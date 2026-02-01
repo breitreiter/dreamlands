@@ -1,0 +1,53 @@
+# Encounters & World Structure Balance
+
+encounters:
+  pool:
+    total: 200  # Hand-crafted bespoke encounters
+    persistence: one_shot  # Never repeats
+    
+  frequency:
+    system: random_chance_per_travel
+    base_chance: 30%  # Per day of travel
+    depletion_effect: decreasing  # As pool exhausts, becomes rarer
+    
+  distribution:
+    by_biome:
+      forest: 30
+      plains: 30
+      mountains: 30
+      swamp: 30
+      scrub: 20
+      
+    by_tier:
+      tier1: 60  # Safe zone - teaching encounters
+      tier2: 80  # Frontier - challenging
+      tier3: 40  # Wilderness - punishing
+      tier4: 20  # Deep wild - deadly
+      
+  plot_keys:
+    per_locale: 5-8
+    purpose: quest_hooks_and_arcs
+    persistence: carries_across_encounters
+    
+  structure:
+    overworld: atomic  # Never multi-stage
+    dungeons: multi_stage  # Always room-to-room
+
+dungeons:
+  total: 21
+  generation: hand_crafted
+  placement: poi_scatter_algorithm
+  
+
+game_structure:
+  win_condition: clear_all_21_dungeons
+  target_playtime: 5-10_hours  # ~30min per dungeon + prep/travel
+  
+  death_system:
+    in_civilization: injury_and_recovery  # Expedition cut short
+    deep_wild_overextended: permadeath    # Full restart
+    
+  progression:
+    new_game_plus: false
+    difficulty_settings: none  # Single balanced experience
+    replayability: different_world_seeds

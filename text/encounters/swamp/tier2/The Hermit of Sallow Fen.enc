@@ -1,0 +1,58 @@
+The Hermit of Sallow Fen
+
+You smell the smoke before you see the light.
+
+Deep into the fen and your world has narrowed to a catalogue of miseries. Black water sucking at your boots, the ceaseless drone of biting flies, air so thick with rot it coats the back of your throat like oil. The trail, such as it was, vanished yesterday beneath a carpet of duckweed. Since then you have navigated by the moss on the cypress knees and the slow pull of current beneath the water's skin, trusting that the deeper channels lead inland toward high ground and the frontier beyond.
+
+You had not expected to find anyone living here. Nothing lives here that does not bite, sting, or drag itself through the muck on its belly.
+
+Yet there it is: a smudge of smoke above the treeline, yellow-grey against the perpetual overcast, and beneath it, as you round a curtain of hanging moss, a dwelling. The world is generous. It is a shack built on stilts above the waterline, patched with bark and river-reed and what appears to be sailcloth long since gone to grey. Animal bones hang from the eaves on cords of sinew, clicking softly in a breeze you cannot feel. A dugout canoe is tethered to one stilt. On the listing porch, a cookfire burns in a ring of river stones, and over it a blackened pot sends up a steam that cuts through the swamp-stink with something almost pleasant—herbs, root vegetables, something warm and human.
+
+The woman sits beside the fire as though she has been waiting.
+
+She is old, or perhaps merely weathered beyond reckoning; face like cracked leather, hair a white tangle threaded with feathers and what might be small bones. Her clothes are layered and shapeless, stained with mud and tannin. She watches you with eyes that are, against all expectation, perfectly clear. Pale. Amused.
+
+"Sit," she says, as though you are late to supper.
+
+She does not rise. Does not reach for a weapon. She stirs the pot with a wooden spoon and the smell intensifies; rich, savory, undeniably good. Your stomach clenches. It has been too long since you've had a warm meal.
+
+"You'll want to eat before the water rises," she continues, conversational, almost cheerful. "Moon's pulling the fen tonight. The channels you walked this morning will be six feet deep by dark." She taps the spoon against the pot's rim. "If you know the way through, you'll manage fine. If you don't..." She shrugs, a gesture that carries the weight of absolute indifference to your survival.
+
+Her pale eyes drift to your pack, your boots, the shape of what you carry. She smiles. Three teeth are missing. The rest are very white.
+
+"I don't get visitors," she says. "Not ones who last."
+
+Something moves in the shack behind her. A scrape, a settling weight. She does not look back at it.
+
+choices:
+
+* Accept her hospitality = Sit, eat, and trade what information you can, trusting that hunger and the rising water leave you little choice but faith.
+  @check negotiation medium {
+    You trade tales of the world beyond the fen for bowls of her root-stew, and something in your words—perhaps the honesty of exhaustion, or the shape of distant roads in your voice—softens the pale amusement in her eyes. When you depart at dawn, she presses into your hands a small bundle wrapped in oilcloth: dried fish, hard travelers' bread, something that smells of smoke and keeping. "The fen takes," she says, "but I give what I can spare."
+    +add_random_items 3 food
+  } @else {
+    You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind—only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun's pale climb you have lost the night, and perhaps something more.
+    +damage_health small
+    +skip_time morning
+  }
+
+* Demand to know what is in the shack = You have not survived in this fen by ignoring what moves in the dark behind a stranger's smile.
+  The hermit's smile doesn't waver as the thing behind the sailcloth door begins to move, something massive shifting in the darkness with a wet, patient hunger. "My boy gets so few visitors," she says, rising with a mother's gentle pride, and you understand now why the bones hang from the eaves: they are not charms but trophies, markers for those who also trusted their instincts too late.
+  @check combat hard {
+    The sailcloth tears away. Something fills the doorway; too tall, joints wrong. Pale skin stretched tight. Fingers tipped with yellowed bone hooks. A mouth that opens too wide, teeth jagged and uneven. It drops into the shallows. The water barely reaches its knees.
+    It lunges. You slip aside. The hooks slice past your throat, close enough that you smell old blood and swamp rot. It is quick but clumsy. You ready your weapon. When it overreaches, you strike. You hit the monster hard with your weapon.
+    A thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.
+    The crack echoes. It falters. You retrieve your weapon and cut its throat in a single stroke. It collapses into the black water, which closes and stills.
+    The hermit is gone. Only the low cookfire and a steaming pot remain. You take what supplies you can and leave the shack behind, bones clicking faintly in the wind as the fen swallows you.
+    +get_random_treasure
+  } @else {
+    The sailcloth tears away. A horrid shape fills the door; wrong-jointed, bone-hooked, ghastly mouth splitting wide. It drops into the shallows and lunges.
+    You swing your weapon on instinct. The attack skates off its hide. No blood. No pause. A hooked hand snags your shoulder and wrenches you sideways. Another tears through your pack, spilling its contents into the black water.
+    You twist free, stumbling into the muck. The things stares blankly at you, twists its head, and begins to lope forward. You flee, thrashing through the waters. By the time you catch your breath, the clearing is gone and so is whatever the swamp claimed from your pack.
+    +lose_random_item
+  }
+
+* Press on into the swamp = Thank her and refuse, trusting your own sense of direction over the charity of a woman who lives where nothing should.
+  You barely make it a dozen yards before the shack unfolds impossible legs from beneath its stilts and comes crashing after you through the black water, the hermit's laughter echoing across the fen like a crow's cry. You run until your lungs burn and the darkness is complete, finally collapsing in some nameless hollow where the cypress roots offer meager shelter. By the time you manage a fire, you have no idea which way leads forward—only that the smoke behind you has long since vanished, and with it, any sense of where you've been.
+  +add_condition lost
+  +skip_time evening

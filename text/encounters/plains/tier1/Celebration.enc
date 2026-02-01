@@ -1,0 +1,57 @@
+Celebration
+
+The road cuts through wheat fields bright as hammered brass. In a shallow clearing ahead, ribbons hang from fence posts and a long table blocks the way, set with bread, salt, and cloudy cider. Villagers stand in a loose ring, smiling as you approach.
+
+“Traveler,” a woman calls, flowers tied to her braids. “Your path is blessed. We're at the choosing.”
+
+A wreath of barley settles on your head before you can step back. Someone presses a small sack into your hands; grain, tied tight with red thread. The circle closes in, casual as a market crowd. At the center of the table you notice a rough stone bowl, dark with something that isn't water.
+
+You glance down the road beyond them. No sign of another traveler. No sign of whoever was meant to be “chosen” before you arrived.
+
+Your attention returns to the villagers. A fresh faced young woman steps forward, her hands held out. She is presenting you with a rusted iron dagger, blade pitted and stained.
+
+All eyes are upon you.
+
+choices:
+
+* Refuse the dagger = Take no part in whatever this is
+    @check negotiation easy {
+        You raise both hands in a warding gesture, palms outward. The barley wreath shifts on your head. You thank them for the honor, your voice steady, and explain that your own gods would look unkindly upon your taking part in their rites. The young woman's smile falters. The dagger remains suspended between you, rust flaking from its edge.
+
+        To fill the silence you speak of Shemned, god of the autumn harvest in the hills where you were born. You tell what fragments you recall: how the grain must be cut before the moon wanes, how the last sheaf stands in the field until frost claims it. Your words come haltingly, cobbled from childhood memory. The villagers listen, their circle loosening, and soon a gray haired man interrupts with questions. Does Shemned sleep beneath the roots? Does he rise at planting? The debate sprawls, voices overlapping, until the woman with flowers in her braids claps her hands once, sharply.
+
+        "You worship the Worm Below," she announces, satisfied. "Only by another name." The others nod. You feel the weight of their conclusion settle over you like the barley crown itself, but you nod in return, eager to be gone. Let them believe what they will. The young woman lowers the dagger. Another villager presses a cloth sack into your arms, heavier than the first. They step aside. The road opens before you. You walk through their ring, and no one follows.
+        +add_random_items 3 food
+        +heal_spirits small
+    } @else {
+        You let the dagger remain in the young woman's outstretched hands. Your voice cuts across the clearing, sharp with disgust. Whatever ritual they mean to enact here, you will have no part of it. You speak of Shemned, your own harvest god, whose priests pour wine rather than darker things, who demands no blade be lifted save to cut grain from the stalk.
+
+        The smiles do not fade. They simply empty of warmth.
+
+        Hands close around your arms before you can pivot toward the road. You are hauled backward, your heels dragging furrows through the dust. The circle parts and reforms behind you. They march you to the edge of the clearing where the wheat begins, and there they release you with a shove that sends you stumbling into the stalks. One of them, the woman with the braided flowers, reaches out and plucks the barley wreath from your head. She turns away without a word.
+
+        Behind you, the villagers drift back toward their table. The cider is poured. Bread is broken. They do not look in your direction again.
+        +damage_spirits small
+    }
+* Accept the dagger = Take part in the ritual
+    @check bushcraft medium {
+        You have seen this ritual done, though never from the center of the circle. You begin to walk, letting memory guide your steps. The first stop comes at the eastern edge of the clearing, where morning light falls. You raise the rusted blade toward the wheat, point trembling slightly in your grip, and call a blessing on the harvest. You don't know the words, but you say what feels right.
+
+        The villagers answer, their words echo yours. You move to the southern point, then west, then north. At each compass mark you halt, extend the dagger toward the fields, and speak. The blade catches sunlight at odd angles, its pitted surface scattering fragments of brightness. Each time you call, the villagers respond, their voices rising and falling in unison, shaping the blessing into something larger than your words alone could carry.
+
+        When the circle closes, you return to the young woman. She waits with her hands open. You lay the dagger across her palms. She bows, pressing her forehead to the hilt for a long breath, then lifts her gaze to meet yours. "It is a good blessing from an outsider," she says. "The words were new but familiar."
+
+        The evening unfolds in shared bread and story. You sit among them as the light fades, their voices weaving tales of seasons past while cider passes hand to hand. The barley wreath remains on your head, and no one moves to take it back.
+        +add_random_items 3 food
+        +heal_spirits medium
+        +skip_time morning
+    } @else {
+        You walk with grim determination to the stone bowl. Your fingers close around the dagger's pitted hilt. You hold out your hand, palm upward, and draw the rusted edge across the flesh in one deliberate stroke. The blade bites deep; pain flares white and immediate. Blood wells thick and dark from the gash, spilling over your fingers in hot rivulets. You turn your hand and let the crimson flow pour into the bowl, where it mingles with whatever lies within.
+
+        The villagers stare, their smiles frozen. The clearing falls silent save for the drip of blood striking liquid. A small child tugs at her mother's skirt and asks, voice clear in the stillness, "Why is that person bleeding in the soup?"
+
+        The woman with flowers in her braids blinks. Another villager clears his throat. Someone mutters about foreign customs, ancient ways from distant lands. They nod to one another, uncertainty masked by forced courtesy. Two men lift the bowl with careful hands and carry it behind the table, tilting it to spill its contents into the wheat. The young woman retrieves the dagger from your slack grip, her expression carefully blank. You bind your hand in a strip torn from your cloak, the wound throbbing with each beat of your heart. At the first lull in their murmured conversation, you turn and walk back to the road, your departure unmarked by farewell.
+        +damage_spirits small
+        +damage_health trivial
+    }
+

@@ -1,0 +1,47 @@
+The Gatekeeper
+
+The raised path ends at a sluice gate where an old woman sits on a stool, arms crossed over a walking stick planted in the mud. She wears the loose cotton of the fen-folk and the expression of someone who has judged three generations. Behind her, water pools against the closed gate — your route forward lies on the other side, where the path continues toward the village you need to reach before nightfall. She doesn't move. Doesn't speak. Just watches you approach with eyes that have seen every trick.
+
+"Gate's closed," she says finally. "Stays closed until the paddies on the east side finish draining. Two hours, maybe three." A group of younger villagers works behind her, knee-deep in a flooded field, moving with the unhurried certainty of people who know the water answers to no one's schedule. One of them glances your way, then back to the dike they're patching. The old woman taps her stick once. "You can wait. Or swim. Most outsiders choose wrong."
+
+But you've noticed the frogs have gone quiet in a channel to the south — the kind of silence that means a path through shallower water, if you know how to read it. And the workers are watching their elder more than their work, the way people do when authority is performance as much as fact. Someone laid a bundle of cut reeds near the gate's mechanism, still green enough to bend, and the handle itself is older than the gate it operates.
+
+The sun measures the time you don't have. The old woman measures you.
+
+choices:
+
+* Wait patiently = Settle in and wait the full time for the gate to open properly
+  You find a dry spot near the path's edge and lower yourself to the ground. The old woman makes no acknowledgment, but one of the younger workers wades to the edge of the paddy and offers you a gourd of water without comment. It tastes of the clay it was stored in. The sun moves with the slowness of judgment. You watch the workers shore up a section of dike where water seeps through in dark fingers, packing mud with practiced efficiency. They work in silence broken only by occasional instruction, no word wasted.
+
+  When the paddies finally drain to the old woman's satisfaction, she rises with the care of someone whose bones remember every year. She works the gate mechanism herself, the handle groaning through its arc until water begins to flow through the gap. The path beyond glistens with fresh mud but holds firm under your boots. As you pass, she nods once — not approval, but acknowledgment. You took the measure of things and chose time over risk.
+  +skip_time evening
+
+* Attempt the southern channel = Follow the silent frogs through the shallow route you've spotted
+  @check bushcraft medium {
+    You step off the path before the old woman can object, moving toward the silent channel with the confidence of someone who has read water before. She makes a sound between a grunt and a laugh. The mud here holds your weight where it looks like it shouldn't, and the water runs shallow over gravel beds that ring slightly under your boots. Reeds close behind you like a door shutting.
+
+    The channel winds south then west, meandering but passable, and you read it by the silence — where frogs fall quiet, the ground rises enough to walk. Twice you pause at junctions, waiting for the sound to tell you which branch goes deep. It takes longer than the direct path would have, but you emerge on the western side of the paddies with only your calves wet, joining the raised path again well before the village. Behind you, the frogs resume their evening sermon.
+    +heal_spirits small
+  } @else {
+    You step confidently toward the southern channel and the mud greets you like an old enemy. Your first step sinks past the ankle. Your second plunges you to the knee in cold water that smells of rot and clay. The silence you mistook for shallow ground is simply where the frogs have learned not to nest — the water here is deep and still, thick with silt that sucks at your legs like a living thing.
+
+    Behind you, someone laughs. Not cruel, but not kind either. You haul yourself back toward the path, reeds slapping your face, boots squelching obscenely with each step. The old woman hasn't moved from her stool. When you finally drag yourself back onto solid ground, soaked to the waist and decorated with mud and waterweed, she taps her stick once. "Most outsiders choose wrong," she repeats, as though you've simply confirmed old wisdom. You wait the full time after all, watching the water drain while your clothes refuse to dry in the thick air.
+    +damage_health trivial
+    +damage_spirits small
+  }
+
+* Challenge her authority = Insist you need passage now and offer coin or pressure
+  The old woman's expression doesn't change when you make your case — coin offered, schedule explained, importance implied. She listens the way stone listens to rain. When you finish, she taps her stick twice. The workers behind her stop moving. One of them, a broad-shouldered man with gray in his beard, wades out of the paddy and stands near his elder, saying nothing but present in the way that changes mathematics.
+
+  "Gate stays closed," she says, each word deliberate as a hammer stroke. "Water doesn't care about your coin. Dike doesn't care about your hurry. East paddies flood if I open now, and that's a season's rice drowned for someone else's schedule." She shifts on her stool, settling in. "You want to swim, swim. Want to wait, wait. Want to try moving me?" She glances at the worker beside her, then back to you. "My grandson here would enjoy the exercise."
+
+  You move to try to traverse the swamp, but recognize the futility. You find a stump and fix the woman in your gaze, making certain she knows your annoyance. A few hours pass and the gate opens, just as promised.
+  +damage_spirits small
+  +skip_time evening
+
+* Offer to help with the work = Join the workers to speed the draining and earn passage
+  You wade into the paddy before asking permission, mud sucking at your boots, and take a place beside the workers shoring up the dike. For a moment no one speaks. Then the nearest one, a woman with strong hands and knowing eyes, shows you without words where to pack mud, how to angle it so the water's weight becomes the seal's strength. The work is harder than it looks. Your back complains. The mud is heavy and cold and smells of fish and old roots.
+
+  But you feel the moment they accept you — not as one of them, but as someone willing to stand in their water and do their work without complaint. The old woman doesn't praise you, but when the draining is complete and she works the gate mechanism, she nods toward the path. "Go on, then. You paid your way." One of the younger workers grins, gaps in his teeth, and claps your shoulder with a muddy hand. You reach the village as the lamps are being lit, soaked and tired but arriving with the dignity of someone who earned passage rather than purchased or demanded it. Your clothes will dry. The ache in your back is the cost of traveling honestly through country that doesn't owe you anything.
+  +heal_spirits small
+  +skip_time evening

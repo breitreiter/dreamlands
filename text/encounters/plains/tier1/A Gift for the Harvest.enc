@@ -1,0 +1,66 @@
+A Gift for the Harvest
+
+The girl blocks your path at the edge of the wheat field, arms folded across her chest. Thirteen, maybe fourteen. Sunburnt nose, blonde hair escaping a braid, a smudge of dirt on one cheek. Behind her, the wheat stands tall and golden, rippling under the late afternoon breeze like water. The smell of dry grain and sun-baked earth hangs thick in the air.
+
+"You're not taking the road," she says. Not a question. Her jaw is set, her feet planted wide in the dust. "Not unless you help."
+
+She nods toward the field behind her. At the far edge, near a listing wooden fence, an older man works alone. He moves slowly, bent double, reaping wheat with a hand sickle. Each stroke is labored. Even from here you can see the hitch in his back, the way he pauses between cuts to straighten, one hand pressed to his spine.
+
+"That's my grandfather," the girl says. "He's supposed to have three hired hands today. They didn't come. Said the merchant in Aldgate would pay better for dock work." Her voice hardens. "Now he's out there alone and the field needs cutting before the rains come tomorrow. If it gets wet, it rots. If it rots, we don't eat this winter."
+
+She steps closer. Close enough that you can see the desperation she's trying to hide beneath the bravado. Her hands are balled into fists at her sides.
+
+"You've got that ring," she says, eyes flicking to your hand. "Fancy guild folk always have coin. Or time. Or something." Her voice cracks, just slightly. "I'll give you his dinner. Fresh bread, cheese, the good stuff my grandmother made. It's all we've got to trade." She swallows. "But if you don't help, I'm not letting you pass. I don't care if you're twice my size."
+
+The old man straightens again in the distance, leaning heavily on the fence post. The field stretches wide and golden behind him. The sun is already slanting low.
+
+choices:
+
+* Accept the trade = Take the meal and help cut the wheat
+  You nod once. The girl's face floods with relief so sudden and total it nearly breaks her composure.
+
+  The work is brutal. The sickle is dull and the wheat is thick-stalked, tough as wire. Chaff gets in your eyes, your throat, works its way under your collar and into your boots. Your back screams within the first hour. The old man says nothing, but he watches you with something like gratitude, and the two of you fall into a rhythm: cut, gather, bind. The sun crawls toward the horizon. Your hands blister. The field shrinks, row by row, until at last the final sheaf is tied and stacked with the others.
+
+  The girl brings the meal as promised. Bread still warm, cheese wrapped in cloth, a clay jug of small beer. You eat sitting on the fence while the old man clasps your shoulder once, wordless, then limps toward the distant farmhouse. The girl lingers, watching you with an expression caught between shame and pride.
+
+  "Thank you," she says quietly. Then she runs after her grandfather, disappearing into the amber light.
+
+  You walk on as the first stars prick the sky. Your shoulders ache.
+  +heal_spirits trivial
+  +add_random_items 3 food
+  +skip_time night
+
+* Persuade her = Convince her to let you pass without helping
+  @check mercantile medium {
+    You crouch down, meeting her eyes, and speak quietly. You tell her the truth: you cannot swing a sickle for hours and still make the next town by dark. But you can do something better. You tell her where the dock merchants gather in Aldgate, which alleys the day laborers drink in, how to shame the hired hands into honoring their word. You sketch it out, step by step, until understanding sparks in her face.
+
+    She listens, chewing her lip. Then she nods, slowly. "I can do that," she says. "I can get them back here."
+
+    She steps aside. As you pass, she catches your sleeve. "If this doesn't work," she says, "I'll remember your face."
+
+    You walk on. Behind you, you hear her footsteps pounding back toward the road, quick and purposeful. Whether she'll succeed, you'll never know. The wheat sways golden in the wind. The old man is a distant figure, still bent, still cutting.
+  } @else {
+    You try. You speak of duty, of fairness, of the many paths that might solve her problem. But the words fall flat in the dust between you. She shakes her head, backing up to block the road more fully.
+
+    "Talk," she says bitterly. "That's all guild folk do. Talk and count coin while the rest of us break our backs." Her voice rises. "You think words will cut that wheat? You think words will keep us fed?"
+
+    She picks up a stone. Not large, but her arm is cocked back, and her eyes are bright with tears and fury. "Turn around," she says. "Find another road."
+
+    You do. The long way around adds an hour to your journey, skirting the edge of the fields through scrub and thistle. Once, you glance back. The girl is gone. The old man is still there, a lone figure against the golden expanse, cutting and cutting as the light fails.
+    +damage_spirits trivial
+    +skip_time night
+  }
+
+* Pay your way = Offer coin to hire help for them
+  You reach into your pack and draw out coin. Enough to hire three strong backs for a day, maybe two. You hold it out to the girl.
+
+  Her face goes very still. She stares at the coins in your palm, then up at your face, then back down. For a moment you think she'll take it. Then her expression hardens into something ugly.
+
+  "Charity," she spits. The word is acid. "That's what we are to you, isn't it? Poor farmers with our hands out, begging from the guild."
+
+  She slaps your hand. The coins scatter in the dust. One rolls away into the wheat stubble, glinting.
+
+  "Keep it," she says, voice shaking. "We'll manage. We always do. We don't need your pity." She steps aside, jerking her head toward the road. "Go on. Go back to your soft city friends and tell them how generous you were."
+
+  You walk past her. She doesn't look at you. Behind you, you hear her scrabbling in the dirt, gathering the coins you dropped, her breath hitching with something between rage and shame. The old man is still cutting wheat, alone against the dying light. The coins you meant as kindness burn heavier in her hands than any blade.
+  +damage_spirits small

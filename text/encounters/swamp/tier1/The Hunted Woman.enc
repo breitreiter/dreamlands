@@ -1,0 +1,39 @@
+The Hunted Woman
+
+You round the bend in the channel and find a woman waist-deep in the water, braced against a stilt-post. Her eyes track something behind you, back the way you came. She's breathing hard, clutching a bundle wrapped in oiled cloth to her chest. When she sees you, her hand moves to a gutting knife at her belt, then stops. The frogs have gone silent. In the distance, a punt pole taps against wood in steady rhythm. Getting closer.
+
+She hisses at you, not words, just sound. A warning or a plea, you can't tell which. The bundle shifts against her chest and you catch a glimpse of carved wood, dark with age, wrapped in red cord. The tapping grows louder. Two figures pole into view behind you, maybe fifty yards back. They move with the efficient rhythm of locals, but they're watching the channels ahead, not the water beneath them. Hunting.
+
+The woman jerks her head toward a narrow side channel choked with reeds. She could slip through there if you give her time. Or you could step aside, let the pursuers see her, let village justice sort itself. The bundle in her arms looks old. The kind of thing that has a place it belongs, and people who remember where that place is. The punt pole taps closer. The woman's knuckles are white around the knife handle.
+
+The pursuers will reach this bend in moments. Whatever she's taken, it matters enough to chase into the fen.
+
+choices:
+
+* Distract the pursuers = Call out to the approaching figures, drawing their attention to you while the woman slips away
+  You step into the center of the channel and raise your hand in greeting. Your voice carries across the water, casual, asking about the fishing or the depth ahead or anything that sounds like an outsider's question. The two figures slow their poling. One of them answers, wary but polite, the way locals do when they're deciding whether you're trouble. You keep talking, gesturing back the way you came, describing a bird you saw or a marker you're looking for. Anything to hold their eyes on you.
+
+  The woman is gone. You catch the faintest rustle of reeds closing behind her, then nothing. The pursuers pole closer, their faces clearer now. They're young, maybe brothers, with the hard hands of fish-trap builders. One of them asks if you've seen anyone else in the channels. You tell them no, and the lie sits easy in your mouth because you don't know what she took or why they want it back. They exchange a look, then push past you without another word, poling hard toward the eastern channels where the water opens up. They think she went that way. By the time they realize their mistake, she'll be deep in the reeds where the paths only animals know.
+
+  The frogs start up again, slow at first, then building to their usual roar.
+  +heal_spirits trivial
+
+* Let them pass = Allow the pursuers to find what they're hunting
+  You pole to the side of the channel, making room. The woman's face hardens into something beyond fear. She presses the bundle tighter to her chest and shifts her weight, ready to run or fight or both. The two figures round the bend and see her immediately. They don't call out, don't threaten. They just spread apart, blocking both ends of the channel with the practiced ease of men who've herded livestock through water.
+
+  One of them speaks her name. Aya. It sounds like a condemnation. She shakes her head, backing against the stilt-post, the gutting knife finally clearing its sheath. But she's waist-deep in water and they're in boats, and the arithmetic of that is written in her expression. The other man reaches into his punt and draws out a weighted net, the kind used for stubborn fish. They're not going to hurt her. They're going to take what she's holding and bring her back, and whatever punishment waits will be a village matter, handled in front of everyone who matters.
+
+  One of the men poles close enough to pry the oiled cloth from her grip. He unwraps it carefully, reverently, and you see what she took: a carved marker post, old wood dark as mud, wrapped in cords that might have been red once. He nods to his companion and they haul her into their punt like a stubborn catch.
+
+  They pole past you without acknowledgment. You wonder if you should have done something, but it's too late now.
+  +damage_spirits trivial
+
+* Demand to know what she's taken = Confront the woman and insist on an explanation before you choose
+  She stares at you like you've lost your mind. The punt pole taps closer behind you, steady and inevitable. She shakes her head, not in refusal but in disbelief that you'd waste the seconds she has left asking questions. 
+
+  She spits into the water between you and shoves off from the stilt-post, plunging toward the reeds with the bundle clutched to her chest. But she struggles with the weight and the water, and you can see her eyes widen as the pursuers close in. One hurls a weighted net with practiced ease.
+
+  It catches her at the waist. She goes down with a splash and a cry, the bundle flying from her grip to land in the shallows. One of the men vaults from his boat, waist-deep in water, and drags her upright while the other retrieves the wrapped object with reverent care. They're rough with her but not cruel, hauling her into their punt with the efficiency of men who've dealt with this before. As they pole past you, the bundle secure between them, one of them meets your eyes. The look is flat, unreadable, neither grateful nor hostile.
+
+  You take stock of your surroundings, then roll up your pants and fish into the water. You find the woman's knife, wipe the muck off and appraise it. It's a good knife, well made and sharp. You sheath it in your belt and continue on your way.
+  +add_item knife

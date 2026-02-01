@@ -1,0 +1,133 @@
+{
+  "Choice": {
+    "prefix": ["choice", "* "],
+    "body": [
+      "* ${1:Link text} = ${2:Preview text}",
+      "  ${0}"
+    ],
+    "description": "New choice with link = preview"
+  },
+  "Skill Check Block": {
+    "prefix": ["check", "@check"],
+    "body": [
+      "@check ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|medium,trivial,easy,hard,very_hard,heroic|} {",
+      "  ${3:Success outcome}",
+      "} @else {",
+      "  ${4:Failure outcome}",
+      "}"
+    ],
+    "description": "Skill check with success/failure branches"
+  },
+  "Inscription Block": {
+    "prefix": ["inscription", "\"\"\""],
+    "body": [
+      "\"\"\"",
+      "${1:Inscription text}",
+      "\"\"\""
+    ],
+    "description": "Triple-quoted inscription block"
+  },
+
+  "+damage_health": {
+    "prefix": ["+damage_health", "damage_health"],
+    "body": "+damage_health ${1|small,trivial,medium,large,huge|}",
+    "description": "Deal health damage"
+  },
+  "+heal": {
+    "prefix": ["+heal", "heal"],
+    "body": "+heal ${1|small,trivial,medium,large,huge|}",
+    "description": "Heal health"
+  },
+  "+damage_spirits": {
+    "prefix": ["+damage_spirits", "damage_spirits"],
+    "body": "+damage_spirits ${1|small,trivial,medium,large,huge|}",
+    "description": "Deal spirit damage"
+  },
+  "+heal_spirits": {
+    "prefix": ["+heal_spirits", "heal_spirits"],
+    "body": "+heal_spirits ${1|small,trivial,medium,large,huge|}",
+    "description": "Heal spirits"
+  },
+  "+increase_skill": {
+    "prefix": ["+increase_skill", "increase_skill"],
+    "body": "+increase_skill ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|small,trivial,medium,large,huge|}",
+    "description": "Increase a skill"
+  },
+  "+decrease_skill": {
+    "prefix": ["+decrease_skill", "decrease_skill"],
+    "body": "+decrease_skill ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|small,trivial,medium,large,huge|}",
+    "description": "Decrease a skill"
+  },
+  "+skip_time": {
+    "prefix": ["+skip_time", "skip_time"],
+    "body": "+skip_time ${1|morning,afternoon,evening,night|}",
+    "description": "Skip to time of day"
+  },
+
+  "+open": {
+    "prefix": ["+open", "open"],
+    "body": "+open ${1:encounter_id}",
+    "description": "Navigate to another encounter"
+  },
+  "+add_tag": {
+    "prefix": ["+add_tag", "add_tag"],
+    "body": "+add_tag ${1:tag_id}",
+    "description": "Add a world state tag"
+  },
+  "+remove_tag": {
+    "prefix": ["+remove_tag", "remove_tag"],
+    "body": "+remove_tag ${1:tag_id}",
+    "description": "Remove a world state tag"
+  },
+  "+add_item": {
+    "prefix": ["+add_item", "add_item"],
+    "body": "+add_item ${1:item_id}",
+    "description": "Give player an item"
+  },
+  "+add_random_items": {
+    "prefix": ["+add_random_items", "add_random_items"],
+    "body": "+add_random_items ${1:count} ${2:category}",
+    "description": "Give random items from a category"
+  },
+  "+give_gold": {
+    "prefix": ["+give_gold", "give_gold"],
+    "body": "+give_gold ${1:amount}",
+    "description": "Give gold to player"
+  },
+  "+rem_gold": {
+    "prefix": ["+rem_gold", "rem_gold"],
+    "body": "+rem_gold ${1:amount}",
+    "description": "Remove gold from player"
+  },
+  "+add_condition": {
+    "prefix": ["+add_condition", "add_condition"],
+    "body": "+add_condition ${1:condition_id}",
+    "description": "Apply a condition to the player"
+  },
+
+  "+lose_random_item": {
+    "prefix": ["+lose_random_item", "lose_random_item"],
+    "body": "+lose_random_item",
+    "description": "Player loses a random item"
+  },
+  "+get_random_treasure": {
+    "prefix": ["+get_random_treasure", "get_random_treasure"],
+    "body": "+get_random_treasure",
+    "description": "Player finds random treasure"
+  },
+  "+finish_dungeon": {
+    "prefix": ["+finish_dungeon", "finish_dungeon"],
+    "body": "+finish_dungeon",
+    "description": "Mark dungeon as completed"
+  },
+  "+fail_dungeon": {
+    "prefix": ["+fail_dungeon", "fail_dungeon"],
+    "body": "+fail_dungeon",
+    "description": "Mark dungeon as failed"
+  },
+  "+flee_dungeon": {
+    "prefix": ["+flee_dungeon", "flee_dungeon"],
+    "body": "+flee_dungeon",
+    "description": "Flee from the dungeon"
+  }
+}

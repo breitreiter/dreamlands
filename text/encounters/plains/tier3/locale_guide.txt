@@ -1,0 +1,33 @@
+The Sunder
+
+The wars didn't stop here. They just stopped involving people.
+
+Past the scavenger fields and the overgrown earthworks, the plains flatten into something else—a vast, featureless expanse where the grass thins and then gives up entirely and the soil turns to something smooth and fused, like the land was fired in a kiln. The horizon is visible in every direction and it is wrong. Too far. Too flat. The geometry of the place doesn't sit right in the eye, as if distance itself was damaged and never set properly.
+
+This is where the old wars reached a scale that broke the landscape. Not a battlefield—an aftermath. Whatever was deployed here wasn't meant to be survived, and arguably the land didn't survive it. The ground is glass in places. In others it's pitted and spongy, like it was reorganized at a molecular level by someone who didn't quite understand molecules. There are craters so old they've become shallow bowls of dead earth, and at their centers, things that hum.
+
+The structures are the worst part. They're not ruins—ruins imply decay, a process of falling apart. These are intact. War constructs—walls, towers, platforms—made from materials that don't erode, don't weather, don't age. Some of them are still doing something. Lights that cycle. Sounds at frequencies you feel in your teeth. Doors that open when you approach and close behind you with a purpose that hasn't expired. Dolmens arranged in patterns that obviously control something, but what they control is unclear and interfering with them produces effects at unpredictable distances.
+
+Nothing lives here. Not in the normal sense. The golems—if that's what they are—still walk their patrol routes along walls that defended kingdoms nobody remembers. They don't attack. They don't acknowledge you. They execute routines written in a language that no longer exists, and if you're in the path of the routine, that's your problem, not theirs. They are not hostile. They are incompatible with your existence.
+
+There is nothing to trade here. Nothing to harvest. Nothing to bring back except the knowledge that this is not a place of honor.
+
+## Encounters
+
+There are no NPCs. There is no one here. Anything the player meets is a remnant—autonomous, purposeless, and operating on logic that doesn't include the concept of a living observer.
+
+Encounters should feel vast, silent, and fundamentally alien. The danger is not aggression—it's interference. Walking through a machine that's still running without understanding what any part of it does. The player is not threatened. They are irrelevant, and irrelevance near active machinery is its own kind of danger.
+
+Environmental hazards are primary: zones of altered physics, emanations from structures that affect the body or mind, terrain that is not what it appears to be, and the slow dawning realization that the scale of what happened here exceeds the player's ability to comprehend it.
+
+## Scene Palette
+
+Characters: none. A golem walking a perimeter that no longer encloses anything. Another golem, identical, walking the same perimeter in the opposite direction. Something that might be a golem, motionless, in a position that might be standing guard or might be broken mid-stride. In the far distance, movement too large and too slow to be anything the player has a name for.
+
+Objects: a dolmen humming at a frequency that vibrates the player's gear, a wall segment of seamless material with no joints or tool marks, a crater with a smooth glass floor reflecting a sky that doesn't look quite right, a door in a freestanding frame that opens onto the same plain but the light is different on the other side, a platform covered in symbols that glow faintly in sequence—always the same sequence, a weapon too large to have been wielded by a person embedded in the fused ground, a column of air that shimmers and is warm to approach, a trench cut into the glass plain by something that moved in a straight line to the horizon, a pile of golem parts arranged neatly by someone or something, a cairn of fused earth that might be intentional or might be a side effect of something else
+
+Sensory: a hum felt in the jaw and sternum before the ears register it, the click of boots on ground that rings like ceramic, wind that crosses the plain without resistance and sounds like a sustained note, the absence of smell—no rot, no growth, no dust, just nothing, a headache that starts at the temples when facing certain structures, light that falls flat and shadowless near the craters, the unnerving precision of a golem's footsteps—exactly even, exactly timed, never varying, a taste like copper when the air shimmers, the visual wrongness of a horizon that's too sharp, too defined, like a rendered image with no atmospheric haze, silence so total that your own heartbeat becomes the loudest thing
+
+Activities: approaching a structure and trying to determine if it's safe, watching a golem's patrol route to find the gap, stepping over a trench cut into the earth and choosing not to follow it to the horizon, standing near a dolmen long enough to notice the pattern and then stepping away because the pattern is starting to make sense and that feels dangerous, mapping a route between active zones, resisting the urge to touch a surface that looks like it wants to be touched, looking back the way you came and realizing the landmarks have rearranged—not moved, just rearranged, as if they were always this way, counting your supplies and calculating whether you can afford to go further or if further is a concept that still applies here
+
+Tone reference (do not reuse these scenarios): a golem walks directly through the player's camp at night along a path that has not varied in centuries, a dolmen sequence completes and something changes at the edge of perception—the light shifts, or the hum drops a register, or a door that was closed is now open, the player finds bootprints in the fused glass that are not their own and are not old

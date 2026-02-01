@@ -1,0 +1,26 @@
+# The Far Ranges
+
+FIXME
+
+Beyond the mining towns and mule trails, the mountains stop being an industry and start being a problem. The roads end. The tree line falls away. The rock gets harder, the weather gets worse, and the comfortable infrastructure of toll keeps and assay offices is a memory below you. Up here, the mountains are working against you personally.
+
+And yet people come, because the high ranges hold metals that don't exist lower down. Prospectors—a specific breed of stubborn, solitary, slightly unhinged—work claims in places that would make a lowland miner weep. They blast and pick at veins of ore that are richer and stranger than anything in the foothills, and they haul it down on their backs because no mule trail reaches this far. The ones who survive and succeed don't talk much about what it cost them. The ones who don't survive are found in spring, if they're found at all.
+
+The air is thin enough to slow your thinking. The weather can pin you in place for days. Rockfall is constant and impersonal. Every route is a scramble, a traverse, or a prayer.
+
+## Encounters
+
+The mountains themselves are the primary antagonist—altitude, weather, unstable terrain, exposure. Wildlife exists but stays out of your way; you're above most of it. Other people are rare, and the ones you meet are either prospectors who've been alone too long or the occasional expedition that's in worse shape than you are.
+
+Encounters should feel vertical, breathless, and committed. You can't easily turn back. Every decision about route and shelter has weight because the margin for error is gone. The presence of rare metals should be visible in the world.
+
+## Scene Palette
+Characters: a prospector with a pack too heavy for his frame and a sample of something that glints wrong, a pair of climbers roped together and moving slowly, a claim-staker hammering a marker into a ledge with numb hands, a geologist from some lowland institution who is out of her depth and knows it, a veteran mountaineer descending alone who gives terse advice, a prospector's partner waiting at a base camp that's been waiting too long, a hermit living in a natural cave who barters in ore samples, a rescue party that's given up on rescue and is just recovering the gear
+
+Objects: a piton hammered into a crack with a frayed rope still attached, a chunk of ore with an unfamiliar metallic sheen, a cairn marking a route that might be current or might be years old, a broken pick with a replacement handle lashed on with cord, a cache of supplies under a rock overhang with a claim scratched next to it, a smelting crucible improvised from a hollow stone, a journal wrapped in oilcloth full of assay notes and route descriptions, a pack frame abandoned on a ledge—too heavy to carry, too valuable to leave, a signal mirror, a frozen boot
+
+Sensory: wind that doesn't gust—it just pushes, constantly, thin air that makes your heart pound on easy ground, the crack of rock calving from a face somewhere above, snow that starts horizontal, the creak of a rope under tension, silence so complete your ears ring, the metallic taste of altitude, the clatter of loose scree under every step, a view that would be stunning if you weren't terrified, the sun feeling closer and colder at the same time
+
+Activities: picking a route across a rockfield with no good options, belaying across an exposed traverse, chipping at a vein to assess its worth, melting snow for water because there is no water, waiting out weather in a bivouac that's just a tarp and optimism, hauling a pack uphill and stopping every twenty steps to breathe, studying the rock face for color changes that indicate ore, repairing gear with hands too cold to feel what they're doing, calculating whether there's enough daylight to reach the next shelter, looking down and regretting looking down
+
+Tone reference (do not reuse these scenarios): a prospector shows the player a sample of ore unlike anything from the foothills and says there's a vein of it two days up, a climber's rope anchor pulls free and the player hears the rockfall before they see it, a storm pins the player in a shallow cave with a geologist who fills the silence by cataloguing the minerals in the walls

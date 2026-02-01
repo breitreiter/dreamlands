@@ -1,0 +1,127 @@
+# Trade Economics Balance Data
+
+trade:
+  categories:
+    textiles:
+      name: "Textiles"
+      base_value: 10
+      regional_modifiers:
+        plains: 0.8   # 20% cheaper (sheep country)
+        mountains: 1.2  # 20% more expensive (cold = demand)
+      flavor_items:
+        - "Silk Scarves"
+        - "Wool Blankets"
+        - "Linen Cloth"
+        - "Embroidered Tapestries"
+        
+    metals:
+      name: "Metals"
+      base_value: 15
+      regional_modifiers:
+        mountains: 0.7  # 30% cheaper (mines)
+        plains: 1.3     # 30% more expensive (import cost)
+      flavor_items:
+        - "Iron Ingots"
+        - "Copper Wire"
+        - "Steel Tools"
+        - "Brass Fittings"
+        
+    wood:
+      name: "Wood"
+      base_value: 8
+      regional_modifiers:
+        forest: 0.6     # 40% cheaper (abundant)
+        scrub: 1.5      # 50% more expensive (scarce)
+      flavor_items:
+        - "Oak Planks"
+        - "Pine Lumber"
+        - "Carved Furniture"
+        - "Barrel Staves"
+        
+    stone:
+      name: "Stone"
+      base_value: 12
+      regional_modifiers:
+        mountains: 0.7
+        swamp: 1.4
+      flavor_items:
+        - "Granite Blocks"
+        - "Marble Slabs"
+        - "Gravel"
+        - "Limestone"
+        
+    gems:
+      name: "Gems"
+      base_value: 50
+      regional_modifiers:
+        mountains: 0.8
+        plains: 1.1
+      flavor_items:
+        - "Rough Diamonds"
+        - "Polished Emeralds"
+        - "Ruby Clusters"
+        - "Semi-precious Stones"
+        
+    spices:
+      name: "Spices"
+      base_value: 20
+      regional_modifiers:
+        swamp: 0.7      # Exotic plants grow here
+        mountains: 1.4  # Import cost
+      flavor_items:
+        - "Peppercorns"
+        - "Cinnamon Bark"
+        - "Saffron Threads"
+        - "Dried Herbs"
+        
+    tools:
+      name: "Tools"
+      base_value: 25
+      regional_modifiers:
+        mountains: 0.9  # Metalworking tradition
+        forest: 1.2
+      mechanical_differences: true  # Unlike other categories!
+      flavor_items:
+        - "Hammers"
+        - "Saws"
+        - "Chisels"
+        - "Axes"
+        
+    weapons:
+      name: "Weapons"
+      base_value: 40
+      regional_modifiers:
+        mountains: 0.85
+        plains: 1.15
+      mechanical_differences: true  # Combat stats matter
+      flavor_items:
+        - "Longswords"
+        - "Crossbows"
+        - "Spears"
+        - "Daggers"
+        
+    books:
+      name: "Books"
+      base_value: 30
+      regional_modifiers:
+        settlements_with_libraries: 0.9
+        frontier: 1.3
+      flavor_items:
+        - "Historical Texts"
+        - "Religious Tomes"
+        - "Navigation Charts"
+        - "Technical Manuals"
+        
+  # NOTE: Food explicitly excluded from trade goods
+  # (see auto-travel system - settlements always have food/water)
+  
+  pricing:
+    transaction_scale:
+      minimum: 5
+      typical: 50
+      large: 200
+      major: 500
+      
+    trading_skill_bonus:
+      # Better prices per trading skill level
+      per_level: 5%  # Max 50% at level 10

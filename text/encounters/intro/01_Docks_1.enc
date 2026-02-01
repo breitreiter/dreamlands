@@ -1,0 +1,54 @@
+The Docks of Aldgate
+
+The harbour stinks of empire.
+
+Pitch and bilgewater, the cloying sweetness of spice-rot, fish blood guttering between cobblestones older than any living dynasty—Aldgate presses its gifts upon you before your boots have touched the quay. The Harrower groans against the mooring lines and already the city's hunger announces itself: brown hands grasping for rope, dock-boys swarming the gunwale, and behind them the stevedores, sullen-eyed, appraising the hold with the cold arithmetic of men who tithe to three masters and steal from all of them.
+
+Beyond the wharves the city rises in tiers of crumbling grandeur—warehouses faced in cracked marble, temples gone green with verdigris, and above all the counting-houses of the great guilds, their windows watching the harbour like the lidless eyes of old lizards. Wealth built this place. Wealth and the patient labour of corruption, which hollowed its pillars and made of its courts a labyrinth where gold moves more freely than justice.
+
+You descend the gangplank with one sea-chest and a ring.
+
+The ring matters more than anything in the chest. A Merchant Seal—heavy, tarnished silver, stamped with the sigil of the island compact—it sits on your third finger like a quiet declaration of war. With it you may trade beyond the frontier tariff lines, deal in rawstone and blackwood, keep what the guilds would otherwise devour. Without it you are meat.
+
+It is the ring that draws the woman's gaze.
+
+She waits at the foot of the plank where the customs men have set their folding table—tall, sashed in the coat of a harbour official, her hair drawn back with a severity that matches the line of her mouth. Two pike-bearing guards flank her. She extends one hand, palm upward, with the rehearsed authority of a thousand repetitions.
+
+"The Seal. Registered cargo and letters of compact. You will present them before you set foot on sovereign stone."
+
+Her eyes are on the ring. Not the chest, not your face—the ring. And behind her, half-lost in the press of dockworkers and brazier smoke, a second figure watches: a lean man in no uniform at all, whose stillness amid the chaos is its own species of announcement.
+
+The woman's fingers curl. The guards shift their weight. The lean man tilts his head, as a bird does when it has found something bright and worth taking.
+
+No one else on the dock will meet your eye.
+
+choices:
+
+* Present the Seal and demand lawful passage = Meet authority with authority, and let every watching eye see that you do not flinch.
+  @check negotiation medium {
+    You lay the Seal on the table. The woman's jaw tightens. The lean man smiles once, then melts into the crowd.
+    +add_tag passed_customs
+    +open docks_warehouse
+  } @else {
+    Your tone wavers. She snaps her fingers; the guards close in. "The Seal. Now."
+    +damage_health small
+    +add_tag detained
+  }
+
+* Offer the documents but keep the ring hidden = Comply enough to pass the table while letting the woman believe the Seal is elsewhere.
+  @check negotiation easy {
+    You hand over the papers. Her eyes linger on your empty fingers. You are waved through. She has not stopped watching.
+  } @else {
+    She spots the ring. Her smile is thin. "Attempting to evade registration. Escort him." Strong hands grab your arms.
+    You spend your first day in a holding cell, but eventually talk your way out.
+    +skip_time morning
+  }
+
+* Address the lean man directly = Ignore the official's outstretched hand and speak to the silent watcher, making plain you see him and intend to know the game before you show your hand.
+  You step past the table. The lean man's smile does not reach his eyes. He nods toward the warehouse district. "A word. In private."
+  +open docks_lean_man
+
+* Turn back toward the gangplank = The Harrower has not yet cast off, and a night aboard buys time to learn what manner of welcome Aldgate has prepared.
+  The Harrower's deck is cold. In the dark, you plan. Dawn will bring the same choice—or a different one.
+  +add_tag delayed_landing
+  +skip_time morning

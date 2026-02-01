@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE22CDE4-7A6D-4745-AB25-5FEC7D5C7E11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Map", "lib\Map\Dreamlands.Map.csproj", "{F7C1D37B-3F90-4846-A32B-6DAA583E51F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Encounter", "lib\Encounter\Dreamlands.Encounter.csproj", "{C3D4E5F6-A7B8-9012-CDEF-123456789012}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapGen", "mapgen\MapGen.csproj", "{971E6DFE-2973-4C75-AABA-3FB1DABFFC39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7C1D37B-3F90-4846-A32B-6DAA583E51F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C1D37B-3F90-4846-A32B-6DAA583E51F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C1D37B-3F90-4846-A32B-6DAA583E51F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C1D37B-3F90-4846-A32B-6DAA583E51F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{971E6DFE-2973-4C75-AABA-3FB1DABFFC39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{971E6DFE-2973-4C75-AABA-3FB1DABFFC39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{971E6DFE-2973-4C75-AABA-3FB1DABFFC39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{971E6DFE-2973-4C75-AABA-3FB1DABFFC39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3D4E5F6-A7B8-9012-CDEF-123456789012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D4E5F6-A7B8-9012-CDEF-123456789012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D4E5F6-A7B8-9012-CDEF-123456789012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D4E5F6-A7B8-9012-CDEF-123456789012}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F7C1D37B-3F90-4846-A32B-6DAA583E51F3} = {BE22CDE4-7A6D-4745-AB25-5FEC7D5C7E11}
+		{C3D4E5F6-A7B8-9012-CDEF-123456789012} = {BE22CDE4-7A6D-4745-AB25-5FEC7D5C7E11}
+	EndGlobalSection
+EndGlobal

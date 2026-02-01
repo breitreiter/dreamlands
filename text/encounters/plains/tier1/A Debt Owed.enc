@@ -1,0 +1,60 @@
+A Debt Owed
+
+The group of men walk out to meet you in the road. The oldest, sun-worn and serious, is carrying a ledger and a crude charcoal pencil. The others are local folk, their faces sun-dark and unreadable. 
+
+One spits into the dust. "Aye, look at the ring. It's the same one. Or near enough as matters."
+
+The oldest speaks, "Six months back, one of your men took coin from us for seed wheat that never arrived. We keep our books. We know what's owed us." He taps the ledger meaningfully.
+
+You've never been to these fields before. You were told of no deal with these farmers.
+
+The old man names a sum. Enough to make the farmers whole, he says. Enough to prove you're not the sort who fleeces honest folk. Chaff dust hangs golden in the slanting light. Someone's grandmother has come out to watch, arms crossed, waiting to see what kind of person you are.
+
+choices:
+
+* Pay the sum = Hand over coin to settle a debt that isn't yours
+  You reach for your purse. The motion itself is answer enough. The merchant wets his thumb and marks something in the ledger, the charcoal leaving a dark smudge across the page. The farmers shuffle closer, watching as you count out the coin into his palm. His hand is steady when he takes it, but he doesn't meet your eyes.
+
+  He divides the sum there in the road, parceling it out to three of the farmers by some calculus you'll never know. They take it without joy, folding the coin into their belts. The grandmother nods once and turns back to her door.
+
+  The merchant closes his ledger with a snap. He doesn't thank you. The crowd disperses like smoke. You stand alone in the dusty road with lighter pockets.
+  +rem_gold small
+
+* Explain your innocence = Try to convince them they have the wrong person
+  @check negotiation small {
+    You choose your words with care, measuring each syllable as you might weigh coin. Your smile comes easily, broad and guileless, though your hand rests near your belt in a manner that speaks its own language. You explain the impossibility of their claim, how you have never walked these fields before, how your records would show any such transaction. As you speak, you let slip mention of the guild, of your standing, of how misunderstandings between merchants and farmers have, in the past, drawn unwelcome attention from those who adjudicate such matters.
+
+    A younger farmer, jaw set and fists clenched at his sides, cuts through your words. He does not care, he says, which member of your order made the deal or failed to honor it. The ring marks you all the same. Let the guild sort its own house; they want what is owed.
+
+    The older man turns his head, and the look he gives the younger one carries the weight of years and authority. The young farmer's mouth closes. Silence settles over the road, broken only by the whisper of wind through dry stalks. The old man faces you again, his weathered features unreadable as stone. "You are right," he says at last, each word deliberate. "We have mistaken you for someone else. Go on your way, merchant." He does not open the ledger again. The others step aside, clearing the road, though their eyes follow you still.
+    +heal_spirits small
+  } @else {
+    You speak but the words land wrong, too careful or too quick. The old man shakes his head before you finish, tapping his ledger with the pencil stub. He knew you'd deny it, he says. They always do. A farmer you hadn't noticed before, younger with hands scarred from scythe work, asks why you won't just make it right if you're honest folk.
+
+    You pivot to threats. You are a member of a powerful guild, who will not take lightly to being accused of theft. But the guild is far away. Right now it is just you, surrounded by irate farmers.
+
+    The old man taps the ledger. It is clear you'll need to part with some coin to avoid trouble.
+    +rem_gold small
+  }
+
+* Walk away = Leave without engaging further
+  You turn before the old man finishes speaking. No explanation, no plea. Hard hands grasp your shoulders, spinning you around. These farmers will not let this go quietly.
+  @check combat trivial {
+    You move before the old man can close the distance. Your blow catches the nearest farmer across the jaw; he crumples into the dust without a sound. The ledger falls from weathered hands as the elder reaches forward, too slow, his cry dying in his throat.
+
+    The remaining men lower their tools with deliberate care. Hoes and rakes settle into the furrows. Calloused palms rise, empty, into the golden air. Their eyes follow you as you turn your back on them, on the man sprawled motionless in the road.
+
+    Behind you, a single voice breaks. It rises sharp and terrible, then cuts away as if severed. The wind resumes its passage through the wheat, dry stalks whispering their endless secret. Your shadow lengthens before you on the dust-pale road.
+    +damage_spirits trivial
+  } @else {
+    You turn your back on them.
+
+    The first blow catches you between the shoulders, a hoe handle or staff you cannot see. You wheel, hand moving to defend yourself, but already two more are closing from the flanks. One strikes low; your knee buckles. Another seizes your arm, wrenching it back with the strength of a man accustomed to wrestling calves and plows.
+
+    A single farmer would pose no threat. Five together are a different matter. You twist free, land a solid strike that sends one reeling into the dust, but the others press in like wolves on wounded prey. Fists and rough wood find your ribs, your jaw. The taste of copper floods your mouth. Your vision narrows to a confusion of grasping hands and sun-worn faces, the old man standing well back with his ledger tucked beneath one arm, watching with the same expression he might give a storm rolling across his wheat.
+
+    They drive you to the ground. Dust chokes your lungs. Hands tear at your belt, your pack, methodical and practiced. They take coin, weighed carefully in calloused palms, counted against whatever sum lives in that charcoal-marked ledger. When they are satisfied, they rise and step away, leaving you sprawled in the road with aching ribs and a wallet considerably lighter than before. The old man nods once, as if concluding a transaction at market, and turns back toward his fields.
+    +rem_gold small
+    +damage_health trivial
+    +damage_spirits trivial
+  }

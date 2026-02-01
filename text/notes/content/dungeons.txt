@@ -1,0 +1,22 @@
+# Dungeons scale with distance from starting city
+# Tiers: 0-15 (Safe), 16-25 (Frontier), 26-40 (Wildlands), 40+ (Dark Places)
+
+# Tier 1: Safe zone - cleared or minor threats
+0-15:Bandit Hideout
+0-20:Collapsed Mine
+5-20:Smuggler's Cave
+
+# Tier 2: Frontier - moderate danger
+10-30:Hidden Cave
+15-35:Forgotten Tomb
+15-35:Abandoned Fort
+
+# Tier 3: Wildlands - serious threats
+25-50:Ancient Ruins
+25-50:Monster Lair
+30-50:Haunted Barrow
+
+# Tier 4: Dark Places - deadly
+40-999:Abyssal Pit
+40-999:Dragon's Den
+45-999:Eldritch Temple

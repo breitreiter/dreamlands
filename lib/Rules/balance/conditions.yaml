@@ -1,0 +1,165 @@
+# Condition Balance Data
+# All drain rates are per-day during rest resolution
+#
+# Type Tags
+#   Conditions can carry a type tag (e.g. type: disease). When a new condition
+#   would be applied, if any condition with the same type is already active,
+#   the new one is ignored. This prevents stacking within a type.
+#   Example: a player with Swamp Fever cannot also contract Rot Lung.
+#
+# Affinity
+#   biome:            which biome triggers this condition overnight
+#                     "any" = all biomes, "none" = scripted encounters only
+#   tier:             minimum distance tier ("any" = all tiers, "none" = scripted only)
+#   overnight_chance: probability per rest (before resist check), 0.0–1.0
+#   auto_clear_on_exit: condition clears when player leaves the named biome
+
+conditions:
+  # Physical Conditions (drain Health)
+  
+  injured:
+    name: "Injured"
+    biome: none
+    tier: none
+    drains: health
+    drain: medium
+    cured_by: bandages
+    
+  thirsty:
+    name: "Thirsty"
+    biome: scrub
+    tier: any
+    overnight_chance: 1.0
+    auto_clear_on_exit: scrub
+    drains: health
+    drain: small
+    resisted_by: [canteen]
+    
+  cold:
+    name: "Cold"
+    biome: mountains
+    tier: any
+    overnight_chance: 1.0
+    auto_clear_on_exit: mountains
+    drains: health
+    drain: small
+    resisted_by: [warm_clothing]
+
+  # Mental Conditions (drain Spirits)
+  
+  hungry:
+    name: "Hungry"
+    biome: none
+    tier: none
+    overnight_chance: 0.0           # Not rolled — applied when 0 food at rest
+    drains: spirits
+    drain: small
+    resisted_by: []                 # You either have food or you don't
+    cured_by: eating                # Consuming any food clears it
+    note: "Applied during rest if the player has no food to consume. Drains spirits — hunger is demoralizing before it's dangerous."
+    
+  exhausted:
+    name: "Exhausted"
+    biome: any
+    tier: any
+    overnight_chance: 0.5
+    drains: spirits
+    drain: small
+    resisted_by: [quality_boots, balanced_meal]
+    cured_by: settlement_rest
+    
+  haunted:
+    name: "Haunted"
+    biome: plains
+    tier: 2
+    overnight_chance: 0.35
+    drains: spirits
+    drain: medium
+    resisted_by: [warding_talisman]
+    cured_by: temple_visit
+
+  lost:
+    name: "Lost"
+    biome: any
+    tier: any
+    overnight_chance: 0.3
+    drains: spirits
+    drain: trivial
+    resisted_by: [map_kit]
+    # Special: discovered non-city tiles are cleared from the map when you sleep
+
+  # Disease-type Conditions (drain Health, only one active at a time)
+
+  swamp_fever:
+    name: "Swamp Fever"
+    type: disease
+    biome: swamp
+    tier: 2
+    overnight_chance: 0.4
+    foreshadow: "You feel feverish and your joints ache."
+    drains: health
+    drain: small
+    resisted_by: [mosquito_netting]
+    cured_by: fever_tonic
+
+  infested:
+    name: "Infested"
+    type: disease
+    biome: forest
+    tier: 2
+    overnight_chance: 0.35
+    foreshadow: "Something burrowed in during the night. You can feel it moving."
+    drains: health
+    drain: small
+    resisted_by: [treated_bedroll]
+    cured_by: purgative
+
+  rot_lung:
+    name: "Rot Lung"
+    type: disease
+    biome: scrub
+    tier: 2
+    overnight_chance: 0.3
+    foreshadow: "You wake slick with sweat, coughing dust."
+    drains: health
+    drain: small
+    resisted_by: [dust_mask]
+    cured_by: expectorant
+
+  river_flux:
+    name: "River Flux"
+    type: disease
+    biome: any
+    tier: 2
+    overnight_chance: 0.15
+    foreshadow: "Your stomach turns. Something in the water."
+    drains: health
+    drain: small
+    resisted_by: [purifying_tablets]
+    cured_by: gut_remedy
+
+  # Tier 3 Conditions
+
+  withering:
+    name: "Withering"
+    type: disease
+    biome: plains
+    tier: 3
+    overnight_chance: 0.3
+    foreshadow: "Your teeth ache and there's blood on your shirt. The air here tastes like a copper coin."
+    drains: health
+    drain: large
+    resisted_by: [golem_suit]
+    cured_by: silver_elixir
+
+  forgotten:
+    name: "Forgotten"
+    type: disease
+    biome: swamp
+    tier: 3
+    overnight_chance: 0.3
+    foreshadow: "For a long moment, you're not sure who you are or how you got here. The haze clears, but your memories seem unfamiliar."
+    drains: spirits
+    drain: large
+    resisted_by: [diary]
+    auto_clear_on_exit: swamp

@@ -1,0 +1,49 @@
+An Unpaid Debt
+
+The elder sits beneath the meeting pavilion, reed mat spread before her, contract weighted at the corners with smooth river stones. The ink has run a little in the damp, but the seal is clear enough: the Merchant Guild's device, pressed deep and smug. Around the platform the villagers mutter, not wild with anger but steady with it — the sound of people who know when they've been handled.
+
+The guild merchant stands aloof, dry, immaculate, and composed. He taps the parchment with a gloved finger and explains, patiently, that the exclusivity clause extends to “all navigable channels, known or later discovered,” that the yield guarantee binds the village irrespective of seasonal variance, and that the penalty for breach accrues at a rate any child could calculate. 
+
+He signs deeply, adopting a patronizing tone. “You promised fish,” he says. “If the western channels failed, you should have found others. The contract does not concern itself with disappointment.”
+
+The elder's mouth tightens. The advance coin paid for seed after a blight year. For timber when the flood took three homes. The villagers understood a bad season to be a shared misfortune, not an opportunity for interest to breed like midges. They have no fish in the quantities demanded. They do not have the coin the merchant now claims is owed.
+
+The merchant closes his ledger with a soft, satisfied sound. He will accept payment in fish, in silver, or in pledged labor at guild rates. Failing that, he will mark the village delinquent and let the Guild pursue remedies less conversational. The elder turns to you, eyes sharp and measuring.
+
+choices:
+
+* Pay the debt = Cover the coin the village owes from your own resources
+  You step forward and loosen your purse. The merchant watches, amused, as you count the coin onto the reed mat. His amusement curdles into something harder when the stack rises to match the sum written in his ledger. He blinks, mouth slack, the careful lines of his face collapsing into something unguarded and raw.
+
+  The expression lasts only a moment. It smooths away, replaced by a smile that sits crooked and knowing on his lips. "I was like you once," he says, gathering your coin with gloved fingers. The metal clinks softly as he stacks it into a neat column. "I wanted to be the hero, saving these wretched peasants. A year out here in the borderlands will cure you of that." He regards the pile, then pushes it back across the mat toward you with deliberate care. "Keep your coin, friend. You will need it. Hard times to come."
+
+  He draws a long breath, gaze sliding past you to the villagers beyond. "I will see these folks through, just this once." He pauses, "not a favor to you, but to the man I once was." The contract rustles as he rolls it tight and tucks it into his satchel. He waves a hand, dismissive, the gesture final. "Now get out of here before I make another bad decision."
+  +heal_spirits small
+
+* Side with your fellow Guild member = Insist that the contract is just and valid
+  You take the parchment from beneath its stones and trace the clauses with a careful eye. The ink has blurred in places, true, but the structure remains sound: three seals of the Merchant Guild pressed into wax, each impression crisp and deliberate; the terms of advance and repayment rendered in the formulaic language of commercial law; the interest schedule ascending in neat columns; the waiver of force majeure signed in the elder's own hand. You read the exclusivity provision twice. It is comprehensive. It is binding.
+
+  You set the contract down and meet the elder's gaze. The silence stretches. Around the pavilion the villagers shift, leather creaking, breath held. You speak plainly: the agreement is sound, the debt is owed, and the Guild's claim is just. That the western channels failed is misfortune, but misfortune does not void obligation. The merchant extended coin in good faith; the village accepted it with open hands. Now the terms must be honored, or the consequences will follow with the same inevitability as spring floods.
+
+  The elder's face hardens, not with surprise but with the confirmation of something already suspected. The merchant permits himself a small, measured nod. He reopens his ledger and begins to record the disposition of the matter, quill scratching soft and methodical against vellum. The villagers do not shout. They turn away, shoulders bent, already calculating what can be sold, what can be pledged, what small and bitter surrenders the season ahead will demand.
+
+  The merchant nods graciously, extending you the customary consulting fee.
+  +heal_spirits trivial
+  +give_gold small
+
+* Inspect the contract = Find a way out for the villagers
+  @check mercantile medium {
+    REVIEW: You lift the contract from its bed of river stones. The parchment is stiff beneath your fingers, edges water-stained and curling. The script runs dense and tight, clause nested within clause like fish traps sunk one inside another. Each sentence coils back upon itself, laden with conditions and exceptions that seem to multiply as you read. The merchant's guild employs no fools to draft such instruments.
+
+    You trace the lines again, slower. Your eyes ache from following the serpentine text. The terms shift and qualify, hedging every obligation, foreclosing every exit. You are nearly ready to set the thing down, to admit defeat, when a peculiar phrasing snags your attention. There, in the third subsection of the yield clause: payment calculated as a *residual proportion* of catch taken from designated channels. If the western channels yielded nothing, the residual collapses to near nothing. A handful of coppers, perhaps. Barely sufficient to pay the merchant's passage to this place, let alone the sum he now demands.
+
+    You speak the clause aloud, voice cutting through the pavilion's tense quiet. The merchant's hand darts out. He tears the parchment from your grasp, holds it close to his face. His lips move soundlessly. His brow furrows deep, color rising at his collar. You brace yourself for his fury, for whatever retribution the guild visits upon those who obstruct its commerce. Instead, he exhales slowly. His shoulders settle. He rolls the contract with deliberate care and meets your gaze with something almost like respect. "Well played," he says. "The error is mine. I will face the consequences." He pauses, weighing you with cool appraisal. "You have a sharp eye. You will go far."
+    +heal_spirits small
+  } @else {
+    REVIEW: You take up the contract, fingers tracing the cramped columns of script while the merchant observes with folded hands. The parchment is thick, expensive; the sort of document that carries weight beyond its words. You think you have found it in the third clause, the one concerning seasonal variance, but before you can voice the thought the merchant inclines his head and points to the margin notation, explaining in measured tones how the subsidiary provision negates your interpretation. His voice carries the patience of a tutor addressing a slow pupil.
+
+    You try again, seizing upon the language of "navigable channels." Surely the western reaches, choked with silt and weed, cannot qualify. The merchant does not sigh, but something in his stillness suggests he has heard this before. He gestures to an addendum, its seal pressed so deep the wax has split the fiber, and reads aloud the definition inscribed there. Each word lands with the certainty of a hammer stroke. You scan the remaining paragraphs, fingers growing clumsy, seeking some crack in the edifice of language. There must be something. The elder watches you, and you feel the weight of her expectation like a stone upon your back. But the contract yields nothing; every avenue closes, every hope collapses into qualifications and exceptions nested like traps within traps.
+
+    At last you set the parchment down, your hands uncertain where to rest. The merchant permits himself a small, tight smile. "Well," he says, his voice carrying across the pavilion, "if this august merchant can find nothing amiss, surely the contract is ironclad." He spreads his hands, a gesture of patient magnanimity. "If we are done with this diversion, let us return to the matter of payment." The villagers' muttering has ceased. They watch you depart from beneath the pavilion, and you cannot meet the elder's gaze as you go.
+    +damage_spirits medium
+  }

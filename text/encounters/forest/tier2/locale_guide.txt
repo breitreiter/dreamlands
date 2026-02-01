@@ -1,0 +1,24 @@
+# The Deep Wood
+
+Past the managed woodlands and the last forester's blaze marks, the forest gets serious. The canopy closes. The undergrowth thickens. The trails that existed stop existing. You're in old growth now—trees wide enough to shelter behind, root systems that reshape the ground into ridges and hollows, deadfall everywhere. Navigation becomes a negotiation between your compass and the terrain, and the terrain usually wins.
+
+This is where the valuable things grow. Hardwoods so dense they sink in water, with grain patterns that master woodworkers covet. Dye-lichens on the oldest trunks that produce colors no cultivated plant can match. Mushrooms, resins, barks with properties the apothecaries pay well for. The forest is generous with its wealth, if wealth means things that take days of hard travel to reach and days more to haul out.
+
+The people who work these woods—dye-gatherers, timber scouts, resin-tappers—are a quiet, competent breed who move through the forest like they belong. They don't. The forest tolerates them. The distinction matters, and the deeper you go, the more you feel it.
+
+## Encounters
+Large wildlife is present and not habituated to people—startled animals are more dangerous than aggressive ones. The terrain is the main hazard: ravines hidden by undergrowth, deadfall that shifts when you climb over it, streams that look crossable and aren't. Disorientation is constant. Every direction looks the same.
+
+Encounters should feel claustrophobic, hushed, and physically demanding. The forest is not malevolent but it is vast and indifferent and it does not care about your schedule. NPCs are few and purposeful—everyone here is working, and the work is hard. The forest's value as a source of rare woods and dyes should be visible in the world.
+
+## Scene Palette
+
+Characters: a timber scout blazing a tree with a hand axe and moving on without stopping, a dye-gatherer scraping lichen from a trunk into a leather pouch with the focus of a jeweler, a resin-tapper checking a line of collection cups hung on old trees, a logger's apprentice who got separated from his crew two days ago and is keeping it together, a charcoal burner operating a kiln deep enough in the woods that nobody taxes him, a woodworker examining a fallen trunk with something close to reverence, a trapper who's been out long enough that conversation feels like a foreign language, a pair of gatherers hauling a bundle of dye-lichen wrapped in cloth like it's an infant
+
+Objects: a blaze mark on a tree that's old enough to be half-swallowed by bark, a plank of dark wood so dense it's surprisingly heavy to lift, a collection cup of amber resin hung from a tap, a bundle of dye-lichen that stains everything it touches, a snapped saw blade lodged in a trunk, a lean-to built from deadfall that's been used and re-used by different people, a rope slung over a high branch for hauling, a cache of harvested bark wrapped in oilcloth, sawdust in a color you've never seen before, a hand axe with a handle worn smooth by years of use
+
+Sensory: the crack of a branch underfoot that sounds like a gunshot in the silence, light that comes in shafts where a tree has fallen and opened the canopy, the smell of wet bark and leaf rot and something resinous, the constant rustle of the canopy that makes it impossible to locate sounds, a stream heard for twenty minutes before it's found, the deep quiet between birdcalls, the unexpected give of a rotten log underfoot, the rich chemical smell near a dye-gatherer's work site, the vertigo of looking up a trunk and not finding the top, air that feels used—breathed already by the forest
+
+Activities: pushing through undergrowth that grabs at everything, checking the compass and disagreeing with it, testing a log bridge with one foot before committing, marking a return route and hoping the marks are enough, hauling a heavy pack over a root system that won't let you walk straight, filtering water from a tannin-dark stream, estimating daylight through a canopy you can't see past, examining a trunk's grain to assess its value, scraping dye-lichen and bagging it carefully, sitting still and listening because something large just moved nearby
+
+Tone reference (do not reuse these scenarios): a dye-gatherer shows the player a smear of lichen extract the color of a bruised sunset and says the trees deeper in produce even richer colors, the player's return blazes have been obscured by something—weather, animals, or the forest, a woodworker camps beside a fallen trunk of extraordinary wood and is trying to figure out how to haul five hundred pounds of timber back to civilization

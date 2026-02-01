@@ -1,0 +1,22 @@
+The Bride's Cave
+Your torch casts its glow upon a cathedral of stone. Light strikes wall and stalagmite, crawls across the floor, and reveals words carved into every span of rock. 
+
+Passageways wind away in all directions.
+
+The air hangs cold and unmoving.
+
+choices:
+
+* Venture deeper into the cave = Pick a passage and see where it leads
+  @check bushcraft medium {
+    FIXME: you get turned around a few times, but soon work out the interior logic to the cave system. you wind your way to the innermost cavern.
+    +open ghosts
+  } @else {
+    The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.
+    +skip_time morning
+    +open ghosts
+  }
+
+* Examine the writing = Perhaps it is a clue. Or perhaps knowledge better left unknown.
+  FIXME: you bring your torch close to the wall
+  +open read_text

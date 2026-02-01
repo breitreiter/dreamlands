@@ -1,0 +1,23 @@
+# Hunter's Green
+
+Woods near civilization are working forests. People live here, or near enough—woodcutters, charcoal burners, trappers, the occasional hermit who prefers trees to neighbors. Paths exist. They're not always marked well, but they're worn enough to follow. The canopy filters the light into something green and cathedral-quiet, but you can still hear a road if you listen.
+
+The trees are old but not ancient. Big enough to feel like a forest, not so big that scale gets strange. Mushrooms, berries, and small game are plentiful. Streams run clear. It's the kind of woods where getting lost is an inconvenience, not a death sentence—you'll hit a road or a fence within a day if you just pick a direction and walk.
+The danger here is minor and familiar: a twisted ankle, a territorial boar, weather rolling in faster than expected. People who live in these woods know them well enough to be casual about them, which occasionally gets someone in trouble.
+
+## Encounters
+No serious monsters. Wildlife is present but not aggressive unless provoked or cornered. The occasional rumor of something deeper in the woods is exactly that—a rumor, repeated by people who've never been more than a day's walk from their village.
+
+Encounters should feel grounded and woodsy. Problems are practical and solvable. People out here are competent and self-reliant but happy enough to share a fire or trade news.
+
+## Scene Palette
+
+Characters: a woodcutter hauling a sledge, a trapper checking snares, a charcoal burner tending a mound, a forester marking trees with paint, a kid collecting mushrooms with more confidence than knowledge, a peddler on a shortcut, a hermit who's friendly but clearly done with towns, a hunter skinning something, a lost merchant's apprentice trying to look calm, an old woman gathering herbs who knows every path
+
+Objects: a notched axe stuck in a stump, a bundle of pelts, a charcoal kiln smoking lazily, trail markers carved into bark, a snare with nothing in it, a rain-soaked journal, a handcart loaded with firewood, a clay jug left by a stream to cool, animal bones picked clean, rope bridge over a creek that looks mostly trustworthy
+
+Sensory: dappled light shifting with the breeze, the crack of someone splitting wood out of sight, pine resin and wet earth, birdsong that stops and starts, a stream you hear before you see, the soft give of needle-covered ground, smoke from a charcoal mound drifting low, the creak of old trees in wind, sudden coolness in deep shade, the buzz of insects in a sunlit clearing
+
+Activities: following a game trail, stacking cordwood, arguing about the best route, stopping to sharpen a blade, filtering water through cloth, reading trail signs, resting against a mossy trunk, setting up camp before the light goes, pointing out edible plants with obvious pride, sketching a rough map on birch bark
+
+Tone reference (do not reuse these scenarios): a trapper warns the player about a mother bear nearby, a lost peddler offers to trade for directions, a forester complains about poachers from the nearest town

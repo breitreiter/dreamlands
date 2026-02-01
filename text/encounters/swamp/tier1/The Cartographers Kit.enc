@@ -1,0 +1,47 @@
+The Cartographer's Kit
+
+The trader squats on the raised path through the reeds, his punt already loaded, his shoulders hunched against the humidity like a man who hasn't been dry in days. He's sorting through a canvas wrap of goods, mostly common stuff, fish hooks and lamp oil. But tucked among them you catch the edge of something different. A leather bag, a Merchant's Guild seal stamped into the leather. A guild cartographer's kit.
+
+He moves to cover it when he sees you looking, but not quickly enough.
+
+He names a price that would empty most purses. Says he's leaving within the hour, heading upriver to drier markets where people pay what things are worth. The kit is in good order, he says, all the pieces intact.
+
+What he doesn't say is how he came by such a treasure. The kit is the mark of a guild cartographer, each custom made for the terrain and conditions of the area they're assigned to. No one would part with such a thing at any price. The leather bag has a history, and you've every reason to imagine it's a dark one.
+
+The trader is already wrapping his goods. The punt rocks gently beneath him. In another moment he'll push off, and the kit goes with him.
+
+choices:
+
+* Bargain him down = Argue that the price is madness for a kit he's desperate to sell
+  @check mercantile medium {
+     You rest your hand upon the canvas satchel, not grasping, not yet, but with enough weight that the trader's eyes fix upon it. The hand bears your Merchant Guild seal, turned now to catch what light filters through the reed haze.
+
+    "You have come by some guild property, my friend." Your voice carries no heat, only the flat certainty of stone. "You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do." You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. "Consider this a finder's fee. I will see that the kit is returned to the guild hall in Aldgate."
+
+    The trader's face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer's kit rests in your hands now, its leather still warm from where he clutched it.
+    +add_item cartographer_kit
+    +rem_gold small
+  } @else {
+    He listens to your reasoning with the expression of a man who has heard it all before. When you finish, he wraps the hide back into his bundle with slow, deliberate movements. Says the price stands or he keeps it. Says there are buyers upriver who understand what the thing is worth, who don't waste his time. He could leave right now.
+
+    You try once more, softer, meeting him somewhere closer to his number. He doesn't even respond. Just settles into the punt and lifts his pole, pushing away from the path with a grunt of effort. The current takes him quickly, and he doesn't look back. Within moments he's around the bend, gone into the reed-maze with your last chance at the kit.
+    +damage_spirits trivial
+  }
+
+* Steal it = Wait until he's distracted, then take the kit and run
+  @check stealth medium {
+    You ask about the lamp oil, pointing to a specific flask, making him turn to retrieve it from deeper in the bundle. Your hand moves before thought catches up. The hide is in your grasp and you're already three strides down the raised path before he shouts behind you. The path is narrow but you know how to run it, feet finding the solid center while his voice rises in anger and disbelief.
+
+    You run until you're out of breath, then hide in the reeds. You wait what seems like an eternity, until the only sound left is the incessant croak of the frogs. You emerge from your hiding place, the kit still in your grasp.
+    +add_item cartographer_kit
+    +skip_time evening
+  } @else {
+    REVIEW: You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader's eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.
+
+    Your hand drifts toward the bundle. The pole sweeps through the humid air with shocking swiftness, the waterlogged wood striking your shoulder and chest with the weight of a falling timber. The blow hurls you sideways from the raised path. You plunge into the muck below, the brackish water closing over your head, thick with decay and the writhing roots of reeds. You thrash upward, gasping, fingers clawing through the slime until you find purchase on something solid. When you drag yourself back toward the path, water streaming from your garments, the trader has already set his pole against the muddy bottom. The punt glides away through the reeds, smooth and certain. He calls back over his shoulder, voice carrying across the water: "Stay dry, outlander." The words hang in the wet air long after he vanishes beyond the curtain of rushes.
+    +damage_spirits small
+    +damage_health trivial
+  }
+
+* Let him leave = Step aside and watch him pole away
+  You step to the edge of the raised path. He needs no further answer. The punt slides into the channel with barely a sound, and he poles away with the efficient rhythm of someone who knows water like a second language. The kit stays wrapped in his bundle, its secrets folded into oil-treated hide that will survive the damp journey upriver to markets where people pay asking price and don't ask uncomfortable questions.

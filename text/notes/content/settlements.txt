@@ -1,0 +1,21 @@
+# Settlements scale with distance from starting city
+# Tiers: 0-15 (Safe), 16-25 (Frontier), 26-40 (Wildlands), 40+ (Dark Places)
+
+# Tier 1: Safe zone - civilization
+0-15:Village
+0-15:Trading Post
+0-15:Hamlet
+0-12:Market Town
+
+# Tier 2: Frontier - edge of civilization
+8-25:Outpost
+10-25:Waystation
+12-30:Crossroads Inn
+
+# Tier 3: Wildlands - sparse settlements
+20-45:Frontier Camp
+25-50:Ranger Station
+
+# Tier 4: Dark Places - only hermits survive here
+35-999:Hermitage
+40-999:Recluse's Hut

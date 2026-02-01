@@ -1,0 +1,25 @@
+# The Fens
+
+Most of the fen is empty. Not quiet — the frogs alone are deafening — but empty of people. Channels of slow brown water wind through reed beds taller than a mounted rider. The ground looks solid until it isn't. There are no paths except the ones animals made, and animals don't care if you sink to your knees.
+
+Where people have settled, they've fought for it. Stilt-villages cluster on the few patches of ground that stay above water year-round, connected by raised paths of packed earth that locals walk confidently and outsiders walk like they're on a rope bridge. Around the settlements, the wetland is managed — rice paddies, fish traps, ditches, dikes, sluice gates. Someone's grandfather engineered all of this and someone's father maintains it and someone's kid will inherit the job and complain about it. But a ten-minute walk in any direction and you're back in unmanaged fen, and the fen doesn't care about your dikes.
+
+The settlements are small, tightly knit, and louder than you'd expect. Everyone is in everyone's business. Outsiders are a source of entertainment — watched with open curiosity, asked too many questions, fed whether they want to be or not. Between villages, though, you can walk for hours and meet nothing but herons and mud. The fens smell — not a bad smell once you're used to it, mud and fish and wet reeds and cookfire smoke if you're near a village — but you don't get used to it for a while. Everything is a little damp. Wood swells. Leather gets soft. Paper curls. The locals don't notice anymore, the same way they don't notice the frogs.
+
+## Encounters
+
+Nothing dangerous. The wildlife is plentiful and mostly delicious. The biggest hazard is stepping off a raised path into thigh-deep water, which is embarrassing but not life-threatening. The locals will laugh about it for weeks.
+
+Encounters should feel muggy, communal, and slightly chaotic. Village life is busy and interconnected. Problems are domestic, social, or infrastructural—a blocked ditch, a neighbor's dispute, a festival that needs organizing.
+
+## Scene Palette
+
+Characters: a fisherman who hasn't caught anything all day, a reed-cutter working alone far from any village, a kid poling a punt like they were born in it, someone's grandmother who is somehow in charge of everything, a trader from outside looking miserable and damp, a woman collecting something from the water and not saying what, a trapper checking snares who knows the deep fen by name, a pilgrim looking for a shrine that might not exist anymore, an old man sitting in a boat doing absolutely nothing on purpose, a pair of strangers who arrived separately and are pretending not to know each other
+
+Objects: a fish trap woven from reeds, a flat-bottomed punt with no owner in sight, a sluice gate handle that sticks, a shrine post wrapped in faded cloth, a jar of something pickled that someone is very proud of, a carved marker half-sunk in mud that doesn't match local work, a rope tied to a submerged stump leading down into dark water, a hand-drawn map on hide that disagrees with the landscape, a bundle of herbs hung to dry that no one will name, a boot stuck in the mud with no sign of its owner
+
+Sensory: frogs — a wall of sound that becomes silence once you stop hearing it, the slap of water against stilts, humidity that sits on the skin like a hand, light reflecting off paddy water in blinding sheets, the smell of mud and rot and something sweet underneath, a bird call that stops mid-note, the wobble of a raised path underfoot, mosquitoes at dusk like a second sky, bubbles surfacing in still water with no visible cause, silence where there should be frogs
+
+Activities: poling a boat through channels that weren't there last season, laying fish traps before first light, patching a dike with packed mud and cursing, watching the water for something specific, cooking enough food for twice the number of people present, walking a path that locals say not to walk at night, trading gossip across the water, sitting very still in a boat and listening, dragging something heavy wrapped in reeds toward a boat, waiting at a crossing for someone who may not be coming
+
+Tone reference (do not reuse these scenarios): a reed-cutter warns the player away from a particular channel but won't explain why, an elder asks the player to judge a property dispute and both sides are lying, someone is packing up and leaving the village in a hurry and no one will talk about it

@@ -1,0 +1,40 @@
+The Burning Field
+
+The first whiff of smoke reaches you on the wind, acrid and wrong for the season.
+
+You crest a low rise and see it. A wheat field halfway to harvest, rolling gold and green under a pale sky, and at its heart a ribbon of flame eating its way toward the road. The fire is young yet, barely waist-high, but the grain is tinder-dry and the wind is steady. Already the smoke rises in a grey column that will be visible from the city walls. A farmer stands at the field's edge, frozen, staring at the destruction with his mouth open. His hands hang at his sides like dead things. Behind him, two children clutch each other, wide-eyed and silent.
+
+Beyond the flame, perhaps fifty paces into the field, a mule brays in panic. It is tangled in something, harness or rope, thrashing as the fire crawls closer. The farmer seems not to hear it. He is muttering numbers under his breath, calculations of loss, the arithmetic of ruin.
+
+A woman runs up from the direction of the village, breathless, carrying two empty sacks. She sees the mule and curses, low and bitter. "The well's dry," she says to no one in particular. "The well's been dry since yesterday." She looks at the field, at the smoke, at the farmer who will not move. Then she looks at you. Her gaze catches on the ring at your hand, the worked gold and the guild sigil, and something like hope flickers across her face before it hardens into expectation.
+
+"You want safe roads to market," she says flatly. "This man supplies half the bakers in Aldgate. If his crop burns, bread prices double by week's end."
+
+The mule screams again. The fire creeps forward, a slow bright line dividing the world into what can be saved and what is already lost. The farmer's children have started to cry. The wind does not care. It pushes the flames steadily toward the road, toward the village beyond, toward the next field and the next.
+
+The woman holds out one of the sacks. "Help or don't," she says. "But decide now."
+
+choices:
+
+* Beat a firebreak = Tear through the wheat ahead of the flames, deny them fuel
+  You wade into the unburned grain and begin to rip. Handfuls at first, then armfuls, tearing the stalks down and scattering them behind you, stamping them flat. The woman sees what you are doing and joins you, working in grim silence. The farmer stirs at last, stumbles forward, begins to beat at the flames with his sack where your firebreak meets the advancing line.
+  @check bushcraft medium {
+    Chaff fills your lungs. Your hands bleed from a hundred cuts. But the fire reaches your break and finds nothing to feed it, hesitates, turns back on itself and begins to gutter. The farmer and the woman beat out the last smoldering patches while you collapse at the field's edge, coughing smoke. The mule is lost. A quarter of the field is ash. But the rest stands golden and untouched, rolling in the wind like nothing happened. The woman brings you water in a clay jug. She does not thank you. She does not need to. The farmer is already walking the firebreak, running his hand through the torn grain, weeping soundlessly. You leave him there, counting what remains.
+    +heal_spirits small
+  } @else {
+    You are too slow. The fire outraces you, jumps your pathetic break in a cascade of sparks, and suddenly you are surrounded. Flame on three sides and smoke so thick you cannot see the ground. You run blind, stumbling through the burning wheat, and when you finally break free at the field's edge your clothes are singed and your throat is raw as butchered meat. The woman drags the farmer back as the fire takes the road. It will burn itself out at the fallow ground beyond, but not before it consumes everything. The mule's screaming stops. You walk away before it ends, the taste of ash thick on your tongue, the smell of burned hair following you down the road.
+    +damage_spirits trivial
+    +damage_health trivial
+  }
+
+* Drive the mule out = Charge through smoke and flame, cut it loose, drive it to safety
+  You do not wait for permission. You wrap cloth across your mouth and run into the smoke. The heat is immediate and savage. The world narrows to the sound of the mule's braying, a beacon in the grey. You find it tangled in a collapsed cart, harness twisted around the axle. Your hands work blind, fumbling with knots and buckles while the flames crawl closer. The mule kicks, wild with fear, and catches you in the ribs. You taste blood. But the last strap comes free and you seize its halter, dragging it forward into the smoke, praying you remember which direction is out.
+
+  You do. Barely. You emerge gasping, the mule bolting past you toward open ground. The fire has taken half the field. The woman and the farmer beat at the edges with their sacks, trying to contain it, but the wind is relentless. By the time it burns itself out against the road, the damage is done. The farmer does not speak. He catches the mule, strokes its neck, and stares at the blackened ruin of his harvest. You leave him there. The children watch you go, silent as stones.
+  +heal_spirits small
+
+* Walk on = This is not your field, not your village, not your concern
+  You meet the woman's eyes and say nothing. Her expression does not change. She expected this, perhaps. She turns away, back to the field, and begins beating at the flames with her sack. Alone. The farmer remains frozen. His children cry.
+
+  You walk. Behind you the smoke rises higher, a grey pillar against the sky. The mule's screaming follows you for a time, then stops. You do not look back. By the time you reach the next village, the column is visible for miles, a marker of ruin that every farmer and merchant will see and remember. In Aldgate, bread prices will rise. Tempers will fray. Someone will pay for this. But it will not be you. You are already gone, a stranger passing through, and the ring on your hand catches the light like a promise no one asked you to keep.
+  +damage_spirits medium

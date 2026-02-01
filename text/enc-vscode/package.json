@@ -1,0 +1,31 @@
+{
+  "name": "dreamlands-enc",
+  "displayName": "Dreamlands Encounter Format",
+  "description": "Syntax highlighting and snippets for .enc encounter files",
+  "version": "0.1.0",
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Programming Languages", "Snippets"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "enc",
+        "aliases": ["Encounter", "enc"],
+        "extensions": [".enc"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "enc",
+        "scopeName": "source.enc",
+        "path": "./syntaxes/enc.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "enc",
+        "path": "./snippets/enc.code-snippets"
+      }
+    ]
+  }
+}

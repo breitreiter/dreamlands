@@ -1,0 +1,157 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Encounter",
+  "scopeName": "source.enc",
+  "patterns": [
+    { "include": "#choices-keyword" },
+    { "include": "#fixme-marker" },
+    { "include": "#review-marker" },
+    { "include": "#check-block" },
+    { "include": "#else-block" },
+    { "include": "#brace-close" },
+    { "include": "#choice-line" },
+    { "include": "#verb-command" },
+    { "include": "#inscription-block" },
+    { "include": "#bold-text" },
+    { "include": "#italic-text" }
+  ],
+  "repository": {
+    "choices-keyword": {
+      "match": "^choices:\\s*$",
+      "name": "keyword.control.choices.enc"
+    },
+    "fixme-marker": {
+      "match": "(FIXME:)(.*)",
+      "captures": {
+        "1": { "name": "markup.bold invalid.deprecated.fixme.enc" },
+        "2": { "name": "invalid.deprecated.fixme.enc" }
+      }
+    },
+    "review-marker": {
+      "match": "(REVIEW:)(.*)",
+      "captures": {
+        "1": { "name": "markup.bold markup.changed.review.enc" },
+        "2": { "name": "markup.changed.review.enc" }
+      }
+    },
+    "check-block": {
+      "match": "(@check)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.check.enc" },
+        "2": { "name": "entity.name.type.skill.enc" },
+        "3": { "name": "constant.numeric.difficulty.enc" },
+        "4": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "else-block": {
+      "match": "(\\})\\s*(@else)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" },
+        "2": { "name": "keyword.control.else.enc" },
+        "3": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "brace-close": {
+      "match": "^\\s*(\\})\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" }
+      }
+    },
+    "choice-line": {
+      "match": "^(\\s*)(\\*)\\s+(.*?)(?:\\s*(=)\\s*(.*))?$",
+      "captures": {
+        "2": { "name": "keyword.operator.choice.enc" },
+        "3": { "name": "entity.name.tag.choice-link.enc" },
+        "4": { "name": "punctuation.separator.equals.enc" },
+        "5": { "name": "string.unquoted.choice-preview.enc" }
+      }
+    },
+    "verb-command": {
+      "patterns": [
+        { "include": "#verb-magnitude" },
+        { "include": "#verb-skill-magnitude" },
+        { "include": "#verb-time" },
+        { "include": "#verb-int" },
+        { "include": "#verb-int-id" },
+        { "include": "#verb-id" },
+        { "include": "#verb-noarg" }
+      ]
+    },
+    "verb-magnitude": {
+      "match": "(\\+)(damage_health|heal|damage_spirits|heal_spirits)\\s+(trivial|small|medium|large|huge)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "constant.numeric.magnitude.enc" }
+      }
+    },
+    "verb-skill-magnitude": {
+      "match": "(\\+)(increase_skill|decrease_skill)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|small|medium|large|huge)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "entity.name.type.skill.enc" },
+        "4": { "name": "constant.numeric.magnitude.enc" }
+      }
+    },
+    "verb-time": {
+      "match": "(\\+)(skip_time)\\s+(morning|afternoon|evening|night)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "constant.numeric.time-period.enc" }
+      }
+    },
+    "verb-int": {
+      "match": "(\\+)(give_gold|rem_gold)\\s+(\\d+)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "constant.numeric.amount.enc" }
+      }
+    },
+    "verb-int-id": {
+      "match": "(\\+)(add_random_items)\\s+(\\d+)\\s+(\\S+)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "constant.numeric.count.enc" },
+        "4": { "name": "string.unquoted.category.enc" }
+      }
+    },
+    "verb-id": {
+      "match": "(\\+)(open|add_tag|remove_tag|add_item|add_condition)\\s+(\\S+)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "string.unquoted.id.enc" }
+      }
+    },
+    "verb-noarg": {
+      "match": "(\\+)(lose_random_item|get_random_treasure|finish_dungeon|fail_dungeon|flee_dungeon)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" }
+      }
+    },
+    "inscription-block": {
+      "begin": "^\\s*(\"\"\")\\s*$",
+      "end": "^\\s*(\"\"\")\\s*$",
+      "beginCaptures": { "1": { "name": "punctuation.definition.string.begin.enc" } },
+      "endCaptures": { "1": { "name": "punctuation.definition.string.end.enc" } },
+      "name": "string.quoted.triple.inscription.enc"
+    },
+    "bold-text": {
+      "match": "(\\*\\*)([^*]+)(\\*\\*)",
+      "captures": {
+        "1": { "name": "punctuation.definition.bold.begin.enc" },
+        "2": { "name": "markup.bold.enc" },
+        "3": { "name": "punctuation.definition.bold.end.enc" }
+      }
+    },
+    "italic-text": {
+      "match": "(?<!\\*)(?<!\\w)(\\*)([^*\\s][^*]*)(\\*)(?!\\*)",
+      "name": "markup.italic.enc"
+    }
+  }
+}

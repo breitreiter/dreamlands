@@ -1,0 +1,18 @@
+# The Mosswater
+
+## Encounters
+Things live here that don't live elsewhere. Not necessarily monsters—just animals and organisms adapted to an environment humans aren't built for. Large reptiles. Swarms of biting insects. Plants that are mildly toxic to touch. Something big enough to rock a canoe that you never quite see.
+
+Encounters should feel damp, disorienting, and resource-draining. Navigation is unreliable. Comfort is unavailable. NPCs, when they appear, are either desperate or strangely at home in ways that raise questions. The swamp's value as a source of rare medicinal ingredients should be visible in the world—people picking, drying, bundling, treating wounds with things that work—but never offered directly to the player.
+
+## Scene Palette
+
+Characters: a recluse living on a raised platform who hasn't seen another person in weeks, an herb-picker knee-deep in black water pulling up roots with her bare hands, a fugitive who won't say from what, a pair of trappers in a canoe who know the channels but won't share for free, a fever-sick traveler camped on a hummock being tended by someone with a poultice that's clearly working, a pilgrim looking for a shrine that may not exist, a gatherer drying bundles of moss on a rack and watching you like you might steal them, someone grinding a bright paste in a mortar who packs it away when you get close
+
+Objects: a waterlogged pack with ruined supplies, a canoe with a slow leak, a bundle of dried rushes for a fire that won't light, a jar of rendered fat for waterproofing, hanging bundles of herbs drying under an oilcloth lean-to, a hand-drawn channel map on oilcloth that's mostly smeared, a snapped pole stuck in the mud, a mortar stained vivid green from whatever was last ground in it, a boot stuck in the muck with no owner in sight, a rope line strung between trees to mark a passable route, a satchel full of roots packed carefully in damp moss
+
+Sensory: the suck and pull of mud at every step, water sounds everywhere—dripping, flowing, bubbling, standing, air thick enough to taste, the drone of insects as a constant background, the rich stink of decomposition that you stop noticing and then suddenly notice again, a sharp medicinal smell near someone's camp that cuts through the rot, the slap of something entering water nearby, light that goes green and dim under the canopy, the feel of sweat that can't evaporate
+
+Activities: testing footing with a pole before each step, wringing out socks for the third time today, scraping mud from gear, scanning the water for movement, trying to find dry wood, reorienting after a wrong turn that all looks the same, treating a leech bite with something from a pouch that works better than it should, patching a canoe, rationing food that's going soft, navigating by the flow direction of water when the sun is hidden
+
+Tone reference (do not reuse these scenarios): a channel the player was following dead-ends in impassable thicket, a gatherer applying a bright paste to a wound on her arm and the wound visibly improving, something large surfaces near the canoe and then submerges without explanation

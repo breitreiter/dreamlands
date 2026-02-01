@@ -1,0 +1,222 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace Dreamlands.Map;
+
+public static class MapSerializer
+{
+    private static readonly JsonSerializerOptions Options = new()
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
+    public static void Save(Map map, int seed, string path)
+    {
+        var dto = ToDto(map, seed);
+        var json = JsonSerializer.Serialize(dto, Options);
+        File.WriteAllText(path, json);
+    }
+
+    public static string ToJson(Map map, int seed)
+    {
+        var dto = ToDto(map, seed);
+        return JsonSerializer.Serialize(dto, Options);
+    }
+
+    public static Map Load(string path)
+    {
+        var json = File.ReadAllText(path);
+        return FromJson(json);
+    }
+
+    public static Map FromJson(string json)
+    {
+        var dto = JsonSerializer.Deserialize<MapDto>(json, Options)
+            ?? throw new InvalidOperationException("Failed to deserialize map JSON");
+
+        var map = new Map(dto.Width, dto.Height);
+
+        // Build region lookup
+        var regions = new Dictionary<int, Region>();
+        foreach (var r in dto.Regions)
+        {
+            var terrain = Enum.Parse<Terrain>(r.Terrain);
+            var region = new Region(r.Id, terrain) { Name = r.Name };
+            regions[r.Id] = region;
+            map.Regions.Add(region);
+        }
+
+        // Populate nodes
+        foreach (var n in dto.Nodes)
+        {
+            var node = map[n.X, n.Y];
+            node.Terrain = Enum.Parse<Terrain>(n.Terrain);
+            node.Connections = ParseDirections(n.Connections);
+            node.RiverSides = ParseDirections(n.Rivers);
+            node.Crossings = ParseDirections(n.Crossings);
+            node.Description = n.Description;
+            node.DistanceFromCity = n.DistanceFromCity ?? int.MaxValue;
+
+            if (n.RegionId.HasValue && regions.TryGetValue(n.RegionId.Value, out var region))
+            {
+                node.Region = region;
+                region.Nodes.Add(node);
+            }
+
+            if (n.Poi != null)
+            {
+                var kind = Enum.Parse<PoiKind>(n.Poi.Kind);
+                node.Poi = new Poi(kind, n.Poi.Type)
+                {
+                    Name = n.Poi.Name,
+                    DungeonId = n.Poi.DungeonId,
+                    DecalFile = n.Poi.DecalFile
+                };
+            }
+        }
+
+        // Recompute LakeNeighbors from terrain data
+        foreach (var node in map.AllNodes())
+        {
+            int count = 0;
+            foreach (var dir in DirectionExtensions.Each())
+            {
+                var neighbor = map.GetNeighbor(node, dir);
+                if (neighbor?.Terrain == Terrain.Lake)
+                    count++;
+            }
+            node.LakeNeighbors = count;
+        }
+
+        // Restore starting city
+        if (dto.StartingCity is { Length: 2 })
+            map.StartingCity = map[dto.StartingCity[0], dto.StartingCity[1]];
+
+        return map;
+    }
+
+    private static Direction ParseDirections(List<string>? dirs)
+    {
+        if (dirs == null || dirs.Count == 0)
+            return Direction.None;
+
+        var result = Direction.None;
+        foreach (var d in dirs)
+            result |= Enum.Parse<Direction>(d, ignoreCase: true);
+        return result;
+    }
+
+    // --- Serialization ---
+
+    private static MapDto ToDto(Map map, int seed)
+    {
+        return new MapDto
+        {
+            Seed = seed,
+            Width = map.Width,
+            Height = map.Height,
+            StartingCity = map.StartingCity != null ? new[] { map.StartingCity.X, map.StartingCity.Y } : null,
+            Regions = map.Regions.Select(ToDto).ToList(),
+            Nodes = map.AllNodes().Select(ToDto).ToList()
+        };
+    }
+
+    private static RegionDto ToDto(Region region)
+    {
+        return new RegionDto
+        {
+            Id = region.Id,
+            Terrain = region.Terrain.ToString(),
+            Name = region.Name,
+            Size = region.Size
+        };
+    }
+
+    private static NodeDto ToDto(Node node)
+    {
+        return new NodeDto
+        {
+            X = node.X,
+            Y = node.Y,
+            Terrain = node.Terrain.ToString(),
+            RegionId = node.Region?.Id,
+            Description = node.Description,
+            Poi = node.Poi != null ? ToDto(node.Poi) : null,
+            Connections = ToConnectionList(node.Connections),
+            Rivers = node.HasRiver ? ToConnectionList(node.RiverSides) : null,
+            Crossings = node.Crossings != Direction.None ? ToConnectionList(node.Crossings) : null,
+            IsLakeAdjacent = node.IsLakeAdjacent ? true : null,
+            DistanceFromCity = node.DistanceFromCity < int.MaxValue ? node.DistanceFromCity : null
+        };
+    }
+
+    private static PoiDto ToDto(Poi poi)
+    {
+        return new PoiDto
+        {
+            Kind = poi.Kind.ToString(),
+            Type = poi.Type,
+            Name = poi.Name,
+            DungeonId = poi.DungeonId,
+            DecalFile = poi.DecalFile
+        };
+    }
+
+    private static List<string>? ToConnectionList(Direction dir)
+    {
+        if (dir == Direction.None)
+            return null;
+
+        var list = new List<string>();
+        foreach (var d in DirectionExtensions.Each())
+            if ((dir & d) != 0)
+                list.Add(d.ToString().ToLower());
+        return list.Count > 0 ? list : null;
+    }
+
+    // --- DTOs ---
+
+    internal record MapDto
+    {
+        public int Seed { get; init; }
+        public int Width { get; init; }
+        public int Height { get; init; }
+        public int[]? StartingCity { get; init; }
+        public List<RegionDto> Regions { get; init; } = new();
+        public List<NodeDto> Nodes { get; init; } = new();
+    }
+
+    internal record RegionDto
+    {
+        public int Id { get; init; }
+        public string Terrain { get; init; } = "";
+        public string? Name { get; init; }
+        public int Size { get; init; }
+    }
+
+    internal record NodeDto
+    {
+        public int X { get; init; }
+        public int Y { get; init; }
+        public string Terrain { get; init; } = "";
+        public int? RegionId { get; init; }
+        public string? Description { get; init; }
+        public PoiDto? Poi { get; init; }
+        public List<string>? Connections { get; init; }
+        public List<string>? Rivers { get; init; }
+        public List<string>? Crossings { get; init; }
+        public bool? IsLakeAdjacent { get; init; }
+        public int? DistanceFromCity { get; init; }
+    }
+
+    internal record PoiDto
+    {
+        public string Kind { get; init; } = "";
+        public string Type { get; init; } = "";
+        public string? Name { get; init; }
+        public string? DungeonId { get; init; }
+        public string? DecalFile { get; init; }
+    }
+}

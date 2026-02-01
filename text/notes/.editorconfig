@@ -1,0 +1,10 @@
+# Encounter fragment format uses 2-space indents. Tab key inserts 2 spaces.
+root = true
+
+[*.enc]
+indent_style = space
+indent_size = 2
+
+[encounters/**/*.txt]
+indent_style = space
+indent_size = 2

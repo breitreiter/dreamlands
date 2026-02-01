@@ -1,0 +1,22 @@
+# Swamp encounters by tier
+# Tiers: 0-15 (Safe), 16-25 (Frontier), 26-40 (Wildlands), 40+ (Dark Places)
+
+# Tier 1: Safe zone - minor hazards
+0-15:Poisonous snakes slither through the reeds.
+0-18:A hermit offers guidance for a price.
+0-20:You find a boardwalk through the mire.
+
+# Tier 2: Frontier - mixed
+10-30:A crocodile lurks just beneath the surface.
+12-30:Giant leeches swarm from the murky water.
+15-35:Strange sounds echo across the marsh.
+
+# Tier 3: Wildlands - dangerous
+20-45:Will-o'-wisps lead travelers astray.
+25-50:Lizardfolk hunters track your movement.
+25-45:The ground gives way to quicksand.
+
+# Tier 4: Dark Places - deadly
+35-999:A coven of witches performs dark rituals.
+40-999:Shambling undead rise from the muck.
+40-999:The swamp water turns black and begins to bubble.

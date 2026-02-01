@@ -1,0 +1,62 @@
+# Combat Balance Data
+
+combat:
+  resolution:
+    type: abstract_narrative  # Not tactical grid combat
+    system: skill_check       # Combat skill + modifiers vs target
+    
+  player_stats:
+    starting_health: 20
+    health_gain_per_level: 0  # No leveling, static HP pool
+    
+  damage:
+    # Direct damage (rare - most combat causes conditions)
+    minor_injury: 3
+    moderate_injury: 5
+    severe_injury: 8
+    
+    # Combat defeat typically causes Injured condition rather than direct damage
+    defeat_damage: 5
+    defeat_condition: injured  # -2 health per day until treated
+    
+  enemy_difficulty:
+    tier1:
+      typical_hp: 5
+      combat_target: 12
+      damage: 3
+      
+    tier2:
+      typical_hp: 10
+      combat_target: 16
+      damage: 5
+      
+    tier3:
+      typical_hp: 15
+      combat_target: 20
+      damage: 8
+      
+    tier4:
+      typical_hp: 25
+      combat_target: 24
+      damage: 12
+      
+  equipment_bonuses:
+    # Weapons
+    rusty_sword: 1
+    good_sword: 3
+    fine_sword: 5
+    
+    # Armor (defense bonus reduces damage taken)
+    leather_armor: 2
+    chain_mail: 4
+    plate_armor: 6
+    
+  supernatural_damage:
+    # Direct Spirits damage from cosmic horror encounters
+    minor_terror: 2
+    moderate_terror: 4
+    major_revelation: 8
+    witness_the_unspeakable: 15
+    
+    # No condition for this - it's instant and frightening
+    # Design: rare, dramatic, no way to resist

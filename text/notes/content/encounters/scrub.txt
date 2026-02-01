@@ -1,0 +1,22 @@
+# Scrub encounters by tier
+# Tiers: 0-15 (Safe), 16-25 (Frontier), 26-40 (Wildlands), 40+ (Dark Places)
+
+# Tier 1: Safe zone - environmental challenges
+0-15:Cacti provide meager shelter from the sun.
+0-18:A dried-up well marks an abandoned camp.
+0-20:Desperate refugees flee across the wasteland.
+
+# Tier 2: Frontier - mixed
+10-30:Vultures circle something up ahead.
+12-30:A dust storm approaches rapidly.
+15-35:You find tracks of a large predator.
+
+# Tier 3: Wildlands - dangerous
+20-45:Giant lizards bask on the hot rocks.
+25-50:Raiders on horseback spot you from afar.
+25-45:The heat becomes unbearable.
+
+# Tier 4: Dark Places - deadly
+35-999:A giant scorpion emerges from the sand.
+40-999:Mirages reveal impossible, beckoning shapes.
+40-999:The land itself seems to drain your strength.

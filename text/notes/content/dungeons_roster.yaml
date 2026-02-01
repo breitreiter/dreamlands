@@ -1,0 +1,185 @@
+# Dungeon Roster - Machine-readable source of truth
+# 
+# This file is the canonical data source for all dungeons.
+# - mapgen uses: id, biome, decal for placement
+# - game client uses: id, folder for encounter loading
+# - both use: tier_range for distance-based placement
+#
+# See mapgen/reference/dungeon_roster.md for full design docs and descriptions
+
+dungeons:
+  # ============================================================================
+  # FOREST (6 dungeons)
+  # ============================================================================
+    
+  - id: blackivy_manse
+    name: Blackivy Manse
+    biome: forest
+    decal: dungeons_pack_aty_normal_12.png
+    folder: blackivy_manse
+    tier_range: [1, 1]
+  
+  - id: librarians_mound
+    name: The Librarians' Mound
+    biome: forest
+    decal: dungeons_pack_aty_normal_31.png
+    folder: librarians_mound
+    tier_range: [2, 3]
+  
+  - id: pallid_court
+    name: The Pallid Court
+    biome: forest
+    decal: ruins_megapack_normal_29.png
+    folder: pallid_court
+    tier_range: [4, 4]
+  
+  - id: charnel_garden
+    name: The Charnel Garden
+    biome: forest
+    decal: ruins_megapack_normal_21.png
+    folder: charnel_garden
+    tier_range: [1, 2]
+  
+  - id: fane_whispering_antlers
+    name: The Fane of Whispering Antlers
+    biome: forest
+    decal: dungeons_pack_aty_normal_37.png
+    folder: fane_whispering_antlers
+    tier_range: [2, 3]
+  
+  - id: lammasgate
+    name: Lammasgate
+    biome: forest
+    decal: ruins_megapack_normal_02.png
+    folder: lammasgate
+    tier_range: [3, 4]
+  
+  # ============================================================================
+  # MOUNTAINS (5 dungeons)
+  # ============================================================================
+  
+  - id: frostwrights_needle
+    name: The Frostwright's Needle
+    biome: mountains
+    decal: dungeons_pack_aty_normal_17.png
+    folder: frostwrights_needle
+    tier_range: [3, 4]
+  
+  - id: greyspire_hermitage
+    name: Greyspire Hermitage
+    biome: mountains
+    decal: dungeons_pack_aty_normal_09.png
+    folder: greyspire_hermitage
+    tier_range: [4, 4]
+  
+  - id: marrowpeak_redoubt
+    name: Marrowpeak Redoubt
+    biome: mountains
+    decal: ruins_megapack_normal_04.png
+    folder: marrowpeak_redoubt
+    tier_range: [3, 4]
+  
+  - id: vultures_pulpit
+    name: Vulture's Pulpit
+    biome: mountains
+    decal: ruins_megapack_normal_25.png
+    folder: vultures_pulpit
+    tier_range: [2, 3]
+  
+  - id: tabernacle_honest_men
+    name: The Tabernacle of Honest Men
+    biome: mountains
+    decal: ruins_megapack_normal_17.png
+    folder: tabernacle_honest_men
+    tier_range: [2, 4]
+  
+  # ============================================================================
+  # SWAMP (5 dungeons)
+  # ============================================================================
+  
+  - id: submersion_saint_evarre
+    name: Submersion of Saint Evarre
+    biome: swamp
+    decal: ruins_megapack_normal_03.png
+    folder: submersion_saint_evarre
+    tier_range: [4, 4]
+  
+  - id: fort_contrition
+    name: Fort Contrition
+    biome: swamp
+    decal: dungeons_pack_aty_normal_01.png
+    folder: fort_contrition
+    tier_range: [1, 2]
+  
+  - id: bile_vaults
+    name: The Bile Vaults
+    biome: swamp
+    decal: dungeons_pack_aty_normal_14.png
+    folder: bile_vaults
+    tier_range: [2, 3]
+  
+  - id: redoubt_mire_baron
+    name: Redoubt of the Mire Baron
+    biome: swamp
+    decal: dungeons_pack_aty_normal_33.png
+    folder: redoubt_mire_baron
+    tier_range: [2, 4]
+  
+  - id: fever_palace
+    name: The Fever Palace
+    biome: swamp
+    decal: ruins_megapack_normal_16.png
+    folder: fever_palace
+    tier_range: [2, 4]
+  
+  # ============================================================================
+  # HILLS (3 dungeons)
+  # ============================================================================
+  
+  - id: azharan_unruled
+    name: Azharan, the Unruled
+    biome: hills
+    decal: ruins_megapack_normal_11.png
+    folder: azharan_unruled
+    tier_range: [2, 3]
+  
+  - id: caliphs_dreaming
+    name: The Caliph's Dreaming
+    biome: hills
+    decal: ruins_megapack_normal_08.png
+    folder: caliphs_dreaming
+    tier_range: [2, 4]
+  
+  - id: sepulcher_ninety_nine
+    name: Sepulcher of the Ninety-Nine
+    biome: hills
+    decal: dungeons_pack_aty_normal_03.png
+    folder: sepulcher_ninety_nine
+    tier_range: [3, 4]
+  
+  # ============================================================================
+  # PLAINS (2 dungeons)
+  # ============================================================================
+  
+  - id: brides_cave
+    name: The Bride's Cave
+    biome: plains
+    decal: caveminevintage_normal_17.png
+    folder: brides_cave
+    tier_range: [1, 1]
+  
+  - id: sodality_furrow
+    name: The Sodality of the Furrow
+    biome: plains
+    decal: ruins_megapack_normal_05.png
+    folder: sodality_furrow
+    tier_range: [1, 1]
+
+# Notes:
+# - tier_range format is [min, max] difficulty tier
+# - Tier 1 (Safe)
+# - Tier 2 (Frontier)
+# - Tier 3 (Wildlands)
+# - Tier 4 (Dark Places)
+# - decal paths are relative to assets/map/decals/poi/dungeons/{biome}/
+# - folder paths are relative to text/encounters/dungeons/
