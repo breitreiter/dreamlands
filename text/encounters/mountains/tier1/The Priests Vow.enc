@@ -1,0 +1,54 @@
+The Priest's Vow
+
+You hear the shouting before you round the switchback, a raw, hoarse voice calling for help. A miner sits wedged between two massive stones where a recent rockfall has shifted the scree. His legs vanish into the gap. The rocks lean against each other like drunk companions, holding him in place without crushing him. Yet. Above, more loose stone perches on the slope, ready to follow the first slide down.
+
+The miner's head has a bloodly gash from the rockslide, but he is alive and glad to see you.
+
+A priest is here, furiously praying for the miner's safety. "Oh, thank goodness you came! I am on pilgrimage, and cannot touch the impure. But you can. And you must! I will bless you, and you will pull him free."
+
+The rocks trapping the miner are daunting. With the priest's help, you could pull the man free, but on your own you'd likely doom both the miner and yourself.
+
+The rocks creak as the scree settles another finger's width.
+
+choices:
+
+* Convince the priest to help = Superstition be damned
+  @check negotiation medium {
+    You stride to the priest's side, your voice cutting through his rising prayers. "Get over here and help me!"
+
+    He recoils as if struck. "I cannot, brother. You must understand. I am on holy pilgrimage. If I touch him, my hands will be unclean. I will be cursed."
+
+    You measure the man before you. His eyes burn with conviction, not cowardice. "Ignore your hands, brother." you say, "What of your heart? If you let this man die, will not your heart be unclean? Will you not be cursed as a murderer is cursed?"
+
+    The priest goes still. His gaze drops to his open palms, and he stares at them as if reading scripture written in his own flesh. The miner's ragged breathing fills the silence. Somewhere above, a pebble skitters down the slope.
+
+    "You are right," the priest says at last. "I will help you."
+
+    Together you grasp the miner beneath his arms. Your boots scrape against loose stone as you pull. The priest's knuckles whiten, his jaw clenched, and you feel the man's weight shift inch by agonizing inch. The rocks groan. With a final heave you wrench the miner free, dragging him clear as a cascade of smaller stones rattles down to fill the space where he lay trapped. The three of you collapse in the dust, gasping.
+
+    You glance at the priest. His hands tremble before him, no longer clean by the laws he honors. You hope you have not damned this man.
+    +heal_spirits small
+  } @else {
+    You stride to the priest and seize his shoulder. "Get over here and help me pull him free!"
+
+    The holy man recoils. "I cannot, brother. You must understand I walk the high pilgrimage. If I touch his blood, my hands become unclean. The curse will follow me." His voice trembles with genuine terror.
+
+    You turn from him without another word. You kneel beside the trapped miner and draw your hand across the gash on his brow, collecting the warm blood on your palm. The miner watches with feverish eyes as you rise and cross back to the priest. Before he can retreat, you press your bloodied palm against his face, drawing a dark streak from temple to jaw.
+
+    "There," you say, "you're unclean. Now help me."
+
+    The priest touches the stain with trembling fingers. He lifts his hand before his eyes, turns it in the mountain light, sees the red gleaming there. His mouth opens. The shriek that tears from his throat is not words but pure animal anguish. It does not stop. He drops to his knees, still howling, rocking forward and back with both hands clutching at his defiled face.
+
+    You return to the miner and brace your feet against the lower stone. You pull. The rocks do not yield. You shift your grip, plant yourself anew, haul with every fiber of strength you possess. Behind you the priest's wailing scrapes against your skull. The miner gasps shallow breaths, his face gone the color of tallow. Above, a grinding sound: stone dragging across stone. A pebble skitters down the slope, then another. You pull again. Nothing moves.
+
+    The scree settles with a deep, final crunch. The miner's eyes roll back. His chest stills. You release your grip and step away, the priest's shrieks still echoing from the mountainside.
+    +damage_spirits medium
+  }
+
+* Try to dig him out on you rown = Try to excavate around the trapped legs instead of moving the stones
+  You drop to your knees beside the gap and begin scooping scree away from where his legs disappear between the rocks. The loose stone comes away easily at first. Then you hit compressed earth, then bedrock. The miner watches you work with something that might be gratitude. The priest prayers eacho. You dig until your hands are raw and the hole is twice as deep, but the stones extend further than you can reach. The gap that holds him runs all the way down to the mountain's bones. The miner knows it before you do. You see understanding settle across his face like dust. His voice comes out steady despite everything. "Enough," he says. "You tried." When you round the switchback, you can still hear the priest's fruitless prayers.
+  +damage_spirits medium
+
+* Walk on = This isn't your problem and the mountain takes who it takes
+  You meet the trapped miner's eyes for a moment. He doesn't curse or plead. Perhaps he's already spent his voice shouting before you arrived. Perhaps he simply recognizes the shape of your decision in your posture. You continue up the switchback and the voices fade behind you. The trail climbs another half mile before leveling onto a ridge where you can see the whole valley spread below. From here the rockfall is invisible, just another fold in the mountainside. A hawk circles on a thermal, hunting. The wind carries the faint sound of metal on stone from a mine shaft somewhere higher up. Everything continues as it always has. You drink from your own flask and taste snowmelt, cold and clean. The water is good in the Near Ranges.
+  +heal_spirits trivial

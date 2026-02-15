@@ -1,0 +1,45 @@
+The Trailside Verdict
+
+A toll collector sits on a flat rock beside the trail, three miners standing witness behind him. A muleteer kneels in the gravel, hands spread. Before the kneeling man lies an open pack, ore samples spilled across the stone. The muleteer has a dark bruise across his jaw.
+
+"Theft from a registered claim," the toll collector pronounces gravely. "Caught red-handed coming down the trail. Standard judgment: restitution double the value, or we turn you over to the mining council." 
+
+The muleteer protests. He was a hired hand, just hauling what he was paid to haul, never wanted any trouble.
+
+Then the toll collector's eyes find you. "You came down same trail. You see this man working any claim up there? You saw something, or you didn't." The wind cuts across the switchback, carrying the distant clang of metal on stone. The muleteer's face turns toward you, hope and desperation carved into sun-weathered features.
+
+But you weren't watching claims or miners. Your attention was on your footing and the trail, not the goings-on of the miners. The toll collector waits, ledger open. The miners shift, hands near their tools. The muleteer's fate hangs on testimony you cannot honestly provide.
+
+choices:
+
+* Testify for him = Claim you saw him working a claim, lending your word to his innocence
+  @check negotiation medium {
+    The toll collector's eyes narrow as you speak, tracing the line of the trail upward with his gaze as if measuring your claim against the gradient itself. You describe the upper switchback, the eastern face where morning light strikes first, a figure bent to the rock with tools in hand. The muleteer seizes the thread, nodding, adding details that match or nearly match. One of the miners shifts his weight, uncertain now. The other two exchange glances.
+
+    The toll collector closes his ledger with a sound like a verdict deferred. "Witness testimony complicates things," he says, voice flat with the weariness of a man who knows how easily truth bends in thin air. He waves the muleteer up, tells him to move on, but the look he gives you carries weight. The miners watch you pass with eyes that remember faces. The muleteer doesn't thank you, just gathers his pack and walks quickly down the trail, and you're left with the knowledge that your word is now written in the invisible ledger this mountain keeps—whether true or false, it's been spent.
+    +heal_spirits small
+  } @else {
+    You step forward and declare that you saw the man laboring at a claim, just as he swore. Your voice carries across the switchback with what you hope sounds like certainty.
+
+    The muleteer seizes upon your words with desperate gratitude. "Yes, yes, the northern face, just past the second marker stone, where the quartz runs deep through the granite." He nods vigorously, hands gesturing toward the heights. But you spoke of the eastern slope, near the stand of twisted pines. The contradiction hangs in the air like smoke. You open your mouth to amend your account, to weave the threads together, but the toll collector's expression has already hardened into something colder than the mountain wind. The miners behind him exchange glances, their hands settling more firmly upon their tools.
+
+    The toll collector's gaze drops to your hand, fixing upon the ring that encircles your finger. "Lying to a toll collector." His voice carries no anger, only a terrible weariness. "You should know better than most. I remember when that ring meant something." He closes his ledger with a sound like a splitting stone. A gesture sends two miners forward to grip the muleteer's arms, hauling him upright from the gravel. "Take him away. He'll work his debt in the mines." The muleteer does not resist, does not even look at you as they lead him toward the upper trail. The toll collector turns his attention back to you, and his words fall with the weight of judgment. "You'd best be passing through. Not much law up in these mountains, so we rely on honesty, a trait you seem to lack." He moves to the side of the trail, creating a narrow passage, his silence an invitation to depart that will not be repeated.
+    +damage_spirits small
+  }
+   
+* Testify against him = State you saw no one working claims where he says he was
+  You meet the muleteer's eyes as you speak and watch hope collapse like a shaft with rotted timbers. The words come plain: you saw no one working the claims, no tools abandoned, no fresh tailings. The toll collector nods as though this confirms what he already knew. The miners close ranks, hands settling on pick handles.
+
+  They bind the muleteer's wrists with rope meant for pack loads. He doesn't struggle, doesn't plead further, just stares at the spilled ore samples like a man reading his own grave marker. The toll collector marks something in his ledger, mentions the mining council, mentions examples that need making. They lead him down the trail, boots scuffing gravel, and the sound carries long after they've rounded the switchback.
+
+  You're left alone with the scattered ore and the wind.
+  +add_item backpack
+
+* Admit you weren't watching = Confess you saw nothing useful, offering no testimony either way
+  The toll collector's face hardens into something carved from the same granite as the peaks above. "No use to me then," he says, closing the ledger with a snap that echoes off the rock face. The miners mutter, dissatisfaction rolling through them like a rockslide's first rattle. One steps forward, jabbing a thick finger toward the muleteer. "Guilty, then. Silence from a witness means he's got nothing good to say."
+
+  The muleteer surges upward, words tumbling out—appeals to fairness, to proper procedure, to waiting for someone who actually saw something. The toll collector raises a hand, considers, then shakes his head. "Trail justice doesn't wait for perfect proof. You were coming down with claim-marked ore, no papers, no witness. Math's simple." They take the muleteer by both arms. He doesn't fight, but his eyes find yours one last time, and there's nothing in them but the cold knowledge of abandonment.
+
+  They march him downtrail toward whatever verdict the mining council delivers. You're waved aside, irrelevant now, a passerby who confirmed nothing but their own absence.
+  +damage_spirits trivial
+

@@ -11,6 +11,14 @@ Violating any of these invalidates the encounter. Check each one before finalizi
 5. NO NAMED NPCS. Do not invent named characters, locations, or organizations beyond what the locale provides. "A farmer," "the forester," "the old woman": not "Theron the woodcutter" or "the Order of the Silver Asp."
 6. OUTCOME CONSISTENCY. Each outcome must be internally consistent with the body text. If the body establishes a locked door, no outcome walks through it without addressing the lock.
 
+## About the PC
+- The player is a wanderer who travels alone
+- The player's gender is never specified
+- The player is new to the area
+- The player is a high-ranking member of the Merchant's Guild
+- The player wears a signet ring which identifies them as a high-ranking member of the Merchant Guild. 
+- If another member of the Merchant's Guild has wronged an NPC, they may hold the player to account for it
+
 ## Locale
 
 {{LOCALE_GUIDE}}
@@ -41,13 +49,6 @@ Every choice must resolve through one of these actions, performed by the player 
 - USE_BUSHCRAFT: Apply wilderness knowledge
 - USE_STRENGTH: Apply brute physical force
 - USE_TOOL: Apply a tool or device to the problem
-
-## About the PC
-- The player character is a wanderer who travels alone
-- The player character's gender is never specified
-- The player character is new to the area
-- The player character wears a signet ring which identifies them as a high-ranking member of the Merchant Guild. NPCs might assume the PC is wealthy, well-connected, worldly, or trustworthy.
-- If another member of the Merchant's Guild has wronged an NPC or promised them something, they may hold the player character to account for it
 
 ## Instructions
 

@@ -1,0 +1,53 @@
+Blockade at Copper Gap
+
+The pass ahead chokes with miners. Thirty, maybe forty of them, blocking the switchback with overturned carts and piled stones. They've barricaded the only maintained route through this section of the Ranges. Their faces show the gray dust of underground work, and their hands grip tools that were splitting rock this morning. A man with a dust-caked beard stands atop the largest cart, calling out grievances about wages cut in half, about an overseer who changed the terms after ore was already hauled. The crowd rumbles agreement. They're not letting anyone through until the mining company sends someone to negotiate.
+
+The merchant behind you has already started complaining about spoiled goods and lost profits. More travelers bunch up at your back, a growing knot of impatience and cargo that can't afford delay. 
+
+The bearded man notices you studying the barricade. He climbs down, approaches with careful steps. "I know your ring, friend, but I don't know you." He gestures at the strikers, "these are good men, hard workers, but they've been done wrong by the company. It would mean a lot to have a guild member speak on their behalf." His voice drops low enough that only you can hear it. "Perhaps we could also find a way to get you through the blockade, if you're a friend of the miners."
+
+The miners picked this spot with care. You can see no other way forward.
+
+choices:
+
+* Speak on behalf of the miners = Lend your guild status to their cause
+  You draw breath and step forward, though the words do not come easily. Speaking for those who halt commerce and raise barricades against the very order you have spent your years upholding sits ill with you. Yet here you stand, and the bearded man watches with eyes that have seen too many promises broken. You speak of wages earned and contracts honored, of men who split stone in darkness and deserve what was pledged them. The old phrases rise unbidden to your tongue: prosperity through order, the rule of lawful exchange. You swallow them down. They would serve no purpose here.
+
+  The assembled travelers stare. Merchants cross their arms over laden packs. A woman with bolts of fabric balanced on her mule shakes her head in disgust. No one nods agreement. No one steps forward to join their voice to yours. An overripe apple comes hurtling from the rear of the crowd, spinning end over end. It passes a hand's breadth from your shoulder and bursts against the stones of the barricade, spattering pulp across the weathered wood.
+
+  The miners keep their word. When night falls and the stars kindle cold above the peaks, they open a narrow gap between cart and stone. You slip through in darkness, your passage masked by the shifting of guards and the crackle of their fire. The bearded man clasps your shoulder once, says nothing, and then you are beyond the barricade with the pass stretching empty before you.
+  +skip_time night
+
+* Attempt to climb around = Scale the steep terrain beside the barricade
+  @check bushcraft medium {
+    You leave the maintained track and commit to the slope. The rock here crumbles at the first test, sends pebbles chattering down into the gorge. You move slowly, testing each handhold, finding the stone that won't betray you. Your fingers go numb in the wind. Twice you freeze as loose scree slides beneath your boots, but you read the mountain's old bones beneath the treacherous surface and trust them. The miners below watch your progress in silence. One calls out a warning about an unstable section. You adjust, find another route.
+
+    You pull yourself onto the trail beyond the blockade with scraped palms and dust in your throat. The path ahead lies empty, winding higher into the peaks. Behind you, travelers still crowd against the barrier. The bearded man raises one hand in acknowledgment—respect or perhaps just recognition that some people cannot be stopped by stones and carts. You've lost an hour and gained a lesson about what desperation looks like from above.
+    +heal_spirits small
+  } @else {
+    The slope beside the barricade looks climbable until you're halfway up it. The stone here has been fractured by a thousand freeze-thaw cycles, and it crumbles like stale bread beneath your weight. You commit too much to a handhold that breaks free. The slide starts small but grows, rock cascading loose in a gray avalanche that carries you sideways and down in a chaos of impacts.
+
+    You crash into the roadbed below the blockade hard enough to empty your lungs. Miners rush forward, pull you clear of the still-sliding debris. Your ribs scream. Blood runs from a gash across your forearm, and your knee has already begun to swell. The bearded man crouches beside you, his expression caught between concern and vindication. They carry you to the side of the road, bind your wounds with cloth that smells of rock dust and sweat. You will not be climbing today, nor tomorrow. The blockade remains, and you sit among the trapped travelers nursing injuries earned by impatience. The cold settles into your bones while the miners return to their vigil.
+    +skip_time morning
+    +damage_health small
+  }
+
+* Persuade the other merchants to force through = Organize the backed-up merchants and couriers to break the barricade
+  @check negotiation medium {
+    You move among the travelers, speaking low. The merchant with spoiled goods needs no convincing. A courier carrying time-sensitive contracts joins immediately. A muleteer whose animals are growing anxious in the confined space adds her voice. Within minutes you've assembled a core of twenty travelers whose livelihoods depend on passage. You approach the barricade together, not threatening but inexorable as weather.
+
+    The miners see you coming. They raise their tools, form a line, but their hearts aren't in violence. These are men who split stone for wages, not soldiers. When your group reaches the carts and begins dismantling the barrier methodically, the resistance crumbles. The bearded man shouts threats that nobody heeds. A few miners step forward but stop when they see the determination in the travelers' faces. The barricade comes apart piece by piece. You all push through, ignoring the curses that follow you up the switchback.
+
+    Behind you, the miners stand among the ruins of their blockade. Some are already drifting away, heading back to whatever grim terms the company will impose. The bearded man remains atop his cart, alone now, staring at the scattered stones. You've cleared the pass, but the cold wind carries the sound of something breaking that has nothing to do with wood or rock.
+    +heal_spirits small
+  } @else {
+    You move among the travelers, making your case. The merchant listens, nods, but won't commit. The muleteer won't risk her animals. A courier flat refuses to be part of breaking a strike, mutters something about his own father working a mine once. One by one they turn away from your arguments. You have only a handful of supporters when you walk to the barricade. And by the time you get there, you're down to two.
+
+    You demand to be let through, or you'll force the matter. The bearded man gestures, and a half-dozen miners climb down from the barricade. They do not seriously injure you, but they give you a good beating as a message to the other travelers.
+
+    The strike resolves itself by morning, but your bruises are still raw.
+    +skip_time morning
+    +damage_health small
+    +damage_spirits small
+  }
+

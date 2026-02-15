@@ -1,0 +1,49 @@
+The Old Assay Station
+
+The trail switchbacks through loose scree to a stone structure wedged between two boulders like a tooth in a broken jaw. The assay station has been abandoned long enough that moss mats the north wall and the hinges have swollen with rust, but not so long that the roof has surrendered. A rockslide blocks the main trail ahead—fresh enough that dust still ghosts the air when the wind shifts, massive enough that no lone traveler is shifting it. The detour climbs another thousand feet along an exposed ridge. To the west, the sky darkens to a color like old bruises pressed under skin.
+
+Inside, the air is colder than it should be. Not drafty—still. Held. The hearth is laid with ash that looks recently stirred, though no footprints mark the floor. Three different hands have carved warnings into the doorframe, letters cut deep enough to splinter the wood. Along the far wall, half-collapsed against a stack of rotted sample crates, lie two skeletal corpses in the tatters of heavy work coats, ribs laced with mineral stain, skulls tilted toward the scales as if waiting for a verdict.
+
+Up here, folk speak of such places in lowered voices. Where a man dies in the mountains, that ground is no longer mere ground but a kind of tomb. It may lack carved stone or priestly seal, but it holds the same claim. A proper cleric might come with oils and ash and words of severing, lay the restless to quiet, and mark the threshold clean again. A traveler with a bedroll and a flint has no such authority.
+
+The first cold drops of sleet tick against the stone outside.
+
+
+choices:
+
+* Study = Examine the station carefully before deciding whether to shelter here
+  A frantic message is caved into the doorframe: "The dead are digging. DIGGING FROM BELOW." A second is barely legible, as though scratched in haste or terror: "They know the weight of what you carry."
+  @check perception medium {
+    Inside, you find the source of the digging sounds. A root cellar hatch beneath the worktable has warped with moisture, and when the wind gusts a certain way, it rattles against its frame with a rhythmic knock that could be mistaken for something deliberate. The scales swing slightly in the draft, their creaking almost conversational in the silence. You wedge a stone against the hatch to still it, and the station falls quiet except for the wind.
+
+    The hearth draws well when you test it with a scrap of kindling. The walls keep the wind at bay. You wait out the storm in practical shelter while sleet turns to snow outside, and when dawn comes clear and cold, you continue up the detour route with no more weight than you brought here.
+    +heal_spirits small
+  } else {
+    REVIEW: You crouch at the threshold and let your eyes adjust to the gloom within. The skeletal remains draw your gaze first, but as the shadows resolve, you begin to notice other marks. Scratches in the plaster near the window frame, deliberate and deep. You step closer and make out letters gouged into the ancient coating: "sleep not in this tomb."
+
+    A second warning mars the wood above the collapsed shelving, this one carved with less care, the letters ragged as though cut in haste or terror: "on the first night, they measure your gold, on the next night, they measure your soul." The doorframe bears a third inscription, so deeply scored that the wood has split along the grain. You trace the edges with one finger and feel splinters catch at your skin.
+
+    The cold presses closer. You tell yourself you are no slave to superstition, that these are merely the scratchings of frightened men long dead. Yet your pulse quickens, and the stillness within the station feels less like shelter than like the held breath before a spring trap closes. You straighten, step back across the threshold, and turn your face to the darkening sky.
+
+    The descent is cruel. Sleet hardens to ice on the scree, and each footfall threatens to send you sliding down the slope in a tumble of loose stone. Your hands grow numb where you brace against the boulders. Water runs cold down the back of your neck. But no pale shapes rise from the rocks to bar your path, and no skeletal fingers reach from the shadows. By the time you reach the lower trail, your legs burn and your breath comes hard, but you are alone with the mountain and the gathering storm.
+    +damage_spirits small
+  }
+
+* Try to do last rites = Say a few words over the bodies
+  You kneel before the remains and speak what words you remember from graveside vigils, the formulae worn smooth by repetition in temple halls. The phrases come haltingly at first, then with greater confidence as you recall the cadences that once echoed from vaulted stone. You add prayers overheard in childhood, their meanings half-forgotten but their rhythms still potent, syllables that carried weight when intoned by voices robed in authority. Your breath clouds in the cold air with each invocation.
+
+  The corpses remain still. You do not touch them; the mineral bloom crusting their bones suggests transformations best left undisturbed. Instead you gather kindling from the splintered crates and coax a small fire to life in the hearth, feeding it carefully until warmth pushes back the station's chill. You spread your bedroll as far from the bodies as the cramped space permits and settle into it, wrapping yourself against the cold that seeps up through stone.
+
+  Sleep comes poorly. The fire casts restless shadows that animate the hollow sockets, lend false motion to the skeletal fingers. Each time you drift toward unconsciousness, dreams rise to meet you: visions of stone pressing down, of scales that measure guilt in ounces, of cold hands reaching from darkness. You wake gasping more than once, find the fire still burning, force yourself back toward rest. The cycle repeats until exhaustion drags you under despite your fear.
+
+  When you wake at last, true darkness fills the station. The fire has died to ash and ember, its light surrendered. You fumble for your flint in the blackness, strike sparks until a flame catches. In the wavering glow you turn toward the far wall. The space where the corpses lay slumped is empty now, marked only by the stains their bones left on rotted wood. The scales stand silent on their bench. Of the dead themselves, no trace remains. You are alone in the station, alone with the memory of their watching, alone with the certainty that something has changed in the night.
+  +damage_spirits medium
+
+* Ignore = Press on immediately, taking the detour route despite the weather
+  You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you've gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.
+
+  The ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.
+
+  You reach the valley floor two hours after full dark, shaking so hard you can barely strike a spark for fire. The cold has settled into your bones in a way that will ache for days. But you are through, and the trail behind you is passable again, and you did not spend a night in a place where three different travelers felt compelled to carve warnings in stone. Whether that makes you wise or merely lucky is a question the mountain does not answer. The fire builds slowly, and you feed it through the long hours until dawn, grateful for the pain that means you can still feel your fingers.
+  +damage_health trivial
+  +damage_spirits medium

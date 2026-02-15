@@ -1,0 +1,43 @@
+The Festival Gate
+
+The high meadow beyond the toll gate is crowded with miners and their families—tables laid with food, a barrel tapped and flowing, children weaving between the adults. First ore day, when last season's claims finally paid out. Even the wind seems to have taken the afternoon off. The toll collector sits unmoved on his stool, his toll station blocking the trail.
+
+"Triple rate today, traveler. Festival tax." His voice carries the certainty of stone. "Or you turn back down the switchbacks." Behind the collector, a grey-bearded miner watches from a bench, his gaze deliberate and assessing. Others have noticed too. The celebration hasn't stopped, but a pocket of attention has formed around you, faces turning with the casual interest of those watching a play they've seen before.
+
+You take a breath to speak, but the collector interjects. "New folk always have opinions about what's fair. Up here, fair is what we say." The watching miner sets down his cup. The price demanded is dear; who ever heard of triple tolls?
+
+The collector smiles. "You look like a a merchant of some measure. You can afford it, surely."
+
+choices:
+
+* Persuade = Appeal to fairness and custom before witnesses
+  You catch the grey-bearded miner's eye. "Hail friend," you say, "you look like you know the lay of things. How long has this festival tax been in place?"
+  @check negotiation easy {
+    The grey-bearded miner rises before you finish speaking. He crosses to the gate with the measured pace of someone who's earned the right to interrupt. "Festival tax." He spits into the gravel. "That's a new verse added to an old song." He turns to the collector. "Garrim, you remember what we agreed when we voted you this post? Standard rates. No creative additions just because your pockets are light."
+
+    The collector's jaw works, but the faces around him have set like cooling iron. One of his companions steps back, hands spreading in a gesture of disavowal. "Triple rate was mentioned," the collector says, but the words come out defensive now, argument instead of decree. The miner doesn't move his hand from the bar. A woman calls from the crowd: "Let them through, Garrim. We're trying to celebrate, not watch you shame yourself."
+
+    The bar lifts. The collector waves you past with a motion that tries to reclaim dignity from the wreckage of his scheme. As you cross into the meadow, someone presses a cup into your hand—festival beer, thin but cold. The miner nods once, his assessment apparently satisfied. Behind you, the collector's companions have already drifted back toward the celebration, and the crowd's attention dissolves like snow in sunlight. The camps and the cartographer wait beyond the far edge of the meadow, the maps as near now as your next breath.
+    +rem_gold trivial
+    +heal_spirits small
+  } @else {
+    The grey-bearded miner studies you through your appeal, his expression carving itself into something harder with each word. When you finish, he shakes his head. "You speak pretty enough, but you don't know what you're speaking about." He turns to the crowd. "Outsider comes in, tells us our business, thinks three days on the trail makes them mountain folk." A few laughs ripple through the watchers, not cruel but dismissive, the sound of a community closing ranks.
+
+    The collector's smile widens. "See? Even Torvin knows. This is how we do things up here." His companions straighten, emboldened by the shift. The miner returns to his bench and his cup, the trial concluded and failed. You could force the issue—push past, make threats—but the watching faces have gone from curious to cold. The switchbacks down stretch behind you, and the cartographer's deadline burns like a brand. Sometimes the mountains reject you with rockfall and storm. Sometimes they just make you pay.
+    +rem_gold medium
+  }
+
+* Pay = Hand over the coin and pass through
+  You count out the coin onto the collector's palm, each piece a small defeat that clinks against the others. He weighs the stack with theatrical care, then sweeps it into his pouch with the satisfaction of a man proven right. The bar lifts. "See? Easy when folk are reasonable." His companions smirk, their posture loosening now that the confrontation has resolved in their favor.
+
+  As you pass into the meadow, the grey-bearded miner catches your eye. There's something in his look—not quite pity, closer to disappointment. He raises his cup in a gesture that might be salute or farewell, then turns back to his companions. The celebration resumes its rhythm around you, the festival's noise swallowing the small drama at the gate. You are lighter by enough coin to matter, heavier by the knowledge of what that weight bought: passage, yes, but also the collector's continuing certainty that his innovations will be tolerated. 
+
+  Behind you, the collector has already returned to his stool, ready for the next traveler with opinions about fairness.
+  +rem_gold medium
+
+* Reject = Refuse the inflated price and turn back
+  You shake your head and step back from the gate. The collector's smile curdles. "Long walk here for nothing, traveler." He settles deeper onto his stool, already dismissing you. His companions relax, the moment passing without the confrontation they'd braced for. The grey-bearded miner watches your retreat with an expression that might be respect or might be simple acknowledgment; hard to say with mountain folk.
+
+  You take the long way foward, and long it is. Your feet hurt and your back aches, but your coin still heavy in your purse. Sometimes the mountains defeat you with weather or stone. Today they defeat you with bureaucracy.
+  +damage_spirits small
+  +skip_time evening
