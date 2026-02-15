@@ -71,14 +71,25 @@ static class CheckCommand
         var errors = new List<string>();
         foreach (var choice in encounter.Choices)
         {
-            if (choice.Branched is { } branched)
+            if (choice.Requires is { } requires)
             {
-                var err = ActionVerb.Validate(branched.ConditionAction, VerbUsage.Condition);
+                var err = ActionVerb.Validate(requires, VerbUsage.Condition);
                 if (err != null)
-                    errors.Add($"@{branched.ConditionAction}: {err}");
+                    errors.Add($"[requires {requires}]: {err}");
+            }
 
-                ValidateMechanics(branched.Success.Mechanics, errors);
-                ValidateMechanics(branched.Failure.Mechanics, errors);
+            if (choice.Conditional is { } conditional)
+            {
+                foreach (var branch in conditional.Branches)
+                {
+                    var err = ActionVerb.Validate(branch.Condition, VerbUsage.Condition);
+                    if (err != null)
+                        errors.Add($"@if {branch.Condition}: {err}");
+                    ValidateMechanics(branch.Outcome.Mechanics, errors);
+                }
+
+                if (conditional.Fallback is { } fallback)
+                    ValidateMechanics(fallback.Mechanics, errors);
             }
 
             if (choice.Single is { } single)

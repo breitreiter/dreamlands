@@ -27,7 +27,7 @@ Something moves in the shack behind her. A scrape, a settling weight. She does n
 choices:
 
 * Accept her hospitality = Sit, eat, and trade what information you can, trusting that hunger and the rising water leave you little choice but faith.
-  @check negotiation medium {
+  @if check negotiation medium {
     You trade tales of the world beyond the fen for bowls of her root-stew, and something in your words—perhaps the honesty of exhaustion, or the shape of distant roads in your voice—softens the pale amusement in her eyes. When you depart at dawn, she presses into your hands a small bundle wrapped in oilcloth: dried fish, hard travelers' bread, something that smells of smoke and keeping. "The fen takes," she says, "but I give what I can spare."
     +add_random_items 3 food
   } @else {
@@ -38,7 +38,7 @@ choices:
 
 * Demand to know what is in the shack = You have not survived in this fen by ignoring what moves in the dark behind a stranger's smile.
   The hermit's smile doesn't waver as the thing behind the sailcloth door begins to move, something massive shifting in the darkness with a wet, patient hunger. "My boy gets so few visitors," she says, rising with a mother's gentle pride, and you understand now why the bones hang from the eaves: they are not charms but trophies, markers for those who also trusted their instincts too late.
-  @check combat hard {
+  @if check combat hard {
     The sailcloth tears away. Something fills the doorway; too tall, joints wrong. Pale skin stretched tight. Fingers tipped with yellowed bone hooks. A mouth that opens too wide, teeth jagged and uneven. It drops into the shallows. The water barely reaches its knees.
     It lunges. You slip aside. The hooks slice past your throat, close enough that you smell old blood and swamp rot. It is quick but clumsy. You ready your weapon. When it overreaches, you strike. You hit the monster hard with your weapon.
     A thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.

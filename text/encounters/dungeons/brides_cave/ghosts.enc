@@ -13,7 +13,7 @@ The figures drift closer. You can smell limestone and old cloth and something el
 choices:
 
 * Draw your weapon = Destroy this abomination and make this cave safe again
-  @check combat hard {
+  @if check combat hard {
     FIXME: the awful monster wails, then fades to silence. whatever happened here is over now. no one need fear this cave again
     +finish_dungeon
   } @else {
@@ -28,7 +28,7 @@ choices:
 
 * Approach with open hands = Perhaps you can reason with these spirits
   You lower your hands. "I'm listening," you say.
-  @check negotiation easy {
+  @if check negotiation easy {
     The cold eases. The figures become clearer - still translucent, still overlapping, but more distinct. A young woman with dark hair. An older one with work-roughened features. A girl who couldn't have been more than sixteen.
 
     "We came here to dream," the dark-haired one says. "That's what the old women told us. Spend one night in the Bride's Cave, and you'll dream true. Your beloved will return. Your husband will come back. The man who promised..."

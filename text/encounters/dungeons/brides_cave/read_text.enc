@@ -16,7 +16,7 @@ choices:
   +flee_dungeon
 
 * Venture deeper into the cave = Pick a passage and see where it leads
-  @check bushcraft medium {
+  @if check bushcraft medium {
     FIXME: you get turned around a few times, but soon work out the interior logic to the cave system. you wind your way to the innermost cavern.
     +open ghosts
   } @else {

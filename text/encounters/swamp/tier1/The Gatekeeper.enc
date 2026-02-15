@@ -17,7 +17,7 @@ choices:
   +skip_time evening
 
 * Attempt the southern channel = Follow the silent frogs through the shallow route you've spotted
-  @check bushcraft medium {
+  @if check bushcraft medium {
     You step off the path before the old woman can object, moving toward the silent channel with the confidence of someone who has read water before. She makes a sound between a grunt and a laugh. The mud here holds your weight where it looks like it shouldn't, and the water runs shallow over gravel beds that ring slightly under your boots. Reeds close behind you like a door shutting.
 
     The channel winds south then west, meandering but passable, and you read it by the silence — where frogs fall quiet, the ground rises enough to walk. Twice you pause at junctions, waiting for the sound to tell you which branch goes deep. It takes longer than the direct path would have, but you emerge on the western side of the paddies with only your calves wet, joining the raised path again well before the village. Behind you, the frogs resume their evening sermon.

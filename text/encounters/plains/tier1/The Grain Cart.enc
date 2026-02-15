@@ -20,7 +20,7 @@ choices:
   +rem_gold small
 
 * Persuade the man to leave = Something feels amiss here
-  @check mercantile medium {
+  @if check mercantile medium {
     You've seen this trap in three towns before. The owner and his men are hiding nearby, keen to extort silver from anyone foolish enough to steal from the cart. The boy's eyes widen as you explain the game, then he drops the sack and melts into the wheat without a word. Sure enough, as you continue down the road, you catch the glint of steel behind the stone wall where the merchant and his hired muscle wait for easier marks.
   } @else {
     You clear your throat and set about the tale of Old Man Yaniv and the grimlet—carefully, properly, with the necessary scaffolding. The grimlet, you explain, is not merely a creature of shadow and riddles but a cautionary mechanism in furred form, and its threefold bargains must be understood in sequence if one is to appreciate their symmetry. There are digressions, brief but essential, on the curing of jorgo root, on the contractual ambiguity of sunset, on the moral hazard of speaking imprecisely to entities who delight in precision. Somewhere during your clarification of root preparation methods, the boy’s attention begins to drift, and you, ever attentive to pedagogy, pivot smoothly to the more illustrative case of Yaniv and the Magic Fish.
@@ -31,7 +31,7 @@ choices:
   }
 
 * Give this ruffian a thrashing = You'll not let theft go unpunished
-  @check combat trivial {
+  @if check combat trivial {
     The boy takes one look at your stance and drops the sack, grain spilling across the dirt as he scrambles backward. He turns and runs into the wheat, the stalks swallowing him whole, his panicked breathing fading into the cicada drone. You continue down the road, leaving the tilted cart and its intact cargo to bake in the afternoon sun.
     +heal_spirits trivial
   } @else {

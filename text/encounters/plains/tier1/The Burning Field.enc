@@ -18,7 +18,7 @@ choices:
 
 * Beat a firebreak = Tear through the wheat ahead of the flames, deny them fuel
   You wade into the unburned grain and begin to rip. Handfuls at first, then armfuls, tearing the stalks down and scattering them behind you, stamping them flat. The woman sees what you are doing and joins you, working in grim silence. The farmer stirs at last, stumbles forward, begins to beat at the flames with his sack where your firebreak meets the advancing line.
-  @check bushcraft medium {
+  @if check bushcraft medium {
     Chaff fills your lungs. Your hands bleed from a hundred cuts. But the fire reaches your break and finds nothing to feed it, hesitates, turns back on itself and begins to gutter. The farmer and the woman beat out the last smoldering patches while you collapse at the field's edge, coughing smoke. The mule is lost. A quarter of the field is ash. But the rest stands golden and untouched, rolling in the wind like nothing happened. The woman brings you water in a clay jug. She does not thank you. She does not need to. The farmer is already walking the firebreak, running his hand through the torn grain, weeping soundlessly. You leave him there, counting what remains.
     +heal_spirits small
   } @else {

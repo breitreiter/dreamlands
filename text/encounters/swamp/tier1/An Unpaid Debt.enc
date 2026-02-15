@@ -32,7 +32,7 @@ choices:
   +give_gold small
 
 * Inspect the contract = Find a way out for the villagers
-  @check mercantile medium {
+  @if check mercantile medium {
     REVIEW: You lift the contract from its bed of river stones. The parchment is stiff beneath your fingers, edges water-stained and curling. The script runs dense and tight, clause nested within clause like fish traps sunk one inside another. Each sentence coils back upon itself, laden with conditions and exceptions that seem to multiply as you read. The merchant's guild employs no fools to draft such instruments.
 
     You trace the lines again, slower. Your eyes ache from following the serpentine text. The terms shift and qualify, hedging every obligation, foreclosing every exit. You are nearly ready to set the thing down, to admit defeat, when a peculiar phrasing snags your attention. There, in the third subsection of the yield clause: payment calculated as a *residual proportion* of catch taken from designated channels. If the western channels yielded nothing, the residual collapses to near nothing. A handful of coppers, perhaps. Barely sufficient to pay the merchant's passage to this place, let alone the sum he now demands.

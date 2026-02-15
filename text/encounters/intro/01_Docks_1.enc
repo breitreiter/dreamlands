@@ -25,7 +25,7 @@ No one else on the dock will meet your eye.
 choices:
 
 * Present the Seal and demand lawful passage = Meet authority with authority, and let every watching eye see that you do not flinch.
-  @check negotiation medium {
+  @if check negotiation medium {
     You lay the Seal on the table. The woman's jaw tightens. The lean man smiles once, then melts into the crowd.
     +add_tag passed_customs
     +open docks_warehouse
@@ -36,7 +36,7 @@ choices:
   }
 
 * Offer the documents but keep the ring hidden = Comply enough to pass the table while letting the woman believe the Seal is elsewhere.
-  @check negotiation easy {
+  @if check negotiation easy {
     You hand over the papers. Her eyes linger on your empty fingers. You are waved through. She has not stopped watching.
   } @else {
     She spots the ring. Her smile is thin. "Attempting to evade registration. Escort him." Strong hands grab your arms.

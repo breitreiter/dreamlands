@@ -13,7 +13,7 @@ The rocks creak as the scree settles another finger's width.
 choices:
 
 * Convince the priest to help = Superstition be damned
-  @check negotiation medium {
+  @if check negotiation medium {
     You stride to the priest's side, your voice cutting through his rising prayers. "Get over here and help me!"
 
     He recoils as if struck. "I cannot, brother. You must understand. I am on holy pilgrimage. If I touch him, my hands will be unclean. I will be cursed."

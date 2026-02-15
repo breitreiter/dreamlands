@@ -1,13 +1,18 @@
+using System.Text.RegularExpressions;
+
 namespace Dreamlands.Encounter;
 
 /// <summary>
 /// Parses encounter files using the token-driven format:
-/// <c>* </c> for choices, <c>@check</c>/<c>@else</c> for flow control,
+/// <c>* </c> for choices, <c>@if</c>/<c>@elif</c>/<c>@else</c> for flow control,
 /// <c>+verb</c> for commands, <c>{ }</c> for blocks, bare text for prose.
 /// </summary>
-public static class EncounterParser
+public static partial class EncounterParser
 {
     private const string ChoicesMarker = "choices:";
+
+    [GeneratedRegex(@"\[requires\s+(.+?)\]\s*$")]
+    private static partial Regex RequiresPattern();
 
     /// <summary>Parse encounter source text. Returns a result with either a valid encounter or errors.</summary>
     public static ParseResult Parse(string source)
@@ -61,6 +66,16 @@ public static class EncounterParser
         return string.Join("\n", bodyLines);
     }
 
+    /// <summary>Strip trailing [requires ...] from option text. Returns cleaned text and condition string (or null).</summary>
+    private static (string text, string? requires) StripRequires(string optionText)
+    {
+        var match = RequiresPattern().Match(optionText);
+        if (!match.Success)
+            return (optionText, null);
+        var cleaned = optionText[..match.Index].TrimEnd();
+        return (cleaned, match.Groups[1].Value.Trim());
+    }
+
     private static IReadOnlyList<Choice> ParseChoices(string[] lines, int start, List<ParseError> errors)
     {
         var choices = new List<Choice>();
@@ -68,34 +83,60 @@ public static class EncounterParser
         // State
         string? currentOptionText = null;
         int currentOptionLine = 0;
-        string? conditionAction = null;
-        var successText = new List<string>();
-        var successMechanics = new List<string>();
-        var failureText = new List<string>();
-        var failureMechanics = new List<string>();
+        var branches = new List<ConditionalBranch>();
+        string? currentCondition = null;
+        var branchText = new List<string>();
+        var branchMechanics = new List<string>();
+        var fallbackText = new List<string>();
+        var fallbackMechanics = new List<string>();
         var singleText = new List<string>();
         var singleMechanics = new List<string>();
-        bool inBranch = false;
-        bool inFailure = false;
+        bool inConditional = false;
+        bool inFallback = false;
         int braceDepth = 0;
+
+        void PushBranch()
+        {
+            if (currentCondition != null)
+            {
+                branches.Add(new ConditionalBranch
+                {
+                    Condition = currentCondition,
+                    Outcome = new OutcomePart { Text = JoinProse(branchText), Mechanics = branchMechanics.ToList() }
+                });
+                currentCondition = null;
+                branchText.Clear();
+                branchMechanics.Clear();
+            }
+        }
 
         void FinishChoice()
         {
             if (currentOptionText == null) return;
-            ParseOptionLinkPreview(currentOptionText, out var link, out var preview);
 
-            if (conditionAction != null)
+            var (cleanedText, requires) = StripRequires(currentOptionText);
+            ParseOptionLinkPreview(cleanedText, out var link, out var preview);
+
+            if (branches.Count > 0 || currentCondition != null)
             {
+                // Finish any in-progress branch
+                PushBranch();
+
+                OutcomePart? fallback = null;
+                if (inFallback || fallbackText.Count > 0 || fallbackMechanics.Count > 0)
+                    fallback = new OutcomePart { Text = JoinProse(fallbackText), Mechanics = fallbackMechanics.ToList() };
+
                 choices.Add(new Choice
                 {
-                    OptionText = currentOptionText,
+                    OptionText = cleanedText,
                     OptionLink = link,
                     OptionPreview = preview,
-                    Branched = new BranchedOutcome
+                    Requires = requires,
+                    Conditional = new ConditionalOutcome
                     {
-                        ConditionAction = conditionAction,
-                        Success = new OutcomePart { Text = JoinProse(successText), Mechanics = successMechanics.ToList() },
-                        Failure = new OutcomePart { Text = JoinProse(failureText), Mechanics = failureMechanics.ToList() }
+                        Preamble = JoinProse(singleText),
+                        Branches = branches.ToList(),
+                        Fallback = fallback
                     }
                 });
             }
@@ -103,9 +144,10 @@ public static class EncounterParser
             {
                 choices.Add(new Choice
                 {
-                    OptionText = currentOptionText,
+                    OptionText = cleanedText,
                     OptionLink = link,
                     OptionPreview = preview,
+                    Requires = requires,
                     Single = new SingleOutcome
                     {
                         Part = new OutcomePart { Text = JoinProse(singleText), Mechanics = singleMechanics.ToList() }
@@ -115,12 +157,13 @@ public static class EncounterParser
 
             // Reset
             currentOptionText = null;
-            conditionAction = null;
-            successText.Clear(); successMechanics.Clear();
-            failureText.Clear(); failureMechanics.Clear();
+            currentCondition = null;
+            branches.Clear();
+            branchText.Clear(); branchMechanics.Clear();
+            fallbackText.Clear(); fallbackMechanics.Clear();
             singleText.Clear(); singleMechanics.Clear();
-            inBranch = false;
-            inFailure = false;
+            inConditional = false;
+            inFallback = false;
             braceDepth = 0;
         }
 
@@ -150,7 +193,7 @@ public static class EncounterParser
                 continue;
             }
 
-            // Handle closing brace: "}" or "} @else {"
+            // Handle closing brace: "}" or "} @else {" or "} @elif condition {"
             if (trimmed == "}" || trimmed.StartsWith("}", StringComparison.Ordinal))
             {
                 if (braceDepth == 0)
@@ -159,15 +202,33 @@ public static class EncounterParser
                     continue;
                 }
 
-                // Check for "} @else {"
                 var afterBrace = trimmed[1..].Trim();
+
+                // "} @elif condition {"
+                if (afterBrace.StartsWith("@elif", StringComparison.Ordinal))
+                {
+                    var rest = afterBrace[5..].Trim();
+                    if (!rest.EndsWith("{"))
+                    {
+                        errors.Add(new ParseError { Line = lineNum, Message = "@elif line must end with '{'." });
+                        continue;
+                    }
+
+                    // Close the current branch, start a new one
+                    PushBranch();
+                    currentCondition = rest[..^1].Trim();
+                    // braceDepth stays at 1
+                    continue;
+                }
+
+                // "} @else {"
                 if (afterBrace.StartsWith("@else", StringComparison.Ordinal))
                 {
                     var rest = afterBrace[5..].Trim();
                     if (rest == "{")
                     {
-                        // Switch to failure branch (brace depth stays at 1)
-                        inFailure = true;
+                        PushBranch();
+                        inFallback = true;
                         continue;
                     }
                     else
@@ -180,20 +241,24 @@ public static class EncounterParser
                 // Plain "}" — close block
                 braceDepth--;
                 if (braceDepth == 0)
-                    inBranch = false;
+                {
+                    if (!inFallback)
+                        PushBranch();
+                    inConditional = false;
+                }
                 continue;
             }
 
             // Handle "@else {" on its own line (after "}" was on the previous line)
-            if (braceDepth == 0 && conditionAction != null && !inFailure &&
+            if (braceDepth == 0 && branches.Count > 0 && !inFallback &&
                 trimmed.StartsWith("@else", StringComparison.Ordinal))
             {
                 var rest = trimmed[5..].Trim();
                 if (rest == "{")
                 {
                     braceDepth++;
-                    inBranch = true;
-                    inFailure = true;
+                    inConditional = true;
+                    inFallback = true;
                     continue;
                 }
                 else
@@ -203,26 +268,49 @@ public static class EncounterParser
                 }
             }
 
-            // Handle "@check skill difficulty {"
-            if (trimmed.StartsWith("@check ", StringComparison.Ordinal))
+            // Handle "@elif condition {" on its own line (after "}" was on the previous line)
+            if (braceDepth == 0 && branches.Count > 0 && !inFallback &&
+                trimmed.StartsWith("@elif", StringComparison.Ordinal))
             {
-                if (conditionAction != null)
+                var rest = trimmed[5..].Trim();
+                if (!rest.EndsWith("{"))
                 {
-                    errors.Add(new ParseError { Line = lineNum, Message = "Multiple @check blocks in one choice." });
+                    errors.Add(new ParseError { Line = lineNum, Message = "@elif line must end with '{'." });
+                    continue;
+                }
+                currentCondition = rest[..^1].Trim();
+                braceDepth++;
+                inConditional = true;
+                continue;
+            }
+
+            // Handle "@if condition {"
+            if (trimmed.StartsWith("@if ", StringComparison.Ordinal))
+            {
+                if (branches.Count > 0 || currentCondition != null)
+                {
+                    errors.Add(new ParseError { Line = lineNum, Message = "Multiple @if blocks in one choice." });
                     continue;
                 }
 
-                var content = trimmed[1..]; // strip '@', keep "check skill difficulty {"
+                var content = trimmed[4..]; // strip "@if "
                 if (!content.EndsWith("{"))
                 {
-                    errors.Add(new ParseError { Line = lineNum, Message = "@check line must end with '{'." });
+                    errors.Add(new ParseError { Line = lineNum, Message = "@if line must end with '{'." });
                     continue;
                 }
 
-                conditionAction = content[..^1].Trim(); // "check skill difficulty"
+                currentCondition = content[..^1].Trim();
                 braceDepth++;
-                inBranch = true;
-                inFailure = false;
+                inConditional = true;
+                inFallback = false;
+                continue;
+            }
+
+            // Explicit error for old @check syntax
+            if (trimmed.StartsWith("@check ", StringComparison.Ordinal))
+            {
+                errors.Add(new ParseError { Line = lineNum, Message = "@check is no longer supported. Use '@if check <skill> <difficulty> {' instead." });
                 continue;
             }
 
@@ -230,12 +318,12 @@ public static class EncounterParser
             if (trimmed.Length >= 2 && trimmed[0] == '+' && char.IsLetter(trimmed[1]))
             {
                 var command = trimmed[1..]; // strip '+'
-                if (inBranch)
+                if (inConditional)
                 {
-                    if (inFailure)
-                        failureMechanics.Add(command);
+                    if (inFallback)
+                        fallbackMechanics.Add(command);
                     else
-                        successMechanics.Add(command);
+                        branchMechanics.Add(command);
                 }
                 else
                 {
@@ -244,21 +332,21 @@ public static class EncounterParser
                 continue;
             }
 
-            // Handle open brace on its own (shouldn't appear outside @check/@else)
+            // Handle open brace on its own (shouldn't appear outside @if/@elif/@else)
             if (trimmed == "{")
             {
-                errors.Add(new ParseError { Line = lineNum, Message = "Unexpected '{' without @check or @else." });
+                errors.Add(new ParseError { Line = lineNum, Message = "Unexpected '{' without @if or @else." });
                 braceDepth++;
                 continue;
             }
 
             // Everything else is prose
-            if (inBranch)
+            if (inConditional)
             {
-                if (inFailure)
-                    failureText.Add(raw);
+                if (inFallback)
+                    fallbackText.Add(raw);
                 else
-                    successText.Add(raw);
+                    branchText.Add(raw);
             }
             else
             {

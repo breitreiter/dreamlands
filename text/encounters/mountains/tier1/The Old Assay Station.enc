@@ -13,7 +13,7 @@ choices:
 
 * Study = Examine the station carefully before deciding whether to shelter here
   A frantic message is caved into the doorframe: "The dead are digging. DIGGING FROM BELOW." A second is barely legible, as though scratched in haste or terror: "They know the weight of what you carry."
-  @check perception medium {
+  @if check perception medium {
     Inside, you find the source of the digging sounds. A root cellar hatch beneath the worktable has warped with moisture, and when the wind gusts a certain way, it rattles against its frame with a rhythmic knock that could be mistaken for something deliberate. The scales swing slightly in the draft, their creaking almost conversational in the silence. You wedge a stone against the hatch to still it, and the station falls quiet except for the wind.
 
     The hearth draws well when you test it with a scrap of kindling. The walls keep the wind at bay. You wait out the storm in practical shelter while sleet turns to snow outside, and when dawn comes clear and cold, you continue up the detour route with no more weight than you brought here.

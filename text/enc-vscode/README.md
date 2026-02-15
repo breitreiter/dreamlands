@@ -14,14 +14,17 @@ This is a local extension, not published to the marketplace. To install:
 
 ## Features
 
-**Syntax highlighting** for `.enc` files: titles, prose, `choices:` blocks, `@check`/`@else` branches, `+command` lines, and `"""` inscription blocks.
+**Syntax highlighting** for `.enc` files: titles, prose, `choices:` blocks, `@if`/`@elif`/`@else` conditionals, `[requires]` choice gating, `+command` lines, and `"""` inscription blocks.
 
 **Snippets:**
 
 | Prefix | Description |
 |--------|-------------|
 | `choice` | Choice with link = preview text |
-| `@check` | Skill check with success/failure branches |
+| `@if check` | Skill check with success/failure branches |
+| `@if has` | Branch on item possession |
+| `@if tag` | Branch on world-state tag |
+| `[requires` | Gate a choice on a condition |
 | `"""` | Triple-quoted inscription block |
 | `+damage_health` | Deal health damage |
 | `+heal` | Heal health |

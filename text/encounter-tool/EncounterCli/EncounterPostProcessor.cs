@@ -5,7 +5,7 @@ namespace EncounterCli;
 
 /// <summary>
 /// Transforms raw LLM encounter output into valid .enc format.
-/// Converts SUCCESS:/FAILURE: labels to @check/@else blocks and humanizes
+/// Converts SUCCESS:/FAILURE: labels to @if check/@else blocks and humanizes
 /// SCREAMING_SNAKE_CASE action labels on choice lines.
 ///
 /// Does not touch prose content. Does not add game commands (+lines) — those
@@ -38,10 +38,10 @@ static partial class EncounterPostProcessor
 
     /// <summary>
     /// Post-process LLM encounter output into valid .enc format.
-    /// Scrubs preamble clutter, then converts SUCCESS/FAILURE to @check/@else.
+    /// Scrubs preamble clutter, then converts SUCCESS/FAILURE to @if check/@else.
     /// </summary>
     /// <param name="text">Raw LLM output (after code fence stripping).</param>
-    /// <param name="difficulty">Default difficulty for generated @check blocks.</param>
+    /// <param name="difficulty">Default difficulty for generated @if check blocks.</param>
     /// <returns>Transformed encounter text.</returns>
     public static string Process(string text, string difficulty = "medium")
     {
@@ -251,9 +251,9 @@ static partial class EncounterPostProcessor
             foreach (var line in TrimBlankEnds(preSplit))
                 sb.Append($"  {line}\n");
 
-            // @check block
+            // @if check block
             var skillName = !string.IsNullOrEmpty(skill) ? skill : "luck";
-            sb.Append($"  @check {skillName} {difficulty} {{\n");
+            sb.Append($"  @if check {skillName} {difficulty} {{\n");
 
             foreach (var line in TrimBlankEnds(successLines))
                 sb.Append(string.IsNullOrWhiteSpace(line) ? "\n" : $"    {line}\n");

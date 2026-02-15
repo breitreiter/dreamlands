@@ -105,18 +105,30 @@ static class BundleCommand
         var choices = new List<object>();
         foreach (var c in enc.Choices)
         {
-            if (c.Branched != null)
+            if (c.Conditional != null)
             {
+                var branches = c.Conditional.Branches.Select(b => new
+                {
+                    condition = b.Condition,
+                    text = b.Outcome.Text,
+                    mechanics = b.Outcome.Mechanics
+                }).ToList();
+
+                object? fallback = c.Conditional.Fallback is { } fb
+                    ? new { text = fb.Text, mechanics = fb.Mechanics }
+                    : null;
+
                 choices.Add(new
                 {
                     optionText = c.OptionText,
                     optionLink = c.OptionLink,
                     optionPreview = c.OptionPreview,
-                    branched = new
+                    requires = c.Requires,
+                    conditional = new
                     {
-                        conditionAction = c.Branched.ConditionAction,
-                        success = new { text = c.Branched.Success.Text, mechanics = c.Branched.Success.Mechanics },
-                        failure = new { text = c.Branched.Failure.Text, mechanics = c.Branched.Failure.Mechanics }
+                        preamble = c.Conditional.Preamble,
+                        branches,
+                        fallback
                     }
                 });
             }
@@ -127,6 +139,7 @@ static class BundleCommand
                     optionText = c.OptionText,
                     optionLink = c.OptionLink,
                     optionPreview = c.OptionPreview,
+                    requires = c.Requires,
                     single = new
                     {
                         text = c.Single!.Part.Text,

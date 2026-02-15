@@ -25,7 +25,12 @@ CONDITIONS
 ACTION VERBS
 ------------------------------------
 
-Flow control        @check <skill> <difficulty> { ... } @else { ... }
+Flow control        @if check <skill> <difficulty> { ... } @else { ... }
+                    @if has <item_id> { ... } @elif check <skill> <difficulty> { ... } @else { ... }
+                    @if tag <tag_id> { ... } @else { ... }
+
+Choice gating       * Option text [requires has <item_id>]
+                    * Option text [requires tag <tag_id>]
 
 Navigation          +open <encounter_id>
 

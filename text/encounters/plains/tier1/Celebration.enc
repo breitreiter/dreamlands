@@ -15,7 +15,7 @@ All eyes are upon you.
 choices:
 
 * Refuse the dagger = Take no part in whatever this is
-    @check negotiation easy {
+    @if check negotiation easy {
         You raise both hands in a warding gesture, palms outward. The barley wreath shifts on your head. You thank them for the honor, your voice steady, and explain that your own gods would look unkindly upon your taking part in their rites. The young woman's smile falters. The dagger remains suspended between you, rust flaking from its edge.
 
         To fill the silence you speak of Shemned, god of the autumn harvest in the hills where you were born. You tell what fragments you recall: how the grain must be cut before the moon wanes, how the last sheaf stands in the field until frost claims it. Your words come haltingly, cobbled from childhood memory. The villagers listen, their circle loosening, and soon a gray haired man interrupts with questions. Does Shemned sleep beneath the roots? Does he rise at planting? The debate sprawls, voices overlapping, until the woman with flowers in her braids claps her hands once, sharply.
@@ -34,7 +34,7 @@ choices:
         +damage_spirits small
     }
 * Accept the dagger = Take part in the ritual
-    @check bushcraft medium {
+    @if check bushcraft medium {
         You have seen this ritual done, though never from the center of the circle. You begin to walk, letting memory guide your steps. The first stop comes at the eastern edge of the clearing, where morning light falls. You raise the rusted blade toward the wheat, point trembling slightly in your grip, and call a blessing on the harvest. You don't know the words, but you say what feels right.
 
         The villagers answer, their words echo yours. You move to the southern point, then west, then north. At each compass mark you halt, extend the dagger toward the fields, and speak. The blade catches sunlight at odd angles, its pitted surface scattering fragments of brightness. Each time you call, the villagers respond, their voices rising and falling in unison, shaping the blessing into something larger than your words alone could carry.

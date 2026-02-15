@@ -13,7 +13,7 @@ But you weren't watching claims or miners. Your attention was on your footing an
 choices:
 
 * Testify for him = Claim you saw him working a claim, lending your word to his innocence
-  @check negotiation medium {
+  @if check negotiation medium {
     The toll collector's eyes narrow as you speak, tracing the line of the trail upward with his gaze as if measuring your claim against the gradient itself. You describe the upper switchback, the eastern face where morning light strikes first, a figure bent to the rock with tools in hand. The muleteer seizes the thread, nodding, adding details that match or nearly match. One of the miners shifts his weight, uncertain now. The other two exchange glances.
 
     The toll collector closes his ledger with a sound like a verdict deferred. "Witness testimony complicates things," he says, voice flat with the weariness of a man who knows how easily truth bends in thin air. He waves the muleteer up, tells him to move on, but the look he gives you carries weight. The miners watch you pass with eyes that remember faces. The muleteer doesn't thank you, just gathers his pack and walks quickly down the trail, and you're left with the knowledge that your word is now written in the invisible ledger this mountain keeps—whether true or false, it's been spent.

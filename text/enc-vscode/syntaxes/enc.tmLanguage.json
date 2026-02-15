@@ -6,10 +6,16 @@
     { "include": "#choices-keyword" },
     { "include": "#fixme-marker" },
     { "include": "#review-marker" },
-    { "include": "#check-block" },
+    { "include": "#if-check-block" },
+    { "include": "#if-has-block" },
+    { "include": "#if-tag-block" },
+    { "include": "#elif-check-block" },
+    { "include": "#elif-has-block" },
+    { "include": "#elif-tag-block" },
     { "include": "#else-block" },
     { "include": "#brace-close" },
     { "include": "#choice-line" },
+    { "include": "#requires-tag" },
     { "include": "#verb-command" },
     { "include": "#inscription-block" },
     { "include": "#bold-text" },
@@ -34,13 +40,63 @@
         "2": { "name": "markup.changed.review.enc" }
       }
     },
-    "check-block": {
-      "match": "(@check)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
+    "if-check-block": {
+      "match": "(@if)\\s+(check)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
       "captures": {
-        "1": { "name": "keyword.control.check.enc" },
-        "2": { "name": "entity.name.type.skill.enc" },
-        "3": { "name": "constant.numeric.difficulty.enc" },
+        "1": { "name": "keyword.control.if.enc" },
+        "2": { "name": "keyword.other.condition.enc" },
+        "3": { "name": "entity.name.type.skill.enc" },
+        "4": { "name": "constant.numeric.difficulty.enc" },
+        "5": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "if-has-block": {
+      "match": "(@if)\\s+(has)\\s+(\\S+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.if.enc" },
+        "2": { "name": "keyword.other.condition.enc" },
+        "3": { "name": "string.unquoted.id.enc" },
         "4": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "if-tag-block": {
+      "match": "(@if)\\s+(tag)\\s+(\\S+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.if.enc" },
+        "2": { "name": "keyword.other.condition.enc" },
+        "3": { "name": "string.unquoted.id.enc" },
+        "4": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "elif-check-block": {
+      "match": "(\\})?\\s*(@elif)\\s+(check)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" },
+        "2": { "name": "keyword.control.elif.enc" },
+        "3": { "name": "keyword.other.condition.enc" },
+        "4": { "name": "entity.name.type.skill.enc" },
+        "5": { "name": "constant.numeric.difficulty.enc" },
+        "6": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "elif-has-block": {
+      "match": "(\\})?\\s*(@elif)\\s+(has)\\s+(\\S+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" },
+        "2": { "name": "keyword.control.elif.enc" },
+        "3": { "name": "keyword.other.condition.enc" },
+        "4": { "name": "string.unquoted.id.enc" },
+        "5": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "elif-tag-block": {
+      "match": "(\\})?\\s*(@elif)\\s+(tag)\\s+(\\S+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" },
+        "2": { "name": "keyword.control.elif.enc" },
+        "3": { "name": "keyword.other.condition.enc" },
+        "4": { "name": "string.unquoted.id.enc" },
+        "5": { "name": "punctuation.definition.block.open.enc" }
       }
     },
     "else-block": {
@@ -64,6 +120,14 @@
         "3": { "name": "entity.name.tag.choice-link.enc" },
         "4": { "name": "punctuation.separator.equals.enc" },
         "5": { "name": "string.unquoted.choice-preview.enc" }
+      }
+    },
+    "requires-tag": {
+      "match": "(\\[requires)\\s+((?:check|has|tag)\\s+\\S+(?:\\s+\\S+)?)(\\])",
+      "captures": {
+        "1": { "name": "keyword.other.requires.enc" },
+        "2": { "name": "constant.other.condition.enc" },
+        "3": { "name": "keyword.other.requires.enc" }
       }
     },
     "verb-command": {

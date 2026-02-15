@@ -13,7 +13,7 @@ The trader is already wrapping his goods. The punt rocks gently beneath him. In 
 choices:
 
 * Bargain him down = Argue that the price is madness for a kit he's desperate to sell
-  @check mercantile medium {
+  @if check mercantile medium {
      You rest your hand upon the canvas satchel, not grasping, not yet, but with enough weight that the trader's eyes fix upon it. The hand bears your Merchant Guild seal, turned now to catch what light filters through the reed haze.
 
     "You have come by some guild property, my friend." Your voice carries no heat, only the flat certainty of stone. "You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do." You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. "Consider this a finder's fee. I will see that the kit is returned to the guild hall in Aldgate."
@@ -29,7 +29,7 @@ choices:
   }
 
 * Steal it = Wait until he's distracted, then take the kit and run
-  @check stealth medium {
+  @if check stealth medium {
     You ask about the lamp oil, pointing to a specific flask, making him turn to retrieve it from deeper in the bundle. Your hand moves before thought catches up. The hide is in your grasp and you're already three strides down the raised path before he shouts behind you. The path is narrow but you know how to run it, feet finding the solid center while his voice rises in anger and disbelief.
 
     You run until you're out of breath, then hide in the reeds. You wait what seems like an eternity, until the only sound left is the incessant croak of the frogs. You emerge from your hiding place, the kit still in your grasp.

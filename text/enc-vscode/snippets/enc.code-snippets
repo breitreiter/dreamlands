@@ -7,16 +7,43 @@
     ],
     "description": "New choice with link = preview"
   },
-  "Skill Check Block": {
-    "prefix": ["check", "@check"],
+  "If Check Block": {
+    "prefix": ["if check", "@if check"],
     "body": [
-      "@check ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|medium,trivial,easy,hard,very_hard,heroic|} {",
+      "@if check ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|medium,trivial,easy,hard,very_hard,heroic|} {",
       "  ${3:Success outcome}",
       "} @else {",
       "  ${4:Failure outcome}",
       "}"
     ],
     "description": "Skill check with success/failure branches"
+  },
+  "If Has Block": {
+    "prefix": ["if has", "@if has"],
+    "body": [
+      "@if has ${1:item_id} {",
+      "  ${2:Outcome when player has item}",
+      "} @else {",
+      "  ${3:Outcome otherwise}",
+      "}"
+    ],
+    "description": "Branch on item possession"
+  },
+  "If Tag Block": {
+    "prefix": ["if tag", "@if tag"],
+    "body": [
+      "@if tag ${1:tag_id} {",
+      "  ${2:Outcome when tag is set}",
+      "} @else {",
+      "  ${3:Outcome otherwise}",
+      "}"
+    ],
+    "description": "Branch on world-state tag"
+  },
+  "Requires": {
+    "prefix": ["requires", "[requires"],
+    "body": "[requires ${1|has,tag,check|} ${2:id}]",
+    "description": "Gate a choice on a condition"
   },
   "Inscription Block": {
     "prefix": ["inscription", "\"\"\""],

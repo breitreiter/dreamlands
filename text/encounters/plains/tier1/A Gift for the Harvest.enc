@@ -31,7 +31,7 @@ choices:
   +skip_time night
 
 * Persuade her = Convince her to let you pass without helping
-  @check mercantile medium {
+  @if check mercantile medium {
     You crouch down, meeting her eyes, and speak quietly. You tell her the truth: you cannot swing a sickle for hours and still make the next town by dark. But you can do something better. You tell her where the dock merchants gather in Aldgate, which alleys the day laborers drink in, how to shame the hired hands into honoring their word. You sketch it out, step by step, until understanding sparks in her face.
 
     She listens, chewing her lip. Then she nods, slowly. "I can do that," she says. "I can get them back here."

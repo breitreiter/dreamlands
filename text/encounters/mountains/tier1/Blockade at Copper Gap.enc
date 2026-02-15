@@ -19,7 +19,7 @@ choices:
   +skip_time night
 
 * Attempt to climb around = Scale the steep terrain beside the barricade
-  @check bushcraft medium {
+  @if check bushcraft medium {
     You leave the maintained track and commit to the slope. The rock here crumbles at the first test, sends pebbles chattering down into the gorge. You move slowly, testing each handhold, finding the stone that won't betray you. Your fingers go numb in the wind. Twice you freeze as loose scree slides beneath your boots, but you read the mountain's old bones beneath the treacherous surface and trust them. The miners below watch your progress in silence. One calls out a warning about an unstable section. You adjust, find another route.
 
     You pull yourself onto the trail beyond the blockade with scraped palms and dust in your throat. The path ahead lies empty, winding higher into the peaks. Behind you, travelers still crowd against the barrier. The bearded man raises one hand in acknowledgment—respect or perhaps just recognition that some people cannot be stopped by stones and carts. You've lost an hour and gained a lesson about what desperation looks like from above.
@@ -33,7 +33,7 @@ choices:
   }
 
 * Persuade the other merchants to force through = Organize the backed-up merchants and couriers to break the barricade
-  @check negotiation medium {
+  @if check negotiation medium {
     You move among the travelers, speaking low. The merchant with spoiled goods needs no convincing. A courier carrying time-sensitive contracts joins immediately. A muleteer whose animals are growing anxious in the confined space adds her voice. Within minutes you've assembled a core of twenty travelers whose livelihoods depend on passage. You approach the barricade together, not threatening but inexorable as weather.
 
     The miners see you coming. They raise their tools, form a line, but their hearts aren't in violence. These are men who split stone for wages, not soldiers. When your group reaches the carts and begins dismantling the barrier methodically, the resistance crumbles. The bearded man shouts threats that nobody heeds. A few miners step forward but stop when they see the determination in the travelers' faces. The barricade comes apart piece by piece. You all push through, ignoring the curses that follow you up the switchback.

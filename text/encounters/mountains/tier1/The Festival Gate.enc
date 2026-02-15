@@ -12,7 +12,7 @@ choices:
 
 * Persuade = Appeal to fairness and custom before witnesses
   You catch the grey-bearded miner's eye. "Hail friend," you say, "you look like you know the lay of things. How long has this festival tax been in place?"
-  @check negotiation easy {
+  @if check negotiation easy {
     The grey-bearded miner rises before you finish speaking. He crosses to the gate with the measured pace of someone who's earned the right to interrupt. "Festival tax." He spits into the gravel. "That's a new verse added to an old song." He turns to the collector. "Garrim, you remember what we agreed when we voted you this post? Standard rates. No creative additions just because your pockets are light."
 
     The collector's jaw works, but the faces around him have set like cooling iron. One of his companions steps back, hands spreading in a gesture of disavowal. "Triple rate was mentioned," the collector says, but the words come out defensive now, argument instead of decree. The miner doesn't move his hand from the bar. A woman calls from the crowd: "Let them through, Garrim. We're trying to celebrate, not watch you shame yourself."

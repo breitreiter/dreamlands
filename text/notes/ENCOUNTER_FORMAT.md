@@ -29,8 +29,8 @@ After `choices:`, every line's role is determined by its first non-whitespace ch
 | First chars | Role | Example |
 |-------------|------|---------|
 | `* ` (asterisk + space) | **Choice boundary** | `* Accept her hospitality = Sit and eat...` |
-| `@keyword` | **Flow control** | `@check negotiation medium {` |
-| `} ...` | **Block close** | `}` or `} @else {` |
+| `@keyword` | **Flow control** | `@if check negotiation medium {` |
+| `} ...` | **Block close / transition** | `}`, `} @else {`, `} @elif has torch {` |
 | `+verb` (+ immediately followed by a letter) | **Game command** | `+damage_health small` |
 | anything else | **Prose** | `You trade tales of the world...` |
 
@@ -51,6 +51,15 @@ The text after `* ` is the **option text**. If it contains `=`, the part before 
 * Full option text with no link/preview split
 ```
 
+A trailing `[requires <condition>]` gates the choice — the runtime hides it unless the condition is met:
+
+```
+* Open the sealed door [requires has ancient_key]
+* Reveal Thorvin's affair = Expose him [requires has thorvins_journal]
+```
+
+The `[requires ...]` tag is stripped from option text before link/preview splitting.
+
 ### 3.2 Outcomes
 
 After a choice boundary, the parser collects lines until the next `* ` or end of file. These lines form the choice's outcome, which is one of:
@@ -64,11 +73,11 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
   +skip_time evening
 ```
 
-**B) Branched outcome** — a `@check` block with success and failure branches:
+**B) Conditional outcome** — an `@if` block with one or more branches:
 
 ```
 * Accept her hospitality = Sit, eat, and trade what information you can.
-  @check negotiation medium {
+  @if check negotiation medium {
     You trade tales of the world beyond the fen...
     +add_random_items 3 food
   } @else {
@@ -78,12 +87,25 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
   }
 ```
 
-**C) Mixed** — prose before a `@check` block (the prose always renders, the check determines what follows):
+**C) Multi-branch conditional** — `@if` with `@elif` branches:
+
+```
+* Pick the lock
+  @if has rusted_key {
+    The key turns with a click...
+  } @elif check stealth medium {
+    You work the tumblers...
+  } @else {
+    The lock defeats you...
+  }
+```
+
+**D) Mixed** — prose before an `@if` block (the prose always renders, the conditional determines what follows):
 
 ```
 * Demand to know what is in the shack
   The hermit's smile doesn't waver as the thing begins to move...
-  @check combat hard {
+  @if check combat hard {
     The sailcloth tears away. You fight and win.
     +get_random_treasure
   } @else {
@@ -94,10 +116,14 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
 
 ### 3.3 Block structure
 
-- `@check <skill> <difficulty> {` opens a success branch.
-- `} @else {` closes the success branch and opens the failure branch. May also be written as `}` then `@else {` on the next line.
+- `@if <condition> {` opens the first conditional branch.
+- `} @elif <condition> {` closes the current branch and opens the next one. May also be written as `}` then `@elif <condition> {` on the next line.
+- `} @else {` closes the current branch and opens the fallback branch. May also be written as `}` then `@else {` on the next line.
 - `}` alone closes the current block.
 - Braces must be matched. Unclosed `{` is an error.
+- Only one `@if` per choice.
+- `@elif` and `@else` are optional. A bare `@if ... { } ` with no else is valid.
+- Branches are evaluated top-to-bottom at runtime. The first matching condition wins.
 
 ### 3.4 Game commands
 
@@ -107,11 +133,12 @@ Lines starting with `+` immediately followed by a letter are game commands. The 
 
 For each choice, the parser produces:
 
-- **OptionText** (string): full option line after `* `.
+- **OptionText** (string): full option line after `* `, with `[requires ...]` stripped.
 - **OptionLink** (string, optional): text before `=`, if present.
 - **OptionPreview** (string, optional): text after `=`, if present.
+- **Requires** (string, optional): condition from `[requires ...]`, e.g. `"has ancient_key"`.
 - Either:
-  - **Branched:** ConditionAction (string from `@check`), Success (prose + commands), Failure (prose + commands).
+  - **Conditional:** Preamble (prose before `@if`), Branches (ordered list of condition + outcome), Fallback (outcome from `@else`, optional).
   - **Single:** prose + commands.
 
 ---
@@ -139,11 +166,13 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 
 ## 5. Action vocabulary
 
-### Conditions (used in `@check`)
+### Conditions (used in `@if` / `@elif` / `[requires]`)
 
 | Verb | Arguments | Description |
 |------|-----------|-------------|
 | `check <skill> <difficulty>` | skill, difficulty | Branch on a skill check |
+| `has <item_id>` | item id | Branch on whether player has an item |
+| `tag <tag_id>` | tag id | Branch on whether a world-state tag is set |
 
 ### Game commands (used with `+`)
 
@@ -191,6 +220,7 @@ The canonical definitions for these types live in `lib/Rules/`: `Skill.cs`, `Dif
 - `*text*` (no space after first `*`) is always prose (italic markdown), never a choice.
 - `**text**` is always prose (bold markdown).
 - `+1` or `+ text` (digit or space after `+`) is prose, not a command. Commands require `+` immediately followed by a letter.
-- `}` is only a block close when it is the entire trimmed content of a line. `}` embedded in prose is harmless.
-- `@` at the start of a line is only flow control when followed by a known keyword (`check`, `else`). Other `@` usage is prose.
+- `}` is only a block close when it is the entire trimmed content of a line (or starts a `} @else`/`} @elif` transition). `}` embedded in prose is harmless.
+- `@` at the start of a line is only flow control when followed by a known keyword (`if`, `elif`, `else`). Other `@` usage is prose. The old `@check` keyword is no longer supported and produces a parse error.
 - Inside `{ }` blocks, `* ` is prose, not a choice boundary. Choices only start outside blocks.
+- `[requires ...]` is only parsed at the end of a `* ` choice line, not in prose or outcome text.

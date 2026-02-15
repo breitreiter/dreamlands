@@ -54,6 +54,14 @@ public sealed class ActionVerb
         new ArgDef("skill", ArgType.Skill),
         new ArgDef("difficulty", ArgType.Difficulty));
 
+    public static readonly ActionVerb Has = new("has",
+        VerbUsage.Condition, "Branch on whether player has an item",
+        new ArgDef("item_id", ArgType.Id));
+
+    public static readonly ActionVerb Tag = new("tag",
+        VerbUsage.Condition, "Branch on whether a world-state tag is set",
+        new ArgDef("tag_id", ArgType.Id));
+
     // ── Navigation ──────────────────────────────────────────────
 
     public static readonly ActionVerb Open = new("open",
@@ -157,7 +165,7 @@ public sealed class ActionVerb
     /// <summary>All defined verbs.</summary>
     public static IReadOnlyList<ActionVerb> All { get; } = new ActionVerb[]
     {
-        Check,
+        Check, Has, Tag,
         Open,
         AddTag, RemoveTag,
         AddItem, AddRandomItems, LoseRandomItem, GetRandomTreasure,
