@@ -250,7 +250,7 @@ public sealed class ActionVerb
     /// Split an action string into tokens, respecting double-quoted strings.
     /// <c>open "The Ghosts"</c> yields <c>["open", "The Ghosts"]</c>.
     /// </summary>
-    private static List<string> Tokenize(string action)
+    public static List<string> Tokenize(string action)
     {
         var tokens = new List<string>();
         var span = action.AsSpan().Trim();
