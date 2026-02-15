@@ -9,7 +9,7 @@ public static class ContentPopulator
     {
         Console.Error.WriteLine("Populating content...");
         Console.Error.WriteLine("  Settlements...");
-        SettlementPlacer.PlaceSettlements(map, content, rng);
+        SettlementPlacer.PlaceSettlements(map, rng);
         Console.Error.WriteLine("  Tiers...");
         TierAssigner.Assign(map);
         SizeSettlements(map);

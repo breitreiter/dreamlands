@@ -9,11 +9,8 @@ public static class SettlementPlacer
     private const int Tier2Max = 25;
     private const int Tier3Max = 40;
 
-    public static void PlaceSettlements(Map map, ContentLoader content, Random rng)
+    public static void PlaceSettlements(Map map, Random rng)
     {
-        if (!content.HasPoiTypes(PoiKind.Settlement))
-            return;
-
         var traversable = map.AllNodes()
             .Where(n => !n.IsWater && n.Connections != Direction.None)
             .ToDictionary(n => (n.X, n.Y));
@@ -47,7 +44,7 @@ public static class SettlementPlacer
             if (site == null)
                 break;
 
-            PlaceSettlement(site, content, rng);
+            PlaceSettlement(site);
             MarkCovered(site, traversable, covered, survivalRadius);
         }
     }
@@ -116,10 +113,9 @@ public static class SettlementPlacer
         return count;
     }
 
-    private static void PlaceSettlement(Node node, ContentLoader content, Random rng)
+    private static void PlaceSettlement(Node node)
     {
-        var type = content.GetPoiTypeAtDistance(PoiKind.Settlement, node.DistanceFromCity, rng) ?? "Settlement";
-        node.Poi = new Poi(PoiKind.Settlement, type);
+        node.Poi = new Poi(PoiKind.Settlement, "Settlement");
     }
 
     private static void MarkCovered(Node start, Dictionary<(int, int), Node> traversable, HashSet<Node> covered, int radius)
