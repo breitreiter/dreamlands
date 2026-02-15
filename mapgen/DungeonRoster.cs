@@ -5,6 +5,10 @@ namespace MapGen;
 
 public record DungeonEntry(string Id, string Name, string Biome, string Decal, string Folder, int TierMin, int TierMax);
 
+// TODO: Replace dungeons_roster.yaml with per-dungeon descriptor.yaml files
+// loaded from text/encounters/dungeons/<id>/descriptor.yaml. This keeps dungeon
+// definition (map placement metadata, encounter files, documentation) colocated.
+// Blocked on having more than one functioning dungeon.
 public static class DungeonRoster
 {
     public static List<DungeonEntry> Load(string contentPath)
