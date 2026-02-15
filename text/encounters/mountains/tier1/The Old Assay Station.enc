@@ -18,8 +18,8 @@ choices:
 
     The hearth draws well when you test it with a scrap of kindling. The walls keep the wind at bay. You wait out the storm in practical shelter while sleet turns to snow outside, and when dawn comes clear and cold, you continue up the detour route with no more weight than you brought here.
     +heal_spirits small
-  } else {
-    REVIEW: You crouch at the threshold and let your eyes adjust to the gloom within. The skeletal remains draw your gaze first, but as the shadows resolve, you begin to notice other marks. Scratches in the plaster near the window frame, deliberate and deep. You step closer and make out letters gouged into the ancient coating: "sleep not in this tomb."
+  } @else {
+    You crouch at the threshold and let your eyes adjust to the gloom within. The skeletal remains draw your gaze first, but as the shadows resolve, you begin to notice other marks. Scratches in the plaster near the window frame, deliberate and deep. You step closer and make out letters gouged into the ancient coating: "sleep not in this tomb."
 
     A second warning mars the wood above the collapsed shelving, this one carved with less care, the letters ragged as though cut in haste or terror: "on the first night, they measure your gold, on the next night, they measure your soul." The doorframe bears a third inscription, so deeply scored that the wood has split along the grain. You trace the edges with one finger and feel splinters catch at your skin.
 

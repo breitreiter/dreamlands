@@ -185,8 +185,8 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `add_random_items <count> <category>` | int, category | Give random items from a category |
 | `lose_random_item` | (none) | Player loses a random item |
 | `get_random_treasure` | (none) | Player gets a random valuable |
-| `give_gold <amount>` | int | Give player gold |
-| `rem_gold <amount>` | int | Take player's gold |
+| `give_gold <magnitude>` | magnitude | Give player gold |
+| `rem_gold <magnitude>` | magnitude | Take player's gold |
 | `damage_health <magnitude>` | magnitude | Reduce player health |
 | `heal <magnitude>` | magnitude | Restore player health |
 | `damage_spirits <magnitude>` | magnitude | Reduce player spirits |

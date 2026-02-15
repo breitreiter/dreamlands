@@ -42,8 +42,8 @@ Items               +add_item <item_id>
                     +lose_random_item
                     +get_random_treasure
 
-Gold                +give_gold <amount>
-                    +rem_gold <amount>
+Gold                +give_gold <magnitude>
+                    +rem_gold <magnitude>
 
 Health              +damage_health <magnitude>
                     +heal <magnitude>

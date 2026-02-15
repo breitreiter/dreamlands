@@ -16,7 +16,7 @@ choices:
   You turn to find the cart's owner, two guards at his side. He sees the bag immediately. His eyes find your ring, and his face goes cold with calculation. "I had expected to travel three day with that grain, but here we have a buyer with ready coin. Just one sack then? Let me check my ledger."
 
   You curse your ill luck, but pay. The guards watch the coin change hands, bored witnesses to a transaction they've seen a dozen times. The merchant smiles, all teeth, and climbs back onto his repaired cart. The boy and his siblings are gone, vanished into the wheat. Your pack is lighter by coin and heavier by grain.
-  +add_item grain 3
+  +add_item grain_sack
   +rem_gold small
 
 * Persuade the man to leave = Something feels amiss here
@@ -35,7 +35,7 @@ choices:
     The boy takes one look at your stance and drops the sack, grain spilling across the dirt as he scrambles backward. He turns and runs into the wheat, the stalks swallowing him whole, his panicked breathing fading into the cicada drone. You continue down the road, leaving the tilted cart and its intact cargo to bake in the afternoon sun.
     +heal_spirits trivial
   } @else {
-    REVIEW: You stride toward the youth with purpose. He does not cower. Instead, his shoulders tense, his feet shift to balance, and you glimpse in his stance some trace of training, or at least of many fights survived.
+    You stride toward the youth with purpose. He does not cower. Instead, his shoulders tense, his feet shift to balance, and you glimpse in his stance some trace of training, or at least of many fights survived.
 
     He moves before you close the distance. The sack of grain, still gripped in both hands, rises and swings toward you with surprising force. It catches you across the chest and shoulder, a dull, heavy impact that staggers you backward. The weight of it, the suddenness, sends you sprawling into the dirt.
 

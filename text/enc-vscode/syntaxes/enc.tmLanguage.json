@@ -135,7 +135,7 @@
         { "include": "#verb-magnitude" },
         { "include": "#verb-skill-magnitude" },
         { "include": "#verb-time" },
-        { "include": "#verb-int" },
+        { "include": "#verb-gold" },
         { "include": "#verb-int-id" },
         { "include": "#verb-id" },
         { "include": "#verb-noarg" }
@@ -167,12 +167,12 @@
         "4": { "name": "constant.language.flag.enc" }
       }
     },
-    "verb-int": {
-      "match": "(\\+)(give_gold|rem_gold)\\s+(\\d+)\\s*$",
+    "verb-gold": {
+      "match": "(\\+)(give_gold|rem_gold)\\s+(trivial|small|medium|large|huge)\\s*$",
       "captures": {
         "1": { "name": "punctuation.definition.verb.enc" },
         "2": { "name": "support.function.verb.enc" },
-        "3": { "name": "constant.numeric.amount.enc" }
+        "3": { "name": "constant.numeric.magnitude.enc" }
       }
     },
     "verb-int-id": {

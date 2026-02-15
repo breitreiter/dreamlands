@@ -20,7 +20,7 @@ Village boards it up, but the damage is done
 
 The tally marks: Not counting victims - counting days waiting for rescue, or counting days until "the magic works," or counting days of prayer. Same difference when you're starving in the dark.
 The love poetry: Their ritual verses, their prayers, their desperate last words. All in different hands because it's different women over 40-50 years.
-Does this track better? The tragedy is they came willingly, believing in magic, died alone hoping it would work.
+
 
 ## Assets
 

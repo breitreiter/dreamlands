@@ -2,4 +2,3 @@ name: "The Bride's Cave"
 preview: "Weathered boards cover the entrance, warning carved above: \"SEALED BY ORDER - NO ENTRY.\" Through gaps you glimpse limestone chambers stretching into darkness. You've heard rumors of recent disappearances."
 id: brides_cave
 decal: assets/map/decals/poi/dungeons/plains/caveminevintage_normal_17.png
-start: intro

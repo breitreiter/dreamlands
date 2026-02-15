@@ -21,7 +21,7 @@ choices:
   +rem_gold small
 
 * Explain your innocence = Try to convince them they have the wrong person
-  @if check negotiation small {
+  @if check negotiation easy {
     You choose your words with care, measuring each syllable as you might weigh coin. Your smile comes easily, broad and guileless, though your hand rests near your belt in a manner that speaks its own language. You explain the impossibility of their claim, how you have never walked these fields before, how your records would show any such transaction. As you speak, you let slip mention of the guild, of your standing, of how misunderstandings between merchants and farmers have, in the past, drawn unwelcome attention from those who adjudicate such matters.
 
     A younger farmer, jaw set and fists clenched at his sides, cuts through your words. He does not care, he says, which member of your order made the deal or failed to honor it. The ring marks you all the same. Let the guild sort its own house; they want what is owed.
@@ -39,7 +39,7 @@ choices:
 
 * Walk away = Leave without engaging further
   You turn before the old man finishes speaking. No explanation, no plea. Hard hands grasp your shoulders, spinning you around. These farmers will not let this go quietly.
-  @if check combat trivial {
+  @check combat trivial {
     You move before the old man can close the distance. Your blow catches the nearest farmer across the jaw; he crumples into the dust without a sound. The ledger falls from weathered hands as the elder reaches forward, too slow, his cry dying in his throat.
 
     The remaining men lower their tools with deliberate care. Hoes and rakes settle into the furrows. Calloused palms rise, empty, into the golden air. Their eyes follow you as you turn your back on them, on the man sprawled motionless in the road.

@@ -46,7 +46,9 @@ static class CheckCommand
             if (result.Encounter != null)
                 vocabErrors = ValidateVocabulary(result.Encounter);
 
-            if (result.IsSuccess && vocabErrors.Count == 0)
+            var markerWarnings = CheckForMarkers(text);
+
+            if (result.IsSuccess && vocabErrors.Count == 0 && markerWarnings.Count == 0)
             {
                 Console.WriteLine($"  OK  {rel}");
             }
@@ -58,6 +60,8 @@ static class CheckCommand
                     Console.WriteLine($"      {err}");
                 foreach (var err in vocabErrors)
                     Console.WriteLine($"      {err}");
+                foreach (var warn in markerWarnings)
+                    Console.WriteLine($"      {warn}");
             }
         }
 
@@ -98,6 +102,21 @@ static class CheckCommand
             }
         }
         return errors;
+    }
+
+    private static List<string> CheckForMarkers(string text)
+    {
+        var warnings = new List<string>();
+        var lines = text.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var trimmed = lines[i].TrimStart();
+            if (trimmed.StartsWith("FIXME:"))
+                warnings.Add($"Line {i + 1}: FIXME marker (must be expanded before publishing)");
+            else if (trimmed.StartsWith("REVIEW:"))
+                warnings.Add($"Line {i + 1}: REVIEW marker (must be reviewed before publishing)");
+        }
+        return warnings;
     }
 
     private static void ValidateMechanics(IReadOnlyList<string> mechanics, List<string> errors)

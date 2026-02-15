@@ -39,12 +39,19 @@ public sealed class ActionVerb
     public string Description { get; }
     public IReadOnlyList<ArgDef> Args { get; }
 
+    /// <summary>Optional boolean flags that may follow positional args (e.g. no_sleep, no_meal).</summary>
+    public IReadOnlySet<string> Flags { get; }
+
     private ActionVerb(string name, VerbUsage usage, string description, params ArgDef[] args)
+        : this(name, usage, description, args, Array.Empty<string>()) { }
+
+    private ActionVerb(string name, VerbUsage usage, string description, ArgDef[] args, string[] flags)
     {
         Name = name;
         Usage = usage;
         Description = description;
         Args = args;
+        Flags = new HashSet<string>(flags);
     }
 
     // ── Conditions ──────────────────────────────────────────────
@@ -99,11 +106,11 @@ public sealed class ActionVerb
 
     public static readonly ActionVerb GiveGold = new("give_gold",
         VerbUsage.Mechanic, "Give player gold",
-        new ArgDef("amount", ArgType.Int));
+        new ArgDef("amount", ArgType.Magnitude));
 
     public static readonly ActionVerb RemGold = new("rem_gold",
         VerbUsage.Mechanic, "Take player's gold",
-        new ArgDef("amount", ArgType.Int));
+        new ArgDef("amount", ArgType.Magnitude));
 
     // ── Health ──────────────────────────────────────────────────
 
@@ -147,7 +154,8 @@ public sealed class ActionVerb
 
     public static readonly ActionVerb SkipTime = new("skip_time",
         VerbUsage.Mechanic, "Advance to a time of day",
-        new ArgDef("period", ArgType.TimePeriod));
+        new[] { new ArgDef("period", ArgType.TimePeriod) },
+        new[] { "no_sleep", "no_meal", "no_biome" });
 
     // ── Dungeon ─────────────────────────────────────────────────
 
@@ -192,11 +200,11 @@ public sealed class ActionVerb
     /// </summary>
     public static string? Validate(string action, VerbUsage expectedUsage)
     {
-        var parts = action.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length == 0)
+        var tokens = Tokenize(action);
+        if (tokens.Count == 0)
             return "Empty action.";
 
-        var verbName = parts[0];
+        var verbName = tokens[0];
         var verb = FromName(verbName);
         if (verb == null)
             return $"Unknown verb '{verbName}'.";
@@ -208,20 +216,71 @@ public sealed class ActionVerb
             return $"'{verbName}' is a {actual} but was used as a {expected}.";
         }
 
-        var argValues = parts.AsSpan(1);
-        if (argValues.Length != verb.Args.Count)
-            return $"'{verbName}' expects {verb.Args.Count} argument(s) but got {argValues.Length}.";
+        var argTokens = tokens.GetRange(1, Math.Min(verb.Args.Count, tokens.Count - 1));
+        if (argTokens.Count != verb.Args.Count)
+            return $"'{verbName}' expects {verb.Args.Count} argument(s) but got {tokens.Count - 1}.";
 
         for (int i = 0; i < verb.Args.Count; i++)
         {
             var def = verb.Args[i];
-            var value = argValues[i];
+            var value = argTokens[i];
             var err = ValidateArg(def, value);
             if (err != null)
                 return $"'{verbName}' argument '{def.Name}': {err}";
         }
 
+        // Validate any trailing flags.
+        var trailing = tokens.GetRange(1 + verb.Args.Count, tokens.Count - 1 - verb.Args.Count);
+        if (trailing.Count > 0 && verb.Flags.Count == 0)
+            return $"'{verbName}' does not accept flags, but got: {string.Join(", ", trailing)}.";
+
+        var seen = new HashSet<string>();
+        foreach (var flag in trailing)
+        {
+            if (!verb.Flags.Contains(flag))
+                return $"'{verbName}': unknown flag '{flag}'. Valid flags: {string.Join(", ", verb.Flags)}.";
+            if (!seen.Add(flag))
+                return $"'{verbName}': duplicate flag '{flag}'.";
+        }
+
         return null;
+    }
+
+    /// <summary>
+    /// Split an action string into tokens, respecting double-quoted strings.
+    /// <c>open "The Ghosts"</c> yields <c>["open", "The Ghosts"]</c>.
+    /// </summary>
+    private static List<string> Tokenize(string action)
+    {
+        var tokens = new List<string>();
+        var span = action.AsSpan().Trim();
+        while (span.Length > 0)
+        {
+            if (span[0] == '"')
+            {
+                span = span[1..];
+                var close = span.IndexOf('"');
+                if (close < 0)
+                {
+                    tokens.Add(span.ToString());
+                    break;
+                }
+                tokens.Add(span[..close].ToString());
+                span = span[(close + 1)..].TrimStart();
+            }
+            else
+            {
+                var space = span.IndexOf(' ');
+                if (space < 0)
+                {
+                    tokens.Add(span.ToString());
+                    break;
+                }
+                tokens.Add(span[..space].ToString());
+                span = span[(space + 1)..].TrimStart();
+            }
+        }
+        return tokens;
     }
 
     private static string? ValidateArg(ArgDef def, string value)

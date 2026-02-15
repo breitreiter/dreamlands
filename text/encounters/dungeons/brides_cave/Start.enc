@@ -1,0 +1,25 @@
+The Bride's Cave
+
+Your torch casts its glow upon a cathedral of stone. Light strikes wall and stalagmite, crawls across the floor, and reveals words carved into every span of rock. 
+
+Passageways wind away in all directions.
+
+The air hangs cold and unmoving.
+
+choices:
+
+* Venture deeper into the cave = Pick a passage and see where it leads
+  @if check bushcraft medium {
+    You choose a passage at random and press forward, torchlight dancing across walls dense with carved script. The tunnel bends, splits, rejoins itself in ways that defy surface logic. Twice you find yourself before the same fork, recognizing a particular glyph worn smooth by water. The third time you stop, study the patterns scored into the stone, and begin to perceive the structure beneath the chaos: a spiral, not a maze, its arms folding inward like the shell of some primordial thing.
+
+    You follow the logic now, marking your turns by the age of the carvings. Where the words are deep and crisp, you advance; where they blur to faint scratches, you retreat. The passages grow narrower, the ceiling presses lower, and the cold intensifies until each breath stings your throat. At last the corridor widens. You emerge into a chamber vast enough that your torchlight cannot find its far walls, only an expanse of darkness that swallows flame and sound alike.
+    +open "The Ghosts"
+  } @else {
+    The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.
+    +skip_time morning no_meal no_sleep no_biome
+    +open "The Ghosts"
+  }
+
+* Examine the writing = Perhaps it is a clue. Or perhaps knowledge better left unknown.
+  You bring your torch close to the wall. The flame gutters in the stillness, casting writhing shadows across the stone. The marks are deep, carved by something that pressed with inhuman strength.
+  +open "A Record in Stone"

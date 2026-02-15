@@ -118,12 +118,12 @@
   },
   "+give_gold": {
     "prefix": ["+give_gold", "give_gold"],
-    "body": "+give_gold ${1:amount}",
+    "body": "+give_gold ${1|small,trivial,medium,large,huge|}",
     "description": "Give gold to player"
   },
   "+rem_gold": {
     "prefix": ["+rem_gold", "rem_gold"],
-    "body": "+rem_gold ${1:amount}",
+    "body": "+rem_gold ${1|small,trivial,medium,large,huge|}",
     "description": "Remove gold from player"
   },
   "+add_condition": {

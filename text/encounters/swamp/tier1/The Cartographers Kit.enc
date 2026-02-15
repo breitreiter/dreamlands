@@ -36,7 +36,7 @@ choices:
     +add_item cartographer_kit
     +skip_time evening
   } @else {
-    REVIEW: You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader's eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.
+    You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader's eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.
 
     Your hand drifts toward the bundle. The pole sweeps through the humid air with shocking swiftness, the waterlogged wood striking your shoulder and chest with the weight of a falling timber. The blow hurls you sideways from the raised path. You plunge into the muck below, the brackish water closing over your head, thick with decay and the writhing roots of reeds. You thrash upward, gasping, fingers clawing through the slime until you find purchase on something solid. When you drag yourself back toward the path, water streaming from your garments, the trader has already set his pole against the muddy bottom. The punt glides away through the reeds, smooth and certain. He calls back over his shoulder, voice carrying across the water: "Stay dry, outlander." The words hang in the wet air long after he vanishes beyond the curtain of rushes.
     +damage_spirits small
