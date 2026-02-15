@@ -147,11 +147,6 @@
     "body": "+finish_dungeon",
     "description": "Mark dungeon as completed"
   },
-  "+fail_dungeon": {
-    "prefix": ["+fail_dungeon", "fail_dungeon"],
-    "body": "+fail_dungeon",
-    "description": "Mark dungeon as failed"
-  },
   "+flee_dungeon": {
     "prefix": ["+flee_dungeon", "flee_dungeon"],
     "body": "+flee_dungeon",

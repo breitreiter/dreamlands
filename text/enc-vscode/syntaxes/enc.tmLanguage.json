@@ -192,7 +192,7 @@
       }
     },
     "verb-noarg": {
-      "match": "(\\+)(lose_random_item|get_random_treasure|finish_dungeon|fail_dungeon|flee_dungeon)\\s*$",
+      "match": "(\\+)(lose_random_item|get_random_treasure|finish_dungeon|flee_dungeon)\\s*$",
       "captures": {
         "1": { "name": "punctuation.definition.verb.enc" },
         "2": { "name": "support.function.verb.enc" }

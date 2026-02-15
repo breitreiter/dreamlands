@@ -59,5 +59,4 @@ Conditions          +add_condition <condition_id>
 Time                +skip_time <period>
 
 Dungeon             +finish_dungeon
-                    +fail_dungeon
                     +flee_dungeon

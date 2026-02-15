@@ -154,9 +154,6 @@ public sealed class ActionVerb
     public static readonly ActionVerb FinishDungeon = new("finish_dungeon",
         VerbUsage.Mechanic, "Mark current dungeon as completed");
 
-    public static readonly ActionVerb FailDungeon = new("fail_dungeon",
-        VerbUsage.Mechanic, "Mark current dungeon as failed");
-
     public static readonly ActionVerb FleeDungeon = new("flee_dungeon",
         VerbUsage.Mechanic, "Exit dungeon without completing it");
 
@@ -175,7 +172,7 @@ public sealed class ActionVerb
         IncreaseSkill, DecreaseSkill,
         AddCondition,
         SkipTime,
-        FinishDungeon, FailDungeon, FleeDungeon,
+        FinishDungeon, FleeDungeon,
     };
 
     private static readonly Dictionary<string, ActionVerb> ByName =

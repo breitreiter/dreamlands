@@ -196,7 +196,6 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `add_condition <id>` | condition id | Apply a status condition |
 | `skip_time <period>` | time period | Advance to a time of day |
 | `finish_dungeon` | (none) | Mark current dungeon as completed |
-| `fail_dungeon` | (none) | Mark current dungeon as failed |
 | `flee_dungeon` | (none) | Exit dungeon without completing it |
 
 ### Argument types

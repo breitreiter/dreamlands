@@ -44,7 +44,6 @@ This is a local extension, not published to the marketplace. To install:
 | `+lose_random_item` | Lose a random item |
 | `+get_random_treasure` | Find random treasure |
 | `+finish_dungeon` | Mark dungeon completed |
-| `+fail_dungeon` | Mark dungeon failed |
 | `+flee_dungeon` | Flee dungeon |
 
 Skill and difficulty values are offered as dropdown completions in the relevant snippets.
