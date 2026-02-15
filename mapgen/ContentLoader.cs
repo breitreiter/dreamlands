@@ -31,7 +31,6 @@ public class ContentLoader
         _poiTypes[PoiKind.Settlement] = LoadContentFile("settlements.txt");
         _poiTypes[PoiKind.Dungeon] = LoadContentFile("dungeons.txt");
         _poiTypes[PoiKind.Landmark] = LoadContentFile("landmarks.txt");
-        _poiTypes[PoiKind.WaterSource] = LoadContentFile("watersources.txt");
     }
 
     private List<string> LoadFile(string relativePath)

@@ -1,0 +1,98 @@
+using Dreamlands.Map;
+
+namespace MapGen;
+
+public static class EncounterPlacer
+{
+    private const int MinSpacing = 3;
+
+    public static void Place(Map map)
+    {
+        var traversable = map.AllNodes()
+            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue)
+            .ToDictionary(n => (n.X, n.Y));
+
+        if (traversable.Count == 0)
+            return;
+
+        var regions = map.Regions.Where(r => r.Tier > 0).ToList();
+        int placed = 0;
+
+        foreach (var region in regions)
+        {
+            var nodes = region.Nodes
+                .Where(n => n.Poi == null && traversable.ContainsKey((n.X, n.Y)))
+                .ToList();
+
+            if (nodes.Count == 0)
+                continue;
+
+            var slots = new List<Node>();
+            var distance = new Dictionary<Node, int>();
+
+            // Initialize: all nodes start at max distance from any slot
+            foreach (var n in nodes)
+                distance[n] = int.MaxValue;
+
+            while (true)
+            {
+                // Find the node farthest from any existing encounter slot
+                Node? farthest = null;
+                int maxDist = -1;
+
+                foreach (var n in nodes)
+                {
+                    if (n.Poi != null)
+                        continue;
+
+                    int d = distance[n];
+                    if (d > maxDist)
+                    {
+                        maxDist = d;
+                        farthest = n;
+                    }
+                }
+
+                if (farthest == null || maxDist <= MinSpacing)
+                    break;
+
+                farthest.Poi = new Poi(PoiKind.Encounter, "Encounter");
+                slots.Add(farthest);
+                placed++;
+
+                // BFS from the new slot to update distances
+                var queue = new Queue<Node>();
+                distance[farthest] = 0;
+                queue.Enqueue(farthest);
+
+                while (queue.Count > 0)
+                {
+                    var node = queue.Dequeue();
+                    int dist = distance[node];
+
+                    if (dist >= MinSpacing)
+                        continue;
+
+                    foreach (var dir in DirectionExtensions.Each())
+                    {
+                        if (!node.HasConnection(dir))
+                            continue;
+
+                        var neighbor = SettlementPlacer.GetConnectedNeighbor(node, dir, traversable);
+                        if (neighbor == null || !distance.ContainsKey(neighbor))
+                            continue;
+
+                        int newDist = dist + 1;
+                        if (newDist < distance[neighbor])
+                        {
+                            distance[neighbor] = newDist;
+                            queue.Enqueue(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+
+        Console.Error.WriteLine($"    Placed {placed} encounter slots");
+    }
+}

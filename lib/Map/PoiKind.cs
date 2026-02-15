@@ -1,3 +1,3 @@
 namespace Dreamlands.Map;
 
-public enum PoiKind { Settlement, Dungeon, Landmark, WaterSource }
+public enum PoiKind { Settlement, Dungeon, Landmark, Encounter }

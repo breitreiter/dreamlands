@@ -5,6 +5,7 @@ public class Region
     public int Id { get; }
     public Terrain Terrain { get; }
     public string? Name { get; set; }
+    public int Tier { get; set; }
     public List<Node> Nodes { get; } = new();
 
     public Region(int id, Terrain terrain)

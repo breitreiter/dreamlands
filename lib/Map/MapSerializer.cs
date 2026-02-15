@@ -43,7 +43,7 @@ public static class MapSerializer
         foreach (var r in dto.Regions)
         {
             var terrain = Enum.Parse<Terrain>(r.Terrain);
-            var region = new Region(r.Id, terrain) { Name = r.Name };
+            var region = new Region(r.Id, terrain) { Name = r.Name, Tier = r.Tier };
             regions[r.Id] = region;
             map.Regions.Add(region);
         }
@@ -130,6 +130,7 @@ public static class MapSerializer
             Id = region.Id,
             Terrain = region.Terrain.ToString(),
             Name = region.Name,
+            Tier = region.Tier,
             Size = region.Size
         };
     }
@@ -193,6 +194,7 @@ public static class MapSerializer
         public int Id { get; init; }
         public string Terrain { get; init; } = "";
         public string? Name { get; init; }
+        public int Tier { get; init; }
         public int Size { get; init; }
     }
 

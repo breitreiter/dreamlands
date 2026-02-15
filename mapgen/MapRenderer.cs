@@ -96,7 +96,7 @@ public static class MapRenderer
                     bg = BlackBg;
                 }
 
-                var isPoi = node.Poi != null && node.Poi.Kind != PoiKind.WaterSource;
+                var isPoi = node.Poi != null;
                 var chars = isPoi ? PoiBoxChars : BoxChars;
                 var ch = chars[node.Connections];
 

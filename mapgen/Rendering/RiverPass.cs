@@ -27,7 +27,7 @@ public static class RiverPass
             var dirs = DirectionExtensions.Each().Where(d => node.HasRiverOn(d)).ToList();
             var pairs = PairDirections(dirs);
             var rng = new Random(HashCode.Combine(seed, node.X, node.Y, 0x52495645));
-            bool hasPoi = node.Poi != null && node.Poi.Kind != PoiKind.WaterSource;
+            bool hasPoi = node.Poi != null;
 
             foreach (var (a, b) in pairs)
             {

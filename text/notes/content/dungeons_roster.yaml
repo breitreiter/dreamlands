@@ -31,7 +31,7 @@ dungeons:
     biome: forest
     decal: ruins_megapack_normal_29.png
     folder: pallid_court
-    tier_range: [4, 4]
+    tier_range: [3, 3]
   
   - id: charnel_garden
     name: The Charnel Garden
@@ -52,7 +52,7 @@ dungeons:
     biome: forest
     decal: ruins_megapack_normal_02.png
     folder: lammasgate
-    tier_range: [3, 4]
+    tier_range: [3, 3]
   
   # ============================================================================
   # MOUNTAINS (5 dungeons)
@@ -63,21 +63,21 @@ dungeons:
     biome: mountains
     decal: dungeons_pack_aty_normal_17.png
     folder: frostwrights_needle
-    tier_range: [3, 4]
+    tier_range: [3, 3]
   
   - id: greyspire_hermitage
     name: Greyspire Hermitage
     biome: mountains
     decal: dungeons_pack_aty_normal_09.png
     folder: greyspire_hermitage
-    tier_range: [4, 4]
+    tier_range: [3, 3]
   
   - id: marrowpeak_redoubt
     name: Marrowpeak Redoubt
     biome: mountains
     decal: ruins_megapack_normal_04.png
     folder: marrowpeak_redoubt
-    tier_range: [3, 4]
+    tier_range: [3, 3]
   
   - id: vultures_pulpit
     name: Vulture's Pulpit
@@ -91,7 +91,7 @@ dungeons:
     biome: mountains
     decal: ruins_megapack_normal_17.png
     folder: tabernacle_honest_men
-    tier_range: [2, 4]
+    tier_range: [2, 3]
   
   # ============================================================================
   # SWAMP (5 dungeons)
@@ -102,7 +102,7 @@ dungeons:
     biome: swamp
     decal: ruins_megapack_normal_03.png
     folder: submersion_saint_evarre
-    tier_range: [4, 4]
+    tier_range: [3, 3]
   
   - id: fort_contrition
     name: Fort Contrition
@@ -123,14 +123,14 @@ dungeons:
     biome: swamp
     decal: dungeons_pack_aty_normal_33.png
     folder: redoubt_mire_baron
-    tier_range: [2, 4]
+    tier_range: [2, 3]
   
   - id: fever_palace
     name: The Fever Palace
     biome: swamp
     decal: ruins_megapack_normal_16.png
     folder: fever_palace
-    tier_range: [2, 4]
+    tier_range: [2, 3]
   
   # ============================================================================
   # HILLS (3 dungeons)
@@ -148,14 +148,14 @@ dungeons:
     biome: hills
     decal: ruins_megapack_normal_08.png
     folder: caliphs_dreaming
-    tier_range: [2, 4]
+    tier_range: [2, 3]
   
   - id: sepulcher_ninety_nine
     name: Sepulcher of the Ninety-Nine
     biome: hills
     decal: dungeons_pack_aty_normal_03.png
     folder: sepulcher_ninety_nine
-    tier_range: [3, 4]
+    tier_range: [3, 3]
   
   # ============================================================================
   # PLAINS (2 dungeons)
@@ -177,9 +177,8 @@ dungeons:
 
 # Notes:
 # - tier_range format is [min, max] difficulty tier
-# - Tier 1 (Safe)
-# - Tier 2 (Frontier)
-# - Tier 3 (Wildlands)
-# - Tier 4 (Dark Places)
+# - Tier 1 (Safe) — closest region to start
+# - Tier 2 (Frontier) — middle regions
+# - Tier 3 (Wildlands) — farthest region from start
 # - decal paths are relative to assets/map/decals/poi/dungeons/{biome}/
 # - folder paths are relative to text/encounters/dungeons/

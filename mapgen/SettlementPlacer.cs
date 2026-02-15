@@ -4,11 +4,10 @@ namespace MapGen;
 
 public static class SettlementPlacer
 {
-    // Tier boundaries from reference/hiking_distances.md
-    private const int Tier1Max = 15;  // Safe zone
-    private const int Tier2Max = 25;  // Frontier
-    private const int Tier3Max = 40;  // Wildlands
-    // Beyond Tier3Max = Dark Places
+    // Settlement spacing distances
+    private const int Tier1Max = 15;
+    private const int Tier2Max = 25;
+    private const int Tier3Max = 40;
 
     public static void PlaceSettlements(Map map, ContentLoader content, Random rng)
     {
@@ -107,23 +106,6 @@ public static class SettlementPlacer
         <= Tier2Max => 8,   // Tier 2: moderate (settlements every 6-8)
         <= Tier3Max => 12,  // Tier 3: sparse (settlements every 15-20)
         _ => 18             // Tier 4: very sparse
-    };
-
-    public static int GetTier(int distance) => distance switch
-    {
-        <= Tier1Max => 1,
-        <= Tier2Max => 2,
-        <= Tier3Max => 3,
-        _ => 4
-    };
-
-    // Water coverage radius by tier (how far water sources cover)
-    public static int GetWaterRadius(int distance) => distance switch
-    {
-        <= Tier1Max => 3,   // Tier 1: water every 2-3 nodes
-        <= Tier2Max => 4,   // Tier 2: water every 3-4 nodes
-        <= Tier3Max => 5,   // Tier 3: water every 4-6 nodes
-        _ => 7              // Tier 4: water every 5-8 nodes
     };
 
     private static int ConnectionCount(Node node)

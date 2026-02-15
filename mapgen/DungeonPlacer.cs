@@ -37,8 +37,8 @@ public static class DungeonPlacer
             var candidates = traversable.Values
                 .Where(n => n.Terrain == terrain
                     && n.Poi == null
-                    && SettlementPlacer.GetTier(n.DistanceFromCity) >= entry.TierMin
-                    && SettlementPlacer.GetTier(n.DistanceFromCity) <= entry.TierMax)
+                    && (n.Region?.Tier ?? 0) >= entry.TierMin
+                    && (n.Region?.Tier ?? 0) <= entry.TierMax)
                 .ToList();
 
             if (candidates.Count == 0)
