@@ -9,6 +9,7 @@ map_*.png
 map_*.json
 *.kate-swp
 .vscode/
+*.sh
 mapgen/reference/
 ui/
 generated_*.enc
