@@ -1,4 +1,5 @@
 A Record in Stone
+
 You run your fingers along the etchings, the marks damp and ragged.
 
 Love oaths. Prayers. Names unknown to you. The script shifts every few paces. Fine calligraphy, jagged scrawls, deep gouges hacked by frantic hands. A few catch your eye.
@@ -28,9 +29,9 @@ choices:
     The first tunnel branches without warning. You take the left fork, follow it for twenty paces, and find it ending at a blank face of limestone. You retrace your steps, breathing the stale air, and try the right. This one twists sharply, doubles back on itself, and deposits you at a chamber you passed moments before. The same etchings mark the wall: tally marks in clusters, a name repeated until the stone wore smooth beneath the chisel. You pause, run your palm along the surface, and note the subtle downward slope of the floor. Water seeks the depths. You follow its course.
 
     The logic reveals itself in fragments. Passages that slant upward lead nowhere. Those that descend branch often, but the lowest path always continues. You trace this thread through three more turns, past alcoves cluttered with offerings gone to rot and rust. The air grows heavier, thick with the scent of damp earth and something older, something that clings to the back of your throat. The walls widen. The ceiling lifts away into shadow. You emerge at last into the innermost cavern, its vastness swallowing the meager light, its silence broken only by the slow drip of water from heights unseen.
-    +open ghosts
+    +open "The Ghosts"
   } @else {
     The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.
     +skip_time morning
-    +open ghosts
+    +open "The Ghosts"
   }

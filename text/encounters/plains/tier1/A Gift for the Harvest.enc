@@ -21,7 +21,7 @@ choices:
 
   The work is brutal. The sickle is dull and the wheat is thick-stalked, tough as wire. Chaff gets in your eyes, your throat, works its way under your collar and into your boots. Your back screams within the first hour. The old man says nothing, but he watches you with something like gratitude, and the two of you fall into a rhythm: cut, gather, bind. The sun crawls toward the horizon. Your hands blister. The field shrinks, row by row, until at last the final sheaf is tied and stacked with the others.
 
-  The girl brings the meal as promised. Bread still warm, cheese wrapped in cloth, a clay jug of small beer. You eat sitting on the fence while the old man clasps your shoulder once, wordless, then limps toward the distant farmhouse. The girl lingers, watching you with an expression caught between shame and pride.
+  The girl brings the meal as promised. You eat sitting on the fence while the old man clasps your shoulder once, wordless, then limps toward the distant farmhouse. The girl lingers, watching you with an expression caught between shame and pride.
 
   "Thank you," she says quietly. Then she runs after her grandfather, disappearing into the amber light.
 
@@ -31,7 +31,7 @@ choices:
   +skip_time night
 
 * Persuade her = Convince her to let you pass without helping
-  @if check mercantile medium {
+  @check mercantile medium {
     You crouch down, meeting her eyes, and speak quietly. You tell her the truth: you cannot swing a sickle for hours and still make the next town by dark. But you can do something better. You tell her where the dock merchants gather in Aldgate, which alleys the day laborers drink in, how to shame the hired hands into honoring their word. You sketch it out, step by step, until understanding sparks in her face.
 
     She listens, chewing her lip. Then she nods, slowly. "I can do that," she says. "I can get them back here."
