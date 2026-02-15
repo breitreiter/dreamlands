@@ -71,6 +71,7 @@ public static class MapSerializer
                 node.Poi = new Poi(kind, n.Poi.Type)
                 {
                     Name = n.Poi.Name,
+                    Size = n.Poi.Size != null ? Enum.Parse<SettlementSize>(n.Poi.Size) : null,
                     DungeonId = n.Poi.DungeonId,
                     DecalFile = n.Poi.DecalFile
                 };
@@ -160,6 +161,7 @@ public static class MapSerializer
             Kind = poi.Kind.ToString(),
             Type = poi.Type,
             Name = poi.Name,
+            Size = poi.Size?.ToString(),
             DungeonId = poi.DungeonId,
             DecalFile = poi.DecalFile
         };
@@ -218,6 +220,7 @@ public static class MapSerializer
         public string Kind { get; init; } = "";
         public string Type { get; init; } = "";
         public string? Name { get; init; }
+        public string? Size { get; init; }
         public string? DungeonId { get; init; }
         public string? DecalFile { get; init; }
     }

@@ -58,7 +58,7 @@ public static class PoiPass
                 float cy = (node.Y + 0.5f) * TileSize;
 
                 SKBitmap decal;
-                if (node.Poi.Type == "City" && cityDecal != null)
+                if (node.Poi.Size == SettlementSize.City && cityDecal != null)
                     decal = cityDecal;
                 else
                 {

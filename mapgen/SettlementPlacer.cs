@@ -69,7 +69,7 @@ public static class SettlementPlacer
         var candidates = preferred.Count > 0 ? preferred : nearEdge;
 
         var city = candidates.OrderByDescending(ConnectionCount).First();
-        city.Poi = new Poi(PoiKind.Settlement, "City");
+        city.Poi = new Poi(PoiKind.Settlement, "City") { Size = SettlementSize.City };
         return city;
     }
 

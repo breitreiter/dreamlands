@@ -12,6 +12,7 @@ public static class ContentPopulator
         SettlementPlacer.PlaceSettlements(map, content, rng);
         Console.Error.WriteLine("  Tiers...");
         TierAssigner.Assign(map);
+        SizeSettlements(map);
         NameRegions(map);
         NameSettlements(map);
         AssignNodeDescriptions(map);
@@ -20,6 +21,28 @@ public static class ContentPopulator
         DungeonPlacer.PlaceDungeons(map, roster, rng);
         Console.Error.WriteLine("  Encounters...");
         EncounterPlacer.Place(map);
+    }
+
+    private static void SizeSettlements(Map map)
+    {
+        foreach (var node in map.AllNodes())
+        {
+            if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Size != null)
+                continue;
+
+            var tier = node.Region?.Tier ?? 1;
+            int connections = 0;
+            foreach (var dir in DirectionExtensions.Each())
+                if (node.HasConnection(dir)) connections++;
+            bool high = connections >= 4;
+
+            node.Poi.Size = tier switch
+            {
+                1 => high ? SettlementSize.Town : SettlementSize.Village,
+                2 => high ? SettlementSize.Village : SettlementSize.Outpost,
+                _ => high ? SettlementSize.Outpost : SettlementSize.Camp,
+            };
+        }
     }
 
     private static void NameRegions(Map map)
@@ -36,7 +59,8 @@ public static class ContentPopulator
                 continue;
 
             var tier = node.Region?.Tier ?? 1;
-            node.Poi.Name = FlavorText.SettlementName(node.Terrain, tier);
+            var size = node.Poi.Size ?? SettlementSize.Village;
+            node.Poi.Name = FlavorText.SettlementName(node.Terrain, tier, size);
         }
     }
 
@@ -46,7 +70,7 @@ public static class ContentPopulator
         {
             var tier = node.Region?.Tier ?? 1;
             node.Description = node.Poi?.Kind == PoiKind.Settlement
-                ? FlavorText.SettlementDescription(node.Terrain, tier)
+                ? FlavorText.SettlementDescription(node.Terrain, tier, node.Poi.Size ?? SettlementSize.Village)
                 : FlavorText.TileDescription(node.Terrain, tier);
         }
     }
