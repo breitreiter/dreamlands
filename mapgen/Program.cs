@@ -46,10 +46,9 @@ public class Program
         var (map, actualSeed) = MapGenerator.Generate(width, height, seed, onCycle);
         Console.Error.WriteLine($"Seed: {actualSeed}");
 
-        // Populate content (region names, descriptions, settlements)
-        var content = new ContentLoader();
+        var contentPath = Path.Combine(AppContext.BaseDirectory, "content");
         var contentRng = new Random(actualSeed);
-        ContentPopulator.Populate(map, content, contentRng);
+        ContentPopulator.Populate(map, contentPath, contentRng);
 
         if (animate)
             Console.Clear();

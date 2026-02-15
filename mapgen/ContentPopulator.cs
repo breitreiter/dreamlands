@@ -5,7 +5,7 @@ namespace MapGen;
 
 public static class ContentPopulator
 {
-    public static void Populate(Map map, ContentLoader content, Random rng)
+    public static void Populate(Map map, string contentPath, Random rng)
     {
         Console.Error.WriteLine("Populating content...");
         Console.Error.WriteLine("  Settlements...");
@@ -17,7 +17,7 @@ public static class ContentPopulator
         NameSettlements(map);
         AssignNodeDescriptions(map);
         Console.Error.WriteLine("  Dungeons...");
-        var roster = DungeonRoster.Load(content.ContentPath);
+        var roster = DungeonRoster.Load(contentPath);
         DungeonPlacer.PlaceDungeons(map, roster, rng);
         Console.Error.WriteLine("  Encounters...");
         EncounterPlacer.Place(map);
