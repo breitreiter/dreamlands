@@ -19,12 +19,12 @@ choices:
   } @else {
     FIXME: The cold intensifies. You feel yourself losing direction, strength, warmth. You wake up outside the cave, somehow spared by these monsters. you dare not return.
     +skip_time morning
-    +fail_dungeon
+    +finish_dungeon
   }
 
 * Flee for your life = The ghost has you confused with another. You will not die in their stead.
   FIXME: you run through a maze of twisting passages, all different. when you are nearly out of hope, sunlight and safety.
-  +fail_dungeon
+  +finish_dungeon
 
 * Approach with open hands = Perhaps you can reason with these spirits
   You lower your hands. "I'm listening," you say.
@@ -62,5 +62,5 @@ choices:
     +finish_dungeon
   } @else {
     FIXME: "this is not the one. someone different. someone new. leave. leave while you still have life in you. come not back, lest you try our patience." You leave, unharmed, but uncertain what you have witnessed.
-    +fail_dungeon
+    +finish_dungeon
   }
