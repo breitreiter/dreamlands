@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\lib\Map\Dreamlands.Map.csproj" />
+    <ProjectReference Include="..\lib\Flavor\Dreamlands.Flavor.csproj" />
   </ItemGroup>
 
 </Project>
