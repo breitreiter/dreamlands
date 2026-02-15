@@ -159,11 +159,12 @@
       }
     },
     "verb-time": {
-      "match": "(\\+)(skip_time)\\s+(morning|afternoon|evening|night)\\s*$",
+      "match": "(\\+)(skip_time)\\s+(morning|afternoon|evening|night)(?:\\s+((?:no_sleep|no_meal|no_biome)(?:\\s+(?:no_sleep|no_meal|no_biome))*))?\\s*$",
       "captures": {
         "1": { "name": "punctuation.definition.verb.enc" },
         "2": { "name": "support.function.verb.enc" },
-        "3": { "name": "constant.numeric.time-period.enc" }
+        "3": { "name": "constant.numeric.time-period.enc" },
+        "4": { "name": "constant.language.flag.enc" }
       }
     },
     "verb-int": {

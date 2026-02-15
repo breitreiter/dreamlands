@@ -88,7 +88,7 @@
   "+skip_time": {
     "prefix": ["+skip_time", "skip_time"],
     "body": "+skip_time ${1|morning,afternoon,evening,night|}",
-    "description": "Skip to time of day"
+    "description": "Skip to time of day (optional flags: no_sleep, no_meal, no_biome)"
   },
 
   "+open": {

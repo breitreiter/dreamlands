@@ -56,7 +56,7 @@ Skills              +increase_skill <skill> <magnitude>
 
 Conditions          +add_condition <condition_id>
 
-Time                +skip_time <period>
+Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
 
 Dungeon             +finish_dungeon
                     +flee_dungeon

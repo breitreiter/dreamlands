@@ -194,7 +194,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `increase_skill <skill> <magnitude>` | skill, magnitude | Boost a skill |
 | `decrease_skill <skill> <magnitude>` | skill, magnitude | Reduce a skill |
 | `add_condition <id>` | condition id | Apply a status condition |
-| `skip_time <period>` | time period | Advance to a time of day |
+| `skip_time <period> [flags...]` | time period + optional flags | Advance to a time of day |
 | `finish_dungeon` | (none) | Mark current dungeon as completed |
 | `flee_dungeon` | (none) | Exit dungeon without completing it |
 
@@ -209,6 +209,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | **id** | Free-form string (item, tag, encounter, or condition identifier) |
 | **int** | Positive integer |
 | **category** | Item category name (e.g. `food`) |
+| **skip_time flags** | `no_sleep`, `no_meal`, `no_biome` — suppress daily-rest accounting when time transit crosses a rest period |
 
 The canonical definitions for these types live in `lib/Rules/`: `Skill.cs`, `Difficulty.cs`, `Magnitude.cs`, `TimePeriod.cs`, `ActionVocabulary.cs`.
 
