@@ -15,7 +15,7 @@ public static class FlavorText
         {
             Terrain.Plains => Pick("Meadows", "Steppe", "Grasslands", "Fields"),
             Terrain.Forest => Pick("Woods", "Timberlands", "Thicket", "Greenwood"),
-            Terrain.Hills => Pick("Highlands", "Ridges", "Barrows", "Downs"),
+            Terrain.Scrub => Pick("Barrens", "Drylands", "Wastes", "Flats"),
             Terrain.Mountains => Pick("Peaks", "Crags", "Spires", "Heights"),
             Terrain.Swamp => Pick("Mire", "Fens", "Bogs", "Marshes"),
             Terrain.Lake => Pick("Shallows", "Deeps", "Waters", "Mere"),
@@ -31,7 +31,7 @@ public static class FlavorText
         {
             Terrain.Plains => $"{mood} grasslands stretch to the horizon.",
             Terrain.Forest => $"A {mood.ToLower()} forest presses in from all sides.",
-            Terrain.Hills => $"{mood} hills roll into the distance.",
+            Terrain.Scrub => $"{mood} scrubland stretches to the horizon, dry and sparse.",
             Terrain.Mountains => $"{mood} peaks loom overhead, jagged against the sky.",
             Terrain.Swamp => $"A {mood.ToLower()} swamp spreads underfoot, thick with mist.",
             Terrain.Lake => "Still water reflects the sky.",
@@ -47,7 +47,7 @@ public static class FlavorText
         {
             Terrain.Plains => Pick("Wheat", "Wind", "Sun", "Grass"),
             Terrain.Forest => Pick("Oak", "Elm", "Thorn", "Moss"),
-            Terrain.Hills => Pick("Stone", "Cairn", "Slate", "Flint"),
+            Terrain.Scrub => Pick("Dust", "Thorn", "Sand", "Flint"),
             Terrain.Mountains => Pick("Iron", "Frost", "Crag", "Granite"),
             Terrain.Swamp => Pick("Fog", "Reed", "Mire", "Murk"),
             _ => "Lake",
@@ -79,7 +79,7 @@ public static class FlavorText
         {
             Terrain.Plains => "amid open fields",
             Terrain.Forest => "beneath the canopy",
-            Terrain.Hills => "perched on a hillside",
+            Terrain.Scrub => "huddled in the scrubland",
             Terrain.Mountains => "nestled in a mountain pass",
             Terrain.Swamp => "built on stilts above the bog",
             _ => "by the water's edge",

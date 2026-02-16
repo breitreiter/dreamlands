@@ -11,7 +11,7 @@ public static class DungeonPlacer
         ["forest"] = Terrain.Forest,
         ["mountains"] = Terrain.Mountains,
         ["swamp"] = Terrain.Swamp,
-        ["hills"] = Terrain.Hills,
+        ["scrub"] = Terrain.Scrub,
         ["plains"] = Terrain.Plains,
     };
 

@@ -10,7 +10,7 @@ public static class TerrainPass
         [Terrain.Lake] = "water.png",
         [Terrain.Plains] = "plains.png",
         [Terrain.Forest] = "forest.png",
-        [Terrain.Hills] = "hills.png",
+        [Terrain.Scrub] = "scrub.png",
         [Terrain.Mountains] = "mountains.png",
         [Terrain.Swamp] = "swamp.png"
     };

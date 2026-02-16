@@ -50,7 +50,7 @@ public static class MapRenderer
         [Terrain.Lake] = "\x1b[44m",       // Blue background
         [Terrain.Plains] = "\x1b[102m",    // Bright green background
         [Terrain.Forest] = "\x1b[42m",     // Green background
-        [Terrain.Hills] = "\x1b[43m",      // Yellow background
+        [Terrain.Scrub] = "\x1b[43m",      // Yellow background
         [Terrain.Mountains] = "\x1b[100m", // Bright black (gray) background
         [Terrain.Swamp] = "\x1b[45m"       // Magenta background
     };

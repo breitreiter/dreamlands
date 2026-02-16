@@ -133,26 +133,26 @@ dungeons:
     tier_range: [2, 3]
   
   # ============================================================================
-  # HILLS (3 dungeons)
+  # SCRUB (3 dungeons)
   # ============================================================================
   
   - id: azharan_unruled
     name: Azharan, the Unruled
-    biome: hills
+    biome: scrub
     decal: ruins_megapack_normal_11.png
     folder: azharan_unruled
     tier_range: [2, 3]
   
   - id: caliphs_dreaming
     name: The Caliph's Dreaming
-    biome: hills
+    biome: scrub
     decal: ruins_megapack_normal_08.png
     folder: caliphs_dreaming
     tier_range: [2, 3]
   
   - id: sepulcher_ninety_nine
     name: Sepulcher of the Ninety-Nine
-    biome: hills
+    biome: scrub
     decal: dungeons_pack_aty_normal_03.png
     folder: sepulcher_ninety_nine
     tier_range: [3, 3]

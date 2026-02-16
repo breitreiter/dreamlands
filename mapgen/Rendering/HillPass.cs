@@ -45,7 +45,7 @@ public static class HillPass
                 int tileX = (int)(px / TileSize);
                 int tileY = (int)(py / TileSize);
                 if (!map.InBounds(tileX, tileY)) continue;
-                if (map[tileX, tileY].Terrain != Terrain.Hills) continue;
+                if (map[tileX, tileY].Terrain != Terrain.Scrub) continue;
 
                 var decal = decals[rng.Next(decals.Count)];
                 float w = decal.Width * scale;
@@ -102,7 +102,7 @@ public static class HillPass
                 int tileX = (int)(px / TileSize);
                 int tileY = (int)(py / TileSize);
                 if (!map.InBounds(tileX, tileY)) continue;
-                if (map[tileX, tileY].Terrain != Terrain.Hills) continue;
+                if (map[tileX, tileY].Terrain != Terrain.Scrub) continue;
 
                 var decal = palms[rng.Next(palms.Count)];
                 placements.Add((px, py, decal));

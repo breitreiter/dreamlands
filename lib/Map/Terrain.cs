@@ -5,7 +5,7 @@ public enum Terrain
     Lake,
     Plains,
     Forest,
-    Hills,
+    Scrub,
     Mountains,
     Swamp
 }

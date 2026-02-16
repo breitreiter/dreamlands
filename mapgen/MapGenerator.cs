@@ -43,7 +43,7 @@ public static class MapGenerator
         {
             (Terrain.Plains, 30),
             (Terrain.Forest, 20),
-            (Terrain.Hills, 35),
+            (Terrain.Scrub, 35),
             (Terrain.Mountains, 8),
             (Terrain.Swamp, 5),
         };
@@ -283,7 +283,7 @@ public static class MapGenerator
     {
         Terrain.Plains => 0.85f,
         Terrain.Forest => 0.60f,
-        Terrain.Hills => 0.60f,
+        Terrain.Scrub => 0.60f,
         Terrain.Swamp => 0.35f,
         Terrain.Mountains => 0.25f,
         _ => 0.5f

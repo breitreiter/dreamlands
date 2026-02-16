@@ -12,7 +12,7 @@ public static class PoiPass
     static readonly Dictionary<Terrain, string> TerrainToFolder = new()
     {
         [Terrain.Plains] = "plains_hills",
-        [Terrain.Hills] = "scrub",
+        [Terrain.Scrub] = "scrub",
         [Terrain.Forest] = "forest",
         [Terrain.Mountains] = "mountain",
         [Terrain.Swamp] = "swamp",
@@ -22,7 +22,7 @@ public static class PoiPass
     {
         ["forest"] = "forest",
         ["swamp"] = "swamp",
-        ["hills"] = "hills",
+        ["scrub"] = "scrub",
         ["plains"] = "plains",
     };
 
@@ -74,7 +74,7 @@ public static class PoiPass
                 {
                     Terrain.Forest => "forest",
                     Terrain.Swamp => "swamp",
-                    Terrain.Hills => "hills",
+                    Terrain.Scrub => "scrub",
                     Terrain.Plains => "plains",
                     _ => null
                 };
