@@ -65,7 +65,7 @@ conditions:
     overnight_chance: 0.5
     drains: spirits
     drain: small
-    resisted_by: [quality_boots, balanced_meal]
+    resisted_by: [sturdy_boots, balanced_meal]
     cured_by: settlement_rest
     
   haunted:
