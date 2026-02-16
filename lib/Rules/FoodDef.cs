@@ -10,12 +10,7 @@ public sealed class FoodCategory
     public int BasePrice { get; init; }
     public int Slots { get; init; } = 1;
     public int StackSize { get; init; } = 10;
-    public IReadOnlyDictionary<string, FoodFlavors> Flavors { get; init; } =
-        new Dictionary<string, FoodFlavors>();
 }
-
-/// <summary>Vendor and foraged flavor names for a biome.</summary>
-public readonly record struct FoodFlavors(IReadOnlyList<string> Vendor, IReadOnlyList<string> Foraged);
 
 /// <summary>A special food with prophylactic properties.</summary>
 public sealed class SpecialFood
@@ -72,23 +67,12 @@ public sealed class FoodBalance
         {
             foreach (var (id, cat) in f.Categories)
             {
-                var flavors = new Dictionary<string, FoodFlavors>();
-                if (cat.Flavors != null)
-                {
-                    foreach (var (biome, fl) in cat.Flavors)
-                    {
-                        flavors[biome] = new FoodFlavors(
-                            fl.Vendor ?? [],
-                            fl.Foraged ?? []);
-                    }
-                }
                 categories[id] = new FoodCategory
                 {
                     Id = id,
                     BasePrice = cat.BasePrice,
                     Slots = cat.Slots > 0 ? cat.Slots : 1,
                     StackSize = cat.StackSize > 0 ? cat.StackSize : 10,
-                    Flavors = flavors,
                 };
             }
         }
@@ -169,12 +153,6 @@ public sealed class FoodBalance
         public int BasePrice { get; set; }
         public int Slots { get; set; }
         public int StackSize { get; set; }
-        public Dictionary<string, FlavorListYaml>? Flavors { get; set; }
-    }
-    class FlavorListYaml
-    {
-        public List<string>? Vendor { get; set; }
-        public List<string>? Foraged { get; set; }
     }
     class MealYaml
     {

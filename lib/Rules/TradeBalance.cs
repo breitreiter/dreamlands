@@ -10,7 +10,6 @@ public sealed class TradeCategory
     public string Name { get; init; } = "";
     public int BaseValue { get; init; }
     public IReadOnlyDictionary<string, double> RegionalModifiers { get; init; } = new Dictionary<string, double>();
-    public IReadOnlyList<string> FlavorItems { get; init; } = [];
 }
 
 /// <summary>Trade balance data from trade.yaml.</summary>
@@ -44,7 +43,6 @@ public sealed class TradeBalance
                     Name = cat.Name ?? id,
                     BaseValue = cat.BaseValue,
                     RegionalModifiers = cat.RegionalModifiers ?? new Dictionary<string, double>(),
-                    FlavorItems = cat.FlavorItems ?? [],
                 };
             }
         }
@@ -68,7 +66,6 @@ public sealed class TradeBalance
         public string? Name { get; set; }
         public int BaseValue { get; set; }
         public Dictionary<string, double>? RegionalModifiers { get; set; }
-        public List<string>? FlavorItems { get; set; }
     }
     class PricingYaml
     {

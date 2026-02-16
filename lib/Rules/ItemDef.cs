@@ -21,8 +21,6 @@ public sealed class ItemDef
     public int CapacityBonus { get; init; }
     public IReadOnlyList<string> Resists { get; init; } = [];
     public IReadOnlyList<string> Cures { get; init; } = [];
-    public IReadOnlyDictionary<string, IReadOnlyList<FlavorVariant>> Flavors { get; init; } =
-        new Dictionary<string, IReadOnlyList<FlavorVariant>>();
 
     internal static IReadOnlyDictionary<string, ItemDef> Load(string balancePath)
     {
@@ -57,24 +55,6 @@ public sealed class ItemDef
                 }
             }
 
-            var flavors = new Dictionary<string, IReadOnlyList<FlavorVariant>>();
-            if (item.Flavors != null)
-            {
-                foreach (var (biome, variants) in item.Flavors)
-                {
-                    flavors[biome] = variants.Select(v =>
-                    {
-                        if (v is Dictionary<object, object> dict)
-                        {
-                            var name = dict.TryGetValue("name", out var n) ? n?.ToString() ?? "" : "";
-                            var cls = dict.TryGetValue("class", out var c) ? c?.ToString() : null;
-                            return new FlavorVariant(name, cls);
-                        }
-                        return new FlavorVariant(v?.ToString() ?? "", null);
-                    }).ToList();
-                }
-            }
-
             result[id] = new ItemDef
             {
                 Id = id,
@@ -89,7 +69,6 @@ public sealed class ItemDef
                 CapacityBonus = capacityBonus,
                 Resists = resists,
                 Cures = cures,
-                Flavors = flavors,
             };
         }
         return result;
@@ -119,7 +98,6 @@ public sealed class ItemDef
         public int StackSize { get; set; }
         public string? Availability { get; set; }
         public List<EffectYaml>? Effects { get; set; }
-        public Dictionary<string, List<object>>? Flavors { get; set; }
     }
     class EffectYaml
     {
@@ -130,6 +108,3 @@ public sealed class ItemDef
         public int CapacityBonus { get; set; }
     }
 }
-
-/// <summary>A biome-specific flavor name for an item.</summary>
-public readonly record struct FlavorVariant(string Name, string? WeaponClass);

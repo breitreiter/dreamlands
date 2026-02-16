@@ -2,66 +2,86 @@
 
 equipment:
   # Tools & Gear (not consumable)
-  
+
   camping_gear:
-    name: "Camping Gear"
     type: tool
     base_price: 15
     slots: 2
     effects:
       - resists: [cold, exhausted]
-        
-  quality_boots:
-    name: "Quality Boots"
-    type: tool
+
+  base_boots:
+    type: boots
+    quality: basic
+    base_price: 5
+    slots: 1
+    effects:
+      - exhaustion_resist: 0
+
+  sturdy_boots:
+    type: boots
+    quality: crude
     base_price: 20
     slots: 1
     effects:
+      - exhaustion_resist: 1
+      - resists: [exhausted]
+
+  fine_boots:
+    type: boots
+    quality: good
+    base_price: 60
+    slots: 1
+    effects:
+      - exhaustion_resist: 2
+      - resists: [exhausted]
+
+  master_boots:
+    type: boots
+    quality: fine
+    base_price: 150
+    slots: 1
+    effects:
+      - exhaustion_resist: 3
       - resists: [exhausted]
 
   map_kit:
-    name: "Cartography Kit"
     type: tool
     base_price: 20
     slots: 1
     effects:
       - resists: [lost]
-      
+
   warm_clothing:
-    name: "Warm Clothing"
     type: tool
     base_price: 15
     slots: 1
     effects:
       - resists: [cold]
-      
+
   canteen:
-    name: "Canteen"
     type: tool
     base_price: 10
     slots: 1
     effects:
       - resists: [thirsty]
-      
+
   mosquito_netting:
-    name: "Mosquito Netting"
     type: tool
     base_price: 12
     slots: 1
     effects:
       - resists: [swamp_fever]
-      
+
   warding_talisman:
-    name: "Warding Talisman"
     type: tool
     base_price: 25
     slots: 1
     availability: temple_settlements
     effects:
       - resists: [haunted]
-      
+
   treated_bedroll:
-    name: "Treated Bedroll"
     type: tool
     base_price: 18
     slots: 2
@@ -69,25 +89,22 @@ equipment:
       - resists: [infested]
 
   dust_mask:
-    name: "Dust Mask"
     type: tool
     base_price: 8
     slots: 1
     effects:
       - resists: [rot_lung]
-      
+
   backpack:
-    name: "Backpack"
     type: tool
     base_price: 30
     slots: 0  # Doesn't consume slot
     effects:
       - capacity_bonus: 5
-      
+
   # Consumables
-  
+
   bandages:
-    name: "Bandages"
     type: consumable
     base_price: 5
     slots: 1
@@ -96,7 +113,6 @@ equipment:
       - cures: [injured]
 
   fever_tonic:
-    name: "Fever Tonic"
     type: consumable
     base_price: 12
     slots: 1
@@ -105,7 +121,6 @@ equipment:
       - cures: [swamp_fever]
 
   purgative:
-    name: "Purgative"
     type: consumable
     base_price: 12
     slots: 1
@@ -114,7 +129,6 @@ equipment:
       - cures: [infested]
 
   expectorant:
-    name: "Expectorant"
     type: consumable
     base_price: 12
     slots: 1
@@ -123,16 +137,14 @@ equipment:
       - cures: [rot_lung]
 
   gut_remedy:
-    name: "Gut Remedy"
     type: consumable
     base_price: 10
     slots: 1
     stack_size: 5
     effects:
       - cures: [river_flux]
-      
+
   purifying_tablets:
-    name: "Purifying Tablets"
     type: consumable
     base_price: 8
     slots: 1
@@ -144,133 +156,68 @@ equipment:
   # Quality is the mechanic. Class (sword, axe, club, spear, dagger, staff) determines
   # narrative text — readying sentences, damage descriptions — via weapon_classes.yaml.
   # A "crude weapon" might be a rusty seax (sword) or a heavy cudgel (club).
-  
+  # Flavor names (biome-specific) live in lib/Flavor/equipment_names.yaml.
+
+  base_weapon:
+    type: weapon
+    quality: basic
+    base_price: 5
+    slots: 2
+    effects:
+      - combat_bonus: 0
+
   crude_weapon:
-    name: "Crude Weapon"
     type: weapon
     quality: crude
     base_price: 15
     slots: 2
     effects:
       - combat_bonus: 1
-    flavors:
-      plains:
-        - { name: "boat hook", class: spear }
-        - { name: "marlinspike", class: dagger }
-        - { name: "chipped cutlass", class: sword }
-      scrub:
-        - { name: "jambiya", class: dagger }
-        - { name: "cracked scimitar", class: sword }
-        - { name: "sun-bleached spear", class: spear }
-      swamp:
-        - { name: "bone shiv", class: dagger }
-        - { name: "reed spear", class: spear }
-        - { name: "corroded machete", class: sword }
-      forest:
-        - { name: "woodsman's hatchet", class: axe }
-        - { name: "hunting knife", class: dagger }
-        - { name: "gnarled club", class: club }
-      mountains:
-        - { name: "rusted sword", class: sword }
-        - { name: "pickaxe", class: axe }
-        - { name: "cudgel", class: club }
 
   good_weapon:
-    name: "Good Weapon"
     type: weapon
     quality: good
     base_price: 50
     slots: 2
     effects:
       - combat_bonus: 3
-    flavors:
-      plains:
-        - { name: "longsword", class: sword }
-        - { name: "war axe", class: axe }
-        - { name: "spear", class: spear }
-      scrub:
-        - { name: "curved sword", class: sword }
-        - { name: "desert lance", class: spear }
-        - { name: "iron khopesh", class: sword }
-      swamp:
-        - { name: "barbed trident", class: spear }
-        - { name: "saw-tooth machete", class: sword }
-        - { name: "bog iron hatchet", class: axe }
-      forest:
-        - { name: "woodsman's axe", class: axe }
-        - { name: "boar spear", class: spear }
-        - { name: "broad falchion", class: sword }
-      mountains:
-        - { name: "ice axe", class: axe }
-        - { name: "tunnel blade", class: dagger }
-        - { name: "short-hafted axe", class: axe }
 
   fine_weapon:
-    name: "Fine Weapon"
     type: weapon
     quality: fine
     base_price: 150
     slots: 2
     effects:
       - combat_bonus: 5
-    flavors:
-      plains:
-        - { name: "fire lance", class: spear }
-        - { name: "power axe", class: axe }
-      scrub:
-        - { name: "damascus scimitar", class: sword }
-        - { name: "jewelled tulwar", class: sword }
-      swamp:
-        - { name: "black iron glaive", class: spear }
-        - { name: "serpent-etched blade", class: sword }
-      mountains:
-        - { name: "frost-forged axe", class: axe }
-        - { name: "ancient warpick", class: axe }
-      forest:
-        - { name: "primal wood spear", class: spear }
-        - { name: "ancient tooth spear", class: spear }
+
+  base_armor:
+    type: armor
+    quality: basic
+    base_price: 10
+    slots: 3
+    effects:
+      - combat_defense: 0
 
   light_armor:
-    name: "Light Armor"
     type: armor
     quality: crude
     base_price: 30
     slots: 3
     effects:
       - combat_defense: 2
-    flavors:
-      plains: [leather jerkin, padded gambeson, hide coat, studded vest]
-      scrub:   [desert robes, sand-leather wrap]
-      swamp:   [boiled hide vest, reed-woven coat]
-      forest:  [hunter's leathers, bark-backed jerkin]
-      mountains: [fur-lined chain, mountain brigandine]
 
   medium_armor:
-    name: "Medium Armor"
     type: armor
     quality: good
     base_price: 100
     slots: 4
     effects:
       - combat_defense: 4
-    flavors:
-      plains:   [chain mail, brigandine, scale hauberk, ring mail]
-      scrub:     [lamellar cuirass, mirror armor]
-      swamp:     [lacquered scale coat, bog iron mail]
-      mountains: [fur-lined chain, mountain brigandine]
-      forest:    [hunter's leathers, bark-backed jerkin]
 
   heavy_armor:
-    name: "Heavy Armor"
     type: armor
     quality: fine
     base_price: 300
     slots: 5
     effects:
       - combat_defense: 6
-    flavors:
-      plains:   [battlesuit, war harness]
-      scrub:     [gilded lamellar, sun king's plate]
-      swamp:     [rootknotted skin]
-      forest:    [hunter's leathers, bark-backed jerkin]
-      mountains: [frost plate, stone-riveted harness]

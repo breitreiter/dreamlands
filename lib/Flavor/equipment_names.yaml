@@ -1,0 +1,95 @@
+# Equipment Flavor Names
+# Biome-specific names for weapons and armor by quality tier.
+# Weapons: quality -> biome -> [{name, class}]
+# Armor:   quality -> biome -> [name]
+
+weapons:
+  basic:
+    plains:
+      - { name: "walking stick", class: spear }
+
+  crude:
+    plains:
+      - { name: "boat hook", class: spear }
+      - { name: "marlinspike", class: dagger }
+      - { name: "chipped cutlass", class: sword }
+    scrub:
+      - { name: "jambiya", class: dagger }
+      - { name: "cracked scimitar", class: sword }
+      - { name: "sun-bleached spear", class: spear }
+    swamp:
+      - { name: "bone shiv", class: dagger }
+      - { name: "reed spear", class: spear }
+      - { name: "corroded machete", class: sword }
+    forest:
+      - { name: "woodsman's hatchet", class: axe }
+      - { name: "hunting knife", class: dagger }
+      - { name: "gnarled club", class: club }
+    mountains:
+      - { name: "rusted sword", class: sword }
+      - { name: "pickaxe", class: axe }
+      - { name: "cudgel", class: club }
+
+  good:
+    plains:
+      - { name: "longsword", class: sword }
+      - { name: "war axe", class: axe }
+      - { name: "spear", class: spear }
+    scrub:
+      - { name: "curved sword", class: sword }
+      - { name: "desert lance", class: spear }
+      - { name: "iron khopesh", class: sword }
+    swamp:
+      - { name: "barbed trident", class: spear }
+      - { name: "saw-tooth machete", class: sword }
+      - { name: "bog iron hatchet", class: axe }
+    forest:
+      - { name: "woodsman's axe", class: axe }
+      - { name: "boar spear", class: spear }
+      - { name: "broad falchion", class: sword }
+    mountains:
+      - { name: "ice axe", class: axe }
+      - { name: "tunnel blade", class: dagger }
+      - { name: "short-hafted axe", class: axe }
+
+  fine:
+    plains:
+      - { name: "fire lance", class: spear }
+      - { name: "power axe", class: axe }
+    scrub:
+      - { name: "damascus scimitar", class: sword }
+      - { name: "jewelled tulwar", class: sword }
+    swamp:
+      - { name: "black iron glaive", class: spear }
+      - { name: "serpent-etched blade", class: sword }
+    mountains:
+      - { name: "frost-forged axe", class: axe }
+      - { name: "ancient warpick", class: axe }
+    forest:
+      - { name: "primal wood spear", class: spear }
+      - { name: "ancient tooth spear", class: spear }
+
+armor:
+  basic:
+    plains: [travelling clothes]
+
+  crude:
+    plains:     [leather jerkin, padded gambeson, hide coat, studded vest]
+    scrub:      [desert robes, sand-leather wrap]
+    swamp:      [boiled hide vest, reed-woven coat]
+    forest:     [hunter's leathers, bark-backed jerkin]
+    mountains:  [fur-lined chain, mountain brigandine]
+
+  good:
+    plains:     [chain mail, brigandine, scale hauberk, ring mail]
+    scrub:      [lamellar cuirass, mirror armor]
+    swamp:      [lacquered scale coat, bog iron mail]
+    mountains:  [fur-lined chain, mountain brigandine]
+    forest:     [hunter's leathers, bark-backed jerkin]
+
+  fine:
+    plains:     [battlesuit, war harness]
+    scrub:      [gilded lamellar, sun king's plate]
+    swamp:      [rootknotted skin]
+    forest:     [hunter's leathers, bark-backed jerkin]
+    mountains:  [frost plate, stone-riveted harness]

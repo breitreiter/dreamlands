@@ -1,0 +1,54 @@
+# Food Flavor Names
+# Biome-specific names for food categories.
+# category -> biome -> {vendor, foraged}
+
+protein:
+  plains:
+    vendor:  [salt beef, smoked fish, cured sausage]
+    foraged: [snared hare, field mice, grasshoppers]
+  scrub:
+    vendor:  [goat jerky, smoked lizard, spiced locusts]
+    foraged: [scorpion, sun-dried gecko, beetle grubs]
+  swamp:
+    vendor:  [smoked eel, pickled crayfish, salted frog legs]
+    foraged: [raw crayfish, frog, fat grubs]
+  forest:
+    vendor:  [venison jerky, smoked trout, dried rabbit]
+    foraged: [snared squirrel, brook minnows, wood grubs]
+  mountains:
+    vendor:  [yak jerky, salted pork, wind-dried goat]
+    foraged: [ptarmigan, rock pigeon, slugs]
+
+carbs:
+  plains:
+    vendor:  [travel bread, barley cake, oat biscuit]
+    foraged: [wild oats, grass seeds, field tubers]
+  scrub:
+    vendor:  [flatbread, millet cake, dust crackers]
+    foraged: [prickly pear flesh, dry roots, dust yam]
+  swamp:
+    vendor:  [rice ball, cattail flour bread, sago cake]
+    foraged: [cattail root, wild rice, lotus stem]
+  forest:
+    vendor:  [acorn bread, nut loaf, rye hardtack]
+    foraged: [acorns, wild onion, burdock root]
+  mountains:
+    vendor:  [buckwheat cake, dense hardtack, stone bread]
+    foraged: [lichen, pine bark, mountain sorrel]
+
+sweets:
+  plains:
+    vendor:  [honeycomb, dried apricots, molasses candy]
+    foraged: [wild clover, hedge berries, crab apples]
+  scrub:
+    vendor:  [date paste, fig leather, tamarind chew]
+    foraged: [dried cactus fruit, bitter figs, ant honey]
+  swamp:
+    vendor:  [cane sugar block, candied ginger, berry jam]
+    foraged: [swamp berries, wild ginger, sugar reed]
+  forest:
+    vendor:  [wild berry preserve, maple candy, hazelnut paste]
+    foraged: [blackberries, hazelnuts, maple sap]
+  mountains:
+    vendor:  [pine nut brittle, dried cherry, heather honey]
+    foraged: [juniper berries, wild thyme, pine nuts]

@@ -1,0 +1,57 @@
+# Trade Flavor Names
+# Example item names per trade category.
+# category -> [name]
+
+textiles:
+  - "Silk Scarves"
+  - "Wool Blankets"
+  - "Linen Cloth"
+  - "Embroidered Tapestries"
+
+metals:
+  - "Iron Ingots"
+  - "Copper Wire"
+  - "Steel Tools"
+  - "Brass Fittings"
+
+wood:
+  - "Oak Planks"
+  - "Pine Lumber"
+  - "Carved Furniture"
+  - "Barrel Staves"
+
+stone:
+  - "Granite Blocks"
+  - "Marble Slabs"
+  - "Gravel"
+  - "Limestone"
+
+gems:
+  - "Rough Diamonds"
+  - "Polished Emeralds"
+  - "Ruby Clusters"
+  - "Semi-precious Stones"
+
+spices:
+  - "Peppercorns"
+  - "Cinnamon Bark"
+  - "Saffron Threads"
+  - "Dried Herbs"
+
+tools:
+  - "Hammers"
+  - "Saws"
+  - "Chisels"
+  - "Axes"
+
+weapons:
+  - "Longswords"
+  - "Crossbows"
+  - "Spears"
+  - "Daggers"
+
+books:
+  - "Historical Texts"
+  - "Religious Tomes"
+  - "Navigation Charts"
+  - "Technical Manuals"
