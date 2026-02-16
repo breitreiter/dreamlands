@@ -46,7 +46,7 @@ public class Program
         var (map, actualSeed) = MapGenerator.Generate(width, height, seed, onCycle);
         Console.Error.WriteLine($"Seed: {actualSeed}");
 
-        var contentPath = Path.Combine(AppContext.BaseDirectory, "content");
+        var contentPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "text", "notes", "content"));
         var contentRng = new Random(actualSeed);
         ContentPopulator.Populate(map, contentPath, contentRng);
 
