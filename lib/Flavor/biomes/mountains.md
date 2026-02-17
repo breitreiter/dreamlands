@@ -1,11 +1,3 @@
-Excellent instinct. “Miners in mountains” defaults to dwarves almost automatically. If you want distance from Tolkien gravity, you shift:
-
-* from stone-and-iron permanence → to wood-and-weather impermanence
-* from clan-forged stoicism → to family-bound storytelling
-* from subterranean identity → to ridge-line identity
-
-Let’s rebuild them as **fantasy Appalachia without being Appalachia™**.
-
 ---
 
 # The Mountains (Reworked)

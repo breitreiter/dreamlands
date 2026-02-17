@@ -20,6 +20,72 @@ Highland kin-groups controlling passes, wells, and terraced valleys.
 
 They feud, negotiate passage, and guard ancestral land.
 
+(Afghan-inspired structurally)
+
+Core Traits
+
+Honor-based kinship
+
+Strong local autonomy
+
+Outsiders must negotiate passage
+
+Hospitality is binding but political
+
+Not desert princes — mountain plateau tribes.
+
+Architectural Vibe
+
+Stone-walled compounds
+
+Defensive hilltop villages
+
+Courtyard houses with narrow windows
+
+Terraced fields in narrow valleys
+
+Linguistic Feel
+
+Phonetics:
+
+Hard stops: k, g, t, d
+
+Aspirates: kh, gh
+
+Strong r
+
+Short vowels
+
+Settlement examples:
+
+Gharok
+
+Tarsin
+
+Drazhul
+
+Kethar Pass
+
+Sarghun Ridge
+
+Personal names:
+
+Zarik
+
+Davun
+
+Haris
+
+Nadir
+
+Qayem
+
+Sorin (border mixing)
+
+Structure:
+Given name + Father’s name + Clan
+Zarik Davun of the Tarsin
+
 ---
 
 ### 2. The Remnant Administration
