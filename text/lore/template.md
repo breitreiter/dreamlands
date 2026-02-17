@@ -99,6 +99,15 @@
 **Typical Trouble:**
 <!-- Brief list. These encounters should be social, economic, or mildly inconvenient rather than dangerous. -->
 
+**Named NPCs:**
+<!-- Named people who might appear in encounter text, rumors, or dialogue. Include "important but off-screen" figures (governors, captains, patrons) who are referenced but never met. -->
+
+**Plot Keys:**
+<!-- Mechanical keys set/checked by encounters. Keys must be exact, stable strings (e.g., snake_case) to avoid mismatches between set_key and check_key usage. -->
+| Key (exact) | Surface Read (what the player is told) | Semantic Contract (what it actually means) |
+|-------------|----------------------------------------|--------------------------------------------|
+|             |                                        |                                            |
+
 ---
 
 ### Wildlands
@@ -114,6 +123,14 @@
 
 **Narrative Threads:**
 <!-- Recurring elements, unresolved situations, or slow-burn stories that encounters can reference. Seeds for plot keys. -->
+
+**Named NPCs:**
+<!-- As above, but scoped to tier 2: camp figures, pursuers, search parties, off-screen authorities, etc. -->
+
+**Plot Keys:**
+| Key (exact) | Surface Read (what the player is told) | Semantic Contract (what it actually means) |
+|-------------|----------------------------------------|--------------------------------------------|
+|             |                                        |                                            |
 
 ---
 
@@ -134,28 +151,23 @@
 **Rewards & Temptations:**
 <!-- Why would anyone come here? What's the trade goods jackpot, the lost knowledge, the thing that makes the risk calculable? -->
 
+**Area-Specific Encounters:**
+<!-- Encounters that *only* make sense here. Unique to the land, the people, or the horror. -->
+
+**Named NPCs:**
+<!-- Tier 3 still gets named figures (e.g., the "hunter") even if they are never directly encountered. Use names for rumors, journals, and referenced victims. -->
+
+**Plot Keys:**
+| Key (exact) | Surface Read (what the player is told) | Semantic Contract (what it actually means) |
+|-------------|----------------------------------------|--------------------------------------------|
+|             |                                        |                                            |
+
 ---
 
 ## Encounter Flavor
 
 **Universal Modifiers:**
 <!-- Biome-specific flavor that can be layered onto generic encounter templates. Weather, lighting, sounds, smells. The texture that makes "you encounter bandits" feel different here than anywhere else. -->
-
-**Biome-Specific Encounters:**
-<!-- Encounters that *only* make sense here. Unique to the land, the people, or the horror. -->
-
-**Recurring NPCs or Archetypes:**
-<!-- Character types the player might meet repeatedly. The grizzled trapper, the displaced merchant, the zealot heading into the horror zone. -->
-
----
-
-## Plot Keys
-
-<!-- Evocative fragments seeded with a delicate touch. Names, objects, phrases, or events that encounters can reference without explaining. List them with brief internal notes on what they *actually* mean, for authorial reference only. -->
-
-| Key | Surface Read | Actual Significance |
-|-----|-------------|---------------------|
-|     |             |                     |
 
 ---
 
