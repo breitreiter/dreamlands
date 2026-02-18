@@ -1,9 +1,6 @@
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
-
 namespace Dreamlands.Rules;
 
-/// <summary>Trade good category from trade.yaml.</summary>
+/// <summary>Trade good category.</summary>
 public sealed class TradeCategory
 {
     public string Id { get; init; } = "";
@@ -12,64 +9,60 @@ public sealed class TradeCategory
     public IReadOnlyDictionary<string, double> RegionalModifiers { get; init; } = new Dictionary<string, double>();
 }
 
-/// <summary>Trade balance data from trade.yaml.</summary>
+/// <summary>Trade balance data.</summary>
 public sealed class TradeBalance
 {
-    public IReadOnlyDictionary<string, TradeCategory> Categories { get; init; } = new Dictionary<string, TradeCategory>();
+    public static readonly TradeBalance Default = new();
+
+    public IReadOnlyDictionary<string, TradeCategory> Categories { get; init; } = BuildCategories();
     public int PerLevelBonusPercent { get; init; } = 5;
 
-    internal static TradeBalance Load(string balancePath)
+    static Dictionary<string, TradeCategory> BuildCategories() => new()
     {
-        var path = Path.Combine(balancePath, "trade.yaml");
-        if (!File.Exists(path)) return new TradeBalance();
-
-        var yaml = File.ReadAllText(path);
-        var deserializer = new DeserializerBuilder()
-            .WithNamingConvention(UnderscoredNamingConvention.Instance)
-            .Build();
-
-        var doc = deserializer.Deserialize<TradeDoc>(yaml);
-        if (doc?.Trade == null) return new TradeBalance();
-        var t = doc.Trade;
-
-        var categories = new Dictionary<string, TradeCategory>();
-        if (t.Categories != null)
+        ["textiles"] = new()
         {
-            foreach (var (id, cat) in t.Categories)
-            {
-                categories[id] = new TradeCategory
-                {
-                    Id = id,
-                    Name = cat.Name ?? id,
-                    BaseValue = cat.BaseValue,
-                    RegionalModifiers = cat.RegionalModifiers ?? new Dictionary<string, double>(),
-                };
-            }
-        }
-
-        return new TradeBalance
+            Id = "textiles", Name = "Textiles", BaseValue = 10,
+            RegionalModifiers = new Dictionary<string, double> { ["plains"] = 0.8, ["mountains"] = 1.2 },
+        },
+        ["metals"] = new()
         {
-            Categories = categories,
-            PerLevelBonusPercent = 5,
-        };
-    }
-
-    // DTOs
-    class TradeDoc { public TradeYaml? Trade { get; set; } }
-    class TradeYaml
-    {
-        public Dictionary<string, TradeCatYaml>? Categories { get; set; }
-        public PricingYaml? Pricing { get; set; }
-    }
-    class TradeCatYaml
-    {
-        public string? Name { get; set; }
-        public int BaseValue { get; set; }
-        public Dictionary<string, double>? RegionalModifiers { get; set; }
-    }
-    class PricingYaml
-    {
-        public Dictionary<string, int>? TransactionScale { get; set; }
-        public Dictionary<string, object>? TradingSkillBonus { get; set; }
-    }
+            Id = "metals", Name = "Metals", BaseValue = 15,
+            RegionalModifiers = new Dictionary<string, double> { ["mountains"] = 0.7, ["plains"] = 1.3 },
+        },
+        ["wood"] = new()
+        {
+            Id = "wood", Name = "Wood", BaseValue = 8,
+            RegionalModifiers = new Dictionary<string, double> { ["forest"] = 0.6, ["scrub"] = 1.5 },
+        },
+        ["stone"] = new()
+        {
+            Id = "stone", Name = "Stone", BaseValue = 12,
+            RegionalModifiers = new Dictionary<string, double> { ["mountains"] = 0.7, ["swamp"] = 1.4 },
+        },
+        ["gems"] = new()
+        {
+            Id = "gems", Name = "Gems", BaseValue = 50,
+            RegionalModifiers = new Dictionary<string, double> { ["mountains"] = 0.8, ["plains"] = 1.1 },
+        },
+        ["spices"] = new()
+        {
+            Id = "spices", Name = "Spices", BaseValue = 20,
+            RegionalModifiers = new Dictionary<string, double> { ["swamp"] = 0.7, ["mountains"] = 1.4 },
+        },
+        ["tools"] = new()
+        {
+            Id = "tools", Name = "Tools", BaseValue = 25,
+            RegionalModifiers = new Dictionary<string, double> { ["mountains"] = 0.9, ["forest"] = 1.2 },
+        },
+        ["weapons"] = new()
+        {
+            Id = "weapons", Name = "Weapons", BaseValue = 40,
+            RegionalModifiers = new Dictionary<string, double> { ["mountains"] = 0.85, ["plains"] = 1.15 },
+        },
+        ["books"] = new()
+        {
+            Id = "books", Name = "Books", BaseValue = 30,
+            RegionalModifiers = new Dictionary<string, double> { ["settlements_with_libraries"] = 0.9, ["frontier"] = 1.3 },
+        },
+    };
 }

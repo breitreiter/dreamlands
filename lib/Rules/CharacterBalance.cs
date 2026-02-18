@@ -1,101 +1,43 @@
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
-
 namespace Dreamlands.Rules;
 
-/// <summary>Magnitude-to-integer tables and starting stats from character.yaml.</summary>
+/// <summary>Magnitude-to-integer tables and starting stats.</summary>
 public sealed class CharacterBalance
 {
-    public IReadOnlyDictionary<Magnitude, int> DamageMagnitudes { get; init; } = new Dictionary<Magnitude, int>();
-    public IReadOnlyDictionary<Magnitude, int> SkillBumpMagnitudes { get; init; } = new Dictionary<Magnitude, int>();
-    public int StartingHealth { get; init; }
-    public int StartingSpirits { get; init; }
-    public int StartingGold { get; init; }
-    public int StartingInventorySlots { get; init; }
-    public IReadOnlyList<SpiritsThreshold> SpiritsThresholds { get; init; } = [];
-    public int UsesPerLevel { get; init; }
-    public int MaxSkillLevel { get; init; }
+    public static readonly CharacterBalance Default = new();
 
-    internal static CharacterBalance Load(string balancePath)
+    public IReadOnlyDictionary<Magnitude, int> DamageMagnitudes { get; init; } = new Dictionary<Magnitude, int>
     {
-        var path = Path.Combine(balancePath, "character.yaml");
-        if (!File.Exists(path)) return new CharacterBalance();
+        [Magnitude.Trivial] = 1,
+        [Magnitude.Small] = 2,
+        [Magnitude.Medium] = 3,
+        [Magnitude.Large] = 4,
+        [Magnitude.Huge] = 5,
+    };
 
-        var yaml = File.ReadAllText(path);
-        var deserializer = new DeserializerBuilder()
-            .WithNamingConvention(UnderscoredNamingConvention.Instance)
-            .Build();
+    public IReadOnlyDictionary<Magnitude, int> SkillBumpMagnitudes { get; init; } = new Dictionary<Magnitude, int>
+    {
+        [Magnitude.Trivial] = 1,
+        [Magnitude.Small] = 2,
+        [Magnitude.Medium] = 3,
+        [Magnitude.Large] = 4,
+        [Magnitude.Huge] = 5,
+    };
 
-        var doc = deserializer.Deserialize<CharacterDoc>(yaml);
-        var c = doc.Character;
-        var s = doc.Skills;
+    public int StartingHealth { get; init; } = 20;
+    public int StartingSpirits { get; init; } = 20;
+    public int StartingGold { get; init; } = 50;
+    public int StartingInventorySlots { get; init; } = 10;
 
-        return new CharacterBalance
-        {
-            DamageMagnitudes = ParseMagnitudeTable(c.Damage),
-            SkillBumpMagnitudes = ParseMagnitudeTable(s.BumpSkill),
-            StartingHealth = c.StartingStats.Health,
-            StartingSpirits = c.StartingStats.Spirits,
-            StartingGold = c.StartingStats.Gold,
-            StartingInventorySlots = c.StartingStats.InventorySlots,
-            SpiritsThresholds = c.SpiritsPenalties.Thresholds
-                .Select(t => new SpiritsThreshold(t.Spirits, t.Penalty))
-                .OrderByDescending(t => t.AtOrBelow)
-                .ToList(),
-            UsesPerLevel = s.Improvement.UsesPerLevel,
-            MaxSkillLevel = s.Improvement.MaxSkillLevel,
-        };
-    }
+    public IReadOnlyList<SpiritsThreshold> SpiritsThresholds { get; init; } =
+    [
+        new(15, -1),
+        new(10, -2),
+        new(5, -4),
+        new(0, -10),
+    ];
 
-    static Dictionary<Magnitude, int> ParseMagnitudeTable(Dictionary<string, int> raw)
-    {
-        var result = new Dictionary<Magnitude, int>();
-        foreach (var (key, value) in raw)
-        {
-            var mag = Magnitudes.FromScriptName(key);
-            if (mag != null) result[mag.Value] = value;
-        }
-        return result;
-    }
-
-    // DTOs
-    class CharacterDoc
-    {
-        public CharacterYaml Character { get; set; } = new();
-        public SkillsYaml Skills { get; set; } = new();
-    }
-    class CharacterYaml
-    {
-        public Dictionary<string, int> Damage { get; set; } = new();
-        public StartingStatsYaml StartingStats { get; set; } = new();
-        public SpiritsPenaltiesYaml SpiritsPenalties { get; set; } = new();
-    }
-    class StartingStatsYaml
-    {
-        public int Health { get; set; }
-        public int Spirits { get; set; }
-        public int Gold { get; set; }
-        public int InventorySlots { get; set; }
-    }
-    class SpiritsPenaltiesYaml
-    {
-        public List<ThresholdYaml> Thresholds { get; set; } = new();
-    }
-    class ThresholdYaml
-    {
-        public int Spirits { get; set; }
-        public int Penalty { get; set; }
-    }
-    class SkillsYaml
-    {
-        public ImprovementYaml Improvement { get; set; } = new();
-        public Dictionary<string, int> BumpSkill { get; set; } = new();
-    }
-    class ImprovementYaml
-    {
-        public int UsesPerLevel { get; set; }
-        public int MaxSkillLevel { get; set; }
-    }
+    public int UsesPerLevel { get; init; } = 5;
+    public int MaxSkillLevel { get; init; } = 10;
 }
 
 /// <summary>Spirits penalty threshold: if spirits &lt;= AtOrBelow, apply Penalty to checks.</summary>

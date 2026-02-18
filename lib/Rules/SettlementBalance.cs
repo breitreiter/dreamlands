@@ -1,6 +1,3 @@
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
-
 namespace Dreamlands.Rules;
 
 /// <summary>Storage tier definition.</summary>
@@ -23,92 +20,50 @@ public sealed class RegionalSpecialty
     public double PriceModifier { get; init; } = 1.0;
 }
 
-/// <summary>Settlement balance data from settlements.yaml.</summary>
+/// <summary>Settlement balance data.</summary>
 public sealed class SettlementBalance
 {
-    public IReadOnlyDictionary<string, ServiceDef> Services { get; init; } = new Dictionary<string, ServiceDef>();
-    public IReadOnlyDictionary<string, RegionalSpecialty> RegionalSpecialties { get; init; } = new Dictionary<string, RegionalSpecialty>();
+    public static readonly SettlementBalance Default = new();
 
-    internal static SettlementBalance Load(string balancePath)
+    public IReadOnlyDictionary<string, ServiceDef> Services { get; init; } = BuildServices();
+    public IReadOnlyDictionary<string, RegionalSpecialty> RegionalSpecialties { get; init; } = BuildSpecialties();
+
+    static Dictionary<string, ServiceDef> BuildServices() => new()
     {
-        var path = Path.Combine(balancePath, "settlements.yaml");
-        if (!File.Exists(path)) return new SettlementBalance();
-
-        var yaml = File.ReadAllText(path);
-        var deserializer = new DeserializerBuilder()
-            .WithNamingConvention(UnderscoredNamingConvention.Instance)
-            .Build();
-
-        var doc = deserializer.Deserialize<SettlementDoc>(yaml);
-
-        var services = new Dictionary<string, ServiceDef>();
-        if (doc?.Settlements?.Services != null)
+        ["market"] = new() { Id = "market", Availability = "universal", AlwaysAvailable = true },
+        ["water_source"] = new() { Id = "water_source", Availability = "universal", AlwaysAvailable = true },
+        ["storage"] = new()
         {
-            foreach (var (id, svc) in doc.Settlements.Services)
-            {
-                var storageTiers = new List<StorageTier>();
-                if (svc.Tiers != null)
-                {
-                    foreach (var (tierId, tier) in svc.Tiers)
-                        storageTiers.Add(new StorageTier(tierId, tier.Cost, tier.Slots));
-                }
+            Id = "storage", Availability = "common",
+            StorageTiers = [
+                new("basic", 10, 10),
+                new("expanded", 50, 25),
+                new("large", 150, 50),
+                new("warehouse", 400, 100),
+            ],
+        },
+        ["healer"] = new() { Id = "healer", Availability = "rare" },
+        ["temple"] = new() { Id = "temple", Availability = "rare" },
+        ["entertainment"] = new() { Id = "entertainment", Availability = "tbd" },
+    };
 
-                services[id] = new ServiceDef
-                {
-                    Id = id,
-                    Availability = svc.Availability ?? (svc.AlwaysAvailable ? "universal" : "common"),
-                    AlwaysAvailable = svc.AlwaysAvailable,
-                    StorageTiers = storageTiers,
-                };
-            }
-        }
-
-        var specialties = new Dictionary<string, RegionalSpecialty>();
-        if (doc?.Settlements?.RegionalSpecialties != null)
+    static Dictionary<string, RegionalSpecialty> BuildSpecialties() => new()
+    {
+        ["swamp_adjacent"] = new()
         {
-            foreach (var (id, spec) in doc.Settlements.RegionalSpecialties)
-            {
-                specialties[id] = new RegionalSpecialty
-                {
-                    Id = id,
-                    Sells = spec.Sells ?? [],
-                    PriceModifier = spec.PriceModifier,
-                };
-            }
-        }
-
-        return new SettlementBalance
+            Id = "swamp_adjacent", Sells = ["mosquito_netting", "jorgo_root"], PriceModifier = 0.9,
+        },
+        ["mountain_settlements"] = new()
         {
-            Services = services,
-            RegionalSpecialties = specialties,
-        };
-    }
-
-    // DTOs
-    class SettlementDoc { public SettlementsYaml? Settlements { get; set; } }
-    class SettlementsYaml
-    {
-        public Dictionary<string, ServiceYaml>? Services { get; set; }
-        public Dictionary<string, SpecialtyYaml>? RegionalSpecialties { get; set; }
-    }
-    class ServiceYaml
-    {
-        public bool AlwaysAvailable { get; set; }
-        public string? Availability { get; set; }
-        public string? Cost { get; set; }
-        public Dictionary<string, StorageTierYaml>? Tiers { get; set; }
-        public string? Access { get; set; }
-        public List<object>? Services { get; set; }
-        public int DailyLimit { get; set; }
-    }
-    class StorageTierYaml
-    {
-        public int Cost { get; set; }
-        public int Slots { get; set; }
-    }
-    class SpecialtyYaml
-    {
-        public List<string>? Sells { get; set; }
-        public double PriceModifier { get; set; } = 1.0;
-    }
+            Id = "mountain_settlements", Sells = ["warm_clothing", "warming_stew"], PriceModifier = 0.8,
+        },
+        ["plains_temples"] = new()
+        {
+            Id = "plains_temples", Sells = ["warding_talisman"], PriceModifier = 1.0,
+        },
+        ["forest_adjacent"] = new()
+        {
+            Id = "forest_adjacent", Sells = ["treated_bedroll"], PriceModifier = 0.9,
+        },
+    };
 }

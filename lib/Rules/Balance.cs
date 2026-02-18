@@ -1,27 +1,15 @@
 namespace Dreamlands.Rules;
 
-/// <summary>All balance data loaded from YAML files.</summary>
+/// <summary>All balance data.</summary>
 public sealed class BalanceData
 {
-    public CharacterBalance Character { get; init; } = new();
-    public IReadOnlyDictionary<string, ConditionDef> Conditions { get; init; } = new Dictionary<string, ConditionDef>();
-    public IReadOnlyDictionary<string, ItemDef> Items { get; init; } = new Dictionary<string, ItemDef>();
-    public FoodBalance Food { get; init; } = new();
-    public CombatBalance Combat { get; init; } = new();
-    public TradeBalance Trade { get; init; } = new();
-    public SettlementBalance Settlements { get; init; } = new();
+    public static readonly BalanceData Default = new();
 
-    /// <summary>
-    /// Load all balance data from a directory containing YAML files.
-    /// </summary>
-    public static BalanceData Load(string balancePath) => new()
-    {
-        Character = CharacterBalance.Load(balancePath),
-        Conditions = ConditionDef.Load(balancePath),
-        Items = ItemDef.Load(balancePath),
-        Food = FoodBalance.Load(balancePath),
-        Combat = CombatBalance.Load(balancePath),
-        Trade = TradeBalance.Load(balancePath),
-        Settlements = SettlementBalance.Load(balancePath),
-    };
+    public CharacterBalance Character { get; init; } = CharacterBalance.Default;
+    public IReadOnlyDictionary<string, ConditionDef> Conditions { get; init; } = ConditionDef.All;
+    public IReadOnlyDictionary<string, ItemDef> Items { get; init; } = ItemDef.All;
+    public FoodBalance Food { get; init; } = FoodBalance.Default;
+    public CombatBalance Combat { get; init; } = CombatBalance.Default;
+    public TradeBalance Trade { get; init; } = TradeBalance.Default;
+    public SettlementBalance Settlements { get; init; } = SettlementBalance.Default;
 }
