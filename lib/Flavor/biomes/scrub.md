@@ -88,7 +88,7 @@ Zarik Davun of the Tarsin
 
 ---
 
-### 2. The Remnant Administration
+### 2. The Kesharat Administration
 
 Descendants of a fallen empire. Now civil stewards of infrastructure, rail, census, and quotas — acting “in alignment with the Lattice.”
 
@@ -138,7 +138,7 @@ No one has seen the Lattice.
 
 Heavy, irregular, practical.
 
-### Remnant Administration
+### Kesharat Administration
 
 * Square mudbrick or pale stone towns
 * Interior courtyards
@@ -208,7 +208,7 @@ Zarik Davun of Tarsin
 
 ---
 
-### Remnant Administration
+### Kesharat Administration
 
 **Given Names**
 
