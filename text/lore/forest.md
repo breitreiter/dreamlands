@@ -3,10 +3,10 @@
 ## Identity
 
 **Theme / Philosophy:**
-The forest is defined by occlusion and authorship. It is not “wildness” so much as limited sight, hidden agency, and the uneasy sense that events are being shaped just beyond the edge of perception. Unlike the swamp (absorption), the plains (exposure), or the mesa (systemic order), the forest is intimate: sightlines are short, movement is ambiguous, and the canopy and undergrowth constrain both travel and awareness.
+The forest is an examination of freedom; specifically, the relationship between autonomy and humanity. Each layer of depth represents a further severance from social life: from chosen solitude, to exile, to something that has moved beyond the human altogether. The canopy and undergrowth aren't just atmosphere; they're the enabling condition. Occlusion is what makes every stage of withdrawal possible. You can be alone because no one can see you. You can hide because no one can find you. You can hunt because no one can stop you.
 
 **Defining Contradiction:**
-The forest is the only biome where a single human will can eclipse another. Elsewhere, the primary threat is environmental or systemic; here, the defining fear is that someone may be watching, and that your route may have been arranged for you. The horror is not nature, but authorship.
+Freedom in the forest is real, but it scales with inhumanity. The near forest offers peaceful solitude at almost no cost. The intermediate forest offers genuine liberation - from law, from dogma, from the roles you were assigned - but only through exile and mutual suspicion. The deep forest offers total autonomy, and the price is everything that made you a person. The forest's defining horror is not that you might be hunted, but that the hunter was once someone who just wanted to be left alone.
 
 ---
 
