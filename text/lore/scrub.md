@@ -6,7 +6,13 @@
 Wind-cut plateaus and dry riverbeds define a frontier where kinship and administration grind against each other under an ambiguous cosmic order called the Lattice. This is a place where honor-based clan politics collide with procedural bureaucracy, where hospitality is both binding and political, and where rail lines cut across ancestral territory. But the tension is not simply between two models of human order. The Kesharat Administration is no longer entirely human in its thinking: it has been compromised by an extra-dimensional intelligence that colonizes minds and reshapes societies into instruments of its own expansion.
 
 **Defining Contradiction:**
-Long ago, the Kesharat was a functional martial empire built on conquest—not admirable, but comprehensible. Through brute stupidity, they destroyed the people who had been containing an extra-dimensional entity. The Lattice was unleashed, and it consumed their leadership—not physically, but as a parasite consumes the will of its host. The empire ceased to be about martial conquest and honor; it became a machine. The Lattice is simultaneously a hyper-intelligent phenomenon, a manifestation perceived as an indescribable Color at inflection points in physical space, the entity's drive to colonize and reshape the world, the decrees issued by compromised leadership, and a totalizing ideology of order that serves the entity's expansion. Clans insist the Kesharat worships the Lattice; the Kesharat insists it is merely alignment. Both are wrong. The Lattice is not a god to be worshiped or a principle to be followed—it is an occupying intelligence, and the Kesharat are its instruments.
+Long ago, the Kesharat was a functional martial empire built on conquest—not admirable, but comprehensible. Through brute stupidity, they destroyed the people who had been containing an extra-dimensional entity. The Lattice was unleashed, and it consumed their leadership—not physically, but as a parasite consumes the will of its host. The empire ceased to be about martial conquest and honor; it became a machine. The Lattice is simultaneously:
+- A hyper-intelligent phenomenon
+- A manifestation perceived as an indescribable Color at inflection points in physical space
+- The entity's drive to colonize and reshape the world
+- The decrees issued by compromised leadership
+- A totalizing ideology of order that serves the entity's expansion
+Clans insist the Kesharat worships the Lattice; the Kesharat insists it is merely a philosophical system. Both are wrong. Both are right.
 
 ---
 
