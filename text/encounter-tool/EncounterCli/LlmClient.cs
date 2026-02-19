@@ -70,6 +70,19 @@ public sealed class LlmClient
         return response.Text;
     }
 
+    /// <summary>
+    /// Multi-turn completion: sends the full message list, appends the assistant response, returns the text.
+    /// </summary>
+    public async Task<string?> CompleteAsync(List<ChatMessage> messages, CancellationToken cancellationToken = default)
+    {
+        var options = new ChatOptions { MaxOutputTokens = 4096 };
+        var response = await _client.GetResponseAsync(messages, options, cancellationToken);
+        var text = response.Text;
+        if (!string.IsNullOrEmpty(text))
+            messages.Add(new ChatMessage(ChatRole.Assistant, text));
+        return text;
+    }
+
     private static IConfiguration? LoadConfig(string? configPath)
     {
         if (!string.IsNullOrEmpty(configPath))

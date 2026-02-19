@@ -1,27 +1,25 @@
 using System.Text;
+using Microsoft.Extensions.AI;
 
 namespace EncounterCli;
 
 static class GenerateCommand
 {
-    const string OraclesDir = "/home/joseph/repos/dreamlands/text/encounters/generation";
+    const string GenerationDir = "/home/joseph/repos/dreamlands/text/encounters/generation";
     const string LocaleGuideFilename = "locale_guide.txt";
+    const string SystemPrompt = "You are a narrative designer for a computer RPG. Follow instructions precisely. Output only the requested content.";
 
     public static async Task<int> RunAsync(string[] args)
     {
-        string? templatePath = null;
         string? outPath = null;
         string? configPath = null;
         var promptsOnly = false;
-        var twoPass = false;
 
         for (int i = 0; i < args.Length; i++)
         {
-            if (args[i] == "--template" && i + 1 < args.Length) { templatePath = args[i + 1]; i++; }
-            else if (args[i] == "--out" && i + 1 < args.Length) { outPath = args[i + 1]; i++; }
+            if (args[i] == "--out" && i + 1 < args.Length) { outPath = args[i + 1]; i++; }
             else if (args[i] == "--config" && i + 1 < args.Length) { configPath = args[i + 1]; i++; }
             else if (args[i] == "--prompts-only") promptsOnly = true;
-            else if (args[i] == "--two-pass") twoPass = true;
         }
 
         // Locale guide: always in cwd
@@ -33,43 +31,30 @@ static class GenerateCommand
             return 1;
         }
 
-        if (!Directory.Exists(OraclesDir))
+        if (!Directory.Exists(GenerationDir))
         {
-            Console.Error.WriteLine($"Oracles directory not found: {OraclesDir}");
+            Console.Error.WriteLine($"Generation directory not found: {GenerationDir}");
             return 1;
         }
 
-        // Default template depends on mode:
-        //   single-pass (default) -> encounter_prompt_v2.md (body + choices + outcomes)
-        //   two-pass              -> encounter_prompt.md (body only, original)
-        if (string.IsNullOrEmpty(templatePath))
-        {
-            templatePath = twoPass
-                ? Path.Combine(OraclesDir, "encounter_prompt.md")
-                : Path.Combine(OraclesDir, "encounter_prompt_v2.md");
-        }
-        else
-        {
-            templatePath = Path.GetFullPath(templatePath);
-        }
-        if (!File.Exists(templatePath))
-        {
-            Console.Error.WriteLine($"Template file not found: {templatePath}");
-            return 1;
-        }
+        // Verify all templates exist
+        var structurePath = Path.Combine(GenerationDir, "encounter_structure.md");
+        var bodyPath = Path.Combine(GenerationDir, "encounter_prompt.md");
+        var outcomesPath = Path.Combine(GenerationDir, "outcomes_prompt.md");
 
-        // Outcomes template (for two-pass mode)
-        var outcomesTemplatePath = Path.Combine(OraclesDir, "outcomes_prompt.md");
-        if (twoPass && !File.Exists(outcomesTemplatePath))
+        foreach (var (name, path) in new[] { ("encounter_structure.md", structurePath), ("encounter_prompt.md", bodyPath), ("outcomes_prompt.md", outcomesPath) })
         {
-            Console.Error.WriteLine($"Outcomes template not found: {outcomesTemplatePath}");
-            return 1;
+            if (!File.Exists(path))
+            {
+                Console.Error.WriteLine($"Template not found: {name} (expected at {path})");
+                return 1;
+            }
         }
 
         // Load oracle files
-        var situationFile = Path.Combine(OraclesDir, "Situation.txt");
-        var forcingFile = Path.Combine(OraclesDir, "Forcing.txt");
-        var twistFile = Path.Combine(OraclesDir, "Twist.txt");
+        var situationFile = Path.Combine(GenerationDir, "Situation.txt");
+        var forcingFile = Path.Combine(GenerationDir, "Forcing.txt");
+        var twistFile = Path.Combine(GenerationDir, "Twist.txt");
 
         foreach (var (name, path) in new[] { ("Situation.txt", situationFile), ("Forcing.txt", forcingFile), ("Twist.txt", twistFile) })
         {
@@ -113,29 +98,28 @@ static class GenerateCommand
         }
         Console.WriteLine();
 
-        // Build prompt from template
-        var template = File.ReadAllText(templatePath);
+        // Build Turn 1 prompt (structure scaffold) with oracle/locale substituted
         var localeGuide = File.ReadAllText(localePath);
-        var prompt = template
+        var structureTemplate = File.ReadAllText(structurePath);
+        var structurePrompt = structureTemplate
             .Replace("{{LOCALE_GUIDE}}", localeGuide)
             .Replace("{{ORACLE_SITUATION}}", situation)
             .Replace("{{ORACLE_FORCING}}", forcing)
             .Replace("{{ORACLE_TWIST}}", twist);
 
+        var bodyPrompt = File.ReadAllText(bodyPath);
+        var outcomesPrompt = File.ReadAllText(outcomesPath);
+
         if (promptsOnly)
         {
-            Console.WriteLine($"--- Generation Prompt ({(twoPass ? "two-pass: body only" : "single-pass: full encounter")}) ---");
-            Console.WriteLine(prompt);
-            if (twoPass)
-            {
-                Console.WriteLine();
-                Console.WriteLine("--- Outcomes Prompt (pass 2) ---");
-                var outcomesTemplate = File.ReadAllText(outcomesTemplatePath);
-                var outcomesPreview = outcomesTemplate
-                    .Replace("{{LOCALE_GUIDE}}", localeGuide)
-                    .Replace("{{ENCOUNTER_TEXT}}", "(encounter text from pass 1)");
-                Console.WriteLine(outcomesPreview);
-            }
+            Console.WriteLine("--- Pass 1: Structure Scaffold ---");
+            Console.WriteLine(structurePrompt);
+            Console.WriteLine();
+            Console.WriteLine("--- Pass 2: Encounter Body ---");
+            Console.WriteLine(bodyPrompt);
+            Console.WriteLine();
+            Console.WriteLine("--- Pass 3: Choice Outcomes ---");
+            Console.WriteLine(outcomesPrompt);
             return 0;
         }
 
@@ -143,17 +127,52 @@ static class GenerateCommand
         if (client == null)
             return 1;
 
-        // Pass 1: Generate encounter
-        Console.WriteLine(twoPass ? "Generating encounter body..." : "Generating encounter...");
+        var messages = new List<ChatMessage>
+        {
+            new(ChatRole.System, SystemPrompt),
+            new(ChatRole.User, structurePrompt)
+        };
+
+        // Pass 1: Structure scaffold
+        Console.WriteLine("Generating structure scaffold...");
+        Console.WriteLine();
+        string? scaffoldText;
+        try
+        {
+            scaffoldText = await client.CompleteAsync(messages);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error generating scaffold: {ex.Message}");
+            return 1;
+        }
+
+        if (string.IsNullOrWhiteSpace(scaffoldText))
+        {
+            Console.Error.WriteLine("No response from LLM.");
+            return 1;
+        }
+
+        Console.WriteLine(scaffoldText);
+        Console.WriteLine();
+        Console.Write("Continue to encounter body? [Y/n] ");
+        if ((Console.ReadLine()?.Trim().ToLowerInvariant() ?? "") == "n")
+            return 0;
+        Console.WriteLine();
+
+        // Pass 2: Encounter body
+        messages.Add(new ChatMessage(ChatRole.User, bodyPrompt));
+
+        Console.WriteLine("Generating encounter body...");
         Console.WriteLine();
         string? encounterText;
         try
         {
-            encounterText = await client.CompleteAsync(prompt);
+            encounterText = await client.CompleteAsync(messages);
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error generating encounter: {ex.Message}");
+            Console.Error.WriteLine($"Error generating encounter body: {ex.Message}");
             return 1;
         }
 
@@ -167,41 +186,36 @@ static class GenerateCommand
         encounterText = EncounterPostProcessor.Process(encounterText);
         Console.WriteLine(encounterText);
         Console.WriteLine();
+        Console.Write("Continue to epilogues? [Y/n] ");
+        if ((Console.ReadLine()?.Trim().ToLowerInvariant() ?? "") == "n")
+            return 0;
+        Console.WriteLine();
 
-        // Pass 2 (two-pass mode only): Generate outcomes with rich context
-        string? outcomesText = null;
-        if (twoPass)
+        // Pass 3: Choice outcomes
+        messages.Add(new ChatMessage(ChatRole.User, outcomesPrompt));
+
+        Console.WriteLine("Generating outcomes...");
+        Console.WriteLine();
+        string? outcomesText;
+        try
         {
-            Console.Write("Continue to epilogues? [Y/n] ");
-            var answer = Console.ReadLine()?.Trim().ToLowerInvariant() ?? "";
-            if (answer == "n")
-                return 0;
-
-            Console.WriteLine();
-            Console.WriteLine("Generating outcomes...");
-            Console.WriteLine();
-            var outcomesTemplate = File.ReadAllText(outcomesTemplatePath);
-            var outcomesPrompt = outcomesTemplate
-                .Replace("{{ENCOUNTER_TEXT}}", encounterText)
-                .Replace("{{LOCALE_GUIDE}}", localeGuide);
-
-            try
-            {
-                outcomesText = await client.CompleteAsync(outcomesPrompt);
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Error generating outcomes: {ex.Message}");
-                return 1;
-            }
-
-            if (!string.IsNullOrWhiteSpace(outcomesText))
-            {
-                outcomesText = StripCodeFences(outcomesText);
-                outcomesText = EncounterPostProcessor.Process(outcomesText);
-                Console.WriteLine(outcomesText);
-            }
+            outcomesText = await client.CompleteAsync(messages);
         }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error generating outcomes: {ex.Message}");
+            return 1;
+        }
+
+        if (string.IsNullOrWhiteSpace(outcomesText))
+        {
+            Console.Error.WriteLine("No response from LLM.");
+            return 1;
+        }
+
+        outcomesText = StripCodeFences(outcomesText);
+        outcomesText = EncounterPostProcessor.Process(outcomesText);
+        Console.WriteLine(outcomesText);
 
         // Write output file
         if (!string.IsNullOrEmpty(outPath))
@@ -209,18 +223,15 @@ static class GenerateCommand
             outPath = Path.GetFullPath(outPath);
             var sb = new StringBuilder();
             sb.Append(encounterText);
-            if (twoPass && !string.IsNullOrWhiteSpace(outcomesText))
-            {
-                sb.AppendLine();
-                sb.AppendLine();
-                sb.Append(outcomesText);
-            }
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.Append(outcomesText);
+
             var outDir = Path.GetDirectoryName(outPath);
             if (!string.IsNullOrEmpty(outDir))
                 Directory.CreateDirectory(outDir);
             File.WriteAllText(outPath, sb.ToString());
 
-            // Rename the file to match the encounter title
             var finalPath = TryRenameToTitle(outPath, sb.ToString());
             Console.WriteLine();
             Console.WriteLine($"Wrote output to {finalPath}");
@@ -229,17 +240,12 @@ static class GenerateCommand
         return 0;
     }
 
-    /// <summary>
-    /// Rename the output file to match the encounter title extracted from the text.
-    /// Returns the final path (renamed or original if rename wasn't possible).
-    /// </summary>
     static string TryRenameToTitle(string outPath, string text)
     {
         var title = EncounterPostProcessor.ExtractTitle(text);
         if (string.IsNullOrWhiteSpace(title))
             return FallbackRename(outPath);
 
-        // If the "title" is too long, it's probably a paragraph — use a random name instead
         if (title.Length > 60)
             return FallbackRename(outPath);
 
@@ -251,7 +257,7 @@ static class GenerateCommand
         var newPath = Path.Combine(dir, sanitized + ".enc");
 
         if (string.Equals(outPath, newPath, StringComparison.Ordinal))
-            return outPath; // already named correctly
+            return outPath;
 
         if (File.Exists(newPath))
         {
@@ -263,9 +269,6 @@ static class GenerateCommand
         return newPath;
     }
 
-    /// <summary>
-    /// Rename output file to a random timestamped name when no valid title is available.
-    /// </summary>
     static string FallbackRename(string outPath)
     {
         var dir = Path.GetDirectoryName(outPath) ?? ".";
@@ -282,11 +285,10 @@ static class GenerateCommand
         return newPath;
     }
 
-    /// <summary>Strip characters that are invalid in filenames.</summary>
     static string SanitizeFilename(string title)
     {
         var invalid = Path.GetInvalidFileNameChars();
-        var sb = new System.Text.StringBuilder(title.Length);
+        var sb = new StringBuilder(title.Length);
         foreach (var c in title)
         {
             if (Array.IndexOf(invalid, c) < 0)
@@ -295,7 +297,6 @@ static class GenerateCommand
         return sb.ToString().Trim();
     }
 
-    /// <summary>Strip leading/trailing markdown code fences that LLMs sometimes wrap output in.</summary>
     static string StripCodeFences(string text)
     {
         var trimmed = text.Trim();

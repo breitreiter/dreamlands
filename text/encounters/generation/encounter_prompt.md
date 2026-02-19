@@ -1,13 +1,4 @@
-You are generating a short encounter for a computer RPG.
-
-## Locale
-{{LOCALE_GUIDE}}
-
-## Oracle Fragments
-These three fragments must shape the encounter:
-- Situation: {{ORACLE_SITUATION}}
-- Forcing Function: {{ORACLE_FORCING}}
-- Twist: {{ORACLE_TWIST}}
+Now write the encounter body using the structure scaffold above.
 
 ## Available Actions
 - IGNORE
@@ -28,7 +19,7 @@ These three fragments must shape the encounter:
 
 ## Instructions
 
-First, select 2-3 actions from the list that could plausibly resolve an encounter matching these oracle fragments and locale. State your selections.
+First, select 2-3 actions from the list that could plausibly resolve this encounter. State your selections.
 
 Then write the encounter in 2-4 short paragraphs:
 - Ground it in the locale's specific details, tone, and stakes level
@@ -58,7 +49,7 @@ Constraints:
 * Do NOT resolve the encounter
 * Do NOT name the player character
 * Do NOT reference game mechanics, stats, or UI
-* Do not describe the player’s internal emotions directly; imply through physical reaction
+* Do not describe the player's internal emotions directly; imply through physical reaction
 * Keep the focus tightly on this moment
 * Avoid moralizing or narratorial judgment
 * Never name or specify the player's weapon. Describe combat through action, impact, and sensation rather than equipment. "You strike," "the blow lands," "steel meets bone" — not "you swing your sword."

@@ -1,4 +1,4 @@
-You are writing choice outcomes for a narrative RPG encounter. The encounter body has already been written. Your job is to write the outcome prose for each choice.
+Now write the choice outcomes for the encounter above.
 
 ## HARD RULES
 
@@ -18,10 +18,6 @@ Not all paths are equal. Some choices lead to richer lore, better rewards, or mo
 
 Adversity is content. Getting wrecked, fleeing in terror, making the "wrong" choice: these create memorable stories. Not every choice should have a clean win state. Failure outcomes should be vivid and interesting, not perfunctory.
 
-## Locale
-
-{{LOCALE_GUIDE}}
-
 ## Tone
 
 Match the register of the encounter body exactly. If the body is terse and physical, outcomes are terse and physical. If the body is atmospheric and layered, outcomes are atmospheric and layered. Read the body carefully before writing.
@@ -36,10 +32,6 @@ Additional tone rules:
 * Each paragraph should contain at most one striking metaphor
 * Favor sentences between 8–18 words
 * Each outcome should read as though it could be the last thing the player reads about this place. Make it land.
-
-## The Encounter
-
-{{ENCOUNTER_TEXT}}
 
 ## Instructions
 
