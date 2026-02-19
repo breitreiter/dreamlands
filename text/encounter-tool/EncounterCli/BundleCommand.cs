@@ -77,8 +77,11 @@ static class BundleCommand
         }
 
         if (errors > 0)
-        {
             Console.Error.WriteLine($"{errors} file(s) skipped due to errors.");
+
+        if (encounters.Count == 0)
+        {
+            Console.Error.WriteLine("No valid encounters to bundle.");
             return 1;
         }
 

@@ -1,6 +1,4 @@
-using Dreamlands.Map;
-
-namespace MapGen;
+namespace Dreamlands.Map;
 
 public static class MapRenderer
 {

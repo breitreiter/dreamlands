@@ -3,7 +3,7 @@ using Dreamlands.Rules;
 namespace Dreamlands.Game;
 
 /// <summary>Result of a skill check roll.</summary>
-public record SkillCheckResult(bool Passed, int Rolled, int Target, int Modifier, Skill Skill);
+public record SkillCheckResult(bool Passed, int Rolled, int Target, int Modifier, int SkillLevel, Skill Skill);
 
 /// <summary>Skill check dice rolling.</summary>
 public static class SkillChecks
@@ -22,7 +22,7 @@ public static class SkillChecks
         var roll = rng.Next(1, 21);
         var total = roll + modifier;
 
-        return new SkillCheckResult(total >= dc, roll, dc, modifier, skill);
+        return new SkillCheckResult(total >= dc, roll, dc, modifier, skillLevel, skill);
     }
 
     /// <summary>Get the spirits penalty based on current spirits value and balance thresholds.</summary>

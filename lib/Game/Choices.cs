@@ -40,6 +40,7 @@ public static class Choices
         if (choice.Conditional != null)
         {
             var preamble = string.IsNullOrEmpty(choice.Conditional.Preamble) ? null : choice.Conditional.Preamble;
+            SkillCheckResult? lastCheckResult = null;
 
             foreach (var branch in choice.Conditional.Branches)
             {
@@ -55,6 +56,7 @@ public static class Choices
                     if (skill != null && difficulty != null)
                     {
                         checkResult = SkillChecks.Roll(skill.Value, difficulty.Value, state, balance, rng);
+                        lastCheckResult = checkResult;
                         passed = checkResult.Passed;
                     }
                     else
@@ -77,18 +79,18 @@ public static class Choices
                 }
             }
 
-            // No branch matched — use fallback
+            // No branch matched — use fallback (preserve last check result so player sees the failed roll)
             if (choice.Conditional.Fallback != null)
             {
                 return new ResolvedChoice(
                     preamble,
                     choice.Conditional.Fallback.Text,
                     choice.Conditional.Fallback.Mechanics,
-                    null);
+                    lastCheckResult);
             }
 
             // No fallback either — empty result
-            return new ResolvedChoice(preamble, "", [], null);
+            return new ResolvedChoice(preamble, "", [], lastCheckResult);
         }
 
         return new ResolvedChoice(null, "", [], null);

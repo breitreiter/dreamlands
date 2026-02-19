@@ -14,3 +14,4 @@ mapgen/reference/
 ui/
 generated_*.enc
 encounter_*.enc
+.play-tmp/
