@@ -1,0 +1,9 @@
+Dust Storm
+
+There's a dust storm coming. You can either wait it out or press on.
+
+choices:
+* Wait it out = You wait it out.
+  +skip_time morning
+* Press on = You press on.
+  +skip_time evening

@@ -12,6 +12,7 @@ Long ago, the Kesharat was a functional martial empire built on conquest—not a
 - The entity's drive to colonize and reshape the world
 - The decrees issued by compromised leadership
 - A totalizing ideology of order that serves the entity's expansion
+
 Clans insist the Kesharat worships the Lattice; the Kesharat insists it is merely a philosophical system. Both are wrong. Both are right.
 
 ---

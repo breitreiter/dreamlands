@@ -39,7 +39,7 @@ choices:
 
 * Walk away = Leave without engaging further
   You turn before the old man finishes speaking. No explanation, no plea. Hard hands grasp your shoulders, spinning you around. These farmers will not let this go quietly.
-  @check combat trivial {
+  @if check combat trivial {
     You move before the old man can close the distance. Your blow catches the nearest farmer across the jaw; he crumples into the dust without a sound. The ledger falls from weathered hands as the elder reaches forward, too slow, his cry dying in his throat.
 
     The remaining men lower their tools with deliberate care. Hoes and rakes settle into the furrows. Calloused palms rise, empty, into the golden air. Their eyes follow you as you turn your back on them, on the man sprawled motionless in the road.

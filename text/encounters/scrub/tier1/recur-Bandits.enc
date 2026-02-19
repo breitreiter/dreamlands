@@ -1,0 +1,9 @@
+Bandits
+
+There are bandits on the road. You can either fight them or run.
+
+choices:
+* Fight them = You fight them.
+  +skip_time morning
+* Run = You run.
+  +skip_time evening
