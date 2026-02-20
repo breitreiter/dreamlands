@@ -31,8 +31,8 @@ public class PlayerState
     // Inventory
     public List<ItemInstance> Pack { get; set; } = new();
     public int PackCapacity { get; set; } = 10;
-    public List<ItemInstance> Scrip { get; set; } = new();
-    public int ScripCapacity { get; set; } = 10;
+    public List<ItemInstance> Haversack { get; set; } = new();
+    public int HaversackCapacity { get; set; } = 10;
     public EquippedGear Equipment { get; set; } = new();
 
     // Time
@@ -66,7 +66,8 @@ public class PlayerState
             Spirits = balance.Character.StartingSpirits,
             MaxSpirits = balance.Character.StartingSpirits,
             Gold = balance.Character.StartingGold,
-            PackCapacity = balance.Character.StartingInventorySlots,
+            PackCapacity = balance.Character.StartingPackSlots,
+            HaversackCapacity = balance.Character.StartingHaversackSlots,
         };
 
         // Initialize skills with random starting values (0-3)

@@ -26,7 +26,8 @@ public sealed class CharacterBalance
     public int StartingHealth { get; init; } = 20;
     public int StartingSpirits { get; init; } = 20;
     public int StartingGold { get; init; } = 50;
-    public int StartingInventorySlots { get; init; } = 10;
+    public int StartingPackSlots { get; init; } = 10;
+    public int StartingHaversackSlots { get; init; } = 10;
 
     public IReadOnlyList<SpiritsThreshold> SpiritsThresholds { get; init; } =
     [
@@ -38,6 +39,15 @@ public sealed class CharacterBalance
 
     public int UsesPerLevel { get; init; } = 5;
     public int MaxSkillLevel { get; init; } = 10;
+
+    public IReadOnlyDictionary<Magnitude, int> CostMagnitudes { get; init; } = new Dictionary<Magnitude, int>
+    {
+        [Magnitude.Trivial] = 5,
+        [Magnitude.Small] = 15,
+        [Magnitude.Medium] = 40,
+        [Magnitude.Large] = 80,
+        [Magnitude.Huge] = 200,
+    };
 }
 
 /// <summary>Spirits penalty threshold: if spirits &lt;= AtOrBelow, apply Penalty to checks.</summary>

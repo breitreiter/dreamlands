@@ -129,11 +129,11 @@ static class ExploreMode
             foreach (var item in p.Pack)
                 Console.WriteLine($"    {item.DisplayName}");
 
-        Console.WriteLine($"  Scrip ({p.Scrip.Count}/{p.ScripCapacity}):");
-        if (p.Scrip.Count == 0)
+        Console.WriteLine($"  Haversack ({p.Haversack.Count}/{p.HaversackCapacity}):");
+        if (p.Haversack.Count == 0)
             Console.WriteLine("    (empty)");
         else
-            foreach (var item in p.Scrip)
+            foreach (var item in p.Haversack)
                 Console.WriteLine($"    {item.DisplayName}");
 
         if (p.Equipment.Weapon != null)

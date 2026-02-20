@@ -33,7 +33,7 @@ public static class Conditions
     }
 
     static bool EvaluateHas(string itemId, PlayerState state) =>
-        state.Pack.Any(i => i.DefId == itemId) || state.Scrip.Any(i => i.DefId == itemId);
+        state.Pack.Any(i => i.DefId == itemId) || state.Haversack.Any(i => i.DefId == itemId);
 
     static bool EvaluateTag(string tagId, PlayerState state) =>
         state.Tags.Contains(tagId);

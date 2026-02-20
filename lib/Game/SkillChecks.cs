@@ -16,9 +16,9 @@ public static class SkillChecks
         var dc = difficulty.Target();
         var skillLevel = state.Skills.GetValueOrDefault(skill);
         var spiritsPenalty = GetSpiritsPenalty(state.Spirits, balance);
-        var equipmentBonus = GetEquipmentBonus(skill, state);
+        var itemBonus = GetItemBonus(skill, state, balance);
 
-        var modifier = skillLevel + spiritsPenalty + equipmentBonus;
+        var modifier = skillLevel + spiritsPenalty + itemBonus;
         var roll = rng.Next(1, 21);
         var total = roll + modifier;
 
@@ -36,17 +36,34 @@ public static class SkillChecks
         return 0;
     }
 
-    /// <summary>Get equipment bonus for a skill check.</summary>
-    static int GetEquipmentBonus(Skill skill, PlayerState state)
+    /// <summary>
+    /// Get item bonus for a skill check: equipped gear + passive inventory items (tools, consumables).
+    /// </summary>
+    static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
     {
-        if (skill != Skill.Combat) return 0;
-
         int bonus = 0;
-        if (state.Equipment.Weapon != null)
+
+        // Equipped gear
+        foreach (var slot in new[] { state.Equipment.Weapon, state.Equipment.Armor, state.Equipment.Boots })
         {
-            // Combat bonus from weapon — lookup will happen via balance in the future
-            // For now, the weapon's DefId encodes quality tier
+            if (slot == null) continue;
+            if (balance.Items.TryGetValue(slot.DefId, out var def)
+                && def.SkillModifiers.TryGetValue(skill, out var mod))
+                bonus += mod;
         }
+
+        // Passive items in Pack and Haversack (non-equippable types only)
+        foreach (var container in new[] { state.Pack, state.Haversack })
+        {
+            foreach (var item in container)
+            {
+                if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
+                if (def.IsPackItem) continue; // equippable items only count when equipped
+                if (def.SkillModifiers.TryGetValue(skill, out var mod))
+                    bonus += mod;
+            }
+        }
+
         return bonus;
     }
 }

@@ -16,6 +16,8 @@ public abstract record MechanicResult
     public record ConditionAdded(string ConditionId) : MechanicResult;
     public record TimeAdvanced(TimePeriod NewPeriod, int NewDay) : MechanicResult;
     public record Navigation(string EncounterId) : MechanicResult;
+    public record ItemEquipped(string DefId, string DisplayName, string Slot) : MechanicResult;
+    public record ItemUnequipped(string DefId, string DisplayName, string Slot) : MechanicResult;
     public record DungeonFinished : MechanicResult;
     public record DungeonFled : MechanicResult;
 }

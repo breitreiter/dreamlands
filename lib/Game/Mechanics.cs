@@ -43,6 +43,9 @@ public static class Mechanics
             "add_random_items" => ApplyAddRandomItems(args, state, balance, rng),
             "lose_random_item" => ApplyLoseRandomItem(state, rng),
             "get_random_treasure" => ApplyGetRandomTreasure(state, balance, rng),
+            "equip" => ApplyEquip(args, state, balance),
+            "unequip" => ApplyUnequip(args, state, balance),
+            "discard" => ApplyDiscard(args, state),
             "add_tag" => ApplyAddTag(args, state),
             "remove_tag" => ApplyRemoveTag(args, state),
             "add_condition" => ApplyAddCondition(args, state),
@@ -134,12 +137,13 @@ public static class Mechanics
 
         var itemId = args[0];
         var displayName = itemId;
+        ItemDef? def = null;
 
-        if (balance.Items.TryGetValue(itemId, out var def))
+        if (balance.Items.TryGetValue(itemId, out def))
             displayName = def.Name;
 
         var instance = new ItemInstance(itemId, displayName);
-        state.Pack.Add(instance);
+        AddItemToInventory(def, instance, state);
         return new MechanicResult.ItemGained(itemId, displayName);
     }
 
@@ -149,7 +153,6 @@ public static class Mechanics
         if (!int.TryParse(args[0], out var count)) return null;
         var category = args[1];
 
-        // Find items matching the category (type matches category name)
         var candidates = balance.Items.Values
             .Where(i => i.Type.ToString().Equals(category, StringComparison.OrdinalIgnoreCase) ||
                         i.Id.Contains(category, StringComparison.OrdinalIgnoreCase))
@@ -162,7 +165,7 @@ public static class Mechanics
         {
             var item = candidates[rng.Next(candidates.Count)];
             var instance = new ItemInstance(item.Id, item.Name);
-            state.Pack.Add(instance);
+            AddItemToInventory(item, instance, state);
             last = new MechanicResult.ItemGained(item.Id, item.Name);
         }
         return last;
@@ -170,6 +173,7 @@ public static class Mechanics
 
     static MechanicResult? ApplyLoseRandomItem(PlayerState state, Random rng)
     {
+        // Lose from Pack only (valuable gear — thief/disaster scenario)
         if (state.Pack.Count == 0) return null;
 
         var index = rng.Next(state.Pack.Count);
@@ -180,17 +184,125 @@ public static class Mechanics
 
     static MechanicResult? ApplyGetRandomTreasure(PlayerState state, BalanceData balance, Random rng)
     {
-        // Pick a random item from the catalog weighted toward valuable items
         var candidates = balance.Items.Values
-            .Where(i => i.BasePrice >= 20)
+            .Where(i => i.Cost is Magnitude.Medium or Magnitude.Large or Magnitude.Huge)
             .ToList();
 
         if (candidates.Count == 0) return null;
 
         var item = candidates[rng.Next(candidates.Count)];
         var instance = new ItemInstance(item.Id, item.Name);
-        state.Pack.Add(instance);
+        AddItemToInventory(item, instance, state);
         return new MechanicResult.ItemGained(item.Id, item.Name);
+    }
+
+    static MechanicResult? ApplyEquip(List<string> args, PlayerState state, BalanceData balance)
+    {
+        if (args.Count < 1) return null;
+        var itemId = args[0];
+
+        var index = state.Pack.FindIndex(i => i.DefId == itemId);
+        if (index < 0) return null;
+        if (!balance.Items.TryGetValue(itemId, out var def)) return null;
+        if (def.Type is not (ItemType.Weapon or ItemType.Armor or ItemType.Boots)) return null;
+
+        var item = state.Pack[index];
+        state.Pack.RemoveAt(index);
+
+        // Swap: move currently equipped item back to Pack
+        var slot = def.Type switch
+        {
+            ItemType.Weapon => "weapon",
+            ItemType.Armor => "armor",
+            ItemType.Boots => "boots",
+            _ => ""
+        };
+
+        var old = def.Type switch
+        {
+            ItemType.Weapon => state.Equipment.Weapon,
+            ItemType.Armor => state.Equipment.Armor,
+            ItemType.Boots => state.Equipment.Boots,
+            _ => null
+        };
+
+        if (old != null)
+            state.Pack.Add(old);
+
+        switch (def.Type)
+        {
+            case ItemType.Weapon: state.Equipment.Weapon = item; break;
+            case ItemType.Armor: state.Equipment.Armor = item; break;
+            case ItemType.Boots: state.Equipment.Boots = item; break;
+        }
+
+        return new MechanicResult.ItemEquipped(itemId, def.Name, slot);
+    }
+
+    static MechanicResult? ApplyUnequip(List<string> args, PlayerState state, BalanceData balance)
+    {
+        if (args.Count < 1) return null;
+        var slot = args[0].ToLowerInvariant();
+
+        ItemInstance? item = slot switch
+        {
+            "weapon" => state.Equipment.Weapon,
+            "armor" => state.Equipment.Armor,
+            "boots" => state.Equipment.Boots,
+            _ => null
+        };
+
+        if (item == null) return null;
+
+        switch (slot)
+        {
+            case "weapon": state.Equipment.Weapon = null; break;
+            case "armor": state.Equipment.Armor = null; break;
+            case "boots": state.Equipment.Boots = null; break;
+        }
+
+        state.Pack.Add(item);
+
+        var defId = item.DefId;
+        var displayName = item.DisplayName;
+        if (balance.Items.TryGetValue(defId, out var def))
+            displayName = def.Name;
+
+        return new MechanicResult.ItemUnequipped(defId, displayName, slot);
+    }
+
+    static MechanicResult? ApplyDiscard(List<string> args, PlayerState state)
+    {
+        if (args.Count < 1) return null;
+        var itemId = args[0];
+
+        // Try Pack first, then Haversack
+        var index = state.Pack.FindIndex(i => i.DefId == itemId);
+        if (index >= 0)
+        {
+            var item = state.Pack[index];
+            state.Pack.RemoveAt(index);
+            return new MechanicResult.ItemLost(item.DefId, item.DisplayName);
+        }
+
+        index = state.Haversack.FindIndex(i => i.DefId == itemId);
+        if (index >= 0)
+        {
+            var item = state.Haversack[index];
+            state.Haversack.RemoveAt(index);
+            return new MechanicResult.ItemLost(item.DefId, item.DisplayName);
+        }
+
+        return null;
+    }
+
+    /// <summary>Route an item to Pack (equippable gear) or Haversack (tools, consumables).</summary>
+    static void AddItemToInventory(ItemDef? def, ItemInstance instance, PlayerState state)
+    {
+        if (def != null && !def.IsPackItem)
+            state.Haversack.Add(instance);
+        else
+            state.Pack.Add(instance);
     }
 
     static MechanicResult? ApplyAddTag(List<string> args, PlayerState state)

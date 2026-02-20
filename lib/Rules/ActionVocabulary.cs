@@ -102,6 +102,18 @@ public sealed class ActionVerb
     public static readonly ActionVerb GetRandomTreasure = new("get_random_treasure",
         VerbUsage.Mechanic, "Player gets a random valuable");
 
+    public static readonly ActionVerb Equip = new("equip",
+        VerbUsage.Mechanic, "Equip an item from Pack",
+        new ArgDef("item_id", ArgType.Id));
+
+    public static readonly ActionVerb Unequip = new("unequip",
+        VerbUsage.Mechanic, "Unequip an item from a gear slot",
+        new ArgDef("slot", ArgType.Id));
+
+    public static readonly ActionVerb Discard = new("discard",
+        VerbUsage.Mechanic, "Discard an item from inventory",
+        new ArgDef("item_id", ArgType.Id));
+
     // ── Gold ────────────────────────────────────────────────────
 
     public static readonly ActionVerb GiveGold = new("give_gold",
@@ -174,6 +186,7 @@ public sealed class ActionVerb
         Open,
         AddTag, RemoveTag,
         AddItem, AddRandomItems, LoseRandomItem, GetRandomTreasure,
+        Equip, Unequip, Discard,
         GiveGold, RemGold,
         DamageHealth, Heal,
         DamageSpirits, HealSpirits,

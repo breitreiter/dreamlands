@@ -1,7 +1,10 @@
 namespace Dreamlands.Rules;
 
 /// <summary>Type of equipment item.</summary>
-public enum ItemType { Tool, Consumable, Weapon, Armor }
+public enum ItemType { Tool, Consumable, Weapon, Armor, Boots }
+
+/// <summary>Weapon class for weapon-type items.</summary>
+public enum WeaponClass { Dagger, Axe, Sword }
 
 /// <summary>Definition of an equipment item.</summary>
 public sealed class ItemDef
@@ -9,162 +12,243 @@ public sealed class ItemDef
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
     public ItemType Type { get; init; }
-    public int BasePrice { get; init; }
-    public int Slots { get; init; }
+    public int Slots { get; init; } = 1;
     public int StackSize { get; init; } = 1;
-    public string? Quality { get; init; }
-    public int CombatBonus { get; init; }
-    public int CombatDefense { get; init; }
     public int CapacityBonus { get; init; }
-    public IReadOnlyList<string> Resists { get; init; } = [];
     public IReadOnlyList<string> Cures { get; init; } = [];
+
+    public WeaponClass? WeaponClass { get; init; }
+    public Magnitude? Cost { get; init; }
+    public string? Biome { get; init; }
+    public int? ShopTier { get; init; }
+    public IReadOnlyDictionary<Skill, int> SkillModifiers { get; init; } = new Dictionary<Skill, int>();
+    public IReadOnlyDictionary<string, int> ResistModifiers { get; init; } = new Dictionary<string, int>();
+
+    /// <summary>True for items that go in Pack (equippable gear). False for consumables/tools that go in Haversack.</summary>
+    public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots;
 
     internal static IReadOnlyDictionary<string, ItemDef> All { get; } = BuildAll();
 
     static Dictionary<string, ItemDef> BuildAll() => new()
     {
-        // Tools & Gear
+        // ── Weapons ──
 
-        ["camping_gear"] = new()
+        ["bodkin"] = new()
         {
-            Id = "camping_gear", Type = ItemType.Tool, BasePrice = 15, Slots = 2,
-            Resists = ["cold", "exhausted"],
+            Id = "bodkin", Name = "Bodkin", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1, [Skill.Mercantile] = 1 },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
         },
-        ["base_boots"] = new()
+        ["jambiya"] = new()
         {
-            Id = "base_boots", Type = ItemType.Tool, Quality = "basic", BasePrice = 5, Slots = 1,
+            Id = "jambiya", Name = "Jambiya", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            Biome = "scrub", ShopTier = 1, Cost = Magnitude.Small,
         },
-        ["sturdy_boots"] = new()
+        ["seax"] = new()
         {
-            Id = "sturdy_boots", Type = ItemType.Tool, Quality = "crude", BasePrice = 20, Slots = 1,
-            Resists = ["exhausted"],
+            Id = "seax", Name = "Seax", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2, [Skill.Bushcraft] = 2 },
+            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
         },
+        ["hatchet"] = new()
+        {
+            Id = "hatchet", Name = "Hatchet", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Axe,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2, [Skill.Bushcraft] = 2 },
+            Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["war_axe"] = new()
+        {
+            Id = "war_axe", Name = "War Axe", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Axe,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3, [Skill.Bushcraft] = 1 },
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["bardiche"] = new()
+        {
+            Id = "bardiche", Name = "Bardiche", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Axe,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["short_sword"] = new()
+        {
+            Id = "short_sword", Name = "Short Sword", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Sword,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["scimitar"] = new()
+        {
+            Id = "scimitar", Name = "Scimitar", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Sword,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["arming_sword"] = new()
+        {
+            Id = "arming_sword", Name = "Arming Sword", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Sword,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4, [Skill.Negotiation] = 2 },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Huge,
+        },
+
+        // ── Armor ──
+
+        ["tunic"] = new()
+        {
+            Id = "tunic", Name = "Tunic", Type = ItemType.Armor,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 1 },
+            Biome = "plains", ShopTier = 1,
+        },
+        ["leather"] = new()
+        {
+            Id = "leather", Name = "Leather", Type = ItemType.Armor,
+            ResistModifiers = new Dictionary<string, int> { ["injury"] = 2 },
+            Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["gambeson"] = new()
+        {
+            Id = "gambeson", Name = "Gambeson", Type = ItemType.Armor,
+            ResistModifiers = new Dictionary<string, int> { ["injury"] = 2 },
+            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["chainmail"] = new()
+        {
+            Id = "chainmail", Name = "Chainmail", Type = ItemType.Armor,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Luck] = 1, [Skill.Stealth] = -3 },
+            ResistModifiers = new Dictionary<string, int> { ["injury"] = 3, ["exhausted"] = -2 },
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["scale_armor"] = new()
+        {
+            Id = "scale_armor", Name = "Scale Armor", Type = ItemType.Armor,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Stealth] = -3 },
+            ResistModifiers = new Dictionary<string, int> { ["injury"] = 3, ["exhausted"] = -3 },
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+
+        // ── Boots ──
+
         ["fine_boots"] = new()
         {
-            Id = "fine_boots", Type = ItemType.Tool, Quality = "good", BasePrice = 60, Slots = 1,
-            Resists = ["exhausted"],
+            Id = "fine_boots", Name = "Fine Boots", Type = ItemType.Boots,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1, [Skill.Mercantile] = 1, [Skill.Stealth] = 1 },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
         },
-        ["master_boots"] = new()
+        ["riding_boots"] = new()
         {
-            Id = "master_boots", Type = ItemType.Tool, Quality = "fine", BasePrice = 150, Slots = 1,
-            Resists = ["exhausted"],
+            Id = "riding_boots", Name = "Riding Boots", Type = ItemType.Boots,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
+            ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 2 },
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
         },
-        ["map_kit"] = new()
+        ["heavy_work_boots"] = new()
         {
-            Id = "map_kit", Type = ItemType.Tool, BasePrice = 20, Slots = 1,
-            Resists = ["lost"],
+            Id = "heavy_work_boots", Name = "Heavy Work Boots", Type = ItemType.Boots,
+            ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 3 },
+            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Medium,
         },
-        ["warm_clothing"] = new()
+
+        // ── Tools ──
+
+        ["cartographers_kit"] = new()
         {
-            Id = "warm_clothing", Type = ItemType.Tool, BasePrice = 15, Slots = 1,
-            Resists = ["cold"],
+            Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["lost"] = 5 },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
+        },
+        ["sleeping_kit"] = new()
+        {
+            Id = "sleeping_kit", Name = "Sleeping Kit", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 3 },
+            Biome = "any", Cost = Magnitude.Small,
+        },
+        ["cooking_supplies"] = new()
+        {
+            Id = "cooking_supplies", Name = "Cooking Supplies", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 2 },
+            Biome = "any", Cost = Magnitude.Small,
+        },
+        ["writing_kit"] = new()
+        {
+            Id = "writing_kit", Name = "Writing Kit", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 2, [Skill.Negotiation] = 1 },
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["yoriks_guide"] = new()
+        {
+            Id = "yoriks_guide", Name = "Yorik's Guide to Plant and Beast", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Bushcraft] = 2 },
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
         },
         ["canteen"] = new()
         {
-            Id = "canteen", Type = ItemType.Tool, BasePrice = 10, Slots = 1,
-            Resists = ["thirsty"],
+            Id = "canteen", Name = "Canteen", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["thirsty"] = 3 },
+            Biome = "any", Cost = Magnitude.Small,
         },
-        ["mosquito_netting"] = new()
+        ["insect_netting"] = new()
         {
-            Id = "mosquito_netting", Type = ItemType.Tool, BasePrice = 12, Slots = 1,
-            Resists = ["swamp_fever"],
+            Id = "insect_netting", Name = "Insect Netting", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["swamp_fever"] = 3 },
+            Biome = "swamp", Cost = Magnitude.Small,
         },
-        ["warding_talisman"] = new()
+        ["breathing_apparatus"] = new()
         {
-            Id = "warding_talisman", Type = ItemType.Tool, BasePrice = 25, Slots = 1,
-            Resists = ["haunted"],
+            Id = "breathing_apparatus", Name = "Intricate Breathing Apparatus", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["radiation"] = 3, ["rot_lung"] = 3 },
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
         },
-        ["treated_bedroll"] = new()
+        ["heavy_furs"] = new()
         {
-            Id = "treated_bedroll", Type = ItemType.Tool, BasePrice = 18, Slots = 2,
-            Resists = ["infested"],
+            Id = "heavy_furs", Name = "Heavy Furs", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, int> { ["freezing"] = 4 },
+            Biome = "mountains", Cost = Magnitude.Small,
         },
-        ["dust_mask"] = new()
+        ["peoples_borderlands"] = new()
         {
-            Id = "dust_mask", Type = ItemType.Tool, BasePrice = 8, Slots = 1,
-            Resists = ["rot_lung"],
-        },
-        ["backpack"] = new()
-        {
-            Id = "backpack", Type = ItemType.Tool, BasePrice = 30, Slots = 0,
-            CapacityBonus = 5,
+            Id = "peoples_borderlands", Name = "Peoples of the Borderlands", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 3 },
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
         },
 
-        // Consumables
+        // ── Consumables ──
 
         ["bandages"] = new()
         {
-            Id = "bandages", Type = ItemType.Consumable, BasePrice = 5, Slots = 1, StackSize = 10,
-            Cures = ["injured"],
+            Id = "bandages", Name = "Bandages", Type = ItemType.Consumable,
+            StackSize = 10, Cures = ["injured"], Cost = Magnitude.Trivial,
         },
         ["fever_tonic"] = new()
         {
-            Id = "fever_tonic", Type = ItemType.Consumable, BasePrice = 12, Slots = 1, StackSize = 5,
-            Cures = ["swamp_fever"],
+            Id = "fever_tonic", Name = "Fever Tonic", Type = ItemType.Consumable,
+            StackSize = 5, Cures = ["swamp_fever"], Cost = Magnitude.Small,
         },
         ["purgative"] = new()
         {
-            Id = "purgative", Type = ItemType.Consumable, BasePrice = 12, Slots = 1, StackSize = 5,
-            Cures = ["infested"],
+            Id = "purgative", Name = "Purgative", Type = ItemType.Consumable,
+            StackSize = 5, Cures = ["infested"], Cost = Magnitude.Small,
         },
         ["expectorant"] = new()
         {
-            Id = "expectorant", Type = ItemType.Consumable, BasePrice = 12, Slots = 1, StackSize = 5,
-            Cures = ["rot_lung"],
+            Id = "expectorant", Name = "Expectorant", Type = ItemType.Consumable,
+            StackSize = 5, Cures = ["rot_lung"], Cost = Magnitude.Small,
         },
         ["gut_remedy"] = new()
         {
-            Id = "gut_remedy", Type = ItemType.Consumable, BasePrice = 10, Slots = 1, StackSize = 5,
-            Cures = ["river_flux"],
+            Id = "gut_remedy", Name = "Gut Remedy", Type = ItemType.Consumable,
+            StackSize = 5, Cures = ["river_flux"], Cost = Magnitude.Small,
         },
         ["purifying_tablets"] = new()
         {
-            Id = "purifying_tablets", Type = ItemType.Consumable, BasePrice = 8, Slots = 1, StackSize = 10,
-            Resists = ["river_flux"],
-        },
-
-        // Weapons
-
-        ["base_weapon"] = new()
-        {
-            Id = "base_weapon", Type = ItemType.Weapon, Quality = "basic", BasePrice = 5, Slots = 2,
-        },
-        ["crude_weapon"] = new()
-        {
-            Id = "crude_weapon", Type = ItemType.Weapon, Quality = "crude", BasePrice = 15, Slots = 2,
-            CombatBonus = 1,
-        },
-        ["good_weapon"] = new()
-        {
-            Id = "good_weapon", Type = ItemType.Weapon, Quality = "good", BasePrice = 50, Slots = 2,
-            CombatBonus = 3,
-        },
-        ["fine_weapon"] = new()
-        {
-            Id = "fine_weapon", Type = ItemType.Weapon, Quality = "fine", BasePrice = 150, Slots = 2,
-            CombatBonus = 5,
-        },
-
-        // Armor
-
-        ["base_armor"] = new()
-        {
-            Id = "base_armor", Type = ItemType.Armor, Quality = "basic", BasePrice = 10, Slots = 3,
-        },
-        ["light_armor"] = new()
-        {
-            Id = "light_armor", Type = ItemType.Armor, Quality = "crude", BasePrice = 30, Slots = 3,
-            CombatDefense = 2,
-        },
-        ["medium_armor"] = new()
-        {
-            Id = "medium_armor", Type = ItemType.Armor, Quality = "good", BasePrice = 100, Slots = 4,
-            CombatDefense = 4,
-        },
-        ["heavy_armor"] = new()
-        {
-            Id = "heavy_armor", Type = ItemType.Armor, Quality = "fine", BasePrice = 300, Slots = 5,
-            CombatDefense = 6,
+            Id = "purifying_tablets", Name = "Purifying Tablets", Type = ItemType.Consumable,
+            StackSize = 10, Cost = Magnitude.Trivial,
+            ResistModifiers = new Dictionary<string, int> { ["river_flux"] = 3 },
         },
     };
 }
