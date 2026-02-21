@@ -1,4 +1,5 @@
 using Dreamlands.Map;
+using Dreamlands.Rules;
 
 namespace Dreamlands.Flavor;
 
@@ -123,6 +124,61 @@ public static class FlavorText
 
     public static string ConditionWarning(string condition) =>
         $"You are affected by {condition}.";
+
+    // --- Items ---
+
+    public static string ItemDescription(string itemId) => itemId switch
+    {
+        // Weapons
+        "bodkin" => "More suited to court than the frontier.",
+        "jambiya" => "Curved dagger carried by nearly every adult desert clan member.",
+        "seax" => "A utility knife common among the hill folk.",
+        "hatchet" => "Ubiquitous tool of the forest folk.",
+        "war_axe" => "A heavy axe built for war.",
+        "bardiche" => "A mighty two-handed axe.",
+        "short_sword" => "A well-balanced blade, designed for quick thrusts.",
+        "scimitar" => "A true warrior's blade, swift and deadly.",
+        "arming_sword" => "The pinnacle of the swordmaker's art. A masterpiece.",
+        // Armor
+        "tunic" => "A simple tunic, comfortable but offering little protection.",
+        "leather" => "Flexible lamellar armor, favored by hunters.",
+        "gambeson" => "Heavy padded surcoat.",
+        "chainmail" => "Fine mail shirt, remarkably well preserved.",
+        "scale_armor" => "Heavy Kesharat infantry armor.",
+        // Boots
+        "fine_boots" => "Exquisite footwear, more at home in court than the dusty road.",
+        "riding_boots" => "Kesharat officer's boots.",
+        "heavy_work_boots" => "Simple but comfortable boots.",
+        // Tools
+        "cartographers_kit" => "A guild cartographer's kit in excellent condition.",
+        "sleeping_kit" => "A bedroll and simple waxed canvas tent.",
+        "cooking_supplies" => "A small cookpot and utensils.",
+        "writing_kit" => "Pen, paper, ink, wax, and seal.",
+        "yoriks_guide" => "Beautiful illustrated guide to local flora and fauna.",
+        "canteen" => "A stout canteen with a wooden stopper.",
+        "insect_netting" => "Fine netting to keep out flying pests.",
+        "breathing_apparatus" => "Bulky device that attaches over mouth and nose.",
+        "heavy_furs" => "Bulky but warm furs.",
+        "peoples_borderlands" => "A remarkably complete guide to the cultures of the frontier.",
+        _ => "",
+    };
+
+    // --- Food ---
+
+    public static (string Name, string Description) FoodName(FoodType type, Terrain biome, bool foraged, Random? rng = null)
+    {
+        var names = (type, foraged) switch
+        {
+            (FoodType.Protein, true) => new[] { "Smoked Rabbit", "Dried Fish", "Roast Pigeon", "Cured Lizard" },
+            (FoodType.Protein, false) => new[] { "Salted Beef", "Mutton Jerky", "Smoked Sausage", "Tinned Fish" },
+            (FoodType.Grain, true) => new[] { "Foraged Roots", "Wild Tubers", "Cattail Flour Cake", "Acorn Bread" },
+            (FoodType.Grain, false) => new[] { "Hardtack", "Barley Loaf", "Travel Biscuit", "Oat Cake" },
+            (FoodType.Sweets, true) => new[] { "Wild Berries", "Honeycomb", "Dried Figs", "Crabapples" },
+            (FoodType.Sweets, false) => new[] { "Sugar Dates", "Candied Ginger", "Preserved Plums", "Molasses Chew" },
+        };
+        var idx = rng?.Next(names.Length) ?? (_counter++ % names.Length);
+        return (names[idx], "");
+    }
 
     // --- Helpers ---
 

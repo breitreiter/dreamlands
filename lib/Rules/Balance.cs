@@ -8,7 +8,7 @@ public sealed class BalanceData
     public CharacterBalance Character { get; init; } = CharacterBalance.Default;
     public IReadOnlyDictionary<string, ConditionDef> Conditions { get; init; } = ConditionDef.All;
     public IReadOnlyDictionary<string, ItemDef> Items { get; init; } = ItemDef.All;
-    public FoodBalance Food { get; init; } = FoodBalance.Default;
+    public ForagingRules Foraging { get; init; } = new();
     public CombatBalance Combat { get; init; } = CombatBalance.Default;
     public TradeBalance Trade { get; init; } = TradeBalance.Default;
     public SettlementBalance Settlements { get; init; } = SettlementBalance.Default;

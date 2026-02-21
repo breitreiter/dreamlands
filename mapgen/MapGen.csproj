@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\lib\Map\Dreamlands.Map.csproj" />
     <ProjectReference Include="..\lib\Flavor\Dreamlands.Flavor.csproj" />
+    <ProjectReference Include="..\lib\Rules\Dreamlands.Rules.csproj" />
   </ItemGroup>
 
 </Project>

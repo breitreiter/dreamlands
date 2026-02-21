@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Rules\Dreamlands.Rules.csproj" />
+  </ItemGroup>
+
 </Project>

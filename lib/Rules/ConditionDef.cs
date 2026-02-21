@@ -36,21 +36,22 @@ public sealed class ConditionDef
         {
             Id = "cold", Name = "Cold", Biome = "mountains", Tier = "any",
             OvernightChance = 1.0, AutoClearOnExit = "mountains",
-            Drains = "health", DrainMagnitude = Magnitude.Small, ResistedBy = ["warm_clothing"],
+            Drains = "health", DrainMagnitude = Magnitude.Small, ResistedBy = ["heavy_furs"],
         },
 
         // Mental (drain spirits)
         ["hungry"] = new()
         {
             Id = "hungry", Name = "Hungry", Biome = "none", Tier = "none",
-            Drains = "spirits", DrainMagnitude = Magnitude.Small, CuredBy = "eating",
+            Drains = "spirits", DrainMagnitude = Magnitude.Small,
+            ResistedBy = ["food"], CuredBy = "food",
         },
         ["exhausted"] = new()
         {
             Id = "exhausted", Name = "Exhausted", Biome = "any", Tier = "any",
             OvernightChance = 0.5,
             Drains = "spirits", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["sturdy_boots", "balanced_meal"], CuredBy = "settlement_rest",
+            ResistedBy = ["heavy_work_boots"], CuredBy = "settlement_rest",
         },
         ["haunted"] = new()
         {
@@ -73,7 +74,7 @@ public sealed class ConditionDef
             Biome = "swamp", Tier = "2", OvernightChance = 0.4,
             Foreshadow = "You feel feverish and your joints ache.",
             Drains = "health", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["mosquito_netting"], CuredBy = "fever_tonic",
+            ResistedBy = ["insect_netting"], CuredBy = "fever_tonic",
         },
         ["infested"] = new()
         {

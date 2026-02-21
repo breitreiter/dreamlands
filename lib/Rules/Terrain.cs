@@ -1,4 +1,4 @@
-namespace Dreamlands.Map;
+namespace Dreamlands.Rules;
 
 public enum Terrain
 {

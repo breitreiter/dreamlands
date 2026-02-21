@@ -26,8 +26,8 @@ public sealed class CharacterBalance
     public int StartingHealth { get; init; } = 20;
     public int StartingSpirits { get; init; } = 20;
     public int StartingGold { get; init; } = 50;
-    public int StartingPackSlots { get; init; } = 10;
-    public int StartingHaversackSlots { get; init; } = 10;
+    public int StartingPackSlots { get; init; } = 3;
+    public int StartingHaversackSlots { get; init; } = 20;
 
     public IReadOnlyList<SpiritsThreshold> SpiritsThresholds { get; init; } =
     [

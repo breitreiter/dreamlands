@@ -1,4 +1,5 @@
 using Dreamlands.Map;
+using Dreamlands.Rules;
 
 namespace MapGen;
 

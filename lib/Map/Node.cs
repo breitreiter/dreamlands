@@ -1,3 +1,5 @@
+using Dreamlands.Rules;
+
 namespace Dreamlands.Map;
 
 public class Node
