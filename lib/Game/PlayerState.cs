@@ -17,6 +17,7 @@ public class PlayerState
     public int Y { get; set; }
     public string? CurrentDungeonId { get; set; }
     public string? CurrentSettlementId { get; set; }
+    public string? CurrentEncounterId { get; set; }
 
     // Vitals
     public int Health { get; set; }

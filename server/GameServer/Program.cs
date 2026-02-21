@@ -9,10 +9,9 @@ using GameServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IGameStore>(new LocalFileStore(
-    Path.Combine(Directory.GetCurrentDirectory(), "saves")));
 
 // Configure JSON to use camelCase and string enums
+builder.Services.AddCors();
 builder.Services.ConfigureHttpJsonOptions(opts =>
 {
     opts.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -23,10 +22,30 @@ var app = builder.Build();
 
 // ── Load shared read-only game data ──
 
-var mapPath = args.FirstOrDefault(a => !a.StartsWith("-"))
+// Find repo root (walk up from assembly location looking for Dreamlands.sln)
+static string FindRepoRoot()
+{
+    var dir = Path.GetDirectoryName(typeof(Program).Assembly.Location)!;
+    while (dir != null)
+    {
+        if (File.Exists(Path.Combine(dir, "Dreamlands.sln"))) return dir;
+        dir = Path.GetDirectoryName(dir);
+    }
+    return Directory.GetCurrentDirectory();
+}
+
+string? ParseArg(string[] a, string flag)
+{
+    for (int i = 0; i < a.Length - 1; i++)
+        if (a[i] == flag) return a[i + 1];
+    return null;
+}
+
+var repoRoot = FindRepoRoot();
+var mapPath = ParseArg(args, "--map")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_MAP")
-    ?? "worlds/production/map.json";
-var bundlePath = args.Skip(1).FirstOrDefault(a => !a.StartsWith("-"))
+    ?? Path.Combine(repoRoot, "worlds/production/map.json");
+var bundlePath = ParseArg(args, "--bundle")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_BUNDLE")
     ?? "/tmp/encounters.bundle.json";
 
@@ -46,7 +65,7 @@ catch (Exception ex)
 }
 
 var balance = BalanceData.Default;
-var store = app.Services.GetRequiredService<IGameStore>();
+var store = new LocalFileStore(Path.Combine(repoRoot, "saves"));
 
 // ── CORS for local dev ──
 app.UseCors(policy => policy
@@ -59,7 +78,24 @@ app.UseCors(policy => policy
 GameSession BuildSession(PlayerState player)
 {
     var rng = new Random(player.Seed + player.VisitedNodes.Count);
-    return new GameSession(player, map, bundle, balance, rng);
+    var session = new GameSession(player, map, bundle, balance, rng);
+
+    // Restore active encounter from persisted state
+    if (player.CurrentEncounterId is { } encId)
+    {
+        var enc = bundle.GetById(encId);
+        if (enc != null)
+        {
+            session.Mode = SessionMode.InEncounter;
+            session.CurrentEncounter = enc;
+        }
+        else
+        {
+            player.CurrentEncounterId = null;
+        }
+    }
+
+    return session;
 }
 
 StatusInfo BuildStatus(PlayerState p) => new()
@@ -145,7 +181,8 @@ List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
             MechanicResult.ItemUnequipped iu => $"Unequipped: {iu.DisplayName} ({iu.Slot})",
             MechanicResult.TagAdded t => $"Tag: {t.TagId}",
             MechanicResult.TagRemoved t => $"Tag removed: {t.TagId}",
-            MechanicResult.ConditionAdded c => $"Condition: {c.ConditionId}",
+            MechanicResult.ConditionAdded c => c.Stacks > 1 ? $"Condition: {c.ConditionId} x{c.Stacks}" : $"Condition: {c.ConditionId}",
+            MechanicResult.ConditionRemoved c => $"Condition removed: {c.ConditionId}",
             MechanicResult.TimeAdvanced ta => $"Time: {ta.NewPeriod}, Day {ta.NewDay}",
             MechanicResult.Navigation n => $"Navigate to: {n.EncounterId}",
             MechanicResult.DungeonFinished => "Dungeon completed!",
@@ -171,7 +208,7 @@ GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, Li
     Inventory = BuildInventory(session.Player),
 };
 
-GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome outcome) => new()
+GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome outcome, string nextAction = "end_encounter") => new()
 {
     Mode = "outcome",
     Status = BuildStatus(session.Player),
@@ -188,6 +225,7 @@ GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome
             Modifier = ck.Modifier,
         } : null,
         Mechanics = BuildMechanicResults(outcome.Results),
+        NextAction = nextAction,
     },
     Inventory = BuildInventory(session.Player),
 };
@@ -247,6 +285,12 @@ app.MapGet("/api/game/{id}", async (string id) =>
             Node = BuildNodeInfo(node, player),
             Inventory = BuildInventory(player),
         });
+    }
+
+    if (session.CurrentEncounter is { } enc)
+    {
+        var choices = Choices.GetVisible(enc, player, balance);
+        return Results.Ok(BuildEncounterResponse(session, enc, choices));
     }
 
     return Results.Ok(BuildExploringResponse(session));
@@ -341,34 +385,12 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                         case FinishReason.DungeonFinished:
                             player.CurrentDungeonId = null;
                             await store.Save(player);
-                            return Results.Ok(new GameResponse
-                            {
-                                Mode = "outcome",
-                                Status = BuildStatus(player),
-                                Outcome = new OutcomeInfo
-                                {
-                                    Text = "You emerge victorious from the dungeon!",
-                                    Mechanics = [],
-                                    NextAction = "end_encounter",
-                                },
-                                Inventory = BuildInventory(player),
-                            });
+                            return Results.Ok(BuildOutcomeResponse(session, finished.Outcome!, "end_dungeon"));
 
                         case FinishReason.DungeonFled:
                             player.CurrentDungeonId = null;
                             await store.Save(player);
-                            return Results.Ok(new GameResponse
-                            {
-                                Mode = "outcome",
-                                Status = BuildStatus(player),
-                                Outcome = new OutcomeInfo
-                                {
-                                    Text = "You flee the dungeon, battered but alive.",
-                                    Mechanics = [],
-                                    NextAction = "end_encounter",
-                                },
-                                Inventory = BuildInventory(player),
-                            });
+                            return Results.Ok(BuildOutcomeResponse(session, finished.Outcome!, "end_dungeon"));
 
                         case FinishReason.PlayerDied:
                             await store.Save(player);
@@ -419,6 +441,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
         }
 
         case "end_encounter":
+        case "end_dungeon":
         {
             EncounterRunner.EndEncounter(session);
             await store.Save(player);

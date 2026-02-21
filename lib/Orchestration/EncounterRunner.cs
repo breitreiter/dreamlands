@@ -6,7 +6,7 @@ public abstract record EncounterStep
 {
     public record ShowEncounter(Encounter.Encounter Encounter, List<Encounter.Choice> VisibleChoices) : EncounterStep;
     public record ShowOutcome(ResolvedChoice Resolved, List<MechanicResult> Results) : EncounterStep;
-    public record Finished(FinishReason Reason, string? NavigateToId = null) : EncounterStep;
+    public record Finished(FinishReason Reason, string? NavigateToId = null, ShowOutcome? Outcome = null) : EncounterStep;
 }
 
 public enum FinishReason { Completed, NavigatedTo, DungeonFinished, DungeonFled, PlayerDied }
@@ -17,6 +17,7 @@ public static class EncounterRunner
     {
         session.Mode = SessionMode.InEncounter;
         session.CurrentEncounter = encounter;
+        session.Player.CurrentEncounterId = encounter.Id;
         session.Player.UsedEncounterIds.Add(encounter.Id);
         var visible = Choices.GetVisible(encounter, session.Player, session.Balance);
         return new EncounterStep.ShowEncounter(encounter, visible);
@@ -38,13 +39,15 @@ public static class EncounterRunner
             {
                 session.Mode = SessionMode.Exploring;
                 session.CurrentEncounter = null;
-                return new EncounterStep.Finished(FinishReason.DungeonFinished);
+                session.Player.CurrentEncounterId = null;
+                return new EncounterStep.Finished(FinishReason.DungeonFinished, Outcome: outcome);
             }
             if (r is MechanicResult.DungeonFled)
             {
                 session.Mode = SessionMode.Exploring;
                 session.CurrentEncounter = null;
-                return new EncounterStep.Finished(FinishReason.DungeonFled);
+                session.Player.CurrentEncounterId = null;
+                return new EncounterStep.Finished(FinishReason.DungeonFled, Outcome: outcome);
             }
         }
 
@@ -52,7 +55,8 @@ public static class EncounterRunner
         {
             session.Mode = SessionMode.GameOver;
             session.CurrentEncounter = null;
-            return new EncounterStep.Finished(FinishReason.PlayerDied);
+            session.Player.CurrentEncounterId = null;
+            return new EncounterStep.Finished(FinishReason.PlayerDied, Outcome: outcome);
         }
 
         return outcome;
@@ -62,6 +66,7 @@ public static class EncounterRunner
     {
         session.Mode = SessionMode.Exploring;
         session.CurrentEncounter = null;
+        session.Player.CurrentEncounterId = null;
         session.SkipEncounterTrigger = true;
     }
 }
