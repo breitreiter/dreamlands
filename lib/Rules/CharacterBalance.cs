@@ -37,7 +37,6 @@ public sealed class CharacterBalance
         new(0, -10),
     ];
 
-    public int UsesPerLevel { get; init; } = 5;
     public int MaxSkillLevel { get; init; } = 10;
 
     public IReadOnlyDictionary<Magnitude, int> CostMagnitudes { get; init; } = new Dictionary<Magnitude, int>
