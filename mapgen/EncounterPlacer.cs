@@ -9,7 +9,7 @@ public static class EncounterPlacer
     public static void Place(Map map)
     {
         var traversable = map.AllNodes()
-            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue)
+            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue && n.Y > 0)
             .ToDictionary(n => (n.X, n.Y));
 
         if (traversable.Count == 0)

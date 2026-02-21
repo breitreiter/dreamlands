@@ -13,7 +13,7 @@ public static class SettlementPlacer
     public static void PlaceSettlements(Map map, Random rng)
     {
         var traversable = map.AllNodes()
-            .Where(n => !n.IsWater && n.Connections != Direction.None)
+            .Where(n => !n.IsWater && n.Connections != Direction.None && n.Y > 0)
             .ToDictionary(n => (n.X, n.Y));
 
         if (traversable.Count == 0)

@@ -19,7 +19,7 @@ public static class DungeonPlacer
     public static void PlaceDungeons(Map map, List<DungeonEntry> roster, Random rng)
     {
         var traversable = map.AllNodes()
-            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue)
+            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue && n.Y > 0)
             .ToDictionary(n => (n.X, n.Y));
 
         if (traversable.Count == 0)
