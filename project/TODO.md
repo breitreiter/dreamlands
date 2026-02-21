@@ -163,8 +163,8 @@ data is placeholder or missing.
       stacks system, dual-drain model, flavor text in `ConditionFlavor.cs`
 - [x] Finalize consumables/medicines — reconciled with `haversack.md`,
       magnitude-based cure/resist, 11 new medicines
-- [ ] Define trade goods — full list with biome affinity, flavor label, flavor description.
-      `TradeBalance` has 9 bare economic categories but no flavor layer.
+- [x] Define trade goods — 62 concrete trade goods as ItemDefs with biome, tier, cost,
+      and flavor descriptions. Old TradeCategory system removed.
 - [ ] Per-food flavor descriptions — `FlavorText.FoodName()` returns `""` for description,
       hardcoded generic names ignore the biome-specific YAML data in `FlavorNames`
 
