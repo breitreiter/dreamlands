@@ -11,7 +11,7 @@ Items that go in the haversack
 
 # Medicines
 
--- swamp fever
+//swamp fever
 
 ## Jorgo Root
 - Mountains 2
@@ -23,7 +23,7 @@ Items that go in the haversack
 - +Cure Swamp Fever small
 - A pale shelf fungus with a rubbery texture. Boiled in broth, it is believed to speed recovery from fever by inducing heavy sweat
 
--- injured
+//injured
 
 ## Duskwort
 - Plains 2
@@ -40,46 +40,41 @@ Items that go in the haversack
 - +Cure Injury large
 - Sharp-smelling amber paste that significantly speeds wound healing
 
--- tummy ache?
+//road flux
 
 ## Creeping Baldric
+- Forest 2
+- +Cure Road Flux small
 - A knotted root that smells faintly of sulfur. Eating a small amount raw settles a fevered stomach and stops vomiting
 
 ## Dustseed 
-- Tiny grey seeds shaken from a dry-country grass. Sprinkled into water, they settle intestinal cramps within an hour
+- Plains 2
+- +Resist Road Flux small
+- Tiny grey seeds shaken from a dry-country grass. Sprinkled into food and water, they purify and cleanse
 
--- rot lung
-
-## Sallow Corm
-- Swamp 2
-- +Cure Rot Lung small
-- A waxy underground bulb. Dissolved in warm water, it soothes coughing
-
-## Rattlecap 
-- A dried seed pod that makes a faint noise when shaken. Ground into a paste and applied to a wound, it draws out suppuration and keeps the wound clean
-
--- buffs
-
-## Silvertree Bark
-- Forest 2
-- Peeled from a riverine tree with distinctive silver scaling. Chewed slowly, it calms the nerves and freshens breath
+//exhausted
 
 ## Widow's Veil
 - Swamp 2
-- A thin, papery leaf that grows in clusters. Crushed and inhaled, it clears the sinuses and sharpens the senses
+- +Resist exhausted small
+- A thin, papery leaf that grows in clusters. Crushed and inhaled, it clears the mind and fortifies the spirit
 
 ## Pale Knot Berry
 - Plains 2
+- +Cure exhausted small
 - Small, waxy white berries with an astringent taste. Eating a handful restores alertness and fights the urge to sleep
 
--- rads
+//irradiated
 
 ## Shustov Tonic
 - Plains 3
+- +Resist Irradiated small
+- +Cure Irradiated small
 - Glass bottle of mysterious clear liquid. Tastes like cold nothing. Then your chest gets warm, which is how you know it's working.
 
--- poisoned
+//poisoned
 
 ## Mudcap Fungus 
 - Swamp 2
+- +Cure poisoned medium
 - A flat, brown mushroom found on dead wood. Soaked and applied to the skin, it draws venom from stings and minor envenomated punctures

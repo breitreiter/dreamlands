@@ -18,8 +18,8 @@ MAGNITUDE                       TIME PERIODS
   huge
 
 CONDITIONS
-  diseased  injured  thirsty  cold  infested
-  exhausted  haunted  hungry  lost
+  freezing  hungry  thirsty  swamp_fever  road_flux
+  irradiated  exhausted  lost  injured  poisoned
 
 
 ACTION VERBS

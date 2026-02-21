@@ -225,14 +225,7 @@ This gives the player three states per hazard:
 
 Food operates on two layers: the **triad** (category coverage) and **prophylactics** (special foods with condition resistance).
 
-**The Triad:** Players consume 3 food units per day. Category is the mechanic — protein, carbs, sweets — and names are regional color, exactly like weapon types. Eating one from each category is a "balanced meal" and grants +1 Health restore, +1 Spirits restore overnight. This is a mild but reliable reward for planning ahead. You *can* eat three proteins and survive, but you miss the bonus.
 
-| Meal Quality | Requirement | Bonus |
-|-------------|-------------|-------|
-| Balanced | 1 protein + 1 carb + 1 sweet | +1 Health, +1 Spirits |
-| Partial / Monotone | 3 units, incomplete triad | No bonus, no penalty |
-| Skimped | 1-2 units | No bonus, no penalty, but risky |
-| Starving | 0 units | Hungry condition applied |
 
 **Prophylactics:** Special foods belong to a category (they count toward the triad) but also provide a weak resist bonus (+2) against a specific condition. They don't cure — they improve your odds of not contracting something overnight. Think garlic soup, not penicillin.
 
