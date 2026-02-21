@@ -166,8 +166,12 @@ public class Program
         MapSerializer.Save(map, actualSeed, jsonPath);
         Console.Error.WriteLine($"  map.json -> {jsonPath}");
 
-        // map.png + tiles
+        // map.png + tiles — render passes use relative paths from the mapgen source dir
+        var mapgenDir = Path.Combine(RepoRoot, "mapgen");
+        var prevDir = Environment.CurrentDirectory;
+        Environment.CurrentDirectory = mapgenDir;
         using var image = ImageRenderer.Render(map, actualSeed);
+        Environment.CurrentDirectory = prevDir;
 
         var pngPath = Path.Combine(worldDir, "map.png");
         Console.Error.WriteLine("  Encoding PNG...");

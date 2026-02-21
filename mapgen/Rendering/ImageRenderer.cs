@@ -7,7 +7,10 @@ public static class ImageRenderer
 {
     private const int TileSize = 128;
 
-    public static void Render(Map map, string outputPath, int seed)
+    /// <summary>
+    /// Renders the map and returns the final SKImage. Caller owns the returned image and must dispose it.
+    /// </summary>
+    public static SKImage Render(Map map, int seed)
     {
         int canvasWidth = map.Width * TileSize;
         int canvasHeight = map.Height * TileSize;
@@ -48,11 +51,7 @@ public static class ImageRenderer
             Console.Error.WriteLine("  POIs...");
             PoiPass.Draw(canvas, map, terrainSnapshot, seed);
 
-            Console.Error.WriteLine("  Encoding PNG...");
-            using var image = surface.Snapshot();
-            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-            using var stream = File.OpenWrite(outputPath);
-            data.SaveTo(stream);
+            return surface.Snapshot();
         }
         finally
         {
