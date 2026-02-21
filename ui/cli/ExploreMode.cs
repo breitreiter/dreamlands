@@ -1,3 +1,4 @@
+using System.Linq;
 using Dreamlands.Map;
 using Dreamlands.Orchestration;
 using Dreamlands.Rules;
@@ -112,7 +113,7 @@ static class ExploreMode
         foreach (var (skill, level) in p.Skills)
             Console.WriteLine($"    {skill.GetInfo().DisplayName}: {level}");
         if (p.ActiveConditions.Count > 0)
-            Console.WriteLine($"  Conditions: {string.Join(", ", p.ActiveConditions)}");
+            Console.WriteLine($"  Conditions: {string.Join(", ", p.ActiveConditions.Select(c => $"{c.Key} x{c.Value}"))}");
         if (p.Tags.Count > 0)
             Console.WriteLine($"  Tags: {string.Join(", ", p.Tags)}");
         if (p.CompletedDungeons.Count > 0)

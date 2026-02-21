@@ -48,7 +48,8 @@ public static class Mechanics
             "discard" => ApplyDiscard(args, state),
             "add_tag" => ApplyAddTag(args, state),
             "remove_tag" => ApplyRemoveTag(args, state),
-            "add_condition" => ApplyAddCondition(args, state),
+            "add_condition" => ApplyAddCondition(args, state, balance),
+            "remove_condition" => ApplyRemoveCondition(args, state),
             "skip_time" => ApplySkipTime(args, state),
             "open" => ApplyOpen(args),
             "finish_dungeon" => ApplyFinishDungeon(state),
@@ -319,11 +320,23 @@ public static class Mechanics
         return new MechanicResult.TagRemoved(args[0]);
     }
 
-    static MechanicResult? ApplyAddCondition(List<string> args, PlayerState state)
+    static MechanicResult? ApplyAddCondition(List<string> args, PlayerState state, BalanceData balance)
     {
         if (args.Count < 1) return null;
-        state.ActiveConditions.Add(args[0]);
-        return new MechanicResult.ConditionAdded(args[0]);
+        var id = args[0];
+        if (state.ActiveConditions.ContainsKey(id)) return null;
+
+        var stacks = balance.Conditions.TryGetValue(id, out var def) ? def.Stacks : 1;
+        state.ActiveConditions[id] = stacks;
+        return new MechanicResult.ConditionAdded(id, stacks);
+    }
+
+    static MechanicResult? ApplyRemoveCondition(List<string> args, PlayerState state)
+    {
+        if (args.Count < 1) return null;
+        var id = args[0];
+        if (!state.ActiveConditions.Remove(id)) return null;
+        return new MechanicResult.ConditionRemoved(id);
     }
 
     static MechanicResult ApplySkipTime(List<string> args, PlayerState state)

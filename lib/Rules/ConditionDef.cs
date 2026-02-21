@@ -5,118 +5,71 @@ public sealed class ConditionDef
 {
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
-    public string? Type { get; init; }
     public string Biome { get; init; } = "none";
     public string Tier { get; init; } = "none";
-    public string Drains { get; init; } = "health";
-    public Magnitude DrainMagnitude { get; init; }
-    public double OvernightChance { get; init; }
-    public IReadOnlyList<string> ResistedBy { get; init; } = [];
-    public string? CuredBy { get; init; }
-    public string? AutoClearOnExit { get; init; }
-    public string? Foreshadow { get; init; }
+    public int Stacks { get; init; } = 1;
+    public Magnitude? HealthDrain { get; init; }
+    public Magnitude? SpiritsDrain { get; init; }
+    public string? SpecialCure { get; init; }
+    public string? SpecialEffect { get; init; }
 
     internal static IReadOnlyDictionary<string, ConditionDef> All { get; } = BuildAll();
 
     static Dictionary<string, ConditionDef> BuildAll() => new()
     {
-        // Physical (drain health)
-        ["injured"] = new()
+        ["freezing"] = new()
         {
-            Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
-            Drains = "health", DrainMagnitude = Magnitude.Medium, CuredBy = "bandages",
+            Id = "freezing", Name = "Freezing", Biome = "mountains", Tier = "any",
+            Stacks = 1, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Small,
+            SpecialCure = "Leave the mountain biome or enter a settlement.",
+        },
+        ["hungry"] = new()
+        {
+            Id = "hungry", Name = "Hungry", Biome = "none", Tier = "none",
+            Stacks = 2, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
         },
         ["thirsty"] = new()
         {
             Id = "thirsty", Name = "Thirsty", Biome = "scrub", Tier = "any",
-            OvernightChance = 1.0, AutoClearOnExit = "scrub",
-            Drains = "health", DrainMagnitude = Magnitude.Small, ResistedBy = ["canteen"],
+            Stacks = 1, HealthDrain = Magnitude.Small, SpiritsDrain = Magnitude.Small,
+            SpecialCure = "Enter a settlement.",
         },
-        ["cold"] = new()
+        ["swamp_fever"] = new()
         {
-            Id = "cold", Name = "Cold", Biome = "mountains", Tier = "any",
-            OvernightChance = 1.0, AutoClearOnExit = "mountains",
-            Drains = "health", DrainMagnitude = Magnitude.Small, ResistedBy = ["heavy_furs"],
+            Id = "swamp_fever", Name = "Swamp Fever", Biome = "swamp", Tier = "any",
+            Stacks = 4, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
         },
-
-        // Mental (drain spirits)
-        ["hungry"] = new()
+        ["road_flux"] = new()
         {
-            Id = "hungry", Name = "Hungry", Biome = "none", Tier = "none",
-            Drains = "spirits", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["food"], CuredBy = "food",
+            Id = "road_flux", Name = "Road Flux", Biome = "none", Tier = "none",
+            Stacks = 2, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
+        },
+        ["irradiated"] = new()
+        {
+            Id = "irradiated", Name = "Irradiated", Biome = "plains", Tier = "3",
+            HealthDrain = Magnitude.Medium, SpiritsDrain = Magnitude.Small,
         },
         ["exhausted"] = new()
         {
-            Id = "exhausted", Name = "Exhausted", Biome = "any", Tier = "any",
-            OvernightChance = 0.5,
-            Drains = "spirits", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["heavy_work_boots"], CuredBy = "settlement_rest",
+            Id = "exhausted", Name = "Exhausted", Biome = "none", Tier = "none",
+            Stacks = 1, SpiritsDrain = Magnitude.Small,
+            SpecialCure = "Rest in an inn.",
         },
-        ["haunted"] = new()
+        ["poisoned"] = new()
         {
-            Id = "haunted", Name = "Haunted", Biome = "plains", Tier = "2",
-            OvernightChance = 0.35,
-            Drains = "spirits", DrainMagnitude = Magnitude.Medium,
-            ResistedBy = ["warding_talisman"], CuredBy = "temple_visit",
+            Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
+            Stacks = 3, HealthDrain = Magnitude.Small,
         },
         ["lost"] = new()
         {
-            Id = "lost", Name = "Lost", Biome = "any", Tier = "any",
-            OvernightChance = 0.3,
-            Drains = "spirits", DrainMagnitude = Magnitude.Trivial, ResistedBy = ["map_kit"],
+            Id = "lost", Name = "Lost", Biome = "none", Tier = "none",
+            Stacks = 1,
+            SpecialEffect = "Erase a random number of previously-discovered map tile routes.",
         },
-
-        // Disease (drain health, only one active at a time)
-        ["swamp_fever"] = new()
+        ["injured"] = new()
         {
-            Id = "swamp_fever", Name = "Swamp Fever", Type = "disease",
-            Biome = "swamp", Tier = "2", OvernightChance = 0.4,
-            Foreshadow = "You feel feverish and your joints ache.",
-            Drains = "health", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["insect_netting"], CuredBy = "fever_tonic",
-        },
-        ["infested"] = new()
-        {
-            Id = "infested", Name = "Infested", Type = "disease",
-            Biome = "forest", Tier = "2", OvernightChance = 0.35,
-            Foreshadow = "Something burrowed in during the night. You can feel it moving.",
-            Drains = "health", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["treated_bedroll"], CuredBy = "purgative",
-        },
-        ["rot_lung"] = new()
-        {
-            Id = "rot_lung", Name = "Rot Lung", Type = "disease",
-            Biome = "scrub", Tier = "2", OvernightChance = 0.3,
-            Foreshadow = "You wake slick with sweat, coughing dust.",
-            Drains = "health", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["dust_mask"], CuredBy = "expectorant",
-        },
-        ["river_flux"] = new()
-        {
-            Id = "river_flux", Name = "River Flux", Type = "disease",
-            Biome = "any", Tier = "2", OvernightChance = 0.15,
-            Foreshadow = "Your stomach turns. Something in the water.",
-            Drains = "health", DrainMagnitude = Magnitude.Small,
-            ResistedBy = ["purifying_tablets"], CuredBy = "gut_remedy",
-        },
-
-        // Tier 3
-        ["withering"] = new()
-        {
-            Id = "withering", Name = "Withering", Type = "disease",
-            Biome = "plains", Tier = "3", OvernightChance = 0.3,
-            Foreshadow = "Your teeth ache and there's blood on your shirt. The air here tastes like a copper coin.",
-            Drains = "health", DrainMagnitude = Magnitude.Large,
-            ResistedBy = ["golem_suit"], CuredBy = "silver_elixir",
-        },
-        ["forgotten"] = new()
-        {
-            Id = "forgotten", Name = "Forgotten", Type = "disease",
-            Biome = "swamp", Tier = "3", OvernightChance = 0.3,
-            Foreshadow = "For a long moment, you're not sure who you are or how you got here. The haze clears, but your memories seem unfamiliar.",
-            Drains = "spirits", DrainMagnitude = Magnitude.Large,
-            ResistedBy = ["diary"], AutoClearOnExit = "swamp",
+            Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
+            Stacks = 3, HealthDrain = Magnitude.Small, SpiritsDrain = Magnitude.Trivial,
         },
     };
 }

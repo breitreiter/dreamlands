@@ -1,0 +1,550 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Dreamlands.Encounter;
+using Dreamlands.Game;
+using Dreamlands.Map;
+using Dreamlands.Orchestration;
+using Dreamlands.Rules;
+using GameServer;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IGameStore>(new LocalFileStore(
+    Path.Combine(Directory.GetCurrentDirectory(), "saves")));
+
+// Configure JSON to use camelCase and string enums
+builder.Services.ConfigureHttpJsonOptions(opts =>
+{
+    opts.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    opts.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+});
+
+var app = builder.Build();
+
+// ── Load shared read-only game data ──
+
+var mapPath = args.FirstOrDefault(a => !a.StartsWith("-"))
+    ?? Environment.GetEnvironmentVariable("DREAMLANDS_MAP")
+    ?? "worlds/production/map.json";
+var bundlePath = args.Skip(1).FirstOrDefault(a => !a.StartsWith("-"))
+    ?? Environment.GetEnvironmentVariable("DREAMLANDS_BUNDLE")
+    ?? "/tmp/encounters.bundle.json";
+
+Map map;
+EncounterBundle bundle;
+try
+{
+    map = MapSerializer.Load(mapPath);
+    bundle = EncounterBundle.Load(bundlePath);
+    app.Logger.LogInformation("Loaded map ({Width}x{Height}) and {Count} encounters",
+        map.Width, map.Height, bundle.Encounters.Count);
+}
+catch (Exception ex)
+{
+    app.Logger.LogCritical(ex, "Failed to load game data");
+    return 1;
+}
+
+var balance = BalanceData.Default;
+var store = app.Services.GetRequiredService<IGameStore>();
+
+// ── CORS for local dev ──
+app.UseCors(policy => policy
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+// ── Helper: reconstruct session from persisted state ──
+
+GameSession BuildSession(PlayerState player)
+{
+    var rng = new Random(player.Seed + player.VisitedNodes.Count);
+    return new GameSession(player, map, bundle, balance, rng);
+}
+
+StatusInfo BuildStatus(PlayerState p) => new()
+{
+    Health = p.Health,
+    MaxHealth = p.MaxHealth,
+    Spirits = p.Spirits,
+    MaxSpirits = p.MaxSpirits,
+    Gold = p.Gold,
+    Time = p.Time.ToString(),
+    Day = p.Day,
+    Conditions = new Dictionary<string, int>(p.ActiveConditions),
+    Skills = p.Skills.ToDictionary(
+        kv => kv.Key.ScriptName(),
+        kv => kv.Value),
+};
+
+NodeInfo BuildNodeInfo(Node node, PlayerState p) => new()
+{
+    X = node.X,
+    Y = node.Y,
+    Terrain = node.Terrain.ToString().ToLowerInvariant(),
+    Region = node.Region?.Name,
+    RegionTier = node.Region?.Tier,
+    Description = node.Description,
+    Poi = node.Poi != null ? new PoiInfo
+    {
+        Kind = node.Poi.Kind.ToString().ToLowerInvariant(),
+        Name = node.Poi.Name,
+        DungeonId = node.Poi.DungeonId,
+        DungeonCompleted = node.Poi.DungeonId != null
+            ? p.CompletedDungeons.Contains(node.Poi.DungeonId) : null,
+    } : null,
+};
+
+List<ExitInfo> BuildExits(GameSession session) =>
+    Movement.GetExits(session).Select(e => new ExitInfo
+    {
+        Direction = e.Dir.ToString().ToLowerInvariant(),
+        Terrain = e.Target.Terrain.ToString().ToLowerInvariant(),
+        Poi = e.Target.Poi?.Name ?? e.Target.Poi?.Kind.ToString(),
+    }).ToList();
+
+InventoryInfo BuildInventory(PlayerState p) => new()
+{
+    Pack = p.Pack.Select(i => new ItemInfo { DefId = i.DefId, Name = i.DisplayName, Description = i.Description }).ToList(),
+    PackCapacity = p.PackCapacity,
+    Haversack = p.Haversack.Select(i => new ItemInfo { DefId = i.DefId, Name = i.DisplayName, Description = i.Description }).ToList(),
+    HaversackCapacity = p.HaversackCapacity,
+    Equipment = new EquipmentInfo
+    {
+        Weapon = p.Equipment.Weapon != null ? new ItemInfo { DefId = p.Equipment.Weapon.DefId, Name = p.Equipment.Weapon.DisplayName } : null,
+        Armor = p.Equipment.Armor != null ? new ItemInfo { DefId = p.Equipment.Armor.DefId, Name = p.Equipment.Armor.DisplayName } : null,
+        Boots = p.Equipment.Boots != null ? new ItemInfo { DefId = p.Equipment.Boots.DefId, Name = p.Equipment.Boots.DisplayName } : null,
+    },
+};
+
+EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => new()
+{
+    Title = encounter.Title,
+    Body = encounter.Body,
+    Choices = choices.Select((c, i) => new ChoiceInfo
+    {
+        Index = i,
+        Label = c.OptionLink ?? c.OptionText,
+        Preview = c.OptionPreview,
+    }).ToList(),
+};
+
+List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
+    results.Select(r => new MechanicResultInfo
+    {
+        Type = r.GetType().Name,
+        Description = r switch
+        {
+            MechanicResult.HealthChanged h => $"Health {(h.Delta >= 0 ? "+" : "")}{h.Delta} ({h.NewValue})",
+            MechanicResult.SpiritsChanged s => $"Spirits {(s.Delta >= 0 ? "+" : "")}{s.Delta} ({s.NewValue})",
+            MechanicResult.GoldChanged g => $"Gold {(g.Delta >= 0 ? "+" : "")}{g.Delta} ({g.NewValue})",
+            MechanicResult.SkillChanged sk => $"{sk.Skill.ScriptName()} {(sk.Delta >= 0 ? "+" : "")}{sk.Delta} ({sk.NewValue})",
+            MechanicResult.ItemGained ig => $"Gained: {ig.DisplayName}",
+            MechanicResult.ItemLost il => $"Lost: {il.DisplayName}",
+            MechanicResult.ItemEquipped ie => $"Equipped: {ie.DisplayName} ({ie.Slot})",
+            MechanicResult.ItemUnequipped iu => $"Unequipped: {iu.DisplayName} ({iu.Slot})",
+            MechanicResult.TagAdded t => $"Tag: {t.TagId}",
+            MechanicResult.TagRemoved t => $"Tag removed: {t.TagId}",
+            MechanicResult.ConditionAdded c => $"Condition: {c.ConditionId}",
+            MechanicResult.TimeAdvanced ta => $"Time: {ta.NewPeriod}, Day {ta.NewDay}",
+            MechanicResult.Navigation n => $"Navigate to: {n.EncounterId}",
+            MechanicResult.DungeonFinished => "Dungeon completed!",
+            MechanicResult.DungeonFled => "Fled the dungeon!",
+            _ => r.ToString() ?? "",
+        },
+    }).ToList();
+
+GameResponse BuildExploringResponse(GameSession session) => new()
+{
+    Mode = "exploring",
+    Status = BuildStatus(session.Player),
+    Node = BuildNodeInfo(session.CurrentNode, session.Player),
+    Exits = BuildExits(session),
+    Inventory = BuildInventory(session.Player),
+};
+
+GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<Choice> choices) => new()
+{
+    Mode = "encounter",
+    Status = BuildStatus(session.Player),
+    Encounter = BuildEncounterInfo(encounter, choices),
+    Inventory = BuildInventory(session.Player),
+};
+
+GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome outcome) => new()
+{
+    Mode = "outcome",
+    Status = BuildStatus(session.Player),
+    Outcome = new OutcomeInfo
+    {
+        Preamble = outcome.Resolved.Preamble,
+        Text = outcome.Resolved.Text,
+        SkillCheck = outcome.Resolved.CheckResult is { } ck ? new SkillCheckInfo
+        {
+            Skill = ck.Skill.ScriptName(),
+            Passed = ck.Passed,
+            Rolled = ck.Rolled,
+            Target = ck.Target,
+            Modifier = ck.Modifier,
+        } : null,
+        Mechanics = BuildMechanicResults(outcome.Results),
+    },
+    Inventory = BuildInventory(session.Player),
+};
+
+// ── Endpoints ──
+
+app.MapPost("/api/game/new", async () =>
+{
+    var rng = new Random();
+    var gameId = Guid.NewGuid().ToString("N")[..12];
+    var seed = rng.Next();
+    var player = PlayerState.NewGame(gameId, seed, balance);
+
+    if (map.StartingCity != null)
+    {
+        player.X = map.StartingCity.X;
+        player.Y = map.StartingCity.Y;
+    }
+
+    var session = BuildSession(player);
+    session.MarkVisited();
+    await store.Save(player);
+
+    return Results.Ok(new { gameId, state = BuildExploringResponse(session) });
+});
+
+app.MapGet("/api/game/{id}", async (string id) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var session = BuildSession(player);
+
+    // Reconstruct current mode
+    if (player.Health <= 0)
+        return Results.Ok(new GameResponse
+        {
+            Mode = "game_over",
+            Status = BuildStatus(player),
+            Reason = "You have perished in the Dreamlands.",
+        });
+
+    if (player.CurrentSettlementId != null)
+    {
+        var node = session.CurrentNode;
+        var tier = node.Region?.Tier ?? 1;
+        return Results.Ok(new GameResponse
+        {
+            Mode = "at_settlement",
+            Status = BuildStatus(player),
+            Settlement = new SettlementInfo
+            {
+                Name = player.CurrentSettlementId,
+                Tier = tier,
+                Services = ["market"],
+            },
+            Node = BuildNodeInfo(node, player),
+            Inventory = BuildInventory(player),
+        });
+    }
+
+    return Results.Ok(BuildExploringResponse(session));
+});
+
+app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var session = BuildSession(player);
+
+    if (player.Health <= 0)
+        return Results.Ok(new GameResponse
+        {
+            Mode = "game_over",
+            Status = BuildStatus(player),
+            Reason = "You have perished in the Dreamlands.",
+        });
+
+    GameResponse response;
+
+    switch (req.Action)
+    {
+        case "move":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot move while not exploring" });
+
+            if (!Enum.TryParse<Direction>(req.Direction, true, out var dir))
+                return Results.BadRequest(new { error = $"Invalid direction: {req.Direction}" });
+
+            var target = Movement.TryMove(session, dir);
+            if (target == null)
+                return Results.BadRequest(new { error = $"No exit {req.Direction}" });
+
+            Movement.Execute(session, dir);
+
+            // Check for encounter trigger at new location
+            var node = session.CurrentNode;
+            if (node.Poi?.Kind == PoiKind.Encounter && !session.SkipEncounterTrigger)
+            {
+                var enc = EncounterSelection.PickOverworld(session, node);
+                if (enc != null)
+                {
+                    var step = EncounterRunner.Begin(session, enc);
+                    await store.Save(player);
+                    return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.VisibleChoices));
+                }
+            }
+            session.SkipEncounterTrigger = false;
+
+            await store.Save(player);
+            response = BuildExploringResponse(session);
+            break;
+        }
+
+        case "choose":
+        {
+            if (session.CurrentEncounter == null)
+                return Results.BadRequest(new { error = "No active encounter" });
+
+            var choices = Choices.GetVisible(session.CurrentEncounter, player, balance);
+            var idx = req.ChoiceIndex ?? -1;
+            if (idx < 0 || idx >= choices.Count)
+                return Results.BadRequest(new { error = $"Invalid choice index: {idx}" });
+
+            var chosen = choices[idx];
+            var result = EncounterRunner.Choose(session, chosen);
+
+            switch (result)
+            {
+                case EncounterStep.ShowOutcome outcome:
+                    response = BuildOutcomeResponse(session, outcome);
+                    break;
+
+                case EncounterStep.Finished finished:
+                    switch (finished.Reason)
+                    {
+                        case FinishReason.NavigatedTo:
+                            var next = EncounterSelection.ResolveNavigation(session, finished.NavigateToId!);
+                            if (next != null)
+                            {
+                                var step = EncounterRunner.Begin(session, next);
+                                await store.Save(player);
+                                return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.VisibleChoices));
+                            }
+                            EncounterRunner.EndEncounter(session);
+                            await store.Save(player);
+                            return Results.Ok(BuildExploringResponse(session));
+
+                        case FinishReason.DungeonFinished:
+                            player.CurrentDungeonId = null;
+                            await store.Save(player);
+                            return Results.Ok(new GameResponse
+                            {
+                                Mode = "outcome",
+                                Status = BuildStatus(player),
+                                Outcome = new OutcomeInfo
+                                {
+                                    Text = "You emerge victorious from the dungeon!",
+                                    Mechanics = [],
+                                    NextAction = "end_encounter",
+                                },
+                                Inventory = BuildInventory(player),
+                            });
+
+                        case FinishReason.DungeonFled:
+                            player.CurrentDungeonId = null;
+                            await store.Save(player);
+                            return Results.Ok(new GameResponse
+                            {
+                                Mode = "outcome",
+                                Status = BuildStatus(player),
+                                Outcome = new OutcomeInfo
+                                {
+                                    Text = "You flee the dungeon, battered but alive.",
+                                    Mechanics = [],
+                                    NextAction = "end_encounter",
+                                },
+                                Inventory = BuildInventory(player),
+                            });
+
+                        case FinishReason.PlayerDied:
+                            await store.Save(player);
+                            return Results.Ok(new GameResponse
+                            {
+                                Mode = "game_over",
+                                Status = BuildStatus(player),
+                                Reason = "You have perished in the Dreamlands.",
+                            });
+
+                        default: // Completed
+                            EncounterRunner.EndEncounter(session);
+                            await store.Save(player);
+                            return Results.Ok(BuildExploringResponse(session));
+                    }
+
+                default:
+                    response = BuildExploringResponse(session);
+                    break;
+            }
+            break;
+        }
+
+        case "enter_dungeon":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot enter dungeon while not exploring" });
+
+            var node = session.CurrentNode;
+            if (node.Poi?.Kind != PoiKind.Dungeon || node.Poi.DungeonId == null)
+                return Results.BadRequest(new { error = "No dungeon at current location" });
+
+            if (player.CompletedDungeons.Contains(node.Poi.DungeonId))
+                return Results.BadRequest(new { error = "Dungeon already completed" });
+
+            player.CurrentDungeonId = node.Poi.DungeonId;
+            var start = EncounterSelection.GetDungeonStart(session, node.Poi.DungeonId);
+            if (start == null)
+            {
+                player.CurrentDungeonId = null;
+                return Results.BadRequest(new { error = "Dungeon entrance is sealed" });
+            }
+
+            var step = EncounterRunner.Begin(session, start);
+            await store.Save(player);
+            response = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices);
+            break;
+        }
+
+        case "end_encounter":
+        {
+            EncounterRunner.EndEncounter(session);
+            await store.Save(player);
+            response = BuildExploringResponse(session);
+            break;
+        }
+
+        case "enter_settlement":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot enter settlement while not exploring" });
+
+            var settlement = SettlementRunner.Enter(session);
+            if (settlement == null)
+                return Results.BadRequest(new { error = "No settlement at current location" });
+
+            await store.Save(player);
+            response = new GameResponse
+            {
+                Mode = "at_settlement",
+                Status = BuildStatus(player),
+                Settlement = new SettlementInfo
+                {
+                    Name = settlement.Name,
+                    Tier = settlement.Tier,
+                    Services = settlement.Services,
+                },
+                Node = BuildNodeInfo(session.CurrentNode, player),
+                Inventory = BuildInventory(player),
+            };
+            break;
+        }
+
+        case "leave_settlement":
+        {
+            SettlementRunner.Leave(session);
+            await store.Save(player);
+            response = BuildExploringResponse(session);
+            break;
+        }
+
+        case "buy":
+        {
+            if (session.Mode != SessionMode.AtSettlement)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            if (string.IsNullOrEmpty(req.ItemId))
+                return Results.BadRequest(new { error = "itemId required" });
+
+            var qty = req.Quantity ?? 1;
+            var result = Market.Buy(player, req.ItemId, qty, balance);
+            await store.Save(player);
+
+            return Results.Ok(new
+            {
+                success = result.Success,
+                message = result.Message,
+                status = BuildStatus(player),
+                inventory = BuildInventory(player),
+            });
+        }
+
+        case "sell":
+        {
+            if (session.Mode != SessionMode.AtSettlement)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            if (string.IsNullOrEmpty(req.ItemId))
+                return Results.BadRequest(new { error = "itemId required" });
+
+            var result = Market.Sell(player, req.ItemId, balance);
+            await store.Save(player);
+
+            return Results.Ok(new
+            {
+                success = result.Success,
+                message = result.Message,
+                status = BuildStatus(player),
+                inventory = BuildInventory(player),
+            });
+        }
+
+        default:
+            return Results.BadRequest(new { error = $"Unknown action: {req.Action}" });
+    }
+
+    await store.Save(player);
+    return Results.Ok(response);
+});
+
+app.MapGet("/api/game/{id}/market", async (string id) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var session = BuildSession(player);
+    var node = session.CurrentNode;
+    var tier = node.Region?.Tier ?? 1;
+
+    var stock = Market.GetStock(tier, balance).Select(item => new
+    {
+        id = item.Id,
+        name = item.Name,
+        type = item.Type.ToString().ToLowerInvariant(),
+        buyPrice = Market.GetBuyPrice(item, balance),
+        sellPrice = Market.GetSellPrice(item, balance),
+        skillModifiers = item.SkillModifiers.ToDictionary(
+            kv => kv.Key.ScriptName(), kv => kv.Value),
+        resistModifiers = item.ResistModifiers,
+        description = FormatItemDescription(item),
+    }).ToList();
+
+    return Results.Ok(new { tier, stock });
+});
+
+string FormatItemDescription(ItemDef item)
+{
+    var parts = new List<string>();
+    foreach (var (skill, mod) in item.SkillModifiers)
+        parts.Add($"{skill.GetInfo().DisplayName} {(mod >= 0 ? "+" : "")}{mod}");
+    foreach (var (resist, mod) in item.ResistModifiers)
+        parts.Add($"{resist} resist {(mod >= 0 ? "+" : "")}{mod}");
+    if (item.Cures.Count > 0)
+        parts.Add($"Cures: {string.Join(", ", item.Cures)}");
+    return string.Join(", ", parts);
+}
+
+app.Run();
+return 0;

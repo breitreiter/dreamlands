@@ -16,6 +16,7 @@ public class PlayerState
     public int X { get; set; }
     public int Y { get; set; }
     public string? CurrentDungeonId { get; set; }
+    public string? CurrentSettlementId { get; set; }
 
     // Vitals
     public int Health { get; set; }
@@ -26,7 +27,7 @@ public class PlayerState
 
     // Skills
     public Dictionary<Skill, int> Skills { get; set; } = new();
-    public Dictionary<Skill, int> SkillUses { get; set; } = new();
+    public bool SkipEncounterTrigger { get; set; }
 
     // Inventory
     public List<ItemInstance> Pack { get; set; } = new();
@@ -41,7 +42,7 @@ public class PlayerState
 
     // World state
     public HashSet<string> Tags { get; set; } = new();
-    public HashSet<string> ActiveConditions { get; set; } = new();
+    public Dictionary<string, int> ActiveConditions { get; set; } = new();
     public HashSet<string> CompletedDungeons { get; set; } = new();
     public HashSet<string> UsedEncounterIds { get; set; } = new();
     public HashSet<long> VisitedNodes { get; set; } = new();
@@ -73,9 +74,6 @@ public class PlayerState
         // Initialize skills with random starting values (0-3)
         foreach (var skillInfo in Rules.Skills.All)
             state.Skills[skillInfo.Skill] = rng.Next(0, 4);
-
-        foreach (var skillInfo in Rules.Skills.All)
-            state.SkillUses[skillInfo.Skill] = 0;
 
         return state;
     }

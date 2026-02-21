@@ -1,6 +1,18 @@
 # Dreamlands TODO
 
-Not Jira. Just a list of things that need doing, roughly grouped.
+Just a list of things that need doing, roughly grouped.
+
+--
+
+## MVP Blockers
+
+[x] Write out final conditions list → update ConditionDef.All
+      /home/joseph/repos/dreamlands/project/design/conditions_list.md
+[x] Finalize consumables/medicines → update ItemDef.All consumables
+      /home/joseph/repos/dreamlands/project/design/haversack.md
+[x] Define trade goods with flavor → flesh out TradeBalance
+      /home/joseph/repos/dreamlands/project/design/trade_goods.md
+[ ] Reconcile settlement screen vs balance data mismatches  
 
 ---
 
@@ -135,22 +147,22 @@ with balance data (inn vs entertainment, guild outpost vs storage) — reconcile
 - [ ] Town — Guild storage
 - [ ] Town — Healer
 - [ ] Town — Inn
-- [ ] Gathering action
+- [x] Gathering action
+      /home/joseph/repos/dreamlands/project/design/foraging.md
 
 ### Resource Systems
-- [ ] Finalize food and medicine
+- [x] Finalize food and medicine
 - [ ] Finalize end-of-day (design exists in `project/design/end_of_day_maintenance.md`)
 - [ ] Finalize equipment
-- [ ] Condition tick lifecycle (`ConditionDef` has drain amounts in Rules, nothing applies them)
 
 ### Data Authoring
 These are design/content tasks that block codegen — the code scaffolding exists but the
 data is placeholder or missing.
 
-- [ ] Write out final conditions list and effects — the real list is in Joseph's head,
-      `ConditionDef.All` in code is out of date
-- [ ] Finalize consumables/medicines — `ItemDef` consumables are placeholders,
-      `project/design/haversack.md` is patchy and not codegen-ready
+- [x] Write out final conditions list and effects — reconciled with `conditions_list.md`,
+      stacks system, dual-drain model, flavor text in `ConditionFlavor.cs`
+- [x] Finalize consumables/medicines — reconciled with `haversack.md`,
+      magnitude-based cure/resist, 11 new medicines
 - [ ] Define trade goods — full list with biome affinity, flavor label, flavor description.
       `TradeBalance` has 9 bare economic categories but no flavor layer.
 - [ ] Per-food flavor descriptions — `FlavorText.FoodName()` returns `""` for description,

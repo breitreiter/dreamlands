@@ -162,6 +162,10 @@ public sealed class ActionVerb
         VerbUsage.Mechanic, "Apply a status condition",
         new ArgDef("condition_id", ArgType.Id));
 
+    public static readonly ActionVerb RemoveCondition = new("remove_condition",
+        VerbUsage.Mechanic, "Remove a status condition",
+        new ArgDef("condition_id", ArgType.Id));
+
     // ── Time ────────────────────────────────────────────────────
 
     public static readonly ActionVerb SkipTime = new("skip_time",
@@ -191,7 +195,7 @@ public sealed class ActionVerb
         DamageHealth, Heal,
         DamageSpirits, HealSpirits,
         IncreaseSkill, DecreaseSkill,
-        AddCondition,
+        AddCondition, RemoveCondition,
         SkipTime,
         FinishDungeon, FleeDungeon,
     };
