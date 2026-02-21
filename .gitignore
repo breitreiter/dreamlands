@@ -10,6 +10,9 @@ map_*.json
 *.kate-swp
 .vscode/
 *.sh
+!worlds/*/build.sh
+!worlds/*/use.sh
+!worlds/*/rebuild.sh
 mapgen/reference/
 generated_*.enc
 encounter_*.enc
