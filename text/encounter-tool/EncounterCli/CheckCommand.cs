@@ -104,6 +104,16 @@ static class CheckCommand
         return errors;
     }
 
+    private static readonly (char Char, string Name, string Replacement)[] BadChars =
+    [
+        ('\u2014', "em-dash", "--"),
+        ('\u2013', "en-dash", "-"),
+        ('\u201C', "left double quote", "\""),
+        ('\u201D', "right double quote", "\""),
+        ('\u2018', "left single quote", "'"),
+        ('\u2019', "right single quote/apostrophe", "'"),
+    ];
+
     private static List<string> CheckForMarkers(string text)
     {
         var warnings = new List<string>();
@@ -115,6 +125,12 @@ static class CheckCommand
                 warnings.Add($"Line {i + 1}: FIXME marker (must be expanded before publishing)");
             else if (trimmed.StartsWith("REVIEW:"))
                 warnings.Add($"Line {i + 1}: REVIEW marker (must be reviewed before publishing)");
+
+            foreach (var (ch, name, replacement) in BadChars)
+            {
+                if (lines[i].Contains(ch))
+                    warnings.Add($"Line {i + 1}: {name} ({ch}) — use {replacement} instead");
+            }
         }
         return warnings;
     }

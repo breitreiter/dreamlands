@@ -16,6 +16,7 @@ class Program
             "bundle" => BundleCommand.Run(rest),
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "fix-quotes" => FixQuotesCommand.Run(rest),
             _ => PrintUsage()
         };
     }
@@ -27,6 +28,7 @@ class Program
         Console.WriteLine("  encounter bundle <path> [--out <dir>] [--ext .enc,.txt]");
         Console.WriteLine("  encounter fixme <file.enc> [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
+        Console.WriteLine("  encounter fix-quotes [<path>] [--ext .enc,.txt]");
         Console.WriteLine();
         Console.WriteLine("generate looks for locale_guide.txt in the current directory and oracle");
         Console.WriteLine("fragments in /home/joseph/repos/dreamlands/text/encounters/generation/.");
