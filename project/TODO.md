@@ -143,6 +143,19 @@ with balance data (inn vs entertainment, guild outpost vs storage) — reconcile
 - [ ] Finalize equipment
 - [ ] Condition tick lifecycle (`ConditionDef` has drain amounts in Rules, nothing applies them)
 
+### Data Authoring
+These are design/content tasks that block codegen — the code scaffolding exists but the
+data is placeholder or missing.
+
+- [ ] Write out final conditions list and effects — the real list is in Joseph's head,
+      `ConditionDef.All` in code is out of date
+- [ ] Finalize consumables/medicines — `ItemDef` consumables are placeholders,
+      `project/design/haversack.md` is patchy and not codegen-ready
+- [ ] Define trade goods — full list with biome affinity, flavor label, flavor description.
+      `TradeBalance` has 9 bare economic categories but no flavor layer.
+- [ ] Per-food flavor descriptions — `FlavorText.FoodName()` returns `""` for description,
+      hardcoded generic names ignore the biome-specific YAML data in `FlavorNames`
+
 ### Other Mechanics
 - [ ] Save/load — PlayerState is JSON-serializable but nothing calls it.
 
