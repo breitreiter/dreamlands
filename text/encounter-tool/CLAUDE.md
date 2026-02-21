@@ -45,7 +45,7 @@ dotnet run --project ../../../encounter-tool/EncounterCli -- generate --out gene
 
 ## Encounter Format (.enc)
 
-Full spec: `../notes/ENCOUNTER_FORMAT.md`
+Full spec: `../../project/encounter-spec/format.md`
 
 Quick summary: Title on line 1, prose body, then `choices:` at column 0. Choices at 2-space indent, outcomes at 4-space, branched content ([if]/[else]) at 6-space. Mechanics in brackets (e.g. `[skill_check persuade 15]`, `[give_item torch]`, `[branch other_encounter]`).
 

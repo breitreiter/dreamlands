@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Map\Dreamlands.Map.csproj" />
+    <ProjectReference Include="..\Rules\Dreamlands.Rules.csproj" />
   </ItemGroup>
 
   <ItemGroup>
