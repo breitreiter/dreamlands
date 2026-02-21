@@ -12,7 +12,7 @@ Just a list of things that need doing, roughly grouped.
       /home/joseph/repos/dreamlands/project/design/haversack.md
 [x] Define trade goods with flavor → flesh out TradeBalance
       /home/joseph/repos/dreamlands/project/design/trade_goods.md
-[ ] Reconcile settlement screen vs balance data mismatches  
+[x] Reconcile settlement screen vs balance data mismatches
 
 ---
 
@@ -119,12 +119,15 @@ Screen designs live in `project/screens/`. Some are well-specified, some are emp
 
 ## Frontend Implementation
 
-Blocked on UX design + GameServer. Each screen is a separate task.
+React + Vite scaffold in `ui/web/`. Screen shells exist for all major views.
+GameServer running with save persistence.
 
-- [ ] Landing
-- [ ] Explore/Map/Status
-- [ ] Inventory
-- [ ] Encounter
+- [x] Scaffold React app with Vite, API client, game context
+- [x] Screen shells — Splash, Explore, Encounter, Inventory, Market, Settlement, GameOver
+- [ ] Landing — connect to server, new game / load game
+- [ ] Explore/Map/Status — Leaflet integration, movement
+- [ ] Inventory — equipment, consumables
+- [ ] Encounter — choice rendering, conditional branches
 - [ ] Daily rest
 - [ ] Town — Home
 - [ ] Town — Temple
@@ -137,9 +140,9 @@ Blocked on UX design + GameServer. Each screen is a separate task.
 ## Rules / Game Mechanics
 
 ### Settlement Mechanics
-No game logic exists for settlement interaction. `SettlementBalance` data and Flavor
-stubs exist but nothing in `lib/Game/` processes them. Screen design has mismatches
-with balance data (inn vs entertainment, guild outpost vs storage) — reconcile first.
+`SettlementRunner` in Orchestration handles entering settlements. `AtSettlement` session
+mode added. Balance data and Flavor stubs exist but game logic for individual services
+is not yet built.
 
 - [ ] Town — Shop
 - [ ] Town — Temple
@@ -169,7 +172,7 @@ data is placeholder or missing.
       hardcoded generic names ignore the biome-specific YAML data in `FlavorNames`
 
 ### Other Mechanics
-- [ ] Save/load — PlayerState is JSON-serializable but nothing calls it.
+- [x] Save/load — GameServer with file-based GameStore, PlayerState persisted as JSON
 
 ## Design Decisions Needed
 
@@ -199,14 +202,14 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 ## Infrastructure
 
 - [ ] Test projects — zero coverage. Scaffold xUnit for Rules, Game, Encounter at minimum.
-- [ ] GameServer — Azure Function tier from `project/architecture/web_plan.md`. Not urgent
-      until game loop stabilizes.
-- [ ] Web UI — just a Leaflet map viewer. No game screens. Blocked on GameServer + Figma.
+- [x] GameServer — ASP.NET Minimal API with file-based save store in `server/GameServer/`.
+- [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
+- [ ] Web UI — flesh out screens, connect to GameServer, real game loop.
 
 ## Cleanup
 
-- [ ] Remove `CombatBalance` (`lib/Rules/CombatBalance.cs`) and its reference in `Balance.cs` —
-      combat is just a skill check now, no separate combat system needed.
+- [x] Remove `CombatBalance` — combat is just a skill check, no separate system needed.
+- [x] Remove `UsesPerLevel` from `CharacterBalance` — no use-based skill advancement, gear only.
 - [ ] Remove `SkillUses` dict from `PlayerState` — no use-based skill advancement, gear only.
 - [ ] Stale reference docs — `project/reference/mapgen_design.md` references ocean/coast
       terrain that no longer exists. Several reference docs may have similar staleness.
