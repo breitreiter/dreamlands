@@ -1,0 +1,39 @@
+import { GameProvider, useGame } from "./GameContext";
+import Splash from "./screens/Splash";
+import Explore from "./screens/Explore";
+import Encounter from "./screens/Encounter";
+import Outcome from "./screens/Outcome";
+import Settlement from "./screens/Settlement";
+import GameOver from "./screens/GameOver";
+
+function GameRouter() {
+  const { response, error, clearError } = useGame();
+
+  if (!response) return <Splash />;
+
+  return (
+    <>
+      {error && (
+        <div className="fixed top-0 left-0 right-0 z-[2000] bg-red-900/90 text-red-100 px-4 py-2 text-sm flex justify-between items-center">
+          <span>{error}</span>
+          <button onClick={clearError} className="text-red-300 hover:text-white ml-4">
+            Dismiss
+          </button>
+        </div>
+      )}
+      {response.mode === "exploring" && <Explore state={response} />}
+      {response.mode === "encounter" && <Encounter state={response} />}
+      {response.mode === "outcome" && <Outcome state={response} />}
+      {response.mode === "at_settlement" && <Settlement state={response} />}
+      {response.mode === "game_over" && <GameOver state={response} />}
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <GameProvider>
+      <GameRouter />
+    </GameProvider>
+  );
+}
