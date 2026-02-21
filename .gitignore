@@ -14,3 +14,7 @@ mapgen/reference/
 generated_*.enc
 encounter_*.enc
 .play-tmp/
+worlds/*/tiles/
+worlds/*/map.png
+worlds/*/assets/
+worlds/*/encounters/

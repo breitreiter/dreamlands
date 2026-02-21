@@ -1,0 +1,9 @@
+worlds:
+  production:
+    width: 100
+    height: 100
+    seed: ~
+  test:
+    width: 10
+    height: 10
+    seed: ~
