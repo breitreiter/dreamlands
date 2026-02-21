@@ -155,13 +155,19 @@ static class GenerateCommand
 
         Console.WriteLine(scaffoldText);
         Console.WriteLine();
-        Console.Write("Continue to encounter body? [Y/n] ");
-        if ((Console.ReadLine()?.Trim().ToLowerInvariant() ?? "") == "n")
+
+        // Optional steering notes before body generation
+        Console.Write("Steering notes (enter to skip, 'n' to quit): ");
+        var steering = Console.ReadLine()?.Trim() ?? "";
+        if (steering.Equals("n", StringComparison.OrdinalIgnoreCase))
             return 0;
         Console.WriteLine();
 
-        // Pass 2: Encounter body
-        messages.Add(new ChatMessage(ChatRole.User, bodyPrompt));
+        // Pass 2: Encounter body — prepend steering notes if provided
+        var bodyWithSteering = string.IsNullOrEmpty(steering)
+            ? bodyPrompt
+            : $"The user has the following notes on the scaffold:\n{steering}\n\nTake these into account.\n\n{bodyPrompt}";
+        messages.Add(new ChatMessage(ChatRole.User, bodyWithSteering));
 
         Console.WriteLine("Generating encounter body...");
         Console.WriteLine();

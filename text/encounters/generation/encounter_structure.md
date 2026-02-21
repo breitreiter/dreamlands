@@ -7,6 +7,10 @@ These three fragments must shape the encounter:
 - Forcing Function: {{ORACLE_FORCING}}
 - Twist: {{ORACLE_TWIST}}
 
+## About the PC
+- The player is a wanderer who travels alone
+- The player wears a signet ring which identifies them as a high-ranking member of the Merchant Guild.
+
 ## Task
 
 You are generating a STRUCTURE PASS for a roadside CRPG encounter.

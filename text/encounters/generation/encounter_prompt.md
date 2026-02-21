@@ -30,8 +30,6 @@ Then write the encounter in 2-4 short paragraphs:
 
 Do not invent named NPCs, locations, or organizations beyond what the locale provides. Use descriptors like "a farmer," "a guard," "a merchant" instead.
 
-The player character is a wanderer who travels alone.
-
 Do not imply future consequences, recurring characters, or events that happen "later." The encounter is self-contained.
 
 Tone & voice:
