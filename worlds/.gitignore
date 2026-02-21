@@ -1,0 +1,6 @@
+# Track scripts + registry, ignore generated content
+map.json
+map.png
+tiles/
+encounters/
+assets/
