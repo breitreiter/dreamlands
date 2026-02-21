@@ -4,7 +4,7 @@ using Dreamlands.Rules;
 
 namespace Dreamlands.Orchestration;
 
-public enum SessionMode { Exploring, InEncounter, GameOver }
+public enum SessionMode { Exploring, InEncounter, AtSettlement, GameOver }
 
 public class GameSession
 {
@@ -16,7 +16,11 @@ public class GameSession
 
     public SessionMode Mode { get; set; } = SessionMode.Exploring;
     public Encounter.Encounter? CurrentEncounter { get; set; }
-    public bool SkipEncounterTrigger { get; set; }
+    public bool SkipEncounterTrigger
+    {
+        get => Player.SkipEncounterTrigger;
+        set => Player.SkipEncounterTrigger = value;
+    }
 
     public GameSession(PlayerState player, Dreamlands.Map.Map map, EncounterBundle bundle, BalanceData balance, Random rng)
     {
