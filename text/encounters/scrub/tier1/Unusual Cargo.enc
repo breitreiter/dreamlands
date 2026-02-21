@@ -1,0 +1,45 @@
+Unusual Cargo
+
+The canyon pass narrows to a stone throat barely wide enough for two carts abreast. A rope barrier blocks the way, strung between iron stakes driven into the cracked earth. Behind it stands a toll-keeper in dusty indigo, arms crossed, while two merchants argue with the practiced intensity of people who know their words won't matter. Their loaded carts sit baking in the harsh sun. 
+
+One merchant keeps fishing in a leather document case at his belt, pulling out stamped tokens, putting them back. The toll-keeper doesn't look at them anymore.
+
+The lead merchant spots your ring while you're still appraising the situation. His relief is immediate and desperate. "Guild authority," he says loudly. He gestures toward the toll-keeper, "This man is trying to rob us. We paid. We have tokens. He says tokens mean nothing now."
+
+The man with the document case pulls out a stamped metal disk and holds it up with some gravity. You can't read the language, but you understand it's a contract of some sort.
+
+The toll-keeper sighs heavily. "I have explained this. All travelers will be searched. It is the new rule. Your tokens do not buy you an exception from the rule." He gestures to a pair of nearby guards, who start walking toward the cart.
+
+The lead merchant leans close to you, voice dropping. "This is robbery. He will search our cargo. He will find so-called contraband. He will steal from both of us." The sealed crate on his middle cart sits roped tight, wax stamps intact along every edge. Too many seals for ordinary cargo.
+
+choices:
+
+* Persuade the toll-keeper to reconsider = Use your Guild authority to negotiate a resolution
+  You step between them before the guards reach the crate. "The Guild recognizes passage tokens issued under legitimate clan authority," you say, loud enough for the waiting travelers to hear. "If your clan wishes to renegotiate terms, that conversation happens through formal channels. Not at a rope barrier in the afternoon heat." You turn the ring so the signet catches light. "Unless you want every caravan master from here to the plateaus hearing that clan word means nothing."
+  @if check mercantile medium {
+    The toll-keeper holds your gaze for a long moment, his jaw working as though chewing something bitter. His eyes narrow, measuring the weight of the ring you wear against whatever authority has placed him here at this stone throat. The guards halt mid-stride, their attention fixed on their captain.
+
+    At last he grunts, a sound dragged up from some deep well of pragmatism. He waves one hand sharply, and the guards retreat to their stations without a word. "We will make an exception for the outlander," he says, each word dropping like a stone into still water, "who is unaccustomed to our ways." He moves to the nearest iron stake and begins working the rope free, his fingers quick despite their reluctance. The barrier sags, then falls away entirely. "Tomorrow you will not be so fortunate."
+
+    The lead merchant exhales audibly. He says nothing, perhaps knowing better than to claim victory aloud, and climbs onto his cart. The wheels groan as the mules lean into their harnesses. You watch the sealed crate pass through the gap, its wax stamps catching the brutal sun, still intact.
+  } @else {
+    The toll-keeper throws back his head and laughs, a sound like stones scraping in a dry riverbed. "Guild authority stops where clan ground starts," he says. His hand sweeps toward the canyon walls, encompassing the narrow throat of stone. "You want to argue law, walk back to Aldgate and file a complaint."
+
+    He snaps his fingers. The guards stride past you, boots crunching on sun-baked earth, making straight for the middle cart. They seize iron pry-bars and wedge them beneath the lid of the conspicuous crate. Wood groans and splits. Wax seals crack and tumble into the dust like broken teeth. The guards heave the lid aside and step back. Inside, stacked in careful rows, sit rough-bound books, their covers stained dark with age and handling.
+
+    The toll-keeper reaches in and lifts one free. He opens it, tilts his head to read, then spits into the dirt at his feet. "You would bring such pollution among our people? Shameful." His voice carries the weight of genuine disgust. He beckons the guards closer, already turning his full attention to the merchant, whose face has gone the color of ash. The toll-keeper glances at your pack, dismisses it with a flick of his eyes, then waves you forward. "Go. You are not my concern today."
+
+    You consider asking what manner of text could provoke such revulsion, but the toll-keeper's hand is already on the merchant's shoulder, fingers digging in. The second merchant has gone very still beside his cart. You walk past the rope barrier, boots finding the narrow track that winds deeper into the canyon, and you do not look back.
+  }
+
+* Accuse the merchant = Side with the toll-keeper, these merchants seem suspect
+  The toll-keeper's grin splits his weathered face as you gesture toward the over-sealed crate. The lead merchant goes pale beneath his road dust, his hand dropping from the document case to grip the cart rail. "Those are very delicate instruments," he says, and the words tumble out too quickly. "Please. I can pay a special fee, yes? For an exception." His voice drops to a whisper meant to carry. "For your trouble, and for our friend here in the guild."
+
+  The leather pouch appears in his hand with practiced ease. Gold coins catch the sun as he counts them out, pressing a few into your palm before turning to the toll-keeper with the bulk of his offering. The metal is warm, still holding the heat of the merchant's body. The toll-keeper's thick fingers close around his share with the smooth motion of long habit.
+
+  "No trouble at all," the keeper announces, already turning to wave his guards back. "Carry on. Safe travels." The rope barrier drops with a slap of hemp on stone. The merchant clicks his tongue, and his horses lean into their traces, wheels groaning as the carts lurch forward. He looks at you once as he passes, and the gratitude has curdled into something harder. His eyes promise memory. Then the dust swallows him, and the canyon throat stands empty once more, save for the toll-keeper whistling a tuneless melody while he tests the weight of each coin.
+
+* Submit to a search = Follow the rules and hope for the best
+  You step forward, ahead of the merchant, and offer yourself for inspection. The nearest guard halts, grunts, and begins pulling through the contents of your pack with thick fingers. His face remains flat, uninterested. After a moment he waves you past the rope barrier with the back of his hand.
+
+  You walk through the stone throat alone. Behind you, the argument swells into shouts. Wood cracks, sharp and splintering. A voice rises in protest, then cuts short. The sound echoes off the canyon walls. You do not turn. Whatever lay sealed beneath those wax stamps belongs to someone else now. The rope barrier recedes behind you, and the passage ahead narrows into shadow.
