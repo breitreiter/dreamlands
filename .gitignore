@@ -1,6 +1,7 @@
 bin/
 obj/
 assets/
+!ui/web/src/assets/
 .idea/
 .claude/
 *.DotSettings.user

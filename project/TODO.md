@@ -18,6 +18,7 @@ Just a list of things that need doing, roughly grouped.
 
 ## Map Visual
 
+- [ ] Add a border/frame to mapgen output so the map edge looks intentional against the background
 - [ ] Replace lake sprite
 - [ ] Fix mountain coloring
 - [ ] Finish mountain POI sprites

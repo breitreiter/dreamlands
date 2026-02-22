@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.leaflet-container {
+  background: url("./assets/black-stone.jpg") repeat;
+}
+
 html,
 body,
 #root {
