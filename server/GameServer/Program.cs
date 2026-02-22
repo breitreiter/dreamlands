@@ -49,6 +49,7 @@ var mapPath = ParseArg(args, "--map")
 var bundlePath = ParseArg(args, "--bundle")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_BUNDLE")
     ?? Path.Combine(repoRoot, "worlds/production/encounters.bundle.json");
+var noEncounters = args.Contains("--no-encounters");
 
 Map map;
 EncounterBundle bundle;
@@ -58,6 +59,8 @@ try
     bundle = EncounterBundle.Load(bundlePath);
     app.Logger.LogInformation("Loaded map ({Width}x{Height}) and {Count} encounters",
         map.Width, map.Height, bundle.Encounters.Count);
+    if (noEncounters)
+        app.Logger.LogInformation("Overworld encounters SUPPRESSED (--no-encounters)");
 }
 catch (Exception ex)
 {
@@ -411,7 +414,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             // Check for encounter trigger at new location
             var node = session.CurrentNode;
-            if (node.Poi?.Kind == PoiKind.Encounter && !session.SkipEncounterTrigger)
+            if (node.Poi?.Kind == PoiKind.Encounter && !session.SkipEncounterTrigger && !noEncounters)
             {
                 var enc = EncounterSelection.PickOverworld(session, node);
                 if (enc != null)
