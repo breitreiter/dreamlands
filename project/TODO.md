@@ -172,17 +172,8 @@ data is placeholder or missing.
       hardcoded generic names ignore the biome-specific YAML data in `FlavorNames`
 
 ### Condition Runtime
-`ConditionDef` entries define drains, cures, and special effects as data, but no game code
-applies them yet. All `SpecialCure` and `SpecialEffect` strings are just design notes.
-
-- [ ] Health/spirits drain — apply `HealthDrain`/`SpiritsDrain` per tick (end-of-day or per-move)
-- [ ] Stack decay — conditions with `Stacks > 1` should tick down over time
-- [ ] Cure: leave biome — `freezing` clears when player leaves mountains
-- [ ] Cure: enter settlement — `thirsty` clears on settlement entry
-- [ ] Cure: rest at inn — `exhausted` clears on inn rest
-- [ ] Cure: medicine items — consumables with `Cures` list should remove matching conditions
-- [ ] Special effect: `lost` — erase discovered map tile routes
-- [ ] Condition acquisition — when/how conditions get applied (biome entry, failed checks, etc.)
+All condition resolution (acquisition, cures, drain, stack decay, special effects) happens
+during end-of-day. See "Finalize end-of-day" above — condition runtime is part of that work.
 
 ### Other Mechanics
 - [x] Save/load — GameServer with file-based GameStore, PlayerState persisted as JSON
@@ -214,7 +205,7 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Infrastructure
 
-- [ ] Test projects — zero coverage. Scaffold xUnit for Rules, Game, Encounter at minimum.
+- [x] Test projects — xUnit tests for Rules (31), Game (41), Encounter (18) in `tests/`.
 - [x] GameServer — ASP.NET Minimal API with file-based save store in `server/GameServer/`.
 - [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
 - [ ] Web UI — flesh out screens, connect to GameServer, real game loop.
