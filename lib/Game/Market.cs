@@ -109,10 +109,10 @@ public static class Market
         int maxStock = balance.Trade.MaxStock[size];
         int perDay = balance.Trade.RestockPerDay[size];
 
-        // Trade goods and food restock, never equipment
+        // Trade goods restock; food has unlimited stock, equipment never restocks
         var restockIds = settlement.Stock.Keys
             .Where(id => balance.Items.TryGetValue(id, out var def)
-                         && (def.Type == ItemType.TradeGood || def.FoodType != null))
+                         && def.Type == ItemType.TradeGood)
             .ToList();
 
         if (restockIds.Count == 0)
@@ -212,7 +212,8 @@ public static class Market
         }
 
         player.Gold -= price;
-        settlement.Stock[itemId] = stock - 1;
+        if (def.FoodType == null) // food has unlimited stock in settlements
+            settlement.Stock[itemId] = stock - 1;
         return new MarketResult(true, $"Bought {def.Name} for {price} gold");
     }
 
