@@ -199,9 +199,9 @@ data is placeholder or missing.
       magnitude-based cure/resist, 11 new medicines
 - [x] Define trade goods — 62 concrete trade goods as ItemDefs with biome, tier, cost,
       and flavor descriptions. Old TradeCategory system removed.
-- [ ] Per-food flavor descriptions — `FoodDescription()` stub returns generic category text.
-      Replace with richer per-name descriptions (e.g. "Sun-dried strips of lean goat, salted
-      and folded into a travel pouch" instead of "A filling portion of meat or fish").
+- [x] Per-food flavor descriptions — `FoodNames.cs` has ~90 biome×category×source entries
+      with evocative per-name descriptions. `FlavorText.FoodName()` picks from static data.
+      Market purchases get flavor names + descriptions via `createFood` callback.
 
 ### Condition Runtime
 All condition resolution (acquisition, cures, drain, stack decay, special effects) happens
@@ -250,3 +250,6 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 - [ ] Stale reference docs — `project/reference/mapgen_design.md` references ocean/coast
       terrain that no longer exists. Several reference docs may have similar staleness.
 - [ ] `project/design/gaps.md` checkbox audit — many checked items may not reflect current code.
+- [x] Remove dead `FlavorNames` class and YAML files — deleted `FlavorNames.cs`,
+      `food_names.yaml`, `trade_names.yaml`, `equipment_names.yaml`. Removed YamlDotNet
+      from Flavor csproj. Food names now served by static `FoodNames.cs`.

@@ -5,10 +5,6 @@
     <ProjectReference Include="..\Rules\Dreamlands.Rules.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="16.3.0" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

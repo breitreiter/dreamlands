@@ -166,64 +166,8 @@ public static class FlavorText
     // --- Food ---
 
     public static (string Name, string Description) FoodName(
-        FoodType type, Terrain biome, bool foraged, FlavorNames? flavorNames = null, Random? rng = null)
-    {
-        var biomeKey = biome.ToString().ToLowerInvariant();
-        var categoryKey = type switch
-        {
-            FoodType.Protein => "protein",
-            FoodType.Grain => "carbs", // YAML uses "carbs"
-            FoodType.Sweets => "sweets",
-            _ => "protein",
-        };
-
-        // Try biome-specific YAML names first
-        string? name = null;
-        if (flavorNames != null)
-        {
-            var foodNames = flavorNames.FoodNames(categoryKey, biomeKey);
-            var list = foraged ? foodNames.Foraged : foodNames.Vendor;
-            if (list.Count > 0)
-            {
-                var idx = rng?.Next(list.Count) ?? (_counter++ % list.Count);
-                name = list[idx];
-            }
-        }
-
-        // Fallback to hardcoded generic names
-        name ??= PickFoodFallback(type, foraged, rng);
-
-        return (name, FoodDescription(name, type, foraged));
-    }
-
-    static string PickFoodFallback(FoodType type, bool foraged, Random? rng)
-    {
-        var names = (type, foraged) switch
-        {
-            (FoodType.Protein, true) => new[] { "smoked rabbit", "dried fish", "roast pigeon", "cured lizard" },
-            (FoodType.Protein, false) => new[] { "salted beef", "mutton jerky", "smoked sausage", "tinned fish" },
-            (FoodType.Grain, true) => new[] { "foraged roots", "wild tubers", "cattail flour cake", "acorn bread" },
-            (FoodType.Grain, false) => new[] { "hardtack", "barley loaf", "travel biscuit", "oat cake" },
-            (FoodType.Sweets, true) => new[] { "wild berries", "honeycomb", "dried figs", "crabapples" },
-            (FoodType.Sweets, false) => new[] { "sugar dates", "candied ginger", "preserved plums", "molasses chew" },
-        };
-        var idx = rng?.Next(names.Length) ?? (_counter++ % names.Length);
-        return names[idx];
-    }
-
-    /// <summary>Short flavor description for a food item. Stub — expand with richer per-name text later.</summary>
-    static string FoodDescription(string name, FoodType type, bool foraged)
-    {
-        var source = foraged ? "Foraged from the surrounding land" : "Purchased from a local vendor";
-        var category = type switch
-        {
-            FoodType.Protein => "A filling portion of meat or fish",
-            FoodType.Grain => "Sturdy, starchy fare that keeps well on the road",
-            FoodType.Sweets => "A small treat to lift the spirits",
-            _ => "Trail food",
-        };
-        return $"{category}. {source}.";
-    }
+        FoodType type, Terrain biome, bool foraged, Random? rng = null) =>
+        FoodNames.Pick(type, biome, foraged, rng);
 
     // --- Helpers ---
 

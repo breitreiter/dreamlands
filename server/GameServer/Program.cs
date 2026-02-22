@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Dreamlands.Encounter;
+using Dreamlands.Flavor;
 using Dreamlands.Game;
 using Dreamlands.Map;
 using Dreamlands.Orchestration;
@@ -507,7 +508,16 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 req.Order.Sells.Select(s => new SellLine(s.ItemDefId)).ToList());
 
             var mRng = new Random();
-            var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance, mRng);
+            ItemInstance CreateFood(FoodType ft, string biome, Random r)
+            {
+                var terrain = Enum.Parse<Terrain>(biome, ignoreCase: true);
+                var (name, desc) = FlavorText.FoodName(ft, terrain, foraged: false, rng: r);
+                return new ItemInstance($"food_{ft.ToString().ToLowerInvariant()}", name)
+                {
+                    FoodType = ft, Description = desc,
+                };
+            }
+            var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance, mRng, CreateFood);
             await store.Save(player);
 
             var tier = sNode.Region?.Tier ?? 1;
