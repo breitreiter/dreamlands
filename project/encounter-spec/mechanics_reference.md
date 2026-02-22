@@ -17,7 +17,7 @@ MAGNITUDE                       TIME PERIODS
   huge
 
 CONDITIONS
-  freezing  hungry  thirsty  swamp_fever  road_flux
+  freezing  hungry  thirsty  swamp_fever  gut_worms
   irradiated  exhausted  lost  injured  poisoned
 
 

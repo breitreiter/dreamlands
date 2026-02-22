@@ -40,16 +40,16 @@ Items that go in the haversack
 - +Cure Injury large
 - Sharp-smelling amber paste that significantly speeds wound healing
 
-//road flux
+//gut worms
 
 ## Creeping Baldric
 - Forest 2
-- +Cure Road Flux small
+- +Cure Gut Worms small
 - A knotted root that smells faintly of sulfur. Eating a small amount raw settles a fevered stomach and stops vomiting
 
 ## Dustseed 
 - Plains 2
-- +Resist Road Flux small
+- +Resist Gut Worms small
 - Tiny grey seeds shaken from a dry-country grass. Sprinkled into food and water, they purify and cleanse
 
 //exhausted

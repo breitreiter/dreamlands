@@ -9,7 +9,7 @@ namespace Dreamlands.Game;
 public static class EndOfDay
 {
     // Conditions that are always checked regardless of biome
-    static readonly string[] UniversalAmbientIds = ["road_flux", "lost"];
+    static readonly string[] UniversalAmbientIds = ["lost"];
 
     // Conditions that only come from encounters, never from ambient resist checks
     static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "exhausted"];

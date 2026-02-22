@@ -41,9 +41,9 @@ public sealed class ConditionDef
             Id = "swamp_fever", Name = "Swamp Fever", Biome = "swamp", Tier = "any",
             Stacks = 4, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
         },
-        ["road_flux"] = new()
+        ["gut_worms"] = new()
         {
-            Id = "road_flux", Name = "Road Flux", Biome = "none", Tier = "none",
+            Id = "gut_worms", Name = "Gut Worms", Biome = "forest", Tier = "2",
             Stacks = 2, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
             ResistDifficulty = Difficulty.Easy,
         },

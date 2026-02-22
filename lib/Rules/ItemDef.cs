@@ -200,7 +200,7 @@ public sealed class ItemDef
         ["breathing_apparatus"] = new()
         {
             Id = "breathing_apparatus", Name = "Intricate Breathing Apparatus", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Medium, ["road_flux"] = Magnitude.Medium },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Medium, ["gut_worms"] = Magnitude.Medium },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
         },
         ["heavy_furs"] = new()
@@ -277,13 +277,13 @@ public sealed class ItemDef
         ["creeping_baldric"] = new()
         {
             Id = "creeping_baldric", Name = "Creeping Baldric", Type = ItemType.Consumable,
-            StackSize = 5, Cures = new Dictionary<string, Magnitude> { ["road_flux"] = Magnitude.Small },
+            StackSize = 5, Cures = new Dictionary<string, Magnitude> { ["gut_worms"] = Magnitude.Small },
             Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["dustseed"] = new()
         {
             Id = "dustseed", Name = "Dustseed", Type = ItemType.Consumable,
-            StackSize = 10, ResistModifiers = new Dictionary<string, Magnitude> { ["road_flux"] = Magnitude.Small },
+            StackSize = 10, ResistModifiers = new Dictionary<string, Magnitude> { ["gut_worms"] = Magnitude.Small },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Trivial,
         },
         ["widows_veil"] = new()

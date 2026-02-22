@@ -78,18 +78,18 @@ Flavor text for conditions should be written in pure prose — no meta-language 
 - HealComplete: The fever breaks for the last time. You are wrung out, hollow, but clean.
 - Death: The world blurs and runs together. The swamp has many dead in it. It will have one more.
 
-# Road Flux
-- Trigger: every rest
+# Gut Worms
+- Trigger: resting in forest tier 2
 - Stacks: 2
 - -Health trivial
 - -Spirits trivial
-- Ongoing: Your guts have not forgiven you. Neither has the road.
-- Resist: Something tasted wrong. Your body had its argument with it through the small hours and won. Luck or preparation, hard to say which.
-- Succumb: Raw rations, water from the wrong source; hard to say which did it. The road has a hundred ways to school the careless.
-- HealProgress: The cramps ease. Your guts have declared a grudging truce.
-- HealFailure: The medicine does what it can. Out here, on these rations, it is not enough.
-- HealComplete: The war in your belly is over. You are hollow and scoured, but the journey is manageable again.
-- Death: You drink everything you have and it is not enough. They will find your bones by the road, if they bother to look.
+- Ongoing: Something writhes behind your navel. The forest's tiny passengers have made themselves at home.
+- Resist: Something in the water looked wrong. You boiled it twice and ate nothing you couldn't identify. Caution, not luck.
+- Succumb: It started with the berries, or the stream, or the meat that sat too long in the humid air. The forest feeds you its own way.
+- HealProgress: The cramps ease. Whatever is living in you has lost ground, though it hasn't surrendered.
+- HealFailure: The medicine passes through you. The worms remain, patient and well-fed.
+- HealComplete: The last of them passes. You are hollow and scoured, but the food stays down again.
+- Death: You cannot keep water down. The forest takes back everything it gave you, and then the rest.
 
 # Irradiated
 - Trigger: resting in plains tier 3

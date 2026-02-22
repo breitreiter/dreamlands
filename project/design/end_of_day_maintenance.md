@@ -128,13 +128,13 @@ and narratively coherent (you get sick from sleeping in hazards, not passing thr
 | Thirsty | Scrub | Any | Camping in scrub |
 | Swamp Fever | Swamp | Any | Camping in swamp |
 | Irradiated | Plains | Tier 3 only | Camping in tier-3 plains |
+| Gut Worms | Forest | Tier 2 only | Camping in tier-2 forest |
 
 ### Universal Conditions (checked every rest)
 
 | Condition | Trigger |
 |---|---|
 | Hungry | No food consumed |
-| Road Flux | Every rest (resist check) |
 | Lost | Every rest (resist check) |
 
 ### Encounter-Only Conditions

@@ -112,7 +112,7 @@ public static class SkillChecks
             "freezing" or "thirsty" or "lost" => (Skill?)Skill.Bushcraft,
             "poisoned" => Skill.Bushcraft,
             "injured" => Skill.Combat,
-            _ => null, // swamp_fever, road_flux, irradiated, exhausted — gear only
+            _ => null, // swamp_fever, gut_worms, irradiated, exhausted — gear only
         };
 
         var skillLevel = skill != null ? state.Skills.GetValueOrDefault(skill.Value) : 0;
@@ -168,7 +168,7 @@ public static class SkillChecks
     /// Injury = armor(big) + token, Poison = armor(big) + token,
     /// Exhausted = boots(big) + best equipment(small) + token,
     /// Freezing/Thirsty = two best small gear + token,
-    /// Swamp Fever/Road Flux/Irradiated = consumable(big) + best equipment(small) + token.
+    /// Swamp Fever/Gut Worms/Irradiated = consumable(big) + best equipment(small) + token.
     /// Foraging = weapon(big) + token (uses Bushcraft skill).
     /// </summary>
     internal static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
@@ -182,7 +182,7 @@ public static class SkillChecks
             "exhausted" => GetEquippedResist(state.Equipment.Boots, conditionId, magnitudes, balance)
                          + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
             "freezing" or "thirsty" or "lost" => GetBestPackResist(conditionId, magnitudes, state, balance, 2),
-            "swamp_fever" or "road_flux" or "irradiated" =>
+            "swamp_fever" or "gut_worms" or "irradiated" =>
                 GetBestConsumedResist(conditionId, magnitudes, state, balance)
                 + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
             "foraging" => GetEquippedResist(state.Equipment.Weapon, conditionId, magnitudes, balance),

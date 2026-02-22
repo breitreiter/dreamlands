@@ -103,7 +103,7 @@ A side effect of every combat is the risk of gaining the Injured condition. Mech
 ### Hungry resist
 - N/A - alternate system based entirely on food volume consumed
 
-### Swamp Fever, Road Flux, Irradiated resist
+### Swamp Fever, Gut Worms, Irradiated resist
 - just-eaten (nightly maintenance) consumable bonus (big) + single highest pack-held equipment bonus (small) + bonus
 
 ### Poison resist

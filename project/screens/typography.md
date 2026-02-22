@@ -25,8 +25,8 @@ https://game-icons.net/tags/blood.html
 - poisoned
 - irradiated
 - Swamp Fever
-- Road Flux
+- Gut Worms
 
 Red Mire Fever	Standing water	Camp hygiene
 Ashlung	Dust / ruins / spores	Air protection
-Road Flux	Foraged food	Self-sufficiency risk
+Gut Worms	Foraged food	Self-sufficiency risk

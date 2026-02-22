@@ -24,7 +24,7 @@ Skill check bonus logic: `lib/Game/SkillChecks.cs`
 | Poison resist | Armor (big) + token | 0 | same as Cunning — no positive armor bonus |
 | Exhausted resist | Boots (big) + equipment (small) | 0 | boots have no SkillModifiers, only ResistModifiers |
 | Freezing/Thirsty | Two small gear + token | 0 | heavy_furs/canteen use ResistModifiers (Magnitude), not SkillModifiers |
-| Swamp Fever/Road Flux/Irradiated | Consumable (big) + equipment (small) | 0 | consumables/tools use ResistModifiers (Magnitude), not numeric bonuses |
+| Swamp Fever/Gut Worms/Irradiated | Consumable (big) + equipment (small) | 0 | consumables/tools use ResistModifiers (Magnitude), not numeric bonuses |
 
 ## Systemic Issue: Condition Resists
 
