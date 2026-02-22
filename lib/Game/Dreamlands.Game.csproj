@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Dreamlands.Game.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Rules\Dreamlands.Rules.csproj" />
     <ProjectReference Include="..\Encounter\Dreamlands.Encounter.csproj" />
   </ItemGroup>

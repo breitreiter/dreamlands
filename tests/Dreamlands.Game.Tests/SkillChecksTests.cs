@@ -142,4 +142,94 @@ public class SkillChecksTests
         var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng);
         Assert.Equal(RollMode.Normal, result.RollMode);
     }
+
+    // ── Gear sourcing tests ──
+
+    [Fact]
+    public void GetItemBonus_Combat_UsesWeaponOnly()
+    {
+        var state = Fresh();
+        state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword");
+        state.Equipment.Armor = new ItemInstance("scale_armor", "Scale Armor");
+
+        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Combat, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_Cunning_UsesArmorOnly()
+    {
+        var state = Fresh();
+        state.Equipment.Armor = new ItemInstance("chainmail", "Chainmail");
+        state.Equipment.Weapon = new ItemInstance("bodkin", "Bodkin");
+
+        Assert.Equal(-3, SkillChecks.GetItemBonus(Skill.Cunning, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_Negotiation_TwoHighestTools()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("peoples_borderlands", "Peoples of the Borderlands"));
+        state.Haversack.Add(new ItemInstance("writing_kit", "Writing Kit"));
+
+        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // 3 + 1
+    }
+
+    [Fact]
+    public void GetItemBonus_Bushcraft_SingleTool()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("yoriks_guide", "Yorik's Guide"));
+        state.Equipment.Weapon = new ItemInstance("hatchet", "Hatchet"); // Combat only now
+
+        Assert.Equal(2, SkillChecks.GetItemBonus(Skill.Bushcraft, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_Mercantile_UsesTool()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("writing_kit", "Writing Kit"));
+
+        Assert.Equal(2, SkillChecks.GetItemBonus(Skill.Mercantile, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_Luck_AlwaysZero()
+    {
+        var state = Fresh();
+        state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword");
+        state.Equipment.Armor = new ItemInstance("chainmail", "Chainmail");
+        state.Haversack.Add(new ItemInstance("writing_kit", "Writing Kit"));
+
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Luck, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_NoGear_ReturnsZero()
+    {
+        var state = Fresh();
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Combat, state, Balance));
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Cunning, state, Balance));
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_BootsDontAffectChecks()
+    {
+        var state = Fresh();
+        state.Equipment.Boots = new ItemInstance("heavy_work_boots", "Heavy Work Boots");
+
+        foreach (var skill in new[] { Skill.Combat, Skill.Cunning, Skill.Negotiation, Skill.Bushcraft, Skill.Mercantile, Skill.Luck })
+            Assert.Equal(0, SkillChecks.GetItemBonus(skill, state, Balance));
+    }
+
+    [Fact]
+    public void GetItemBonus_NonToolHaversackItems_Ignored()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // consumable, not a tool
+
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance));
+    }
 }

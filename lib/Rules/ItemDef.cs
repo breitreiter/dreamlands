@@ -38,7 +38,7 @@ public sealed class ItemDef
         {
             Id = "bodkin", Name = "Bodkin", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1, [Skill.Mercantile] = 1 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
             Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["jambiya"] = new()
@@ -52,21 +52,21 @@ public sealed class ItemDef
         {
             Id = "seax", Name = "Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2, [Skill.Bushcraft] = 2 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
             Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["hatchet"] = new()
         {
             Id = "hatchet", Name = "Hatchet", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2, [Skill.Bushcraft] = 2 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
             Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["war_axe"] = new()
         {
             Id = "war_axe", Name = "War Axe", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3, [Skill.Bushcraft] = 1 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Medium,
         },
         ["bardiche"] = new()
@@ -94,7 +94,7 @@ public sealed class ItemDef
         {
             Id = "arming_sword", Name = "Arming Sword", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4, [Skill.Negotiation] = 2 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
             Biome = "plains", ShopTier = 1, Cost = Magnitude.Huge,
         },
 
@@ -103,7 +103,6 @@ public sealed class ItemDef
         ["tunic"] = new()
         {
             Id = "tunic", Name = "Tunic", Type = ItemType.Armor,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 1 },
             Biome = "plains", ShopTier = 1,
         },
         ["leather"] = new()
@@ -121,7 +120,7 @@ public sealed class ItemDef
         ["chainmail"] = new()
         {
             Id = "chainmail", Name = "Chainmail", Type = ItemType.Armor,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Luck] = 1, [Skill.Cunning] = -3 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = -3 },
             ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Medium },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
         },
@@ -138,13 +137,11 @@ public sealed class ItemDef
         ["fine_boots"] = new()
         {
             Id = "fine_boots", Name = "Fine Boots", Type = ItemType.Boots,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1, [Skill.Mercantile] = 1, [Skill.Cunning] = 1 },
             Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
         },
         ["riding_boots"] = new()
         {
             Id = "riding_boots", Name = "Riding Boots", Type = ItemType.Boots,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
             ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Small },
             Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
         },

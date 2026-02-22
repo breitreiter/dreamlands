@@ -98,33 +98,45 @@ public static class SkillChecks
     }
 
     /// <summary>
-    /// Get item bonus for a skill check: equipped gear + passive inventory items (tools, consumables).
+    /// Get item bonus for an encounter skill check. Each skill draws from specific gear sources:
+    /// Combat = weapon, Cunning = armor, Negotiation/Bushcraft/Mercantile = two best tools, Luck = none.
     /// </summary>
-    static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
+    internal static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
     {
-        int bonus = 0;
-
-        // Equipped gear
-        foreach (var slot in new[] { state.Equipment.Weapon, state.Equipment.Armor, state.Equipment.Boots })
+        return skill switch
         {
-            if (slot == null) continue;
-            if (balance.Items.TryGetValue(slot.DefId, out var def)
-                && def.SkillModifiers.TryGetValue(skill, out var mod))
-                bonus += mod;
+            Skill.Combat => GetEquippedMod(state.Equipment.Weapon, Skill.Combat, balance),
+            Skill.Cunning => GetEquippedMod(state.Equipment.Armor, Skill.Cunning, balance),
+            Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
+            Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
+            Skill.Mercantile => GetBestToolBonuses(Skill.Mercantile, state, balance),
+            _ => 0, // Luck gets no gear bonus
+        };
+    }
+
+    static int GetEquippedMod(ItemInstance? slot, Skill skill, BalanceData balance)
+    {
+        if (slot == null) return 0;
+        if (balance.Items.TryGetValue(slot.DefId, out var def)
+            && def.SkillModifiers.TryGetValue(skill, out var mod))
+            return mod;
+        return 0;
+    }
+
+    static int GetBestToolBonuses(Skill skill, PlayerState state, BalanceData balance)
+    {
+        int best = 0, secondBest = 0;
+
+        foreach (var item in state.Haversack)
+        {
+            if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
+            if (def.Type != ItemType.Tool) continue;
+            if (!def.SkillModifiers.TryGetValue(skill, out var mod) || mod <= 0) continue;
+
+            if (mod >= best) { secondBest = best; best = mod; }
+            else if (mod > secondBest) { secondBest = mod; }
         }
 
-        // Passive items in Pack and Haversack (non-equippable types only)
-        foreach (var container in new[] { state.Pack, state.Haversack })
-        {
-            foreach (var item in container)
-            {
-                if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
-                if (def.IsPackItem) continue; // equippable items only count when equipped
-                if (def.SkillModifiers.TryGetValue(skill, out var mod))
-                    bonus += mod;
-            }
-        }
-
-        return bonus;
+        return best + secondBest;
     }
 }
