@@ -1,7 +1,7 @@
 namespace Dreamlands.Rules;
 
 /// <summary>Type of equipment item.</summary>
-public enum ItemType { Tool, Consumable, Weapon, Armor, Boots, TradeGood }
+public enum ItemType { Tool, Consumable, Token, Weapon, Armor, Boots, TradeGood }
 
 /// <summary>Weapon class for weapon-type items.</summary>
 public enum WeaponClass { Dagger, Axe, Sword }
@@ -290,6 +290,15 @@ public sealed class ItemDef
             Id = "mudcap_fungus", Name = "Mudcap Fungus", Type = ItemType.Consumable,
             StackSize = 5, Cures = new Dictionary<string, Magnitude> { ["poisoned"] = Magnitude.Medium },
             Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
+        },
+
+        // ── Tokens (dungeon rewards) ──
+
+        ["ivory_comb"] = new()
+        {
+            Id = "ivory_comb", Name = "Ivory Comb", Type = ItemType.Token,
+            Description = "A delicate comb carved from yellowed bone, cold to the touch. Faint scratches on the spine might be letters in a language you don't recognize.",
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
         },
 
         // ── Trade Goods: Plains ──

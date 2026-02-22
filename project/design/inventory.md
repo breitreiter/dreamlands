@@ -36,6 +36,7 @@ The haversack's permanent capacity is 20.
 Items which can be stored in the haversack:
 - food items
 - medicines and consumables
+- tokens — small keepsakes and trinkets found as dungeon rewards. Each provides a +1 bonus to a specific check type (see dice_mechanics.md). Cannot be bought or sold. One token per slot.
 
 Like the pack, the haversack has a fixed number of slots.
 
