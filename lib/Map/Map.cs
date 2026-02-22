@@ -37,7 +37,6 @@ public class Map
     {
         var neighbor = GetNeighbor(node, dir);
         if (neighbor == null || neighbor.IsWater || node.IsWater) return false;
-        if (node.HasRiverOn(dir) && !node.IsCrossableOn(dir)) return false;
         return true;
     }
 
