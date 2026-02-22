@@ -19,6 +19,7 @@ public sealed class ItemDef
     public IReadOnlyDictionary<string, Magnitude> Cures { get; init; } = new Dictionary<string, Magnitude>();
 
     public WeaponClass? WeaponClass { get; init; }
+    public FoodType? FoodType { get; init; }
     public Magnitude? Cost { get; init; }
     public string? Biome { get; init; }
     public int? ShopTier { get; init; }
@@ -213,6 +214,26 @@ public sealed class ItemDef
             Id = "peoples_borderlands", Name = "Peoples of the Borderlands", Type = ItemType.Tool,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+
+        // ── Food ──
+        // One def per FoodType. Display names come from FlavorText.FoodName() at purchase/forage
+        // time and are stored on the ItemInstance. Each food item occupies 1 haversack slot.
+
+        ["food_protein"] = new()
+        {
+            Id = "food_protein", Name = "Protein", Type = ItemType.Consumable,
+            FoodType = Rules.FoodType.Protein, Cost = Magnitude.Trivial,
+        },
+        ["food_grain"] = new()
+        {
+            Id = "food_grain", Name = "Grain", Type = ItemType.Consumable,
+            FoodType = Rules.FoodType.Grain, Cost = Magnitude.Trivial,
+        },
+        ["food_sweets"] = new()
+        {
+            Id = "food_sweets", Name = "Sweets", Type = ItemType.Consumable,
+            FoodType = Rules.FoodType.Sweets, Cost = Magnitude.Trivial,
         },
 
         // ── Medicines ──

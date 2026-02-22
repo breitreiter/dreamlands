@@ -200,8 +200,9 @@ data is placeholder or missing.
       magnitude-based cure/resist, 11 new medicines
 - [x] Define trade goods — 62 concrete trade goods as ItemDefs with biome, tier, cost,
       and flavor descriptions. Old TradeCategory system removed.
-- [ ] Per-food flavor descriptions — `FlavorText.FoodName()` returns `""` for description,
-      hardcoded generic names ignore the biome-specific YAML data in `FlavorNames`
+- [ ] Per-food flavor descriptions — `FoodDescription()` stub returns generic category text.
+      Replace with richer per-name descriptions (e.g. "Sun-dried strips of lean goat, salted
+      and folded into a travel pouch" instead of "A filling portion of meat or fish").
 
 ### Condition Runtime
 All condition resolution (acquisition, cures, drain, stack decay, special effects) happens
