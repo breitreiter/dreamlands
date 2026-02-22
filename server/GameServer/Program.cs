@@ -397,6 +397,18 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             Movement.Execute(session, dir);
 
+            // Advance time by one segment per move
+            if (player.Time < TimePeriod.Night)
+            {
+                player.Time = player.Time + 1;
+            }
+            else
+            {
+                player.Time = TimePeriod.Morning;
+                player.Day++;
+                player.PendingEndOfDay = true;
+            }
+
             // Check for encounter trigger at new location
             var node = session.CurrentNode;
             if (node.Poi?.Kind == PoiKind.Encounter && !session.SkipEncounterTrigger)
@@ -412,7 +424,15 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             session.SkipEncounterTrigger = false;
 
             await store.Save(player);
-            response = BuildExploringResponse(session);
+            if (player.PendingEndOfDay)
+            {
+                session.Mode = SessionMode.Camp;
+                response = BuildCampResponse(session, BuildCampThreats(session));
+            }
+            else
+            {
+                response = BuildExploringResponse(session);
+            }
             break;
         }
 
