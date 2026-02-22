@@ -167,14 +167,12 @@ These must be resolved before end-of-day can be implemented.
 - [ ] **Food in marketplace** — settlements need to stock food. Haversack is the inventory for
       consumables/food (disjoint from Pack for trade/equipment). Market integration needs to
       handle both inventories.
-- [ ] **Condition acquisition & recovery mechanics** — hard numbers needed for: base resist DCs
-      per condition, what skill is checked, how equipment/tool resist modifiers apply, how cure
-      magnitudes translate to stack removal. `conditions_list.md` is authoritative for flavor
-      and structure; this is the mechanical layer on top.
-- [ ] **Skill check formalization** — resist and cure are skill checks like any other, but the
-      exact formula (d20 + skill + modifiers vs DC) needs to be pinned down for all check types:
-      encounter checks, resist checks, cure checks, foraging. Currently only `SkillChecks.Roll()`
-      exists with a basic formula.
+- [x] **Condition acquisition & recovery mechanics** — resist is a standard skill check with
+      gear bonuses from `ResistModifiers` → `ResistBonusMagnitudes`. Cure is deterministic
+      (consume item → heal stacks), negated only by same-night failed resist.
+- [x] **Skill check formalization** — unified formula in `SkillChecks.cs`: encounter checks
+      via `GetItemBonus()`, resist checks via `GetResistBonus()`. Both use the same
+      `Roll()` with nat 1/20, advantage, luck rerolls.
 
 ### Non-Blocking
 - [ ] Implement foraging action — design complete in `project/design/foraging.md`, no code yet

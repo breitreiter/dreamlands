@@ -52,15 +52,15 @@ Executed in this order:
 
 1. **Consume food** — remove selected food items from haversack
 2. **Ambient condition resist checks** — for each biome/tier condition that applies:
-   - Make a resist skill check (mechanics TBD — see blockers)
-   - Equipment/tool resist modifiers apply to the check
+   - Roll resist check: d20 + skill + gear resist bonus vs DC (see `dice_mechanics.md`)
+   - Gear resist bonuses computed from `ResistModifiers` via `ResistBonusMagnitudes` table
    - If failed and condition not already active: apply condition (Succumb text)
    - If failed and condition already active: no stack reset, show HealFailure text
    - If passed: show Resist text (unless auto-pass from gear)
 3. **Apply medicines** — for each medicine the player chose to use:
-   - Make a cure skill check (mechanics TBD — see blockers)
-   - If passed: reduce condition stacks by cure magnitude
-   - If failed: show HealFailure text, stacks unchanged
+   - If the player failed the resist check for this same condition (step 2): cure negated,
+     show HealFailure text, medicine still consumed
+   - Otherwise: deterministic — consume the item, reduce condition stacks by cure magnitude
    - If stacks reach 0: condition removed (HealComplete text)
 4. **Condition drain** — for each active condition:
    - Apply HealthDrain (flat, not per-stack)
@@ -79,9 +79,11 @@ after drain means food and rest are damage mitigation, not damage prevention. Me
 before drain means treating a condition in time reduces tonight's suffering — but you still
 take the hit from whatever conditions remain.
 
-Resist before cure means: if you're already freezing and you fail the resist check again,
-your healing attempt for freezing also fails (HealFailure). You can't outrun the environment
-with medicine alone — you need to leave the mountains or find shelter.
+Resist before cure means: if you're camping in the mountains and you fail the freezing resist
+check, your medicine for freezing is wasted — the environment overwhelmed it. You can't
+outrun the biome with medicine alone; you need to leave or find shelter. But if you passed
+the resist (or the condition came from an encounter, not tonight's biome), the cure works
+automatically — no roll needed.
 
 ## Food & Meals
 
@@ -147,12 +149,15 @@ These are never acquired from ambient checks — only from encounter mechanics:
 
 ## Condition Recovery Rules
 
-From `conditions_list.md` (authoritative source):
+From `conditions_list.md` (authoritative source), updated per `dice_mechanics.md`:
 
 - **Conditions do not improve on their own.** No automatic stack decay.
-- **Consuming a curative heals a stack**, UNLESS the PC fails the resist check again.
-  (i.e., if you're still in the biome that caused the condition and you fail resist,
-  your cure attempt is negated — HealFailure text shown.)
+- **Recovery is deterministic.** Consume the right curative item → reduce stacks by cure
+  magnitude. No skill check for the cure itself.
+- **Exception: failed resist negates cure.** If you failed tonight's resist check for
+  this same condition, the medicine is consumed but does nothing (HealFailure text).
+  This only applies to ambient conditions checked during this end-of-day — encounter-sourced
+  conditions always respond to medicine.
 - **0 stacks = cured.** Condition removed, HealComplete text shown.
 - **Drain is flat per condition**, not per-stack. 1 stack of Injured drains the same as
   3 stacks of Injured.
@@ -165,5 +170,12 @@ These must be resolved before end-of-day can be implemented:
 
 - **Food item definitions** — no food items exist in ItemDef.All yet
 - **Food in marketplace** — settlements need to stock food
-- **Condition resist/cure mechanics** — exact DCs, skills, modifier formulas
-- **Skill check formalization** — unified formula for all check types
+
+### Resolved
+
+- ~~**Condition resist/cure mechanics**~~ — resist is a standard skill check with gear
+  bonuses from `ResistModifiers` → `ResistBonusMagnitudes`. Cure is deterministic (consume
+  item → heal stacks), negated only by a same-night failed resist. See `dice_mechanics.md`.
+- ~~**Skill check formalization**~~ — unified formula in `SkillChecks.cs`: `d20 + skill +
+  gear bonus vs DC`, with nat 1/20, advantage/disadvantage, luck rerolls. Resist bonuses
+  via `GetResistBonus()`, encounter bonuses via `GetItemBonus()`.

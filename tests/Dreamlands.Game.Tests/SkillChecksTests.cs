@@ -169,8 +169,8 @@ public class SkillChecksTests
     public void GetItemBonus_Negotiation_TwoHighestTools()
     {
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("peoples_borderlands", "Peoples of the Borderlands"));
-        state.Haversack.Add(new ItemInstance("writing_kit", "Writing Kit"));
+        state.Pack.Add(new ItemInstance("peoples_borderlands", "Peoples of the Borderlands"));
+        state.Pack.Add(new ItemInstance("writing_kit", "Writing Kit"));
 
         Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // 3 + 1
     }
@@ -179,7 +179,7 @@ public class SkillChecksTests
     public void GetItemBonus_Bushcraft_SingleTool()
     {
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("yoriks_guide", "Yorik's Guide"));
+        state.Pack.Add(new ItemInstance("yoriks_guide", "Yorik's Guide"));
         state.Equipment.Weapon = new ItemInstance("hatchet", "Hatchet"); // Combat only now
 
         Assert.Equal(2, SkillChecks.GetItemBonus(Skill.Bushcraft, state, Balance));
@@ -189,7 +189,7 @@ public class SkillChecksTests
     public void GetItemBonus_Mercantile_UsesTool()
     {
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("writing_kit", "Writing Kit"));
+        state.Pack.Add(new ItemInstance("writing_kit", "Writing Kit"));
 
         Assert.Equal(2, SkillChecks.GetItemBonus(Skill.Mercantile, state, Balance));
     }
@@ -200,7 +200,7 @@ public class SkillChecksTests
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword");
         state.Equipment.Armor = new ItemInstance("chainmail", "Chainmail");
-        state.Haversack.Add(new ItemInstance("writing_kit", "Writing Kit"));
+        state.Pack.Add(new ItemInstance("writing_kit", "Writing Kit"));
 
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Luck, state, Balance));
     }
@@ -215,7 +215,7 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetItemBonus_BootsDontAffectChecks()
+    public void GetItemBonus_BootsDontAffectEncounterChecks()
     {
         var state = Fresh();
         state.Equipment.Boots = new ItemInstance("heavy_work_boots", "Heavy Work Boots");
@@ -225,11 +225,83 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetItemBonus_NonToolHaversackItems_Ignored()
+    public void GetItemBonus_ConsumablesInHaversack_Ignored()
     {
         var state = Fresh();
         state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // consumable, not a tool
 
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance));
+    }
+
+    // ── Token bonus tests ──
+
+    [Fact]
+    public void GetItemBonus_TokenAddsOneToMatchingSkill()
+    {
+        var state = Fresh();
+        state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword"); // +4 combat
+        state.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb")); // +1 negotiation token
+
+        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Combat, state, Balance)); // no token for combat
+        Assert.Equal(1, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // token only
+    }
+
+    [Fact]
+    public void GetItemBonus_TokenStacksWithGear()
+    {
+        var state = Fresh();
+        state.Pack.Add(new ItemInstance("peoples_borderlands", "Peoples of the Borderlands")); // +3 negotiation
+        state.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb")); // +1 negotiation token
+
+        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // 3 + 1
+    }
+
+    // ── Resist bonus tests ──
+
+    [Fact]
+    public void GetResistBonus_Injured_UsesArmor()
+    {
+        var state = Fresh();
+        state.Equipment.Armor = new ItemInstance("leather", "Leather"); // injured = Small → +2
+
+        Assert.Equal(2, SkillChecks.GetResistBonus("injured", state, Balance));
+    }
+
+    [Fact]
+    public void GetResistBonus_Exhausted_UsesBootsPlusPackTool()
+    {
+        var state = Fresh();
+        state.Equipment.Boots = new ItemInstance("heavy_work_boots", "Heavy Work Boots"); // exhausted = Medium → +3
+        state.Pack.Add(new ItemInstance("sleeping_kit", "Sleeping Kit")); // exhausted = Medium → +3
+
+        Assert.Equal(6, SkillChecks.GetResistBonus("exhausted", state, Balance)); // 3 + 3
+    }
+
+    [Fact]
+    public void GetResistBonus_Freezing_UsesTwoBestPackTools()
+    {
+        var state = Fresh();
+        state.Pack.Add(new ItemInstance("heavy_furs", "Heavy Furs")); // freezing = Large → +4
+
+        Assert.Equal(4, SkillChecks.GetResistBonus("freezing", state, Balance));
+    }
+
+    [Fact]
+    public void GetResistBonus_SwampFever_UsesConsumablePlusTool()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("jorgo_root", "Jorgo Root")); // swamp_fever = Small → +2
+        state.Pack.Add(new ItemInstance("insect_netting", "Insect Netting")); // swamp_fever = Medium → +3
+
+        Assert.Equal(5, SkillChecks.GetResistBonus("swamp_fever", state, Balance)); // 2 + 3
+    }
+
+    [Fact]
+    public void GetResistBonus_NoGear_ReturnsZero()
+    {
+        var state = Fresh();
+        Assert.Equal(0, SkillChecks.GetResistBonus("injured", state, Balance));
+        Assert.Equal(0, SkillChecks.GetResistBonus("freezing", state, Balance));
+        Assert.Equal(0, SkillChecks.GetResistBonus("swamp_fever", state, Balance));
     }
 }
