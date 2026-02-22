@@ -12,9 +12,13 @@ All other items have +/-5% jitter from base.
 
 Settlements impose an additional 10% buy price penalty for items from their same biome.
 
+# Food
+
+All settlements stock all three food types (Meat & Fish, Breadstuffs, Sweets). Food has unlimited stock — buying food never depletes the settlement's supply.
+
 # Settlement inventory by size.
 
-Each step up is additive. An output has everything that a camp has, plus more.
+Each step up is additive. An outpost has everything that a camp has, plus more. Food is always included at every tier (see above).
 
 ## Camp
 - 2 in-biome/in-tier trade goods
@@ -42,9 +46,8 @@ Each step up is additive. An output has everything that a camp has, plus more.
 
 # Settlement Restock
 
-Camps, Outputs, and Villages stock one random trade good each day. No settlements restock weapons, armor, or equipment.
-Towns and Cities stock two random trade goods each day.
-If an item would stock past its cap, the added stock is lost.
+Camps, Outposts, and Villages restock one random trade good each day. Towns and Cities restock two random trade goods each day. Food never needs restocking (unlimited). Equipment never restocks.
+If an item would restock past its cap, the added stock is lost.
 
 All settlements in tier 1 start with max possible inventory.
 

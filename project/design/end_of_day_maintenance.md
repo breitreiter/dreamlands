@@ -135,6 +135,7 @@ and narratively coherent (you get sick from sleeping in hazards, not passing thr
 | Condition | Trigger |
 |---|---|
 | Hungry | No food consumed |
+| Exhausted | Every rest (resist check) |
 | Lost | Every rest (resist check) |
 
 ### Encounter-Only Conditions
@@ -145,7 +146,6 @@ These are never acquired from ambient checks — only from encounter mechanics:
 |---|---|
 | Poisoned | Failed encounter combat/trap |
 | Injured | Lost medium+ health in one encounter |
-| Exhausted | Encounter consequence or travel extremes |
 
 ## Condition Recovery Rules
 

@@ -36,6 +36,16 @@ public static class SettlementRunner
         var settlement = session.Player.Settlements[node.Poi.Name];
         Market.Restock(settlement, size, session.Player.Day, session.Balance, session.Rng);
 
+        // Clear conditions that resolve on entering a settlement
+        var cleared = new List<string>();
+        foreach (var (conditionId, _) in session.Player.ActiveConditions)
+        {
+            if (session.Balance.Conditions.TryGetValue(conditionId, out var def) && def.ClearedOnSettlement)
+                cleared.Add(conditionId);
+        }
+        foreach (var id in cleared)
+            session.Player.ActiveConditions.Remove(id);
+
         var services = new List<string> { "market" };
 
         return new SettlementData(node.Poi.Name, tier, biome, size, services);

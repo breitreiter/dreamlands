@@ -12,6 +12,8 @@ public sealed class ConditionDef
     public Magnitude? SpiritsDrain { get; init; }
     public string? SpecialCure { get; init; }
     public string? SpecialEffect { get; init; }
+    /// <summary>If true, this condition is automatically cleared when entering a settlement.</summary>
+    public bool ClearedOnSettlement { get; init; }
     /// <summary>Per-condition resist DC override. Null = use AmbientResistDifficulty.</summary>
     public Difficulty? ResistDifficulty { get; init; }
 
@@ -23,6 +25,7 @@ public sealed class ConditionDef
         {
             Id = "freezing", Name = "Freezing", Biome = "mountains", Tier = "any",
             Stacks = 1, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Small,
+            ClearedOnSettlement = true,
             SpecialCure = "Leave the mountain biome or enter a settlement.",
         },
         ["hungry"] = new()
@@ -34,6 +37,7 @@ public sealed class ConditionDef
         {
             Id = "thirsty", Name = "Thirsty", Biome = "scrub", Tier = "any",
             Stacks = 1, HealthDrain = Magnitude.Small, SpiritsDrain = Magnitude.Small,
+            ClearedOnSettlement = true,
             SpecialCure = "Enter a settlement.",
         },
         ["swamp_fever"] = new()
