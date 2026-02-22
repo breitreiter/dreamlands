@@ -95,6 +95,10 @@ GameSession BuildSession(PlayerState player)
             player.CurrentEncounterId = null;
         }
     }
+    else if (player.PendingEndOfDay)
+    {
+        session.Mode = SessionMode.Camp;
+    }
     else if (player.CurrentSettlementId != null)
     {
         session.Mode = SessionMode.AtSettlement;
@@ -235,6 +239,62 @@ GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome
     Inventory = BuildInventory(session.Player),
 };
 
+GameResponse BuildCampResponse(GameSession session, CampInfo camp) => new()
+{
+    Mode = "camp",
+    Status = BuildStatus(session.Player),
+    Node = BuildNodeInfo(session.CurrentNode, session.Player),
+    Camp = camp,
+    Inventory = BuildInventory(session.Player),
+};
+
+CampInfo BuildCampThreats(GameSession session)
+{
+    var node = session.CurrentNode;
+    var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
+    var tier = node.Region?.Tier ?? 1;
+    var threats = EndOfDay.GetThreats(biome, tier, balance);
+
+    return new CampInfo
+    {
+        Threats = threats.Select(t => new CampThreatInfo
+        {
+            ConditionId = t.Id,
+            Name = t.Name,
+            Warning = t.SpecialCure ?? t.SpecialEffect ?? "",
+        }).ToList(),
+    };
+}
+
+List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
+    events.Select(e => new CampEventInfo
+    {
+        Type = e.GetType().Name,
+        Description = e switch
+        {
+            EndOfDayEvent.FoodConsumed f => f.Balanced
+                ? $"Balanced meal: {string.Join(", ", f.FoodEaten)}"
+                : $"Ate: {string.Join(", ", f.FoodEaten)}",
+            EndOfDayEvent.Starving => "No food! Going hungry.",
+            EndOfDayEvent.HungerReduced h => $"Hunger easing ({h.NewStacks} days remaining)",
+            EndOfDayEvent.HungerCured => "No longer hungry!",
+            EndOfDayEvent.ResistPassed r => $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
+            EndOfDayEvent.ResistFailed r => $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
+            EndOfDayEvent.CureApplied c => c.Remaining > 0
+                ? $"{c.ItemDefId} reduced {c.ConditionId} by {c.StacksRemoved} ({c.Remaining} remaining)"
+                : $"{c.ItemDefId} cured {c.ConditionId}!",
+            EndOfDayEvent.CureNegated c => $"{c.ItemDefId} negated — {c.ConditionId} contracted tonight",
+            EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",
+            EndOfDayEvent.ConditionDrain d => $"{d.ConditionId}: -{d.HealthLost} health, -{d.SpiritsLost} spirits",
+            EndOfDayEvent.SpecialEffect s => $"{s.ConditionId}: {s.Effect}",
+            EndOfDayEvent.RestRecovery r => $"Rest: +{r.HealthGained} health, +{r.SpiritsGained} spirits",
+            EndOfDayEvent.PlayerDied d => d.ConditionId != null
+                ? $"Perished from {d.ConditionId}."
+                : "Perished in the night.",
+            _ => e.ToString() ?? "",
+        },
+    }).ToList();
+
 // ── Endpoints ──
 
 app.MapPost("/api/game/new", async () =>
@@ -272,6 +332,9 @@ app.MapGet("/api/game/{id}", async (string id) =>
             Status = BuildStatus(player),
             Reason = "You have perished in the Dreamlands.",
         });
+
+    if (player.PendingEndOfDay)
+        return Results.Ok(BuildCampResponse(session, BuildCampThreats(session)));
 
     if (player.CurrentSettlementId != null)
     {
@@ -409,6 +472,11 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                         default: // Completed
                             EncounterRunner.EndEncounter(session);
                             await store.Save(player);
+                            if (player.PendingEndOfDay)
+                            {
+                                session.Mode = SessionMode.Camp;
+                                return Results.Ok(BuildCampResponse(session, BuildCampThreats(session)));
+                            }
                             return Results.Ok(BuildExploringResponse(session));
                     }
 
@@ -450,7 +518,16 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
         {
             EncounterRunner.EndEncounter(session);
             await store.Save(player);
-            response = BuildExploringResponse(session);
+
+            if (player.PendingEndOfDay)
+            {
+                session.Mode = SessionMode.Camp;
+                response = BuildCampResponse(session, BuildCampThreats(session));
+            }
+            else
+            {
+                response = BuildExploringResponse(session);
+            }
             break;
         }
 
@@ -485,6 +562,54 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             SettlementRunner.Leave(session);
             await store.Save(player);
             response = BuildExploringResponse(session);
+            break;
+        }
+
+        case "camp_resolve":
+        {
+            if (session.Mode != SessionMode.Camp)
+                return Results.BadRequest(new { error = "Not in camp mode" });
+
+            var campChoices = req.CampChoices ?? new CampResolveRequest();
+            var node = session.CurrentNode;
+            var campBiome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
+            var campTier = node.Region?.Tier ?? 1;
+
+            var campEvents = EndOfDay.Resolve(
+                player, campBiome, campTier,
+                campChoices.Food, campChoices.Medicine,
+                balance, session.Rng);
+
+            var campInfo = BuildCampThreats(session);
+            campInfo = new CampInfo
+            {
+                Threats = campInfo.Threats,
+                Events = FormatCampEvents(campEvents),
+            };
+
+            if (player.Health <= 0)
+            {
+                await store.Save(player);
+                return Results.Ok(new GameResponse
+                {
+                    Mode = "game_over",
+                    Status = BuildStatus(player),
+                    Reason = "You have perished in the Dreamlands.",
+                    Camp = campInfo,
+                });
+            }
+
+            session.Mode = SessionMode.Exploring;
+            await store.Save(player);
+            response = new GameResponse
+            {
+                Mode = "camp_resolved",
+                Status = BuildStatus(player),
+                Node = BuildNodeInfo(node, player),
+                Exits = BuildExits(session),
+                Camp = campInfo,
+                Inventory = BuildInventory(player),
+            };
             break;
         }
 

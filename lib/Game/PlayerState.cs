@@ -41,6 +41,12 @@ public class PlayerState
     public TimePeriod Time { get; set; } = TimePeriod.Morning;
     public int Day { get; set; } = 1;
 
+    // End-of-day flags (set by skip_time, consumed by EndOfDay.Resolve)
+    public bool PendingEndOfDay { get; set; }
+    public bool PendingNoSleep { get; set; }
+    public bool PendingNoMeal { get; set; }
+    public bool PendingNoBiome { get; set; }
+
     // World state
     public HashSet<string> Tags { get; set; } = new();
     public Dictionary<string, int> ActiveConditions { get; set; } = new();

@@ -30,6 +30,9 @@ public class GameResponse
     // Market order results
     public MarketOrderResultInfo? MarketResult { get; init; }
 
+    // Camp
+    public CampInfo? Camp { get; init; }
+
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
 }
@@ -157,6 +160,25 @@ public class EquipmentInfo
 
 // Request DTOs
 
+public class CampInfo
+{
+    public List<CampThreatInfo> Threats { get; init; } = [];
+    public List<CampEventInfo> Events { get; init; } = [];
+}
+
+public class CampThreatInfo
+{
+    public string ConditionId { get; init; } = "";
+    public string Name { get; init; } = "";
+    public string Warning { get; init; } = "";
+}
+
+public class CampEventInfo
+{
+    public string Type { get; init; } = "";
+    public string Description { get; init; } = "";
+}
+
 public class ActionRequest
 {
     public string Action { get; set; } = "";
@@ -165,6 +187,13 @@ public class ActionRequest
     public string? ItemId { get; set; }
     public int? Quantity { get; set; }
     public MarketOrderRequest? Order { get; set; }
+    public CampResolveRequest? CampChoices { get; set; }
+}
+
+public class CampResolveRequest
+{
+    public List<string> Food { get; set; } = [];
+    public List<string> Medicine { get; set; } = [];
 }
 
 public class MarketOrderRequest

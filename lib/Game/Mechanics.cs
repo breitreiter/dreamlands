@@ -363,9 +363,18 @@ public static class Mechanics
         var target = TimePeriods.FromScriptName(args[0]);
         if (target == null) return new MechanicResult.TimeAdvanced(state.Time, state.Day);
 
+        // Parse flags (args after the time period)
+        var flags = args.Skip(1).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
         // Advance forward — if target is before or equal to current, wrap to next day
         if (target.Value <= state.Time)
+        {
             state.Day++;
+            state.PendingEndOfDay = true;
+            if (flags.Contains("no_sleep")) state.PendingNoSleep = true;
+            if (flags.Contains("no_meal")) state.PendingNoMeal = true;
+            if (flags.Contains("no_biome")) state.PendingNoBiome = true;
+        }
 
         state.Time = target.Value;
         return new MechanicResult.TimeAdvanced(state.Time, state.Day);

@@ -28,6 +28,9 @@ public sealed class CharacterBalance
     public int MinSkillLevel { get; init; } = -2;
     public int MaxSkillLevel { get; init; } = 4;
 
+    // Ambient resist check difficulty (single DC for all conditions)
+    public Difficulty AmbientResistDifficulty { get; init; } = Difficulty.Medium;
+
     // End-of-day rest recovery (before meal bonuses)
     public int BaseRestHealth { get; init; } = 1;
     public int BaseRestSpirits { get; init; } = 1;

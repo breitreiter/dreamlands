@@ -98,6 +98,51 @@ public static class SkillChecks
     }
 
     /// <summary>
+    /// Roll a resist check for an ambient condition. Uses resist bonuses instead of skill bonuses,
+    /// and maps each condition to its resist skill (if any).
+    /// </summary>
+    public static SkillCheckResult RollResist(
+        string conditionId, Difficulty difficulty, PlayerState state, BalanceData balance, Random rng)
+    {
+        var dc = difficulty.Target();
+
+        // Map condition to skill (some conditions are gear-only, no skill bonus)
+        var skill = conditionId switch
+        {
+            "freezing" or "thirsty" or "lost" => (Skill?)Skill.Bushcraft,
+            "poisoned" => Skill.Bushcraft,
+            "injured" => Skill.Combat,
+            _ => null, // swamp_fever, road_flux, irradiated, exhausted — gear only
+        };
+
+        var skillLevel = skill != null ? state.Skills.GetValueOrDefault(skill.Value) : 0;
+        var resistBonus = GetResistBonus(conditionId, state, balance);
+        var modifier = skillLevel + resistBonus;
+        var rollSkill = skill ?? Skill.Luck; // placeholder for result record
+
+        var rollMode = RollMode.Normal;
+        if (HasSpiritsDisadvantage(state.Spirits, balance))
+        {
+            rollMode = RollMode.Disadvantage;
+        }
+
+        var result = RollOnce(dc, modifier, skillLevel, rollSkill, rollMode, rng);
+
+        // Luck reroll on failure
+        if (!result.Passed)
+        {
+            var luckLevel = state.Skills.GetValueOrDefault(Skill.Luck);
+            if (TryLuckReroll(luckLevel, balance, rng))
+            {
+                var reroll = RollOnce(dc, modifier, skillLevel, rollSkill, rollMode, rng);
+                return reroll with { WasLuckyReroll = true };
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Get item bonus for an encounter skill check. Each skill draws from specific gear sources
     /// (per dice_mechanics.md): Combat = weapon + token, Cunning = armor + token,
     /// Negotiation/Bushcraft/Mercantile = two best tools + token, Luck = none.
@@ -136,7 +181,7 @@ public static class SkillChecks
             "poison" => GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance),
             "exhausted" => GetEquippedResist(state.Equipment.Boots, conditionId, magnitudes, balance)
                          + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
-            "freezing" or "thirsty" => GetBestPackResist(conditionId, magnitudes, state, balance, 2),
+            "freezing" or "thirsty" or "lost" => GetBestPackResist(conditionId, magnitudes, state, balance, 2),
             "swamp_fever" or "road_flux" or "irradiated" =>
                 GetBestConsumedResist(conditionId, magnitudes, state, balance)
                 + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
