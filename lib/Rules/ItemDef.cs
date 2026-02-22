@@ -25,8 +25,8 @@ public sealed class ItemDef
     public IReadOnlyDictionary<Skill, int> SkillModifiers { get; init; } = new Dictionary<Skill, int>();
     public IReadOnlyDictionary<string, Magnitude> ResistModifiers { get; init; } = new Dictionary<string, Magnitude>();
 
-    /// <summary>True for items that go in Pack (equippable gear). False for consumables/tools that go in Haversack.</summary>
-    public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.TradeGood;
+    /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
+    public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.TradeGood;
 
     internal static IReadOnlyDictionary<string, ItemDef> All { get; } = BuildAll();
 

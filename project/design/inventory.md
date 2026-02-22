@@ -9,9 +9,11 @@ This represents some sort of load-bearing pack carried on the back, either by st
 The pack's starting capacity is 3.
 
 The pack has a few inventory slots which hold large objects. This includes:
-- Survival equipment, like cartography kits and bedrolls
 - Weapons and armor
+- Tools and survival equipment (cartography kits, bedrolls, canteens, etc.)
 - Trade goods
+
+Tools and trade goods compete for the same limited pack slots. This forces a core decision: carry tools for a comfortable, well-prepared journey, or fill those slots with trade goods for a profitable one.
 
 The pack has a numeric number of slots. Everything is one slot. All items are scaled to be approximately the same level of bulk or weight or encumbrance. Slots are basically an abstraction for "equally inconvenient to pack and carry"
 
@@ -33,14 +35,13 @@ The haversack's permanent capacity is 20.
 
 Items which can be stored in the haversack:
 - food items
-- small mementos and quest items
-- documents
+- medicines and consumables
 
 Like the pack, the haversack has a fixed number of slots.
 
-A serving of food is one slot. A small trinket is one slot. A document is one slot. When buying food, you buy quantities pre-measured to fit into exactly one slot.
+A serving of food is one slot. A medicine is one slot (consumables may stack). When buying food, you buy quantities pre-measured to fit into exactly one slot.
 
-The haversack cannot carry any equippable items.
+The haversack cannot carry any equippable items or tools.
 
 Items in the haversack which apply bonuses provide them from the haversack.
 
