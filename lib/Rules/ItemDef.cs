@@ -222,12 +222,12 @@ public sealed class ItemDef
 
         ["food_protein"] = new()
         {
-            Id = "food_protein", Name = "Protein", Type = ItemType.Consumable,
+            Id = "food_protein", Name = "Meat & Fish", Type = ItemType.Consumable,
             FoodType = Rules.FoodType.Protein, Cost = Magnitude.Trivial,
         },
         ["food_grain"] = new()
         {
-            Id = "food_grain", Name = "Grain", Type = ItemType.Consumable,
+            Id = "food_grain", Name = "Breadstuffs", Type = ItemType.Consumable,
             FoodType = Rules.FoodType.Grain, Cost = Magnitude.Trivial,
         },
         ["food_sweets"] = new()
