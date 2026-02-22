@@ -88,8 +88,8 @@ public class MechanicsTests
     public void IncreaseSkill_CappedAtMaxLevel()
     {
         var state = Fresh();
-        state.Skills[Skill.Combat] = 9;
-        var results = Mechanics.Apply(["increase_skill combat huge"], state, Balance, Rng);
+        state.Skills[Skill.Combat] = 3;
+        var results = Mechanics.Apply(["increase_skill combat 5"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.SkillChanged>(results[0]);
         Assert.Equal(Balance.Character.MaxSkillLevel, state.Skills[Skill.Combat]);
@@ -100,8 +100,8 @@ public class MechanicsTests
     {
         var state = Fresh();
         state.Skills[Skill.Cunning] = 1;
-        Mechanics.Apply(["decrease_skill cunning huge"], state, Balance, Rng);
-        Assert.Equal(0, state.Skills[Skill.Cunning]);
+        Mechanics.Apply(["decrease_skill cunning 5"], state, Balance, Rng);
+        Assert.Equal(Balance.Character.MinSkillLevel, state.Skills[Skill.Cunning]);
     }
 
     [Fact]

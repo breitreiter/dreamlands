@@ -17,8 +17,8 @@ public class SkillChecksTests
         var result = SkillChecks.Roll(Skill.Combat, Difficulty.Easy, state, Balance, rng);
 
         Assert.Equal(Skill.Combat, result.Skill);
-        Assert.Equal(10, result.Target); // Easy DC
-        Assert.InRange(result.Rolled, 1, 20);
+        Assert.Equal(8, result.Target); // Easy DC
+        Assert.InRange(result.NaturalRoll, 1, 20);
         Assert.Equal(state.Skills[Skill.Combat], result.SkillLevel);
     }
 
@@ -27,72 +27,119 @@ public class SkillChecksTests
     {
         var state = Fresh();
         state.Skills[Skill.Combat] = 10;
-        // d20 (1-20) + 10 >= 5 always passes
+        // d20 (1-20) + 10 >= 5 always passes (except nat 1)
+        // Use a seed that won't roll natural 1
         var rng = new Random(1);
         var result = SkillChecks.Roll(Skill.Combat, Difficulty.Trivial, state, Balance, rng);
         Assert.True(result.Passed);
     }
 
     [Fact]
-    public void Roll_ZeroSkill_HeroicDifficulty_UsuallyFails()
+    public void Roll_ZeroSkill_EpicDifficulty_UsuallyFails()
     {
         var state = Fresh();
         state.Skills[Skill.Cunning] = 0;
-        state.Spirits = 20; // no penalty
+        state.Spirits = 20; // no disadvantage
 
-        // DC 30, need natural 20+10 (modifier 0) — impossible without high roll+modifier
-        // Try many seeds, most should fail
+        // DC 22, modifier 0 — only nat 20 passes (and nat 1 always fails)
         int failCount = 0;
         for (int seed = 0; seed < 50; seed++)
         {
             var rng = new Random(seed);
-            var result = SkillChecks.Roll(Skill.Cunning, Difficulty.Heroic, state, Balance, rng);
+            var result = SkillChecks.Roll(Skill.Cunning, Difficulty.Epic, state, Balance, rng);
             if (!result.Passed) failCount++;
         }
-        Assert.True(failCount > 40, "Expected most heroic checks with skill 0 to fail");
+        Assert.True(failCount > 40, "Expected most epic checks with skill 0 to fail");
     }
 
     [Fact]
-    public void GetSpiritsPenalty_FullSpirits_NoPenalty()
-    {
-        Assert.Equal(0, SkillChecks.GetSpiritsPenalty(20, Balance));
-    }
-
-    [Fact]
-    public void GetSpiritsPenalty_AboveAllThresholds_NoPenalty()
-    {
-        Assert.Equal(0, SkillChecks.GetSpiritsPenalty(16, Balance));
-    }
-
-    [Fact]
-    public void GetSpiritsPenalty_AtFirstThreshold_ReturnsPenalty()
-    {
-        // First threshold is AtOrBelow=15, Penalty=-1
-        Assert.Equal(-1, SkillChecks.GetSpiritsPenalty(15, Balance));
-    }
-
-    [Fact]
-    public void GetSpiritsPenalty_AtZero_ReturnsPenalty()
-    {
-        var penalty = SkillChecks.GetSpiritsPenalty(0, Balance);
-        Assert.True(penalty < 0, "Expected negative penalty at 0 spirits");
-    }
-
-    [Fact]
-    public void Roll_WithSpiritsPenalty_AffectsModifier()
+    public void Natural1_AlwaysFails()
     {
         var state = Fresh();
-        state.Skills[Skill.Combat] = 5;
-        state.Spirits = 20; // no penalty
+        state.Skills[Skill.Combat] = 10; // huge modifier
+        state.Spirits = 20;
 
-        var rng1 = new Random(42);
-        var noPenalty = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng1);
+        // Find a seed that rolls natural 1
+        for (int seed = 0; seed < 1000; seed++)
+        {
+            var rng = new Random(seed);
+            var result = SkillChecks.Roll(Skill.Combat, Difficulty.Trivial, state, Balance, rng);
+            if (result.NaturalRoll == 1)
+            {
+                Assert.False(result.Passed, "Natural 1 should always fail");
+                return;
+            }
+        }
+        Assert.Fail("Could not find a seed that rolls natural 1");
+    }
 
-        state.Spirits = 10; // penalty
-        var rng2 = new Random(42); // same seed = same d20 roll
-        var withPenalty = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng2);
+    [Fact]
+    public void Natural20_AlwaysPasses()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Combat] = -2; // lowest modifier
+        state.Spirits = 20;
 
-        Assert.Equal(noPenalty.Rolled, withPenalty.Rolled); // same die roll
-        Assert.True(withPenalty.Modifier < noPenalty.Modifier, "Spirits penalty should reduce modifier");
+        // Find a seed that rolls natural 20
+        for (int seed = 0; seed < 1000; seed++)
+        {
+            var rng = new Random(seed);
+            var result = SkillChecks.Roll(Skill.Combat, Difficulty.Epic, state, Balance, rng);
+            if (result.NaturalRoll == 20)
+            {
+                Assert.True(result.Passed, "Natural 20 should always pass");
+                return;
+            }
+        }
+        Assert.Fail("Could not find a seed that rolls natural 20");
+    }
+
+    [Fact]
+    public void HasSpiritsDisadvantage_AboveThreshold_False()
+    {
+        Assert.False(SkillChecks.HasSpiritsDisadvantage(20, Balance));
+        Assert.False(SkillChecks.HasSpiritsDisadvantage(11, Balance));
+    }
+
+    [Fact]
+    public void HasSpiritsDisadvantage_AtOrBelowThreshold_True()
+    {
+        Assert.True(SkillChecks.HasSpiritsDisadvantage(10, Balance));
+        Assert.True(SkillChecks.HasSpiritsDisadvantage(0, Balance));
+    }
+
+    [Fact]
+    public void Roll_LowSpirits_ImposesDisadvantage()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Combat] = 0;
+        state.Spirits = 5; // below threshold
+
+        var rng = new Random(42);
+        var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng);
+        Assert.Equal(RollMode.Disadvantage, result.RollMode);
+    }
+
+    [Fact]
+    public void Roll_Advantage_CancelledBySpiritsDisadvantage()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Combat] = 0;
+        state.Spirits = 5; // below threshold → disadvantage
+
+        var rng = new Random(42);
+        var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng,
+            rollMode: RollMode.Advantage);
+        Assert.Equal(RollMode.Normal, result.RollMode);
+    }
+
+    [Fact]
+    public void Roll_RollModeDefaultsToNormal()
+    {
+        var state = Fresh();
+        state.Spirits = 20;
+        var rng = new Random(42);
+        var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng);
+        Assert.Equal(RollMode.Normal, result.RollMode);
     }
 }

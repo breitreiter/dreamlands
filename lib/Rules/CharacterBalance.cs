@@ -20,13 +20,10 @@ public sealed class CharacterBalance
     public int StartingPackSlots { get; init; } = 3;
     public int StartingHaversackSlots { get; init; } = 20;
 
-    public IReadOnlyList<SpiritsThreshold> SpiritsThresholds { get; init; } =
-    [
-        new(15, -1),
-        new(10, -2),
-        new(5, -4),
-        new(0, -10),
-    ];
+    public int SpiritDisadvantageThreshold { get; init; } = 10;
+
+    /// <summary>Luck reroll trigger chance by skill level (index = level, 0% for ≤0).</summary>
+    public IReadOnlyList<int> LuckRerollChance { get; init; } = [0, 5, 10, 15, 15];
 
     public int MinSkillLevel { get; init; } = -2;
     public int MaxSkillLevel { get; init; } = 4;
@@ -48,6 +45,3 @@ public sealed class CharacterBalance
         [Magnitude.Huge] = 200,
     };
 }
-
-/// <summary>Spirits penalty threshold: if spirits &lt;= AtOrBelow, apply Penalty to checks.</summary>
-public readonly record struct SpiritsThreshold(int AtOrBelow, int Penalty);

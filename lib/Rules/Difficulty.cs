@@ -8,7 +8,7 @@ public enum Difficulty
     Medium,
     Hard,
     VeryHard,
-    Heroic
+    Epic
 }
 
 /// <summary>Script and display metadata for a <see cref="Difficulty"/> tier.</summary>
@@ -21,11 +21,11 @@ public static class Difficulties
     public static IReadOnlyList<DifficultyInfo> All { get; } = new DifficultyInfo[]
     {
         new(Difficulty.Trivial,  "trivial",   "Trivial",   5),
-        new(Difficulty.Easy,     "easy",      "Easy",      10),
-        new(Difficulty.Medium,   "medium",    "Medium",    15),
-        new(Difficulty.Hard,     "hard",      "Hard",      20),
-        new(Difficulty.VeryHard, "very_hard", "Very Hard", 25),
-        new(Difficulty.Heroic,   "heroic",    "Heroic",    30),
+        new(Difficulty.Easy,     "easy",      "Easy",      8),
+        new(Difficulty.Medium,   "medium",    "Medium",    12),
+        new(Difficulty.Hard,     "hard",      "Hard",      15),
+        new(Difficulty.VeryHard, "very_hard", "Very Hard", 18),
+        new(Difficulty.Epic,     "epic",      "Epic",      22),
     };
 
     private static readonly Dictionary<string, Difficulty> ByScriptName =

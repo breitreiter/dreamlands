@@ -18,7 +18,7 @@ public class BalanceDataTests
         Assert.Equal(20, c.StartingHealth);
         Assert.Equal(20, c.StartingSpirits);
         Assert.Equal(50, c.StartingGold);
-        Assert.Equal(10, c.MaxSkillLevel);
+        Assert.Equal(4, c.MaxSkillLevel);
     }
 
     [Fact]
@@ -105,11 +105,11 @@ public class BalanceDataTests
 
     [Theory]
     [InlineData("trivial", Difficulty.Trivial, 5)]
-    [InlineData("easy", Difficulty.Easy, 10)]
-    [InlineData("medium", Difficulty.Medium, 15)]
-    [InlineData("hard", Difficulty.Hard, 20)]
-    [InlineData("very_hard", Difficulty.VeryHard, 25)]
-    [InlineData("heroic", Difficulty.Heroic, 30)]
+    [InlineData("easy", Difficulty.Easy, 8)]
+    [InlineData("medium", Difficulty.Medium, 12)]
+    [InlineData("hard", Difficulty.Hard, 15)]
+    [InlineData("very_hard", Difficulty.VeryHard, 18)]
+    [InlineData("epic", Difficulty.Epic, 22)]
     public void Difficulties_FromScriptName_RoundTrips(string name, Difficulty expected, int dc)
     {
         var difficulty = Difficulties.FromScriptName(name);
