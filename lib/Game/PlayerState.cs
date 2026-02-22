@@ -47,6 +47,8 @@ public class PlayerState
     public HashSet<string> CompletedDungeons { get; set; } = new();
     public HashSet<string> UsedEncounterIds { get; set; } = new();
     public HashSet<long> VisitedNodes { get; set; } = new();
+    public Dictionary<string, SettlementState> Settlements { get; set; } = new();
+    public HashSet<string> ClaimedFeaturedBuys { get; set; } = new();
 
     /// <summary>Encode (x, y) into a single long for VisitedNodes.</summary>
     public static long EncodePosition(int x, int y) => ((long)x << 32) | (uint)y;
