@@ -22,3 +22,4 @@ worlds/*/map.png
 worlds/*/assets/
 worlds/*/encounters/
 saves/
+.session.json
