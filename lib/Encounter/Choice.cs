@@ -25,7 +25,7 @@ public sealed class Choice
 /// <summary>One branch in a conditional: a condition string and its outcome.</summary>
 public sealed class ConditionalBranch
 {
-    /// <summary>Condition expression, e.g. "check stealth medium" or "has rusted_key".</summary>
+    /// <summary>Condition expression, e.g. "check cunning medium" or "has rusted_key".</summary>
     public string Condition { get; init; } = "";
 
     public OutcomePart Outcome { get; init; } = new();

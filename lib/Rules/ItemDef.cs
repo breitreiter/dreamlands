@@ -121,14 +121,14 @@ public sealed class ItemDef
         ["chainmail"] = new()
         {
             Id = "chainmail", Name = "Chainmail", Type = ItemType.Armor,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Luck] = 1, [Skill.Stealth] = -3 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Luck] = 1, [Skill.Cunning] = -3 },
             ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Medium },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
         },
         ["scale_armor"] = new()
         {
             Id = "scale_armor", Name = "Scale Armor", Type = ItemType.Armor,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Stealth] = -3 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = -3 },
             ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Medium },
             Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
         },
@@ -138,7 +138,7 @@ public sealed class ItemDef
         ["fine_boots"] = new()
         {
             Id = "fine_boots", Name = "Fine Boots", Type = ItemType.Boots,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1, [Skill.Mercantile] = 1, [Skill.Stealth] = 1 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1, [Skill.Mercantile] = 1, [Skill.Cunning] = 1 },
             Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
         },
         ["riding_boots"] = new()

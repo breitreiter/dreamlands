@@ -29,7 +29,7 @@ choices:
   }
 
 * Steal it = Wait until he's distracted, then take the kit and run
-  @if check stealth medium {
+  @if check cunning medium {
     You ask about the lamp oil, pointing to a specific flask, making him turn to retrieve it from deeper in the bundle. Your hand moves before thought catches up. The hide is in your grasp and you're already three strides down the raised path before he shouts behind you. The path is narrow but you know how to run it, feet finding the solid center while his voice rises in anger and disbelief.
 
     You run until you're out of breath, then hide in the reeds. You wait what seems like an eternity, until the only sound left is the incessant croak of the frogs. You emerge from your hiding place, the kit still in your grasp.

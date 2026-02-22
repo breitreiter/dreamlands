@@ -5,8 +5,7 @@ SKILLS                          DIFFICULTY        DC
   combat       fighting            trivial         5
   negotiation  persuasion/social   easy           10
   bushcraft    survival/travel     medium         15
-  stealth      stealth/evasion     hard           20
-  perception   awareness           very_hard      25
+  cunning      trickery/awareness  hard           20
   luck         fortune             heroic         30
   mercantile   trade/appraisal
 

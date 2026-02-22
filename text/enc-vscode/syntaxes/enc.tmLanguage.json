@@ -41,7 +41,7 @@
       }
     },
     "if-check-block": {
-      "match": "(@if)\\s+(check)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
+      "match": "(@if)\\s+(check)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
       "captures": {
         "1": { "name": "keyword.control.if.enc" },
         "2": { "name": "keyword.other.condition.enc" },
@@ -69,7 +69,7 @@
       }
     },
     "elif-check-block": {
-      "match": "(\\})?\\s*(@elif)\\s+(check)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
+      "match": "(\\})?\\s*(@elif)\\s+(check)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
       "captures": {
         "1": { "name": "punctuation.definition.block.close.enc" },
         "2": { "name": "keyword.control.elif.enc" },
@@ -150,7 +150,7 @@
       }
     },
     "verb-skill-magnitude": {
-      "match": "(\\+)(increase_skill|decrease_skill)\\s+(combat|negotiation|bushcraft|stealth|perception|luck|mercantile)\\s+(trivial|small|medium|large|huge)\\s*$",
+      "match": "(\\+)(increase_skill|decrease_skill)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(trivial|small|medium|large|huge)\\s*$",
       "captures": {
         "1": { "name": "punctuation.definition.verb.enc" },
         "2": { "name": "support.function.verb.enc" },

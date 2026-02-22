@@ -93,7 +93,7 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
 * Pick the lock
   @if has rusted_key {
     The key turns with a click...
-  } @elif check stealth medium {
+  } @elif check cunning medium {
     You work the tumblers...
   } @else {
     The lock defeats you...
@@ -202,7 +202,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 
 | Type | Valid values |
 |------|-------------|
-| **skill** | `combat`, `negotiation`, `bushcraft`, `stealth`, `perception`, `luck`, `mercantile` |
+| **skill** | `combat`, `negotiation`, `bushcraft`, `cunning`, `luck`, `mercantile` |
 | **difficulty** | `trivial`, `easy`, `medium`, `hard`, `very_hard`, `heroic` |
 | **magnitude** | `trivial`, `small`, `medium`, `large`, `huge` |
 | **time period** | `morning`, `afternoon`, `evening`, `night` |

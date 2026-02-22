@@ -174,7 +174,7 @@ public class ChoicesTests
                 [
                     new ConditionalBranch
                     {
-                        Condition = "check stealth medium",
+                        Condition = "check cunning medium",
                         Outcome = new OutcomePart { Text = "You slip by unnoticed." }
                     }
                 ],
@@ -183,11 +183,11 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Stealth] = 5;
+        state.Skills[Skill.Cunning] = 5;
         var resolved = Choices.Resolve(choice, state, Balance, new Random(42));
 
         // Either branch should have a check result
         Assert.NotNull(resolved.CheckResult);
-        Assert.Equal(Skill.Stealth, resolved.CheckResult!.Skill);
+        Assert.Equal(Skill.Cunning, resolved.CheckResult!.Skill);
     }
 }

@@ -99,9 +99,9 @@ public class MechanicsTests
     public void DecreaseSkill_FloorsAtZero()
     {
         var state = Fresh();
-        state.Skills[Skill.Stealth] = 1;
-        Mechanics.Apply(["decrease_skill stealth huge"], state, Balance, Rng);
-        Assert.Equal(0, state.Skills[Skill.Stealth]);
+        state.Skills[Skill.Cunning] = 1;
+        Mechanics.Apply(["decrease_skill cunning huge"], state, Balance, Rng);
+        Assert.Equal(0, state.Skills[Skill.Cunning]);
     }
 
     [Fact]

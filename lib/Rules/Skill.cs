@@ -6,8 +6,7 @@ public enum Skill
     Combat,
     Negotiation,
     Bushcraft,
-    Stealth,
-    Perception,
+    Cunning,
     Luck,
     Mercantile
 }
@@ -24,8 +23,7 @@ public static class Skills
         new(Skill.Combat,      "combat",      "Combat",      "Fighting prowess in close encounters"),
         new(Skill.Negotiation, "negotiation", "Negotiation", "Persuasion, deception, and social cunning"),
         new(Skill.Bushcraft,   "bushcraft",   "Bushcraft",   "Wilderness survival and travel know-how"),
-        new(Skill.Stealth,     "stealth",     "Stealth",     "Moving unseen and avoiding trouble"),
-        new(Skill.Perception,  "perception",  "Perception",  "Spotting dangers and hidden opportunities"),
+        new(Skill.Cunning,     "cunning",     "Cunning",     "Trickery, awareness, and staying one step ahead"),
         new(Skill.Luck,        "luck",        "Luck",        "A slight nudge on the odds"),
         new(Skill.Mercantile,  "mercantile",  "Mercantile",  "An eye for value and a tongue for prices"),
     };

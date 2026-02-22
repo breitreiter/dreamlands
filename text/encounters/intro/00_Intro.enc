@@ -16,7 +16,7 @@ choices:
   REVIEW: The fat bastard bled more than you'd expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but their reach doesn't extend to Aldgate's hungry shores. You've heard it is a land of blood and gold and shadow, and you were born for all three.
   +increase_skill combat huge
   +decrease_skill negotiation huge
-  +increase_skill stealth huge
+  +increase_skill cunning huge
   +decrease_skill mercantile huge
 
 * Birthright = My mother once wore this, but it is now mine
@@ -43,6 +43,5 @@ choices:
 * A Commission = The Guild sent me
   The ring is yours. Not stolen, not inherited, not won, earned. Twelve years in the Guild's cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You've bled for every league of parchment, fought off things in uncharted places that don't appear on any map because you decided they shouldn't. When the Guild needed someone to survey a new island they chose you. The commission came with the signet, the authority to requisition supplies and act in the Guild's name. You intend to draw the definitive map of this land. If you happen to turn a profit along the way, well. You are Guild, after all.
   +increase_skill combat huge
-  +increase_skill perception huge
   +decrease_skill negotiation huge
-  +decrease_skill stealth huge
+  +increase_skill cunning huge

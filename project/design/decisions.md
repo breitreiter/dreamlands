@@ -153,8 +153,7 @@
   4. Negotiation (social encounters/trading)
   5. Survival (general wilderness competence)
   6. Tracking (following trails, navigation)
-  7. Stealth (avoiding encounters)
-  8. Perception (spotting dangers/opportunities)
+  7. Cunning (trickery, awareness, staying one step ahead)
   9. Lore (identifying things, knowledge checks)
   10. Trading (better prices at markets)
 

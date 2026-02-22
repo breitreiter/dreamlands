@@ -86,8 +86,7 @@ public class BalanceDataTests
     [InlineData("combat", Skill.Combat)]
     [InlineData("negotiation", Skill.Negotiation)]
     [InlineData("bushcraft", Skill.Bushcraft)]
-    [InlineData("stealth", Skill.Stealth)]
-    [InlineData("perception", Skill.Perception)]
+    [InlineData("cunning", Skill.Cunning)]
     [InlineData("luck", Skill.Luck)]
     [InlineData("mercantile", Skill.Mercantile)]
     public void Skills_FromScriptName_RoundTrips(string name, Skill expected)

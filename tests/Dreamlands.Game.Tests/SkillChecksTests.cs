@@ -37,7 +37,7 @@ public class SkillChecksTests
     public void Roll_ZeroSkill_HeroicDifficulty_UsuallyFails()
     {
         var state = Fresh();
-        state.Skills[Skill.Stealth] = 0;
+        state.Skills[Skill.Cunning] = 0;
         state.Spirits = 20; // no penalty
 
         // DC 30, need natural 20+10 (modifier 0) — impossible without high roll+modifier
@@ -46,7 +46,7 @@ public class SkillChecksTests
         for (int seed = 0; seed < 50; seed++)
         {
             var rng = new Random(seed);
-            var result = SkillChecks.Roll(Skill.Stealth, Difficulty.Heroic, state, Balance, rng);
+            var result = SkillChecks.Roll(Skill.Cunning, Difficulty.Heroic, state, Balance, rng);
             if (!result.Passed) failCount++;
         }
         Assert.True(failCount > 40, "Expected most heroic checks with skill 0 to fail");

@@ -92,7 +92,7 @@ Weapons, armor, boots, and tools all take up one pack slot each.
 ## Chainmail
 - +Resist injury medium
 - +Luck trivial
-- -Stealth medium
+- -Cunning medium
 - -Resist Exhaustion small
 - Plains 2
 - Cost large
@@ -100,7 +100,7 @@ Weapons, armor, boots, and tools all take up one pack slot each.
 
 ## Scale Armor
 - +Resist injury medium
-- -Stealth medium
+- -Cunning medium
 - -Resist Exhaustion medium
 - Scrub 2
 - Cost medium
@@ -111,7 +111,7 @@ Weapons, armor, boots, and tools all take up one pack slot each.
 ## Fine Boots
 - +Negotiation trivial
 - +Mercantile trivial
-- +Stealth trivial
+- +Cunning trivial
 - Plains 1
 - Cost large
 - Exquisite footwear, more at home in court than the dusty road
