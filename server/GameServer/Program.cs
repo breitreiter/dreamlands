@@ -47,7 +47,7 @@ var mapPath = ParseArg(args, "--map")
     ?? Path.Combine(repoRoot, "worlds/production/map.json");
 var bundlePath = ParseArg(args, "--bundle")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_BUNDLE")
-    ?? "/tmp/encounters.bundle.json";
+    ?? Path.Combine(repoRoot, "worlds/production/encounters.bundle.json");
 
 Map map;
 EncounterBundle bundle;
