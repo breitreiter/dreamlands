@@ -246,6 +246,32 @@ public static class Market
         return new MarketResult(false, "Item not found in inventory");
     }
 
+    public static MarketOrderResult ApplyOrder(PlayerState player, MarketOrder order,
+        string biome, SettlementState settlement, BalanceData balance)
+    {
+        var results = new List<MarketLineResult>();
+
+        // Sells first — frees inventory space + adds gold
+        foreach (var sell in order.Sells)
+        {
+            var result = Sell(player, sell.ItemDefId, biome, settlement, balance);
+            results.Add(new MarketLineResult("sell", sell.ItemDefId, result.Success, result.Message));
+        }
+
+        // Then buys
+        foreach (var buy in order.Buys)
+        {
+            for (int i = 0; i < buy.Quantity; i++)
+            {
+                var result = Buy(player, buy.ItemId, settlement, balance);
+                results.Add(new MarketLineResult("buy", buy.ItemId, result.Success, result.Message));
+                if (!result.Success) break; // stop buying this item on first failure
+            }
+        }
+
+        return new MarketOrderResult(results.All(r => r.Success), results);
+    }
+
     static void AddRandomItems(List<string> catalog, List<ItemDef> pool, int count, Random rng, List<string>? exclude = null)
     {
         var available = exclude != null ? pool.Where(i => !exclude.Contains(i.Id)).ToList() : pool.ToList();
@@ -261,3 +287,9 @@ public static class Market
 public record StockEntry(ItemDef Item, int Price, int Quantity, bool IsFeaturedSell);
 
 public record MarketResult(bool Success, string Message);
+
+public record MarketOrder(List<BuyLine> Buys, List<SellLine> Sells);
+public record BuyLine(string ItemId, int Quantity);
+public record SellLine(string ItemDefId);
+public record MarketOrderResult(bool Success, List<MarketLineResult> Results);
+public record MarketLineResult(string Action, string ItemId, bool Success, string Message);

@@ -102,6 +102,7 @@ export interface GameResponse {
   reason?: string;
   settlement?: SettlementInfo;
   inventory?: InventoryInfo;
+  marketResult?: MarketOrderResult;
 }
 
 export interface NewGameResponse {
@@ -128,9 +129,12 @@ export interface MarketStockResponse {
   sellPrices: Record<string, number>;
 }
 
-export interface MarketActionResponse {
+export interface MarketOrder {
+  buys: { itemId: string; quantity: number }[];
+  sells: { itemDefId: string }[];
+}
+
+export interface MarketOrderResult {
   success: boolean;
-  message: string;
-  status: StatusInfo;
-  inventory: InventoryInfo;
+  results: { action: string; itemId: string; success: boolean; message: string }[];
 }

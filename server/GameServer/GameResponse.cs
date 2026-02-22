@@ -27,8 +27,25 @@ public class GameResponse
     // Settlement
     public SettlementInfo? Settlement { get; init; }
 
+    // Market order results
+    public MarketOrderResultInfo? MarketResult { get; init; }
+
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
+}
+
+public class MarketOrderResultInfo
+{
+    public bool Success { get; init; }
+    public List<MarketLineResultInfo> Results { get; init; } = [];
+}
+
+public class MarketLineResultInfo
+{
+    public string Action { get; init; } = "";
+    public string ItemId { get; init; } = "";
+    public bool Success { get; init; }
+    public string Message { get; init; } = "";
 }
 
 public class StatusInfo
@@ -147,4 +164,22 @@ public class ActionRequest
     public int? ChoiceIndex { get; set; }
     public string? ItemId { get; set; }
     public int? Quantity { get; set; }
+    public MarketOrderRequest? Order { get; set; }
+}
+
+public class MarketOrderRequest
+{
+    public List<MarketBuyLine> Buys { get; set; } = [];
+    public List<MarketSellLine> Sells { get; set; } = [];
+}
+
+public class MarketBuyLine
+{
+    public string ItemId { get; set; } = "";
+    public int Quantity { get; set; } = 1;
+}
+
+public class MarketSellLine
+{
+    public string ItemDefId { get; set; } = "";
 }

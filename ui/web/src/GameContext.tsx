@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import type { GameResponse } from "./api/types";
+import type { GameResponse, MarketOrder } from "./api/types";
 import * as api from "./api/client";
 
 interface GameState {
@@ -17,8 +17,8 @@ interface GameContextValue extends GameState {
     choiceIndex?: number;
     itemId?: string;
     quantity?: number;
+    order?: MarketOrder;
   }) => Promise<GameResponse | null>;
-  setResponse: (r: GameResponse) => void;
   clearError: () => void;
 }
 
@@ -58,6 +58,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       choiceIndex?: number;
       itemId?: string;
       quantity?: number;
+      order?: MarketOrder;
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));
@@ -77,17 +78,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [state.gameId]
   );
 
-  const setResponse = useCallback((r: GameResponse) => {
-    setState((s) => ({ ...s, response: r }));
-  }, []);
-
   const clearError = useCallback(() => {
     setState((s) => ({ ...s, error: null }));
   }, []);
 
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, doAction, setResponse, clearError }}
+      value={{ ...state, startNewGame, doAction, clearError }}
     >
       {children}
     </GameContext.Provider>

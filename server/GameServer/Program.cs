@@ -487,37 +487,13 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             break;
         }
 
-        case "buy":
+        case "market_order":
         {
             if (session.Mode != SessionMode.AtSettlement)
                 return Results.BadRequest(new { error = "Not at a settlement" });
 
-            if (string.IsNullOrEmpty(req.ItemId))
-                return Results.BadRequest(new { error = "itemId required" });
-
-            var settlementId = player.CurrentSettlementId!;
-            if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
-                return Results.BadRequest(new { error = "Settlement not initialized" });
-
-            var result = Market.Buy(player, req.ItemId, settlementState, balance);
-            await store.Save(player);
-
-            return Results.Ok(new
-            {
-                success = result.Success,
-                message = result.Message,
-                status = BuildStatus(player),
-                inventory = BuildInventory(player),
-            });
-        }
-
-        case "sell":
-        {
-            if (session.Mode != SessionMode.AtSettlement)
-                return Results.BadRequest(new { error = "Not at a settlement" });
-
-            if (string.IsNullOrEmpty(req.ItemId))
-                return Results.BadRequest(new { error = "itemId required" });
+            if (req.Order == null)
+                return Results.BadRequest(new { error = "order required" });
 
             var settlementId = player.CurrentSettlementId!;
             if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
@@ -525,16 +501,40 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             var sNode = session.CurrentNode;
             var sBiome = sNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-            var result = Market.Sell(player, req.ItemId, sBiome, settlementState, balance);
+
+            var order = new MarketOrder(
+                req.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList(),
+                req.Order.Sells.Select(s => new SellLine(s.ItemDefId)).ToList());
+
+            var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance);
             await store.Save(player);
 
-            return Results.Ok(new
+            var tier = sNode.Region?.Tier ?? 1;
+            response = new GameResponse
             {
-                success = result.Success,
-                message = result.Message,
-                status = BuildStatus(player),
-                inventory = BuildInventory(player),
-            });
+                Mode = "at_settlement",
+                Status = BuildStatus(player),
+                Settlement = new SettlementInfo
+                {
+                    Name = settlementId,
+                    Tier = tier,
+                    Services = ["market"],
+                },
+                Node = BuildNodeInfo(sNode, player),
+                Inventory = BuildInventory(player),
+                MarketResult = new MarketOrderResultInfo
+                {
+                    Success = result.Success,
+                    Results = result.Results.Select(r => new MarketLineResultInfo
+                    {
+                        Action = r.Action,
+                        ItemId = r.ItemId,
+                        Success = r.Success,
+                        Message = r.Message,
+                    }).ToList(),
+                },
+            };
+            break;
         }
 
         default:
