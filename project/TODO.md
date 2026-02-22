@@ -179,6 +179,19 @@ These must be resolved before end-of-day can be implemented.
 ### Non-Blocking
 - [ ] Implement foraging action — design complete in `project/design/foraging.md`, no code yet
 
+### Gear Gaps
+Analysis in `project/design/gear_gap_analysis.md`. Not blocking gameplay loop but needed for
+balanced endgame progression.
+
+- [ ] **Condition resist bonus path** — `ResistModifiers` are `Magnitude` enums (Small/Medium/Large),
+      not integers. No code converts them into numeric check bonuses. Either add Magnitude→int
+      conversion or give items `SkillModifiers` for resist checks. Affects all 6 condition resist types.
+- [ ] **+5 weapon** — best weapons are +4 (bardiche, scimitar, arming_sword). Need one +5 tier 3 / dungeon reward.
+- [ ] **Cunning armor** — no armor has a positive Cunning modifier. Need armor progression toward +5.
+- [ ] **Negotiation tool** — need a +2 tool to pair with peoples_borderlands (+3) for +5 total.
+- [ ] **Bushcraft tool** — need a +3 tool to pair with yoriks_guide (+2) for +5 total.
+- [ ] **Mercantile tool** — need a +3 tool to pair with writing_kit (+2) for +5 total.
+
 ### Data Authoring
 These are design/content tasks that block codegen — the code scaffolding exists but the
 data is placeholder or missing.
