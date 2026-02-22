@@ -11,8 +11,12 @@ public static class Market
         string name, string biome, int tier, SettlementSize size,
         PlayerState player, BalanceData balance, Random rng)
     {
-        var state = new SettlementState();
+        var state = new SettlementState { Biome = biome };
         var catalog = new List<string>();
+
+        // Food — always stocked at every settlement
+        foreach (var foodId in new[] { "food_protein", "food_grain", "food_sweets" })
+            catalog.Add(foodId);
 
         var inBiomeTierGoods = balance.Items.Values
             .Where(i => i.Type == ItemType.TradeGood && i.Biome == biome && i.ShopTier != null && i.ShopTier <= tier)
@@ -85,8 +89,12 @@ public static class Market
         foreach (var itemId in catalog)
         {
             var def = balance.Items[itemId];
-            // Equipment gets exactly 1, never more
-            state.Stock[itemId] = def.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots ? 1 : initialQty;
+            state.Stock[itemId] = def switch
+            {
+                { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
+                { FoodType: not null } => maxStock, // food always well-stocked
+                _ => initialQty,
+            };
         }
 
         state.LastRestockDay = player.Day;
@@ -101,12 +109,13 @@ public static class Market
         int maxStock = balance.Trade.MaxStock[size];
         int perDay = balance.Trade.RestockPerDay[size];
 
-        // Only trade goods restock, never equipment
-        var tradeGoodIds = settlement.Stock.Keys
-            .Where(id => balance.Items.TryGetValue(id, out var def) && def.Type == ItemType.TradeGood)
+        // Trade goods and food restock, never equipment
+        var restockIds = settlement.Stock.Keys
+            .Where(id => balance.Items.TryGetValue(id, out var def)
+                         && (def.Type == ItemType.TradeGood || def.FoodType != null))
             .ToList();
 
-        if (tradeGoodIds.Count == 0)
+        if (restockIds.Count == 0)
         {
             settlement.LastRestockDay = currentDay;
             return;
@@ -116,7 +125,7 @@ public static class Market
         {
             for (int i = 0; i < perDay; i++)
             {
-                var itemId = tradeGoodIds[rng.Next(tradeGoodIds.Count)];
+                var itemId = restockIds[rng.Next(restockIds.Count)];
                 if (settlement.Stock[itemId] < maxStock)
                     settlement.Stock[itemId]++;
             }
@@ -164,7 +173,8 @@ public static class Market
         return Math.Max(1, (int)Math.Round(price * discount));
     }
 
-    public static MarketResult Buy(PlayerState player, string itemId, SettlementState settlement, BalanceData balance)
+    public static MarketResult Buy(PlayerState player, string itemId, SettlementState settlement,
+        BalanceData balance, Random rng, Func<FoodType, string, Random, ItemInstance>? createFood = null)
     {
         if (!balance.Items.TryGetValue(itemId, out var def))
             return new MarketResult(false, $"Unknown item: {itemId}");
@@ -181,7 +191,9 @@ public static class Market
         if (player.Gold < price)
             return new MarketResult(false, "Not enough gold");
 
-        var instance = new ItemInstance(def.Id, def.Name);
+        var instance = def.FoodType is FoodType ft && createFood != null
+            ? createFood(ft, settlement.Biome, rng)
+            : new ItemInstance(def.Id, def.Name) { FoodType = def.FoodType };
 
         if (def.IsPackItem)
         {
@@ -247,7 +259,8 @@ public static class Market
     }
 
     public static MarketOrderResult ApplyOrder(PlayerState player, MarketOrder order,
-        string biome, SettlementState settlement, BalanceData balance)
+        string biome, SettlementState settlement, BalanceData balance, Random rng,
+        Func<FoodType, string, Random, ItemInstance>? createFood = null)
     {
         var results = new List<MarketLineResult>();
 
@@ -263,7 +276,7 @@ public static class Market
         {
             for (int i = 0; i < buy.Quantity; i++)
             {
-                var result = Buy(player, buy.ItemId, settlement, balance);
+                var result = Buy(player, buy.ItemId, settlement, balance, rng, createFood);
                 results.Add(new MarketLineResult("buy", buy.ItemId, result.Success, result.Message));
                 if (!result.Success) break; // stop buying this item on first failure
             }

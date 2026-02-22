@@ -506,7 +506,8 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 req.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList(),
                 req.Order.Sells.Select(s => new SellLine(s.ItemDefId)).ToList());
 
-            var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance);
+            var mRng = new Random();
+            var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance, mRng);
             await store.Save(player);
 
             var tier = sNode.Region?.Tier ?? 1;

@@ -166,13 +166,14 @@ From `conditions_list.md` (authoritative source), updated per `dice_mechanics.md
 
 ## Blockers
 
-These must be resolved before end-of-day can be implemented:
-
-- **Food item definitions** — no food items exist in ItemDef.All yet
-- **Food in marketplace** — settlements need to stock food
+All blockers resolved. End-of-day is ready for implementation.
 
 ### Resolved
 
+- ~~**Food item definitions**~~ — 3 food ItemDefs (protein/grain/sweets), biome-aware flavor
+  names via `FlavorText.FoodName()`.
+- ~~**Food in marketplace**~~ — all settlements stock all 3 food types at max stock, food
+  restocks alongside trade goods.
 - ~~**Condition resist/cure mechanics**~~ — resist is a standard skill check with gear
   bonuses from `ResistModifiers` → `ResistBonusMagnitudes`. Cure is deterministic (consume
   item → heal stacks), negated only by a same-night failed resist. See `dice_mechanics.md`.

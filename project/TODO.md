@@ -161,12 +161,11 @@ is not yet built.
 ### End-of-Day Blockers
 These must be resolved before end-of-day can be implemented.
 
-- [ ] **Food item definitions** — FoodType enum and ItemInstance.FoodType exist but zero food
-      items are defined in ItemDef.All. Need concrete protein/grain/sweets items per biome/tier
-      with names, costs, stack sizes. Design in `project/design/haversack.md`.
-- [ ] **Food in marketplace** — settlements need to stock food. Haversack is the inventory for
-      consumables/food (disjoint from Pack for trade/equipment). Market integration needs to
-      handle both inventories.
+- [x] **Food item definitions** — 3 food ItemDefs (food_protein, food_grain, food_sweets),
+      trivial cost, FoodType on ItemDef, biome-aware flavor names via FlavorText.FoodName().
+- [x] **Food in marketplace** — all settlements stock all 3 food types, always at max stock,
+      food restocks alongside trade goods. Buy creates ItemInstance with FoodType set;
+      callers can pass createFood delegate for flavor-named instances.
 - [x] **Condition acquisition & recovery mechanics** — resist is a standard skill check with
       gear bonuses from `ResistModifiers` → `ResistBonusMagnitudes`. Cure is deterministic
       (consume item → heal stacks), negated only by same-night failed resist.
