@@ -171,6 +171,19 @@ data is placeholder or missing.
 - [ ] Per-food flavor descriptions — `FlavorText.FoodName()` returns `""` for description,
       hardcoded generic names ignore the biome-specific YAML data in `FlavorNames`
 
+### Condition Runtime
+`ConditionDef` entries define drains, cures, and special effects as data, but no game code
+applies them yet. All `SpecialCure` and `SpecialEffect` strings are just design notes.
+
+- [ ] Health/spirits drain — apply `HealthDrain`/`SpiritsDrain` per tick (end-of-day or per-move)
+- [ ] Stack decay — conditions with `Stacks > 1` should tick down over time
+- [ ] Cure: leave biome — `freezing` clears when player leaves mountains
+- [ ] Cure: enter settlement — `thirsty` clears on settlement entry
+- [ ] Cure: rest at inn — `exhausted` clears on inn rest
+- [ ] Cure: medicine items — consumables with `Cures` list should remove matching conditions
+- [ ] Special effect: `lost` — erase discovered map tile routes
+- [ ] Condition acquisition — when/how conditions get applied (biome entry, failed checks, etc.)
+
 ### Other Mechanics
 - [x] Save/load — GameServer with file-based GameStore, PlayerState persisted as JSON
 
