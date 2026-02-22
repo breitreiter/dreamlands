@@ -54,7 +54,7 @@ public sealed class CharacterBalance
 
     public IReadOnlyDictionary<Magnitude, int> CostMagnitudes { get; init; } = new Dictionary<Magnitude, int>
     {
-        [Magnitude.Trivial] = 5,
+        [Magnitude.Trivial] = 3,
         [Magnitude.Small] = 15,
         [Magnitude.Medium] = 40,
         [Magnitude.Large] = 80,

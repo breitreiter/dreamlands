@@ -165,8 +165,9 @@ public static class EndOfDay
             if (noBiome && threat.Biome != "none")
                 continue;
 
+            var dc = threat.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
             var check = SkillChecks.RollResist(
-                threat.Id, balance.Character.AmbientResistDifficulty,
+                threat.Id, dc,
                 state, balance, rng);
 
             if (check.Passed)

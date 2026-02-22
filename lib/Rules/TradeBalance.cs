@@ -10,6 +10,7 @@ public sealed class TradeBalance
     public double PriceJitter { get; init; } = 0.05;
     public double SameBiomeBuyPenalty { get; init; } = 0.10;
     public double MercantileDiscountPerPoint { get; init; } = 0.02;
+    public int CrossBiomeFlatBonus { get; init; } = 10;
 
     public IReadOnlyDictionary<SettlementSize, int> MaxStock { get; init; } = new Dictionary<SettlementSize, int>
     {

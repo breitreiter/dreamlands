@@ -150,6 +150,7 @@ is not yet built.
 - [ ] Town — Guild storage
 - [ ] Town — Healer
 - [ ] Town — Inn
+- [ ] Stock medicine in biome-appropriate markets (medicines may not spawn yet)
 - [x] Gathering action
       /home/joseph/repos/dreamlands/project/design/foraging.md
 
@@ -217,6 +218,7 @@ See `project/design/gaps.md` for the full list. Resolved items noted inline.
 - [x] Combat model — single skill check, same as any other check
 - [x] Skill advancement — no use-based advancement, gear only
 - [x] Character creation — flat start, initial backgrounder encounter sets skills based on character background
+- [ ] Wire up player creation encounter chain — replace random skill spread in NewGame() with actual intro encounter. Should advise player to buy food before setting out.
 - [x] Encounter frequency — baked into mapgen as placeholders. First visit pulls from bespoke .enc
       pool. Subsequent visits have ~10% chance to trigger a recurring encounter.
 

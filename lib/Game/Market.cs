@@ -153,16 +153,19 @@ public static class Market
         if (basePrice <= 0) return 0;
 
         double modifier = 1.0;
+        int flat = 0;
 
         // Featured buy premium
         if (item.Id == settlement.FeaturedBuyItem)
             modifier += balance.Trade.FeaturedBuyPremium;
 
-        // Same-biome penalty
-        if (item.Biome == settlementBiome)
+        // Cross-biome flat bonus / same-biome penalty
+        if (item.Biome != settlementBiome)
+            flat += balance.Trade.CrossBiomeFlatBonus;
+        else
             modifier -= balance.Trade.SameBiomeBuyPenalty;
 
-        return Math.Max(1, (int)Math.Round(basePrice * modifier));
+        return Math.Max(1, (int)Math.Round(basePrice * modifier) + flat);
     }
 
     public static int GetBuyFromSettlementPrice(string itemId, SettlementState settlement, BalanceData balance, int mercantileSkill)

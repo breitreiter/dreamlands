@@ -79,9 +79,26 @@ public class PlayerState
             HaversackCapacity = balance.Character.StartingHaversackSlots,
         };
 
-        // All skills start at 0 (untrained) — the intro encounter sets real values
-        foreach (var skillInfo in Rules.Skills.All)
-            state.Skills[skillInfo.Skill] = 0;
+        // Temporary random skill spread until the player creation encounter chain is wired up
+        var rng = new Random(seed);
+        var pool = Rules.Skills.All.Select(s => s.Skill).ToList();
+
+        // 1 random skill at +4
+        var idx = rng.Next(pool.Count);
+        state.Skills[pool[idx]] = 4;
+        pool.RemoveAt(idx);
+
+        // 2 random skills at +2
+        for (int i = 0; i < 2; i++)
+        {
+            idx = rng.Next(pool.Count);
+            state.Skills[pool[idx]] = 2;
+            pool.RemoveAt(idx);
+        }
+
+        // Remaining skills at 0
+        foreach (var skill in pool)
+            state.Skills[skill] = 0;
 
         return state;
     }

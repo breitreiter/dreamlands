@@ -12,6 +12,8 @@ public sealed class ConditionDef
     public Magnitude? SpiritsDrain { get; init; }
     public string? SpecialCure { get; init; }
     public string? SpecialEffect { get; init; }
+    /// <summary>Per-condition resist DC override. Null = use AmbientResistDifficulty.</summary>
+    public Difficulty? ResistDifficulty { get; init; }
 
     internal static IReadOnlyDictionary<string, ConditionDef> All { get; } = BuildAll();
 
@@ -43,6 +45,7 @@ public sealed class ConditionDef
         {
             Id = "road_flux", Name = "Road Flux", Biome = "none", Tier = "none",
             Stacks = 2, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
+            ResistDifficulty = Difficulty.Easy,
         },
         ["irradiated"] = new()
         {
