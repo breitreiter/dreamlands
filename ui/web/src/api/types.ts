@@ -115,6 +115,8 @@ export interface MarketItem {
   type: string;
   buyPrice: number;
   sellPrice: number;
+  quantity: number;
+  isFeaturedSell: boolean;
   skillModifiers: Record<string, number>;
   resistModifiers: Record<string, number>;
   description: string;

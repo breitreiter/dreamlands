@@ -28,17 +28,22 @@ export default function MarketScreen({
       .finally(() => setLoadingStock(false));
   }, [gameId]);
 
+  async function refreshStock() {
+    if (!gameId) return;
+    try {
+      const res = await api.getMarketStock(gameId);
+      setStock(res.stock);
+    } catch {}
+  }
+
   async function handleBuy(itemId: string) {
     const result = await doAction({ action: "buy", itemId, quantity: 1 });
     if (result) {
-      setMessage(
-        `Bought item` // The response will update the state
-      );
-      // Refresh status from response
+      setMessage("Bought item");
+      await refreshStock();
     } else {
       setMessage("Purchase failed");
     }
-    // Clear message after a bit
     setTimeout(() => setMessage(null), 2000);
   }
 
@@ -46,6 +51,7 @@ export default function MarketScreen({
     const result = await doAction({ action: "sell", itemId: itemDefId });
     if (result) {
       setMessage("Sold item");
+      await refreshStock();
     } else {
       setMessage("Sale failed");
     }
@@ -74,6 +80,7 @@ export default function MarketScreen({
                   <tr className="text-left text-xs text-stone-400 border-b border-stone-700">
                     <th className="p-2">Item</th>
                     <th className="p-2">Type</th>
+                    <th className="p-2 text-right">Qty</th>
                     <th className="p-2 text-right">Price</th>
                     <th className="p-2"></th>
                   </tr>
@@ -95,13 +102,16 @@ export default function MarketScreen({
                       <td className="p-2 text-stone-400 capitalize">
                         {item.type}
                       </td>
+                      <td className="p-2 text-right text-stone-300">
+                        {item.quantity}
+                      </td>
                       <td className="p-2 text-right text-amber-400">
                         {item.buyPrice}g
                       </td>
                       <td className="p-2">
                         <button
                           onClick={() => handleBuy(item.id)}
-                          disabled={loading || status.gold < item.buyPrice}
+                          disabled={loading || status.gold < item.buyPrice || item.quantity <= 0}
                           className="px-3 py-1 bg-amber-700 hover:bg-amber-600
                                      disabled:bg-stone-700 disabled:text-stone-500
                                      text-xs transition-colors"
