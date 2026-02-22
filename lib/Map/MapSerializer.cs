@@ -54,7 +54,6 @@ public static class MapSerializer
         {
             var node = map[n.X, n.Y];
             node.Terrain = Enum.Parse<Terrain>(n.Terrain);
-            node.Connections = ParseDirections(n.Connections);
             node.RiverSides = ParseDirections(n.Rivers);
             node.Crossings = ParseDirections(n.Crossings);
             node.Description = n.Description;
@@ -147,9 +146,8 @@ public static class MapSerializer
             RegionId = node.Region?.Id,
             Description = node.Description,
             Poi = node.Poi != null ? ToDto(node.Poi) : null,
-            Connections = ToConnectionList(node.Connections),
-            Rivers = node.HasRiver ? ToConnectionList(node.RiverSides) : null,
-            Crossings = node.Crossings != Direction.None ? ToConnectionList(node.Crossings) : null,
+            Rivers = node.HasRiver ? ToDirectionList(node.RiverSides) : null,
+            Crossings = node.Crossings != Direction.None ? ToDirectionList(node.Crossings) : null,
             IsLakeAdjacent = node.IsLakeAdjacent ? true : null,
             DistanceFromCity = node.DistanceFromCity < int.MaxValue ? node.DistanceFromCity : null
         };
@@ -168,7 +166,7 @@ public static class MapSerializer
         };
     }
 
-    private static List<string>? ToConnectionList(Direction dir)
+    private static List<string>? ToDirectionList(Direction dir)
     {
         if (dir == Direction.None)
             return null;
@@ -209,7 +207,6 @@ public static class MapSerializer
         public int? RegionId { get; init; }
         public string? Description { get; init; }
         public PoiDto? Poi { get; init; }
-        public List<string>? Connections { get; init; }
         public List<string>? Rivers { get; init; }
         public List<string>? Crossings { get; init; }
         public bool? IsLakeAdjacent { get; init; }

@@ -19,7 +19,7 @@ public static class DungeonPlacer
     public static void PlaceDungeons(Map map, List<DungeonEntry> roster, Random rng)
     {
         var traversable = map.AllNodes()
-            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue && n.Y > 0)
+            .Where(n => !n.IsWater && n.DistanceFromCity < int.MaxValue && n.Y > 0)
             .ToDictionary(n => (n.X, n.Y));
 
         if (traversable.Count == 0)
@@ -49,7 +49,7 @@ public static class DungeonPlacer
             var scored = new List<(Node node, int score)>();
             foreach (var node in candidates)
             {
-                int connections = CountConnections(node);
+                int connections = map.LandNeighbors(node).Count();
                 // Strongly prefer dead ends, then low connectivity
                 int score = connections switch
                 {
@@ -60,7 +60,7 @@ public static class DungeonPlacer
                 };
 
                 // Penalize proximity to already-placed dungeons
-                int minDist = MinBfsDistance(node, placed, traversable, MinSeparation);
+                int minDist = MinBfsDistance(map, node, placed, traversable, MinSeparation);
                 if (minDist < MinSeparation)
                     score -= (MinSeparation - minDist) * 15;
 
@@ -79,15 +79,7 @@ public static class DungeonPlacer
         }
     }
 
-    private static int CountConnections(Node node)
-    {
-        int count = 0;
-        foreach (var dir in DirectionExtensions.Each())
-            if (node.HasConnection(dir)) count++;
-        return count;
-    }
-
-    private static int MinBfsDistance(Node start, List<Node> targets, Dictionary<(int, int), Node> traversable, int maxDist)
+    private static int MinBfsDistance(Map map, Node start, List<Node> targets, Dictionary<(int, int), Node> traversable, int maxDist)
     {
         if (targets.Count == 0)
             return int.MaxValue;
@@ -109,13 +101,9 @@ public static class DungeonPlacer
             if (dist >= maxDist || dist >= closest)
                 continue;
 
-            foreach (var dir in DirectionExtensions.Each())
+            foreach (var (dir, neighbor) in map.LandNeighbors(node))
             {
-                if (!node.HasConnection(dir))
-                    continue;
-
-                var neighbor = SettlementPlacer.GetConnectedNeighbor(node, dir, traversable);
-                if (neighbor != null && !visited.ContainsKey(neighbor))
+                if (traversable.ContainsKey((neighbor.X, neighbor.Y)) && !visited.ContainsKey(neighbor))
                 {
                     visited[neighbor] = dist + 1;
                     queue.Enqueue(neighbor);

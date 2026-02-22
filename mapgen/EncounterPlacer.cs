@@ -9,7 +9,7 @@ public static class EncounterPlacer
     public static void Place(Map map)
     {
         var traversable = map.AllNodes()
-            .Where(n => !n.IsWater && n.Connections != Direction.None && n.DistanceFromCity < int.MaxValue && n.Y > 0)
+            .Where(n => !n.IsWater && n.DistanceFromCity < int.MaxValue && n.Y > 0)
             .ToDictionary(n => (n.X, n.Y));
 
         if (traversable.Count == 0)
@@ -73,13 +73,9 @@ public static class EncounterPlacer
                     if (dist >= MinSpacing)
                         continue;
 
-                    foreach (var dir in DirectionExtensions.Each())
+                    foreach (var (dir, neighbor) in map.LandNeighbors(node))
                     {
-                        if (!node.HasConnection(dir))
-                            continue;
-
-                        var neighbor = SettlementPlacer.GetConnectedNeighbor(node, dir, traversable);
-                        if (neighbor == null || !distance.ContainsKey(neighbor))
+                        if (!distance.ContainsKey(neighbor))
                             continue;
 
                         int newDist = dist + 1;

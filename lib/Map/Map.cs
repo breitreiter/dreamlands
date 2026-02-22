@@ -33,37 +33,21 @@ public class Map
         return InBounds(nx, ny) ? _nodes[nx, ny] : null;
     }
 
-    public void Connect(Node a, Node b)
+    public bool CanTraverse(Node node, Direction dir)
     {
-        var dir = GetDirection(a, b);
-        if (dir == Direction.None) return;
-
-        a.AddConnection(dir);
-        b.AddConnection(dir.Opposite());
+        var neighbor = GetNeighbor(node, dir);
+        if (neighbor == null || neighbor.IsWater || node.IsWater) return false;
+        if (node.HasRiverOn(dir) && !node.IsCrossableOn(dir)) return false;
+        return true;
     }
 
-    public void Disconnect(Node a, Node b)
+    public IEnumerable<(Direction Dir, Node Neighbor)> LandNeighbors(Node node)
     {
-        var dir = GetDirection(a, b);
-        if (dir == Direction.None) return;
-
-        a.RemoveConnection(dir);
-        b.RemoveConnection(dir.Opposite());
-    }
-
-    private static Direction GetDirection(Node from, Node to)
-    {
-        int dx = to.X - from.X;
-        int dy = to.Y - from.Y;
-
-        return (dx, dy) switch
+        foreach (var dir in DirectionExtensions.Each())
         {
-            (0, -1) => Direction.North,
-            (0, 1) => Direction.South,
-            (1, 0) => Direction.East,
-            (-1, 0) => Direction.West,
-            _ => Direction.None
-        };
+            if (CanTraverse(node, dir))
+                yield return (dir, GetNeighbor(node, dir)!);
+        }
     }
 
     public IEnumerable<Node> AllNodes()

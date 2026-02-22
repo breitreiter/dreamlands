@@ -6,26 +6,21 @@ public static class Movement
 {
     public static List<(Direction Dir, Dreamlands.Map.Node Target)> GetExits(GameSession session)
     {
+        var map = session.Map;
         var node = session.CurrentNode;
         var exits = new List<(Direction, Dreamlands.Map.Node)>();
-        foreach (var dir in DirectionExtensions.Each())
-        {
-            if (node.HasConnection(dir))
-            {
-                var neighbor = session.Map.GetNeighbor(node, dir);
-                if (neighbor != null)
-                    exits.Add((dir, neighbor));
-            }
-        }
+        foreach (var (dir, neighbor) in map.LandNeighbors(node))
+            exits.Add((dir, neighbor));
         return exits;
     }
 
     public static Dreamlands.Map.Node? TryMove(GameSession session, Direction dir)
     {
+        var map = session.Map;
         var node = session.CurrentNode;
-        if (!node.HasConnection(dir))
+        if (!map.CanTraverse(node, dir))
             return null;
-        return session.Map.GetNeighbor(node, dir);
+        return map.GetNeighbor(node, dir);
     }
 
     public static Dreamlands.Map.Node Execute(GameSession session, Direction dir)

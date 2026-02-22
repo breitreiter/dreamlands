@@ -32,9 +32,7 @@ public static class ContentPopulator
                 continue;
 
             var tier = node.Region?.Tier ?? 1;
-            int connections = 0;
-            foreach (var dir in DirectionExtensions.Each())
-                if (node.HasConnection(dir)) connections++;
+            int connections = map.LandNeighbors(node).Count();
             bool high = connections >= 4;
 
             node.Poi.Size = tier switch

@@ -21,17 +21,8 @@ public static class MapGenerator
         Console.Error.WriteLine("  Regions...");
         ComputeRegions(map);
 
-        Console.Error.WriteLine("  Connections...");
-        GenerateConnections(map, rng);
-
-        Console.Error.WriteLine("  Bridging...");
-        BridgeDisconnectedComponents(map);
-
         Console.Error.WriteLine("  Rivers...");
         GenerateRivers(map, rng);
-
-        Console.Error.WriteLine("  Bridging...");
-        BridgeDisconnectedComponents(map);
 
         return (map, actualSeed);
     }
@@ -239,134 +230,6 @@ public static class MapGenerator
         }
     }
 
-    private static void GenerateConnections(Map map, Random rng)
-    {
-        for (int y = 0; y < map.Height; y++)
-        {
-            for (int x = 0; x < map.Width; x++)
-            {
-                var node = map[x, y];
-
-                if (node.IsWater)
-                    continue;
-
-                if (x < map.Width - 1)
-                {
-                    var east = map[x + 1, y];
-                    if (!east.IsWater)
-                    {
-                        float prob = GetEdgeProbability(node.Terrain, east.Terrain);
-                        if (rng.NextDouble() < prob)
-                            map.Connect(node, east);
-                    }
-                }
-
-                if (y < map.Height - 1)
-                {
-                    var south = map[x, y + 1];
-                    if (!south.IsWater)
-                    {
-                        float prob = GetEdgeProbability(node.Terrain, south.Terrain);
-                        if (rng.NextDouble() < prob)
-                            map.Connect(node, south);
-                    }
-                }
-            }
-        }
-    }
-
-    private static float GetEdgeProbability(Terrain a, Terrain b)
-    {
-        return MathF.Min(GetTerrainConnectivity(a), GetTerrainConnectivity(b));
-    }
-
-    private static float GetTerrainConnectivity(Terrain terrain) => terrain switch
-    {
-        Terrain.Plains => 0.85f,
-        Terrain.Forest => 0.60f,
-        Terrain.Scrub => 0.60f,
-        Terrain.Swamp => 0.35f,
-        Terrain.Mountains => 0.25f,
-        _ => 0.5f
-    };
-
-    private static void BridgeDisconnectedComponents(Map map)
-    {
-        while (true)
-        {
-            var landNodes = map.AllNodes().Where(n => !n.IsWater).ToList();
-            if (landNodes.Count == 0) return;
-
-            var componentId = new Dictionary<Node, int>();
-            var components = new List<List<Node>>();
-
-            foreach (var start in landNodes)
-            {
-                if (componentId.ContainsKey(start)) continue;
-
-                var component = new List<Node>();
-                var queue = new Queue<Node>();
-                queue.Enqueue(start);
-                componentId[start] = components.Count;
-
-                while (queue.Count > 0)
-                {
-                    var node = queue.Dequeue();
-                    component.Add(node);
-
-                    foreach (var dir in DirectionExtensions.Each())
-                    {
-                        if (!node.HasConnection(dir)) continue;
-
-                        var neighbor = map.GetNeighbor(node, dir);
-                        if (neighbor == null || componentId.ContainsKey(neighbor)) continue;
-
-                        componentId[neighbor] = components.Count;
-                        queue.Enqueue(neighbor);
-                    }
-                }
-
-                components.Add(component);
-            }
-
-            var multiNodeComponents = components.Where(c => c.Count > 1).ToList();
-            if (multiNodeComponents.Count <= 1) return;
-
-            var largest = multiNodeComponents.OrderByDescending(c => c.Count).First();
-            var largestSet = new HashSet<Node>(largest);
-
-            bool bridged = false;
-            foreach (var component in multiNodeComponents)
-            {
-                if (component == largest) continue;
-
-                foreach (var node in component)
-                {
-                    foreach (var dir in DirectionExtensions.Each())
-                    {
-                        var neighbor = map.GetNeighbor(node, dir);
-                        if (neighbor != null && largestSet.Contains(neighbor))
-                        {
-                            map.Connect(node, neighbor);
-                            bridged = true;
-                            break;
-                        }
-                    }
-                    if (bridged) break;
-                }
-                if (bridged) break;
-            }
-
-            if (!bridged)
-            {
-                var smallest = multiNodeComponents.Where(c => c != largest)
-                    .OrderBy(c => c.Count).First();
-                foreach (var node in smallest)
-                    node.Connections = Direction.None;
-            }
-        }
-    }
-
     private static bool IsMapEdge(Node node, Map map) =>
         node.X == 0 || node.X == map.Width - 1 || node.Y == 0 || node.Y == map.Height - 1;
 
@@ -447,16 +310,6 @@ public static class MapGenerator
                     node.AddCrossing(dir);
                     neighbor?.AddCrossing(dir.Opposite());
                 }
-            }
-        }
-
-        // Remove connections blocked by non-crossable rivers
-        foreach (var node in map.AllNodes())
-        {
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                if (node.HasRiverOn(dir) && !node.IsCrossableOn(dir))
-                    node.RemoveConnection(dir);
             }
         }
     }

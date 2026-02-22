@@ -4,47 +4,6 @@ namespace Dreamlands.Map;
 
 public static class MapRenderer
 {
-    private static readonly Dictionary<Direction, char> BoxChars = new()
-    {
-        [Direction.None] = ' ',
-        [Direction.North] = '╵',
-        [Direction.South] = '╷',
-        [Direction.East] = '╶',
-        [Direction.West] = '╴',
-        [Direction.North | Direction.South] = '│',
-        [Direction.East | Direction.West] = '─',
-        [Direction.North | Direction.East] = '└',
-        [Direction.North | Direction.West] = '┘',
-        [Direction.South | Direction.East] = '┌',
-        [Direction.South | Direction.West] = '┐',
-        [Direction.North | Direction.South | Direction.East] = '├',
-        [Direction.North | Direction.South | Direction.West] = '┤',
-        [Direction.North | Direction.East | Direction.West] = '┴',
-        [Direction.South | Direction.East | Direction.West] = '┬',
-        [Direction.North | Direction.South | Direction.East | Direction.West] = '┼'
-    };
-
-    // Double-line box chars for POI nodes
-    private static readonly Dictionary<Direction, char> PoiBoxChars = new()
-    {
-        [Direction.None] = '◆',
-        [Direction.North] = '╨',
-        [Direction.South] = '╥',
-        [Direction.East] = '╞',
-        [Direction.West] = '╡',
-        [Direction.North | Direction.South] = '║',
-        [Direction.East | Direction.West] = '═',
-        [Direction.North | Direction.East] = '╚',
-        [Direction.North | Direction.West] = '╝',
-        [Direction.South | Direction.East] = '╔',
-        [Direction.South | Direction.West] = '╗',
-        [Direction.North | Direction.South | Direction.East] = '╠',
-        [Direction.North | Direction.South | Direction.West] = '╣',
-        [Direction.North | Direction.East | Direction.West] = '╩',
-        [Direction.South | Direction.East | Direction.West] = '╦',
-        [Direction.North | Direction.South | Direction.East | Direction.West] = '╬'
-    };
-
     private static readonly Dictionary<Terrain, string> TerrainColors = new()
     {
         [Terrain.Lake] = "\x1b[44m",       // Blue background
@@ -53,6 +12,14 @@ public static class MapRenderer
         [Terrain.Scrub] = "\x1b[43m",      // Yellow background
         [Terrain.Mountains] = "\x1b[100m", // Bright black (gray) background
         [Terrain.Swamp] = "\x1b[45m"       // Magenta background
+    };
+
+    private static readonly Dictionary<PoiKind, char> PoiGlyphs = new()
+    {
+        [PoiKind.Settlement] = 'S',
+        [PoiKind.Dungeon] = 'D',
+        [PoiKind.Landmark] = 'L',
+        [PoiKind.Encounter] = 'E',
     };
 
     private const string Reset = "\x1b[0m";
@@ -96,9 +63,7 @@ public static class MapRenderer
                     bg = BlackBg;
                 }
 
-                var isPoi = node.Poi != null;
-                var chars = isPoi ? PoiBoxChars : BoxChars;
-                var ch = chars[node.Connections];
+                var ch = node.Poi != null && PoiGlyphs.TryGetValue(node.Poi.Kind, out var glyph) ? glyph : ' ';
 
                 output.Write($"{bg}{fg}{ch}{Reset}");
             }
