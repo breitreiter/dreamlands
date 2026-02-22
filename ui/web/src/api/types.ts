@@ -92,8 +92,24 @@ export interface InventoryInfo {
   equipment: EquipmentInfo;
 }
 
+export interface CampThreatInfo {
+  conditionId: string;
+  name: string;
+  warning: string;
+}
+
+export interface CampEventInfo {
+  type: string;
+  description: string;
+}
+
+export interface CampInfo {
+  threats: CampThreatInfo[];
+  events: CampEventInfo[];
+}
+
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "at_settlement" | "game_over";
+  mode: "exploring" | "encounter" | "outcome" | "at_settlement" | "game_over" | "camp" | "camp_resolved";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
@@ -101,6 +117,7 @@ export interface GameResponse {
   outcome?: OutcomeInfo;
   reason?: string;
   settlement?: SettlementInfo;
+  camp?: CampInfo;
   inventory?: InventoryInfo;
   marketResult?: MarketOrderResult;
 }
@@ -127,6 +144,11 @@ export interface MarketStockResponse {
   tier: number;
   stock: MarketItem[];
   sellPrices: Record<string, number>;
+}
+
+export interface CampResolveChoices {
+  food: string[];
+  medicine: string[];
 }
 
 export interface MarketOrder {

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import type { GameResponse, MarketOrder } from "./api/types";
+import type { GameResponse, MarketOrder, CampResolveChoices } from "./api/types";
 import * as api from "./api/client";
 
 interface GameState {
@@ -11,6 +11,7 @@ interface GameState {
 
 interface GameContextValue extends GameState {
   startNewGame: () => Promise<void>;
+  refreshState: () => Promise<void>;
   doAction: (body: {
     action: string;
     direction?: string;
@@ -18,6 +19,7 @@ interface GameContextValue extends GameState {
     itemId?: string;
     quantity?: number;
     order?: MarketOrder;
+    campChoices?: CampResolveChoices;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
 }
@@ -51,6 +53,21 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const refreshState = useCallback(async () => {
+    if (!state.gameId) return;
+    setState((s) => ({ ...s, loading: true, error: null }));
+    try {
+      const result = await api.getGame(state.gameId);
+      setState((s) => ({ ...s, response: result, loading: false }));
+    } catch (e) {
+      setState((s) => ({
+        ...s,
+        loading: false,
+        error: e instanceof Error ? e.message : "Unknown error",
+      }));
+    }
+  }, [state.gameId]);
+
   const doAction = useCallback(
     async (body: {
       action: string;
@@ -59,6 +76,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       itemId?: string;
       quantity?: number;
       order?: MarketOrder;
+      campChoices?: CampResolveChoices;
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));
@@ -84,7 +102,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, doAction, clearError }}
+      value={{ ...state, startNewGame, refreshState, doAction, clearError }}
     >
       {children}
     </GameContext.Provider>

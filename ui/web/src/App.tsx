@@ -5,6 +5,7 @@ import Encounter from "./screens/Encounter";
 import Outcome from "./screens/Outcome";
 import Settlement from "./screens/Settlement";
 import GameOver from "./screens/GameOver";
+import Camp from "./screens/Camp";
 
 function GameRouter() {
   const { response, error, clearError } = useGame();
@@ -26,6 +27,7 @@ function GameRouter() {
       {response.mode === "outcome" && <Outcome state={response} />}
       {response.mode === "at_settlement" && <Settlement state={response} />}
       {response.mode === "game_over" && <GameOver state={response} />}
+      {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
     </>
   );
 }
