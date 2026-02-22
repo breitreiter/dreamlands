@@ -152,6 +152,10 @@ public static class Market
         var basePrice = GetBasePrice(item, balance);
         if (basePrice <= 0) return 0;
 
+        // If the settlement stocks this item, sell price = settlement's own price (no arbitrage)
+        if (settlement.Prices.ContainsKey(item.Id))
+            return settlement.Prices[item.Id];
+
         double modifier = 1.0;
         int flat = 0;
 
