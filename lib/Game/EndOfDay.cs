@@ -119,35 +119,27 @@ public static class EndOfDay
 
         bool balanced = hasProtein && hasGrain && hasSweets;
 
-        if (eaten.Count == 0)
-        {
-            // Starving — apply Hungry if not already active
-            events.Add(new EndOfDayEvent.Starving());
-            if (!state.ActiveConditions.ContainsKey("hungry"))
-            {
-                var stacks = balance.Conditions.TryGetValue("hungry", out var def) ? def.Stacks : 2;
-                state.ActiveConditions["hungry"] = stacks;
-            }
-        }
-        else
-        {
+        if (eaten.Count > 0)
             events.Add(new EndOfDayEvent.FoodConsumed(eaten, balanced));
+        else
+            events.Add(new EndOfDayEvent.Starving());
 
-            // If Hungry is active, reduce stacks
-            if (state.ActiveConditions.TryGetValue("hungry", out var hungerStacks))
-            {
-                hungerStacks--;
-                if (hungerStacks <= 0)
-                {
-                    state.ActiveConditions.Remove("hungry");
-                    events.Add(new EndOfDayEvent.HungerCured());
-                }
-                else
-                {
-                    state.ActiveConditions["hungry"] = hungerStacks;
-                    events.Add(new EndOfDayEvent.HungerReduced(hungerStacks));
-                }
-            }
+        // Shortfall = meals missing out of 3. Each missing meal = 1 stack of Hungry.
+        int shortfall = 3 - eaten.Count;
+        int maxStacks = balance.Conditions.TryGetValue("hungry", out var hungryDef) ? hungryDef.Stacks : 3;
+        if (shortfall > 0)
+        {
+            var current = state.ActiveConditions.GetValueOrDefault("hungry");
+            var newStacks = Math.Min(current + shortfall, maxStacks);
+            state.ActiveConditions["hungry"] = newStacks;
+            if (current > 0)
+                events.Add(new EndOfDayEvent.HungerChanged(newStacks));
+        }
+        else if (state.ActiveConditions.ContainsKey("hungry"))
+        {
+            // Full 3 meals clears Hungry
+            state.ActiveConditions.Remove("hungry");
+            events.Add(new EndOfDayEvent.HungerCured());
         }
 
         return balanced;

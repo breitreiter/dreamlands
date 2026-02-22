@@ -5,7 +5,7 @@ public abstract record EndOfDayEvent
 {
     public record FoodConsumed(List<string> FoodEaten, bool Balanced) : EndOfDayEvent;
     public record Starving : EndOfDayEvent;
-    public record HungerReduced(int NewStacks) : EndOfDayEvent;
+    public record HungerChanged(int NewStacks) : EndOfDayEvent;
     public record HungerCured : EndOfDayEvent;
     public record ResistPassed(string ConditionId, SkillCheckResult Check) : EndOfDayEvent;
     public record ResistFailed(string ConditionId, SkillCheckResult Check, int Stacks) : EndOfDayEvent;

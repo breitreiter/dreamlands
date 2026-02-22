@@ -276,7 +276,7 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
                 ? $"Balanced meal: {string.Join(", ", f.FoodEaten)}"
                 : $"Ate: {string.Join(", ", f.FoodEaten)}",
             EndOfDayEvent.Starving => "No food! Going hungry.",
-            EndOfDayEvent.HungerReduced h => $"Hunger easing ({h.NewStacks} days remaining)",
+            EndOfDayEvent.HungerChanged h => $"Hungry ({h.NewStacks} stacks)",
             EndOfDayEvent.HungerCured => "No longer hungry!",
             EndOfDayEvent.ResistPassed r => $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
             EndOfDayEvent.ResistFailed r => $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
