@@ -58,7 +58,7 @@ public class StatusInfo
     public string Time { get; init; } = "";
     public int Day { get; init; }
     public Dictionary<string, int> Conditions { get; init; } = new();
-    public Dictionary<string, int> Skills { get; init; } = new();
+    public Dictionary<string, string> Skills { get; init; } = new();
 }
 
 public class NodeInfo

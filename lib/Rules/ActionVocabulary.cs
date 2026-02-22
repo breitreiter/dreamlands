@@ -24,6 +24,8 @@ public enum ArgType
     Id,
     /// <summary>A positive integer.</summary>
     Int,
+    /// <summary>A signed integer skill level (e.g. -2 to +4).</summary>
+    SkillLevel,
     /// <summary>An item category name (e.g. "food"). Free-form for now.</summary>
     Category,
 }
@@ -149,12 +151,17 @@ public sealed class ActionVerb
     public static readonly ActionVerb IncreaseSkill = new("increase_skill",
         VerbUsage.Mechanic, "Boost a skill",
         new ArgDef("skill", ArgType.Skill),
-        new ArgDef("magnitude", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     public static readonly ActionVerb DecreaseSkill = new("decrease_skill",
         VerbUsage.Mechanic, "Reduce a skill",
         new ArgDef("skill", ArgType.Skill),
-        new ArgDef("magnitude", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
+
+    public static readonly ActionVerb SetSkill = new("set_skill",
+        VerbUsage.Mechanic, "Set a skill to a specific level",
+        new ArgDef("skill", ArgType.Skill),
+        new ArgDef("level", ArgType.SkillLevel));
 
     // ── Conditions ──────────────────────────────────────────────
 
@@ -194,7 +201,7 @@ public sealed class ActionVerb
         GiveGold, RemGold,
         DamageHealth, Heal,
         DamageSpirits, HealSpirits,
-        IncreaseSkill, DecreaseSkill,
+        IncreaseSkill, DecreaseSkill, SetSkill,
         AddCondition, RemoveCondition,
         SkipTime,
         FinishDungeon, FleeDungeon,
@@ -316,6 +323,8 @@ public sealed class ActionVerb
                 ? "identifier must not be empty." : null,
             ArgType.Int => int.TryParse(value, out var n) && n > 0
                 ? null : $"'{value}' is not a positive integer.",
+            ArgType.SkillLevel => int.TryParse(value, out _)
+                ? null : $"'{value}' is not a valid integer.",
             ArgType.Category => string.IsNullOrWhiteSpace(value)
                 ? "category must not be empty." : null,
             _ => $"unknown argument type {def.Type}.",

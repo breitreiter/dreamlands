@@ -39,6 +39,7 @@ public static class Mechanics
             "rem_gold" => ApplyRemGold(args, state, balance),
             "increase_skill" => ApplyIncreaseSkill(args, state, balance),
             "decrease_skill" => ApplyDecreaseSkill(args, state, balance),
+            "set_skill" => ApplySetSkill(args, state, balance),
             "add_item" => ApplyAddItem(args, state, balance, rng),
             "add_random_items" => ApplyAddRandomItems(args, state, balance, rng),
             "lose_random_item" => ApplyLoseRandomItem(state, rng),
@@ -106,10 +107,10 @@ public static class Mechanics
 
         var skill = Skills.FromScriptName(args[0]);
         if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+        if (!int.TryParse(args[1], out var amount)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
 
-        var amount = ResolveMagnitude(args.GetRange(1, 1), balance.Character.SkillBumpMagnitudes);
         var current = state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = Math.Min(balance.Character.MaxSkillLevel, current + amount);
+        var newLevel = Math.Clamp(current + amount, balance.Character.MinSkillLevel, balance.Character.MaxSkillLevel);
         var delta = newLevel - current;
         state.Skills[skill.Value] = newLevel;
 
@@ -122,10 +123,26 @@ public static class Mechanics
 
         var skill = Skills.FromScriptName(args[0]);
         if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+        if (!int.TryParse(args[1], out var amount)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
 
-        var amount = ResolveMagnitude(args.GetRange(1, 1), balance.Character.SkillBumpMagnitudes);
         var current = state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = Math.Max(0, current - amount);
+        var newLevel = Math.Clamp(current - amount, balance.Character.MinSkillLevel, balance.Character.MaxSkillLevel);
+        var delta = newLevel - current;
+        state.Skills[skill.Value] = newLevel;
+
+        return new MechanicResult.SkillChanged(skill.Value, delta, newLevel);
+    }
+
+    static MechanicResult ApplySetSkill(List<string> args, PlayerState state, BalanceData balance)
+    {
+        if (args.Count < 2) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+
+        var skill = Skills.FromScriptName(args[0]);
+        if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+        if (!int.TryParse(args[1], out var level)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+
+        var current = state.Skills.GetValueOrDefault(skill.Value);
+        var newLevel = Math.Clamp(level, balance.Character.MinSkillLevel, balance.Character.MaxSkillLevel);
         var delta = newLevel - current;
         state.Skills[skill.Value] = newLevel;
 

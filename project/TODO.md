@@ -158,6 +158,27 @@ is not yet built.
 - [ ] Finalize end-of-day (design exists in `project/design/end_of_day_maintenance.md`)
 - [ ] Finalize equipment
 
+### End-of-Day Blockers
+These must be resolved before end-of-day can be implemented.
+
+- [ ] **Food item definitions** — FoodType enum and ItemInstance.FoodType exist but zero food
+      items are defined in ItemDef.All. Need concrete protein/grain/sweets items per biome/tier
+      with names, costs, stack sizes. Design in `project/design/haversack.md`.
+- [ ] **Food in marketplace** — settlements need to stock food. Haversack is the inventory for
+      consumables/food (disjoint from Pack for trade/equipment). Market integration needs to
+      handle both inventories.
+- [ ] **Condition acquisition & recovery mechanics** — hard numbers needed for: base resist DCs
+      per condition, what skill is checked, how equipment/tool resist modifiers apply, how cure
+      magnitudes translate to stack removal. `conditions_list.md` is authoritative for flavor
+      and structure; this is the mechanical layer on top.
+- [ ] **Skill check formalization** — resist and cure are skill checks like any other, but the
+      exact formula (d20 + skill + modifiers vs DC) needs to be pinned down for all check types:
+      encounter checks, resist checks, cure checks, foraging. Currently only `SkillChecks.Roll()`
+      exists with a basic formula.
+
+### Non-Blocking
+- [ ] Implement foraging action — design complete in `project/design/foraging.md`, no code yet
+
 ### Data Authoring
 These are design/content tasks that block codegen — the code scaffolding exists but the
 data is placeholder or missing.

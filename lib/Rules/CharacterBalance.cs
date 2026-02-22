@@ -14,15 +14,6 @@ public sealed class CharacterBalance
         [Magnitude.Huge] = 5,
     };
 
-    public IReadOnlyDictionary<Magnitude, int> SkillBumpMagnitudes { get; init; } = new Dictionary<Magnitude, int>
-    {
-        [Magnitude.Trivial] = 1,
-        [Magnitude.Small] = 2,
-        [Magnitude.Medium] = 3,
-        [Magnitude.Large] = 4,
-        [Magnitude.Huge] = 5,
-    };
-
     public int StartingHealth { get; init; } = 20;
     public int StartingSpirits { get; init; } = 20;
     public int StartingGold { get; init; } = 50;
@@ -37,7 +28,16 @@ public sealed class CharacterBalance
         new(0, -10),
     ];
 
-    public int MaxSkillLevel { get; init; } = 10;
+    public int MinSkillLevel { get; init; } = -2;
+    public int MaxSkillLevel { get; init; } = 4;
+
+    // End-of-day rest recovery (before meal bonuses)
+    public int BaseRestHealth { get; init; } = 1;
+    public int BaseRestSpirits { get; init; } = 1;
+
+    // Balanced meal bonus (1 protein + 1 grain + 1 sweet)
+    public int BalancedMealHealthBonus { get; init; } = 1;
+    public int BalancedMealSpiritsBonus { get; init; } = 1;
 
     public IReadOnlyDictionary<Magnitude, int> CostMagnitudes { get; init; } = new Dictionary<Magnitude, int>
     {

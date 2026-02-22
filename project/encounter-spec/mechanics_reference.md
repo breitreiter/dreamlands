@@ -50,8 +50,9 @@ Health              +damage_health <magnitude>
 Spirits             +damage_spirits <magnitude>
                     +heal_spirits <magnitude>
 
-Skills              +increase_skill <skill> <magnitude>
-                    +decrease_skill <skill> <magnitude>
+Skills              +set_skill <skill> <level>
+                    +increase_skill <skill> <amount>
+                    +decrease_skill <skill> <amount>
 
 Conditions          +add_condition <condition_id>
 

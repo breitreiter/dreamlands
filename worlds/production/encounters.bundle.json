@@ -1,0 +1,1644 @@
+{
+  "index": {
+    "byId": {
+      "A Record in Stone": {
+        "category": "dungeons/brides_cave",
+        "encounterIndex": 0
+      },
+      "Start": {
+        "category": "dungeons/brides_cave",
+        "encounterIndex": 1
+      },
+      "The Ghosts": {
+        "category": "dungeons/brides_cave",
+        "encounterIndex": 2
+      },
+      "00_Intro": {
+        "category": "intro",
+        "encounterIndex": 3
+      },
+      "01_Docks_1": {
+        "category": "intro",
+        "encounterIndex": 4
+      },
+      "Blockade at Copper Gap": {
+        "category": "mountains/tier1",
+        "encounterIndex": 5
+      },
+      "The Festival Gate": {
+        "category": "mountains/tier1",
+        "encounterIndex": 6
+      },
+      "The Old Assay Station": {
+        "category": "mountains/tier1",
+        "encounterIndex": 7
+      },
+      "The Priests Vow": {
+        "category": "mountains/tier1",
+        "encounterIndex": 8
+      },
+      "The Trailside Verdict": {
+        "category": "mountains/tier1",
+        "encounterIndex": 9
+      },
+      "A Debt Owed": {
+        "category": "plains/tier1",
+        "encounterIndex": 10
+      },
+      "A Gift for the Harvest": {
+        "category": "plains/tier1",
+        "encounterIndex": 11
+      },
+      "Celebration": {
+        "category": "plains/tier1",
+        "encounterIndex": 12
+      },
+      "The Burning Field": {
+        "category": "plains/tier1",
+        "encounterIndex": 13
+      },
+      "The Grain Cart": {
+        "category": "plains/tier1",
+        "encounterIndex": 14
+      },
+      "recur-Bandits": {
+        "category": "scrub/tier1",
+        "encounterIndex": 15
+      },
+      "recur-Dust Storm": {
+        "category": "scrub/tier1",
+        "encounterIndex": 16
+      },
+      "The Courier": {
+        "category": "scrub/tier1",
+        "encounterIndex": 17
+      },
+      "Unusual Cargo": {
+        "category": "scrub/tier1",
+        "encounterIndex": 18
+      },
+      "A Sons Responsibility": {
+        "category": "swamp/tier1",
+        "encounterIndex": 19
+      },
+      "An Unpaid Debt": {
+        "category": "swamp/tier1",
+        "encounterIndex": 20
+      },
+      "The Cartographers Kit": {
+        "category": "swamp/tier1",
+        "encounterIndex": 21
+      },
+      "The Gatekeeper": {
+        "category": "swamp/tier1",
+        "encounterIndex": 22
+      },
+      "The Hunted Woman": {
+        "category": "swamp/tier1",
+        "encounterIndex": 23
+      },
+      "The Hermit of Sallow Fen": {
+        "category": "swamp/tier2",
+        "encounterIndex": 24
+      }
+    },
+    "byCategory": {
+      "dungeons/brides_cave": [
+        "A Record in Stone",
+        "Start",
+        "The Ghosts"
+      ],
+      "intro": [
+        "00_Intro",
+        "01_Docks_1"
+      ],
+      "mountains/tier1": [
+        "Blockade at Copper Gap",
+        "The Festival Gate",
+        "The Old Assay Station",
+        "The Priests Vow",
+        "The Trailside Verdict"
+      ],
+      "plains/tier1": [
+        "A Debt Owed",
+        "A Gift for the Harvest",
+        "Celebration",
+        "The Burning Field",
+        "The Grain Cart"
+      ],
+      "scrub/tier1": [
+        "recur-Bandits",
+        "recur-Dust Storm",
+        "The Courier",
+        "Unusual Cargo"
+      ],
+      "swamp/tier1": [
+        "A Sons Responsibility",
+        "An Unpaid Debt",
+        "The Cartographers Kit",
+        "The Gatekeeper",
+        "The Hunted Woman"
+      ],
+      "swamp/tier2": [
+        "The Hermit of Sallow Fen"
+      ]
+    }
+  },
+  "encounters": [
+    {
+      "id": "A Record in Stone",
+      "category": "dungeons/brides_cave",
+      "title": "A Record in Stone",
+      "body": "\nYou run your fingers along the etchings, the marks damp and ragged.\n\nLove oaths. Prayers. Names unknown to you. The script shifts every few paces. Fine calligraphy, jagged scrawls, deep gouges hacked by frantic hands. A few catch your eye.\n\nSome passages end mid-sentence, the final letter trailing off into nothing. Others overlap, newer words carved atop old, layer upon layer of desperate testimony.\n\n*Alain, you swore by the harvest moon. I kneel where the stone drinks tears and lay your name before the deep. If the spirits hear, let them turn you. If they do not, let them judge you as they judge me.*\n\n*Matthis, I have brought your token and my last candle. The flame gutters, yet I keep vigil. Let the dark teach you constancy. Let it scour from you the forgetfulness that has made this cavern my only witness.*\n\nYou find a name, inscribed a hundred times over. Messages to family. Regrets for things not said, mistakes, misdeeds. Tally marks stand ranked in columns. Five-bar gates repeat by the hundreds, scored hard into the stone.\n",
+      "choices": [
+        {
+          "optionText": "Flee this cursed place = Run before whatever wrote these oaths finds you",
+          "optionLink": "Flee this cursed place",
+          "optionPreview": "Run before whatever wrote these oaths finds you",
+          "requires": null,
+          "single": {
+            "text": "You pull your hand from the stone. The damp clings to your fingertips. Behind you the wall stretches away into shadow, scored with its litany of grief and longing, but you have read enough.\n  Your boots find purchase on the uneven floor. You move quickly, not running, not yet, but with purpose. The echoes of your passage scatter into the dark. The weight of those inscriptions presses at your back, a hundred voices crying out in silence, but you do not turn to answer them. Whatever drove those hands to carve and scrape and plead may still linger in these depths. You have no wish to join their testimony.\n  The passage narrows ahead. You slip through, and the inscribed wall falls behind you. Your breath comes easier. The dark remains, but it is merely dark now, empty of names and numbers and the memory of desperate fingers working stone.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
+          }
+        },
+        {
+          "optionText": "Venture deeper into the cave = Pick a passage and see where it leads",
+          "optionLink": "Venture deeper into the cave",
+          "optionPreview": "Pick a passage and see where it leads",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check bushcraft medium",
+                "text": "You choose a passage and press inward, ducking beneath a low overhang where moisture drips in slow rhythm. The stone walls close around you, ridged and uneven, forcing you to turn sideways in places where the path narrows to a fissure. Your boots scrape over grit and loose pebbles.\n    The first tunnel branches without warning. You take the left fork, follow it for twenty paces, and find it ending at a blank face of limestone. You retrace your steps, breathing the stale air, and try the right. This one twists sharply, doubles back on itself, and deposits you at a chamber you passed moments before. The same etchings mark the wall: tally marks in clusters, a name repeated until the stone wore smooth beneath the chisel. You pause, run your palm along the surface, and note the subtle downward slope of the floor. Water seeks the depths. You follow its course.\n    The logic reveals itself in fragments. Passages that slant upward lead nowhere. Those that descend branch often, but the lowest path always continues. You trace this thread through three more turns, past alcoves cluttered with offerings gone to rot and rust. The air grows heavier, thick with the scent of damp earth and something older, something that clings to the back of your throat. The walls widen. The ceiling lifts away into shadow. You emerge at last into the innermost cavern, its vastness swallowing the meager light, its silence broken only by the slow drip of water from heights unseen.",
+                "mechanics": [
+                  "open \u0022The Ghosts\u0022"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.",
+              "mechanics": [
+                "skip_time morning",
+                "open \u0022The Ghosts\u0022"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "dungeons/brides_cave",
+      "title": "The Bride\u0027s Cave",
+      "body": "\nYour torch casts its glow upon a cathedral of stone. Light strikes wall and stalagmite, crawls across the floor, and reveals words carved into every span of rock. \n\nPassageways wind away in all directions.\n\nThe air hangs cold and unmoving.\n",
+      "choices": [
+        {
+          "optionText": "Venture deeper into the cave = Pick a passage and see where it leads",
+          "optionLink": "Venture deeper into the cave",
+          "optionPreview": "Pick a passage and see where it leads",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check bushcraft medium",
+                "text": "You choose a passage at random and press forward, torchlight dancing across walls dense with carved script. The tunnel bends, splits, rejoins itself in ways that defy surface logic. Twice you find yourself before the same fork, recognizing a particular glyph worn smooth by water. The third time you stop, study the patterns scored into the stone, and begin to perceive the structure beneath the chaos: a spiral, not a maze, its arms folding inward like the shell of some primordial thing.\n    You follow the logic now, marking your turns by the age of the carvings. Where the words are deep and crisp, you advance; where they blur to faint scratches, you retreat. The passages grow narrower, the ceiling presses lower, and the cold intensifies until each breath stings your throat. At last the corridor widens. You emerge into a chamber vast enough that your torchlight cannot find its far walls, only an expanse of darkness that swallows flame and sound alike.",
+                "mechanics": [
+                  "open \u0022The Ghosts\u0022"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.",
+              "mechanics": [
+                "skip_time morning no_meal no_sleep no_biome",
+                "open \u0022The Ghosts\u0022"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Examine the writing = Perhaps it is a clue. Or perhaps knowledge better left unknown.",
+          "optionLink": "Examine the writing",
+          "optionPreview": "Perhaps it is a clue. Or perhaps knowledge better left unknown.",
+          "requires": null,
+          "single": {
+            "text": "You bring your torch close to the wall. The flame gutters in the stillness, casting writhing shadows across the stone. The marks are deep, carved by something that pressed with inhuman strength.",
+            "mechanics": [
+              "open \u0022A Record in Stone\u0022"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Ghosts",
+      "category": "dungeons/brides_cave",
+      "title": "The Ghosts",
+      "body": "\nThe passage opens into a vast chamber. Water drips somewhere in the darkness beyond your light.\n\nShe stands in a pool of white fabric - no, multiple figures, overlapping, their edges uncertain. Sometimes one, sometimes many. Tally marks cover every inch of stone around them. The scratches go up twelve feet high in places, as if clawed by someone climbing.\n\n\u0022You came,\u0022 she says. They say. The voices layer. \u0022Finally, you came back.\u0022\n\nYour hand finds your weapon. The temperature drops.\n\n\u0022We waited. We counted every dawn through the cracks. We wrote you poems. Why did it take so long?\u0022\n\nThe figures drift closer. You can smell limestone and old cloth and something else - desperation, maybe, or longing, faded and confused.\n",
+      "choices": [
+        {
+          "optionText": "Draw your weapon = Destroy this abomination and make this cave safe again",
+          "optionLink": "Draw your weapon",
+          "optionPreview": "Destroy this abomination and make this cave safe again",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat hard",
+                "text": "You draw steel. The blade rings clear in the dark.\n    You feel a probing presence in your mind. You do not recoil, but let it in. You show it the blood you have spilled, the men you have cut down. The ghosts are hungry, but your appetites are darker still.\n    The figures recoil. The overlapping voices rise into a keening wail that echoes from every wall, multiplying, splitting into harmonics that scrape against your ears. The sound climbs higher, becomes thin, becomes nothing. The white shapes blur, their edges bleeding into shadow and stone. Then they are gone. Only silence remains, profound and absolute.\n    The chamber stands empty. The tally marks remain, but whatever hand carved them has released its hold. Whatever dwelt here, whatever waited and counted and remembered, has passed beyond reach. The cave is yours now. No one need fear this darkness again.",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "The cold descends like a predator\u0027s jaws. Your fingers tighten on the hilt; you draw steel, the rasp of metal loud in the dripping silence.\n    The figures do not recoil. They drift nearer, their white shapes bleeding into one another, edges dissolving like fog. The temperature plummets further, a cold that reaches past your skin and settles in your bones. Your breath comes in ragged clouds. The stone beneath your boots tilts, or perhaps you tilt, your sense of direction sliding away like water through cupped hands. The torch gutters. Your grip weakens. The weapon grows heavy, impossibly heavy, and slips from nerveless fingers to clatter on stone. Darkness closes in from the edges of your vision. The layered voices murmur something you cannot parse, soft as a lullaby, mournful as a dirge.\n    When you wake, you lie sprawled on sun-warmed earth outside the cave mouth. The light is wrong, shifted hours forward, the shadows long and slanting. Your limbs feel hollow, your throat parched. The cave yawns behind you, silent and patient. You rise on unsteady legs and turn your back to it. You do not look behind. You do not return.",
+              "mechanics": [
+                "skip_time morning no_sleep no_meal",
+                "damage_spirits small",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Flee for your life = The ghost has you confused with another. You will not die in their stead.",
+          "optionLink": "Flee for your life",
+          "optionPreview": "The ghost has you confused with another. You will not die in their stead.",
+          "requires": null,
+          "single": {
+            "text": "You turn and plunge into the nearest passage, the ghost\u0027s layered voices rising behind you in a wail that echoes off stone. The corridor twists left, then right. Your boots strike uneven ground. Each turn opens onto another passage, each one different: one narrows until your shoulders scrape the walls, another yawns wide with columns carved from living rock, a third descends in steps worn smooth by centuries of feet.\n  The air grows thick and stale. Your lungs burn. Behind you, nothing. Ahead, only deeper darkness. The passages multiply, branch, fold back on themselves. You choose by instinct, by desperation, by whatever animal sense drives fleeing things. The stone drinks your footfalls. Time stretches. Your legs weaken.\n  Then, faint as a whisper: warmth on your face. You stumble forward. The passage climbs. The warmth strengthens. Light, pale and clean, spills down from somewhere above. You claw your way upward toward it, and the corridor opens onto broken sky. Sun. Wind that tastes of living things. You collapse onto grass and stone beneath the open air, chest heaving, the tomb\u0027s darkness falling away behind you like a shed skin.",
+            "mechanics": [
+              "finish_dungeon"
+            ]
+          }
+        },
+        {
+          "optionText": "Approach with open hands = Perhaps you can reason with these spirits",
+          "optionLink": "Approach with open hands",
+          "optionPreview": "Perhaps you can reason with these spirits",
+          "requires": null,
+          "conditional": {
+            "preamble": "You lower your hands. \u0022I\u0027m listening,\u0022 you say.",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "The cold eases. The figures become clearer - still translucent, still overlapping, but more distinct. A young woman with dark hair. An older one with work-roughened features. A girl who couldn\u0027t have been more than sixteen.\n    \u0022We came here to dream,\u0022 the dark-haired one says. \u0022That\u0027s what the old women told us. Spend one night in the Bride\u0027s Cave, and you\u0027ll dream true. Your beloved will return. Your husband will come back. The man who promised...\u0022\n    \u0022Marta was first,\u0022 another voice. \u0022Sixty years ago, maybe more. We found her marks when we came. We thought - we thought they meant the ritual worked.\u0022\n    \u0022I came in winter,\u0022 says the girl. Sixteen, you think. Maybe younger. \u0022The passages flooded. I could hear the water rising but I couldn\u0027t find the way back. I counted twenty-three days.\u0022\n    They speak over each other now, a dozen voices.\n    *I was left at the altar, my father wouldn\u0027t take me back\u2014*\n    *He took my dowry and disappeared, I had nothing\u2014*\n    *The old women said it was ancient magic, older than the village\u2014*\n    *I wrote him poems, thinking he would feel them somehow\u2014*\n    *We counted the days. We thought someone would notice\u2014*\n    The dark-haired woman\u2014Marta, perhaps\u2014steps forward. \u0022The village finally sealed it. But by then we were already here. Already waiting. Already...\u0022\n    She gestures at the tally marks climbing the walls.\n    \u0022We thought you were someone coming to find us. We always think that.\u0022 Her smile is unbearably sad. \u0022But you listened. That\u0027s... that\u0027s something.\u0022\n    The cold has become almost comfortable now. One of them presses something into your palm - you feel its weight, though her fingers pass through yours like mist.\n    \u0022Remember us,\u0022 they say together, then disperse, like mist in daylight.",
+                "mechanics": [
+                  "add_item ivory_comb",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You spread your hands wide, showing empty palms to the drifting forms. The figures halt their advance, their edges rippling like cloth underwater. For a moment the chamber falls silent save for the eternal drip of water against stone.\n    Then the voices return, no longer layered but speaking in turns, overlapping, cutting across one another. \u0022This is not the one.\u0022 A pause, a shifting of pale fabric. \u0022Someone different. Someone new.\u0022 The temperature plunges further. Your breath mists before your face. The tallest figure leans forward, and you glimpse where face should be only deeper shadow. \u0022Leave,\u0022 they intone, and the word carries the weight of stone grinding upon stone. \u0022Leave while you still have life in you.\u0022\n    You take a step backward. The figures do not follow. They stand motionless, watching, waiting. \u0022Come not back,\u0022 the voices whisper, \u0022lest you try our patience.\u0022 The words hang in the cold air long after you turn and make your way toward the passage. Behind you, the scratching begins again\u2014slow, deliberate, counting something only they can measure. You emerge into the corridor beyond, unharmed in body but carrying the chill of that place in your bones, uncertain what manner of grief or madness you have witnessed.",
+              "mechanics": [
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "00_Intro",
+      "category": "intro",
+      "title": "Who Are You?",
+      "body": "\n*The Harrower\u0027s* hold stinks of bilge and bodies, but at least it\u0027s dry. You\u0027ve claimed a corner between cargo nets and a stack of water casks, far enough from the lanterns that no one takes much interest in you. Above, you hear the crew working the rigging, voices sharp with the urgency of landfall. \n\nAldgate. The name tastes like opportunity and threat in equal measure. Fortunes to those willing to take them; death to those who underestimate the land.\n\nYou turn the seal ring over in your fingers, feeling the weight of gold against your palm. A signet ring, worn smooth from years of use. It has stamped contracts, treaties, death sentences. It is a ring that opens doors for the bearer, loosens tongues, carries the grim authority of the Trade Guild.\n\nThe ring catches the dim light as you slide it back onto your finger. The weight still feels new and unfamiliar.\n\nHow did you come by this ring?\n",
+      "choices": [
+        {
+          "optionText": "Murder = I took it by force",
+          "optionLink": "Murder",
+          "optionPreview": "I took it by force",
+          "requires": null,
+          "single": {
+            "text": "REVIEW: The fat bastard bled more than you\u0027d expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but their reach doesn\u0027t extend to Aldgate\u0027s hungry shores. You\u0027ve heard it is a land of blood and gold and shadow, and you were born for all three.",
+            "mechanics": [
+              "increase_skill combat huge",
+              "decrease_skill negotiation huge",
+              "increase_skill cunning huge",
+              "decrease_skill mercantile huge"
+            ]
+          }
+        },
+        {
+          "optionText": "Birthright = My mother once wore this, but it is now mine",
+          "optionLink": "Birthright",
+          "optionPreview": "My mother once wore this, but it is now mine",
+          "requires": null,
+          "single": {
+            "text": "This was your mother\u0027s ring, a prize she fought for with ink and iron. She wore it like a blade, and men twice her size bent when its seal pressed wax. You remember the smell of hot resin and sea-salt in her hair, the way she would turn the signet once before a bargain, as if testing the world\u0027s grain for weakness. She said the ring would secure the family\u0027s future, and you mean to see that through.",
+            "mechanics": [
+              "decrease_skill combat huge",
+              "increase_skill negotiation huge",
+              "increase_skill mercantile huge",
+              "decrease_skill bushcraft huge"
+            ]
+          }
+        },
+        {
+          "optionText": "Gambling = I won it in a game",
+          "optionLink": "Gambling",
+          "optionPreview": "I won it in a game",
+          "requires": null,
+          "single": {
+            "text": "You still remember the trader\u0027s face when you called his bluff; the way his confidence shattered as you laid down your cards. The whole den had gone silent, unsure of what this meant. The man had thought a Guild signet would cow a room of dockside rabble, but you\u0027ve always had the devil\u0027s luck. Now his ruin buys your passage to Aldgate, where your luck will surely unlock even greater fortunes.",
+            "mechanics": [
+              "decrease_skill combat huge",
+              "increase_skill negotiation huge",
+              "decrease_skill bushcraft huge",
+              "increase_skill luck huge"
+            ]
+          }
+        },
+        {
+          "optionText": "A Gift = It was given to me",
+          "optionLink": "A Gift",
+          "optionPreview": "It was given to me",
+          "requires": null,
+          "single": {
+            "text": "The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father\u0027s finest hunters gave up the search after the first week, muttering of spirits and spoor that walked in circles. You did not. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with smoke and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You\u0027ve come here to make your own story, where your name will be remembered.",
+            "mechanics": [
+              "decrease_skill combat huge",
+              "decrease_skill negotiation huge",
+              "increase_skill bushcraft huge",
+              "increase_skill luck huge"
+            ]
+          }
+        },
+        {
+          "optionText": "A Commission = The Guild sent me",
+          "optionLink": "A Commission",
+          "optionPreview": "The Guild sent me",
+          "requires": null,
+          "single": {
+            "text": "The ring is yours. Not stolen, not inherited, not won, earned. Twelve years in the Guild\u0027s cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You\u0027ve bled for every league of parchment, fought off things in uncharted places that don\u0027t appear on any map because you decided they shouldn\u0027t. When the Guild needed someone to survey a new island they chose you. The commission came with the signet, the authority to requisition supplies and act in the Guild\u0027s name. You intend to draw the definitive map of this land. If you happen to turn a profit along the way, well. You are Guild, after all.",
+            "mechanics": [
+              "increase_skill combat huge",
+              "decrease_skill negotiation huge",
+              "increase_skill cunning huge"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "01_Docks_1",
+      "category": "intro",
+      "title": "The Docks of Aldgate",
+      "body": "\nThe harbour stinks of empire.\n\nPitch and bilgewater, the cloying sweetness of spice-rot, fish blood guttering between cobblestones older than any living dynasty\u2014Aldgate presses its gifts upon you before your boots have touched the quay. The Harrower groans against the mooring lines and already the city\u0027s hunger announces itself: brown hands grasping for rope, dock-boys swarming the gunwale, and behind them the stevedores, sullen-eyed, appraising the hold with the cold arithmetic of men who tithe to three masters and steal from all of them.\n\nBeyond the wharves the city rises in tiers of crumbling grandeur\u2014warehouses faced in cracked marble, temples gone green with verdigris, and above all the counting-houses of the great guilds, their windows watching the harbour like the lidless eyes of old lizards. Wealth built this place. Wealth and the patient labour of corruption, which hollowed its pillars and made of its courts a labyrinth where gold moves more freely than justice.\n\nYou descend the gangplank with one sea-chest and a ring.\n\nThe ring matters more than anything in the chest. A Merchant Seal\u2014heavy, tarnished silver, stamped with the sigil of the island compact\u2014it sits on your third finger like a quiet declaration of war. With it you may trade beyond the frontier tariff lines, deal in rawstone and blackwood, keep what the guilds would otherwise devour. Without it you are meat.\n\nIt is the ring that draws the woman\u0027s gaze.\n\nShe waits at the foot of the plank where the customs men have set their folding table\u2014tall, sashed in the coat of a harbour official, her hair drawn back with a severity that matches the line of her mouth. Two pike-bearing guards flank her. She extends one hand, palm upward, with the rehearsed authority of a thousand repetitions.\n\n\u0022The Seal. Registered cargo and letters of compact. You will present them before you set foot on sovereign stone.\u0022\n\nHer eyes are on the ring. Not the chest, not your face\u2014the ring. And behind her, half-lost in the press of dockworkers and brazier smoke, a second figure watches: a lean man in no uniform at all, whose stillness amid the chaos is its own species of announcement.\n\nThe woman\u0027s fingers curl. The guards shift their weight. The lean man tilts his head, as a bird does when it has found something bright and worth taking.\n\nNo one else on the dock will meet your eye.\n",
+      "choices": [
+        {
+          "optionText": "Present the Seal and demand lawful passage = Meet authority with authority, and let every watching eye see that you do not flinch.",
+          "optionLink": "Present the Seal and demand lawful passage",
+          "optionPreview": "Meet authority with authority, and let every watching eye see that you do not flinch.",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You lay the Seal on the table. The woman\u0027s jaw tightens. The lean man smiles once, then melts into the crowd.",
+                "mechanics": [
+                  "add_tag passed_customs",
+                  "open docks_warehouse"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "Your tone wavers. She snaps her fingers; the guards close in. \u0022The Seal. Now.\u0022",
+              "mechanics": [
+                "damage_health small",
+                "add_tag detained"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Offer the documents but keep the ring hidden = Comply enough to pass the table while letting the woman believe the Seal is elsewhere.",
+          "optionLink": "Offer the documents but keep the ring hidden",
+          "optionPreview": "Comply enough to pass the table while letting the woman believe the Seal is elsewhere.",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You hand over the papers. Her eyes linger on your empty fingers. You are waved through. She has not stopped watching.",
+                "mechanics": []
+              }
+            ],
+            "fallback": {
+              "text": "She spots the ring. Her smile is thin. \u0022Attempting to evade registration. Escort him.\u0022 Strong hands grab your arms.\n    You spend your first day in a holding cell, but eventually talk your way out.",
+              "mechanics": [
+                "skip_time morning"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Address the lean man directly = Ignore the official\u0027s outstretched hand and speak to the silent watcher, making plain you see him and intend to know the game before you show your hand.",
+          "optionLink": "Address the lean man directly",
+          "optionPreview": "Ignore the official\u0027s outstretched hand and speak to the silent watcher, making plain you see him and intend to know the game before you show your hand.",
+          "requires": null,
+          "single": {
+            "text": "You step past the table. The lean man\u0027s smile does not reach his eyes. He nods toward the warehouse district. \u0022A word. In private.\u0022",
+            "mechanics": [
+              "open docks_lean_man"
+            ]
+          }
+        },
+        {
+          "optionText": "Turn back toward the gangplank = The Harrower has not yet cast off, and a night aboard buys time to learn what manner of welcome Aldgate has prepared.",
+          "optionLink": "Turn back toward the gangplank",
+          "optionPreview": "The Harrower has not yet cast off, and a night aboard buys time to learn what manner of welcome Aldgate has prepared.",
+          "requires": null,
+          "single": {
+            "text": "The Harrower\u0027s deck is cold. In the dark, you plan. Dawn will bring the same choice\u2014or a different one.",
+            "mechanics": [
+              "add_tag delayed_landing",
+              "skip_time morning"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "Blockade at Copper Gap",
+      "category": "mountains/tier1",
+      "title": "Blockade at Copper Gap",
+      "body": "\nThe pass ahead chokes with miners. Thirty, maybe forty of them, blocking the switchback with overturned carts and piled stones. They\u0027ve barricaded the only maintained route through this section of the Ranges. Their faces show the gray dust of underground work, and their hands grip tools that were splitting rock this morning. A man with a dust-caked beard stands atop the largest cart, calling out grievances about wages cut in half, about an overseer who changed the terms after ore was already hauled. The crowd rumbles agreement. They\u0027re not letting anyone through until the mining company sends someone to negotiate.\n\nThe merchant behind you has already started complaining about spoiled goods and lost profits. More travelers bunch up at your back, a growing knot of impatience and cargo that can\u0027t afford delay. \n\nThe bearded man notices you studying the barricade. He climbs down, approaches with careful steps. \u0022I know your ring, friend, but I don\u0027t know you.\u0022 He gestures at the strikers, \u0022these are good men, hard workers, but they\u0027ve been done wrong by the company. It would mean a lot to have a guild member speak on their behalf.\u0022 His voice drops low enough that only you can hear it. \u0022Perhaps we could also find a way to get you through the blockade, if you\u0027re a friend of the miners.\u0022\n\nThe miners picked this spot with care. You can see no other way forward.\n",
+      "choices": [
+        {
+          "optionText": "Speak on behalf of the miners = Lend your guild status to their cause",
+          "optionLink": "Speak on behalf of the miners",
+          "optionPreview": "Lend your guild status to their cause",
+          "requires": null,
+          "single": {
+            "text": "You draw breath and step forward, though the words do not come easily. Speaking for those who halt commerce and raise barricades against the very order you have spent your years upholding sits ill with you. Yet here you stand, and the bearded man watches with eyes that have seen too many promises broken. You speak of wages earned and contracts honored, of men who split stone in darkness and deserve what was pledged them. The old phrases rise unbidden to your tongue: prosperity through order, the rule of lawful exchange. You swallow them down. They would serve no purpose here.\n  The assembled travelers stare. Merchants cross their arms over laden packs. A woman with bolts of fabric balanced on her mule shakes her head in disgust. No one nods agreement. No one steps forward to join their voice to yours. An overripe apple comes hurtling from the rear of the crowd, spinning end over end. It passes a hand\u0027s breadth from your shoulder and bursts against the stones of the barricade, spattering pulp across the weathered wood.\n  The miners keep their word. When night falls and the stars kindle cold above the peaks, they open a narrow gap between cart and stone. You slip through in darkness, your passage masked by the shifting of guards and the crackle of their fire. The bearded man clasps your shoulder once, says nothing, and then you are beyond the barricade with the pass stretching empty before you.",
+            "mechanics": [
+              "skip_time night"
+            ]
+          }
+        },
+        {
+          "optionText": "Attempt to climb around = Scale the steep terrain beside the barricade",
+          "optionLink": "Attempt to climb around",
+          "optionPreview": "Scale the steep terrain beside the barricade",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check bushcraft medium",
+                "text": "You leave the maintained track and commit to the slope. The rock here crumbles at the first test, sends pebbles chattering down into the gorge. You move slowly, testing each handhold, finding the stone that won\u0027t betray you. Your fingers go numb in the wind. Twice you freeze as loose scree slides beneath your boots, but you read the mountain\u0027s old bones beneath the treacherous surface and trust them. The miners below watch your progress in silence. One calls out a warning about an unstable section. You adjust, find another route.\n    You pull yourself onto the trail beyond the blockade with scraped palms and dust in your throat. The path ahead lies empty, winding higher into the peaks. Behind you, travelers still crowd against the barrier. The bearded man raises one hand in acknowledgment\u2014respect or perhaps just recognition that some people cannot be stopped by stones and carts. You\u0027ve lost an hour and gained a lesson about what desperation looks like from above.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "The slope beside the barricade looks climbable until you\u0027re halfway up it. The stone here has been fractured by a thousand freeze-thaw cycles, and it crumbles like stale bread beneath your weight. You commit too much to a handhold that breaks free. The slide starts small but grows, rock cascading loose in a gray avalanche that carries you sideways and down in a chaos of impacts.\n    You crash into the roadbed below the blockade hard enough to empty your lungs. Miners rush forward, pull you clear of the still-sliding debris. Your ribs scream. Blood runs from a gash across your forearm, and your knee has already begun to swell. The bearded man crouches beside you, his expression caught between concern and vindication. They carry you to the side of the road, bind your wounds with cloth that smells of rock dust and sweat. You will not be climbing today, nor tomorrow. The blockade remains, and you sit among the trapped travelers nursing injuries earned by impatience. The cold settles into your bones while the miners return to their vigil.",
+              "mechanics": [
+                "skip_time morning",
+                "damage_health small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Persuade the other merchants to force through = Organize the backed-up merchants and couriers to break the barricade",
+          "optionLink": "Persuade the other merchants to force through",
+          "optionPreview": "Organize the backed-up merchants and couriers to break the barricade",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You move among the travelers, speaking low. The merchant with spoiled goods needs no convincing. A courier carrying time-sensitive contracts joins immediately. A muleteer whose animals are growing anxious in the confined space adds her voice. Within minutes you\u0027ve assembled a core of twenty travelers whose livelihoods depend on passage. You approach the barricade together, not threatening but inexorable as weather.\n    The miners see you coming. They raise their tools, form a line, but their hearts aren\u0027t in violence. These are men who split stone for wages, not soldiers. When your group reaches the carts and begins dismantling the barrier methodically, the resistance crumbles. The bearded man shouts threats that nobody heeds. A few miners step forward but stop when they see the determination in the travelers\u0027 faces. The barricade comes apart piece by piece. You all push through, ignoring the curses that follow you up the switchback.\n    Behind you, the miners stand among the ruins of their blockade. Some are already drifting away, heading back to whatever grim terms the company will impose. The bearded man remains atop his cart, alone now, staring at the scattered stones. You\u0027ve cleared the pass, but the cold wind carries the sound of something breaking that has nothing to do with wood or rock.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You move among the travelers, making your case. The merchant listens, nods, but won\u0027t commit. The muleteer won\u0027t risk her animals. A courier flat refuses to be part of breaking a strike, mutters something about his own father working a mine once. One by one they turn away from your arguments. You have only a handful of supporters when you walk to the barricade. And by the time you get there, you\u0027re down to two.\n    You demand to be let through, or you\u0027ll force the matter. The bearded man gestures, and a half-dozen miners climb down from the barricade. They do not seriously injure you, but they give you a good beating as a message to the other travelers.\n    The strike resolves itself by morning, but your bruises are still raw.",
+              "mechanics": [
+                "skip_time morning",
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Festival Gate",
+      "category": "mountains/tier1",
+      "title": "The Festival Gate",
+      "body": "\nThe high meadow beyond the toll gate is crowded with miners and their families\u2014tables laid with food, a barrel tapped and flowing, children weaving between the adults. First ore day, when last season\u0027s claims finally paid out. Even the wind seems to have taken the afternoon off. The toll collector sits unmoved on his stool, his toll station blocking the trail.\n\n\u0022Triple rate today, traveler. Festival tax.\u0022 His voice carries the certainty of stone. \u0022Or you turn back down the switchbacks.\u0022 Behind the collector, a grey-bearded miner watches from a bench, his gaze deliberate and assessing. Others have noticed too. The celebration hasn\u0027t stopped, but a pocket of attention has formed around you, faces turning with the casual interest of those watching a play they\u0027ve seen before.\n\nYou take a breath to speak, but the collector interjects. \u0022New folk always have opinions about what\u0027s fair. Up here, fair is what we say.\u0022 The watching miner sets down his cup. The price demanded is dear; who ever heard of triple tolls?\n\nThe collector smiles. \u0022You look like a a merchant of some measure. You can afford it, surely.\u0022\n",
+      "choices": [
+        {
+          "optionText": "Persuade = Appeal to fairness and custom before witnesses",
+          "optionLink": "Persuade",
+          "optionPreview": "Appeal to fairness and custom before witnesses",
+          "requires": null,
+          "conditional": {
+            "preamble": "You catch the grey-bearded miner\u0027s eye. \u0022Hail friend,\u0022 you say, \u0022you look like you know the lay of things. How long has this festival tax been in place?\u0022",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "The grey-bearded miner rises before you finish speaking. He crosses to the gate with the measured pace of someone who\u0027s earned the right to interrupt. \u0022Festival tax.\u0022 He spits into the gravel. \u0022That\u0027s a new verse added to an old song.\u0022 He turns to the collector. \u0022Garrim, you remember what we agreed when we voted you this post? Standard rates. No creative additions just because your pockets are light.\u0022\n    The collector\u0027s jaw works, but the faces around him have set like cooling iron. One of his companions steps back, hands spreading in a gesture of disavowal. \u0022Triple rate was mentioned,\u0022 the collector says, but the words come out defensive now, argument instead of decree. The miner doesn\u0027t move his hand from the bar. A woman calls from the crowd: \u0022Let them through, Garrim. We\u0027re trying to celebrate, not watch you shame yourself.\u0022\n    The bar lifts. The collector waves you past with a motion that tries to reclaim dignity from the wreckage of his scheme. As you cross into the meadow, someone presses a cup into your hand\u2014festival beer, thin but cold. The miner nods once, his assessment apparently satisfied. Behind you, the collector\u0027s companions have already drifted back toward the celebration, and the crowd\u0027s attention dissolves like snow in sunlight. The camps and the cartographer wait beyond the far edge of the meadow, the maps as near now as your next breath.",
+                "mechanics": [
+                  "rem_gold trivial",
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "The grey-bearded miner studies you through your appeal, his expression carving itself into something harder with each word. When you finish, he shakes his head. \u0022You speak pretty enough, but you don\u0027t know what you\u0027re speaking about.\u0022 He turns to the crowd. \u0022Outsider comes in, tells us our business, thinks three days on the trail makes them mountain folk.\u0022 A few laughs ripple through the watchers, not cruel but dismissive, the sound of a community closing ranks.\n    The collector\u0027s smile widens. \u0022See? Even Torvin knows. This is how we do things up here.\u0022 His companions straighten, emboldened by the shift. The miner returns to his bench and his cup, the trial concluded and failed. You could force the issue\u2014push past, make threats\u2014but the watching faces have gone from curious to cold. The switchbacks down stretch behind you, and the cartographer\u0027s deadline burns like a brand. Sometimes the mountains reject you with rockfall and storm. Sometimes they just make you pay.",
+              "mechanics": [
+                "rem_gold medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Pay = Hand over the coin and pass through",
+          "optionLink": "Pay",
+          "optionPreview": "Hand over the coin and pass through",
+          "requires": null,
+          "single": {
+            "text": "You count out the coin onto the collector\u0027s palm, each piece a small defeat that clinks against the others. He weighs the stack with theatrical care, then sweeps it into his pouch with the satisfaction of a man proven right. The bar lifts. \u0022See? Easy when folk are reasonable.\u0022 His companions smirk, their posture loosening now that the confrontation has resolved in their favor.\n  As you pass into the meadow, the grey-bearded miner catches your eye. There\u0027s something in his look\u2014not quite pity, closer to disappointment. He raises his cup in a gesture that might be salute or farewell, then turns back to his companions. The celebration resumes its rhythm around you, the festival\u0027s noise swallowing the small drama at the gate. You are lighter by enough coin to matter, heavier by the knowledge of what that weight bought: passage, yes, but also the collector\u0027s continuing certainty that his innovations will be tolerated. \n  Behind you, the collector has already returned to his stool, ready for the next traveler with opinions about fairness.",
+            "mechanics": [
+              "rem_gold medium"
+            ]
+          }
+        },
+        {
+          "optionText": "Reject = Refuse the inflated price and turn back",
+          "optionLink": "Reject",
+          "optionPreview": "Refuse the inflated price and turn back",
+          "requires": null,
+          "single": {
+            "text": "You shake your head and step back from the gate. The collector\u0027s smile curdles. \u0022Long walk here for nothing, traveler.\u0022 He settles deeper onto his stool, already dismissing you. His companions relax, the moment passing without the confrontation they\u0027d braced for. The grey-bearded miner watches your retreat with an expression that might be respect or might be simple acknowledgment; hard to say with mountain folk.\n  You take the long way foward, and long it is. Your feet hurt and your back aches, but your coin still heavy in your purse. Sometimes the mountains defeat you with weather or stone. Today they defeat you with bureaucracy.",
+            "mechanics": [
+              "damage_spirits small",
+              "skip_time evening"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Old Assay Station",
+      "category": "mountains/tier1",
+      "title": "The Old Assay Station",
+      "body": "\nThe trail switchbacks through loose scree to a stone structure wedged between two boulders like a tooth in a broken jaw. The assay station has been abandoned long enough that moss mats the north wall and the hinges have swollen with rust, but not so long that the roof has surrendered. A rockslide blocks the main trail ahead\u2014fresh enough that dust still ghosts the air when the wind shifts, massive enough that no lone traveler is shifting it. The detour climbs another thousand feet along an exposed ridge. To the west, the sky darkens to a color like old bruises pressed under skin.\n\nInside, the air is colder than it should be. Not drafty\u2014still. Held. The hearth is laid with ash that looks recently stirred, though no footprints mark the floor. Three different hands have carved warnings into the doorframe, letters cut deep enough to splinter the wood. Along the far wall, half-collapsed against a stack of rotted sample crates, lie two skeletal corpses in the tatters of heavy work coats, ribs laced with mineral stain, skulls tilted toward the scales as if waiting for a verdict.\n\nUp here, folk speak of such places in lowered voices. Where a man dies in the mountains, that ground is no longer mere ground but a kind of tomb. It may lack carved stone or priestly seal, but it holds the same claim. A proper cleric might come with oils and ash and words of severing, lay the restless to quiet, and mark the threshold clean again. A traveler with a bedroll and a flint has no such authority.\n\nThe first cold drops of sleet tick against the stone outside.\n\n",
+      "choices": [
+        {
+          "optionText": "Study = Examine the station carefully before deciding whether to shelter here",
+          "optionLink": "Study",
+          "optionPreview": "Examine the station carefully before deciding whether to shelter here",
+          "requires": null,
+          "conditional": {
+            "preamble": "A frantic message is caved into the doorframe: \u0022The dead are digging. DIGGING FROM BELOW.\u0022 A second is barely legible, as though scratched in haste or terror: \u0022They know the weight of what you carry.\u0022",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "Inside, you find the source of the digging sounds. A root cellar hatch beneath the worktable has warped with moisture, and when the wind gusts a certain way, it rattles against its frame with a rhythmic knock that could be mistaken for something deliberate. The scales swing slightly in the draft, their creaking almost conversational in the silence. You wedge a stone against the hatch to still it, and the station falls quiet except for the wind.\n    The hearth draws well when you test it with a scrap of kindling. The walls keep the wind at bay. You wait out the storm in practical shelter while sleet turns to snow outside, and when dawn comes clear and cold, you continue up the detour route with no more weight than you brought here.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You crouch at the threshold and let your eyes adjust to the gloom within. The skeletal remains draw your gaze first, but as the shadows resolve, you begin to notice other marks. Scratches in the plaster near the window frame, deliberate and deep. You step closer and make out letters gouged into the ancient coating: \u0022sleep not in this tomb.\u0022\n    A second warning mars the wood above the collapsed shelving, this one carved with less care, the letters ragged as though cut in haste or terror: \u0022on the first night, they measure your gold, on the next night, they measure your soul.\u0022 The doorframe bears a third inscription, so deeply scored that the wood has split along the grain. You trace the edges with one finger and feel splinters catch at your skin.\n    The cold presses closer. You tell yourself you are no slave to superstition, that these are merely the scratchings of frightened men long dead. Yet your pulse quickens, and the stillness within the station feels less like shelter than like the held breath before a spring trap closes. You straighten, step back across the threshold, and turn your face to the darkening sky.\n    The descent is cruel. Sleet hardens to ice on the scree, and each footfall threatens to send you sliding down the slope in a tumble of loose stone. Your hands grow numb where you brace against the boulders. Water runs cold down the back of your neck. But no pale shapes rise from the rocks to bar your path, and no skeletal fingers reach from the shadows. By the time you reach the lower trail, your legs burn and your breath comes hard, but you are alone with the mountain and the gathering storm.",
+              "mechanics": [
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Try to do last rites = Say a few words over the bodies",
+          "optionLink": "Try to do last rites",
+          "optionPreview": "Say a few words over the bodies",
+          "requires": null,
+          "single": {
+            "text": "You kneel before the remains and speak what words you remember from graveside vigils, the formulae worn smooth by repetition in temple halls. The phrases come haltingly at first, then with greater confidence as you recall the cadences that once echoed from vaulted stone. You add prayers overheard in childhood, their meanings half-forgotten but their rhythms still potent, syllables that carried weight when intoned by voices robed in authority. Your breath clouds in the cold air with each invocation.\n  The corpses remain still. You do not touch them; the mineral bloom crusting their bones suggests transformations best left undisturbed. Instead you gather kindling from the splintered crates and coax a small fire to life in the hearth, feeding it carefully until warmth pushes back the station\u0027s chill. You spread your bedroll as far from the bodies as the cramped space permits and settle into it, wrapping yourself against the cold that seeps up through stone.\n  Sleep comes poorly. The fire casts restless shadows that animate the hollow sockets, lend false motion to the skeletal fingers. Each time you drift toward unconsciousness, dreams rise to meet you: visions of stone pressing down, of scales that measure guilt in ounces, of cold hands reaching from darkness. You wake gasping more than once, find the fire still burning, force yourself back toward rest. The cycle repeats until exhaustion drags you under despite your fear.\n  When you wake at last, true darkness fills the station. The fire has died to ash and ember, its light surrendered. You fumble for your flint in the blackness, strike sparks until a flame catches. In the wavering glow you turn toward the far wall. The space where the corpses lay slumped is empty now, marked only by the stains their bones left on rotted wood. The scales stand silent on their bench. Of the dead themselves, no trace remains. You are alone in the station, alone with the memory of their watching, alone with the certainty that something has changed in the night.",
+            "mechanics": [
+              "damage_spirits medium"
+            ]
+          }
+        },
+        {
+          "optionText": "Ignore = Press on immediately, taking the detour route despite the weather",
+          "optionLink": "Ignore",
+          "optionPreview": "Press on immediately, taking the detour route despite the weather",
+          "requires": null,
+          "single": {
+            "text": "You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you\u0027ve gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.\n  The ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.\n  You reach the valley floor two hours after full dark, shaking so hard you can barely strike a spark for fire. The cold has settled into your bones in a way that will ache for days. But you are through, and the trail behind you is passable again, and you did not spend a night in a place where three different travelers felt compelled to carve warnings in stone. Whether that makes you wise or merely lucky is a question the mountain does not answer. The fire builds slowly, and you feed it through the long hours until dawn, grateful for the pain that means you can still feel your fingers.",
+            "mechanics": [
+              "damage_health trivial",
+              "damage_spirits medium"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Priests Vow",
+      "category": "mountains/tier1",
+      "title": "The Priest\u0027s Vow",
+      "body": "\nYou hear the shouting before you round the switchback, a raw, hoarse voice calling for help. A miner sits wedged between two massive stones where a recent rockfall has shifted the scree. His legs vanish into the gap. The rocks lean against each other like drunk companions, holding him in place without crushing him. Yet. Above, more loose stone perches on the slope, ready to follow the first slide down.\n\nThe miner\u0027s head has a bloodly gash from the rockslide, but he is alive and glad to see you.\n\nA priest is here, furiously praying for the miner\u0027s safety. \u0022Oh, thank goodness you came! I am on pilgrimage, and cannot touch the impure. But you can. And you must! I will bless you, and you will pull him free.\u0022\n\nThe rocks trapping the miner are daunting. With the priest\u0027s help, you could pull the man free, but on your own you\u0027d likely doom both the miner and yourself.\n\nThe rocks creak as the scree settles another finger\u0027s width.\n",
+      "choices": [
+        {
+          "optionText": "Convince the priest to help = Superstition be damned",
+          "optionLink": "Convince the priest to help",
+          "optionPreview": "Superstition be damned",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You stride to the priest\u0027s side, your voice cutting through his rising prayers. \u0022Get over here and help me!\u0022\n    He recoils as if struck. \u0022I cannot, brother. You must understand. I am on holy pilgrimage. If I touch him, my hands will be unclean. I will be cursed.\u0022\n    You measure the man before you. His eyes burn with conviction, not cowardice. \u0022Ignore your hands, brother.\u0022 you say, \u0022What of your heart? If you let this man die, will not your heart be unclean? Will you not be cursed as a murderer is cursed?\u0022\n    The priest goes still. His gaze drops to his open palms, and he stares at them as if reading scripture written in his own flesh. The miner\u0027s ragged breathing fills the silence. Somewhere above, a pebble skitters down the slope.\n    \u0022You are right,\u0022 the priest says at last. \u0022I will help you.\u0022\n    Together you grasp the miner beneath his arms. Your boots scrape against loose stone as you pull. The priest\u0027s knuckles whiten, his jaw clenched, and you feel the man\u0027s weight shift inch by agonizing inch. The rocks groan. With a final heave you wrench the miner free, dragging him clear as a cascade of smaller stones rattles down to fill the space where he lay trapped. The three of you collapse in the dust, gasping.\n    You glance at the priest. His hands tremble before him, no longer clean by the laws he honors. You hope you have not damned this man.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You stride to the priest and seize his shoulder. \u0022Get over here and help me pull him free!\u0022\n    The holy man recoils. \u0022I cannot, brother. You must understand I walk the high pilgrimage. If I touch his blood, my hands become unclean. The curse will follow me.\u0022 His voice trembles with genuine terror.\n    You turn from him without another word. You kneel beside the trapped miner and draw your hand across the gash on his brow, collecting the warm blood on your palm. The miner watches with feverish eyes as you rise and cross back to the priest. Before he can retreat, you press your bloodied palm against his face, drawing a dark streak from temple to jaw.\n    \u0022There,\u0022 you say, \u0022you\u0027re unclean. Now help me.\u0022\n    The priest touches the stain with trembling fingers. He lifts his hand before his eyes, turns it in the mountain light, sees the red gleaming there. His mouth opens. The shriek that tears from his throat is not words but pure animal anguish. It does not stop. He drops to his knees, still howling, rocking forward and back with both hands clutching at his defiled face.\n    You return to the miner and brace your feet against the lower stone. You pull. The rocks do not yield. You shift your grip, plant yourself anew, haul with every fiber of strength you possess. Behind you the priest\u0027s wailing scrapes against your skull. The miner gasps shallow breaths, his face gone the color of tallow. Above, a grinding sound: stone dragging across stone. A pebble skitters down the slope, then another. You pull again. Nothing moves.\n    The scree settles with a deep, final crunch. The miner\u0027s eyes roll back. His chest stills. You release your grip and step away, the priest\u0027s shrieks still echoing from the mountainside.",
+              "mechanics": [
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Try to dig him out on you rown = Try to excavate around the trapped legs instead of moving the stones",
+          "optionLink": "Try to dig him out on you rown",
+          "optionPreview": "Try to excavate around the trapped legs instead of moving the stones",
+          "requires": null,
+          "single": {
+            "text": "You drop to your knees beside the gap and begin scooping scree away from where his legs disappear between the rocks. The loose stone comes away easily at first. Then you hit compressed earth, then bedrock. The miner watches you work with something that might be gratitude. The priest prayers eacho. You dig until your hands are raw and the hole is twice as deep, but the stones extend further than you can reach. The gap that holds him runs all the way down to the mountain\u0027s bones. The miner knows it before you do. You see understanding settle across his face like dust. His voice comes out steady despite everything. \u0022Enough,\u0022 he says. \u0022You tried.\u0022 When you round the switchback, you can still hear the priest\u0027s fruitless prayers.",
+            "mechanics": [
+              "damage_spirits medium"
+            ]
+          }
+        },
+        {
+          "optionText": "Walk on = This isn\u0027t your problem and the mountain takes who it takes",
+          "optionLink": "Walk on",
+          "optionPreview": "This isn\u0027t your problem and the mountain takes who it takes",
+          "requires": null,
+          "single": {
+            "text": "You meet the trapped miner\u0027s eyes for a moment. He doesn\u0027t curse or plead. Perhaps he\u0027s already spent his voice shouting before you arrived. Perhaps he simply recognizes the shape of your decision in your posture. You continue up the switchback and the voices fade behind you. The trail climbs another half mile before leveling onto a ridge where you can see the whole valley spread below. From here the rockfall is invisible, just another fold in the mountainside. A hawk circles on a thermal, hunting. The wind carries the faint sound of metal on stone from a mine shaft somewhere higher up. Everything continues as it always has. You drink from your own flask and taste snowmelt, cold and clean. The water is good in the Near Ranges.",
+            "mechanics": [
+              "heal_spirits trivial"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Trailside Verdict",
+      "category": "mountains/tier1",
+      "title": "The Trailside Verdict",
+      "body": "\nA toll collector sits on a flat rock beside the trail, three miners standing witness behind him. A muleteer kneels in the gravel, hands spread. Before the kneeling man lies an open pack, ore samples spilled across the stone. The muleteer has a dark bruise across his jaw.\n\n\u0022Theft from a registered claim,\u0022 the toll collector pronounces gravely. \u0022Caught red-handed coming down the trail. Standard judgment: restitution double the value, or we turn you over to the mining council.\u0022 \n\nThe muleteer protests. He was a hired hand, just hauling what he was paid to haul, never wanted any trouble.\n\nThen the toll collector\u0027s eyes find you. \u0022You came down same trail. You see this man working any claim up there? You saw something, or you didn\u0027t.\u0022 The wind cuts across the switchback, carrying the distant clang of metal on stone. The muleteer\u0027s face turns toward you, hope and desperation carved into sun-weathered features.\n\nBut you weren\u0027t watching claims or miners. Your attention was on your footing and the trail, not the goings-on of the miners. The toll collector waits, ledger open. The miners shift, hands near their tools. The muleteer\u0027s fate hangs on testimony you cannot honestly provide.\n",
+      "choices": [
+        {
+          "optionText": "Testify for him = Claim you saw him working a claim, lending your word to his innocence",
+          "optionLink": "Testify for him",
+          "optionPreview": "Claim you saw him working a claim, lending your word to his innocence",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "The toll collector\u0027s eyes narrow as you speak, tracing the line of the trail upward with his gaze as if measuring your claim against the gradient itself. You describe the upper switchback, the eastern face where morning light strikes first, a figure bent to the rock with tools in hand. The muleteer seizes the thread, nodding, adding details that match or nearly match. One of the miners shifts his weight, uncertain now. The other two exchange glances.\n    The toll collector closes his ledger with a sound like a verdict deferred. \u0022Witness testimony complicates things,\u0022 he says, voice flat with the weariness of a man who knows how easily truth bends in thin air. He waves the muleteer up, tells him to move on, but the look he gives you carries weight. The miners watch you pass with eyes that remember faces. The muleteer doesn\u0027t thank you, just gathers his pack and walks quickly down the trail, and you\u0027re left with the knowledge that your word is now written in the invisible ledger this mountain keeps\u2014whether true or false, it\u0027s been spent.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You step forward and declare that you saw the man laboring at a claim, just as he swore. Your voice carries across the switchback with what you hope sounds like certainty.\n    The muleteer seizes upon your words with desperate gratitude. \u0022Yes, yes, the northern face, just past the second marker stone, where the quartz runs deep through the granite.\u0022 He nods vigorously, hands gesturing toward the heights. But you spoke of the eastern slope, near the stand of twisted pines. The contradiction hangs in the air like smoke. You open your mouth to amend your account, to weave the threads together, but the toll collector\u0027s expression has already hardened into something colder than the mountain wind. The miners behind him exchange glances, their hands settling more firmly upon their tools.\n    The toll collector\u0027s gaze drops to your hand, fixing upon the ring that encircles your finger. \u0022Lying to a toll collector.\u0022 His voice carries no anger, only a terrible weariness. \u0022You should know better than most. I remember when that ring meant something.\u0022 He closes his ledger with a sound like a splitting stone. A gesture sends two miners forward to grip the muleteer\u0027s arms, hauling him upright from the gravel. \u0022Take him away. He\u0027ll work his debt in the mines.\u0022 The muleteer does not resist, does not even look at you as they lead him toward the upper trail. The toll collector turns his attention back to you, and his words fall with the weight of judgment. \u0022You\u0027d best be passing through. Not much law up in these mountains, so we rely on honesty, a trait you seem to lack.\u0022 He moves to the side of the trail, creating a narrow passage, his silence an invitation to depart that will not be repeated.",
+              "mechanics": [
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Testify against him = State you saw no one working claims where he says he was",
+          "optionLink": "Testify against him",
+          "optionPreview": "State you saw no one working claims where he says he was",
+          "requires": null,
+          "single": {
+            "text": "You meet the muleteer\u0027s eyes as you speak and watch hope collapse like a shaft with rotted timbers. The words come plain: you saw no one working the claims, no tools abandoned, no fresh tailings. The toll collector nods as though this confirms what he already knew. The miners close ranks, hands settling on pick handles.\n  They bind the muleteer\u0027s wrists with rope meant for pack loads. He doesn\u0027t struggle, doesn\u0027t plead further, just stares at the spilled ore samples like a man reading his own grave marker. The toll collector marks something in his ledger, mentions the mining council, mentions examples that need making. They lead him down the trail, boots scuffing gravel, and the sound carries long after they\u0027ve rounded the switchback.\n  You\u0027re left alone with the scattered ore and the wind.",
+            "mechanics": [
+              "add_item backpack"
+            ]
+          }
+        },
+        {
+          "optionText": "Admit you weren\u0027t watching = Confess you saw nothing useful, offering no testimony either way",
+          "optionLink": "Admit you weren\u0027t watching",
+          "optionPreview": "Confess you saw nothing useful, offering no testimony either way",
+          "requires": null,
+          "single": {
+            "text": "The toll collector\u0027s face hardens into something carved from the same granite as the peaks above. \u0022No use to me then,\u0022 he says, closing the ledger with a snap that echoes off the rock face. The miners mutter, dissatisfaction rolling through them like a rockslide\u0027s first rattle. One steps forward, jabbing a thick finger toward the muleteer. \u0022Guilty, then. Silence from a witness means he\u0027s got nothing good to say.\u0022\n  The muleteer surges upward, words tumbling out\u2014appeals to fairness, to proper procedure, to waiting for someone who actually saw something. The toll collector raises a hand, considers, then shakes his head. \u0022Trail justice doesn\u0027t wait for perfect proof. You were coming down with claim-marked ore, no papers, no witness. Math\u0027s simple.\u0022 They take the muleteer by both arms. He doesn\u0027t fight, but his eyes find yours one last time, and there\u0027s nothing in them but the cold knowledge of abandonment.\n  They march him downtrail toward whatever verdict the mining council delivers. You\u0027re waved aside, irrelevant now, a passerby who confirmed nothing but their own absence.",
+            "mechanics": [
+              "damage_spirits trivial"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "A Debt Owed",
+      "category": "plains/tier1",
+      "title": "A Debt Owed",
+      "body": "\nThe group of men walk out to meet you in the road. The oldest, sun-worn and serious, is carrying a ledger and a crude charcoal pencil. The others are local folk, their faces sun-dark and unreadable. \n\nOne spits into the dust. \u0022Aye, look at the ring. It\u0027s the same one. Or near enough as matters.\u0022\n\nThe oldest speaks, \u0022Six months back, one of your men took coin from us for seed wheat that never arrived. We keep our books. We know what\u0027s owed us.\u0022 He taps the ledger meaningfully.\n\nYou\u0027ve never been to these fields before. You were told of no deal with these farmers.\n\nThe old man names a sum. Enough to make the farmers whole, he says. Enough to prove you\u0027re not the sort who fleeces honest folk. Chaff dust hangs golden in the slanting light. Someone\u0027s grandmother has come out to watch, arms crossed, waiting to see what kind of person you are.\n",
+      "choices": [
+        {
+          "optionText": "Pay the sum = Hand over coin to settle a debt that isn\u0027t yours",
+          "optionLink": "Pay the sum",
+          "optionPreview": "Hand over coin to settle a debt that isn\u0027t yours",
+          "requires": null,
+          "single": {
+            "text": "You reach for your purse. The motion itself is answer enough. The merchant wets his thumb and marks something in the ledger, the charcoal leaving a dark smudge across the page. The farmers shuffle closer, watching as you count out the coin into his palm. His hand is steady when he takes it, but he doesn\u0027t meet your eyes.\n  He divides the sum there in the road, parceling it out to three of the farmers by some calculus you\u0027ll never know. They take it without joy, folding the coin into their belts. The grandmother nods once and turns back to her door.\n  The merchant closes his ledger with a snap. He doesn\u0027t thank you. The crowd disperses like smoke. You stand alone in the dusty road with lighter pockets.",
+            "mechanics": [
+              "rem_gold small"
+            ]
+          }
+        },
+        {
+          "optionText": "Explain your innocence = Try to convince them they have the wrong person",
+          "optionLink": "Explain your innocence",
+          "optionPreview": "Try to convince them they have the wrong person",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You choose your words with care, measuring each syllable as you might weigh coin. Your smile comes easily, broad and guileless, though your hand rests near your belt in a manner that speaks its own language. You explain the impossibility of their claim, how you have never walked these fields before, how your records would show any such transaction. As you speak, you let slip mention of the guild, of your standing, of how misunderstandings between merchants and farmers have, in the past, drawn unwelcome attention from those who adjudicate such matters.\n    A younger farmer, jaw set and fists clenched at his sides, cuts through your words. He does not care, he says, which member of your order made the deal or failed to honor it. The ring marks you all the same. Let the guild sort its own house; they want what is owed.\n    The older man turns his head, and the look he gives the younger one carries the weight of years and authority. The young farmer\u0027s mouth closes. Silence settles over the road, broken only by the whisper of wind through dry stalks. The old man faces you again, his weathered features unreadable as stone. \u0022You are right,\u0022 he says at last, each word deliberate. \u0022We have mistaken you for someone else. Go on your way, merchant.\u0022 He does not open the ledger again. The others step aside, clearing the road, though their eyes follow you still.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You speak but the words land wrong, too careful or too quick. The old man shakes his head before you finish, tapping his ledger with the pencil stub. He knew you\u0027d deny it, he says. They always do. A farmer you hadn\u0027t noticed before, younger with hands scarred from scythe work, asks why you won\u0027t just make it right if you\u0027re honest folk.\n    You pivot to threats. You are a member of a powerful guild, who will not take lightly to being accused of theft. But the guild is far away. Right now it is just you, surrounded by irate farmers.\n    The old man taps the ledger. It is clear you\u0027ll need to part with some coin to avoid trouble.",
+              "mechanics": [
+                "rem_gold small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Walk away = Leave without engaging further",
+          "optionLink": "Walk away",
+          "optionPreview": "Leave without engaging further",
+          "requires": null,
+          "conditional": {
+            "preamble": "You turn before the old man finishes speaking. No explanation, no plea. Hard hands grasp your shoulders, spinning you around. These farmers will not let this go quietly.",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You move before the old man can close the distance. Your blow catches the nearest farmer across the jaw; he crumples into the dust without a sound. The ledger falls from weathered hands as the elder reaches forward, too slow, his cry dying in his throat.\n    The remaining men lower their tools with deliberate care. Hoes and rakes settle into the furrows. Calloused palms rise, empty, into the golden air. Their eyes follow you as you turn your back on them, on the man sprawled motionless in the road.\n    Behind you, a single voice breaks. It rises sharp and terrible, then cuts away as if severed. The wind resumes its passage through the wheat, dry stalks whispering their endless secret. Your shadow lengthens before you on the dust-pale road.",
+                "mechanics": [
+                  "damage_spirits trivial"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You turn your back on them.\n    The first blow catches you between the shoulders, a hoe handle or staff you cannot see. You wheel, hand moving to defend yourself, but already two more are closing from the flanks. One strikes low; your knee buckles. Another seizes your arm, wrenching it back with the strength of a man accustomed to wrestling calves and plows.\n    A single farmer would pose no threat. Five together are a different matter. You twist free, land a solid strike that sends one reeling into the dust, but the others press in like wolves on wounded prey. Fists and rough wood find your ribs, your jaw. The taste of copper floods your mouth. Your vision narrows to a confusion of grasping hands and sun-worn faces, the old man standing well back with his ledger tucked beneath one arm, watching with the same expression he might give a storm rolling across his wheat.\n    They drive you to the ground. Dust chokes your lungs. Hands tear at your belt, your pack, methodical and practiced. They take coin, weighed carefully in calloused palms, counted against whatever sum lives in that charcoal-marked ledger. When they are satisfied, they rise and step away, leaving you sprawled in the road with aching ribs and a wallet considerably lighter than before. The old man nods once, as if concluding a transaction at market, and turns back toward his fields.",
+              "mechanics": [
+                "rem_gold small",
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "A Gift for the Harvest",
+      "category": "plains/tier1",
+      "title": "A Gift for the Harvest",
+      "body": "\nThe girl blocks your path at the edge of the wheat field, arms folded across her chest. Thirteen, maybe fourteen. Sunburnt nose, blonde hair escaping a braid, a smudge of dirt on one cheek. Behind her, the wheat stands tall and golden, rippling under the late afternoon breeze like water. The smell of dry grain and sun-baked earth hangs thick in the air.\n\n\u0022You\u0027re not taking the road,\u0022 she says. Not a question. Her jaw is set, her feet planted wide in the dust. \u0022Not unless you help.\u0022\n\nShe nods toward the field behind her. At the far edge, near a listing wooden fence, an older man works alone. He moves slowly, bent double, reaping wheat with a hand sickle. Each stroke is labored. Even from here you can see the hitch in his back, the way he pauses between cuts to straighten, one hand pressed to his spine.\n\n\u0022That\u0027s my grandfather,\u0022 the girl says. \u0022He\u0027s supposed to have three hired hands today. They didn\u0027t come. Said the merchant in Aldgate would pay better for dock work.\u0022 Her voice hardens. \u0022Now he\u0027s out there alone and the field needs cutting before the rains come tomorrow. If it gets wet, it rots. If it rots, we don\u0027t eat this winter.\u0022\n\nShe steps closer. Close enough that you can see the desperation she\u0027s trying to hide beneath the bravado. Her hands are balled into fists at her sides.\n\n\u0022You\u0027ve got that ring,\u0022 she says, eyes flicking to your hand. \u0022Fancy guild folk always have coin. Or time. Or something.\u0022 Her voice cracks, just slightly. \u0022I\u0027ll give you his dinner. Fresh bread, cheese, the good stuff my grandmother made. It\u0027s all we\u0027ve got to trade.\u0022 She swallows. \u0022But if you don\u0027t help, I\u0027m not letting you pass. I don\u0027t care if you\u0027re twice my size.\u0022\n\nThe old man straightens again in the distance, leaning heavily on the fence post. The field stretches wide and golden behind him. The sun is already slanting low.\n",
+      "choices": [
+        {
+          "optionText": "Accept the trade = Take the meal and help cut the wheat",
+          "optionLink": "Accept the trade",
+          "optionPreview": "Take the meal and help cut the wheat",
+          "requires": null,
+          "single": {
+            "text": "You nod once. The girl\u0027s face floods with relief so sudden and total it nearly breaks her composure.\n  The work is brutal. The sickle is dull and the wheat is thick-stalked, tough as wire. Chaff gets in your eyes, your throat, works its way under your collar and into your boots. Your back screams within the first hour. The old man says nothing, but he watches you with something like gratitude, and the two of you fall into a rhythm: cut, gather, bind. The sun crawls toward the horizon. Your hands blister. The field shrinks, row by row, until at last the final sheaf is tied and stacked with the others.\n  The girl brings the meal as promised. You eat sitting on the fence while the old man clasps your shoulder once, wordless, then limps toward the distant farmhouse. The girl lingers, watching you with an expression caught between shame and pride.\n  \u0022Thank you,\u0022 she says quietly. Then she runs after her grandfather, disappearing into the amber light.\n  You walk on as the first stars prick the sky. Your shoulders ache.",
+            "mechanics": [
+              "heal_spirits trivial",
+              "add_random_items 3 food",
+              "skip_time night"
+            ]
+          }
+        },
+        {
+          "optionText": "Persuade her = Convince her to let you pass without helping",
+          "optionLink": "Persuade her",
+          "optionPreview": "Convince her to let you pass without helping",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check mercantile medium",
+                "text": "You crouch down, meeting her eyes, and speak quietly. You tell her the truth: you cannot swing a sickle for hours and still make the next town by dark. But you can do something better. You tell her where the dock merchants gather in Aldgate, which alleys the day laborers drink in, how to shame the hired hands into honoring their word. You sketch it out, step by step, until understanding sparks in her face.\n    She listens, chewing her lip. Then she nods, slowly. \u0022I can do that,\u0022 she says. \u0022I can get them back here.\u0022\n    She steps aside. As you pass, she catches your sleeve. \u0022If this doesn\u0027t work,\u0022 she says, \u0022I\u0027ll remember your face.\u0022\n    You walk on. Behind you, you hear her footsteps pounding back toward the road, quick and purposeful. Whether she\u0027ll succeed, you\u0027ll never know. The wheat sways golden in the wind. The old man is a distant figure, still bent, still cutting.",
+                "mechanics": []
+              }
+            ],
+            "fallback": {
+              "text": "You try. You speak of duty, of fairness, of the many paths that might solve her problem. But the words fall flat in the dust between you. She shakes her head, backing up to block the road more fully.\n    \u0022Talk,\u0022 she says bitterly. \u0022That\u0027s all guild folk do. Talk and count coin while the rest of us break our backs.\u0022 Her voice rises. \u0022You think words will cut that wheat? You think words will keep us fed?\u0022\n    She picks up a stone. Not large, but her arm is cocked back, and her eyes are bright with tears and fury. \u0022Turn around,\u0022 she says. \u0022Find another road.\u0022\n    You do. The long way around adds an hour to your journey, skirting the edge of the fields through scrub and thistle. Once, you glance back. The girl is gone. The old man is still there, a lone figure against the golden expanse, cutting and cutting as the light fails.",
+              "mechanics": [
+                "damage_spirits trivial",
+                "skip_time night"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Pay your way = Offer coin to hire help for them",
+          "optionLink": "Pay your way",
+          "optionPreview": "Offer coin to hire help for them",
+          "requires": null,
+          "single": {
+            "text": "You reach into your pack and draw out coin. Enough to hire three strong backs for a day, maybe two. You hold it out to the girl.\n  Her face goes very still. She stares at the coins in your palm, then up at your face, then back down. For a moment you think she\u0027ll take it. Then her expression hardens into something ugly.\n  \u0022Charity,\u0022 she spits. The word is acid. \u0022That\u0027s what we are to you, isn\u0027t it? Poor farmers with our hands out, begging from the guild.\u0022\n  She slaps your hand. The coins scatter in the dust. One rolls away into the wheat stubble, glinting.\n  \u0022Keep it,\u0022 she says, voice shaking. \u0022We\u0027ll manage. We always do. We don\u0027t need your pity.\u0022 She steps aside, jerking her head toward the road. \u0022Go on. Go back to your soft city friends and tell them how generous you were.\u0022\n  You walk past her. She doesn\u0027t look at you. Behind you, you hear her scrabbling in the dirt, gathering the coins you dropped, her breath hitching with something between rage and shame. The old man is still cutting wheat, alone against the dying light. The coins you meant as kindness burn heavier in her hands than any blade.",
+            "mechanics": [
+              "damage_spirits small"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "Celebration",
+      "category": "plains/tier1",
+      "title": "Celebration",
+      "body": "\nThe road cuts through wheat fields bright as hammered brass. In a shallow clearing ahead, ribbons hang from fence posts and a long table blocks the way, set with bread, salt, and cloudy cider. Villagers stand in a loose ring, smiling as you approach.\n\n\u0022Traveler,\u0022 a woman calls, flowers tied to her braids. \u0022Your path is blessed. We\u0027re at the choosing.\u0022\n\nA wreath of barley settles on your head before you can step back. Someone presses a small sack into your hands; grain, tied tight with red thread. The circle closes in, casual as a market crowd. At the center of the table you notice a rough stone bowl, dark with something that isn\u0027t water.\n\nYou glance down the road beyond them. No sign of another traveler. No sign of whoever was meant to be \u0022chosen\u0022 before you arrived.\n\nYour attention returns to the villagers. A fresh faced young woman steps forward, her hands held out. She is presenting you with a rusted iron dagger, blade pitted and stained.\n\nAll eyes are upon you.\n",
+      "choices": [
+        {
+          "optionText": "Refuse the dagger = Take no part in whatever this is",
+          "optionLink": "Refuse the dagger",
+          "optionPreview": "Take no part in whatever this is",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You raise both hands in a warding gesture, palms outward. The barley wreath shifts on your head. You thank them for the honor, your voice steady, and explain that your own gods would look unkindly upon your taking part in their rites. The young woman\u0027s smile falters. The dagger remains suspended between you, rust flaking from its edge.\n        To fill the silence you speak of Shemned, god of the autumn harvest in the hills where you were born. You tell what fragments you recall: how the grain must be cut before the moon wanes, how the last sheaf stands in the field until frost claims it. Your words come haltingly, cobbled from childhood memory. The villagers listen, their circle loosening, and soon a gray haired man interrupts with questions. Does Shemned sleep beneath the roots? Does he rise at planting? The debate sprawls, voices overlapping, until the woman with flowers in her braids claps her hands once, sharply.\n        \u0022You worship the Worm Below,\u0022 she announces, satisfied. \u0022Only by another name.\u0022 The others nod. You feel the weight of their conclusion settle over you like the barley crown itself, but you nod in return, eager to be gone. Let them believe what they will. The young woman lowers the dagger. Another villager presses a cloth sack into your arms, heavier than the first. They step aside. The road opens before you. You walk through their ring, and no one follows.",
+                "mechanics": [
+                  "add_random_items 3 food",
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You let the dagger remain in the young woman\u0027s outstretched hands. Your voice cuts across the clearing, sharp with disgust. Whatever ritual they mean to enact here, you will have no part of it. You speak of Shemned, your own harvest god, whose priests pour wine rather than darker things, who demands no blade be lifted save to cut grain from the stalk.\n        The smiles do not fade. They simply empty of warmth.\n        Hands close around your arms before you can pivot toward the road. You are hauled backward, your heels dragging furrows through the dust. The circle parts and reforms behind you. They march you to the edge of the clearing where the wheat begins, and there they release you with a shove that sends you stumbling into the stalks. One of them, the woman with the braided flowers, reaches out and plucks the barley wreath from your head. She turns away without a word.\n        Behind you, the villagers drift back toward their table. The cider is poured. Bread is broken. They do not look in your direction again.",
+              "mechanics": [
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Accept the dagger = Take part in the ritual",
+          "optionLink": "Accept the dagger",
+          "optionPreview": "Take part in the ritual",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check bushcraft medium",
+                "text": "You have seen this ritual done, though never from the center of the circle. You begin to walk, letting memory guide your steps. The first stop comes at the eastern edge of the clearing, where morning light falls. You raise the rusted blade toward the wheat, point trembling slightly in your grip, and call a blessing on the harvest. You don\u0027t know the words, but you say what feels right.\n        The villagers answer, their words echo yours. You move to the southern point, then west, then north. At each compass mark you halt, extend the dagger toward the fields, and speak. The blade catches sunlight at odd angles, its pitted surface scattering fragments of brightness. Each time you call, the villagers respond, their voices rising and falling in unison, shaping the blessing into something larger than your words alone could carry.\n        When the circle closes, you return to the young woman. She waits with her hands open. You lay the dagger across her palms. She bows, pressing her forehead to the hilt for a long breath, then lifts her gaze to meet yours. \u0022It is a good blessing from an outsider,\u0022 she says. \u0022The words were new but familiar.\u0022\n        The evening unfolds in shared bread and story. You sit among them as the light fades, their voices weaving tales of seasons past while cider passes hand to hand. The barley wreath remains on your head, and no one moves to take it back.",
+                "mechanics": [
+                  "add_random_items 3 food",
+                  "heal_spirits medium",
+                  "skip_time morning"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You walk with grim determination to the stone bowl. Your fingers close around the dagger\u0027s pitted hilt. You hold out your hand, palm upward, and draw the rusted edge across the flesh in one deliberate stroke. The blade bites deep; pain flares white and immediate. Blood wells thick and dark from the gash, spilling over your fingers in hot rivulets. You turn your hand and let the crimson flow pour into the bowl, where it mingles with whatever lies within.\n        The villagers stare, their smiles frozen. The clearing falls silent save for the drip of blood striking liquid. A small child tugs at her mother\u0027s skirt and asks, voice clear in the stillness, \u0022Why is that person bleeding in the soup?\u0022\n        The woman with flowers in her braids blinks. Another villager clears his throat. Someone mutters about foreign customs, ancient ways from distant lands. They nod to one another, uncertainty masked by forced courtesy. Two men lift the bowl with careful hands and carry it behind the table, tilting it to spill its contents into the wheat. The young woman retrieves the dagger from your slack grip, her expression carefully blank. You bind your hand in a strip torn from your cloak, the wound throbbing with each beat of your heart. At the first lull in their murmured conversation, you turn and walk back to the road, your departure unmarked by farewell.",
+              "mechanics": [
+                "damage_spirits small",
+                "damage_health trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Burning Field",
+      "category": "plains/tier1",
+      "title": "The Burning Field",
+      "body": "\nThe first whiff of smoke reaches you on the wind, acrid and wrong for the season.\n\nYou crest a low rise and see it. A wheat field halfway to harvest, rolling gold and green under a pale sky, and at its heart a ribbon of flame eating its way toward the road. The fire is young yet, barely waist-high, but the grain is tinder-dry and the wind is steady. Already the smoke rises in a grey column that will be visible from the city walls. A farmer stands at the field\u0027s edge, frozen, staring at the destruction with his mouth open. His hands hang at his sides like dead things. Behind him, two children clutch each other, wide-eyed and silent.\n\nBeyond the flame, perhaps fifty paces into the field, a mule brays in panic. It is tangled in something, harness or rope, thrashing as the fire crawls closer. The farmer seems not to hear it. He is muttering numbers under his breath, calculations of loss, the arithmetic of ruin.\n\nA woman runs up from the direction of the village, breathless, carrying two empty sacks. She sees the mule and curses, low and bitter. \u0022The well\u0027s dry,\u0022 she says to no one in particular. \u0022The well\u0027s been dry since yesterday.\u0022 She looks at the field, at the smoke, at the farmer who will not move. Then she looks at you. Her gaze catches on the ring at your hand, the worked gold and the guild sigil, and something like hope flickers across her face before it hardens into expectation.\n\n\u0022You want safe roads to market,\u0022 she says flatly. \u0022This man supplies half the bakers in Aldgate. If his crop burns, bread prices double by week\u0027s end.\u0022\n\nThe mule screams again. The fire creeps forward, a slow bright line dividing the world into what can be saved and what is already lost. The farmer\u0027s children have started to cry. The wind does not care. It pushes the flames steadily toward the road, toward the village beyond, toward the next field and the next.\n\nThe woman holds out one of the sacks. \u0022Help or don\u0027t,\u0022 she says. \u0022But decide now.\u0022\n",
+      "choices": [
+        {
+          "optionText": "Beat a firebreak = Tear through the wheat ahead of the flames, deny them fuel",
+          "optionLink": "Beat a firebreak",
+          "optionPreview": "Tear through the wheat ahead of the flames, deny them fuel",
+          "requires": null,
+          "conditional": {
+            "preamble": "You wade into the unburned grain and begin to rip. Handfuls at first, then armfuls, tearing the stalks down and scattering them behind you, stamping them flat. The woman sees what you are doing and joins you, working in grim silence. The farmer stirs at last, stumbles forward, begins to beat at the flames with his sack where your firebreak meets the advancing line.",
+            "branches": [
+              {
+                "condition": "check bushcraft medium",
+                "text": "Chaff fills your lungs. Your hands bleed from a hundred cuts. But the fire reaches your break and finds nothing to feed it, hesitates, turns back on itself and begins to gutter. The farmer and the woman beat out the last smoldering patches while you collapse at the field\u0027s edge, coughing smoke. The mule is lost. A quarter of the field is ash. But the rest stands golden and untouched, rolling in the wind like nothing happened. The woman brings you water in a clay jug. She does not thank you. She does not need to. The farmer is already walking the firebreak, running his hand through the torn grain, weeping soundlessly. You leave him there, counting what remains.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You are too slow. The fire outraces you, jumps your pathetic break in a cascade of sparks, and suddenly you are surrounded. Flame on three sides and smoke so thick you cannot see the ground. You run blind, stumbling through the burning wheat, and when you finally break free at the field\u0027s edge your clothes are singed and your throat is raw as butchered meat. The woman drags the farmer back as the fire takes the road. It will burn itself out at the fallow ground beyond, but not before it consumes everything. The mule\u0027s screaming stops. You walk away before it ends, the taste of ash thick on your tongue, the smell of burned hair following you down the road.",
+              "mechanics": [
+                "damage_spirits trivial",
+                "damage_health trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Drive the mule out = Charge through smoke and flame, cut it loose, drive it to safety",
+          "optionLink": "Drive the mule out",
+          "optionPreview": "Charge through smoke and flame, cut it loose, drive it to safety",
+          "requires": null,
+          "single": {
+            "text": "You do not wait for permission. You wrap cloth across your mouth and run into the smoke. The heat is immediate and savage. The world narrows to the sound of the mule\u0027s braying, a beacon in the grey. You find it tangled in a collapsed cart, harness twisted around the axle. Your hands work blind, fumbling with knots and buckles while the flames crawl closer. The mule kicks, wild with fear, and catches you in the ribs. You taste blood. But the last strap comes free and you seize its halter, dragging it forward into the smoke, praying you remember which direction is out.\n  You do. Barely. You emerge gasping, the mule bolting past you toward open ground. The fire has taken half the field. The woman and the farmer beat at the edges with their sacks, trying to contain it, but the wind is relentless. By the time it burns itself out against the road, the damage is done. The farmer does not speak. He catches the mule, strokes its neck, and stares at the blackened ruin of his harvest. You leave him there. The children watch you go, silent as stones.",
+            "mechanics": [
+              "heal_spirits small"
+            ]
+          }
+        },
+        {
+          "optionText": "Walk on = This is not your field, not your village, not your concern",
+          "optionLink": "Walk on",
+          "optionPreview": "This is not your field, not your village, not your concern",
+          "requires": null,
+          "single": {
+            "text": "You meet the woman\u0027s eyes and say nothing. Her expression does not change. She expected this, perhaps. She turns away, back to the field, and begins beating at the flames with her sack. Alone. The farmer remains frozen. His children cry.\n  You walk. Behind you the smoke rises higher, a grey pillar against the sky. The mule\u0027s screaming follows you for a time, then stops. You do not look back. By the time you reach the next village, the column is visible for miles, a marker of ruin that every farmer and merchant will see and remember. In Aldgate, bread prices will rise. Tempers will fray. Someone will pay for this. But it will not be you. You are already gone, a stranger passing through, and the ring on your hand catches the light like a promise no one asked you to keep.",
+            "mechanics": [
+              "damage_spirits medium"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Grain Cart",
+      "category": "plains/tier1",
+      "title": "The Grain Cart",
+      "body": "\nThe cart sits alone at the crossroads, tilted on one broken axle. Sacks of grain are piled high beneath canvas, the lashings still tight, the whole load intact and untouched. No driver. No mule. Just the cart and the flies and the afternoon heat pressing down on the wheat fields.\n\nYou see the problem before you reach it. The axle didn\u0027t break from weight or rot. Someone pried the wheel off and left it ten paces down the road, half-hidden in the ditch. The cart\u0027s been abandoned deliberately, set here like bait. Or a message.\n\nMovement catches your eye near the cart. A young man, nearly a boy, is struggling to pull a full sack from the wagon. He freezes under your gaze, pauses a long moment to think, then shouts \u0022take one for yourself or walk on, stranger. It\u0027s been a hard year and this is the first bit of luck my family\u0027s had.\u0022\n\nThe smell of overripe wheat rolls across the fields. Cicadas drone in the heat.\n",
+      "choices": [
+        {
+          "optionText": "Take the grain = Perhaps it\u0027s your lucky day as well",
+          "optionLink": "Take the grain",
+          "optionPreview": "Perhaps it\u0027s your lucky day as well",
+          "requires": null,
+          "single": {
+            "text": "Your hands work quickly, lifting a sack onto your shoulder. The weight unbalances you, but you\u0027ll manage to the next settlement.\n  You turn to find the cart\u0027s owner, two guards at his side. He sees the bag immediately. His eyes find your ring, and his face goes cold with calculation. \u0022I had expected to travel three day with that grain, but here we have a buyer with ready coin. Just one sack then? Let me check my ledger.\u0022\n  You curse your ill luck, but pay. The guards watch the coin change hands, bored witnesses to a transaction they\u0027ve seen a dozen times. The merchant smiles, all teeth, and climbs back onto his repaired cart. The boy and his siblings are gone, vanished into the wheat. Your pack is lighter by coin and heavier by grain.",
+            "mechanics": [
+              "add_item grain_sack",
+              "rem_gold small"
+            ]
+          }
+        },
+        {
+          "optionText": "Persuade the man to leave = Something feels amiss here",
+          "optionLink": "Persuade the man to leave",
+          "optionPreview": "Something feels amiss here",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check mercantile medium",
+                "text": "You\u0027ve seen this trap in three towns before. The owner and his men are hiding nearby, keen to extort silver from anyone foolish enough to steal from the cart. The boy\u0027s eyes widen as you explain the game, then he drops the sack and melts into the wheat without a word. Sure enough, as you continue down the road, you catch the glint of steel behind the stone wall where the merchant and his hired muscle wait for easier marks.",
+                "mechanics": []
+              }
+            ],
+            "fallback": {
+              "text": "You clear your throat and set about the tale of Old Man Yaniv and the grimlet\u2014carefully, properly, with the necessary scaffolding. The grimlet, you explain, is not merely a creature of shadow and riddles but a cautionary mechanism in furred form, and its threefold bargains must be understood in sequence if one is to appreciate their symmetry. There are digressions, brief but essential, on the curing of jorgo root, on the contractual ambiguity of sunset, on the moral hazard of speaking imprecisely to entities who delight in precision. Somewhere during your clarification of root preparation methods, the boy\u0027s attention begins to drift, and you, ever attentive to pedagogy, pivot smoothly to the more illustrative case of Yaniv and the Magic Fish.\n    This second account you deliver with renewed vigor, outlining each wish and its unintended corollary, tracing the arc of folly with a steady finger as though diagramming it in the air. You conclude with a small, satisfied flourish, certain the lesson has landed squarely. When you turn to gauge the effect, however, there is only the cart, the mule, and the long shadows stretching across the road. The boy, presumably fortified with wisdom, has seen fit to depart before the final summary.",
+              "mechanics": [
+                "heal_spirits trivial",
+                "skip_time evening"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Give this ruffian a thrashing = You\u0027ll not let theft go unpunished",
+          "optionLink": "Give this ruffian a thrashing",
+          "optionPreview": "You\u0027ll not let theft go unpunished",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "The boy takes one look at your stance and drops the sack, grain spilling across the dirt as he scrambles backward. He turns and runs into the wheat, the stalks swallowing him whole, his panicked breathing fading into the cicada drone. You continue down the road, leaving the tilted cart and its intact cargo to bake in the afternoon sun.",
+                "mechanics": [
+                  "heal_spirits trivial"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You stride toward the youth with purpose. He does not cower. Instead, his shoulders tense, his feet shift to balance, and you glimpse in his stance some trace of training, or at least of many fights survived.\n    He moves before you close the distance. The sack of grain, still gripped in both hands, rises and swings toward you with surprising force. It catches you across the chest and shoulder, a dull, heavy impact that staggers you backward. The weight of it, the suddenness, sends you sprawling into the dirt.\n    Before you can rise, he is on you. He straddles your torso, pinning you against the ground with his knees, and his fists descend in rapid succession. The blows land across your jaw, your cheekbone, your brow. You taste copper. Your vision flashes white with each strike. He breathes hard through his teeth, his face taut with desperation, and you feel the weight of his intention: he means to end you here, to beat you senseless or worse.\n    Then, abruptly, he stops. He springs off you and bolts, sprinting down the road toward the wheat fields. You roll to your side, gasping, the dust thick in your throat.\n    Hoofbeats and the creak of leather reach your ears. You push yourself to your knees, blinking blood from one eye, and see three figures approaching: a broad man in merchant\u0027s garb astride a mule, flanked by two guards with cudgels in hand. The merchant reins in near the cart, his gaze sweeping the scene. He sees you, bloodied and still half-prone in the dirt, and his expression hardens.\n    \u0022Looks like the thieves turned on each other,\u0022 he says, voice flat and certain. \u0022One of them is still here.\u0022\n    The guards move to either side of you. You raise a hand, wipe at your mouth, and speak slowly, forcing steadiness into your voice. You tell him you came upon the boy stealing from his cart. You tell him you meant to protect his grain, to stop the theft before it worsened.\n    The merchant\u0027s eyes narrow. He glances at the cart, at the sacks still piled beneath their canvas, the lashings intact. He looks back to you, doubt plain in his face.\n    \u0022Nothing\u0027s been taken,\u0022 he says after a long pause. \u0022So there\u0027s no claim for a crime.\u0022\n    One of the guards prods you with the end of his cudgel, a silent command to rise. You do, slowly, your ribs aching where the boy\u0027s knees pressed down. The merchant watches you stand, his jaw tight, his hand resting on the pommel of a short knife at his belt.\n    \u0022You\u0027ll move along now,\u0022 he says. \u0022And keep to your own road.\u0022\n    You nod once, gather what dignity remains, and turn away from the cart. As you walk, you feel the merchant\u0027s gaze fixed on your back, heavy and mistrustful, until the crossroads and the broken cart are far behind you.",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "recur-Bandits",
+      "category": "scrub/tier1",
+      "title": "Bandits",
+      "body": "\nThere are bandits on the road. You can either fight them or run.\n",
+      "choices": [
+        {
+          "optionText": "Fight them = You fight them.",
+          "optionLink": "Fight them",
+          "optionPreview": "You fight them.",
+          "requires": null,
+          "single": {
+            "text": "",
+            "mechanics": [
+              "skip_time morning"
+            ]
+          }
+        },
+        {
+          "optionText": "Run = You run.",
+          "optionLink": "Run",
+          "optionPreview": "You run.",
+          "requires": null,
+          "single": {
+            "text": "",
+            "mechanics": [
+              "skip_time evening"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "recur-Dust Storm",
+      "category": "scrub/tier1",
+      "title": "Dust Storm",
+      "body": "\nThere\u0027s a dust storm coming. You can either wait it out or press on.\n",
+      "choices": [
+        {
+          "optionText": "Wait it out = You wait it out.",
+          "optionLink": "Wait it out",
+          "optionPreview": "You wait it out.",
+          "requires": null,
+          "single": {
+            "text": "",
+            "mechanics": [
+              "skip_time morning"
+            ]
+          }
+        },
+        {
+          "optionText": "Press on = You press on.",
+          "optionLink": "Press on",
+          "optionPreview": "You press on.",
+          "requires": null,
+          "single": {
+            "text": "",
+            "mechanics": [
+              "skip_time evening"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Courier",
+      "category": "scrub/tier1",
+      "title": "The Courier",
+      "body": "\nThe Kesharat courier stands in full sun, sweat darkening the collar of his rumpled official coat. The leather document case lies in the dust between his boots and the clan trader\u0027s sandals. The trader picked it up when the courier dropped it\u2014fumbled it, really, after the man made some crack about plateau illiteracy loud enough for the whole watering station to hear. Now the trader holds it at arm\u0027s length, recounting the insult word for word to the gathering crowd. Laughter ripples through them. The courier\u0027s face has gone red, though whether from heat or humiliation is hard to say.\n\nYou catch the shift in the crowd\u0027s mood before the courier does. The laughter has an edge now. Someone mutters about arrogant lowlanders. A woman spits in the dust. The trader is still talking, working them like a merchant working a sale, and the courier keeps demanding his property back in that clipped administrative accent that makes everything sound like a reprimand. The signet ring on your hand catches light\u2014the Merchant Guild mark that means you walk between worlds, neither clan nor Kesharat but trusted by both when coin is involved. The courier sees it. His eyes fix on you like a drowning man spotting driftwood.\n\nThe trader wants an apology. The courier would sooner eat glass. And the crowd\u2014wind carries their voices across the exposed stone, a low buzz of old resentments given sudden shape. If they lay hands on him, the Kesharat will answer it. Not here, not now. But somewhere a clan will wake to soldiers at their gates, and a debt will be collected that has nothing to do with justice and everything to do with the appearance of authority. The elder under the awning hasn\u0027t moved, but his eyes are open. Watching.\n\nThe trader holds the case higher. The crowd presses closer. The courier\u0027s hand drifts toward his belt where no weapon hangs.\n\n",
+      "choices": [
+        {
+          "optionText": "PERSUADE the trader = Appeal to the trader\u0027s sense of self-preservation and clan honor",
+          "optionLink": "PERSUADE the trader",
+          "optionPreview": "Appeal to the trader\u0027s sense of self-preservation and clan honor",
+          "requires": null,
+          "conditional": {
+            "preamble": "You step into the gap between them. The words come measured, pitched for the crowd as much as the trader. The Kesharat remembers insults like the plateau remembers water. Not here, not today, but someone will pay. A cousin\u0027s caravan stopped at a checkpoint. A clan\u0027s grazing rights questioned by men with ledgers and swords. The trader\u0027s eyes narrow, but you see the calculation there. You turn the signet ring so the mark catches light. The Merchant Guild has carried messages between these worlds for three generations. You know what retribution looks like when it crosses borders.",
+            "branches": [
+              {
+                "condition": "check luck medium",
+                "text": "The trader lowers the case. Not a surrender, but a repositioning. He addresses the crowd, not the courier. Says he found property that wasn\u0027t his and returned it as clan law demands, insult or no insult. The case lands in the dust at the courier\u0027s feet. The courier snatches it up, clutching it like a child with a stolen cake. He nods once to you, stiff and graceless, and retreats toward his mount. The crowd disperses with the slow reluctance of a disappointed audience. The trader meets your eyes. No gratitude there, but recognition. You\u0027ve given him the story he can tell tonight, the one where he\u0027s generous and the lowlander is a fool.",
+                "mechanics": []
+              }
+            ],
+            "fallback": {
+              "text": "The trader\u0027s face hardens. He asks the crowd if they\u0027re dogs who roll over when the Kesharat snap their fingers. Someone shouts agreement. You see the moment slip like sand through spread fingers. The trader opens the case, breaks the wax seal with his thumb. Papers spill into the wind. The courier lunges. Three men catch him, pin his arms, not gently. No blows fall, but the message is written in grip and stance. The courier is released after long minutes, stumbling, papers scattered across twenty paces of plateau stone. He gathers what he can with shaking hands. Doesn\u0027t look at you. The crowd watches him leave, and their laughter follows him like carrion birds.",
+              "mechanics": []
+            }
+          }
+        },
+        {
+          "optionText": "INTIMIDATE the trader = Use the weight of the Merchant Guild to make the trader yield",
+          "optionLink": "INTIMIDATE the trader",
+          "optionPreview": "Use the weight of the Merchant Guild to make the trader yield",
+          "requires": null,
+          "conditional": {
+            "preamble": "You don\u0027t raise your voice. Volume is for people without leverage. You show the signet ring, let the sun catch the mark that means every trading post between here and the coast. Ask the trader which clans he sells to. Ask if he\u0027s considered how many of them hold Merchant Guild letters of credit. The words land like stones in still water. The crowd shifts, uncertain now. Guild membership isn\u0027t just about coin. It\u0027s about roads that stay open and goods that cross borders without entanglement. You let the silence stretch.",
+            "branches": [
+              {
+                "condition": "check luck medium",
+                "text": "The trader\u0027s jaw works. He spits in the dust, but his hand opens. The case drops. He tells the courier to take his trash and his manners back where they came from. The courier grabs the case, cradles it against his chest. Mumbles something that might be thanks to you, might be a curse. The trader turns his back, loud conversation about anyone who needs outsiders to fight their battles. But the crowd is already losing interest, drifting back to their own transactions. The elder under the awning nods once. You\u0027ve made your point without making an enemy. The currency of it will spend for a while yet.",
+                "mechanics": []
+              }
+            ],
+            "fallback": {
+              "text": "The trader laughs. Asks if you\u0027re threatening a man for picking up what another dropped. The crowd murmurs, and the sound isn\u0027t friendly. Someone mentions a cousin who got squeezed by Guild rates last summer. Another voice adds a grievance about weighted scales. The trader is smiling now, playing to his audience. Your ring suddenly feels heavier, more visible. The courier looks at you with something between hope and panic. The trader tosses the case in the air, catches it. Asks if you\u0027d like to buy it back, maybe. The price is an apology. Not from him. From you. The elder under the awning is watching with the particular attention of someone who will remember what happens next.",
+              "mechanics": []
+            }
+          }
+        },
+        {
+          "optionText": "PAY the trader = Offer coin to resolve the situation",
+          "optionLink": "PAY the trader",
+          "optionPreview": "Offer coin to resolve the situation",
+          "requires": null,
+          "single": {
+            "text": "You pull the purse from your belt, pour coins into your palm. Silver catches light like water in drought country. Don\u0027t address the insult, don\u0027t adjudicate who owes what to whom. Just ask what the finder\u0027s fee is for lost property. Frame it as custom, as proper form. The trader\u0027s eyes fix on your hand. The crowd quiets. Money makes things simple in ways that honor never does.\n  The trader names a price. Not outrageous, but not generous either. The courier starts to object, but you silence him with a look. You count out the coins into the trader\u0027s palm. The exchange happens with the small ceremony that all plateau transactions demand. The trader hands over the case, bows with theatrical courtesy. Tells the courier that civilized people settle matters with trade, not tantrum. The courier takes the case, face burning. Looks at you with naked relief and something more complicated underneath. You\u0027ve saved him, but you\u0027ve also made him small in front of witnesses. The crowd disperses. The elder under the awning returns to his tea. Debt paid, story finished, everyone walks away with something to tell.",
+            "mechanics": []
+          }
+        },
+        {
+          "optionText": "Ignore = Walk past without involvement",
+          "optionLink": "Ignore",
+          "optionPreview": "Walk past without involvement",
+          "requires": null,
+          "single": {
+            "text": "You adjust your pack and turn toward the road. The courier calls after you, voice cracking with desperation. You keep walking. Behind you the voices rise, the trader\u0027s performance reaching its crescendo. The crowd\u0027s laughter has teeth in it now. Your boots find the packed earth of the caravan track. Dust plumes with each step. The sounds fade slower than you\u0027d like.\n  A half mile on, you hear hoofbeats. The courier passes at a gallop, hunched low, no document case visible. His mount\u0027s flanks are lathered. He doesn\u0027t look at you. Further still, you pass a woman leading a pack goat. She mentions that some Kesharat fool got himself rolled at the watering station. Lost his papers, lost his dignity, rode off like demons were chasing him. She seems to find it funny. You ask if anyone was hurt. She shrugs. Says the clans know better than to leave marks the Kesharat can see. You walk on. The wind carries dust and distance. Whatever accounting follows will happen far from here, in offices and checkpoints where your ring holds no weight.",
+            "mechanics": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "Unusual Cargo",
+      "category": "scrub/tier1",
+      "title": "Unusual Cargo",
+      "body": "\nThe canyon pass narrows to a stone throat barely wide enough for two carts abreast. A rope barrier blocks the way, strung between iron stakes driven into the cracked earth. Behind it stands a toll-keeper in dusty indigo, arms crossed, while two merchants argue with the practiced intensity of people who know their words won\u0027t matter. Their loaded carts sit baking in the harsh sun. \n\nOne merchant keeps fishing in a leather document case at his belt, pulling out stamped tokens, putting them back. The toll-keeper doesn\u0027t look at them anymore.\n\nThe lead merchant spots your ring while you\u0027re still appraising the situation. His relief is immediate and desperate. \u0022Guild authority,\u0022 he says loudly. He gestures toward the toll-keeper, \u0022This man is trying to rob us. We paid. We have tokens. He says tokens mean nothing now.\u0022\n\nThe man with the document case pulls out a stamped metal disk and holds it up with some gravity. You can\u0027t read the language, but you understand it\u0027s a contract of some sort.\n\nThe toll-keeper sighs heavily. \u0022I have explained this. All travelers will be searched. It is the new rule. Your tokens do not buy you an exception from the rule.\u0022 He gestures to a pair of nearby guards, who start walking toward the cart.\n\nThe lead merchant leans close to you, voice dropping. \u0022This is robbery. He will search our cargo. He will find so-called contraband. He will steal from both of us.\u0022 The sealed crate on his middle cart sits roped tight, wax stamps intact along every edge. Too many seals for ordinary cargo.\n",
+      "choices": [
+        {
+          "optionText": "Persuade the toll-keeper to reconsider = Use your Guild authority to negotiate a resolution",
+          "optionLink": "Persuade the toll-keeper to reconsider",
+          "optionPreview": "Use your Guild authority to negotiate a resolution",
+          "requires": null,
+          "conditional": {
+            "preamble": "You step between them before the guards reach the crate. \u0022The Guild recognizes passage tokens issued under legitimate clan authority,\u0022 you say, loud enough for the waiting travelers to hear. \u0022If your clan wishes to renegotiate terms, that conversation happens through formal channels. Not at a rope barrier in the afternoon heat.\u0022 You turn the ring so the signet catches light. \u0022Unless you want every caravan master from here to the plateaus hearing that clan word means nothing.\u0022",
+            "branches": [
+              {
+                "condition": "check mercantile medium",
+                "text": "The toll-keeper holds your gaze for a long moment, his jaw working as though chewing something bitter. His eyes narrow, measuring the weight of the ring you wear against whatever authority has placed him here at this stone throat. The guards halt mid-stride, their attention fixed on their captain.\n    At last he grunts, a sound dragged up from some deep well of pragmatism. He waves one hand sharply, and the guards retreat to their stations without a word. \u0022We will make an exception for the outlander,\u0022 he says, each word dropping like a stone into still water, \u0022who is unaccustomed to our ways.\u0022 He moves to the nearest iron stake and begins working the rope free, his fingers quick despite their reluctance. The barrier sags, then falls away entirely. \u0022Tomorrow you will not be so fortunate.\u0022\n    The lead merchant exhales audibly. He says nothing, perhaps knowing better than to claim victory aloud, and climbs onto his cart. The wheels groan as the mules lean into their harnesses. You watch the sealed crate pass through the gap, its wax stamps catching the brutal sun, still intact.",
+                "mechanics": []
+              }
+            ],
+            "fallback": {
+              "text": "The toll-keeper throws back his head and laughs, a sound like stones scraping in a dry riverbed. \u0022Guild authority stops where clan ground starts,\u0022 he says. His hand sweeps toward the canyon walls, encompassing the narrow throat of stone. \u0022You want to argue law, walk back to Aldgate and file a complaint.\u0022\n    He snaps his fingers. The guards stride past you, boots crunching on sun-baked earth, making straight for the middle cart. They seize iron pry-bars and wedge them beneath the lid of the conspicuous crate. Wood groans and splits. Wax seals crack and tumble into the dust like broken teeth. The guards heave the lid aside and step back. Inside, stacked in careful rows, sit rough-bound books, their covers stained dark with age and handling.\n    The toll-keeper reaches in and lifts one free. He opens it, tilts his head to read, then spits into the dirt at his feet. \u0022You would bring such pollution among our people? Shameful.\u0022 His voice carries the weight of genuine disgust. He beckons the guards closer, already turning his full attention to the merchant, whose face has gone the color of ash. The toll-keeper glances at your pack, dismisses it with a flick of his eyes, then waves you forward. \u0022Go. You are not my concern today.\u0022\n    You consider asking what manner of text could provoke such revulsion, but the toll-keeper\u0027s hand is already on the merchant\u0027s shoulder, fingers digging in. The second merchant has gone very still beside his cart. You walk past the rope barrier, boots finding the narrow track that winds deeper into the canyon, and you do not look back.",
+              "mechanics": []
+            }
+          }
+        },
+        {
+          "optionText": "Accuse the merchant = Side with the toll-keeper, these merchants seem suspect",
+          "optionLink": "Accuse the merchant",
+          "optionPreview": "Side with the toll-keeper, these merchants seem suspect",
+          "requires": null,
+          "single": {
+            "text": "The toll-keeper\u0027s grin splits his weathered face as you gesture toward the over-sealed crate. The lead merchant goes pale beneath his road dust, his hand dropping from the document case to grip the cart rail. \u0022Those are very delicate instruments,\u0022 he says, and the words tumble out too quickly. \u0022Please. I can pay a special fee, yes? For an exception.\u0022 His voice drops to a whisper meant to carry. \u0022For your trouble, and for our friend here in the guild.\u0022\n  The leather pouch appears in his hand with practiced ease. Gold coins catch the sun as he counts them out, pressing a few into your palm before turning to the toll-keeper with the bulk of his offering. The metal is warm, still holding the heat of the merchant\u0027s body. The toll-keeper\u0027s thick fingers close around his share with the smooth motion of long habit.\n  \u0022No trouble at all,\u0022 the keeper announces, already turning to wave his guards back. \u0022Carry on. Safe travels.\u0022 The rope barrier drops with a slap of hemp on stone. The merchant clicks his tongue, and his horses lean into their traces, wheels groaning as the carts lurch forward. He looks at you once as he passes, and the gratitude has curdled into something harder. His eyes promise memory. Then the dust swallows him, and the canyon throat stands empty once more, save for the toll-keeper whistling a tuneless melody while he tests the weight of each coin.",
+            "mechanics": []
+          }
+        },
+        {
+          "optionText": "Submit to a search = Follow the rules and hope for the best",
+          "optionLink": "Submit to a search",
+          "optionPreview": "Follow the rules and hope for the best",
+          "requires": null,
+          "single": {
+            "text": "You step forward, ahead of the merchant, and offer yourself for inspection. The nearest guard halts, grunts, and begins pulling through the contents of your pack with thick fingers. His face remains flat, uninterested. After a moment he waves you past the rope barrier with the back of his hand.\n  You walk through the stone throat alone. Behind you, the argument swells into shouts. Wood cracks, sharp and splintering. A voice rises in protest, then cuts short. The sound echoes off the canyon walls. You do not turn. Whatever lay sealed beneath those wax stamps belongs to someone else now. The rope barrier recedes behind you, and the passage ahead narrows into shadow.",
+            "mechanics": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "A Sons Responsibility",
+      "category": "swamp/tier1",
+      "title": "A Son\u0027s Responsibility",
+      "body": "\nThe dike is failing. You see it from the raised path \u2014 a seeping dark line where the packed earth has begun to weep, water forcing through in thin streams that catch the afternoon light. Beyond it, the paddy fields stretch in careful geometric rows, rice stalks still green, weeks from harvest. A woman stands knee-deep in the breach, packing mud with her bare hands. Her movements are methodical but losing ground. The water wants through.\n\nShe doesn\u0027t look up when you approach, but she knows you\u0027re there. \u0022My son left this morning,\u0022 she says, voice flat as the water. \u0022Took the boat. Said he\u0027d be back before the tide pressed in.\u0022 She shoves another handful of clay into the widening gap. It holds for three heartbeats, then a fresh trickle carves through. \u0022He won\u0027t be. This is the third time.\u0022 \n\nYou watch the woman work, and you think you have the gist of it. Cut reeds, bind them with clay, drive stakes into the ground to hold work. With both you you, it would take an hour, maybe less. But the woman\u0027s hands pause and she finally meets your eyes.\n\n\u0022I can\u0027t let just let the dike wash away, but he needs to see it fail.\u0022\n\nThe words carry no heat, only weight. \u0022He needs to come back to ash and mud and understand there are consequences.\u0022 \n\nA heron lifts from the far paddies, wingbeats heavy in the thick air.\n\nThe dike gives a little more. The first paddy will flood soon.\n",
+      "choices": [
+        {
+          "optionText": "Help in silence = Just repair the dike and prevent a flood",
+          "optionLink": "Help in silence",
+          "optionPreview": "Just repair the dike and prevent a flood",
+          "requires": null,
+          "single": {
+            "text": "You step off the path and the water takes you to mid-thigh, warm and thick with silt. The woman watches as you begin to gather materials. Clay from the solid bank, handfuls of reed stems still green enough to bend, the long-bladed sedge that holds knots. You work in silence, weaving fascia between driven stakes, packing the gaps with clay mixed thick with chopped stems. The woman stands aside. She doesn\u0027t help. She watches the way someone watches a meal being prepared for a guest they didn\u0027t invite.\n  The breach holds. You pack the last of the clay smooth, reinforcing the weak points with twisted reed bundles that will swell as they soak. The seeping stops. The paddies remain flat and green, undisturbed. The woman looks at the repair for a long moment, then at the distance where the boat will eventually return. \u0022You\u0027ve bought him another season of thinking he can leave whenever he wants,\u0022 she says. There\u0027s no gratitude in it. She turns and walks toward the hut, feet sure on the raised path, and doesn\u0027t look back. You stand alone by the dike, hands caked with drying mud.",
+            "mechanics": [
+              "heal_spirits trivial"
+            ]
+          }
+        },
+        {
+          "optionText": "Offer to help = Try to understand what\u0027s going on here",
+          "optionLink": "Offer to help",
+          "optionPreview": "Try to understand what\u0027s going on here",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You step off the path and the water takes you to mid-thigh, warm and thick with silt. The woman watches as you begin to gather materials. \u0022What\u0027s your name?\u0022 you ask. \u0022Netta.\u0022 \u0022And your boy?\u0022 She sighs. \u0022Wren.\u0022 You grab two handfuls of clay from the solid bank. \u0022What\u0027s Wren gotten himself into this time?\u0022\n    Netta steps back from the breach. Not far\u2014just enough that her hands are no longer sealing it. She watches the water claim its ground, jaw set hard enough to hurt. \u0022He thinks I\u0027m trying to keep him small,\u0022 she says. \u0022Keep him stuck on this farm.\u0022 The words come rougher now. \u0022But this is what I know. This is what keeps us fed. If he leaves it, I don\u0027t know how to follow.\u0022\n    Another shudder runs through the dike. Clay sloughs away in a slow collapse, and the first paddy begins to fill in earnest. You plant a stake anyway, driving it down with the flat of your palm. \n    \u0022Flooding this won\u0027t bring him back,\u0022 you say. Netta\u0027s eyes flick to the spreading water, to the rice bowing under it. For a long moment she says nothing. Then, almost to herself: \u0022I wanted him to see what it costs.\u0022 \n    \u0022And what if he\u0027s willing to pay that to be free?\u0022\n    Netta inhales, sharp and shaky. She steps forward and sinks her hands back into the breach beside yours. \u0022Then I suppose I\u0027d be a fool to flood my own farm.\u0022\n    The two of you work together, mending the breach. It is filthy, exhausting work, but the dike holds.",
+                "mechanics": [
+                  "skip_time evening",
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "\u0022Your boy will learn nothing from this,\u0022 you say. \u0022Only that he was smart to leave.\u0022\n    You meant it as cold assessment, a judgment of the futility in letting the dike collapse. But the words came wrong, edged with something cruel you had not intended. They settle in the humid air between you like stones dropped into still water.\n    The woman goes rigid. Her hands stop their work, mud dripping from her fingers. She turns her head, and the look she fixes upon you carries no anger, only a frost so deep it seems to draw warmth from your bones. Then she rises from the breach, water streaming from her legs, and walks away without a word. Her footsteps squelch in the saturated earth. She does not look back.\n    The dike gives.\n    Water springs through the gap with sudden violence, no longer seeping but burbling forth in a muddy torrent. The breach widens as you watch, clay and packed earth tumbling into the flood. The first paddy field darkens as water spills across its surface, swallowing the neat rows of green rice. Even if you wished to stem it now, the work requires two pairs of hands, stakes driven while another packs the clay, reeds bundled and braced. You cannot hold it alone.\n    You turn back to the raised path. Behind you, the water rushes on, claiming what it will.",
+              "mechanics": []
+            }
+          }
+        },
+        {
+          "optionText": "Sabotage = Weaken the dike further, ensuring its failure",
+          "optionLink": "Sabotage",
+          "optionPreview": "Weaken the dike further, ensuring its failure",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You seize a double handful of the sodden clay and wrench it free. The dike groans, a deep sound felt more than heard, as the gap widens. You hurl the mass into the flooding paddy. It strikes the water with a thick slap. Again you tear at the packed earth, fingers sinking deep into the yielding wall. Another chunk comes loose. You laugh as you cast it aside, and the sound carries across the fields like the cry of some carrion bird. Water surges through in a brown torrent that foams and churns, spreading between the rice stalks in dark fingers.\n    The woman makes a small sound, wordless and raw. She staggers back from the failing wall, water sluicing past her knees, and her gaze fixes on the spreading flood. Something breaks in her expression, some final acceptance cracking like old pottery. Her hand drops to the earth and closes around a stone the size of a man\u0027s fist. She lifts it, trembling, and lurches toward you with the clumsy desperation of one who has never raised a hand in violence. The stone arcs through the air. You move. Your weapon finds her before she can complete the swing. She falls without ceremony into the muddy water, and the stone tumbles from her fingers.\n    The dike continues its collapse behind you, water roaring through the widening breach. The paddy fields drink deep, rice stalks vanishing beneath the flood. Her son will return to find the house beneath dark water, the dike in ruins, and his mother cold among the drowned earth. Perhaps he will understand then what it means to abandon what must be tended. You turn from the wreckage and walk back along the raised path, leaving the water to claim what remains.",
+                "mechanics": [
+                  "damage_spirits trivial"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You step down into the water beside her. The woman shifts to give you room, assuming help. You reach for the packed clay at the dike\u0027s base, where the structure is oldest, and dig your fingers in. The mud comes away easily once you know where to pry. You work a stone loose, then another, opening a channel beneath her fresh repairs. The water finds it immediately, eager, widening the gap from below.\n    She sees what you\u0027ve done. For a moment she only stares, hands still full of useless mud. Then she drops it and lunges. She\u0027s strong from years of this work and her fists find your chest, your jaw, blows without technique but full of weight. You go down into the water and she\u0027s on top of you, pressing your face into the silt, and you taste the fen, thick and old and furious. The dike gives with a sound like tearing cloth. The flood hits you both, a wall of brown water that sweeps her off and carries you ten feet before you find bottom.\n    When you surface, coughing, she\u0027s already wading toward what remains of her home. The paddies are gone, merged into a single sheet of water reflecting white sky. You pull yourself onto the path and lie there, ribs aching, face throbbing, clothes heavy with silt",
+              "mechanics": [
+                "damage_spirits trivial",
+                "damage_health small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "An Unpaid Debt",
+      "category": "swamp/tier1",
+      "title": "An Unpaid Debt",
+      "body": "\nThe elder sits beneath the meeting pavilion, reed mat spread before her, contract weighted at the corners with smooth river stones. The ink has run a little in the damp, but the seal is clear enough: the Merchant Guild\u0027s device, pressed deep and smug. Around the platform the villagers mutter, not wild with anger but steady with it \u2014 the sound of people who know when they\u0027ve been handled.\n\nThe guild merchant stands aloof, dry, immaculate, and composed. He taps the parchment with a gloved finger and explains, patiently, that the exclusivity clause extends to \u0022all navigable channels, known or later discovered,\u0022 that the yield guarantee binds the village irrespective of seasonal variance, and that the penalty for breach accrues at a rate any child could calculate. \n\nHe signs deeply, adopting a patronizing tone. \u0022You promised fish,\u0022 he says. \u0022If the western channels failed, you should have found others. The contract does not concern itself with disappointment.\u0022\n\nThe elder\u0027s mouth tightens. The advance coin paid for seed after a blight year. For timber when the flood took three homes. The villagers understood a bad season to be a shared misfortune, not an opportunity for interest to breed like midges. They have no fish in the quantities demanded. They do not have the coin the merchant now claims is owed.\n\nThe merchant closes his ledger with a soft, satisfied sound. He will accept payment in fish, in silver, or in pledged labor at guild rates. Failing that, he will mark the village delinquent and let the Guild pursue remedies less conversational. The elder turns to you, eyes sharp and measuring.\n",
+      "choices": [
+        {
+          "optionText": "Pay the debt = Cover the coin the village owes from your own resources",
+          "optionLink": "Pay the debt",
+          "optionPreview": "Cover the coin the village owes from your own resources",
+          "requires": null,
+          "single": {
+            "text": "You step forward and loosen your purse. The merchant watches, amused, as you count the coin onto the reed mat. His amusement curdles into something harder when the stack rises to match the sum written in his ledger. He blinks, mouth slack, the careful lines of his face collapsing into something unguarded and raw.\n  The expression lasts only a moment. It smooths away, replaced by a smile that sits crooked and knowing on his lips. \u0022I was like you once,\u0022 he says, gathering your coin with gloved fingers. The metal clinks softly as he stacks it into a neat column. \u0022I wanted to be the hero, saving these wretched peasants. A year out here in the borderlands will cure you of that.\u0022 He regards the pile, then pushes it back across the mat toward you with deliberate care. \u0022Keep your coin, friend. You will need it. Hard times to come.\u0022\n  He draws a long breath, gaze sliding past you to the villagers beyond. \u0022I will see these folks through, just this once.\u0022 He pauses, \u0022not a favor to you, but to the man I once was.\u0022 The contract rustles as he rolls it tight and tucks it into his satchel. He waves a hand, dismissive, the gesture final. \u0022Now get out of here before I make another bad decision.\u0022",
+            "mechanics": [
+              "heal_spirits small"
+            ]
+          }
+        },
+        {
+          "optionText": "Side with your fellow Guild member = Insist that the contract is just and valid",
+          "optionLink": "Side with your fellow Guild member",
+          "optionPreview": "Insist that the contract is just and valid",
+          "requires": null,
+          "single": {
+            "text": "You take the parchment from beneath its stones and trace the clauses with a careful eye. The ink has blurred in places, true, but the structure remains sound: three seals of the Merchant Guild pressed into wax, each impression crisp and deliberate; the terms of advance and repayment rendered in the formulaic language of commercial law; the interest schedule ascending in neat columns; the waiver of force majeure signed in the elder\u0027s own hand. You read the exclusivity provision twice. It is comprehensive. It is binding.\n  You set the contract down and meet the elder\u0027s gaze. The silence stretches. Around the pavilion the villagers shift, leather creaking, breath held. You speak plainly: the agreement is sound, the debt is owed, and the Guild\u0027s claim is just. That the western channels failed is misfortune, but misfortune does not void obligation. The merchant extended coin in good faith; the village accepted it with open hands. Now the terms must be honored, or the consequences will follow with the same inevitability as spring floods.\n  The elder\u0027s face hardens, not with surprise but with the confirmation of something already suspected. The merchant permits himself a small, measured nod. He reopens his ledger and begins to record the disposition of the matter, quill scratching soft and methodical against vellum. The villagers do not shout. They turn away, shoulders bent, already calculating what can be sold, what can be pledged, what small and bitter surrenders the season ahead will demand.\n  The merchant nods graciously, extending you the customary consulting fee.",
+            "mechanics": [
+              "heal_spirits trivial",
+              "give_gold small"
+            ]
+          }
+        },
+        {
+          "optionText": "Inspect the contract = Find a way out for the villagers",
+          "optionLink": "Inspect the contract",
+          "optionPreview": "Find a way out for the villagers",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check mercantile medium",
+                "text": "You lift the contract from its bed of river stones. The parchment is stiff beneath your fingers, edges water-stained and curling. The script runs dense and tight, clause nested within clause like fish traps sunk one inside another. Each sentence coils back upon itself, laden with conditions and exceptions that seem to multiply as you read. The merchant\u0027s guild employs no fools to draft such instruments.\n    You trace the lines again, slower. Your eyes ache from following the serpentine text. The terms shift and qualify, hedging every obligation, foreclosing every exit. You are nearly ready to set the thing down, to admit defeat, when a peculiar phrasing snags your attention. There, in the third subsection of the yield clause: payment calculated as a *residual proportion* of catch taken from designated channels. If the western channels yielded nothing, the residual collapses to near nothing. A handful of coppers, perhaps. Barely sufficient to pay the merchant\u0027s passage to this place, let alone the sum he now demands.\n    You speak the clause aloud, voice cutting through the pavilion\u0027s tense quiet. The merchant\u0027s hand darts out. He tears the parchment from your grasp, holds it close to his face. His lips move soundlessly. His brow furrows deep, color rising at his collar. You brace yourself for his fury, for whatever retribution the guild visits upon those who obstruct its commerce. Instead, he exhales slowly. His shoulders settle. He rolls the contract with deliberate care and meets your gaze with something almost like respect. \u0022Well played,\u0022 he says. \u0022The error is mine. I will face the consequences.\u0022 He pauses, weighing you with cool appraisal. \u0022You have a sharp eye. You will go far.\u0022",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You take up the contract, fingers tracing the cramped columns of script while the merchant observes with folded hands. The parchment is thick, expensive; the sort of document that carries weight beyond its words. You think you have found it in the third clause, the one concerning seasonal variance, but before you can voice the thought the merchant inclines his head and points to the margin notation, explaining in measured tones how the subsidiary provision negates your interpretation. His voice carries the patience of a tutor addressing a slow pupil.\n    You try again, seizing upon the language of \u0022navigable channels.\u0022 Surely the western reaches, choked with silt and weed, cannot qualify. The merchant does not sigh, but something in his stillness suggests he has heard this before. He gestures to an addendum, its seal pressed so deep the wax has split the fiber, and reads aloud the definition inscribed there. Each word lands with the certainty of a hammer stroke. You scan the remaining paragraphs, fingers growing clumsy, seeking some crack in the edifice of language. There must be something. The elder watches you, and you feel the weight of her expectation like a stone upon your back. But the contract yields nothing; every avenue closes, every hope collapses into qualifications and exceptions nested like traps within traps.\n    At last you set the parchment down, your hands uncertain where to rest. The merchant permits himself a small, tight smile. \u0022Well,\u0022 he says, his voice carrying across the pavilion, \u0022if this august merchant can find nothing amiss, surely the contract is ironclad.\u0022 He spreads his hands, a gesture of patient magnanimity. \u0022If we are done with this diversion, let us return to the matter of payment.\u0022 The villagers\u0027 muttering has ceased. They watch you depart from beneath the pavilion, and you cannot meet the elder\u0027s gaze as you go.",
+              "mechanics": [
+                "damage_spirits medium"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Cartographers Kit",
+      "category": "swamp/tier1",
+      "title": "The Cartographer\u0027s Kit",
+      "body": "\nThe trader squats on the raised path through the reeds, his punt already loaded, his shoulders hunched against the humidity like a man who hasn\u0027t been dry in days. He\u0027s sorting through a canvas wrap of goods, mostly common stuff, fish hooks and lamp oil. But tucked among them you catch the edge of something different. A leather bag, a Merchant\u0027s Guild seal stamped into the leather. A guild cartographer\u0027s kit.\n\nHe moves to cover it when he sees you looking, but not quickly enough.\n\nHe names a price that would empty most purses. Says he\u0027s leaving within the hour, heading upriver to drier markets where people pay what things are worth. The kit is in good order, he says, all the pieces intact.\n\nWhat he doesn\u0027t say is how he came by such a treasure. The kit is the mark of a guild cartographer, each custom made for the terrain and conditions of the area they\u0027re assigned to. No one would part with such a thing at any price. The leather bag has a history, and you\u0027ve every reason to imagine it\u0027s a dark one.\n\nThe trader is already wrapping his goods. The punt rocks gently beneath him. In another moment he\u0027ll push off, and the kit goes with him.\n",
+      "choices": [
+        {
+          "optionText": "Bargain him down = Argue that the price is madness for a kit he\u0027s desperate to sell",
+          "optionLink": "Bargain him down",
+          "optionPreview": "Argue that the price is madness for a kit he\u0027s desperate to sell",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check mercantile medium",
+                "text": "You rest your hand upon the canvas satchel, not grasping, not yet, but with enough weight that the trader\u0027s eyes fix upon it. The hand bears your Merchant Guild seal, turned now to catch what light filters through the reed haze.\n    \u0022You have come by some guild property, my friend.\u0022 Your voice carries no heat, only the flat certainty of stone. \u0022You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do.\u0022 You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. \u0022Consider this a finder\u0027s fee. I will see that the kit is returned to the guild hall in Aldgate.\u0022\n    The trader\u0027s face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer\u0027s kit rests in your hands now, its leather still warm from where he clutched it.",
+                "mechanics": [
+                  "add_item cartographer_kit",
+                  "rem_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "He listens to your reasoning with the expression of a man who has heard it all before. When you finish, he wraps the hide back into his bundle with slow, deliberate movements. Says the price stands or he keeps it. Says there are buyers upriver who understand what the thing is worth, who don\u0027t waste his time. He could leave right now.\n    You try once more, softer, meeting him somewhere closer to his number. He doesn\u0027t even respond. Just settles into the punt and lifts his pole, pushing away from the path with a grunt of effort. The current takes him quickly, and he doesn\u0027t look back. Within moments he\u0027s around the bend, gone into the reed-maze with your last chance at the kit.",
+              "mechanics": [
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Steal it = Wait until he\u0027s distracted, then take the kit and run",
+          "optionLink": "Steal it",
+          "optionPreview": "Wait until he\u0027s distracted, then take the kit and run",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "You ask about the lamp oil, pointing to a specific flask, making him turn to retrieve it from deeper in the bundle. Your hand moves before thought catches up. The hide is in your grasp and you\u0027re already three strides down the raised path before he shouts behind you. The path is narrow but you know how to run it, feet finding the solid center while his voice rises in anger and disbelief.\n    You run until you\u0027re out of breath, then hide in the reeds. You wait what seems like an eternity, until the only sound left is the incessant croak of the frogs. You emerge from your hiding place, the kit still in your grasp.",
+                "mechanics": [
+                  "add_item cartographer_kit",
+                  "skip_time evening"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader\u0027s eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.\n    Your hand drifts toward the bundle. The pole sweeps through the humid air with shocking swiftness, the waterlogged wood striking your shoulder and chest with the weight of a falling timber. The blow hurls you sideways from the raised path. You plunge into the muck below, the brackish water closing over your head, thick with decay and the writhing roots of reeds. You thrash upward, gasping, fingers clawing through the slime until you find purchase on something solid. When you drag yourself back toward the path, water streaming from your garments, the trader has already set his pole against the muddy bottom. The punt glides away through the reeds, smooth and certain. He calls back over his shoulder, voice carrying across the water: \u0022Stay dry, outlander.\u0022 The words hang in the wet air long after he vanishes beyond the curtain of rushes.",
+              "mechanics": [
+                "damage_spirits small",
+                "damage_health trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Let him leave = Step aside and watch him pole away",
+          "optionLink": "Let him leave",
+          "optionPreview": "Step aside and watch him pole away",
+          "requires": null,
+          "single": {
+            "text": "You step to the edge of the raised path. He needs no further answer. The punt slides into the channel with barely a sound, and he poles away with the efficient rhythm of someone who knows water like a second language. The kit stays wrapped in his bundle, its secrets folded into oil-treated hide that will survive the damp journey upriver to markets where people pay asking price and don\u0027t ask uncomfortable questions.",
+            "mechanics": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Gatekeeper",
+      "category": "swamp/tier1",
+      "title": "The Gatekeeper",
+      "body": "\nThe raised path ends at a sluice gate where an old woman sits on a stool, arms crossed over a walking stick planted in the mud. She wears the loose cotton of the fen-folk and the expression of someone who has judged three generations. Behind her, water pools against the closed gate \u2014 your route forward lies on the other side, where the path continues toward the village you need to reach before nightfall. She doesn\u0027t move. Doesn\u0027t speak. Just watches you approach with eyes that have seen every trick.\n\n\u0022Gate\u0027s closed,\u0022 she says finally. \u0022Stays closed until the paddies on the east side finish draining. Two hours, maybe three.\u0022 A group of younger villagers works behind her, knee-deep in a flooded field, moving with the unhurried certainty of people who know the water answers to no one\u0027s schedule. One of them glances your way, then back to the dike they\u0027re patching. The old woman taps her stick once. \u0022You can wait. Or swim. Most outsiders choose wrong.\u0022\n\nBut you\u0027ve noticed the frogs have gone quiet in a channel to the south \u2014 the kind of silence that means a path through shallower water, if you know how to read it. And the workers are watching their elder more than their work, the way people do when authority is performance as much as fact. Someone laid a bundle of cut reeds near the gate\u0027s mechanism, still green enough to bend, and the handle itself is older than the gate it operates.\n\nThe sun measures the time you don\u0027t have. The old woman measures you.\n",
+      "choices": [
+        {
+          "optionText": "Wait patiently = Settle in and wait the full time for the gate to open properly",
+          "optionLink": "Wait patiently",
+          "optionPreview": "Settle in and wait the full time for the gate to open properly",
+          "requires": null,
+          "single": {
+            "text": "You find a dry spot near the path\u0027s edge and lower yourself to the ground. The old woman makes no acknowledgment, but one of the younger workers wades to the edge of the paddy and offers you a gourd of water without comment. It tastes of the clay it was stored in. The sun moves with the slowness of judgment. You watch the workers shore up a section of dike where water seeps through in dark fingers, packing mud with practiced efficiency. They work in silence broken only by occasional instruction, no word wasted.\n  When the paddies finally drain to the old woman\u0027s satisfaction, she rises with the care of someone whose bones remember every year. She works the gate mechanism herself, the handle groaning through its arc until water begins to flow through the gap. The path beyond glistens with fresh mud but holds firm under your boots. As you pass, she nods once \u2014 not approval, but acknowledgment. You took the measure of things and chose time over risk.",
+            "mechanics": [
+              "skip_time evening"
+            ]
+          }
+        },
+        {
+          "optionText": "Attempt the southern channel = Follow the silent frogs through the shallow route you\u0027ve spotted",
+          "optionLink": "Attempt the southern channel",
+          "optionPreview": "Follow the silent frogs through the shallow route you\u0027ve spotted",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check bushcraft medium",
+                "text": "You step off the path before the old woman can object, moving toward the silent channel with the confidence of someone who has read water before. She makes a sound between a grunt and a laugh. The mud here holds your weight where it looks like it shouldn\u0027t, and the water runs shallow over gravel beds that ring slightly under your boots. Reeds close behind you like a door shutting.\n    The channel winds south then west, meandering but passable, and you read it by the silence \u2014 where frogs fall quiet, the ground rises enough to walk. Twice you pause at junctions, waiting for the sound to tell you which branch goes deep. It takes longer than the direct path would have, but you emerge on the western side of the paddies with only your calves wet, joining the raised path again well before the village. Behind you, the frogs resume their evening sermon.",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You step confidently toward the southern channel and the mud greets you like an old enemy. Your first step sinks past the ankle. Your second plunges you to the knee in cold water that smells of rot and clay. The silence you mistook for shallow ground is simply where the frogs have learned not to nest \u2014 the water here is deep and still, thick with silt that sucks at your legs like a living thing.\n    Behind you, someone laughs. Not cruel, but not kind either. You haul yourself back toward the path, reeds slapping your face, boots squelching obscenely with each step. The old woman hasn\u0027t moved from her stool. When you finally drag yourself back onto solid ground, soaked to the waist and decorated with mud and waterweed, she taps her stick once. \u0022Most outsiders choose wrong,\u0022 she repeats, as though you\u0027ve simply confirmed old wisdom. You wait the full time after all, watching the water drain while your clothes refuse to dry in the thick air.",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Challenge her authority = Insist you need passage now and offer coin or pressure",
+          "optionLink": "Challenge her authority",
+          "optionPreview": "Insist you need passage now and offer coin or pressure",
+          "requires": null,
+          "single": {
+            "text": "The old woman\u0027s expression doesn\u0027t change when you make your case \u2014 coin offered, schedule explained, importance implied. She listens the way stone listens to rain. When you finish, she taps her stick twice. The workers behind her stop moving. One of them, a broad-shouldered man with gray in his beard, wades out of the paddy and stands near his elder, saying nothing but present in the way that changes mathematics.\n  \u0022Gate stays closed,\u0022 she says, each word deliberate as a hammer stroke. \u0022Water doesn\u0027t care about your coin. Dike doesn\u0027t care about your hurry. East paddies flood if I open now, and that\u0027s a season\u0027s rice drowned for someone else\u0027s schedule.\u0022 She shifts on her stool, settling in. \u0022You want to swim, swim. Want to wait, wait. Want to try moving me?\u0022 She glances at the worker beside her, then back to you. \u0022My grandson here would enjoy the exercise.\u0022\n  You move to try to traverse the swamp, but recognize the futility. You find a stump and fix the woman in your gaze, making certain she knows your annoyance. A few hours pass and the gate opens, just as promised.",
+            "mechanics": [
+              "damage_spirits small",
+              "skip_time evening"
+            ]
+          }
+        },
+        {
+          "optionText": "Offer to help with the work = Join the workers to speed the draining and earn passage",
+          "optionLink": "Offer to help with the work",
+          "optionPreview": "Join the workers to speed the draining and earn passage",
+          "requires": null,
+          "single": {
+            "text": "You wade into the paddy before asking permission, mud sucking at your boots, and take a place beside the workers shoring up the dike. For a moment no one speaks. Then the nearest one, a woman with strong hands and knowing eyes, shows you without words where to pack mud, how to angle it so the water\u0027s weight becomes the seal\u0027s strength. The work is harder than it looks. Your back complains. The mud is heavy and cold and smells of fish and old roots.\n  But you feel the moment they accept you \u2014 not as one of them, but as someone willing to stand in their water and do their work without complaint. The old woman doesn\u0027t praise you, but when the draining is complete and she works the gate mechanism, she nods toward the path. \u0022Go on, then. You paid your way.\u0022 One of the younger workers grins, gaps in his teeth, and claps your shoulder with a muddy hand. You reach the village as the lamps are being lit, soaked and tired but arriving with the dignity of someone who earned passage rather than purchased or demanded it. Your clothes will dry. The ache in your back is the cost of traveling honestly through country that doesn\u0027t owe you anything.",
+            "mechanics": [
+              "heal_spirits small",
+              "skip_time evening"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Hunted Woman",
+      "category": "swamp/tier1",
+      "title": "The Hunted Woman",
+      "body": "\nYou round the bend in the channel and find a woman waist-deep in the water, braced against a stilt-post. Her eyes track something behind you, back the way you came. She\u0027s breathing hard, clutching a bundle wrapped in oiled cloth to her chest. When she sees you, her hand moves to a gutting knife at her belt, then stops. The frogs have gone silent. In the distance, a punt pole taps against wood in steady rhythm. Getting closer.\n\nShe hisses at you, not words, just sound. A warning or a plea, you can\u0027t tell which. The bundle shifts against her chest and you catch a glimpse of carved wood, dark with age, wrapped in red cord. The tapping grows louder. Two figures pole into view behind you, maybe fifty yards back. They move with the efficient rhythm of locals, but they\u0027re watching the channels ahead, not the water beneath them. Hunting.\n\nThe woman jerks her head toward a narrow side channel choked with reeds. She could slip through there if you give her time. Or you could step aside, let the pursuers see her, let village justice sort itself. The bundle in her arms looks old. The kind of thing that has a place it belongs, and people who remember where that place is. The punt pole taps closer. The woman\u0027s knuckles are white around the knife handle.\n\nThe pursuers will reach this bend in moments. Whatever she\u0027s taken, it matters enough to chase into the fen.\n",
+      "choices": [
+        {
+          "optionText": "Distract the pursuers = Call out to the approaching figures, drawing their attention to you while the woman slips away",
+          "optionLink": "Distract the pursuers",
+          "optionPreview": "Call out to the approaching figures, drawing their attention to you while the woman slips away",
+          "requires": null,
+          "single": {
+            "text": "You step into the center of the channel and raise your hand in greeting. Your voice carries across the water, casual, asking about the fishing or the depth ahead or anything that sounds like an outsider\u0027s question. The two figures slow their poling. One of them answers, wary but polite, the way locals do when they\u0027re deciding whether you\u0027re trouble. You keep talking, gesturing back the way you came, describing a bird you saw or a marker you\u0027re looking for. Anything to hold their eyes on you.\n  The woman is gone. You catch the faintest rustle of reeds closing behind her, then nothing. The pursuers pole closer, their faces clearer now. They\u0027re young, maybe brothers, with the hard hands of fish-trap builders. One of them asks if you\u0027ve seen anyone else in the channels. You tell them no, and the lie sits easy in your mouth because you don\u0027t know what she took or why they want it back. They exchange a look, then push past you without another word, poling hard toward the eastern channels where the water opens up. They think she went that way. By the time they realize their mistake, she\u0027ll be deep in the reeds where the paths only animals know.\n  The frogs start up again, slow at first, then building to their usual roar.",
+            "mechanics": [
+              "heal_spirits trivial"
+            ]
+          }
+        },
+        {
+          "optionText": "Let them pass = Allow the pursuers to find what they\u0027re hunting",
+          "optionLink": "Let them pass",
+          "optionPreview": "Allow the pursuers to find what they\u0027re hunting",
+          "requires": null,
+          "single": {
+            "text": "You pole to the side of the channel, making room. The woman\u0027s face hardens into something beyond fear. She presses the bundle tighter to her chest and shifts her weight, ready to run or fight or both. The two figures round the bend and see her immediately. They don\u0027t call out, don\u0027t threaten. They just spread apart, blocking both ends of the channel with the practiced ease of men who\u0027ve herded livestock through water.\n  One of them speaks her name. Aya. It sounds like a condemnation. She shakes her head, backing against the stilt-post, the gutting knife finally clearing its sheath. But she\u0027s waist-deep in water and they\u0027re in boats, and the arithmetic of that is written in her expression. The other man reaches into his punt and draws out a weighted net, the kind used for stubborn fish. They\u0027re not going to hurt her. They\u0027re going to take what she\u0027s holding and bring her back, and whatever punishment waits will be a village matter, handled in front of everyone who matters.\n  One of the men poles close enough to pry the oiled cloth from her grip. He unwraps it carefully, reverently, and you see what she took: a carved marker post, old wood dark as mud, wrapped in cords that might have been red once. He nods to his companion and they haul her into their punt like a stubborn catch.\n  They pole past you without acknowledgment. You wonder if you should have done something, but it\u0027s too late now.",
+            "mechanics": [
+              "damage_spirits trivial"
+            ]
+          }
+        },
+        {
+          "optionText": "Demand to know what she\u0027s taken = Confront the woman and insist on an explanation before you choose",
+          "optionLink": "Demand to know what she\u0027s taken",
+          "optionPreview": "Confront the woman and insist on an explanation before you choose",
+          "requires": null,
+          "single": {
+            "text": "She stares at you like you\u0027ve lost your mind. The punt pole taps closer behind you, steady and inevitable. She shakes her head, not in refusal but in disbelief that you\u0027d waste the seconds she has left asking questions. \n  She spits into the water between you and shoves off from the stilt-post, plunging toward the reeds with the bundle clutched to her chest. But she struggles with the weight and the water, and you can see her eyes widen as the pursuers close in. One hurls a weighted net with practiced ease.\n  It catches her at the waist. She goes down with a splash and a cry, the bundle flying from her grip to land in the shallows. One of the men vaults from his boat, waist-deep in water, and drags her upright while the other retrieves the wrapped object with reverent care. They\u0027re rough with her but not cruel, hauling her into their punt with the efficiency of men who\u0027ve dealt with this before. As they pole past you, the bundle secure between them, one of them meets your eyes. The look is flat, unreadable, neither grateful nor hostile.\n  You take stock of your surroundings, then roll up your pants and fish into the water. You find the woman\u0027s knife, wipe the muck off and appraise it. It\u0027s a good knife, well made and sharp. You sheath it in your belt and continue on your way.",
+            "mechanics": [
+              "add_item knife"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Hermit of Sallow Fen",
+      "category": "swamp/tier2",
+      "title": "The Hermit of Sallow Fen",
+      "body": "\nYou smell the smoke before you see the light.\n\nDeep into the fen and your world has narrowed to a catalogue of miseries. Black water sucking at your boots, the ceaseless drone of biting flies, air so thick with rot it coats the back of your throat like oil. The trail, such as it was, vanished yesterday beneath a carpet of duckweed. Since then you have navigated by the moss on the cypress knees and the slow pull of current beneath the water\u0027s skin, trusting that the deeper channels lead inland toward high ground and the frontier beyond.\n\nYou had not expected to find anyone living here. Nothing lives here that does not bite, sting, or drag itself through the muck on its belly.\n\nYet there it is: a smudge of smoke above the treeline, yellow-grey against the perpetual overcast, and beneath it, as you round a curtain of hanging moss, a dwelling. The world is generous. It is a shack built on stilts above the waterline, patched with bark and river-reed and what appears to be sailcloth long since gone to grey. Animal bones hang from the eaves on cords of sinew, clicking softly in a breeze you cannot feel. A dugout canoe is tethered to one stilt. On the listing porch, a cookfire burns in a ring of river stones, and over it a blackened pot sends up a steam that cuts through the swamp-stink with something almost pleasant\u2014herbs, root vegetables, something warm and human.\n\nThe woman sits beside the fire as though she has been waiting.\n\nShe is old, or perhaps merely weathered beyond reckoning; face like cracked leather, hair a white tangle threaded with feathers and what might be small bones. Her clothes are layered and shapeless, stained with mud and tannin. She watches you with eyes that are, against all expectation, perfectly clear. Pale. Amused.\n\n\u0022Sit,\u0022 she says, as though you are late to supper.\n\nShe does not rise. Does not reach for a weapon. She stirs the pot with a wooden spoon and the smell intensifies; rich, savory, undeniably good. Your stomach clenches. It has been too long since you\u0027ve had a warm meal.\n\n\u0022You\u0027ll want to eat before the water rises,\u0022 she continues, conversational, almost cheerful. \u0022Moon\u0027s pulling the fen tonight. The channels you walked this morning will be six feet deep by dark.\u0022 She taps the spoon against the pot\u0027s rim. \u0022If you know the way through, you\u0027ll manage fine. If you don\u0027t...\u0022 She shrugs, a gesture that carries the weight of absolute indifference to your survival.\n\nHer pale eyes drift to your pack, your boots, the shape of what you carry. She smiles. Three teeth are missing. The rest are very white.\n\n\u0022I don\u0027t get visitors,\u0022 she says. \u0022Not ones who last.\u0022\n\nSomething moves in the shack behind her. A scrape, a settling weight. She does not look back at it.\n",
+      "choices": [
+        {
+          "optionText": "Accept her hospitality = Sit, eat, and trade what information you can, trusting that hunger and the rising water leave you little choice but faith.",
+          "optionLink": "Accept her hospitality",
+          "optionPreview": "Sit, eat, and trade what information you can, trusting that hunger and the rising water leave you little choice but faith.",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You trade tales of the world beyond the fen for bowls of her root-stew, and something in your words\u2014perhaps the honesty of exhaustion, or the shape of distant roads in your voice\u2014softens the pale amusement in her eyes. When you depart at dawn, she presses into your hands a small bundle wrapped in oilcloth: dried fish, hard travelers\u0027 bread, something that smells of smoke and keeping. \u0022The fen takes,\u0022 she says, \u0022but I give what I can spare.\u0022",
+                "mechanics": [
+                  "add_random_items 3 food"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind\u2014only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun\u0027s pale climb you have lost the night, and perhaps something more.",
+              "mechanics": [
+                "damage_health small",
+                "skip_time morning"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Demand to know what is in the shack = You have not survived in this fen by ignoring what moves in the dark behind a stranger\u0027s smile.",
+          "optionLink": "Demand to know what is in the shack",
+          "optionPreview": "You have not survived in this fen by ignoring what moves in the dark behind a stranger\u0027s smile.",
+          "requires": null,
+          "conditional": {
+            "preamble": "The hermit\u0027s smile doesn\u0027t waver as the thing behind the sailcloth door begins to move, something massive shifting in the darkness with a wet, patient hunger. \u0022My boy gets so few visitors,\u0022 she says, rising with a mother\u0027s gentle pride, and you understand now why the bones hang from the eaves: they are not charms but trophies, markers for those who also trusted their instincts too late.",
+            "branches": [
+              {
+                "condition": "check combat hard",
+                "text": "The sailcloth tears away. Something fills the doorway; too tall, joints wrong. Pale skin stretched tight. Fingers tipped with yellowed bone hooks. A mouth that opens too wide, teeth jagged and uneven. It drops into the shallows. The water barely reaches its knees.\n    It lunges. You slip aside. The hooks slice past your throat, close enough that you smell old blood and swamp rot. It is quick but clumsy. You ready your weapon. When it overreaches, you strike. You hit the monster hard with your weapon.\n    A thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.\n    The crack echoes. It falters. You retrieve your weapon and cut its throat in a single stroke. It collapses into the black water, which closes and stills.\n    The hermit is gone. Only the low cookfire and a steaming pot remain. You take what supplies you can and leave the shack behind, bones clicking faintly in the wind as the fen swallows you.",
+                "mechanics": [
+                  "get_random_treasure"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "The sailcloth tears away. A horrid shape fills the door; wrong-jointed, bone-hooked, ghastly mouth splitting wide. It drops into the shallows and lunges.\n    You swing your weapon on instinct. The attack skates off its hide. No blood. No pause. A hooked hand snags your shoulder and wrenches you sideways. Another tears through your pack, spilling its contents into the black water.\n    You twist free, stumbling into the muck. The things stares blankly at you, twists its head, and begins to lope forward. You flee, thrashing through the waters. By the time you catch your breath, the clearing is gone and so is whatever the swamp claimed from your pack.",
+              "mechanics": [
+                "lose_random_item"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Press on into the swamp = Thank her and refuse, trusting your own sense of direction over the charity of a woman who lives where nothing should.",
+          "optionLink": "Press on into the swamp",
+          "optionPreview": "Thank her and refuse, trusting your own sense of direction over the charity of a woman who lives where nothing should.",
+          "requires": null,
+          "single": {
+            "text": "You barely make it a dozen yards before the shack unfolds impossible legs from beneath its stilts and comes crashing after you through the black water, the hermit\u0027s laughter echoing across the fen like a crow\u0027s cry. You run until your lungs burn and the darkness is complete, finally collapsing in some nameless hollow where the cypress roots offer meager shelter. By the time you manage a fire, you have no idea which way leads forward\u2014only that the smoke behind you has long since vanished, and with it, any sense of where you\u0027ve been.",
+            "mechanics": [
+              "add_condition lost",
+              "skip_time evening"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

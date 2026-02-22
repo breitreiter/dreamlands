@@ -60,7 +60,6 @@ public class PlayerState
     /// <summary>Create a new game with starting stats from balance data.</summary>
     public static PlayerState NewGame(string gameId, int seed, BalanceData balance)
     {
-        var rng = new Random(seed);
         var state = new PlayerState
         {
             GameId = gameId,
@@ -74,9 +73,9 @@ public class PlayerState
             HaversackCapacity = balance.Character.StartingHaversackSlots,
         };
 
-        // Initialize skills with random starting values (0-3)
+        // All skills start at 0 (untrained) — the intro encounter sets real values
         foreach (var skillInfo in Rules.Skills.All)
-            state.Skills[skillInfo.Skill] = rng.Next(0, 4);
+            state.Skills[skillInfo.Skill] = 0;
 
         return state;
     }

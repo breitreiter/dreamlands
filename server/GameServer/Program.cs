@@ -114,7 +114,7 @@ StatusInfo BuildStatus(PlayerState p) => new()
     Conditions = new Dictionary<string, int>(p.ActiveConditions),
     Skills = p.Skills.ToDictionary(
         kv => kv.Key.ScriptName(),
-        kv => kv.Value),
+        kv => FormatSkillLevel(kv.Value)),
 };
 
 NodeInfo BuildNodeInfo(Node node, PlayerState p) => new()
@@ -178,7 +178,7 @@ List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
             MechanicResult.HealthChanged h => $"Health {(h.Delta >= 0 ? "+" : "")}{h.Delta} ({h.NewValue})",
             MechanicResult.SpiritsChanged s => $"Spirits {(s.Delta >= 0 ? "+" : "")}{s.Delta} ({s.NewValue})",
             MechanicResult.GoldChanged g => $"Gold {(g.Delta >= 0 ? "+" : "")}{g.Delta} ({g.NewValue})",
-            MechanicResult.SkillChanged sk => $"{sk.Skill.ScriptName()} {(sk.Delta >= 0 ? "+" : "")}{sk.Delta} ({sk.NewValue})",
+            MechanicResult.SkillChanged sk => $"{sk.Skill.ScriptName()} {(sk.Delta >= 0 ? "+" : "")}{sk.Delta} ({FormatSkillLevel(sk.NewValue)})",
             MechanicResult.ItemGained ig => $"Gained: {ig.DisplayName}",
             MechanicResult.ItemLost il => $"Lost: {il.DisplayName}",
             MechanicResult.ItemEquipped ie => $"Equipped: {ie.DisplayName} ({ie.Slot})",
@@ -592,6 +592,8 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         featuredBuyPremium = balance.Trade.FeaturedBuyPremium,
     });
 });
+
+string FormatSkillLevel(int level) => level >= 0 ? $"+{level}" : $"{level}";
 
 string FormatItemDescription(ItemDef item)
 {
