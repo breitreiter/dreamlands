@@ -12,8 +12,17 @@ dotnet build text/encounter-tool/Encounter.sln
 # Generate a world
 dotnet run --project mapgen -- generate production
 
-# Run CLI harness
-dotnet run --project ui/cli -- --map worlds/production/map.json --bundle /tmp/encounters.bundle.json
+# Run GameServer
+dotnet run --project server/GameServer
+
+# CLI integration test client (talks to GameServer over HTTP)
+dotnet run --project ui/cli -- new                     # create game, save session
+dotnet run --project ui/cli -- status                  # GET current state
+dotnet run --project ui/cli -- move north              # move direction
+dotnet run --project ui/cli -- choose 0                # pick encounter choice
+dotnet run --project ui/cli -- enter-settlement        # enter settlement
+dotnet run --project ui/cli -- market                  # GET market stock
+dotnet run --project ui/cli -- leave-settlement        # leave settlement
 
 # Bundle encounters
 dotnet run --project text/encounter-tool/EncounterCli -- bundle text/encounters --out /tmp
@@ -33,7 +42,7 @@ lib/
   Orchestration/  Bridges Game + Map + Encounter (GameSession, Movement, EncounterSelection, EncounterRunner)
   Flavor/         Static flavor text generation (partial — many stubs)
 mapgen/           Map generation + SkiaSharp rendering + tile slicing
-ui/cli/           Terminal play harness (integration testing, not a real client)
+ui/cli/           HTTP client CLI for integration testing against GameServer
 ui/web/           React + Leaflet map viewer (early stage)
 text/
   encounters/     .enc encounter files, dungeon content, LLM generation tooling
