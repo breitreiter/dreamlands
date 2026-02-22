@@ -36,6 +36,19 @@ public sealed class CharacterBalance
     public int BalancedMealHealthBonus { get; init; } = 1;
     public int BalancedMealSpiritsBonus { get; init; } = 1;
 
+    /// <summary>
+    /// Condition resist bonus from gear ResistModifiers. Code enforces per-slot caps:
+    /// big gear (weapon/armor/boots/consumable) up to +5, small gear (tools) up to +3.
+    /// </summary>
+    public IReadOnlyDictionary<Magnitude, int> ResistBonusMagnitudes { get; init; } = new Dictionary<Magnitude, int>
+    {
+        [Magnitude.Trivial] = 1,
+        [Magnitude.Small] = 2,
+        [Magnitude.Medium] = 3,
+        [Magnitude.Large] = 4,
+        [Magnitude.Huge] = 5,
+    };
+
     public IReadOnlyDictionary<Magnitude, int> CostMagnitudes { get; init; } = new Dictionary<Magnitude, int>
     {
         [Magnitude.Trivial] = 5,
