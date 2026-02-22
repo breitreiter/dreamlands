@@ -244,6 +244,12 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 - [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
 - [ ] Web UI — flesh out screens, connect to GameServer, real game loop.
 
+## Quality of Life
+
+- [ ] Biome intro encounters — one-time scripted encounter per biome/tier that fires on
+      first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
+      in selection logic. Design in `project/design/biome_intro_encounters.md`.
+
 ## Cleanup
 
 - [x] Remove `CombatBalance` — combat is just a skill check, no separate system needed.
