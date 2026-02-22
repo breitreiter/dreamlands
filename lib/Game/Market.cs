@@ -202,7 +202,7 @@ public static class Market
     }
 
     public static MarketResult Sell(PlayerState player, string itemDefId, string settlementBiome,
-        SettlementState settlement, SettlementSize size, BalanceData balance)
+        SettlementState settlement, BalanceData balance)
     {
         // Try pack first, then haversack
         var packItem = player.Pack.FirstOrDefault(i => i.DefId == itemDefId);
@@ -223,7 +223,6 @@ public static class Market
             {
                 int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
                 price = GetSellToSettlementPrice(def, settlementBiome, settlement, balance, mercantile);
-                AddToSettlementStock(settlement, itemDefId, size, balance);
             }
             player.Gold += price;
             return new MarketResult(true, $"Sold {packItem.DisplayName} for {price} gold");
@@ -239,21 +238,12 @@ public static class Market
             {
                 int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
                 price = GetSellToSettlementPrice(def, settlementBiome, settlement, balance, mercantile);
-                AddToSettlementStock(settlement, itemDefId, size, balance);
             }
             player.Gold += price;
             return new MarketResult(true, $"Sold {havItem.DisplayName} for {price} gold");
         }
 
         return new MarketResult(false, "Item not found in inventory");
-    }
-
-    static void AddToSettlementStock(SettlementState settlement, string itemId, SettlementSize size, BalanceData balance)
-    {
-        int maxStock = balance.Trade.MaxStock[size];
-        var current = settlement.Stock.GetValueOrDefault(itemId);
-        if (current < maxStock)
-            settlement.Stock[itemId] = current + 1;
     }
 
     static void AddRandomItems(List<string> catalog, List<ItemDef> pool, int count, Random rng, List<string>? exclude = null)

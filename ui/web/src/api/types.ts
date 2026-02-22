@@ -125,6 +125,7 @@ export interface MarketItem {
 export interface MarketStockResponse {
   tier: number;
   stock: MarketItem[];
+  sellPrices: Record<string, number>;
 }
 
 export interface MarketActionResponse {

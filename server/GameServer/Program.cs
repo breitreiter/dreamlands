@@ -525,8 +525,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             var sNode = session.CurrentNode;
             var sBiome = sNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-            var sSize = sNode.Poi?.Size ?? SettlementSize.Camp;
-            var result = Market.Sell(player, req.ItemId, sBiome, settlementState, sSize, balance);
+            var result = Market.Sell(player, req.ItemId, sBiome, settlementState, balance);
             await store.Save(player);
 
             return Results.Ok(new
@@ -577,10 +576,18 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         description = FormatItemDescription(entry.Item),
     }).ToList();
 
+    var sellPrices = player.Pack.Concat(player.Haversack)
+        .Select(i => i.DefId)
+        .Distinct()
+        .Where(id => balance.Items.ContainsKey(id))
+        .ToDictionary(id => id, id =>
+            Market.GetSellToSettlementPrice(balance.Items[id], biome, settlementState, balance, mercantile));
+
     return Results.Ok(new
     {
         tier,
         stock,
+        sellPrices,
         featuredBuyItem = settlementState.FeaturedBuyItem,
         featuredBuyPremium = balance.Trade.FeaturedBuyPremium,
     });

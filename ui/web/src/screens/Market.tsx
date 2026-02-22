@@ -13,6 +13,7 @@ export default function MarketScreen({
 }) {
   const { gameId, setResponse, loading } = useGame();
   const [stock, setStock] = useState<MarketItem[]>([]);
+  const [sellPrices, setSellPrices] = useState<Record<string, number>>({});
   const [loadingStock, setLoadingStock] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -23,7 +24,7 @@ export default function MarketScreen({
     setLoadingStock(true);
     api
       .getMarketStock(gameId)
-      .then((res) => setStock(res.stock))
+      .then((res) => { setStock(res.stock); setSellPrices(res.sellPrices); })
       .catch((e) => setMessage(e.message))
       .finally(() => setLoadingStock(false));
   }, [gameId]);
@@ -33,6 +34,7 @@ export default function MarketScreen({
     try {
       const res = await api.getMarketStock(gameId);
       setStock(res.stock);
+      setSellPrices(res.sellPrices);
     } catch {}
   }
 
@@ -148,8 +150,7 @@ export default function MarketScreen({
             {inventory && (
               <div className="p-2 space-y-1">
                 {[...inventory.pack, ...inventory.haversack].map((item, i) => {
-                  const stockItem = stock.find((s) => s.id === item.defId);
-                  const sellPrice = stockItem?.sellPrice ?? 0;
+                  const sellPrice = sellPrices[item.defId] ?? 0;
                   return (
                     <div
                       key={i}
