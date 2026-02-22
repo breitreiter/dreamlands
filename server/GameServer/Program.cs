@@ -94,6 +94,10 @@ GameSession BuildSession(PlayerState player)
             player.CurrentEncounterId = null;
         }
     }
+    else if (player.CurrentSettlementId != null)
+    {
+        session.Mode = SessionMode.AtSettlement;
+    }
 
     return session;
 }

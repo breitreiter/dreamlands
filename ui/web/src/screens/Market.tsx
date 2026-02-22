@@ -11,7 +11,7 @@ export default function MarketScreen({
   state: GameResponse;
   onBack: () => void;
 }) {
-  const { gameId, doAction, loading } = useGame();
+  const { gameId, setResponse, loading } = useGame();
   const [stock, setStock] = useState<MarketItem[]>([]);
   const [loadingStock, setLoadingStock] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -37,23 +37,35 @@ export default function MarketScreen({
   }
 
   async function handleBuy(itemId: string) {
-    const result = await doAction({ action: "buy", itemId, quantity: 1 });
-    if (result) {
-      setMessage("Bought item");
-      await refreshStock();
-    } else {
-      setMessage("Purchase failed");
+    if (!gameId) return;
+    try {
+      const result = await api.marketAction(gameId, { action: "buy", itemId, quantity: 1 });
+      if (result.success) {
+        setMessage("Bought item");
+        setResponse({ ...state, status: result.status, inventory: result.inventory });
+        await refreshStock();
+      } else {
+        setMessage(result.message || "Purchase failed");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Purchase failed");
     }
     setTimeout(() => setMessage(null), 2000);
   }
 
   async function handleSell(itemDefId: string) {
-    const result = await doAction({ action: "sell", itemId: itemDefId });
-    if (result) {
-      setMessage("Sold item");
-      await refreshStock();
-    } else {
-      setMessage("Sale failed");
+    if (!gameId) return;
+    try {
+      const result = await api.marketAction(gameId, { action: "sell", itemId: itemDefId });
+      if (result.success) {
+        setMessage("Sold item");
+        setResponse({ ...state, status: result.status, inventory: result.inventory });
+        await refreshStock();
+      } else {
+        setMessage(result.message || "Sale failed");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Sale failed");
     }
     setTimeout(() => setMessage(null), 2000);
   }
