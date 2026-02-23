@@ -37,6 +37,10 @@ dreamlands-cli [options] <command> [args...]
 
 Running `new` saves the game ID and server URL to `.session.json` in the build output directory. Subsequent commands reuse this session automatically, so you don't need to pass `--game-id` each time.
 
+## Development Testing
+
+This CLI serves as the primary integration testing tool during development. Claude Code uses it directly to verify features as they're built — after implementing a server endpoint or game mechanic, it spins up a game via `new`, exercises the new functionality through a sequence of commands, and inspects the JSON responses to confirm correct behavior. This tight loop of "write code, hit it with the CLI, read the output" has been the main way new features get validated before any manual testing happens.
+
 ## Examples
 
 ```bash
