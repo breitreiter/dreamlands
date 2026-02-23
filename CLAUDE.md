@@ -22,6 +22,9 @@ dotnet run --project ui/cli -- move north              # move direction
 dotnet run --project ui/cli -- choose 0                # pick encounter choice
 dotnet run --project ui/cli -- enter-settlement        # enter settlement
 dotnet run --project ui/cli -- market                  # GET market stock
+dotnet run --project ui/cli -- equip hatchet           # equip item from pack
+dotnet run --project ui/cli -- unequip weapon          # unequip slot (weapon|armor|boots)
+dotnet run --project ui/cli -- discard bodkin          # discard item from inventory
 dotnet run --project ui/cli -- leave-settlement        # leave settlement
 
 # Bundle encounters
