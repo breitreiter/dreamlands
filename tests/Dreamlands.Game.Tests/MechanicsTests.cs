@@ -277,4 +277,30 @@ public class MechanicsTests
         Assert.Contains("quest_started", state.Tags);
         Assert.True(state.Gold > Balance.Character.StartingGold);
     }
+
+    [Fact]
+    public void Discard_FromPack_RemovesItem()
+    {
+        var state = Fresh();
+        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
+
+        var results = Mechanics.Apply(["discard bodkin"], state, Balance, Rng);
+
+        var r = Assert.IsType<MechanicResult.ItemLost>(results[0]);
+        Assert.Equal("bodkin", r.DefId);
+        Assert.DoesNotContain(state.Pack, i => i.DefId == "bodkin");
+    }
+
+    [Fact]
+    public void Discard_FromHaversack_RemovesItem()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+
+        var results = Mechanics.Apply(["discard bandages"], state, Balance, Rng);
+
+        var r = Assert.IsType<MechanicResult.ItemLost>(results[0]);
+        Assert.Equal("bandages", r.DefId);
+        Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
+    }
 }
