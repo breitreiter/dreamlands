@@ -228,6 +228,30 @@ try
             break;
         }
 
+        case "equip":
+        {
+            if (positional.Count < 2) { Console.Error.WriteLine("Usage: equip <item_id>"); return 1; }
+            var actionJson = JsonSerializer.Serialize(new { action = "equip", itemId = positional[1] });
+            result = await client.Action(ResolveGameId(), actionJson);
+            break;
+        }
+
+        case "unequip":
+        {
+            if (positional.Count < 2) { Console.Error.WriteLine("Usage: unequip <slot> (weapon|armor|boots)"); return 1; }
+            var actionJson = JsonSerializer.Serialize(new { action = "unequip", slot = positional[1] });
+            result = await client.Action(ResolveGameId(), actionJson);
+            break;
+        }
+
+        case "discard":
+        {
+            if (positional.Count < 2) { Console.Error.WriteLine("Usage: discard <item_id>"); return 1; }
+            var actionJson = JsonSerializer.Serialize(new { action = "discard", itemId = positional[1] });
+            result = await client.Action(ResolveGameId(), actionJson);
+            break;
+        }
+
         case "market":
             result = await client.GetMarket(ResolveGameId());
             break;

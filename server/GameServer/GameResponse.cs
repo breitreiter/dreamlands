@@ -185,6 +185,7 @@ public class ActionRequest
     public string? Direction { get; set; }
     public int? ChoiceIndex { get; set; }
     public string? ItemId { get; set; }
+    public string? Slot { get; set; }
     public int? Quantity { get; set; }
     public MarketOrderRequest? Order { get; set; }
     public CampResolveRequest? CampChoices { get; set; }

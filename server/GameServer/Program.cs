@@ -165,6 +165,24 @@ InventoryInfo BuildInventory(PlayerState p) => new()
     },
 };
 
+string ModeString(SessionMode m) => m switch
+{
+    SessionMode.Exploring => "exploring",
+    SessionMode.InEncounter => "encounter",
+    SessionMode.AtSettlement => "at_settlement",
+    SessionMode.Camp => "camp",
+    SessionMode.GameOver => "game_over",
+    _ => m.ToString().ToLowerInvariant(),
+};
+
+GameResponse BuildInventoryResponse(GameSession s, PlayerState p) => new()
+{
+    Mode = ModeString(s.Mode),
+    Status = BuildStatus(p),
+    Node = BuildNodeInfo(s.CurrentNode, p),
+    Inventory = BuildInventory(p),
+};
+
 EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => new()
 {
     Title = encounter.Title,
@@ -693,6 +711,46 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                     }).ToList(),
                 },
             };
+            break;
+        }
+
+        case "equip":
+        {
+            if (string.IsNullOrEmpty(req.ItemId))
+                return Results.BadRequest(new { error = "ItemId is required" });
+
+            var results = Mechanics.Apply([$"equip {req.ItemId}"], player, balance, session.Rng);
+            if (results.Count == 0)
+                return Results.BadRequest(new { error = $"Cannot equip '{req.ItemId}' — not in pack or not equippable" });
+
+            response = BuildInventoryResponse(session, player);
+            break;
+        }
+
+        case "unequip":
+        {
+            var slot = req.Slot;
+            if (string.IsNullOrEmpty(slot))
+                return Results.BadRequest(new { error = "Slot is required (weapon, armor, boots)" });
+
+            var results = Mechanics.Apply([$"unequip {slot}"], player, balance, session.Rng);
+            if (results.Count == 0)
+                return Results.BadRequest(new { error = $"Nothing equipped in slot '{slot}'" });
+
+            response = BuildInventoryResponse(session, player);
+            break;
+        }
+
+        case "discard":
+        {
+            if (string.IsNullOrEmpty(req.ItemId))
+                return Results.BadRequest(new { error = "ItemId is required" });
+
+            var results = Mechanics.Apply([$"discard {req.ItemId}"], player, balance, session.Rng);
+            if (results.Count == 0)
+                return Results.BadRequest(new { error = $"Item '{req.ItemId}' not found in inventory" });
+
+            response = BuildInventoryResponse(session, player);
             break;
         }
 
