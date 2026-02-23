@@ -15,7 +15,7 @@ public sealed class ItemDef
     public ItemType Type { get; init; }
     public int Slots { get; init; } = 1;
     public int CapacityBonus { get; init; }
-    public IReadOnlyDictionary<string, Magnitude> Cures { get; init; } = new Dictionary<string, Magnitude>();
+    public IReadOnlySet<string> Cures { get; init; } = new HashSet<string>();
 
     public WeaponClass? WeaponClass { get; init; }
     public FoodType? FoodType { get; init; }
@@ -240,7 +240,7 @@ public sealed class ItemDef
         ["bandages"] = new()
         {
             Id = "bandages", Name = "Bandages", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small },
+            Cures = new HashSet<string> { "injured" },
             Cost = Magnitude.Trivial,
         },
         ["jorgo_root"] = new()
@@ -252,7 +252,7 @@ public sealed class ItemDef
         ["gravediggers_ear"] = new()
         {
             Id = "gravediggers_ear", Name = "Gravedigger's Ear", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["swamp_fever"] = Magnitude.Small },
+            Cures = new HashSet<string> { "swamp_fever" },
             Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["duskwort"] = new()
@@ -264,19 +264,19 @@ public sealed class ItemDef
         ["thumbroot"] = new()
         {
             Id = "thumbroot", Name = "Thumbroot", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small },
+            Cures = new HashSet<string> { "injured" },
             Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["wound_sealant"] = new()
         {
             Id = "wound_sealant", Name = "Wound Sealant", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Large },
+            Cures = new HashSet<string> { "injured" },
             Biome = "plains", ShopTier = 3, Cost = Magnitude.Medium,
         },
         ["creeping_baldric"] = new()
         {
             Id = "creeping_baldric", Name = "Creeping Baldric", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["gut_worms"] = Magnitude.Small },
+            Cures = new HashSet<string> { "gut_worms" },
             Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["dustseed"] = new()
@@ -294,20 +294,20 @@ public sealed class ItemDef
         ["pale_knot_berry"] = new()
         {
             Id = "pale_knot_berry", Name = "Pale Knot Berry", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Small },
+            Cures = new HashSet<string> { "exhausted" },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["shustov_tonic"] = new()
         {
             Id = "shustov_tonic", Name = "Shustov Tonic", Type = ItemType.Consumable,
             ResistModifiers = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Small },
-            Cures = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Small },
+            Cures = new HashSet<string> { "irradiated" },
             Biome = "plains", ShopTier = 3, Cost = Magnitude.Medium,
         },
         ["mudcap_fungus"] = new()
         {
             Id = "mudcap_fungus", Name = "Mudcap Fungus", Type = ItemType.Consumable,
-            Cures = new Dictionary<string, Magnitude> { ["poisoned"] = Magnitude.Medium },
+            Cures = new HashSet<string> { "poisoned" },
             Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
         },
 

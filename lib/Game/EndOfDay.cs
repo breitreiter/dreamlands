@@ -193,7 +193,7 @@ public static class EndOfDay
             // Remove medicine from Haversack
             state.Haversack.RemoveAt(idx);
 
-            foreach (var (conditionId, cureMagnitude) in itemDef.Cures)
+            foreach (var conditionId in itemDef.Cures)
             {
                 // If this condition had a failed resist tonight, cure is negated
                 if (failedResists.Contains(conditionId))
@@ -205,19 +205,18 @@ public static class EndOfDay
                 if (!state.ActiveConditions.TryGetValue(conditionId, out var stacks))
                     continue;
 
-                var cureAmount = balance.Character.DamageMagnitudes.GetValueOrDefault(cureMagnitude, 1);
-                var newStacks = stacks - cureAmount;
+                var newStacks = stacks - 1;
 
                 if (newStacks <= 0)
                 {
                     state.ActiveConditions.Remove(conditionId);
-                    events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, stacks, 0));
+                    events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, 1, 0));
                     events.Add(new EndOfDayEvent.ConditionCured(conditionId));
                 }
                 else
                 {
                     state.ActiveConditions[conditionId] = newStacks;
-                    events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, cureAmount, newStacks));
+                    events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, 1, newStacks));
                 }
             }
         }

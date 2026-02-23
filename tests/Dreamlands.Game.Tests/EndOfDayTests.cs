@@ -177,7 +177,7 @@ public class EndOfDayTests
     {
         var state = Fresh();
         state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot")); // cures injured, Small magnitude
+        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot")); // cures injured (1 stack)
         // Give 3 meals
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
@@ -186,13 +186,8 @@ public class EndOfDayTests
         var events = EndOfDay.Resolve(state, "plains", 1,
             ["food_protein", "food_grain", "food_sweets"], ["thumbroot"], Balance, new Random(42));
 
-        // Thumbroot cures injured by Small magnitude (2 stacks)
-        var cureAmount = Balance.Character.DamageMagnitudes[Magnitude.Small];
-        var expected = 3 - cureAmount;
-        if (expected <= 0)
-            Assert.False(state.ActiveConditions.ContainsKey("injured"));
-        else
-            Assert.Equal(expected, state.ActiveConditions["injured"]);
+        // Thumbroot cures injured by 1 stack (3 → 2)
+        Assert.Equal(2, state.ActiveConditions["injured"]);
 
         Assert.Contains(events, e => e is EndOfDayEvent.CureApplied);
     }

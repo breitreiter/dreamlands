@@ -41,7 +41,7 @@ ItemDef (catalog)                    ItemInstance (player inventory)
 | `ShopTier` | `int?` | Settlement tier required to stock this item (1/2/3) |
 | `SkillModifiers` | `IReadOnlyDictionary<Skill, int>` | Skill check bonuses when equipped/carried |
 | `ResistModifiers` | `IReadOnlyDictionary<string, Magnitude>` | Condition resistance bonuses |
-| `Cures` | `IReadOnlyDictionary<string, Magnitude>` | Conditions this item can cure (consumables) |
+| `Cures` | `IReadOnlySet<string>` | Conditions this item can cure — binary, always improves 1 stack |
 | `IsPackItem` | `bool` (computed) | True for Weapon, Armor, Boots, Tool, TradeGood |
 
 ### ItemInstance Fields
