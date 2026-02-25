@@ -170,28 +170,28 @@ export default function MarketScreen({
   }
 
   return (
-    <div className="h-full flex flex-col bg-stone-900 text-stone-100">
+    <div className="h-full flex flex-col bg-page text-primary">
       <StatusBar status={state.status} />
 
       <div className="flex-1 flex overflow-hidden">
         {/* Buy panel */}
-        <div className="flex-1 flex flex-col border-r border-stone-700">
-          <div className="p-3 border-b border-stone-700">
-            <h3 className="text-amber-200 font-medium">Buy</h3>
-            <div className="text-xs text-stone-400">
+        <div className="flex-1 flex flex-col border-r border-edge">
+          <div className="p-3 border-b border-edge">
+            <h3 className="text-accent font-medium">Buy</h3>
+            <div className="text-xs text-dim">
               Gold: {state.status.gold}
               {projected.gold !== state.status.gold && (
-                <span className="text-amber-400"> → {projected.gold}</span>
+                <span className="text-accent"> → {projected.gold}</span>
               )}
             </div>
           </div>
           <div className="flex-1 overflow-y-auto">
             {loadingStock ? (
-              <div className="p-4 text-stone-500">Loading stock...</div>
+              <div className="p-4 text-muted">Loading stock...</div>
             ) : (
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs text-stone-400 border-b border-stone-700">
+                  <tr className="text-left text-xs text-dim border-b border-edge">
                     <th className="p-2">Item</th>
                     <th className="p-2">Type</th>
                     <th className="p-2 text-right">Stock</th>
@@ -206,45 +206,45 @@ export default function MarketScreen({
                     return (
                       <tr
                         key={item.id}
-                        className="border-b border-stone-800 hover:bg-stone-800"
+                        className="border-b border-edge hover:bg-btn-hover"
                       >
                         <td className="p-2">
                           <div>{item.name}</div>
                           {item.description && (
-                            <div className="text-xs text-stone-500">
+                            <div className="text-xs text-muted">
                               {item.description}
                             </div>
                           )}
                         </td>
-                        <td className="p-2 text-stone-400 capitalize">
+                        <td className="p-2 text-dim capitalize">
                           {item.type}
                         </td>
-                        <td className="p-2 text-right text-stone-300">
+                        <td className="p-2 text-right text-primary/80">
                           {projQty !== item.quantity ? (
-                            <><span className="text-stone-500">{item.quantity}</span> → {projQty}</>
+                            <><span className="text-muted">{item.quantity}</span> → {projQty}</>
                           ) : (
                             item.quantity
                           )}
                         </td>
-                        <td className="p-2 text-right text-amber-400">
+                        <td className="p-2 text-right text-accent">
                           {item.buyPrice}g
                         </td>
                         <td className="p-2 flex gap-1">
                           <button
                             onClick={() => addBuy(item.id)}
                             disabled={!canBuy(item)}
-                            className="px-3 py-1 bg-amber-700 hover:bg-amber-600
-                                       disabled:bg-stone-700 disabled:text-stone-500
-                                       text-xs transition-colors"
+                            className="px-3 py-1 bg-action hover:bg-action-hover
+                                       disabled:bg-btn disabled:text-muted
+                                       text-contrast text-xs transition-colors"
                           >
                             +
                           </button>
                           {pendingQty > 0 && (
                             <>
-                              <span className="px-1 text-xs text-amber-300 self-center">{pendingQty}</span>
+                              <span className="px-1 text-xs text-accent self-center">{pendingQty}</span>
                               <button
                                 onClick={() => removeBuy(item.id)}
-                                className="px-2 py-1 bg-stone-700 hover:bg-stone-600 text-xs transition-colors"
+                                className="px-2 py-1 bg-btn hover:bg-btn-hover text-xs transition-colors"
                               >
                                 −
                               </button>
@@ -262,8 +262,8 @@ export default function MarketScreen({
 
         {/* Sell panel */}
         <div className="w-72 flex flex-col">
-          <div className="p-3 border-b border-stone-700">
-            <h3 className="text-amber-200 font-medium">Sell</h3>
+          <div className="p-3 border-b border-edge">
+            <h3 className="text-accent font-medium">Sell</h3>
           </div>
           <div className="flex-1 overflow-y-auto">
             {inventory && (
@@ -274,14 +274,14 @@ export default function MarketScreen({
                   return (
                     <div
                       key={i}
-                      className={`flex items-center justify-between p-2 hover:bg-stone-800 ${
+                      className={`flex items-center justify-between p-2 hover:bg-btn-hover ${
                         soldOut ? "opacity-40" : ""
                       }`}
                     >
                       <div>
                         <div className="text-sm">{item.name}</div>
                         {sellPrice > 0 && (
-                          <div className="text-xs text-amber-400/70">
+                          <div className="text-xs text-accent/70">
                             {sellPrice}g
                           </div>
                         )}
@@ -289,8 +289,8 @@ export default function MarketScreen({
                       <button
                         onClick={() => addSell(item.defId)}
                         disabled={soldOut}
-                        className="px-3 py-1 bg-stone-700 hover:bg-stone-600
-                                   disabled:text-stone-500 text-xs transition-colors"
+                        className="px-3 py-1 bg-btn hover:bg-btn-hover
+                                   disabled:text-muted text-xs transition-colors"
                       >
                         Sell
                       </button>
@@ -299,7 +299,7 @@ export default function MarketScreen({
                 })}
                 {inventory.pack.length === 0 &&
                   inventory.haversack.length === 0 && (
-                    <div className="text-stone-500 text-sm p-2">
+                    <div className="text-muted text-sm p-2">
                       Nothing to sell
                     </div>
                   )}
@@ -310,15 +310,15 @@ export default function MarketScreen({
       </div>
 
       {/* Order summary + footer */}
-      <div className="border-t border-stone-700 bg-stone-800">
+      <div className="border-t border-edge bg-panel">
         {hasOrder && (
-          <div className="px-3 pt-2 text-xs text-stone-400 space-y-1">
+          <div className="px-3 pt-2 text-xs text-dim space-y-1">
             {[...pendingBuys.entries()].map(([itemId, qty]) => {
               const item = stock.find((s) => s.id === itemId);
               return (
                 <div key={`buy-${itemId}`} className="flex justify-between">
-                  <span className="text-amber-300">Buy {qty}x {item?.name ?? itemId}</span>
-                  <span className="text-amber-400">-{(item?.buyPrice ?? 0) * qty}g</span>
+                  <span className="text-accent">Buy {qty}x {item?.name ?? itemId}</span>
+                  <span className="text-accent">-{(item?.buyPrice ?? 0) * qty}g</span>
                 </div>
               );
             })}
@@ -326,38 +326,38 @@ export default function MarketScreen({
               const name = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? [])].find((it) => it.defId === defId)?.name ?? defId;
               return (
                 <div key={`sell-${i}`} className="flex justify-between items-center">
-                  <span className="text-stone-300">Sell {name}</span>
+                  <span className="text-primary/80">Sell {name}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-green-400">+{sellPrices[defId] ?? 0}g</span>
-                    <button onClick={() => removeSell(i)} className="text-stone-500 hover:text-stone-300">×</button>
+                    <span className="text-positive">+{sellPrices[defId] ?? 0}g</span>
+                    <button onClick={() => removeSell(i)} className="text-muted hover:text-primary">×</button>
                   </div>
                 </div>
               );
             })}
-            <div className="flex justify-between pt-1 border-t border-stone-700 text-sm">
+            <div className="flex justify-between pt-1 border-t border-edge text-sm">
               <span>Net</span>
-              <span className={sellRevenue - projected.buyCost >= 0 ? "text-green-400" : "text-red-400"}>
+              <span className={sellRevenue - projected.buyCost >= 0 ? "text-positive" : "text-negative"}>
                 {sellRevenue - projected.buyCost >= 0 ? "+" : ""}{sellRevenue - projected.buyCost}g
               </span>
             </div>
           </div>
         )}
         <div className="flex items-center justify-between p-3">
-          {message && <span className="text-sm text-stone-300">{message}</span>}
+          {message && <span className="text-sm text-primary/80">{message}</span>}
           <div className="flex-1" />
           <div className="flex gap-2">
             {hasOrder && (
               <button
                 onClick={submitOrder}
                 disabled={loading}
-                className="px-4 py-2 bg-amber-700 hover:bg-amber-600 disabled:bg-stone-700 text-sm transition-colors"
+                className="px-4 py-2 bg-action hover:bg-action-hover disabled:bg-btn text-contrast text-sm transition-colors"
               >
                 Confirm Order
               </button>
             )}
             <button
               onClick={cancelOrder}
-              className="px-4 py-2 bg-stone-700 hover:bg-stone-600 text-sm transition-colors"
+              className="px-4 py-2 bg-btn hover:bg-btn-hover text-sm transition-colors"
             >
               {hasOrder ? "Cancel" : "Back"}
             </button>

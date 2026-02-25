@@ -14,40 +14,40 @@ export default function Splash() {
   const [showCredits, setShowCredits] = useState(false);
 
   return (
-    <div className="h-full flex items-center justify-center bg-stone-900 text-stone-100">
+    <div className="h-full flex items-center justify-center bg-page text-primary">
       <div className="text-center space-y-8">
-        <h1 className="text-5xl font-bold tracking-wider text-amber-200">
+        <h1 className="text-5xl font-header tracking-wider text-accent">
           DREAMLANDS
         </h1>
-        <p className="text-stone-400 text-sm">
+        <p className="text-dim text-sm">
           A journey into the unknown
         </p>
         <button
           onClick={startNewGame}
           disabled={loading}
-          className="px-8 py-3 bg-amber-700 hover:bg-amber-600 disabled:bg-stone-700
-                     text-stone-100 font-medium tracking-wide transition-colors"
+          className="px-8 py-3 bg-action hover:bg-action-hover disabled:bg-btn
+                     text-contrast font-medium tracking-wide transition-colors"
         >
           {loading ? "Starting..." : "New Game"}
         </button>
         {error && (
-          <p className="text-red-400 text-sm">{error}</p>
+          <p className="text-negative text-sm">{error}</p>
         )}
         <div>
           <button
             onClick={() => setShowCredits(!showCredits)}
-            className="text-stone-500 hover:text-stone-300 text-xs tracking-wide transition-colors"
+            className="text-muted hover:text-dim text-xs tracking-wide transition-colors"
           >
             {showCredits ? "Close Credits" : "Credits"}
           </button>
           {showCredits && (
             <div className="mt-4 text-left mx-auto max-w-xs space-y-2">
-              <p className="text-stone-400 text-xs font-medium tracking-wide mb-3">
+              <p className="text-dim text-xs font-medium tracking-wide mb-3">
                 Third-party libraries
               </p>
               {credits.map((c) => (
-                <div key={c.name} className="text-xs text-stone-500">
-                  <span className="text-stone-300">{c.name}</span>
+                <div key={c.name} className="text-xs text-muted">
+                  <span className="text-primary/80">{c.name}</span>
                   {" — "}
                   {c.license} ({c.author})
                 </div>

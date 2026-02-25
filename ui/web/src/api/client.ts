@@ -45,6 +45,7 @@ export async function action(
     direction?: string;
     choiceIndex?: number;
     itemId?: string;
+    slot?: string;
     quantity?: number;
     order?: MarketOrder;
     campChoices?: CampResolveChoices;

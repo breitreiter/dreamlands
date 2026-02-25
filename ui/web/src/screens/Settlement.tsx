@@ -19,16 +19,16 @@ export default function Settlement({ state }: { state: GameResponse }) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-stone-900 text-stone-100">
+    <div className="h-full flex flex-col bg-page text-primary">
       <StatusBar status={status} />
 
       <div className="flex-1 flex items-start justify-center overflow-y-auto p-6">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-amber-200">
+            <h2 className="text-2xl font-header text-accent">
               {settlement.name}
             </h2>
-            <div className="text-stone-400 text-sm mt-1">
+            <div className="text-dim text-sm mt-1">
               Tier {settlement.tier} Settlement
             </div>
           </div>
@@ -37,12 +37,12 @@ export default function Settlement({ state }: { state: GameResponse }) {
             {settlement.services.includes("market") && (
               <button
                 onClick={() => setShowMarket(true)}
-                className="w-full py-3 bg-stone-800 hover:bg-stone-700
-                           border border-stone-700 hover:border-amber-700
+                className="w-full py-3 bg-btn hover:bg-btn-hover
+                           border border-edge hover:border-action
                            transition-colors text-left px-4"
               >
-                <span className="text-amber-300">Market</span>
-                <span className="text-stone-400 text-sm block">
+                <span className="text-accent">Market</span>
+                <span className="text-dim text-sm block">
                   Buy and sell goods
                 </span>
               </button>
@@ -50,17 +50,17 @@ export default function Settlement({ state }: { state: GameResponse }) {
 
             <button
               onClick={() => setShowInventory(true)}
-              className="w-full py-3 bg-stone-800 hover:bg-stone-700
-                         border border-stone-700 transition-colors text-left px-4"
+              className="w-full py-3 bg-btn hover:bg-btn-hover
+                         border border-edge transition-colors text-left px-4"
             >
-              <span className="text-stone-200">Inventory</span>
+              <span className="text-primary">Inventory</span>
             </button>
           </div>
 
           <button
             onClick={() => doAction({ action: "leave_settlement" })}
             disabled={loading}
-            className="w-full py-3 bg-stone-700 hover:bg-stone-600 disabled:bg-stone-800
+            className="w-full py-3 bg-btn hover:bg-btn-hover disabled:bg-panel-alt
                        transition-colors"
           >
             Leave Settlement

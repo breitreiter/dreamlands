@@ -1,13 +1,16 @@
 The Old Assay Station
 
-The trail switchbacks through loose scree to a stone structure wedged between two boulders like a tooth in a broken jaw. The assay station has been abandoned long enough that moss mats the north wall and the hinges have swollen with rust, but not so long that the roof has surrendered. A rockslide blocks the main trail ahead—fresh enough that dust still ghosts the air when the wind shifts, massive enough that no lone traveler is shifting it. The detour climbs another thousand feet along an exposed ridge. To the west, the sky darkens to a color like old bruises pressed under skin.
+The trail switchbacks through loose scree to a stone structure wedged between two boulders like a tooth in a broken jaw. The assay station has been abandoned long enough that moss mats the north wall and the hinges have swollen with rust, but not so long that the roof has surrendered. 
 
-Inside, the air is colder than it should be. Not drafty—still. Held. The hearth is laid with ash that looks recently stirred, though no footprints mark the floor. Three different hands have carved warnings into the doorframe, letters cut deep enough to splinter the wood. Along the far wall, half-collapsed against a stack of rotted sample crates, lie two skeletal corpses in the tatters of heavy work coats, ribs laced with mineral stain, skulls tilted toward the scales as if waiting for a verdict.
+A rockslide blocks the main trail ahead; fresh enough that dust still ghosts the air when the wind shifts, massive enough that no lone traveler is shifting it. The detour climbs another thousand feet along an exposed ridge. To the west, the sky darkens to a color like old bruises pressed under skin.
+
+Inside, the air is colder than it should be. Still, like a held breath. 
+
+The hearth is laid with ash that looks recently stirred, though no footprints mark the floor. Three different hands have carved warnings into the doorframe, letters cut deep enough to splinter the wood. Along the far wall, half-collapsed against a stack of rotted sample crates, lie two skeletal corpses in the tatters of heavy work coats, ribs laced with mineral stain, skulls tilted toward the scales as if waiting for a verdict.
 
 Up here, folk speak of such places in lowered voices. Where a man dies in the mountains, that ground is no longer mere ground but a kind of tomb. It may lack carved stone or priestly seal, but it holds the same claim. A proper cleric might come with oils and ash and words of severing, lay the restless to quiet, and mark the threshold clean again. A traveler with a bedroll and a flint has no such authority.
 
 The first cold drops of sleet tick against the stone outside.
-
 
 choices:
 
@@ -39,7 +42,7 @@ choices:
   When you wake at last, true darkness fills the station. The fire has died to ash and ember, its light surrendered. You fumble for your flint in the blackness, strike sparks until a flame catches. In the wavering glow you turn toward the far wall. The space where the corpses lay slumped is empty now, marked only by the stains their bones left on rotted wood. The scales stand silent on their bench. Of the dead themselves, no trace remains. You are alone in the station, alone with the memory of their watching, alone with the certainty that something has changed in the night.
   +damage_spirits medium
 
-* Ignore = Press on immediately, taking the detour route despite the weather
+* Press on immediately = Take the detour despite the weather
   You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you've gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.
 
   The ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.

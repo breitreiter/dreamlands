@@ -1,7 +1,45 @@
 @import "tailwindcss";
 
+@theme {
+  --color-page: #232d46;
+  --color-panel: #262626;
+  --color-panel-alt: #191919;
+  --color-edge: #4a5568;
+
+  --color-primary: #f3f3f3;
+  --color-contrast: #1e1e1e;
+  --color-dim: #aca377;
+  --color-muted: #8b8b8b;
+
+  --color-accent: #d0bd62;
+  --color-action: #d0925d;
+  --color-action-hover: #daa878;
+  --color-action-dim: #b29073;
+
+  --color-negative: #ff6b6b;
+  --color-positive: #6bffae;
+
+  --color-stat-health: #800000;
+  --color-stat-spirits: #460AA7;
+
+  --color-btn: #0d0d0dcc;
+  --color-btn-hover: #292929;
+
+  --font-header: 'Cinzel Decorative', serif;
+  --font-body: 'Alegreya Sans', sans-serif;
+  --font-hand: 'Sue Ellen Francisco', cursive;
+}
+
 .leaflet-container {
   background: url("./assets/black-stone.jpg") repeat;
+}
+
+.leaflet-tile {
+  outline: 1px solid transparent;
+}
+
+html {
+  font-size: 20px;
 }
 
 html,
@@ -12,5 +50,5 @@ body,
   height: 100%;
   width: 100%;
   overflow: hidden;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'Alegreya Sans', sans-serif;
 }

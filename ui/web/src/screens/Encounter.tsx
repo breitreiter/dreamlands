@@ -9,17 +9,17 @@ export default function Encounter({ state }: { state: GameResponse }) {
   if (!encounter) return null;
 
   return (
-    <div className="h-full flex flex-col bg-stone-900 text-stone-100">
+    <div className="h-full flex flex-col bg-page text-primary">
       <StatusBar status={status} />
 
       <div className="flex-1 flex items-start justify-center overflow-y-auto p-6">
         <div className="max-w-2xl w-full space-y-6">
-          <h2 className="text-2xl font-bold text-amber-200">
+          <h2 className="text-2xl font-header text-accent">
             {encounter.title}
           </h2>
 
           {encounter.body && (
-            <div className="text-stone-300 leading-relaxed whitespace-pre-wrap">
+            <div className="text-primary/80 leading-relaxed whitespace-pre-wrap">
               {encounter.body}
             </div>
           )}
@@ -32,17 +32,17 @@ export default function Encounter({ state }: { state: GameResponse }) {
                   doAction({ action: "choose", choiceIndex: choice.index })
                 }
                 disabled={loading}
-                className="w-full text-left p-3 bg-stone-800 hover:bg-stone-700
-                           disabled:bg-stone-800 disabled:text-stone-500
-                           border border-stone-700 hover:border-amber-700
+                className="w-full text-left p-3 bg-btn hover:bg-btn-hover
+                           disabled:bg-btn disabled:text-muted
+                           border border-edge hover:border-action
                            transition-colors group"
               >
-                <span className="text-amber-300 group-hover:text-amber-200">
+                <span className="text-accent group-hover:text-accent">
                   {choice.index + 1}.{" "}
                 </span>
                 <span>{choice.label}</span>
                 {choice.preview && (
-                  <span className="block text-xs text-stone-400 mt-1 ml-5">
+                  <span className="block text-xs text-dim mt-1 ml-5">
                     {choice.preview}
                   </span>
                 )}
@@ -50,11 +50,11 @@ export default function Encounter({ state }: { state: GameResponse }) {
             ))}
 
             {encounter.choices.length === 0 && (
-              <div className="text-center text-stone-500 py-4">
+              <div className="text-center text-muted py-4">
                 <p>No choices available.</p>
                 <button
                   onClick={() => doAction({ action: "end_encounter" })}
-                  className="mt-4 px-6 py-2 bg-stone-700 hover:bg-stone-600 transition-colors"
+                  className="mt-4 px-6 py-2 bg-btn hover:bg-btn-hover transition-colors"
                 >
                   Continue
                 </button>

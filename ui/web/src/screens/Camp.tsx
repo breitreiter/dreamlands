@@ -53,16 +53,16 @@ export default function Camp({ state }: { state: GameResponse }) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-stone-900 text-stone-100">
+    <div className="h-full flex flex-col bg-page text-primary">
       <StatusBar status={state.status} />
 
       <div className="flex-1 flex items-start justify-center overflow-y-auto p-6">
         <div className="max-w-2xl w-full space-y-6">
-          <h2 className="text-xl text-amber-200 font-medium">
+          <h2 className="text-2xl font-header text-accent">
             {resolved ? "Dawn Breaks" : "Make Camp"}
           </h2>
 
-          <p className="text-stone-300 leading-relaxed">
+          <p className="text-primary/80 leading-relaxed">
             {resolved
               ? "You pack up your camp as the new day begins."
               : "Night falls. You set up camp and prepare to rest."}
@@ -71,16 +71,16 @@ export default function Camp({ state }: { state: GameResponse }) {
           {/* Threats */}
           {camp && camp.threats.length > 0 && !resolved && (
             <div className="space-y-2">
-              <div className="text-xs text-stone-400 uppercase tracking-wide">
+              <div className="text-xs text-dim uppercase tracking-wide">
                 Threats
               </div>
               {camp.threats.map((t, i) => (
                 <div
                   key={i}
-                  className="p-2 border border-red-900/50 bg-red-900/20 text-sm"
+                  className="p-2 border border-negative/40 bg-negative/10 text-sm"
                 >
-                  <span className="text-red-300 font-medium">{t.name}</span>
-                  <span className="text-stone-400"> — {t.warning}</span>
+                  <span className="text-negative font-medium">{t.name}</span>
+                  <span className="text-dim"> — {t.warning}</span>
                 </div>
               ))}
             </div>
@@ -89,28 +89,28 @@ export default function Camp({ state }: { state: GameResponse }) {
           {/* Food selection */}
           {!resolved && foodItems.length > 0 && (
             <div className="space-y-2">
-              <div className="text-xs text-stone-400 uppercase tracking-wide">
+              <div className="text-xs text-dim uppercase tracking-wide">
                 Food to eat
               </div>
               {foodItems.map((item, i) => (
                 <label
                   key={i}
-                  className="flex items-center gap-2 p-2 bg-stone-800 cursor-pointer hover:bg-stone-750"
+                  className="flex items-center gap-2 p-2 bg-btn cursor-pointer hover:bg-btn-hover"
                 >
                   <input
                     type="checkbox"
                     checked={selectedFood.has(i)}
                     onChange={() => toggleFood(i)}
-                    className="accent-amber-600"
+                    className="accent-action"
                   />
-                  <span className="text-stone-200 text-sm">{item.name}</span>
+                  <span className="text-primary text-sm">{item.name}</span>
                 </label>
               ))}
             </div>
           )}
 
           {!resolved && foodItems.length === 0 && (
-            <div className="text-stone-500 text-sm">
+            <div className="text-muted text-sm">
               No food in your haversack. You will go hungry tonight.
             </div>
           )}
@@ -118,21 +118,21 @@ export default function Camp({ state }: { state: GameResponse }) {
           {/* Medicine selection */}
           {!resolved && medicineItems.length > 0 && (
             <div className="space-y-2">
-              <div className="text-xs text-stone-400 uppercase tracking-wide">
+              <div className="text-xs text-dim uppercase tracking-wide">
                 Medicine to use
               </div>
               {medicineItems.map((item, i) => (
                 <label
                   key={i}
-                  className="flex items-center gap-2 p-2 bg-stone-800 cursor-pointer hover:bg-stone-750"
+                  className="flex items-center gap-2 p-2 bg-btn cursor-pointer hover:bg-btn-hover"
                 >
                   <input
                     type="checkbox"
                     checked={selectedMedicine.has(i)}
                     onChange={() => toggleMedicine(i)}
-                    className="accent-amber-600"
+                    className="accent-action"
                   />
-                  <span className="text-stone-200 text-sm">{item.name}</span>
+                  <span className="text-primary text-sm">{item.name}</span>
                 </label>
               ))}
             </div>
@@ -140,9 +140,9 @@ export default function Camp({ state }: { state: GameResponse }) {
 
           {/* Resolution events */}
           {resolved && camp && camp.events.length > 0 && (
-            <div className="space-y-1 border-t border-stone-700 pt-3">
+            <div className="space-y-1 border-t border-edge pt-3">
               {camp.events.map((e, i) => (
-                <div key={i} className="text-sm text-stone-300">
+                <div key={i} className="text-sm text-primary/80">
                   {e.description}
                 </div>
               ))}
@@ -154,8 +154,8 @@ export default function Camp({ state }: { state: GameResponse }) {
             <button
               onClick={resolve}
               disabled={loading}
-              className="px-6 py-2 bg-amber-700 hover:bg-amber-600 disabled:bg-stone-700
-                         transition-colors"
+              className="px-6 py-2 bg-action hover:bg-action-hover disabled:bg-btn
+                         text-contrast transition-colors"
             >
               Rest for the Night
             </button>
@@ -163,8 +163,8 @@ export default function Camp({ state }: { state: GameResponse }) {
             <button
               onClick={continueJourney}
               disabled={loading}
-              className="px-6 py-2 bg-amber-700 hover:bg-amber-600 disabled:bg-stone-700
-                         transition-colors"
+              className="px-6 py-2 bg-action hover:bg-action-hover disabled:bg-btn
+                         text-contrast transition-colors"
             >
               Continue
             </button>

@@ -15,9 +15,9 @@ function GameRouter() {
   return (
     <>
       {error && (
-        <div className="fixed top-0 left-0 right-0 z-[2000] bg-red-900/90 text-red-100 px-4 py-2 text-sm flex justify-between items-center">
+        <div className="fixed top-0 left-0 right-0 z-[2000] bg-negative/90 text-contrast px-4 py-2 text-sm flex justify-between items-center">
           <span>{error}</span>
-          <button onClick={clearError} className="text-red-300 hover:text-white ml-4">
+          <button onClick={clearError} className="text-contrast/70 hover:text-contrast ml-4">
             Dismiss
           </button>
         </div>

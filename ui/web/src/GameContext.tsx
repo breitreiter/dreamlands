@@ -17,6 +17,7 @@ interface GameContextValue extends GameState {
     direction?: string;
     choiceIndex?: number;
     itemId?: string;
+    slot?: string;
     quantity?: number;
     order?: MarketOrder;
     campChoices?: CampResolveChoices;
@@ -25,6 +26,12 @@ interface GameContextValue extends GameState {
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
+
+function stripNulls<T extends object>(obj: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v != null)
+  ) as Partial<T>;
+}
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<GameState>({
@@ -74,6 +81,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       direction?: string;
       choiceIndex?: number;
       itemId?: string;
+      slot?: string;
       quantity?: number;
       order?: MarketOrder;
       campChoices?: CampResolveChoices;
@@ -82,7 +90,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
         const result = await api.action(state.gameId, body);
-        setState((s) => ({ ...s, response: result, loading: false }));
+        setState((s) => ({
+          ...s,
+          response: s.response
+            ? { ...s.response, ...stripNulls(result) }
+            : result,
+          loading: false,
+        }));
         return result;
       } catch (e) {
         setState((s) => ({
