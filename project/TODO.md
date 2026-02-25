@@ -18,13 +18,16 @@ Just a list of things that need doing, roughly grouped.
 
 ## Map Visual
 
-- [ ] Add a border/frame to mapgen output so the map edge looks intentional against the background
+- [ ] Add a safe border to the map so the edge looks intentional against the background
 - [ ] Replace lake sprite
+- [ ] Fix lake decal draw order — lake decal should render above the river line
 - [ ] Fix mountain coloring
 - [ ] Finish mountain POI sprites
-- [ ] Improve settlement sprite variability (don't place two identical settlements next to each other)
+- [ ] Improve settlement sprite variability — avoid placing identical decals near each other;
+      may need more decals (recolored variants)
 - [ ] Fix dungeon sprite scaling (PoiPass shares a scale factor derived from settlement decals;
       MountainPass uses a hardcoded `PoiScale = 0.32f` — both may be wrong for dungeon art)
+- [ ] More aggressive mountain settlement placement — aim for at least one per mountain biome
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
 
@@ -152,6 +155,8 @@ is not yet built.
 - [ ] Town — Healer
 - [ ] Town — Inn
 - [ ] Stock medicine in biome-appropriate markets (medicines may not spawn yet)
+- [ ] Courier system — markets sell Dispatches (tier-matched), player delivers to named
+      destination settlement for payment. Design in `project/design/courier_system.md`.
 - [x] Gathering action
       /home/joseph/repos/dreamlands/project/design/foraging.md
 
@@ -228,6 +233,8 @@ See `project/design/gaps.md` for the full list. Resolved items noted inline.
 `lib/Flavor/FlavorText.cs` has real content for region/settlement names and descriptions.
 Everything else is a one-liner placeholder. Generation logic needs to be built.
 
+- [ ] Improve settlement and region names — current names are mechanical (biome root + size
+      suffix). Rework after swamp lore bible is finalized so names can draw on established lore.
 - [ ] Guild office descriptions
 - [ ] Market descriptions
 - [ ] Guild office rumors
@@ -244,9 +251,12 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 - [x] GameServer — ASP.NET Minimal API with file-based save store in `server/GameServer/`.
 - [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
 - [ ] Web UI — flesh out screens, connect to GameServer, real game loop.
+- [ ] Google OAuth login + session reconnect (very late — production only).
+      Analysis in `project/architecture/google_oauth.md`.
 
 ## Quality of Life
 
+- [ ] Server "quick start" flag — start the player with basic gear and extra gold to skip the early trade loop
 - [ ] Biome intro encounters — one-time scripted encounter per biome/tier that fires on
       first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
       in selection logic. Design in `project/design/biome_intro_encounters.md`.
