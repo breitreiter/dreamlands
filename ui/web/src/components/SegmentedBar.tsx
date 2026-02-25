@@ -11,7 +11,7 @@ export default function SegmentedBar({
 }) {
   return (
     <div>
-      <div className="flex gap-[2px]">
+      <div className="flex gap-[4px]">
         {Array.from({ length: max }, (_, i) => {
           const isFirst = i === 0;
           const isLast = i === max - 1;
@@ -21,7 +21,7 @@ export default function SegmentedBar({
               key={i}
               className="h-5 border border-dim"
               style={{
-                width: isEnd ? 19 : 14,
+                width: isEnd ? 18 : 12,
                 backgroundColor: i < value ? `var(${color})` : "#0d0d0d",
                 borderRadius: isFirst
                   ? "999px 0 0 999px"
