@@ -47,9 +47,31 @@ npm run build      # tsc + vite build
 ```
 src/
   main.tsx              # mount point
-  App.tsx               # root component
+  App.tsx               # root: GameProvider + mode-based router
+  GameContext.tsx        # game state, doAction(), partial-response merging
+  api/
+    client.ts           # fetch wrappers for GameServer HTTP API
+    types.ts            # TypeScript interfaces matching server DTOs
+  calendar.ts           # Imperial calendar formatting
+  screens/
+    Splash.tsx          # new game / title screen
+    Explore.tsx         # map + side panel (movement, POI interaction, inventory toggle)
+    Encounter.tsx       # encounter narrative + choices
+    Outcome.tsx         # skill check results + mechanic effects
+    Settlement.tsx      # settlement services menu
+    Market.tsx          # buy/sell with projected inventory/gold
+    Camp.tsx            # end-of-day: auto-balanced meal, medicine, threats
+    Inventory.tsx       # overlay: equip/unequip/discard actions
+    GameOver.tsx        # death screen
+    StatusBar.tsx       # top bar: health, spirits, gold, conditions
   components/
     GameMap.tsx          # leaflet map, tiles from /world/tiles/
+    CompassRose.tsx      # directional movement + inventory button
+    SegmentedBar.tsx     # health/spirits bar with discrete segments
 ```
 
-The app is early-stage — just the map viewer so far.
+## Key Patterns
+
+- **GameContext** provides `doAction()` which merges partial server responses (stripping nulls) so fields like `exits` aren't clobbered by inventory-only responses.
+- **Market** uses `isPackType()` to match the server's `IsPackItem` logic (weapon, armor, boots, tool, tradegood → pack; everything else → haversack).
+- **Camp** auto-selects a balanced meal (1 protein + 1 grain + 1 sweets) or nothing; no manual food selection UI.
