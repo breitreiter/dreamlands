@@ -15,28 +15,23 @@ export default function Camp({ state }: { state: GameResponse }) {
     (i) => i.defId === "bandages" || i.defId === "antivenom" || i.defId === "tonic"
   );
 
-  const [selectedFood, setSelectedFood] = useState<Set<number>>(
-    () => new Set(foodItems.map((_, i) => i))
-  );
-  const [selectedMedicine, setSelectedMedicine] = useState<Set<number>>(
-    () => new Set(medicineItems.map((_, i) => i))
-  );
+  // Auto-select balanced meal (1 protein + 1 grain + 1 sweets) or nothing
+  const [selectedFood] = useState<Set<number>>(() => {
+    const picked = new Set<number>();
+    const seen = new Set<string>();
+    for (let i = 0; i < foodItems.length; i++) {
+      const id = foodItems[i].defId;
+      if (!seen.has(id)) {
+        seen.add(id);
+        picked.add(i);
+      }
+    }
+    if (seen.size < 3) return new Set<number>();
+    return picked;
+  });
 
-  function toggleFood(idx: number) {
-    setSelectedFood((s) => {
-      const next = new Set(s);
-      next.has(idx) ? next.delete(idx) : next.add(idx);
-      return next;
-    });
-  }
-
-  function toggleMedicine(idx: number) {
-    setSelectedMedicine((s) => {
-      const next = new Set(s);
-      next.has(idx) ? next.delete(idx) : next.add(idx);
-      return next;
-    });
-  }
+  // Auto-select all medicine
+  const selectedMedicine = new Set(medicineItems.map((_, i) => i));
 
   function resolve() {
     const food = foodItems
@@ -51,6 +46,10 @@ export default function Camp({ state }: { state: GameResponse }) {
   function continueJourney() {
     refreshState();
   }
+
+  const mealSummary = selectedFood.size > 0
+    ? foodItems.filter((_, i) => selectedFood.has(i)).map((i) => i.name).join(", ")
+    : null;
 
   return (
     <div className="h-full flex flex-col bg-page text-primary">
@@ -86,55 +85,28 @@ export default function Camp({ state }: { state: GameResponse }) {
             </div>
           )}
 
-          {/* Food selection */}
-          {!resolved && foodItems.length > 0 && (
-            <div className="space-y-2">
-              <div className="text-xs text-dim uppercase tracking-wide">
-                Food to eat
-              </div>
-              {foodItems.map((item, i) => (
-                <label
-                  key={i}
-                  className="flex items-center gap-2 p-2 bg-btn cursor-pointer hover:bg-btn-hover"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedFood.has(i)}
-                    onChange={() => toggleFood(i)}
-                    className="accent-action"
-                  />
-                  <span className="text-primary text-sm">{item.name}</span>
-                </label>
-              ))}
+          {/* Meal summary */}
+          {!resolved && (
+            <div className="text-sm">
+              {mealSummary ? (
+                <span className="text-primary/80">Supper: {mealSummary}</span>
+              ) : foodItems.length > 0 ? (
+                <span className="text-muted">
+                  No balanced meal available (need protein, grain, and sweets).
+                  You will go hungry tonight.
+                </span>
+              ) : (
+                <span className="text-muted">
+                  No food in your haversack. You will go hungry tonight.
+                </span>
+              )}
             </div>
           )}
 
-          {!resolved && foodItems.length === 0 && (
-            <div className="text-muted text-sm">
-              No food in your haversack. You will go hungry tonight.
-            </div>
-          )}
-
-          {/* Medicine selection */}
+          {/* Medicine summary */}
           {!resolved && medicineItems.length > 0 && (
-            <div className="space-y-2">
-              <div className="text-xs text-dim uppercase tracking-wide">
-                Medicine to use
-              </div>
-              {medicineItems.map((item, i) => (
-                <label
-                  key={i}
-                  className="flex items-center gap-2 p-2 bg-btn cursor-pointer hover:bg-btn-hover"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedMedicine.has(i)}
-                    onChange={() => toggleMedicine(i)}
-                    className="accent-action"
-                  />
-                  <span className="text-primary text-sm">{item.name}</span>
-                </label>
-              ))}
+            <div className="text-sm text-primary/80">
+              Medicine: {medicineItems.map((i) => i.name).join(", ")}
             </div>
           )}
 

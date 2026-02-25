@@ -4,6 +4,9 @@ import StatusBar from "./StatusBar";
 import type { GameResponse, MarketItem } from "../api/types";
 import * as api from "../api/client";
 
+const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
+function isPackType(type: string) { return PACK_TYPES.has(type); }
+
 export default function MarketScreen({
   state,
   onBack,
@@ -75,7 +78,7 @@ export default function MarketScreen({
     for (const [itemId, qty] of pendingBuys) {
       const item = stock.find((s) => s.id === itemId);
       if (!item) continue;
-      if (item.type === "weapon" || item.type === "armor" || item.type === "boots") {
+      if (isPackType(item.type)) {
         packBuys += qty;
       } else {
         haversackBuys += qty;
@@ -121,9 +124,8 @@ export default function MarketScreen({
     if (pendingQty >= item.quantity) return false;
     if (projected.gold < item.buyPrice) return false;
     // Check space
-    const isPackItem = item.type === "weapon" || item.type === "armor" || item.type === "boots";
-    if (isPackItem && projected.packCount >= projected.packCapacity) return false;
-    if (!isPackItem && projected.haversackCount >= projected.haversackCapacity) return false;
+    if (isPackType(item.type) && projected.packCount >= projected.packCapacity) return false;
+    if (!isPackType(item.type) && projected.haversackCount >= projected.haversackCapacity) return false;
     return true;
   }
 
