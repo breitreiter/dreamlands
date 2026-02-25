@@ -60,7 +60,7 @@ public static class DungeonPlacer
                 };
 
                 // Penalize proximity to already-placed dungeons
-                int minDist = MinBfsDistance(map, node, placed, traversable, MinSeparation);
+                int minDist = MinDistance(node, placed);
                 if (minDist < MinSeparation)
                     score -= (MinSeparation - minDist) * 15;
 
@@ -79,38 +79,17 @@ public static class DungeonPlacer
         }
     }
 
-    private static int MinBfsDistance(Map map, Node start, List<Node> targets, Dictionary<(int, int), Node> traversable, int maxDist)
+    private static int MinDistance(Node start, List<Node> targets)
     {
         if (targets.Count == 0)
             return int.MaxValue;
 
-        var targetSet = new HashSet<Node>(targets);
-        var visited = new Dictionary<Node, int> { [start] = 0 };
-        var queue = new Queue<Node>();
-        queue.Enqueue(start);
-        int closest = int.MaxValue;
-
-        while (queue.Count > 0)
+        int min = int.MaxValue;
+        foreach (var t in targets)
         {
-            var node = queue.Dequeue();
-            int dist = visited[node];
-
-            if (targetSet.Contains(node) && dist > 0)
-                closest = Math.Min(closest, dist);
-
-            if (dist >= maxDist || dist >= closest)
-                continue;
-
-            foreach (var (dir, neighbor) in map.LandNeighbors(node))
-            {
-                if (traversable.ContainsKey((neighbor.X, neighbor.Y)) && !visited.ContainsKey(neighbor))
-                {
-                    visited[neighbor] = dist + 1;
-                    queue.Enqueue(neighbor);
-                }
-            }
+            int d = Math.Abs(start.X - t.X) + Math.Abs(start.Y - t.Y);
+            if (d < min) min = d;
         }
-
-        return closest;
+        return min;
     }
 }

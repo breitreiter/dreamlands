@@ -24,11 +24,11 @@ public static class SettlementPlacer
             return;
 
         map.StartingCity = startingCity;
-        ComputeDistanceField(map, startingCity, traversable);
+        ComputeDistanceField(startingCity, traversable);
 
         var covered = new HashSet<Node>();
         int survivalRadius = GetSurvivalRadius(startingCity.DistanceFromCity);
-        MarkCovered(map, startingCity, traversable, covered, survivalRadius);
+        MarkCovered(startingCity, traversable, covered, survivalRadius);
 
         while (true)
         {
@@ -36,7 +36,7 @@ public static class SettlementPlacer
             if (uncovered.Count == 0)
                 break;
 
-            var target = FindFurthestUncovered(map, uncovered, covered, traversable);
+            var target = FindFurthestUncovered(uncovered, covered);
             if (target == null)
                 break;
 
@@ -46,7 +46,7 @@ public static class SettlementPlacer
                 break;
 
             PlaceSettlement(site);
-            MarkCovered(map, site, traversable, covered, survivalRadius);
+            MarkCovered(site, traversable, covered, survivalRadius);
         }
     }
 
@@ -71,26 +71,10 @@ public static class SettlementPlacer
         return city;
     }
 
-    private static void ComputeDistanceField(Map map, Node start, Dictionary<(int, int), Node> traversable)
+    private static void ComputeDistanceField(Node start, Dictionary<(int, int), Node> traversable)
     {
-        start.DistanceFromCity = 0;
-        var queue = new Queue<Node>();
-        queue.Enqueue(start);
-
-        while (queue.Count > 0)
-        {
-            var node = queue.Dequeue();
-            var nextDist = node.DistanceFromCity + 1;
-
-            foreach (var (dir, neighbor) in map.LandNeighbors(node))
-            {
-                if (traversable.ContainsKey((neighbor.X, neighbor.Y)) && neighbor.DistanceFromCity > nextDist)
-                {
-                    neighbor.DistanceFromCity = nextDist;
-                    queue.Enqueue(neighbor);
-                }
-            }
-        }
+        foreach (var node in traversable.Values)
+            node.DistanceFromCity = Math.Abs(node.X - start.X) + Math.Abs(node.Y - start.Y);
     }
 
     // Settlement spacing by tier (how far apart settlements should be)
@@ -110,30 +94,11 @@ public static class SettlementPlacer
         node.Poi = new Poi(PoiKind.Settlement, "Settlement");
     }
 
-    private static void MarkCovered(Map map, Node start, Dictionary<(int, int), Node> traversable, HashSet<Node> covered, int radius)
+    private static void MarkCovered(Node start, Dictionary<(int, int), Node> traversable, HashSet<Node> covered, int radius)
     {
-        var visited = new Dictionary<Node, int> { [start] = 0 };
-        var queue = new Queue<Node>();
-        queue.Enqueue(start);
-
-        while (queue.Count > 0)
-        {
-            var node = queue.Dequeue();
-            var dist = visited[node];
-            covered.Add(node);
-
-            if (dist >= radius)
-                continue;
-
-            foreach (var (dir, neighbor) in map.LandNeighbors(node))
-            {
-                if (traversable.ContainsKey((neighbor.X, neighbor.Y)) && !visited.ContainsKey(neighbor))
-                {
-                    visited[neighbor] = dist + 1;
-                    queue.Enqueue(neighbor);
-                }
-            }
-        }
+        foreach (var node in traversable.Values)
+            if (Math.Abs(node.X - start.X) + Math.Abs(node.Y - start.Y) <= radius)
+                covered.Add(node);
     }
 
     public static Node? GetTraversableNeighbor(Node node, Direction dir, Dictionary<(int, int), Node> traversable)
@@ -142,14 +107,14 @@ public static class SettlementPlacer
         return traversable.GetValueOrDefault((node.X + dx, node.Y + dy));
     }
 
-    private static Node? FindFurthestUncovered(Map map, List<Node> uncovered, HashSet<Node> covered, Dictionary<(int, int), Node> traversable)
+    private static Node? FindFurthestUncovered(List<Node> uncovered, HashSet<Node> covered)
     {
         Node? furthest = null;
         int maxDist = -1;
 
         foreach (var node in uncovered)
         {
-            int dist = MinDistanceToCovered(map, node, covered, traversable);
+            int dist = MinDistanceToCovered(node, covered);
             if (dist > maxDist)
             {
                 maxDist = dist;
@@ -160,46 +125,27 @@ public static class SettlementPlacer
         return furthest;
     }
 
-    private static int MinDistanceToCovered(Map map, Node start, HashSet<Node> covered, Dictionary<(int, int), Node> traversable)
+    private static int MinDistanceToCovered(Node start, HashSet<Node> covered)
     {
-        var visited = new Dictionary<Node, int> { [start] = 0 };
-        var queue = new Queue<Node>();
-        queue.Enqueue(start);
-
-        while (queue.Count > 0)
+        int min = int.MaxValue;
+        foreach (var c in covered)
         {
-            var node = queue.Dequeue();
-            var dist = visited[node];
-
-            if (covered.Contains(node))
-                return dist;
-
-            foreach (var (dir, neighbor) in map.LandNeighbors(node))
-            {
-                if (traversable.ContainsKey((neighbor.X, neighbor.Y)) && !visited.ContainsKey(neighbor))
-                {
-                    visited[neighbor] = dist + 1;
-                    queue.Enqueue(neighbor);
-                }
-            }
+            int d = Math.Abs(start.X - c.X) + Math.Abs(start.Y - c.Y);
+            if (d < min) min = d;
         }
-
-        return int.MaxValue;
+        return min;
     }
 
     private static Node? FindBestSiteNear(Map map, Node target, Dictionary<(int, int), Node> traversable, HashSet<Node> covered, int radius)
     {
-        var visited = new Dictionary<Node, int> { [target] = 0 };
-        var queue = new Queue<Node>();
-        queue.Enqueue(target);
-
+        int searchRadius = radius / 2;
         Node? bestSite = null;
         int bestScore = -1;
 
-        while (queue.Count > 0)
+        foreach (var node in traversable.Values)
         {
-            var node = queue.Dequeue();
-            var dist = visited[node];
+            if (Math.Abs(node.X - target.X) + Math.Abs(node.Y - target.Y) > searchRadius)
+                continue;
 
             if (node.Poi == null)
             {
@@ -209,18 +155,6 @@ public static class SettlementPlacer
                 {
                     bestScore = score;
                     bestSite = node;
-                }
-            }
-
-            if (dist >= radius / 2)
-                continue;
-
-            foreach (var (dir, neighbor) in map.LandNeighbors(node))
-            {
-                if (traversable.ContainsKey((neighbor.X, neighbor.Y)) && !visited.ContainsKey(neighbor))
-                {
-                    visited[neighbor] = dist + 1;
-                    queue.Enqueue(neighbor);
                 }
             }
         }

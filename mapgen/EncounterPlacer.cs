@@ -60,31 +60,12 @@ public static class EncounterPlacer
                 slots.Add(farthest);
                 placed++;
 
-                // BFS from the new slot to update distances
-                var queue = new Queue<Node>();
-                distance[farthest] = 0;
-                queue.Enqueue(farthest);
-
-                while (queue.Count > 0)
+                // Update distances from the new slot
+                foreach (var n in nodes)
                 {
-                    var node = queue.Dequeue();
-                    int dist = distance[node];
-
-                    if (dist >= MinSpacing)
-                        continue;
-
-                    foreach (var (dir, neighbor) in map.LandNeighbors(node))
-                    {
-                        if (!distance.ContainsKey(neighbor))
-                            continue;
-
-                        int newDist = dist + 1;
-                        if (newDist < distance[neighbor])
-                        {
-                            distance[neighbor] = newDist;
-                            queue.Enqueue(neighbor);
-                        }
-                    }
+                    int d = Math.Abs(n.X - farthest.X) + Math.Abs(n.Y - farthest.Y);
+                    if (d < distance[n])
+                        distance[n] = d;
                 }
             }
         }
