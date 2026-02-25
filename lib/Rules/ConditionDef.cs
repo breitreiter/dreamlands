@@ -70,7 +70,7 @@ public sealed class ConditionDef
         ["lost"] = new()
         {
             Id = "lost", Name = "Lost", Biome = "none", Tier = "none",
-            Stacks = 1,
+            Stacks = 1, ResistDifficulty = Difficulty.Easy,
             SpecialEffect = "Erase a random number of previously-discovered map tile routes.",
         },
         ["injured"] = new()

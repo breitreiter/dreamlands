@@ -25,6 +25,9 @@ public sealed class ItemDef
     public IReadOnlyDictionary<Skill, int> SkillModifiers { get; init; } = new Dictionary<Skill, int>();
     public IReadOnlyDictionary<string, Magnitude> ResistModifiers { get; init; } = new Dictionary<string, Magnitude>();
 
+    /// <summary>Bonus to foraging rolls when this weapon is equipped. Stacks with Bushcraft skill.</summary>
+    public int ForagingBonus { get; init; }
+
     /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
     public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.TradeGood;
 
@@ -53,6 +56,7 @@ public sealed class ItemDef
             Id = "seax", Name = "Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            ForagingBonus = 3,
             Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["hatchet"] = new()

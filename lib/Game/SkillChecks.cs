@@ -169,7 +169,6 @@ public static class SkillChecks
     /// Exhausted = boots(big) + best equipment(small) + token,
     /// Freezing/Thirsty = two best small gear + token,
     /// Swamp Fever/Gut Worms/Irradiated = consumable(big) + best equipment(small) + token.
-    /// Foraging = weapon(big) + token (uses Bushcraft skill).
     /// </summary>
     internal static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
     {
@@ -185,7 +184,6 @@ public static class SkillChecks
             "swamp_fever" or "gut_worms" or "irradiated" =>
                 GetBestConsumedResist(conditionId, magnitudes, state, balance)
                 + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
-            "foraging" => GetEquippedResist(state.Equipment.Weapon, conditionId, magnitudes, balance),
             _ => 0,
         };
 
