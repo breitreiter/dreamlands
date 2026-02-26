@@ -1,11 +1,22 @@
 import { useState, useEffect, useMemo } from "react";
 import { useGame } from "../GameContext";
 import StatusBar from "./StatusBar";
-import type { GameResponse, MarketItem } from "../api/types";
+import type { GameResponse, MarketItem, ItemInfo } from "../api/types";
 import * as api from "../api/client";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
+
+type BuyTab = "trade" | "foods" | "equipment";
+type SellTab = "pack" | "haversack" | "equipped";
+
+function matchesBuyTab(item: MarketItem, tab: BuyTab): boolean {
+  switch (tab) {
+    case "trade": return item.type === "tradegood";
+    case "foods": return item.type === "consumable";
+    case "equipment": return item.type === "weapon" || item.type === "armor" || item.type === "boots" || item.type === "tool";
+  }
+}
 
 export default function MarketScreen({
   state,
@@ -23,6 +34,10 @@ export default function MarketScreen({
   // Local order state
   const [pendingBuys, setPendingBuys] = useState<Map<string, number>>(new Map());
   const [pendingSells, setPendingSells] = useState<string[]>([]);
+
+  // Tab state
+  const [buyTab, setBuyTab] = useState<BuyTab>("trade");
+  const [sellTab, setSellTab] = useState<SellTab>("pack");
 
   useEffect(() => {
     if (!gameId) return;
@@ -123,14 +138,12 @@ export default function MarketScreen({
     const pendingQty = pendingBuys.get(item.id) ?? 0;
     if (pendingQty >= item.quantity) return false;
     if (projected.gold < item.buyPrice) return false;
-    // Check space
     if (isPackType(item.type) && projected.packCount >= projected.packCapacity) return false;
     if (!isPackType(item.type) && projected.haversackCount >= projected.haversackCapacity) return false;
     return true;
   }
 
   function canSell(defId: string): boolean {
-    // Count how many of this item remain after pending sells
     const allItems = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? [])];
     const totalOwned = allItems.filter((i) => i.defId === defId).length;
     const alreadySelling = pendingSells.filter((id) => id === defId).length;
@@ -138,8 +151,6 @@ export default function MarketScreen({
   }
 
   const hasOrder = pendingBuys.size > 0 || pendingSells.length > 0;
-
-  const sellRevenue = pendingSells.reduce((sum, defId) => sum + (sellPrices[defId] ?? 0), 0);
 
   async function submitOrder() {
     if (!gameId || !hasOrder) return;
@@ -159,9 +170,7 @@ export default function MarketScreen({
       }
       setPendingBuys(new Map());
       setPendingSells([]);
-      // Refresh stock to reflect changes
-      api.getMarketStock(gameId).then((res) => { setStock(res.stock); setSellPrices(res.sellPrices); }).catch(() => {});
-      setTimeout(() => setMessage(null), 3000);
+      onBack();
     }
   }
 
@@ -171,198 +180,250 @@ export default function MarketScreen({
     onBack();
   }
 
+  // Filtered stock for buy panel
+  const filteredStock = stock.filter((item) => matchesBuyTab(item, buyTab));
+
+  // Sellable items for sell panel
+  const sellItems = useMemo((): { item: ItemInfo; source: string }[] => {
+    if (!inventory) return [];
+    switch (sellTab) {
+      case "pack":
+        return inventory.pack.map((item) => ({ item, source: "pack" }));
+      case "haversack":
+        return inventory.haversack.map((item) => ({ item, source: "haversack" }));
+      case "equipped": {
+        const items: { item: ItemInfo; source: string }[] = [];
+        if (inventory.equipment.weapon) items.push({ item: inventory.equipment.weapon, source: "weapon" });
+        if (inventory.equipment.armor) items.push({ item: inventory.equipment.armor, source: "armor" });
+        if (inventory.equipment.boots) items.push({ item: inventory.equipment.boots, source: "boots" });
+        return items;
+      }
+    }
+  }, [inventory, sellTab]);
+
+  // Ledger entries for the cash book, each with an undo callback
+  const ledgerEntries = useMemo(() => {
+    const entries: { label: string; amount: number; type: "buy" | "sell"; undo: () => void }[] = [];
+    pendingSells.forEach((defId, idx) => {
+      const allItems = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? [])];
+      const name = allItems.find((it) => it.defId === defId)?.name ?? defId;
+      entries.push({ label: `sell: ${name}`, amount: sellPrices[defId] ?? 0, type: "sell", undo: () => removeSell(idx) });
+    });
+    for (const [itemId, qty] of pendingBuys) {
+      const item = stock.find((s) => s.id === itemId);
+      const name = item?.name ?? itemId;
+      for (let q = 0; q < qty; q++) {
+        entries.push({ label: `buy: ${name}`, amount: item?.buyPrice ?? 0, type: "buy", undo: () => removeBuy(itemId) });
+      }
+    }
+    return entries;
+  }, [pendingBuys, pendingSells, stock, sellPrices, inventory]);
+
+  const TabButton = ({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) => (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1 text-xs transition-colors ${
+        active
+          ? "bg-btn border border-accent text-primary"
+          : "bg-transparent border border-transparent text-muted hover:text-primary"
+      }`}
+      style={{ borderRadius: "999px" }}
+    >
+      {children}
+    </button>
+  );
+
   return (
     <div className="h-full flex flex-col bg-page text-primary">
       <StatusBar status={state.status} />
 
+      {message && (
+        <div className="px-4 py-2 text-sm text-center text-primary/80 bg-panel border-b border-edge">
+          {message}
+        </div>
+      )}
+
       <div className="flex-1 flex overflow-hidden">
-        {/* Buy panel */}
-        <div className="flex-1 flex flex-col border-r border-edge">
+        {/* BUY column */}
+        <div className="flex-1 flex flex-col border-r border-edge min-w-0">
           <div className="p-3 border-b border-edge">
-            <h3 className="text-accent font-medium">Buy</h3>
-            <div className="text-xs text-dim">
-              Gold: {state.status.gold}
-              {projected.gold !== state.status.gold && (
-                <span className="text-accent"> → {projected.gold}</span>
-              )}
+            <h3 className="font-header text-accent text-sm tracking-widest uppercase">Buy</h3>
+            <div className="flex gap-1 mt-2">
+              <TabButton active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabButton>
+              <TabButton active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabButton>
+              <TabButton active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabButton>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto p-2 space-y-2">
             {loadingStock ? (
-              <div className="p-4 text-muted">Loading stock...</div>
+              <div className="p-4 text-muted text-sm">Loading stock...</div>
+            ) : filteredStock.length === 0 ? (
+              <div className="p-4 text-muted text-sm">Nothing available</div>
             ) : (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-xs text-dim border-b border-edge">
-                    <th className="p-2">Item</th>
-                    <th className="p-2">Type</th>
-                    <th className="p-2 text-right">Stock</th>
-                    <th className="p-2 text-right">Price</th>
-                    <th className="p-2"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stock.map((item) => {
-                    const projQty = projected.projectedStock.get(item.id) ?? item.quantity;
-                    const pendingQty = pendingBuys.get(item.id) ?? 0;
-                    return (
-                      <tr
-                        key={item.id}
-                        className="border-b border-edge hover:bg-btn-hover"
-                      >
-                        <td className="p-2">
-                          <div>{item.name}</div>
-                          {item.description && (
-                            <div className="text-xs text-muted">
-                              {item.description}
-                            </div>
-                          )}
-                        </td>
-                        <td className="p-2 text-dim capitalize">
-                          {item.type}
-                        </td>
-                        <td className="p-2 text-right text-primary/80">
-                          {projQty !== item.quantity ? (
-                            <><span className="text-muted">{item.quantity}</span> → {projQty}</>
-                          ) : (
-                            item.quantity
-                          )}
-                        </td>
-                        <td className="p-2 text-right text-accent">
-                          {item.buyPrice}g
-                        </td>
-                        <td className="p-2 flex gap-1">
-                          <button
-                            onClick={() => addBuy(item.id)}
-                            disabled={!canBuy(item)}
-                            className="px-3 py-1 bg-action hover:bg-action-hover
-                                       disabled:bg-btn disabled:text-muted
-                                       text-contrast text-xs transition-colors"
-                          >
-                            +
-                          </button>
-                          {pendingQty > 0 && (
-                            <>
-                              <span className="px-1 text-xs text-accent self-center">{pendingQty}</span>
-                              <button
-                                onClick={() => removeBuy(item.id)}
-                                className="px-2 py-1 bg-btn hover:bg-btn-hover text-xs transition-colors"
-                              >
-                                −
-                              </button>
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </div>
-
-        {/* Sell panel */}
-        <div className="w-72 flex flex-col">
-          <div className="p-3 border-b border-edge">
-            <h3 className="text-accent font-medium">Sell</h3>
-          </div>
-          <div className="flex-1 overflow-y-auto">
-            {inventory && (
-              <div className="p-2 space-y-1">
-                {[...inventory.pack, ...inventory.haversack].map((item, i) => {
-                  const sellPrice = sellPrices[item.defId] ?? 0;
-                  const soldOut = !canSell(item.defId);
-                  return (
-                    <div
-                      key={i}
-                      className={`flex items-center justify-between p-2 hover:bg-btn-hover ${
-                        soldOut ? "opacity-40" : ""
-                      }`}
-                    >
-                      <div>
-                        <div className="text-sm">{item.name}</div>
-                        {sellPrice > 0 && (
-                          <div className="text-xs text-accent/70">
-                            {sellPrice}g
-                          </div>
-                        )}
+              filteredStock.map((item) => {
+                const projQty = projected.projectedStock.get(item.id) ?? item.quantity;
+                const pendingQty = pendingBuys.get(item.id) ?? 0;
+                return (
+                  <div key={item.id} className="flex items-start gap-3 bg-btn p-3 border-l-2 border-accent">
+                    <div className="w-8 h-8 bg-btn-hover flex-shrink-0 flex items-center justify-center text-muted text-xs">
+                      ?
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-primary">
+                        {item.name}
+                        <span className="text-muted ml-1">({projQty} available)</span>
                       </div>
+                      {item.description && (
+                        <div className="text-xs text-muted mt-0.5 truncate">{item.description}</div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {pendingQty > 0 && (
+                        <button
+                          onClick={() => removeBuy(item.id)}
+                          className="px-2 py-1 bg-btn-hover hover:bg-edge text-xs text-muted transition-colors"
+                        >
+                          -
+                        </button>
+                      )}
+                      {pendingQty > 0 && (
+                        <span className="text-xs text-accent w-4 text-center">{pendingQty}</span>
+                      )}
                       <button
-                        onClick={() => addSell(item.defId)}
-                        disabled={soldOut}
-                        className="px-3 py-1 bg-btn hover:bg-btn-hover
-                                   disabled:text-muted text-xs transition-colors"
+                        onClick={() => addBuy(item.id)}
+                        disabled={!canBuy(item)}
+                        className="px-3 py-1 bg-action hover:bg-action-hover disabled:bg-btn disabled:text-muted
+                                   text-contrast text-xs transition-colors flex items-center gap-1"
                       >
-                        Sell
+                        <span className="text-accent">&#x26C1;</span> {item.buyPrice}g
                       </button>
                     </div>
-                  );
-                })}
-                {inventory.pack.length === 0 &&
-                  inventory.haversack.length === 0 && (
-                    <div className="text-muted text-sm p-2">
-                      Nothing to sell
-                    </div>
-                  )}
-              </div>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
-      </div>
 
-      {/* Order summary + footer */}
-      <div className="border-t border-edge bg-panel">
-        {hasOrder && (
-          <div className="px-3 pt-2 text-xs text-dim space-y-1">
-            {[...pendingBuys.entries()].map(([itemId, qty]) => {
-              const item = stock.find((s) => s.id === itemId);
-              return (
-                <div key={`buy-${itemId}`} className="flex justify-between">
-                  <span className="text-accent">Buy {qty}x {item?.name ?? itemId}</span>
-                  <span className="text-accent">-{(item?.buyPrice ?? 0) * qty}g</span>
-                </div>
-              );
-            })}
-            {pendingSells.map((defId, i) => {
-              const name = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? [])].find((it) => it.defId === defId)?.name ?? defId;
-              return (
-                <div key={`sell-${i}`} className="flex justify-between items-center">
-                  <span className="text-primary/80">Sell {name}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-positive">+{sellPrices[defId] ?? 0}g</span>
-                    <button onClick={() => removeSell(i)} className="text-muted hover:text-primary">×</button>
+        {/* CASH BOOK column */}
+        <div className="w-64 flex flex-col bg-parchment text-parchment-text flex-shrink-0">
+          <div className="p-3 border-b border-parchment-text/20">
+            <h3 className="font-header text-parchment-text text-sm tracking-widest uppercase">Cash Book</h3>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 font-hand text-lg">
+            <div className="flex justify-between mb-3">
+              <span>Opening balance</span>
+              <span>{state.status.gold}g</span>
+            </div>
+
+            {ledgerEntries.length > 0 && (
+              <div className="space-y-1 mb-3">
+                {ledgerEntries.map((entry, i) => (
+                  <div
+                    key={i}
+                    onClick={entry.undo}
+                    className="flex justify-between cursor-pointer"
+                  >
+                    <span className="truncate mr-2">{entry.label}</span>
+                    <span className="flex-shrink-0">
+                      {entry.type === "sell" ? (
+                        <span className="text-green-800">+{entry.amount}g</span>
+                      ) : (
+                        <span className="text-red-800">-{entry.amount}g</span>
+                      )}
+                    </span>
                   </div>
-                </div>
-              );
-            })}
-            <div className="flex justify-between pt-1 border-t border-edge text-sm">
-              <span>Net</span>
-              <span className={sellRevenue - projected.buyCost >= 0 ? "text-positive" : "text-negative"}>
-                {sellRevenue - projected.buyCost >= 0 ? "+" : ""}{sellRevenue - projected.buyCost}g
-              </span>
+                ))}
+              </div>
+            )}
+
+            <div className="border-t border-parchment-text/30 pt-2 mt-2">
+              <div className="flex justify-between font-bold">
+                <span>Closing balance</span>
+                <span>{projected.gold}g</span>
+              </div>
             </div>
           </div>
-        )}
-        <div className="flex items-center justify-between p-3">
-          {message && <span className="text-sm text-primary/80">{message}</span>}
-          <div className="flex-1" />
-          <div className="flex gap-2">
-            {hasOrder && (
+
+          {hasOrder && (
+            <div className="p-3 border-t border-parchment-text/20 flex gap-2">
               <button
                 onClick={submitOrder}
                 disabled={loading}
-                className="px-4 py-2 bg-action hover:bg-action-hover disabled:bg-btn text-contrast text-sm transition-colors"
+                className="flex-1 px-3 py-2 bg-parchment-text/80 hover:bg-parchment-text
+                           disabled:opacity-50 text-parchment text-sm transition-colors flex items-center justify-center gap-1"
               >
-                Confirm Order
+                <span>&#x2713;</span> Accept
               </button>
+              <button
+                onClick={cancelOrder}
+                className="flex-1 px-3 py-2 bg-parchment-text/20 hover:bg-parchment-text/30
+                           text-parchment-text text-sm transition-colors flex items-center justify-center gap-1"
+              >
+                <span>&#x2717;</span> Cancel
+              </button>
+            </div>
+          )}
+
+          {!hasOrder && (
+            <div className="p-3 border-t border-parchment-text/20">
+              <button
+                onClick={onBack}
+                className="w-full px-3 py-2 bg-parchment-text/20 hover:bg-parchment-text/30
+                           text-parchment-text text-sm transition-colors"
+              >
+                Leave Market
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* SELL column */}
+        <div className="flex-1 flex flex-col border-l border-edge min-w-0">
+          <div className="p-3 border-b border-edge">
+            <h3 className="font-header text-accent text-sm tracking-widest uppercase">Sell</h3>
+            <div className="flex gap-1 mt-2">
+              <TabButton active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
+              <TabButton active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabButton>
+              <TabButton active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabButton>
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto p-2 space-y-2">
+            {sellItems.length === 0 ? (
+              <div className="p-4 text-muted text-sm">Nothing to sell</div>
+            ) : (
+              sellItems.map(({ item, source }, i) => {
+                const sellPrice = sellPrices[item.defId] ?? 0;
+                const soldOut = !canSell(item.defId);
+                return (
+                  <div
+                    key={`${source}-${item.defId}-${i}`}
+                    className={`flex items-start gap-3 bg-btn p-3 border-l-2 border-accent ${soldOut ? "opacity-40" : ""}`}
+                  >
+                    <div className="w-8 h-8 bg-btn-hover flex-shrink-0 flex items-center justify-center text-muted text-xs">
+                      ?
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-primary">{item.name}</div>
+                      {item.description && (
+                        <div className="text-xs text-muted mt-0.5 truncate">{item.description}</div>
+                      )}
+                      {sellTab === "equipped" && (
+                        <div className="text-xs text-dim mt-0.5">equipped ({source})</div>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => addSell(item.defId)}
+                      disabled={soldOut}
+                      className="px-3 py-1 bg-action hover:bg-action-hover disabled:bg-btn disabled:text-muted
+                                 text-contrast text-xs transition-colors flex items-center gap-1 flex-shrink-0"
+                    >
+                      <span className="text-accent">&#x26C1;</span> {sellPrice}g
+                    </button>
+                  </div>
+                );
+              })
             )}
-            <button
-              onClick={cancelOrder}
-              className="px-4 py-2 bg-btn hover:bg-btn-hover text-sm transition-colors"
-            >
-              {hasOrder ? "Cancel" : "Back"}
-            </button>
           </div>
         </div>
       </div>
