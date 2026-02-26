@@ -50,6 +50,7 @@ var bundlePath = ParseArg(args, "--bundle")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_BUNDLE")
     ?? Path.Combine(repoRoot, "worlds/production/encounters.bundle.json");
 var noEncounters = args.Contains("--no-encounters");
+var noCamp = args.Contains("--no-camp");
 
 Map map;
 EncounterBundle bundle;
@@ -61,6 +62,8 @@ try
         map.Width, map.Height, bundle.Encounters.Count);
     if (noEncounters)
         app.Logger.LogInformation("Overworld encounters SUPPRESSED (--no-encounters)");
+    if (noCamp)
+        app.Logger.LogInformation("End-of-day camp SUPPRESSED (--no-camp)");
 }
 catch (Exception ex)
 {
@@ -423,7 +426,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             {
                 player.Time = player.Time + 1;
             }
-            else
+            else if (!noCamp)
             {
                 player.Time = TimePeriod.Morning;
                 player.Day++;

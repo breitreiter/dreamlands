@@ -254,6 +254,15 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 - [ ] Google OAuth login + session reconnect (very late — production only).
       Analysis in `project/architecture/google_oauth.md`.
 
+## Testing / Regression
+
+- [ ] POI position mismatch — observed a case where the server's in-memory map had a
+      settlement at (16,5) but map.json on disk had it at (16,7). Player could enter a
+      "ghost" settlement that didn't exist in the data. Server restart fixed it. Root cause
+      unclear — map was NOT regenerated between server start and the bug appearing. Need a
+      regression test that verifies every node's POI in the server's loaded map matches the
+      source map.json.
+
 ## Quality of Life
 
 - [ ] Server "quick start" flag — start the player with basic gear and extra gold to skip the early trade loop

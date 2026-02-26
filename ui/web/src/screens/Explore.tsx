@@ -145,9 +145,10 @@ export default function Explore({ state }: { state: GameResponse }) {
             {node.region || node.terrain}
           </div>
 
-          {/* Date */}
+          {/* Date + coordinates */}
           <div className="text-dim -mt-2">
             {formatDateTime(status.day, status.time)}
+            <span className="ml-2 text-muted">({node.x}, {node.y})</span>
           </div>
 
           {/* Flavor text */}
