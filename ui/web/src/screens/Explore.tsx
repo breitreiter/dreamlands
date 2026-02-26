@@ -91,9 +91,10 @@ export default function Explore({ state }: { state: GameResponse }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [doAction, loading]);
 
-  // Reset vignette error when terrain changes
+  // Reset vignette error when terrain or tier changes
   const terrain = state.node?.terrain;
-  useEffect(() => setVignetteError(false), [terrain]);
+  const tier = state.node?.regionTier;
+  useEffect(() => setVignetteError(false), [terrain, tier]);
 
   if (!state.node || !state.exits) return null;
 
@@ -130,9 +131,9 @@ export default function Explore({ state }: { state: GameResponse }) {
       {/* Side panel */}
       <div className="w-[360px] flex flex-col bg-page border-l border-edge overflow-y-auto">
         {/* Vignette */}
-        {!vignetteError && node.terrain && (
+        {!vignetteError && node.terrain && node.regionTier != null && node.regionTier > 0 && (
           <img
-            src={`/world/assets/vignettes/${node.terrain}/encounter_1.png`}
+            src={`/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`}
             alt=""
             className="w-full h-40 object-cover"
             onError={() => setVignetteError(true)}
