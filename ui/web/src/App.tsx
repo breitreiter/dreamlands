@@ -3,7 +3,6 @@ import Splash from "./screens/Splash";
 import Explore from "./screens/Explore";
 import Encounter from "./screens/Encounter";
 import Outcome from "./screens/Outcome";
-import Settlement from "./screens/Settlement";
 import GameOver from "./screens/GameOver";
 import Camp from "./screens/Camp";
 
@@ -22,10 +21,9 @@ function GameRouter() {
           </button>
         </div>
       )}
-      {response.mode === "exploring" && <Explore state={response} />}
+      {(response.mode === "exploring" || response.mode === "at_settlement") && <Explore state={response} />}
       {response.mode === "encounter" && <Encounter state={response} />}
       {response.mode === "outcome" && <Outcome state={response} />}
-      {response.mode === "at_settlement" && <Settlement state={response} />}
       {response.mode === "game_over" && <GameOver state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
     </>

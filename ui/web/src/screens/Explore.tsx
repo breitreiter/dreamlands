@@ -4,6 +4,7 @@ import { CRS, LatLngBounds, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
+import MarketScreen from "./Market";
 import CompassRose from "../components/CompassRose";
 import SegmentedBar from "../components/SegmentedBar";
 import { formatDateTime } from "../calendar";
@@ -59,19 +60,34 @@ const CONDITION_ICONS: Record<string, string> = {
   cursed: "foamy-disc.svg",
 };
 
+const TIER_LABELS: Record<number, string> = { 1: "Village", 2: "Town", 3: "City" };
+
+const IMPLEMENTED_SERVICES = new Set(["market"]);
+
+const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
+  market: { icon: "two-coins.svg", label: "Market" },
+  healer: { icon: "caduceus.svg", label: "Healer" },
+  temple: { icon: "tied-scroll.svg", label: "Temple" },
+  inn: { icon: "camping-tent.svg", label: "Inn" },
+  guild: { icon: "shaking-hands.svg", label: "Guild" },
+};
+
 export default function Explore({ state }: { state: GameResponse }) {
   const { doAction, loading } = useGame();
   const [showInventory, setShowInventory] = useState(false);
   const [vignetteError, setVignetteError] = useState(false);
+  const [activeService, setActiveService] = useState<string | null>(null);
 
   const position = useMemo(
     () => (state.node ? gridToLatLng(state.node.x, state.node.y) : [0, 0] as LatLngExpression),
     [state.node]
   );
 
+  const atSettlement = state.mode === "at_settlement";
+
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (loading) return;
+      if (loading || atSettlement) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
@@ -89,17 +105,37 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [doAction, loading]);
+  }, [doAction, loading, atSettlement]);
 
   // Reset vignette error when terrain or tier changes
   const terrain = state.node?.terrain;
   const tier = state.node?.regionTier;
   useEffect(() => setVignetteError(false), [terrain, tier]);
 
+  async function openService(service: string) {
+    if (!atSettlement) {
+      await doAction({ action: "enter_settlement" });
+    }
+    setActiveService(service);
+  }
+
+  async function closeService() {
+    setActiveService(null);
+    if (atSettlement) {
+      await doAction({ action: "leave_settlement" });
+    }
+  }
+
   if (!state.node || !state.exits) return null;
 
   const { node, exits, status } = state;
   const poi = node.poi;
+  const isSettlement = poi?.kind === "settlement";
+
+  // Show Market as full-screen overlay
+  if (activeService === "market" && atSettlement) {
+    return <MarketScreen state={state} onBack={closeService} />;
+  }
 
   return (
     <div className="h-full flex bg-page text-primary">
@@ -157,16 +193,40 @@ export default function Explore({ state }: { state: GameResponse }) {
             <p className="text-primary/70">{node.description}</p>
           )}
 
-          {/* Settlement button */}
-          {poi?.kind === "settlement" && (
-            <button
-              onClick={() => doAction({ action: "enter_settlement" })}
-              disabled={loading}
-              className="w-full py-2 px-3 bg-btn hover:bg-btn-hover disabled:opacity-50 text-primary rounded-lg flex items-center gap-2 transition-colors"
-            >
-              <img src="/world/assets/icons/medieval-gate.svg" alt="" className="w-5 h-5" />
-              <span>Enter {poi.name || "Settlement"}</span>
-            </button>
+          {/* Settlement bar */}
+          {isSettlement && (
+            <div className="rounded-xl p-3 flex items-center gap-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+              <div className="flex-1 min-w-0">
+                <div className="text-accent text-base truncate">
+                  {poi.name || "Settlement"}
+                </div>
+                <div className="text-dim text-sm">
+                  {TIER_LABELS[node.regionTier ?? 0] || "Settlement"}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                {(state.settlement?.services ?? ["market"]).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
+                  const info = SERVICE_ICONS[service];
+                  if (!info) return null;
+                  return (
+                    <button
+                      key={service}
+                      onClick={() => openService(service)}
+                      disabled={loading}
+                      title={info.label}
+                      className="w-11 h-11 bg-btn rounded-lg flex items-center justify-center
+                                 hover:bg-btn-hover disabled:opacity-50 transition-colors"
+                    >
+                      <img
+                        src={`/world/assets/icons/${info.icon}`}
+                        alt={info.label}
+                        className="w-6 h-6 opacity-80"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
 
           {/* Dungeon button */}
@@ -189,12 +249,14 @@ export default function Explore({ state }: { state: GameResponse }) {
           )}
 
           {/* Compass Rose */}
-          <CompassRose
-            exits={exits}
-            onMove={(dir) => doAction({ action: "move", direction: dir })}
-            onInventory={() => setShowInventory((v) => !v)}
-            disabled={loading}
-          />
+          {!atSettlement && (
+            <CompassRose
+              exits={exits}
+              onMove={(dir) => doAction({ action: "move", direction: dir })}
+              onInventory={() => setShowInventory((v) => !v)}
+              disabled={loading}
+            />
+          )}
 
           {/* Conditions */}
           {Object.keys(status.conditions).length > 0 && (
