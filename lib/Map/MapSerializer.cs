@@ -55,7 +55,6 @@ public static class MapSerializer
             var node = map[n.X, n.Y];
             node.Terrain = Enum.Parse<Terrain>(n.Terrain);
             node.RiverSides = ParseDirections(n.Rivers);
-            node.Crossings = ParseDirections(n.Crossings);
             node.Description = n.Description;
             node.DistanceFromCity = n.DistanceFromCity ?? int.MaxValue;
 
@@ -76,19 +75,6 @@ public static class MapSerializer
                     DecalFile = n.Poi.DecalFile
                 };
             }
-        }
-
-        // Recompute LakeNeighbors from terrain data
-        foreach (var node in map.AllNodes())
-        {
-            int count = 0;
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                var neighbor = map.GetNeighbor(node, dir);
-                if (neighbor?.Terrain == Terrain.Lake)
-                    count++;
-            }
-            node.LakeNeighbors = count;
         }
 
         // Restore starting city
@@ -147,8 +133,6 @@ public static class MapSerializer
             Description = node.Description,
             Poi = node.Poi != null ? ToDto(node.Poi) : null,
             Rivers = node.HasRiver ? ToDirectionList(node.RiverSides) : null,
-            Crossings = node.Crossings != Direction.None ? ToDirectionList(node.Crossings) : null,
-            IsLakeAdjacent = node.IsLakeAdjacent ? true : null,
             DistanceFromCity = node.DistanceFromCity < int.MaxValue ? node.DistanceFromCity : null
         };
     }
@@ -208,8 +192,6 @@ public static class MapSerializer
         public string? Description { get; init; }
         public PoiDto? Poi { get; init; }
         public List<string>? Rivers { get; init; }
-        public List<string>? Crossings { get; init; }
-        public bool? IsLakeAdjacent { get; init; }
         public int? DistanceFromCity { get; init; }
     }
 

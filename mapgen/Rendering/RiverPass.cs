@@ -7,9 +7,9 @@ public static class RiverPass
 {
     private const int TileSize = 128;
     private const float Half = TileSize / 2f;
-    private const int NumPoints = 12;
-    private const float MaxWander = 18f;
-    private const float WanderStep = 8f;
+    private const int NumPoints = 16;
+    private const float MaxWander = 28f;
+    private const float WanderStep = 12f;
     private const float OutlineWidth = 10f;
     private const float MainWidth = 6f;
 
@@ -85,7 +85,7 @@ public static class RiverPass
         }
 
         float shift = ((HashCode.Combine(seed, ek1, ek2, orient) & 0xFFFF) / 65536f - 0.5f)
-                     * TileSize * 0.25f;
+                     * TileSize * 0.36f;
         if (orient == 0) baseX += shift; else baseY += shift;
         return new SKPoint(baseX, baseY);
     }

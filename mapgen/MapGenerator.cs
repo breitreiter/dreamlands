@@ -15,9 +15,6 @@ public static class MapGenerator
         Console.Error.WriteLine("  Terrain...");
         GenerateTerrain(map, rng, width, height, onExpansionCycle);
 
-        Console.Error.WriteLine("  Lake neighbors...");
-        ComputeLakeNeighbors(map);
-
         Console.Error.WriteLine("  Regions...");
         ComputeRegions(map);
 
@@ -182,21 +179,6 @@ public static class MapGenerator
         }
     }
 
-    private static void ComputeLakeNeighbors(Map map)
-    {
-        foreach (var node in map.AllNodes())
-        {
-            int count = 0;
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                var neighbor = map.GetNeighbor(node, dir);
-                if (neighbor?.Terrain == Terrain.Lake)
-                    count++;
-            }
-            node.LakeNeighbors = count;
-        }
-    }
-
     private static void ComputeRegions(Map map)
     {
         int regionId = 0;
@@ -295,23 +277,6 @@ public static class MapGenerator
             FlowRiver(map, rng, bestStart, distance);
         }
 
-        // Mark crossings
-        foreach (var node in map.AllNodes())
-        {
-            if (!node.HasRiver) continue;
-
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                if (!node.HasRiverOn(dir)) continue;
-
-                var neighbor = map.GetNeighbor(node, dir);
-                if (rng.NextDouble() < 0.4)
-                {
-                    node.AddCrossing(dir);
-                    neighbor?.AddCrossing(dir.Opposite());
-                }
-            }
-        }
     }
 
     private static void FlowRiver(Map map, Random rng, Node current, Dictionary<Node, int> distance)
@@ -331,14 +296,14 @@ public static class MapGenerator
                 if (neighbor.Terrain is Terrain.Lake or Terrain.Mountains) continue;
 
                 int neighborDist = distance.GetValueOrDefault(neighbor, int.MaxValue);
-                if (neighborDist <= currentDist)
+                if (neighborDist <= currentDist + 1)
                     candidates.Add((neighbor, dir, neighborDist));
             }
 
             if (candidates.Count == 0) break;
 
             var choice = candidates
-                .Select(c => (c.neighbor, c.dir, score: c.dist + rng.Next(5)))
+                .Select(c => (c.neighbor, c.dir, score: c.dist + rng.Next(8)))
                 .OrderBy(c => c.score)
                 .First();
 
