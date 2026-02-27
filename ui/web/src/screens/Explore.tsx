@@ -112,23 +112,15 @@ export default function Explore({ state }: { state: GameResponse }) {
   const tier = state.node?.regionTier;
   useEffect(() => setVignetteError(false), [terrain, tier]);
 
-  // Auto-enter settlement on arrival so server-side effects (condition clearing, restock) fire
-  const isSettlementPoi = state.node?.poi?.kind === "settlement";
-  useEffect(() => {
-    if (isSettlementPoi && !atSettlement && !loading) {
-      doAction({ action: "enter_settlement" });
+  async function openService(service: string) {
+    if (!atSettlement) {
+      await doAction({ action: "enter_settlement" });
     }
-  }, [isSettlementPoi, atSettlement, loading, doAction]);
-
-  function openService(service: string) {
     setActiveService(service);
   }
 
-  async function closeService() {
+  function closeService() {
     setActiveService(null);
-    if (atSettlement) {
-      await doAction({ action: "leave_settlement" });
-    }
   }
 
   if (!state.node || !state.exits) return null;
@@ -254,14 +246,12 @@ export default function Explore({ state }: { state: GameResponse }) {
           )}
 
           {/* Compass Rose */}
-          {!atSettlement && (
-            <CompassRose
-              exits={exits}
-              onMove={(dir) => doAction({ action: "move", direction: dir })}
-              onInventory={() => setShowInventory((v) => !v)}
-              disabled={loading}
-            />
-          )}
+          <CompassRose
+            exits={exits}
+            onMove={(dir) => doAction({ action: "move", direction: dir })}
+            onInventory={() => setShowInventory((v) => !v)}
+            disabled={loading}
+          />
 
           {/* Conditions */}
           {Object.keys(status.conditions).length > 0 && (

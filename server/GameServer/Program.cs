@@ -421,6 +421,10 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             Movement.Execute(session, dir);
 
+            // Clear conditions on arriving at a settlement
+            if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
+                player.ActiveConditions.Clear();
+
             // Advance time by one segment per move
             if (player.Time < TimePeriod.Night)
             {
