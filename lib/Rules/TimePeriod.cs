@@ -20,7 +20,7 @@ public static class TimePeriods
     public static IReadOnlyList<TimePeriodInfo> All { get; } = new TimePeriodInfo[]
     {
         new(TimePeriod.Morning,   "morning",   "Morning"),
-        new(TimePeriod.Midday,    "midday",    "Midday"),
+        new(TimePeriod.Midday,    "midday",    "High Sun"),
         new(TimePeriod.Afternoon, "afternoon", "Afternoon"),
         new(TimePeriod.Evening,   "evening",   "Evening"),
         new(TimePeriod.Night,     "night",     "Night"),
