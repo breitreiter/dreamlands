@@ -67,7 +67,7 @@ src/
   components/
     GameMap.tsx          # leaflet map, tiles from /world/tiles/
     CompassRose.tsx      # directional movement + inventory button
-    SegmentedBar.tsx     # health/spirits bar with discrete segments
+    StatBar.tsx          # health/spirits gradient bar
 ```
 
 ## Key Patterns

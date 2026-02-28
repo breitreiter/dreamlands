@@ -6,7 +6,7 @@ import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
 import MarketScreen from "./Market";
 import CompassRose from "../components/CompassRose";
-import SegmentedBar from "../components/SegmentedBar";
+import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
 import { formatDateTime } from "../calendar";
 import type { GameResponse } from "../api/types";
 
@@ -261,19 +261,19 @@ export default function Explore({ state }: { state: GameResponse }) {
           </div>
 
           {/* Health bar */}
-          <SegmentedBar
+          <StatBar
             label="Health"
             value={status.health}
             max={status.maxHealth}
-            color="--color-stat-health"
+            gradient={HEALTH_GRADIENT}
           />
 
           {/* Spirits bar */}
-          <SegmentedBar
+          <StatBar
             label="Spirits"
             value={status.spirits}
             max={status.maxSpirits}
-            color="--color-stat-spirits"
+            gradient={SPIRITS_GRADIENT}
           />
         </div>
       </div>
