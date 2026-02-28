@@ -101,9 +101,13 @@ GameSession BuildSession(PlayerState player)
             player.CurrentEncounterId = null;
         }
     }
-    else if (player.PendingEndOfDay)
+    else if (player.PendingEndOfDay && !noCamp)
     {
         session.Mode = SessionMode.Camp;
+    }
+    else if (player.PendingEndOfDay && noCamp)
+    {
+        player.PendingEndOfDay = false;
     }
     else if (player.CurrentSettlementId != null)
     {
@@ -359,8 +363,11 @@ app.MapGet("/api/game/{id}", async (string id) =>
             Reason = "You have perished in the Dreamlands.",
         });
 
-    if (player.PendingEndOfDay)
+    if (player.PendingEndOfDay && !noCamp)
         return Results.Ok(BuildCampResponse(session, BuildCampThreats(session)));
+
+    if (player.PendingEndOfDay && noCamp)
+        player.PendingEndOfDay = false;
 
     if (player.CurrentSettlementId != null)
     {
@@ -454,13 +461,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             session.SkipEncounterTrigger = false;
 
             await store.Save(player);
-            if (player.PendingEndOfDay)
+            if (player.PendingEndOfDay && !noCamp)
             {
                 session.Mode = SessionMode.Camp;
                 response = BuildCampResponse(session, BuildCampThreats(session));
             }
             else
             {
+                if (noCamp) player.PendingEndOfDay = false;
                 response = BuildExploringResponse(session);
             }
             break;
@@ -529,11 +537,12 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                         default: // Completed
                             EncounterRunner.EndEncounter(session);
                             await store.Save(player);
-                            if (player.PendingEndOfDay)
+                            if (player.PendingEndOfDay && !noCamp)
                             {
                                 session.Mode = SessionMode.Camp;
                                 return Results.Ok(BuildCampResponse(session, BuildCampThreats(session)));
                             }
+                            if (noCamp) player.PendingEndOfDay = false;
                             return Results.Ok(BuildExploringResponse(session));
                     }
 
@@ -576,13 +585,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             EncounterRunner.EndEncounter(session);
             await store.Save(player);
 
-            if (player.PendingEndOfDay)
+            if (player.PendingEndOfDay && !noCamp)
             {
                 session.Mode = SessionMode.Camp;
                 response = BuildCampResponse(session, BuildCampThreats(session));
             }
             else
             {
+                if (noCamp) player.PendingEndOfDay = false;
                 response = BuildExploringResponse(session);
             }
             break;
