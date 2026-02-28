@@ -43,8 +43,8 @@ public static class ImageRenderer
             SwampPass.Draw(canvas, map, seed);
             Console.Error.WriteLine("  Mountains...");
             MountainPass.Draw(canvas, map, seed);
-            Console.Error.WriteLine("  Rivers...");
-            RiverPass.Draw(canvas, map, seed);
+            Console.Error.WriteLine("  Lakes (overlay)...");
+            LakePass.Draw(canvas, map);
             Console.Error.WriteLine("  Trees...");
             TreePass.Draw(canvas, map, seed);
             using var terrainSnapshot = surface.Snapshot();

@@ -25,7 +25,6 @@ public static class MapRenderer
     private const string Reset = "\x1b[0m";
     private const string BlackFg = "\x1b[30m";
     private const string BlackBg = "\x1b[40m";
-    private const string WhiteFg = "\x1b[97m";
     private const string YellowFg = "\x1b[33;1m";
 
     public static void Render(Map map, TextWriter? output = null, Node? playerLocation = null, HashSet<Node>? visitedNodes = null)
@@ -56,7 +55,7 @@ public static class MapRenderer
                     continue;
                 }
 
-                var fg = node.HasRiver ? WhiteFg : BlackFg;
+                var fg = BlackFg;
                 if (isStartingCity)
                 {
                     fg = YellowFg;

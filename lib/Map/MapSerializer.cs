@@ -54,7 +54,6 @@ public static class MapSerializer
         {
             var node = map[n.X, n.Y];
             node.Terrain = Enum.Parse<Terrain>(n.Terrain);
-            node.RiverSides = ParseDirections(n.Rivers);
             node.Description = n.Description;
             node.DistanceFromCity = n.DistanceFromCity ?? int.MaxValue;
 
@@ -82,17 +81,6 @@ public static class MapSerializer
             map.StartingCity = map[dto.StartingCity[0], dto.StartingCity[1]];
 
         return map;
-    }
-
-    private static Direction ParseDirections(List<string>? dirs)
-    {
-        if (dirs == null || dirs.Count == 0)
-            return Direction.None;
-
-        var result = Direction.None;
-        foreach (var d in dirs)
-            result |= Enum.Parse<Direction>(d, ignoreCase: true);
-        return result;
     }
 
     // --- Serialization ---
@@ -132,7 +120,6 @@ public static class MapSerializer
             RegionId = node.Region?.Id,
             Description = node.Description,
             Poi = node.Poi != null ? ToDto(node.Poi) : null,
-            Rivers = node.HasRiver ? ToDirectionList(node.RiverSides) : null,
             DistanceFromCity = node.DistanceFromCity < int.MaxValue ? node.DistanceFromCity : null
         };
     }
@@ -148,18 +135,6 @@ public static class MapSerializer
             DungeonId = poi.DungeonId,
             DecalFile = poi.DecalFile
         };
-    }
-
-    private static List<string>? ToDirectionList(Direction dir)
-    {
-        if (dir == Direction.None)
-            return null;
-
-        var list = new List<string>();
-        foreach (var d in DirectionExtensions.Each())
-            if ((dir & d) != 0)
-                list.Add(d.ToString().ToLower());
-        return list.Count > 0 ? list : null;
     }
 
     // --- DTOs ---
@@ -191,7 +166,6 @@ public static class MapSerializer
         public int? RegionId { get; init; }
         public string? Description { get; init; }
         public PoiDto? Poi { get; init; }
-        public List<string>? Rivers { get; init; }
         public int? DistanceFromCity { get; init; }
     }
 

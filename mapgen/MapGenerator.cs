@@ -18,9 +18,6 @@ public static class MapGenerator
         Console.Error.WriteLine("  Regions...");
         ComputeRegions(map);
 
-        Console.Error.WriteLine("  Rivers...");
-        GenerateRivers(map, rng);
-
         return (map, actualSeed);
     }
 
@@ -209,111 +206,6 @@ public static class MapGenerator
             }
 
             map.Regions.Add(region);
-        }
-    }
-
-    private static bool IsMapEdge(Node node, Map map) =>
-        node.X == 0 || node.X == map.Width - 1 || node.Y == 0 || node.Y == map.Height - 1;
-
-    private static void GenerateRivers(Map map, Random rng)
-    {
-        // Build distance field: BFS from map-edge tiles
-        var distance = new Dictionary<Node, int>();
-        var queue = new Queue<Node>();
-
-        foreach (var node in map.AllNodes())
-        {
-            if (IsMapEdge(node, map))
-            {
-                distance[node] = 0;
-                queue.Enqueue(node);
-            }
-        }
-
-        while (queue.Count > 0)
-        {
-            var node = queue.Dequeue();
-            int dist = distance[node];
-
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                var neighbor = map.GetNeighbor(node, dir);
-                if (neighbor == null || distance.ContainsKey(neighbor)) continue;
-                if (neighbor.Terrain is Terrain.Lake or Terrain.Mountains) continue;
-
-                distance[neighbor] = dist + 1;
-                queue.Enqueue(neighbor);
-            }
-        }
-
-        // Flow rivers from each lake
-        var lakes = map.AllNodes().Where(n => n.Terrain == Terrain.Lake).ToList();
-
-        foreach (var lake in lakes)
-        {
-            Node? bestStart = null;
-            Direction bestDir = Direction.None;
-            int bestDist = int.MaxValue;
-
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                var neighbor = map.GetNeighbor(lake, dir);
-                if (neighbor == null || !distance.ContainsKey(neighbor)) continue;
-                if (neighbor.IsWater) continue;
-
-                if (distance[neighbor] < bestDist)
-                {
-                    bestDist = distance[neighbor];
-                    bestStart = neighbor;
-                    bestDir = dir;
-                }
-            }
-
-            if (bestStart == null) continue;
-
-            lake.AddRiver(bestDir);
-            bestStart.AddRiver(bestDir.Opposite());
-
-            FlowRiver(map, rng, bestStart, distance);
-        }
-
-    }
-
-    private static void FlowRiver(Map map, Random rng, Node current, Dictionary<Node, int> distance)
-    {
-        var visited = new HashSet<Node> { current };
-
-        while (!IsMapEdge(current, map))
-        {
-            int currentDist = distance.GetValueOrDefault(current, int.MaxValue);
-
-            var candidates = new List<(Node neighbor, Direction dir, int dist)>();
-
-            foreach (var dir in DirectionExtensions.Each())
-            {
-                var neighbor = map.GetNeighbor(current, dir);
-                if (neighbor == null || visited.Contains(neighbor)) continue;
-                if (neighbor.Terrain is Terrain.Lake or Terrain.Mountains) continue;
-
-                int neighborDist = distance.GetValueOrDefault(neighbor, int.MaxValue);
-                if (neighborDist <= currentDist + 1)
-                    candidates.Add((neighbor, dir, neighborDist));
-            }
-
-            if (candidates.Count == 0) break;
-
-            var choice = candidates
-                .Select(c => (c.neighbor, c.dir, score: c.dist + rng.Next(8)))
-                .OrderBy(c => c.score)
-                .First();
-
-            var (nextNode, nextDir, _) = choice;
-
-            current.AddRiver(nextDir);
-            nextNode.AddRiver(nextDir.Opposite());
-
-            visited.Add(nextNode);
-            current = nextNode;
         }
     }
 

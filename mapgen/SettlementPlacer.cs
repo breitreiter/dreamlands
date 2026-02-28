@@ -7,7 +7,7 @@ public static class SettlementPlacer
 {
     // Manhattan-distance zones from starting city
     // Travel budget: 5 spaces/day, 3 food/day, 20 food max = ~35 spaces absolute range
-    private const int CradleMax = 25;
+    private const int CradleMax = 15;
     private const int MidlandsMax = 50;
     private const int WildsMax = 75;
 
