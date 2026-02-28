@@ -186,7 +186,7 @@ export default function Explore({ state }: { state: GameResponse }) {
           </div>
 
           {/* POI controls — fixed-height slot so compass never shifts */}
-          <div className="h-[60px] flex items-center">
+          <div className="h-[84px] flex items-center">
             {isSettlement && (
               <div className="w-full rounded-xl p-3 flex items-center gap-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
                 <div className="flex-1 min-w-0">
