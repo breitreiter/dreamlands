@@ -18,10 +18,10 @@ export default function StatusBar({ status }: { status: StatusInfo }) {
       <div className="text-dim">
         Day {status.day}, {status.time}
       </div>
-      {Object.keys(status.conditions).length > 0 && (
+      {status.conditions.length > 0 && (
         <div className="text-negative">
-          {Object.entries(status.conditions)
-            .map(([name, stacks]) => stacks > 1 ? `${name} x${stacks}` : name)
+          {status.conditions
+            .map((c) => c.stacks > 1 ? `${c.name} x${c.stacks}` : c.name)
             .join(", ")}
         </div>
       )}

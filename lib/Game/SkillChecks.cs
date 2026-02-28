@@ -143,7 +143,7 @@ public static class SkillChecks
     /// (per dice_mechanics.md): Combat = weapon + token, Cunning = armor + token,
     /// Negotiation/Bushcraft/Mercantile = two best tools + token, Luck = none.
     /// </summary>
-    internal static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
+    public static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
     {
         var gearBonus = skill switch
         {
@@ -166,7 +166,7 @@ public static class SkillChecks
     /// Freezing/Thirsty = two best small gear + token,
     /// Swamp Fever/Gut Worms/Irradiated = consumable(big) + best equipment(small) + token.
     /// </summary>
-    internal static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
+    public static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
     {
         var magnitudes = balance.Character.ResistBonusMagnitudes;
 

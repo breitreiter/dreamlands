@@ -6,8 +6,23 @@ export interface StatusInfo {
   gold: number;
   time: string;
   day: number;
-  conditions: Record<string, number>;
-  skills: Record<string, number>;
+  conditions: ConditionInfo[];
+  skills: SkillInfoDto[];
+}
+
+export interface ConditionInfo {
+  id: string;
+  name: string;
+  stacks: number;
+  description: string;
+}
+
+export interface SkillInfoDto {
+  id: string;
+  name: string;
+  level: number;
+  formatted: string;
+  flavor: string;
 }
 
 export interface NodeInfo {
@@ -76,6 +91,13 @@ export interface ItemInfo {
   defId: string;
   name: string;
   description: string | null;
+  type: string;
+  cost: number | null;
+  skillModifiers: Record<string, number>;
+  resistModifiers: Record<string, number>;
+  foragingBonus: number;
+  cures: string[];
+  isEquippable: boolean;
 }
 
 export interface EquipmentInfo {
@@ -119,7 +141,20 @@ export interface GameResponse {
   settlement?: SettlementInfo;
   camp?: CampInfo;
   inventory?: InventoryInfo;
+  mechanics?: MechanicsInfo;
   marketResult?: MarketOrderResult;
+}
+
+export interface MechanicsInfo {
+  resistances: MechanicLine[];
+  encounterChecks: MechanicLine[];
+  other: MechanicLine[];
+}
+
+export interface MechanicLine {
+  label: string;
+  value: string;
+  source: string;
 }
 
 export interface NewGameResponse {

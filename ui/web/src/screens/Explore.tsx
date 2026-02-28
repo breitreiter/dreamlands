@@ -156,7 +156,7 @@ export default function Explore({ state }: { state: GameResponse }) {
             minZoom={0}
             maxZoom={MAX_ZOOM}
           />
-          {!status.conditions["lost"] && <Marker position={position} icon={playerIcon} />}
+          {!status.conditions.some(c => c.id === "lost") && <Marker position={position} icon={playerIcon} />}
           <MapFollower position={position} />
         </MapContainer>
       </div>
@@ -248,14 +248,14 @@ export default function Explore({ state }: { state: GameResponse }) {
 
           {/* Conditions — flex-1 fills remaining space, items align to bottom */}
           <div className="flex-1 flex flex-col justify-end gap-1">
-            {Object.entries(status.conditions).map(([name, stacks]) => (
-              <div key={name} className="flex items-center gap-2 text-negative">
+            {status.conditions.map((c) => (
+              <div key={c.id} className="flex items-center gap-2 text-negative">
                 <img
-                  src={`/world/assets/icons/${CONDITION_ICONS[name] || "sun.svg"}`}
+                  src={`/world/assets/icons/${CONDITION_ICONS[c.id] || "sun.svg"}`}
                   alt=""
                   className="w-5 h-5"
                 />
-                <span className="capitalize">{name}{stacks > 1 ? ` x${stacks}` : ""}</span>
+                <span>{c.name}{c.stacks > 1 ? ` x${c.stacks}` : ""}</span>
               </div>
             ))}
           </div>

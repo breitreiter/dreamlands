@@ -35,6 +35,9 @@ public class GameResponse
 
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
+
+    // Computed mechanics summary for inventory screen
+    public MechanicsInfo? Mechanics { get; init; }
 }
 
 public class MarketOrderResultInfo
@@ -60,8 +63,25 @@ public class StatusInfo
     public int Gold { get; init; }
     public string Time { get; init; } = "";
     public int Day { get; init; }
-    public Dictionary<string, int> Conditions { get; init; } = new();
-    public Dictionary<string, string> Skills { get; init; } = new();
+    public List<ConditionInfo> Conditions { get; init; } = [];
+    public List<SkillInfoDto> Skills { get; init; } = [];
+}
+
+public class ConditionInfo
+{
+    public string Id { get; init; } = "";
+    public string Name { get; init; } = "";
+    public int Stacks { get; init; }
+    public string Description { get; init; } = "";
+}
+
+public class SkillInfoDto
+{
+    public string Id { get; init; } = "";
+    public string Name { get; init; } = "";
+    public int Level { get; init; }
+    public string Formatted { get; init; } = "";
+    public string Flavor { get; init; } = "";
 }
 
 public class NodeInfo
@@ -149,6 +169,27 @@ public class ItemInfo
     public string DefId { get; init; } = "";
     public string Name { get; init; } = "";
     public string? Description { get; init; }
+    public string Type { get; init; } = "";
+    public int? Cost { get; init; }
+    public Dictionary<string, int> SkillModifiers { get; init; } = [];
+    public Dictionary<string, int> ResistModifiers { get; init; } = [];
+    public int ForagingBonus { get; init; }
+    public List<string> Cures { get; init; } = [];
+    public bool IsEquippable { get; init; }
+}
+
+public class MechanicsInfo
+{
+    public List<MechanicLine> Resistances { get; init; } = [];
+    public List<MechanicLine> EncounterChecks { get; init; } = [];
+    public List<MechanicLine> Other { get; init; } = [];
+}
+
+public class MechanicLine
+{
+    public string Label { get; init; } = "";
+    public string Value { get; init; } = "";
+    public string Source { get; init; } = "";
 }
 
 public class EquipmentInfo

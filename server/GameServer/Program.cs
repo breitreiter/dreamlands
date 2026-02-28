@@ -126,10 +126,30 @@ StatusInfo BuildStatus(PlayerState p) => new()
     Gold = p.Gold,
     Time = p.Time.ToString(),
     Day = p.Day,
-    Conditions = new Dictionary<string, int>(p.ActiveConditions),
-    Skills = p.Skills.ToDictionary(
-        kv => kv.Key.ScriptName(),
-        kv => FormatSkillLevel(kv.Value)),
+    Conditions = p.ActiveConditions.Select(kv =>
+    {
+        var def = balance.Conditions.GetValueOrDefault(kv.Key);
+        var flavor = balance.ConditionFlavors.GetValueOrDefault(kv.Key);
+        return new ConditionInfo
+        {
+            Id = kv.Key,
+            Name = def?.Name ?? kv.Key,
+            Stacks = kv.Value,
+            Description = flavor?.Ongoing ?? "",
+        };
+    }).ToList(),
+    Skills = Skills.All.Select(si =>
+    {
+        var level = p.Skills.GetValueOrDefault(si.Skill);
+        return new SkillInfoDto
+        {
+            Id = si.ScriptName,
+            Name = si.DisplayName,
+            Level = level,
+            Formatted = FormatSkillLevel(level),
+            Flavor = SkillFlavor.Get(si.Skill, level),
+        };
+    }).ToList(),
 };
 
 NodeInfo BuildNodeInfo(Node node, PlayerState p) => new()
@@ -158,19 +178,148 @@ List<ExitInfo> BuildExits(GameSession session) =>
         Poi = e.Target.Poi?.Name ?? e.Target.Poi?.Kind.ToString(),
     }).ToList();
 
+ItemInfo BuildItemInfo(ItemInstance i)
+{
+    var def = balance.Items.GetValueOrDefault(i.DefId);
+    return new ItemInfo
+    {
+        DefId = i.DefId,
+        Name = i.DisplayName,
+        Description = i.Description ?? (def != null ? FormatItemDescription(def) : null),
+        Type = def?.Type.ToString().ToLowerInvariant() ?? "",
+        Cost = def?.Cost != null ? balance.Character.CostMagnitudes.GetValueOrDefault(def.Cost.Value) : null,
+        SkillModifiers = def?.SkillModifiers.ToDictionary(kv => kv.Key.ScriptName(), kv => kv.Value) ?? [],
+        ResistModifiers = def?.ResistModifiers.ToDictionary(
+            kv => kv.Key,
+            kv => balance.Character.ResistBonusMagnitudes.GetValueOrDefault(kv.Value)) ?? [],
+        ForagingBonus = def?.ForagingBonus ?? 0,
+        Cures = def?.Cures.ToList() ?? [],
+        IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
+    };
+}
+
 InventoryInfo BuildInventory(PlayerState p) => new()
 {
-    Pack = p.Pack.Select(i => new ItemInfo { DefId = i.DefId, Name = i.DisplayName, Description = i.Description }).ToList(),
+    Pack = p.Pack.Select(BuildItemInfo).ToList(),
     PackCapacity = p.PackCapacity,
-    Haversack = p.Haversack.Select(i => new ItemInfo { DefId = i.DefId, Name = i.DisplayName, Description = i.Description }).ToList(),
+    Haversack = p.Haversack.Select(BuildItemInfo).ToList(),
     HaversackCapacity = p.HaversackCapacity,
     Equipment = new EquipmentInfo
     {
-        Weapon = p.Equipment.Weapon != null ? new ItemInfo { DefId = p.Equipment.Weapon.DefId, Name = p.Equipment.Weapon.DisplayName } : null,
-        Armor = p.Equipment.Armor != null ? new ItemInfo { DefId = p.Equipment.Armor.DefId, Name = p.Equipment.Armor.DisplayName } : null,
-        Boots = p.Equipment.Boots != null ? new ItemInfo { DefId = p.Equipment.Boots.DefId, Name = p.Equipment.Boots.DisplayName } : null,
+        Weapon = p.Equipment.Weapon != null ? BuildItemInfo(p.Equipment.Weapon) : null,
+        Armor = p.Equipment.Armor != null ? BuildItemInfo(p.Equipment.Armor) : null,
+        Boots = p.Equipment.Boots != null ? BuildItemInfo(p.Equipment.Boots) : null,
     },
 };
+
+MechanicsInfo BuildMechanics(PlayerState p)
+{
+    var resistances = new List<MechanicLine>();
+    var encounterChecks = new List<MechanicLine>();
+    var other = new List<MechanicLine>();
+
+    // Resistances: for each condition, compute total resist bonus
+    foreach (var (condId, condDef) in balance.Conditions)
+    {
+        // Map condition to its resist skill (mirrors SkillChecks.RollResist)
+        var resistSkill = condId switch
+        {
+            "freezing" or "thirsty" or "lost" or "poisoned" => (Skill?)Skill.Bushcraft,
+            "injured" => Skill.Combat,
+            _ => null,
+        };
+
+        var skillBonus = resistSkill != null ? p.Skills.GetValueOrDefault(resistSkill.Value) : 0;
+        var gearBonus = SkillChecks.GetResistBonus(condId, p, balance);
+        var total = skillBonus + gearBonus;
+        if (total <= 0) continue;
+
+        var source = (resistSkill, gearBonus > 0) switch
+        {
+            ({ } s, true) => $"{s.GetInfo().DisplayName} + gear",
+            ({ } s, false) => s.GetInfo().DisplayName,
+            (null, true) => "Gear",
+            _ => "",
+        };
+
+        resistances.Add(new MechanicLine
+        {
+            Label = condDef.Name,
+            Value = $"+{total}",
+            Source = source,
+        });
+    }
+
+    // Encounter checks: per-skill total (base + item bonus)
+    foreach (var si in Skills.All)
+    {
+        var skillLevel = p.Skills.GetValueOrDefault(si.Skill);
+        var itemBonus = SkillChecks.GetItemBonus(si.Skill, p, balance);
+        var total = skillLevel + itemBonus;
+
+        var source = (skillLevel != 0, itemBonus > 0) switch
+        {
+            (true, true) => $"{si.DisplayName} + gear",
+            (true, false) => si.DisplayName,
+            (false, true) => "Gear",
+            _ => si.DisplayName,
+        };
+
+        encounterChecks.Add(new MechanicLine
+        {
+            Label = si.DisplayName,
+            Value = FormatSkillLevel(total),
+            Source = source,
+        });
+    }
+
+    // Other: special computed bonuses
+    var mercantile = p.Skills.GetValueOrDefault(Skill.Mercantile)
+                   + SkillChecks.GetItemBonus(Skill.Mercantile, p, balance);
+    if (mercantile > 0)
+    {
+        other.Add(new MechanicLine
+        {
+            Label = "Better prices",
+            Value = $"{mercantile}%",
+            Source = "Mercantile + gear",
+        });
+    }
+
+    var luckLevel = p.Skills.GetValueOrDefault(Skill.Luck);
+    var luckChances = balance.Character.LuckRerollChance;
+    var rerollChance = luckChances[Math.Min(Math.Max(luckLevel, 0), luckChances.Count - 1)];
+    other.Add(new MechanicLine
+    {
+        Label = "Reroll any failure",
+        Value = $"{rerollChance}%",
+        Source = "Luck",
+    });
+
+    // Foraging bonus: bushcraft + weapon foraging bonus
+    var bushcraft = p.Skills.GetValueOrDefault(Skill.Bushcraft)
+                  + SkillChecks.GetItemBonus(Skill.Bushcraft, p, balance);
+    var weaponForaging = 0;
+    if (p.Equipment.Weapon != null && balance.Items.TryGetValue(p.Equipment.Weapon.DefId, out var weaponDef))
+        weaponForaging = weaponDef.ForagingBonus;
+    var totalForaging = bushcraft + weaponForaging;
+    if (totalForaging > 0)
+    {
+        other.Add(new MechanicLine
+        {
+            Label = "Foraging checks",
+            Value = FormatSkillLevel(totalForaging),
+            Source = "Bushcraft + gear",
+        });
+    }
+
+    return new MechanicsInfo
+    {
+        Resistances = resistances,
+        EncounterChecks = encounterChecks,
+        Other = other,
+    };
+}
 
 string ModeString(SessionMode m) => m switch
 {
@@ -188,6 +337,7 @@ GameResponse BuildInventoryResponse(GameSession s, PlayerState p) => new()
     Status = BuildStatus(p),
     Node = BuildNodeInfo(s.CurrentNode, p),
     Inventory = BuildInventory(p),
+    Mechanics = BuildMechanics(p),
 };
 
 EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => new()
@@ -235,6 +385,7 @@ GameResponse BuildExploringResponse(GameSession session) => new()
     Node = BuildNodeInfo(session.CurrentNode, session.Player),
     Exits = BuildExits(session),
     Inventory = BuildInventory(session.Player),
+    Mechanics = BuildMechanics(session.Player),
 };
 
 GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<Choice> choices) => new()
@@ -243,6 +394,7 @@ GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, Li
     Status = BuildStatus(session.Player),
     Encounter = BuildEncounterInfo(encounter, choices),
     Inventory = BuildInventory(session.Player),
+    Mechanics = BuildMechanics(session.Player),
 };
 
 OutcomeInfo BuildOutcomeInfo(EncounterStep.ShowOutcome outcome, string nextAction = "end_encounter") => new()
@@ -267,6 +419,7 @@ GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome
     Status = BuildStatus(session.Player),
     Outcome = BuildOutcomeInfo(outcome, nextAction),
     Inventory = BuildInventory(session.Player),
+    Mechanics = BuildMechanics(session.Player),
 };
 
 GameResponse BuildCampResponse(GameSession session, CampInfo camp) => new()
@@ -276,6 +429,7 @@ GameResponse BuildCampResponse(GameSession session, CampInfo camp) => new()
     Node = BuildNodeInfo(session.CurrentNode, session.Player),
     Camp = camp,
     Inventory = BuildInventory(session.Player),
+    Mechanics = BuildMechanics(session.Player),
 };
 
 CampInfo BuildCampThreats(GameSession session)
