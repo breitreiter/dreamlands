@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GameResponse, ConditionInfo, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
+import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
 import { useGame } from "../GameContext";
 import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
 
@@ -12,16 +12,23 @@ const CONDITION_ICONS: Record<string, string> = {
   cursed: "foamy-disc.svg",
 };
 
-const SKILL_TIER_COLORS: Record<number, string> = {
-  0: "text-muted border-muted",
-  2: "text-primary border-primary/60",
-  4: "text-accent border-accent",
+const ITEM_TYPE_ICONS: Record<string, string> = {
+  weapon: "sword-brandish.svg",
+  armor: "chain-mail.svg",
+  boots: "boots.svg",
+  tool: "knapsack.svg",
+  consumable: "pouch-with-beads.svg",
+  tradegood: "two-coins.svg",
 };
 
-function skillColor(level: number): string {
-  if (level >= 4) return SKILL_TIER_COLORS[4];
-  if (level >= 2) return SKILL_TIER_COLORS[2];
-  return SKILL_TIER_COLORS[0];
+const TAB_ICONS: Record<string, string> = {
+  pack: "backpack.svg",
+  haversack: "knapsack.svg",
+  equipped: "sword-brandish.svg",
+};
+
+function iconUrl(file: string): string {
+  return `/world/assets/icons/${file}`;
 }
 
 export default function Inventory({
@@ -35,14 +42,23 @@ export default function Inventory({
   const inventory = state.inventory;
 
   return (
-    <div className="h-full flex flex-col bg-page text-primary">
+    <div className="h-full flex flex-col bg-page text-primary relative">
+      {/* Close button — top right */}
+      <button
+        onClick={onClose}
+        className="absolute top-3 right-4 z-10 w-8 h-8 flex items-center justify-center
+                   text-action hover:text-action-hover transition-colors"
+        title="Close"
+      >
+        ✕
+      </button>
+
       {/* Three-column layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Character Panel */}
-        <div className="w-80 flex flex-col border-r border-edge overflow-y-auto flex-shrink-0">
+        <div className="flex-1 flex flex-col border-r border-edge overflow-y-auto">
           <CharacterPanel
             skills={status.skills}
-            conditions={status.conditions}
             health={status.health}
             maxHealth={status.maxHealth}
             spirits={status.spirits}
@@ -50,48 +66,58 @@ export default function Inventory({
           />
         </div>
 
-        {/* Middle: Mechanics */}
-        <div className="flex-1 flex flex-col border-r border-edge overflow-y-auto min-w-0">
+        {/* Middle: Mechanics — parchment background, fixed 380px */}
+        <div className="w-[420px] flex flex-col border-r border-edge overflow-y-auto flex-shrink-0 bg-parchment text-contrast">
           {state.mechanics ? (
             <MechanicsPanel mechanics={state.mechanics} />
           ) : (
-            <div className="p-4 text-muted text-sm">No mechanics data</div>
+            <div className="p-4 text-contrast/50">No mechanics data</div>
           )}
         </div>
 
         {/* Right: Inventory */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col">
           {inventory ? (
             <InventoryPanel inventory={inventory} />
           ) : (
-            <div className="p-4 text-muted text-sm">No inventory data</div>
+            <div className="p-4 text-muted">No inventory data</div>
           )}
         </div>
       </div>
 
-      {/* Bottom bar with close */}
-      <div className="px-4 py-2 border-t border-edge bg-panel-alt flex justify-end">
-        <button
-          onClick={onClose}
-          className="px-4 py-1.5 text-sm text-dim hover:text-primary transition-colors"
-        >
-          Close
-        </button>
-      </div>
+      {/* Conditions footer — full-width strip */}
+      {status.conditions.length > 0 && (
+        <div className="px-4 py-2 border-t border-edge bg-panel-alt flex flex-wrap gap-x-6 gap-y-1">
+          {status.conditions.map((c) => (
+            <div key={c.id} className="flex items-center gap-1.5">
+              <img
+                src={iconUrl(CONDITION_ICONS[c.id] || "sun.svg")}
+                alt=""
+                className="w-5 h-5 flex-shrink-0"
+              />
+              <span className="text-negative">
+                {c.name}
+                {c.stacks > 1 && <span className="text-muted ml-1">x{c.stacks}</span>}
+              </span>
+              {c.description && (
+                <span className="text-muted">{c.description}</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 function CharacterPanel({
   skills,
-  conditions,
   health,
   maxHealth,
   spirits,
   maxSpirits,
 }: {
   skills: SkillInfoDto[];
-  conditions: ConditionInfo[];
   health: number;
   maxHealth: number;
   spirits: number;
@@ -99,8 +125,7 @@ function CharacterPanel({
 }) {
   return (
     <div className="flex flex-col h-full p-4">
-      {/* Character title */}
-      <h2 className="font-header text-accent text-lg tracking-wide uppercase mb-4">
+      <h2 className="font-header text-accent text-[32px] leading-tight mb-4">
         The Merchant
       </h2>
 
@@ -111,47 +136,23 @@ function CharacterPanel({
       </div>
 
       {/* Skills */}
-      <div className="space-y-3 mb-6">
+      <div className="space-y-3">
         {skills.map((skill) => (
           <div key={skill.id} className="flex items-start gap-3">
             <div
-              className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 ${skillColor(skill.level)}`}
+              className="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold flex-shrink-0 mt-0.5 text-accent border-accent"
             >
               {skill.formatted}
             </div>
             <div className="min-w-0">
-              <div className="text-primary text-sm font-medium">{skill.name}</div>
+              <div className="text-primary">{skill.name}</div>
               {skill.flavor && (
-                <div className="text-dim text-xs leading-snug mt-0.5">{skill.flavor}</div>
+                <div className="text-dim leading-snug mt-0.5">{skill.flavor}</div>
               )}
             </div>
           </div>
         ))}
       </div>
-
-      {/* Conditions — pushed to bottom */}
-      {conditions.length > 0 && (
-        <div className="mt-auto pt-4 border-t border-edge space-y-2">
-          {conditions.map((c) => (
-            <div key={c.id} className="flex items-start gap-2">
-              <img
-                src={`/world/assets/icons/${CONDITION_ICONS[c.id] || "sun.svg"}`}
-                alt=""
-                className="w-5 h-5 flex-shrink-0 mt-0.5"
-              />
-              <div className="min-w-0">
-                <div className="text-negative text-sm">
-                  {c.name}
-                  {c.stacks > 1 && <span className="text-muted ml-1">x{c.stacks}</span>}
-                </div>
-                {c.description && (
-                  <div className="text-muted text-xs leading-snug mt-0.5">{c.description}</div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -159,38 +160,68 @@ function CharacterPanel({
 function MechanicsPanel({ mechanics }: { mechanics: MechanicsInfo }) {
   return (
     <div className="p-4">
-      <h2 className="font-header text-accent text-sm tracking-widest uppercase mb-4">
+      <h2 className="font-header text-parchment-text text-[32px] leading-tight mb-4">
         Mechanics
       </h2>
 
       {mechanics.resistances.length > 0 && (
-        <MechanicsSection title="Resistances" lines={mechanics.resistances} />
+        <MechanicsSection title="Resistances" lines={mechanics.resistances} iconType="resistance" />
       )}
 
       {mechanics.encounterChecks.length > 0 && (
-        <MechanicsSection title="Encounter Checks" lines={mechanics.encounterChecks} />
+        <MechanicsSection title="Encounter Checks" lines={mechanics.encounterChecks} iconType="skill" />
       )}
 
       {mechanics.other.length > 0 && (
-        <MechanicsSection title="Other" lines={mechanics.other} />
+        <MechanicsSection title="Other" lines={mechanics.other} iconType="other" />
       )}
     </div>
   );
 }
 
-function MechanicsSection({ title, lines }: { title: string; lines: MechanicLine[] }) {
+const RESISTANCE_ICONS: Record<string, string> = {
+  ...CONDITION_ICONS,
+};
+
+const OTHER_ICONS: Record<string, string> = {
+  "better prices": "pay-money.svg",
+  "reroll any failure": "foamy-disc.svg",
+  "foraging checks": "knapsack.svg",
+};
+
+function mechanicIcon(label: string, iconType: string): string | null {
+  const key = label.toLowerCase();
+  if (iconType === "resistance") return RESISTANCE_ICONS[key] || null;
+  if (iconType === "skill") return "sun.svg";
+  for (const [pattern, icon] of Object.entries(OTHER_ICONS)) {
+    if (key.includes(pattern)) return icon;
+  }
+  return null;
+}
+
+function MechanicsSection({ title, lines, iconType }: { title: string; lines: MechanicLine[]; iconType: string }) {
   return (
     <div className="mb-5">
-      <div className="text-dim text-xs uppercase tracking-wider mb-2">{title}</div>
-      <table className="w-full text-sm">
+      <div className="font-bold mb-2">{title}</div>
+      <table className="w-full">
         <tbody>
-          {lines.map((line, i) => (
-            <tr key={i} className="border-b border-edge/30 last:border-0">
-              <td className="py-1 pr-2 text-primary">{line.label}</td>
-              <td className="py-1 px-2 text-accent font-medium whitespace-nowrap">{line.value}</td>
-              <td className="py-1 pl-2 text-muted text-xs text-right">{line.source}</td>
-            </tr>
-          ))}
+          {lines.map((line, i) => {
+            const icon = mechanicIcon(line.label, iconType);
+            return (
+              <tr key={i} className="border-b border-parchment-text/15 last:border-0">
+                <td className="py-1 pr-2 whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1.5">
+                    {icon && (
+                      <img src={iconUrl(icon)} alt="" className="w-5 h-5 inline-block" style={{ filter: "brightness(0)" }} />
+                    )}
+                    {line.label}
+                  </span>
+                </td>
+                <td className="py-1 px-2 font-bold whitespace-nowrap">{line.value}</td>
+                <td className="py-1 pl-2 text-contrast/50 text-right">{line.source}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -207,17 +238,17 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
     <div className="flex flex-col h-full">
       {/* Header + tabs */}
       <div className="p-4 pb-0">
-        <h2 className="font-header text-accent text-sm tracking-widest uppercase mb-3">
+        <h2 className="font-header text-accent text-[32px] leading-tight mb-3">
           Inventory
         </h2>
         <div className="flex gap-1">
-          <TabButton active={tab === "pack"} onClick={() => setTab("pack")}>
+          <TabButton id="pack" active={tab === "pack"} onClick={() => setTab("pack")}>
             Pack
           </TabButton>
-          <TabButton active={tab === "haversack"} onClick={() => setTab("haversack")}>
+          <TabButton id="haversack" active={tab === "haversack"} onClick={() => setTab("haversack")}>
             Haversack
           </TabButton>
-          <TabButton active={tab === "equipped"} onClick={() => setTab("equipped")}>
+          <TabButton id="equipped" active={tab === "equipped"} onClick={() => setTab("equipped")}>
             Equipped
           </TabButton>
         </div>
@@ -239,17 +270,19 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
   );
 }
 
-function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function TabButton({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) {
+  const icon = TAB_ICONS[id];
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1 text-xs transition-colors ${
+      className={`h-12 px-4 flex items-center gap-2 transition-colors ${
         active
-          ? "bg-btn border border-accent text-primary"
-          : "bg-transparent border border-transparent text-muted hover:text-primary"
+          ? "bg-btn border border-action text-action"
+          : "bg-transparent border border-transparent text-action-dim hover:text-action"
       }`}
       style={{ borderRadius: "999px" }}
     >
+      {icon && <img src={iconUrl(icon)} alt="" className="w-5 h-5 opacity-80" />}
       {children}
     </button>
   );
@@ -268,6 +301,10 @@ function itemModifierSummary(item: ItemInfo): string {
   return parts.join(", ");
 }
 
+function itemTypeIcon(type: string): string {
+  return ITEM_TYPE_ICONS[type] || "wooden-crate.svg";
+}
+
 function ItemCard({
   item,
   actions,
@@ -278,21 +315,21 @@ function ItemCard({
   const mods = itemModifierSummary(item);
   return (
     <div className="flex items-start gap-3 bg-btn p-3 border-l-2 border-accent">
-      <div className="w-8 h-8 bg-btn-hover flex-shrink-0 flex items-center justify-center text-muted text-xs">
-        ?
+      <div className="w-10 h-10 bg-btn-hover flex-shrink-0 flex items-center justify-center">
+        <img src={iconUrl(itemTypeIcon(item.type))} alt="" className="w-6 h-6 opacity-80" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-sm text-primary">
+        <div className="text-primary">
           {item.name}
           {item.cost != null && item.cost > 0 && (
-            <span className="text-accent ml-2 text-xs">{item.cost}g</span>
+            <span className="text-accent ml-2">{item.cost}g</span>
           )}
         </div>
         {mods && (
-          <div className="text-xs text-dim mt-0.5 truncate">{mods}</div>
+          <div className="text-dim mt-0.5 truncate">{mods}</div>
         )}
         {item.description && !mods && (
-          <div className="text-xs text-muted mt-0.5 truncate">{item.description}</div>
+          <div className="text-muted mt-0.5 truncate">{item.description}</div>
         )}
       </div>
       <div className="flex gap-1 flex-shrink-0 items-center">
@@ -302,19 +339,22 @@ function ItemCard({
   );
 }
 
+const ACTION_ICONS: Record<string, string> = {
+  Equip: "sword-brandish.svg",
+  Unequip: "cancel.svg",
+  Discard: "cancel.svg",
+};
+
 function ActionBtn({ label, disabled, onClick }: { label: string; disabled: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className="w-8 h-8 bg-btn-hover hover:bg-edge disabled:opacity-40
-                 flex items-center justify-center text-dim hover:text-primary
-                 transition-colors text-xs"
+      className="w-10 h-10 bg-action hover:bg-action-hover disabled:opacity-40
+                 flex items-center justify-center transition-colors"
       title={label}
     >
-      {label === "Equip" && "E"}
-      {label === "Unequip" && "U"}
-      {label === "Discard" && "D"}
+      <img src={iconUrl(ACTION_ICONS[label] || "sun.svg")} alt={label} className="w-5 h-5" />
     </button>
   );
 }
@@ -330,25 +370,26 @@ function PackTab({
   doAction: (body: { action: string; itemId?: string }) => void;
   loading: boolean;
 }) {
+  const emptySlots = capacity - items.length;
   return (
     <>
-      <div className="text-xs text-dim mb-1">{items.length}/{capacity}</div>
-      {items.length === 0 ? (
-        <div className="text-muted text-sm">Empty</div>
-      ) : (
-        items.map((item, i) => (
-          <ItemCard key={i} item={item} actions={
-            <>
-              {item.isEquippable && (
-                <ActionBtn label="Equip" disabled={loading}
-                  onClick={() => doAction({ action: "equip", itemId: item.defId })} />
-              )}
-              <ActionBtn label="Discard" disabled={loading}
-                onClick={() => doAction({ action: "discard", itemId: item.defId })} />
-            </>
-          } />
-        ))
-      )}
+      {items.map((item, i) => (
+        <ItemCard key={i} item={item} actions={
+          <>
+            {item.isEquippable && (
+              <ActionBtn label="Equip" disabled={loading}
+                onClick={() => doAction({ action: "equip", itemId: item.defId })} />
+            )}
+            <ActionBtn label="Discard" disabled={loading}
+              onClick={() => doAction({ action: "discard", itemId: item.defId })} />
+          </>
+        } />
+      ))}
+      {Array.from({ length: emptySlots }, (_, i) => (
+        <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
+          Empty slot
+        </div>
+      ))}
     </>
   );
 }
@@ -364,19 +405,20 @@ function HaversackTab({
   doAction: (body: { action: string; itemId?: string }) => void;
   loading: boolean;
 }) {
+  const emptySlots = capacity - items.length;
   return (
     <>
-      <div className="text-xs text-dim mb-1">{items.length}/{capacity}</div>
-      {items.length === 0 ? (
-        <div className="text-muted text-sm">Empty</div>
-      ) : (
-        items.map((item, i) => (
-          <ItemCard key={i} item={item} actions={
-            <ActionBtn label="Discard" disabled={loading}
-              onClick={() => doAction({ action: "discard", itemId: item.defId })} />
-          } />
-        ))
-      )}
+      {items.map((item, i) => (
+        <ItemCard key={i} item={item} actions={
+          <ActionBtn label="Discard" disabled={loading}
+            onClick={() => doAction({ action: "discard", itemId: item.defId })} />
+        } />
+      ))}
+      {Array.from({ length: emptySlots }, (_, i) => (
+        <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
+          Empty slot
+        </div>
+      ))}
     </>
   );
 }
@@ -402,7 +444,7 @@ function EquippedTab({
               onClick={() => doAction({ action: "unequip", slot })} />
           } />
         ) : (
-          <div key={slot} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted text-sm">
+          <div key={slot} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
             Empty {slot} slot
           </div>
         );
