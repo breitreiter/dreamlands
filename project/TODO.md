@@ -263,6 +263,10 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Testing / Regression
 
+- [ ] CLI smoke & integration tests — bash scripts that spin up GameServer and exercise
+      the CLI round-trip. Happy-path smoke suite, error cases, and a random action fuzzer.
+      Design in `project/design/cli_integration_tests.md`. Blocked on API surface stabilizing
+      (settlement services, end-of-day, player creation encounter).
 - [ ] POI position mismatch — observed a case where the server's in-memory map had a
       settlement at (16,5) but map.json on disk had it at (16,7). Player could enter a
       "ghost" settlement that didn't exist in the data. Server restart fixed it. Root cause
