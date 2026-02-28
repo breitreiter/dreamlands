@@ -33,7 +33,8 @@ public sealed class SettlementBalance
                 new("warehouse", 400, 100),
             ],
         },
-        ["healer"] = new() { Id = "healer", Availability = "rare" },
+        ["inn"] = new() { Id = "inn", Availability = "universal", AlwaysAvailable = true },
+        ["chapterhouse"] = new() { Id = "chapterhouse", Availability = "unique" },
         ["temple"] = new() { Id = "temple", Availability = "rare" },
         ["entertainment"] = new() { Id = "entertainment", Availability = "tbd" },
     };

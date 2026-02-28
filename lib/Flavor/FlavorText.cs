@@ -109,9 +109,6 @@ public static class FlavorText
     public static string InnDescription(Terrain biome, int tier, SettlementSize size) =>
         "A warm inn with a crackling fire.";
 
-    public static string HealerDescription(Terrain biome, int tier, SettlementSize size) =>
-        "A healer's hut, smelling of herbs.";
-
     // --- Other elements (biome, tier) ---
 
     public static string TimeOfDayDescription(Terrain biome, int tier) =>

@@ -36,7 +36,9 @@ public static class SettlementRunner
         var settlement = session.Player.Settlements[node.Poi.Name];
         Market.Restock(settlement, size, session.Player.Day, session.Balance, session.Rng);
 
-        var services = new List<string> { "market" };
+        var services = new List<string> { "market", "inn" };
+        if (node == session.Map.StartingCity)
+            services.Add("chapterhouse");
 
         return new SettlementData(node.Poi.Name, tier, biome, size, services);
     }

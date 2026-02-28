@@ -39,6 +39,9 @@ public sealed class CharacterBalance
     public int BalancedMealHealthBonus { get; init; } = 1;
     public int BalancedMealSpiritsBonus { get; init; } = 1;
 
+    // Inn pricing: cost per night for multi-night stays (3x trivial food cost)
+    public int InnNightlyCost { get; init; } = 9;
+
     /// <summary>
     /// Condition resist bonus from gear ResistModifiers. Code enforces per-slot caps:
     /// big gear (weapon/armor/boots/consumable) up to +5, small gear (tools) up to +3.

@@ -121,7 +121,6 @@ Screen designs live in `project/screens/`. Some are well-specified, some are emp
 - [ ] Town — Temple
 - [ ] Town — Market
 - [ ] Town — Guild
-- [ ] Town — Healer
 - [ ] shadcn/tailwind based design system
 
 ## Frontend Implementation
@@ -144,8 +143,7 @@ GameServer running with save persistence.
 - [ ] Town — Temple
 - [ ] Town — Market
 - [ ] Town — Guild storage
-- [ ] Town — Healer
-- [ ] Town — Inn
+- [ ] Town — Inn / Chapterhouse
 - [ ] shadcn/tailwind based design system
 
 ## Rules / Game Mechanics
@@ -159,8 +157,7 @@ is not yet built.
 - [ ] Town — Temple
 - [ ] Town — Market
 - [ ] Town — Guild storage
-- [ ] Town — Healer
-- [ ] Town — Inn
+- [x] Town — Inn / Chapterhouse (game logic)
 - [ ] Stock medicine in biome-appropriate markets (medicines may not spawn yet)
 - [ ] Courier system — markets sell Dispatches (tier-matched), player delivers to named
       destination settlement for payment. Design in `project/design/courier_system.md`.
@@ -247,7 +244,6 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 - [ ] Guild office rumors
 - [ ] Temple descriptions
 - [ ] Inn descriptions
-- [ ] Healer descriptions
 - [ ] Time of day descriptions
 - [ ] Weather descriptions
 - [ ] Condition warnings

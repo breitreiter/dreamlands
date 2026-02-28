@@ -25,11 +25,6 @@ re-usable panel for town activities. not all settlements will have all buildings
 - Seek lodging - spirits bump, end-of-day activities (no-biome), skip to morning.
 - Buy food - trade screen
 
-### healer
-- Seek Mending - confirm price + time, heal to full, clear qualifying conditions, spirits to full, 0-many end-of-day (no-biome)
-- Seek Cures - if you have a qualifying condition, confirm price, remove conditions, flavor text. otherwise, flavor text indicating that the healer can only help with diseases and poisoning.
-- What do - short diegetic explanation of services provided
-
 ### guild outpost
 flavor text about the nature, size, and vibe of the guild outpost. introduce the guild factor.
 - what do - short introduction to the concept of settlement-local storage, guaranteed safe, can be upgraded. upgrading doesn't make anything larger; you're just paying the factor to reserve more space for your personal crap.
