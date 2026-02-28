@@ -54,6 +54,7 @@ public class Program
         Console.WriteLine("Options:");
         Console.WriteLine("  --animate, -a    Show generation animation");
         Console.WriteLine("  --regions, -r    Show region breakdown");
+        Console.WriteLine("  --skip-tiles     Skip Leaflet tile slicing (faster iteration)");
         Console.WriteLine();
         Console.WriteLine("Legacy:");
         Console.WriteLine("  mapgen <width> <height> [seed]   Ad-hoc generation (writes to CWD)");
@@ -90,6 +91,7 @@ public class Program
         bool all = false;
         bool animate = false;
         bool showRegions = false;
+        bool skipTiles = false;
         string? worldName = null;
 
         foreach (var arg in args)
@@ -99,6 +101,7 @@ public class Program
                 case "--all": all = true; break;
                 case "--animate" or "-a": animate = true; break;
                 case "--regions" or "-r": showRegions = true; break;
+                case "--skip-tiles": skipTiles = true; break;
                 default: worldName = arg; break;
             }
         }
@@ -114,15 +117,15 @@ public class Program
         if (all)
         {
             foreach (var name in registry.Worlds.Keys)
-                GenerateWorld(name, registry, animate, showRegions);
+                GenerateWorld(name, registry, animate, showRegions, skipTiles);
         }
         else
         {
-            GenerateWorld(worldName!, registry, animate, showRegions);
+            GenerateWorld(worldName!, registry, animate, showRegions, skipTiles);
         }
     }
 
-    static void GenerateWorld(string name, WorldRegistry registry, bool animate, bool showRegions)
+    static void GenerateWorld(string name, WorldRegistry registry, bool animate, bool showRegions, bool skipTiles)
     {
         if (!registry.Worlds.TryGetValue(name, out var config))
         {
@@ -180,10 +183,13 @@ public class Program
             data.SaveTo(stream);
         Console.Error.WriteLine($"  map.png -> {pngPath}");
 
-        var tilesDir = Path.Combine(worldDir, "tiles");
-        Console.Error.WriteLine("  Slicing tiles...");
-        TileSlicer.Slice(image, tilesDir);
-        Console.Error.WriteLine($"  tiles -> {tilesDir}/");
+        if (!skipTiles)
+        {
+            var tilesDir = Path.Combine(worldDir, "tiles");
+            Console.Error.WriteLine("  Slicing tiles...");
+            TileSlicer.Slice(image, tilesDir);
+            Console.Error.WriteLine($"  tiles -> {tilesDir}/");
+        }
 
         // Create placeholder directories
         Directory.CreateDirectory(Path.Combine(worldDir, "encounters"));
