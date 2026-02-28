@@ -90,4 +90,47 @@ public class SettlementRunnerTests
         Assert.Equal(SessionMode.Exploring, session.Mode);
         Assert.Null(session.Player.CurrentSettlementId);
     }
+
+    [Fact]
+    public void Enter_IncludesMarketAndInn()
+    {
+        var session = MakeSessionWithSettlement();
+        var data = SettlementRunner.Enter(session);
+
+        Assert.NotNull(data);
+        Assert.Contains("market", data.Services);
+        Assert.Contains("inn", data.Services);
+    }
+
+    [Fact]
+    public void Enter_NormalSettlement_NoChapterhouse()
+    {
+        var session = MakeSessionWithSettlement();
+        var data = SettlementRunner.Enter(session);
+
+        Assert.NotNull(data);
+        Assert.DoesNotContain("chapterhouse", data.Services);
+    }
+
+    [Fact]
+    public void Enter_StartingCity_HasChapterhouse()
+    {
+        var map = Helpers.MakeMap();
+        var region = new Region(1, Terrain.Plains) { Tier = 1 };
+        map[1, 1].Region = region;
+        map[1, 1].Poi = new Poi(PoiKind.Settlement, "city")
+        {
+            Name = "Aldgate",
+            Size = SettlementSize.City
+        };
+        map.StartingCity = map[1, 1];
+
+        var session = Helpers.MakeSession(map: map);
+        var data = SettlementRunner.Enter(session);
+
+        Assert.NotNull(data);
+        Assert.Contains("chapterhouse", data.Services);
+        Assert.Contains("market", data.Services);
+        Assert.Contains("inn", data.Services);
+    }
 }
