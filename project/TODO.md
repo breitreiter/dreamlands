@@ -29,6 +29,8 @@ Just a list of things that need doing, roughly grouped.
 - [ ] Fix dungeon sprite scaling (PoiPass shares a scale factor derived from settlement decals;
       MountainPass uses a hardcoded `PoiScale = 0.32f` — both may be wrong for dungeon art)
 - [ ] More aggressive mountain settlement placement — aim for at least one per mountain biome
+- [ ] Investigate tier 1 swamp placement — currently lands far from start. May need tier
+      assignment tweaks or biome-aware nudging so early-tier regions stay near the cradle.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
 
