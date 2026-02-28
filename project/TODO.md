@@ -20,7 +20,8 @@ Just a list of things that need doing, roughly grouped.
 
 - [ ] Add a safe border to the map so the edge looks intentional against the background
 - [ ] Replace lake sprite
-- [ ] Fix lake decal draw order — lake decal should render above the river line
+- [ ] Hand-drawn river decals — 800x800 tiles chained lake-to-edge.
+      Design in `project/design/river_decals.md`.
 - [ ] Fix mountain coloring
 - [ ] Finish mountain POI sprites
 - [ ] Improve settlement sprite variability — avoid placing identical decals near each other;
