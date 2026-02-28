@@ -199,7 +199,7 @@ EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => n
 };
 
 List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
-    results.Select(r => new MechanicResultInfo
+    results.Where(r => r is not MechanicResult.Navigation).Select(r => new MechanicResultInfo
     {
         Type = r.GetType().Name,
         Description = r switch
@@ -241,25 +241,27 @@ GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, Li
     Inventory = BuildInventory(session.Player),
 };
 
+OutcomeInfo BuildOutcomeInfo(EncounterStep.ShowOutcome outcome, string nextAction = "end_encounter") => new()
+{
+    Preamble = outcome.Resolved.Preamble,
+    Text = outcome.Resolved.Text,
+    SkillCheck = outcome.Resolved.CheckResult is { } ck ? new SkillCheckInfo
+    {
+        Skill = ck.Skill.ScriptName(),
+        Passed = ck.Passed,
+        Rolled = ck.Rolled,
+        Target = ck.Target,
+        Modifier = ck.Modifier,
+    } : null,
+    Mechanics = BuildMechanicResults(outcome.Results),
+    NextAction = nextAction,
+};
+
 GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome outcome, string nextAction = "end_encounter") => new()
 {
     Mode = "outcome",
     Status = BuildStatus(session.Player),
-    Outcome = new OutcomeInfo
-    {
-        Preamble = outcome.Resolved.Preamble,
-        Text = outcome.Resolved.Text,
-        SkillCheck = outcome.Resolved.CheckResult is { } ck ? new SkillCheckInfo
-        {
-            Skill = ck.Skill.ScriptName(),
-            Passed = ck.Passed,
-            Rolled = ck.Rolled,
-            Target = ck.Target,
-            Modifier = ck.Modifier,
-        } : null,
-        Mechanics = BuildMechanicResults(outcome.Results),
-        NextAction = nextAction,
-    },
+    Outcome = BuildOutcomeInfo(outcome, nextAction),
     Inventory = BuildInventory(session.Player),
 };
 
@@ -492,7 +494,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                             {
                                 var step = EncounterRunner.Begin(session, next);
                                 await store.Save(player);
-                                return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.VisibleChoices));
+                                return Results.Ok(new GameResponse
+                                {
+                                    Mode = "encounter",
+                                    Status = BuildStatus(player),
+                                    Encounter = BuildEncounterInfo(step.Encounter, step.VisibleChoices),
+                                    Outcome = finished.Outcome is { } o ? BuildOutcomeInfo(o) : null,
+                                    Inventory = BuildInventory(player),
+                                });
                             }
                             EncounterRunner.EndEncounter(session);
                             await store.Save(player);

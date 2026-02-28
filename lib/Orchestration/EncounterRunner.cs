@@ -34,7 +34,7 @@ public static class EncounterRunner
         foreach (var r in results)
         {
             if (r is MechanicResult.Navigation nav)
-                return new EncounterStep.Finished(FinishReason.NavigatedTo, nav.EncounterId);
+                return new EncounterStep.Finished(FinishReason.NavigatedTo, nav.EncounterId, Outcome: outcome);
             if (r is MechanicResult.DungeonFinished)
             {
                 session.Mode = SessionMode.Exploring;

@@ -135,6 +135,10 @@ GameServer running with save persistence.
 - [ ] Explore/Map/Status — Leaflet integration, movement
 - [ ] Inventory — equipment, consumables
 - [ ] Encounter — choice rendering, conditional branches
+- [ ] Dungeon continuous scroll — scene transitions clear and redraw instead of accumulating.
+      Server sends combined outcome+encounter for NavigatedTo but the client resets segments
+      on each new encounter title. Need to track dungeon context so continuation detection works
+      across scene boundaries (Encounter.tsx).
 - [ ] Daily rest
 - [ ] Town — Home
 - [ ] Town — Temple
