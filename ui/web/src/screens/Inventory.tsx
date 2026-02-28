@@ -201,24 +201,26 @@ function mechanicIcon(label: string, iconType: string): string | null {
 
 function MechanicsSection({ title, lines, iconType }: { title: string; lines: MechanicLine[]; iconType: string }) {
   return (
-    <div className="mb-5">
-      <div className="font-bold mb-2">{title}</div>
+    <div className="mb-3">
+      <div className="font-bold mb-1 flex justify-between">
+        <span>{title}</span>
+        <span className="text-contrast/50 font-normal">Source</span>
+      </div>
       <table className="w-full">
         <tbody>
           {lines.map((line, i) => {
             const icon = mechanicIcon(line.label, iconType);
             return (
-              <tr key={i} className="border-b border-parchment-text/15 last:border-0">
-                <td className="py-1 pr-2 whitespace-nowrap">
+              <tr key={i}>
+                <td className="py-0.5 pr-2 whitespace-nowrap">
                   <span className="inline-flex items-center gap-1.5">
                     {icon && (
                       <img src={iconUrl(icon)} alt="" className="w-5 h-5 inline-block" style={{ filter: "brightness(0)" }} />
                     )}
-                    {line.label}
+                    {line.label} <span className="font-bold">{line.value}</span>
                   </span>
                 </td>
-                <td className="py-1 px-2 font-bold whitespace-nowrap">{line.value}</td>
-                <td className="py-1 pl-2 text-contrast/50 text-right">{line.source}</td>
+                <td className="py-0.5 pl-2 text-contrast/50 text-right">{line.source}</td>
               </tr>
             );
           })}

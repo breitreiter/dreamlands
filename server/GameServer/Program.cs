@@ -221,6 +221,7 @@ MechanicsInfo BuildMechanics(PlayerState p)
     // Resistances: for each condition, compute total resist bonus
     foreach (var (condId, condDef) in balance.Conditions)
     {
+        if (condId == "disheartened") continue;
         // Map condition to its resist skill (mirrors SkillChecks.RollResist)
         var resistSkill = condId switch
         {
@@ -232,14 +233,11 @@ MechanicsInfo BuildMechanics(PlayerState p)
         var skillBonus = resistSkill != null ? p.Skills.GetValueOrDefault(resistSkill.Value) : 0;
         var gearBonus = SkillChecks.GetResistBonus(condId, p, balance);
         var total = skillBonus + gearBonus;
-        if (total <= 0) continue;
 
-        var source = (resistSkill, gearBonus > 0) switch
+        var source = resistSkill switch
         {
-            ({ } s, true) => $"{s.GetInfo().DisplayName} + gear",
-            ({ } s, false) => s.GetInfo().DisplayName,
-            (null, true) => "Gear",
-            _ => "",
+            { } s => $"{s.GetInfo().DisplayName} + gear",
+            null => "Gear",
         };
 
         resistances.Add(new MechanicLine
@@ -253,17 +251,12 @@ MechanicsInfo BuildMechanics(PlayerState p)
     // Encounter checks: per-skill total (base + item bonus)
     foreach (var si in Skills.All)
     {
+        if (si.Skill == Skill.Luck) continue;
         var skillLevel = p.Skills.GetValueOrDefault(si.Skill);
         var itemBonus = SkillChecks.GetItemBonus(si.Skill, p, balance);
         var total = skillLevel + itemBonus;
 
-        var source = (skillLevel != 0, itemBonus > 0) switch
-        {
-            (true, true) => $"{si.DisplayName} + gear",
-            (true, false) => si.DisplayName,
-            (false, true) => "Gear",
-            _ => si.DisplayName,
-        };
+        var source = $"{si.DisplayName} + gear";
 
         encounterChecks.Add(new MechanicLine
         {
@@ -276,15 +269,12 @@ MechanicsInfo BuildMechanics(PlayerState p)
     // Other: special computed bonuses
     var mercantile = p.Skills.GetValueOrDefault(Skill.Mercantile)
                    + SkillChecks.GetItemBonus(Skill.Mercantile, p, balance);
-    if (mercantile > 0)
+    other.Add(new MechanicLine
     {
-        other.Add(new MechanicLine
-        {
-            Label = "Better prices",
-            Value = $"{mercantile}%",
-            Source = "Mercantile + gear",
-        });
-    }
+        Label = "Better prices",
+        Value = $"{mercantile}%",
+        Source = "Mercantile + gear",
+    });
 
     var luckLevel = p.Skills.GetValueOrDefault(Skill.Luck);
     var luckChances = balance.Character.LuckRerollChance;
@@ -303,15 +293,12 @@ MechanicsInfo BuildMechanics(PlayerState p)
     if (p.Equipment.Weapon != null && balance.Items.TryGetValue(p.Equipment.Weapon.DefId, out var weaponDef))
         weaponForaging = weaponDef.ForagingBonus;
     var totalForaging = bushcraft + weaponForaging;
-    if (totalForaging > 0)
+    other.Add(new MechanicLine
     {
-        other.Add(new MechanicLine
-        {
-            Label = "Foraging checks",
-            Value = FormatSkillLevel(totalForaging),
-            Source = "Bushcraft + gear",
-        });
-    }
+        Label = "Foraging checks",
+        Value = FormatSkillLevel(totalForaging),
+        Source = "Bushcraft + gear",
+    });
 
     return new MechanicsInfo
     {
