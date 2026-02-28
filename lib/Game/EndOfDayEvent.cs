@@ -15,5 +15,7 @@ public abstract record EndOfDayEvent
     public record ConditionDrain(string ConditionId, int HealthLost, int SpiritsLost) : EndOfDayEvent;
     public record SpecialEffect(string ConditionId, string Effect) : EndOfDayEvent;
     public record RestRecovery(int HealthGained, int SpiritsGained) : EndOfDayEvent;
+    public record DisheartendGained : EndOfDayEvent;
+    public record DisheartendCleared : EndOfDayEvent;
     public record PlayerDied(string? ConditionId) : EndOfDayEvent;
 }

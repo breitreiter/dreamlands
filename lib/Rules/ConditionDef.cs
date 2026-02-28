@@ -78,5 +78,11 @@ public sealed class ConditionDef
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
             Stacks = 3, HealthDrain = Magnitude.Small, SpiritsDrain = Magnitude.Trivial,
         },
+        ["disheartened"] = new()
+        {
+            Id = "disheartened", Name = "Disheartened", Biome = "none", Tier = "none",
+            Stacks = 1,
+            SpecialEffect = "Disadvantage on all rolls.",
+        },
     };
 }

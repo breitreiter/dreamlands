@@ -95,25 +95,11 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void HasSpiritsDisadvantage_AboveThreshold_False()
-    {
-        Assert.False(SkillChecks.HasSpiritsDisadvantage(20, Balance));
-        Assert.False(SkillChecks.HasSpiritsDisadvantage(11, Balance));
-    }
-
-    [Fact]
-    public void HasSpiritsDisadvantage_AtOrBelowThreshold_True()
-    {
-        Assert.True(SkillChecks.HasSpiritsDisadvantage(10, Balance));
-        Assert.True(SkillChecks.HasSpiritsDisadvantage(0, Balance));
-    }
-
-    [Fact]
-    public void Roll_LowSpirits_ImposesDisadvantage()
+    public void Roll_Disheartened_ImposesDisadvantage()
     {
         var state = Fresh();
         state.Skills[Skill.Combat] = 0;
-        state.Spirits = 5; // below threshold
+        state.ActiveConditions["disheartened"] = 1;
 
         var rng = new Random(42);
         var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng);
@@ -121,11 +107,11 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void Roll_Advantage_CancelledBySpiritsDisadvantage()
+    public void Roll_Advantage_CancelledByDisheartened()
     {
         var state = Fresh();
         state.Skills[Skill.Combat] = 0;
-        state.Spirits = 5; // below threshold → disadvantage
+        state.ActiveConditions["disheartened"] = 1;
 
         var rng = new Random(42);
         var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng,

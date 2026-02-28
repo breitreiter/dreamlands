@@ -12,7 +12,7 @@ public static class EndOfDay
     static readonly string[] UniversalAmbientIds = ["exhausted", "lost"];
 
     // Conditions that only come from encounters, never from ambient resist checks
-    static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured"];
+    static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "disheartened"];
 
     /// <summary>
     /// Returns ambient conditions that threaten the player tonight based on camping biome/tier.
@@ -81,7 +81,10 @@ public static class EndOfDay
         if (!noSleep)
             ResolveRest(state, balanced, balance, events);
 
-        // 6. Death check
+        // 6. Evaluate disheartened
+        ResolveDisheartened(state, balance, events);
+
+        // 7. Death check
         if (state.Health <= 0)
             events.Add(new EndOfDayEvent.PlayerDied(worstDrainCondition));
 
@@ -257,6 +260,23 @@ public static class EndOfDay
         }
 
         return worstCondition;
+    }
+
+    static void ResolveDisheartened(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
+    {
+        var threshold = balance.Character.SpiritDisadvantageThreshold;
+        var has = state.ActiveConditions.ContainsKey("disheartened");
+
+        if (state.Spirits < threshold && !has)
+        {
+            state.ActiveConditions["disheartened"] = 1;
+            events.Add(new EndOfDayEvent.DisheartendGained());
+        }
+        else if (state.Spirits >= threshold && has)
+        {
+            state.ActiveConditions.Remove("disheartened");
+            events.Add(new EndOfDayEvent.DisheartendCleared());
+        }
     }
 
     static void ResolveRest(PlayerState state, bool balanced,

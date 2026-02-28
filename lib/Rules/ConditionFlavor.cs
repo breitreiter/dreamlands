@@ -105,6 +105,10 @@ public sealed class ConditionFlavor
             HealComplete = "The country makes sense again. You know where you\u2019ve been, and where you\u2019re going.",
             Death = "The wilderness does not yield your body to searchers.",
         },
+        ["disheartened"] = new()
+        {
+            Ongoing = "A grey weight settles behind your eyes. Nothing ahead seems worth the walking.",
+        },
         ["injured"] = new()
         {
             Ongoing = "Your injuries worsen. You\u2019ll need healing soon.",

@@ -29,8 +29,8 @@ public static class SkillChecks
         var itemBonus = GetItemBonus(skill, state, balance);
         var modifier = skillLevel + itemBonus;
 
-        // Low spirits imposes disadvantage
-        if (HasSpiritsDisadvantage(state.Spirits, balance))
+        // Disheartened condition imposes disadvantage
+        if (state.ActiveConditions.ContainsKey("disheartened"))
         {
             rollMode = rollMode switch
             {
@@ -81,10 +81,6 @@ public static class SkillChecks
         return mode == RollMode.Advantage ? Math.Max(first, second) : Math.Min(first, second);
     }
 
-    /// <summary>True if spirits are low enough to impose disadvantage on checks.</summary>
-    public static bool HasSpiritsDisadvantage(int spirits, BalanceData balance) =>
-        spirits <= balance.Character.SpiritDisadvantageThreshold;
-
     static bool TryLuckReroll(int luckLevel, BalanceData balance, Random rng)
     {
         if (luckLevel <= 0) return false;
@@ -121,7 +117,7 @@ public static class SkillChecks
         var rollSkill = skill ?? Skill.Luck; // placeholder for result record
 
         var rollMode = RollMode.Normal;
-        if (HasSpiritsDisadvantage(state.Spirits, balance))
+        if (state.ActiveConditions.ContainsKey("disheartened"))
         {
             rollMode = RollMode.Disadvantage;
         }
