@@ -129,9 +129,14 @@ export default function Explore({ state }: { state: GameResponse }) {
   const poi = node.poi;
   const isSettlement = poi?.kind === "settlement";
 
-  // Show Market as full-screen overlay
+  // Show Market as full-screen
   if (activeService === "market" && atSettlement) {
     return <MarketScreen state={state} onBack={closeService} />;
+  }
+
+  // Show Inventory as full-screen
+  if (showInventory) {
+    return <Inventory state={state} onClose={() => setShowInventory(false)} />;
   }
 
   return (
@@ -278,13 +283,6 @@ export default function Explore({ state }: { state: GameResponse }) {
         </div>
       </div>
 
-      {/* Inventory overlay */}
-      {showInventory && state.inventory && (
-        <Inventory
-          inventory={state.inventory}
-          onClose={() => setShowInventory(false)}
-        />
-      )}
     </div>
   );
 }

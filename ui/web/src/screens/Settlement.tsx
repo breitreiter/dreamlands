@@ -18,6 +18,10 @@ export default function Settlement({ state }: { state: GameResponse }) {
     return <MarketScreen state={state} onBack={() => setShowMarket(false)} />;
   }
 
+  if (showInventory) {
+    return <Inventory state={state} onClose={() => setShowInventory(false)} />;
+  }
+
   return (
     <div className="h-full flex flex-col bg-page text-primary">
       <StatusBar status={status} />
@@ -68,12 +72,6 @@ export default function Settlement({ state }: { state: GameResponse }) {
         </div>
       </div>
 
-      {showInventory && state.inventory && (
-        <Inventory
-          inventory={state.inventory}
-          onClose={() => setShowInventory(false)}
-        />
-      )}
     </div>
   );
 }
