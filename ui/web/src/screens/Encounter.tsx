@@ -18,11 +18,13 @@ export default function Encounter({ state }: { state: GameResponse }) {
 
   if (!encounter && !outcome) return null;
 
+  const dungeonId = node?.poi?.dungeonId;
+  const vignetteSrc = dungeonId
+    ? `/world/assets/vignettes/dungeons/${dungeonId}.png`
+    : `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_tier_${node!.regionTier}_1.png`;
   const hasVignette =
     !vignetteError &&
-    node?.terrain &&
-    node.regionTier != null &&
-    node.regionTier > 0;
+    (dungeonId || (node?.terrain && node.regionTier != null && node.regionTier > 0));
 
   return (
     <div className="h-full flex bg-page text-primary">
@@ -33,7 +35,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
       >
         {hasVignette && (
           <img
-            src={`/world/assets/vignettes/${node!.terrain}/${node!.terrain}_tier_${node!.regionTier}_1.png`}
+            src={vignetteSrc}
             alt=""
             className="w-full h-full object-cover"
             onError={() => setVignetteError(true)}
