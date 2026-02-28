@@ -33,6 +33,16 @@ function stripNulls<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
+function clearStale(result: GameResponse): Partial<GameResponse> {
+  const cleared: Partial<GameResponse> = {};
+  if (result.mode === "encounter") cleared.outcome = undefined;
+  if (result.mode === "exploring" || result.mode === "at_settlement") {
+    cleared.encounter = undefined;
+    cleared.outcome = undefined;
+  }
+  return cleared;
+}
+
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<GameState>({
     gameId: null,
@@ -93,7 +103,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         setState((s) => ({
           ...s,
           response: s.response
-            ? { ...s.response, ...stripNulls(result) }
+            ? { ...s.response, ...clearStale(result), ...stripNulls(result) }
             : result,
           loading: false,
         }));

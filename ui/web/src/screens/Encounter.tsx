@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useGame } from "../GameContext";
 import { formatDateTime } from "../calendar";
 import type { GameResponse } from "../api/types";
@@ -6,10 +6,17 @@ import parchment from "../assets/parchment.png";
 
 export default function Encounter({ state }: { state: GameResponse }) {
   const { doAction, loading } = useGame();
-  const { encounter, node, status } = state;
+  const { encounter, outcome, node, status } = state;
   const [vignetteError, setVignetteError] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  if (!encounter) return null;
+  useEffect(() => {
+    if (outcome && scrollRef.current) {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    }
+  }, [outcome]);
+
+  if (!encounter && !outcome) return null;
 
   const hasVignette =
     !vignetteError &&
@@ -35,72 +42,139 @@ export default function Encounter({ state }: { state: GameResponse }) {
       </div>
 
       {/* Right panel — narrative content */}
-      <div className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
         <div className="max-w-2xl space-y-6">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-header text-accent uppercase">
-              {encounter.title}
-            </h2>
-            {node?.region && status && (
-              <p className="text-dim text-sm mt-1">
-                {node.region}, {formatDateTime(status.day, status.time)}
-              </p>
-            )}
-          </div>
+          {encounter && (
+            <>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-header text-accent uppercase">
+                  {encounter.title}
+                </h2>
+                {node?.region && status && (
+                  <p className="text-dim text-sm mt-1">
+                    {node.region}, {formatDateTime(status.day, status.time)}
+                  </p>
+                )}
+              </div>
 
-          {encounter.body && (
-            <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-              {encounter.body}
-            </div>
+              {encounter.body && (
+                <div className="text-primary/80 leading-loose whitespace-pre-wrap">
+                  {encounter.body}
+                </div>
+              )}
+            </>
           )}
 
-          <div className="space-y-4 pt-2">
-            {encounter.choices.map((choice) => (
-              <button
-                key={choice.index}
-                onClick={() =>
-                  doAction({ action: "choose", choiceIndex: choice.index })
-                }
-                disabled={loading}
-                className="w-full text-left flex items-start gap-3
-                           disabled:text-muted transition-colors group cursor-pointer"
-              >
-                <img
-                  src="/world/assets/icons/sun.svg"
-                  alt=""
-                  className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100
-                             transition-opacity"
-                />
-                <span>
-                  <span className="font-bold text-action group-hover:text-action-hover transition-colors">
-                    {choice.label}
-                  </span>
-                  {choice.preview && (
-                    <span className="block text-sm text-action-dim mt-0.5">
-                      {choice.preview}
-                    </span>
-                  )}
-                </span>
-              </button>
-            ))}
+          {outcome ? (
+            <div className="space-y-6">
+              {outcome.preamble && (
+                <div className="text-primary/80 leading-loose whitespace-pre-wrap">
+                  {outcome.preamble}
+                </div>
+              )}
 
-            {encounter.choices.length === 0 && (
+              {outcome.skillCheck && (
+                <div
+                  className={`p-3 border ${
+                    outcome.skillCheck.passed
+                      ? "border-positive bg-positive/15"
+                      : "border-negative bg-negative/15"
+                  }`}
+                >
+                  <span className="capitalize">{outcome.skillCheck.skill}</span>
+                  {" check: "}
+                  <span className="font-medium">
+                    {outcome.skillCheck.rolled}
+                    {outcome.skillCheck.modifier !== 0 &&
+                      ` ${outcome.skillCheck.modifier >= 0 ? "+" : ""}${outcome.skillCheck.modifier}`}
+                  </span>
+                  {" vs "}
+                  <span className="font-medium">{outcome.skillCheck.target}</span>
+                  {" — "}
+                  <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
+                    {outcome.skillCheck.passed ? "Success" : "Failure"}
+                  </span>
+                </div>
+              )}
+
+              <div className="text-primary/80 leading-loose whitespace-pre-wrap">
+                {outcome.text}
+              </div>
+
+              {outcome.mechanics.length > 0 && (
+                <div className="space-y-1 border-t border-edge pt-3">
+                  {outcome.mechanics.map((m, i) => (
+                    <div key={i} className="text-xs text-dim">
+                      {m.description}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <button
-                onClick={() => doAction({ action: "end_encounter" })}
+                onClick={() => doAction({ action: outcome.nextAction || "end_encounter" })}
+                disabled={loading}
                 className="flex items-start gap-3 transition-colors group cursor-pointer"
               >
                 <img
                   src="/world/assets/icons/sun.svg"
                   alt=""
-                  className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100
-                             transition-opacity"
+                  className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
                 />
                 <span className="font-bold text-action group-hover:text-action-hover transition-colors">
-                  Continue
+                  {outcome.nextAction === "end_dungeon" ? "Return to your journey" : "Continue"}
                 </span>
               </button>
-            )}
-          </div>
+            </div>
+          ) : encounter && (
+            <div className="space-y-4 pt-2">
+              {encounter.choices.map((choice) => (
+                <button
+                  key={choice.index}
+                  onClick={() =>
+                    doAction({ action: "choose", choiceIndex: choice.index })
+                  }
+                  disabled={loading}
+                  className="w-full text-left flex items-start gap-3
+                             disabled:text-muted transition-colors group cursor-pointer"
+                >
+                  <img
+                    src="/world/assets/icons/sun.svg"
+                    alt=""
+                    className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100
+                               transition-opacity"
+                  />
+                  <span>
+                    <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                      {choice.label}
+                    </span>
+                    {choice.preview && (
+                      <span className="block text-sm text-action-dim mt-0.5">
+                        {choice.preview}
+                      </span>
+                    )}
+                  </span>
+                </button>
+              ))}
+
+              {encounter.choices.length === 0 && (
+                <button
+                  onClick={() => doAction({ action: "end_encounter" })}
+                  className="flex items-start gap-3 transition-colors group cursor-pointer"
+                >
+                  <img
+                    src="/world/assets/icons/sun.svg"
+                    alt=""
+                    className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100
+                               transition-opacity"
+                  />
+                  <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                    Continue
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
