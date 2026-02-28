@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Game.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Encounter.Tests", "tests\Dreamlands.Encounter.Tests\Dreamlands.Encounter.Tests.csproj", "{77B93D67-4AC4-4A46-8A8C-56BD56E703A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Map.Tests", "tests\Dreamlands.Map.Tests\Dreamlands.Map.Tests.csproj", "{553A1475-A77E-46CF-99F2-A3E822E764B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Orchestration.Tests", "tests\Dreamlands.Orchestration.Tests\Dreamlands.Orchestration.Tests.csproj", "{E3D4FA08-4044-47C5-9991-3ACA2D365745}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +96,14 @@ Global
 		{77B93D67-4AC4-4A46-8A8C-56BD56E703A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77B93D67-4AC4-4A46-8A8C-56BD56E703A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77B93D67-4AC4-4A46-8A8C-56BD56E703A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{553A1475-A77E-46CF-99F2-A3E822E764B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{553A1475-A77E-46CF-99F2-A3E822E764B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{553A1475-A77E-46CF-99F2-A3E822E764B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{553A1475-A77E-46CF-99F2-A3E822E764B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D4FA08-4044-47C5-9991-3ACA2D365745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D4FA08-4044-47C5-9991-3ACA2D365745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D4FA08-4044-47C5-9991-3ACA2D365745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D4FA08-4044-47C5-9991-3ACA2D365745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F7C1D37B-3F90-4846-A32B-6DAA583E51F3} = {BE22CDE4-7A6D-4745-AB25-5FEC7D5C7E11}
@@ -105,5 +117,7 @@ Global
 		{965898B6-5D4E-4B5A-A1CF-A0D88DE9F515} = {7172C623-A0DA-4B1C-9021-7E3C484979B5}
 		{97A7D127-23A9-4CDB-ABBF-A818C04E7450} = {7172C623-A0DA-4B1C-9021-7E3C484979B5}
 		{77B93D67-4AC4-4A46-8A8C-56BD56E703A7} = {7172C623-A0DA-4B1C-9021-7E3C484979B5}
+		{553A1475-A77E-46CF-99F2-A3E822E764B3} = {7172C623-A0DA-4B1C-9021-7E3C484979B5}
+		{E3D4FA08-4044-47C5-9991-3ACA2D365745} = {7172C623-A0DA-4B1C-9021-7E3C484979B5}
 	EndGlobalSection
 EndGlobal
