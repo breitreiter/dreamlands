@@ -6,6 +6,8 @@ namespace MapGen;
 public static class DungeonPlacer
 {
     private const int MinSeparation = 8;
+    private const int SettlementTooClose = 5;
+    private const int SettlementTooFar = 15;
 
     private static readonly Dictionary<string, Terrain> BiomeToTerrain = new()
     {
@@ -26,6 +28,11 @@ public static class DungeonPlacer
             return;
 
         var placed = new List<Node>();
+
+        // Collect settlement positions for proximity scoring
+        var settlements = map.AllNodes()
+            .Where(n => n.Poi?.Kind == PoiKind.Settlement)
+            .ToList();
 
         // Shuffle roster so tie-breaking isn't biased by file order
         var shuffled = roster.OrderBy(_ => rng.Next()).ToList();
@@ -63,6 +70,13 @@ public static class DungeonPlacer
                 int minDist = MinDistance(node, placed);
                 if (minDist < MinSeparation)
                     score -= (MinSeparation - minDist) * 15;
+
+                // Penalize being too close or too far from nearest settlement
+                int settlementDist = MinDistance(node, settlements);
+                if (settlementDist < SettlementTooClose)
+                    score -= (SettlementTooClose - settlementDist) * 20;
+                else if (settlementDist > SettlementTooFar)
+                    score -= (settlementDist - SettlementTooFar) * 20;
 
                 // Randomize tiebreaking
                 score += rng.Next(10);

@@ -5,10 +5,11 @@ namespace MapGen;
 
 public static class SettlementPlacer
 {
-    // Settlement spacing distances
-    private const int Tier1Max = 15;
-    private const int Tier2Max = 25;
-    private const int Tier3Max = 40;
+    // Manhattan-distance zones from starting city
+    // Travel budget: 5 spaces/day, 3 food/day, 20 food max = ~35 spaces absolute range
+    private const int CradleMax = 25;
+    private const int MidlandsMax = 50;
+    private const int WildsMax = 75;
 
     public static void PlaceSettlements(Map map, Random rng)
     {
@@ -77,13 +78,14 @@ public static class SettlementPlacer
             node.DistanceFromCity = Math.Abs(node.X - start.X) + Math.Abs(node.Y - start.Y);
     }
 
-    // Settlement spacing by tier (how far apart settlements should be)
+    // Coverage radius per zone — how far a settlement "covers" for placement purposes
+    // Spacing ends up ~2x radius (farthest-first greedy fills gaps between coverage circles)
     private static int GetSurvivalRadius(int distance) => distance switch
     {
-        <= Tier1Max => 5,   // Tier 1: dense (inns every 4-6, towns every 8-12)
-        <= Tier2Max => 8,   // Tier 2: moderate (settlements every 6-8)
-        <= Tier3Max => 12,  // Tier 3: sparse (settlements every 15-20)
-        _ => 18             // Tier 4: very sparse
+        <= CradleMax   => 4,   // Cradle: dense, spacing ~7-8
+        <= MidlandsMax => 8,   // Midlands: moderate, spacing ~15-18
+        <= WildsMax    => 13,  // Wilds: sparse, spacing ~25-30
+        _              => 17   // Frontier: very sparse, spacing ~35
     };
 
     private static int TraversableNeighborCount(Map map, Node node) =>
