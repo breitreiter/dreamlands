@@ -173,7 +173,7 @@ export default function Explore({ state }: { state: GameResponse }) {
           />
         )}
 
-        <div className="flex flex-col gap-3 p-3">
+        <div className="flex-1 flex flex-col gap-3 p-3 min-h-0">
           {/* Region name */}
           <div className="font-header text-accent text-lg">
             {node.region || node.terrain}
@@ -185,65 +185,58 @@ export default function Explore({ state }: { state: GameResponse }) {
             <span className="ml-2 text-muted">({node.x}, {node.y})</span>
           </div>
 
-          {/* Flavor text */}
-          {node.description && (
-            <p className="text-primary/70">{node.description}</p>
-          )}
-
-          {/* Settlement bar */}
-          {isSettlement && (
-            <div className="rounded-xl p-3 flex items-center gap-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
-              <div className="flex-1 min-w-0">
-                <div className="text-accent text-base truncate">
-                  {poi.name || "Settlement"}
+          {/* POI controls — fixed-height slot so compass never shifts */}
+          <div className="h-[60px] flex items-center">
+            {isSettlement && (
+              <div className="w-full rounded-xl p-3 flex items-center gap-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+                <div className="flex-1 min-w-0">
+                  <div className="text-accent text-base truncate">
+                    {poi.name || "Settlement"}
+                  </div>
+                  <div className="text-dim text-sm">
+                    {TIER_LABELS[node.regionTier ?? 0] || "Settlement"}
+                  </div>
                 </div>
-                <div className="text-dim text-sm">
-                  {TIER_LABELS[node.regionTier ?? 0] || "Settlement"}
+                <div className="flex gap-2">
+                  {(state.settlement?.services ?? ["market"]).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
+                    const info = SERVICE_ICONS[service];
+                    if (!info) return null;
+                    return (
+                      <button
+                        key={service}
+                        onClick={() => openService(service)}
+                        disabled={loading}
+                        title={info.label}
+                        className="w-11 h-11 bg-btn rounded-lg flex items-center justify-center
+                                   hover:bg-btn-hover disabled:opacity-50 transition-colors"
+                      >
+                        <img
+                          src={`/world/assets/icons/${info.icon}`}
+                          alt={info.label}
+                          className="w-6 h-6 opacity-80"
+                        />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-              <div className="flex gap-2">
-                {(state.settlement?.services ?? ["market"]).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
-                  const info = SERVICE_ICONS[service];
-                  if (!info) return null;
-                  return (
-                    <button
-                      key={service}
-                      onClick={() => openService(service)}
-                      disabled={loading}
-                      title={info.label}
-                      className="w-11 h-11 bg-btn rounded-lg flex items-center justify-center
-                                 hover:bg-btn-hover disabled:opacity-50 transition-colors"
-                    >
-                      <img
-                        src={`/world/assets/icons/${info.icon}`}
-                        alt={info.label}
-                        className="w-6 h-6 opacity-80"
-                      />
-                    </button>
-                  );
-                })}
+            )}
+            {poi?.kind === "dungeon" && !poi.dungeonCompleted && (
+              <button
+                onClick={() => doAction({ action: "enter_dungeon" })}
+                disabled={loading}
+                className="w-full py-2 px-3 bg-btn hover:bg-btn-hover disabled:opacity-50 text-negative rounded-lg flex items-center gap-2 transition-colors"
+              >
+                <img src="/world/assets/icons/dungeon-gate.svg" alt="" className="w-5 h-5" />
+                <span>Enter {poi.name || "Dungeon"}</span>
+              </button>
+            )}
+            {poi?.kind === "dungeon" && poi.dungeonCompleted && (
+              <div className="text-muted text-center w-full">
+                {poi.name || "Dungeon"} (completed)
               </div>
-            </div>
-          )}
-
-          {/* Dungeon button */}
-          {poi?.kind === "dungeon" && !poi.dungeonCompleted && (
-            <button
-              onClick={() => doAction({ action: "enter_dungeon" })}
-              disabled={loading}
-              className="w-full py-2 px-3 bg-btn hover:bg-btn-hover disabled:opacity-50 text-negative rounded-lg flex items-center gap-2 transition-colors"
-            >
-              <img src="/world/assets/icons/dungeon-gate.svg" alt="" className="w-5 h-5" />
-              <span>Enter {poi.name || "Dungeon"}</span>
-            </button>
-          )}
-
-          {/* Dungeon completed */}
-          {poi?.kind === "dungeon" && poi.dungeonCompleted && (
-            <div className="text-muted text-center">
-              {poi.name || "Dungeon"} (completed)
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Compass Rose */}
           <CompassRose
@@ -253,21 +246,19 @@ export default function Explore({ state }: { state: GameResponse }) {
             disabled={loading}
           />
 
-          {/* Conditions */}
-          {Object.keys(status.conditions).length > 0 && (
-            <div className="flex flex-col gap-1">
-              {Object.entries(status.conditions).map(([name, stacks]) => (
-                <div key={name} className="flex items-center gap-2 text-negative">
-                  <img
-                    src={`/world/assets/icons/${CONDITION_ICONS[name] || "sun.svg"}`}
-                    alt=""
-                    className="w-5 h-5"
-                  />
-                  <span className="capitalize">{name}{stacks > 1 ? ` x${stacks}` : ""}</span>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Conditions — flex-1 fills remaining space, items align to bottom */}
+          <div className="flex-1 flex flex-col justify-end gap-1">
+            {Object.entries(status.conditions).map(([name, stacks]) => (
+              <div key={name} className="flex items-center gap-2 text-negative">
+                <img
+                  src={`/world/assets/icons/${CONDITION_ICONS[name] || "sun.svg"}`}
+                  alt=""
+                  className="w-5 h-5"
+                />
+                <span className="capitalize">{name}{stacks > 1 ? ` x${stacks}` : ""}</span>
+              </div>
+            ))}
+          </div>
 
           {/* Health bar */}
           <SegmentedBar
