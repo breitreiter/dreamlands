@@ -4,12 +4,16 @@ import { useGame } from "../GameContext";
 import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
 
 const CONDITION_ICONS: Record<string, string> = {
-  lost: "sextant.svg",
-  hungry: "water-drop.svg",
-  exhausted: "camping-tent.svg",
-  injured: "nested-hearts.svg",
-  poisoned: "caduceus.svg",
-  cursed: "foamy-disc.svg",
+  freezing: "mountains.svg",
+  hungry: "pouch-with-beads.svg",
+  thirsty: "water-drop.svg",
+  poisoned: "foamy-disc.svg",
+  swamp_fever: "foamy-disc.svg",
+  gut_worms: "foamy-disc.svg",
+  irradiated: "foamy-disc.svg",
+  exhausted: "tread.svg",
+  lost: "treasure-map.svg",
+  injured: "bloody-stash.svg",
 };
 
 const ITEM_TYPE_ICONS: Record<string, string> = {

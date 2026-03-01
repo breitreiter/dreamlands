@@ -70,3 +70,30 @@ Icon-based buttons use `bg-action` background. Text-based interactive elements u
 Source SVGs: `assets/icons/`. Served at `/world/assets/icons/<name>.svg`.
 
 Pattern: `<img src="/world/assets/icons/<name>.svg" className="w-5 h-5" />`
+
+### Condition Icons
+
+| Condition    | Icon                  |
+|--------------|-----------------------|
+| Freezing     | `mountains.svg`       |
+| Hungry       | `pouch-with-beads.svg`|
+| Thirsty      | `water-drop.svg`      |
+| Poisoned     | `foamy-disc.svg`      |
+| Swamp Fever  | `foamy-disc.svg`      |
+| Gut Worms    | `foamy-disc.svg`      |
+| Irradiated   | `foamy-disc.svg`      |
+| Exhausted    | `tread.svg`           |
+| Lost         | `treasure-map.svg`    |
+| Injured      | `bloody-stash.svg`    |
+
+### Item Type Icons
+
+| Type       | Icon                  |
+|------------|-----------------------|
+| Weapon     | `sword-brandish.svg`  |
+| Armor      | `chain-mail.svg`      |
+| Boots      | `boots.svg`           |
+| Tool       | `knapsack.svg`        |
+| Consumable | `pouch-with-beads.svg`|
+| Trade Good | `two-coins.svg`       |
+| Default    | `wooden-crate.svg`    |
