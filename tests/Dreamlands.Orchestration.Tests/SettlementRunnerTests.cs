@@ -21,10 +21,10 @@ public class SettlementRunnerTests
     }
 
     [Fact]
-    public void Enter_AtSettlement_ReturnsData()
+    public void EnsureSettlement_AtSettlement_ReturnsData()
     {
         var session = MakeSessionWithSettlement();
-        var data = SettlementRunner.Enter(session);
+        var data = SettlementRunner.EnsureSettlement(session);
 
         Assert.NotNull(data);
         Assert.Equal("Riverton", data.Name);
@@ -34,68 +34,56 @@ public class SettlementRunnerTests
     }
 
     [Fact]
-    public void Enter_NotAtSettlement_ReturnsNull()
+    public void EnsureSettlement_NotAtSettlement_ReturnsNull()
     {
         var session = Helpers.MakeSession();
-        Assert.Null(SettlementRunner.Enter(session));
+        Assert.Null(SettlementRunner.EnsureSettlement(session));
     }
 
     [Fact]
-    public void Enter_InitializesSettlementOnFirstVisit()
+    public void EnsureSettlement_InitializesOnFirstVisit()
     {
         var session = MakeSessionWithSettlement();
         Assert.Empty(session.Player.Settlements);
 
-        SettlementRunner.Enter(session);
+        SettlementRunner.EnsureSettlement(session);
 
         Assert.True(session.Player.Settlements.ContainsKey("Riverton"));
     }
 
     [Fact]
-    public void Enter_RestocksOnRevisit()
+    public void EnsureSettlement_RestocksOnRevisit()
     {
         var session = MakeSessionWithSettlement();
 
-        SettlementRunner.Enter(session);
+        SettlementRunner.EnsureSettlement(session);
         var firstState = session.Player.Settlements["Riverton"];
         var initialLastRestock = firstState.LastRestockDay;
 
-        // Advance days and re-enter
+        // Advance days and re-ensure
         session.Player.Day = 10;
-        session.Mode = SessionMode.Exploring;
-        SettlementRunner.Enter(session);
+        SettlementRunner.EnsureSettlement(session);
 
         // Settlement should still exist (restocked, not re-initialized)
         Assert.True(session.Player.Settlements.ContainsKey("Riverton"));
     }
 
     [Fact]
-    public void Enter_SetsAtSettlementMode()
+    public void EnsureSettlement_DoesNotChangeMode()
     {
         var session = MakeSessionWithSettlement();
-        SettlementRunner.Enter(session);
+        Assert.Equal(SessionMode.Exploring, session.Mode);
 
-        Assert.Equal(SessionMode.AtSettlement, session.Mode);
-        Assert.Equal("Riverton", session.Player.CurrentSettlementId);
-    }
-
-    [Fact]
-    public void Leave_SetsExploringMode()
-    {
-        var session = MakeSessionWithSettlement();
-        SettlementRunner.Enter(session);
-
-        SettlementRunner.Leave(session);
+        SettlementRunner.EnsureSettlement(session);
 
         Assert.Equal(SessionMode.Exploring, session.Mode);
-        Assert.Null(session.Player.CurrentSettlementId);
     }
 
     [Fact]
-    public void Enter_IncludesMarketAndInn()
+    public void EnsureSettlement_IncludesMarketAndInn()
     {
         var session = MakeSessionWithSettlement();
-        var data = SettlementRunner.Enter(session);
+        var data = SettlementRunner.EnsureSettlement(session);
 
         Assert.NotNull(data);
         Assert.Contains("market", data.Services);
@@ -103,17 +91,17 @@ public class SettlementRunnerTests
     }
 
     [Fact]
-    public void Enter_NormalSettlement_NoChapterhouse()
+    public void EnsureSettlement_NormalSettlement_NoChapterhouse()
     {
         var session = MakeSessionWithSettlement();
-        var data = SettlementRunner.Enter(session);
+        var data = SettlementRunner.EnsureSettlement(session);
 
         Assert.NotNull(data);
         Assert.DoesNotContain("chapterhouse", data.Services);
     }
 
     [Fact]
-    public void Enter_StartingCity_HasChapterhouse()
+    public void EnsureSettlement_StartingCity_HasChapterhouse()
     {
         var map = Helpers.MakeMap();
         var region = new Region(1, Terrain.Plains) { Tier = 1 };
@@ -126,7 +114,7 @@ public class SettlementRunnerTests
         map.StartingCity = map[1, 1];
 
         var session = Helpers.MakeSession(map: map);
-        var data = SettlementRunner.Enter(session);
+        var data = SettlementRunner.EnsureSettlement(session);
 
         Assert.NotNull(data);
         Assert.Contains("chapterhouse", data.Services);

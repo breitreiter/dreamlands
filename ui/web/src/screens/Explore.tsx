@@ -83,11 +83,9 @@ export default function Explore({ state }: { state: GameResponse }) {
     [state.node]
   );
 
-  const atSettlement = state.mode === "at_settlement";
-
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (loading || atSettlement) return;
+      if (loading || activeService != null) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
@@ -105,22 +103,18 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [doAction, loading, atSettlement]);
+  }, [doAction, loading, activeService]);
 
   // Reset vignette error when terrain or tier changes
   const terrain = state.node?.terrain;
   const tier = state.node?.regionTier;
   useEffect(() => setVignetteError(false), [terrain, tier]);
 
-  async function openService(service: string) {
-    if (!atSettlement) {
-      await doAction({ action: "enter_settlement" });
-    }
+  function openService(service: string) {
     setActiveService(service);
   }
 
-  async function closeService() {
-    await doAction({ action: "leave_settlement" });
+  function closeService() {
     setActiveService(null);
   }
 
@@ -131,7 +125,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   const isSettlement = poi?.kind === "settlement";
 
   // Show Market as full-screen
-  if (activeService === "market" && atSettlement) {
+  if (activeService === "market") {
     return <MarketScreen state={state} onBack={closeService} />;
   }
 
@@ -204,7 +198,7 @@ export default function Explore({ state }: { state: GameResponse }) {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {(state.settlement?.services ?? ["market"]).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
+                  {(["market"]).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
                     const info = SERVICE_ICONS[service];
                     if (!info) return null;
                     return (

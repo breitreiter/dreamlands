@@ -81,12 +81,6 @@ export interface MechanicResultInfo {
   description: string;
 }
 
-export interface SettlementInfo {
-  name: string;
-  tier: number;
-  services: string[];
-}
-
 export interface ItemInfo {
   defId: string;
   name: string;
@@ -131,14 +125,13 @@ export interface CampInfo {
 }
 
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "at_settlement" | "game_over" | "camp" | "camp_resolved";
+  mode: "exploring" | "encounter" | "outcome" | "game_over" | "camp" | "camp_resolved";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
   encounter?: EncounterInfo;
   outcome?: OutcomeInfo;
   reason?: string;
-  settlement?: SettlementInfo;
   camp?: CampInfo;
   inventory?: InventoryInfo;
   mechanics?: MechanicsInfo;

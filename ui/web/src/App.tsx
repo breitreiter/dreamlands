@@ -21,7 +21,7 @@ function GameRouter() {
           </button>
         </div>
       )}
-      {(response.mode === "exploring" || response.mode === "at_settlement") && <Explore state={response} />}
+      {response.mode === "exploring" && <Explore state={response} />}
       {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
       {response.mode === "game_over" && <GameOver state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}

@@ -24,9 +24,6 @@ public class GameResponse
     // Game over
     public string? Reason { get; init; }
 
-    // Settlement
-    public SettlementInfo? Settlement { get; init; }
-
     // Market order results
     public MarketOrderResultInfo? MarketResult { get; init; }
 
@@ -146,13 +143,6 @@ public class MechanicResultInfo
 {
     public string Type { get; init; } = "";
     public string Description { get; init; } = "";
-}
-
-public class SettlementInfo
-{
-    public string Name { get; init; } = "";
-    public int Tier { get; init; }
-    public List<string> Services { get; init; } = [];
 }
 
 public class InventoryInfo

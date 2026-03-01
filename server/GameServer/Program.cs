@@ -109,11 +109,6 @@ GameSession BuildSession(PlayerState player)
     {
         player.PendingEndOfDay = false;
     }
-    else if (player.CurrentSettlementId != null)
-    {
-        session.Mode = SessionMode.AtSettlement;
-    }
-
     return session;
 }
 
@@ -312,7 +307,7 @@ string ModeString(SessionMode m) => m switch
 {
     SessionMode.Exploring => "exploring",
     SessionMode.InEncounter => "encounter",
-    SessionMode.AtSettlement => "at_settlement",
+
     SessionMode.Camp => "camp",
     SessionMode.GameOver => "game_over",
     _ => m.ToString().ToLowerInvariant(),
@@ -509,25 +504,6 @@ app.MapGet("/api/game/{id}", async (string id) =>
 
     if (player.PendingEndOfDay && noCamp)
         player.PendingEndOfDay = false;
-
-    if (player.CurrentSettlementId != null)
-    {
-        var node = session.CurrentNode;
-        var tier = node.Region?.Tier ?? 1;
-        return Results.Ok(new GameResponse
-        {
-            Mode = "at_settlement",
-            Status = BuildStatus(player),
-            Settlement = new SettlementInfo
-            {
-                Name = player.CurrentSettlementId,
-                Tier = tier,
-                Services = ["market"],
-            },
-            Node = BuildNodeInfo(node, player),
-            Inventory = BuildInventory(player),
-        });
-    }
 
     if (session.CurrentEncounter is { } enc)
     {
@@ -739,40 +715,6 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             break;
         }
 
-        case "enter_settlement":
-        {
-            if (session.Mode != SessionMode.Exploring)
-                return Results.BadRequest(new { error = "Cannot enter settlement while not exploring" });
-
-            var settlement = SettlementRunner.Enter(session);
-            if (settlement == null)
-                return Results.BadRequest(new { error = "No settlement at current location" });
-
-            await store.Save(player);
-            response = new GameResponse
-            {
-                Mode = "at_settlement",
-                Status = BuildStatus(player),
-                Settlement = new SettlementInfo
-                {
-                    Name = settlement.Name,
-                    Tier = settlement.Tier,
-                    Services = settlement.Services,
-                },
-                Node = BuildNodeInfo(session.CurrentNode, player),
-                Inventory = BuildInventory(player),
-            };
-            break;
-        }
-
-        case "leave_settlement":
-        {
-            SettlementRunner.Leave(session);
-            await store.Save(player);
-            response = BuildExploringResponse(session);
-            break;
-        }
-
         case "camp_resolve":
         {
             if (session.Mode != SessionMode.Camp)
@@ -823,17 +765,18 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
         case "market_order":
         {
-            if (session.Mode != SessionMode.AtSettlement)
+            var sNode = session.CurrentNode;
+            if (sNode.Poi?.Kind != PoiKind.Settlement || sNode.Poi.Name == null)
                 return Results.BadRequest(new { error = "Not at a settlement" });
 
             if (req.Order == null)
                 return Results.BadRequest(new { error = "order required" });
 
-            var settlementId = player.CurrentSettlementId!;
+            var settlementId = sNode.Poi.Name;
+            SettlementRunner.EnsureSettlement(session);
             if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
                 return Results.BadRequest(new { error = "Settlement not initialized" });
 
-            var sNode = session.CurrentNode;
             var sBiome = sNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
 
             var order = new MarketOrder(
@@ -853,19 +796,13 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance, mRng, CreateFood);
             await store.Save(player);
 
-            var tier = sNode.Region?.Tier ?? 1;
             response = new GameResponse
             {
-                Mode = "at_settlement",
+                Mode = "exploring",
                 Status = BuildStatus(player),
-                Settlement = new SettlementInfo
-                {
-                    Name = settlementId,
-                    Tier = tier,
-                    Services = ["market"],
-                },
                 Node = BuildNodeInfo(sNode, player),
                 Inventory = BuildInventory(player),
+                Mechanics = BuildMechanics(player),
                 MarketResult = new MarketOrderResultInfo
                 {
                     Success = result.Success,
@@ -937,10 +874,14 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
     var session = BuildSession(player);
     var node = session.CurrentNode;
     var tier = node.Region?.Tier ?? 1;
-    var settlementId = player.CurrentSettlementId;
 
-    if (settlementId == null || !player.Settlements.TryGetValue(settlementId, out var settlementState))
+    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Name == null)
         return Results.BadRequest(new { error = "Not at a settlement" });
+
+    var settlementId = node.Poi.Name;
+    SettlementRunner.EnsureSettlement(session);
+    if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
+        return Results.BadRequest(new { error = "Settlement not initialized" });
 
     var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
     int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);

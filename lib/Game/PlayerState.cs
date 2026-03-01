@@ -16,7 +16,7 @@ public class PlayerState
     public int X { get; set; }
     public int Y { get; set; }
     public string? CurrentDungeonId { get; set; }
-    public string? CurrentSettlementId { get; set; }
+
     public string? CurrentEncounterId { get; set; }
 
     // Vitals

@@ -37,7 +37,7 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
   const cleared: Partial<GameResponse> = {};
   if (result.mode === "encounter") cleared.outcome = undefined;
   if (result.mode === "outcome") cleared.encounter = undefined;
-  if (result.mode === "exploring" || result.mode === "at_settlement") {
+  if (result.mode === "exploring") {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
   }

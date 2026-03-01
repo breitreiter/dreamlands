@@ -4,7 +4,7 @@ using Dreamlands.Rules;
 
 namespace Dreamlands.Orchestration;
 
-public enum SessionMode { Exploring, InEncounter, AtSettlement, Camp, GameOver }
+public enum SessionMode { Exploring, InEncounter, Camp, GameOver }
 
 public class GameSession
 {

@@ -40,8 +40,6 @@ if (positional.Count == 0)
     Console.Error.WriteLine("  enter-dungeon        Enter dungeon at current location");
     Console.Error.WriteLine("  end-encounter        End current encounter");
     Console.Error.WriteLine("  end-dungeon          End dungeon (after completion/flee)");
-    Console.Error.WriteLine("  enter-settlement     Enter settlement at current location");
-    Console.Error.WriteLine("  leave-settlement     Leave current settlement");
     Console.Error.WriteLine("  camp                 Resolve end-of-day (auto-selects food+medicine)");
     Console.Error.WriteLine("  market-order <json>   Submit market buy/sell order");
     Console.Error.WriteLine("  market               Get market stock");
@@ -155,14 +153,6 @@ try
 
         case "end-dungeon":
             result = await client.Action(ResolveGameId(), """{"action":"end_dungeon"}""");
-            break;
-
-        case "enter-settlement":
-            result = await client.Action(ResolveGameId(), """{"action":"enter_settlement"}""");
-            break;
-
-        case "leave-settlement":
-            result = await client.Action(ResolveGameId(), """{"action":"leave_settlement"}""");
             break;
 
         case "camp":
