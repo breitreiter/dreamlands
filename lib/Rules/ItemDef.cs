@@ -6,6 +6,9 @@ public enum ItemType { Tool, Consumable, Token, Weapon, Armor, Boots, TradeGood 
 /// <summary>Weapon class for weapon-type items.</summary>
 public enum WeaponClass { Dagger, Axe, Sword }
 
+/// <summary>Armor class for armor-type items.</summary>
+public enum ArmorClass { Light, Medium, Heavy }
+
 /// <summary>Definition of an equipment item.</summary>
 public sealed class ItemDef
 {
@@ -18,6 +21,7 @@ public sealed class ItemDef
     public IReadOnlySet<string> Cures { get; init; } = new HashSet<string>();
 
     public WeaponClass? WeaponClass { get; init; }
+    public ArmorClass? ArmorClass { get; init; }
     public FoodType? FoodType { get; init; }
     public Magnitude? Cost { get; init; }
     public string? Biome { get; init; }
@@ -187,38 +191,130 @@ public sealed class ItemDef
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
         },
 
-        // ── Armor ──
+        // ── Armor: Light (Cunning +0 to +5, Injury +0, Freezing +0 to +3) ──
 
         ["tunic"] = new()
         {
             Id = "tunic", Name = "Tunic", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
             Biome = "plains", ShopTier = 1,
         },
+        ["silks"] = new()
+        {
+            Id = "silks", Name = "Silks", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
+            Biome = "scrub", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["waxed_poncho"] = new()
+        {
+            Id = "waxed_poncho", Name = "Waxed Poncho", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["freezing"] = Magnitude.Trivial },
+            Biome = "swamp", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["traveling_cloak"] = new()
+        {
+            Id = "traveling_cloak", Name = "Traveling Cloak", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 3 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["freezing"] = Magnitude.Small },
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["embroidered_kaftan"] = new()
+        {
+            Id = "embroidered_kaftan", Name = "Embroidered Kaftan", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 4 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["freezing"] = Magnitude.Small },
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["nightveil"] = new()
+        {
+            Id = "nightveil", Name = "Nightveil", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 5 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["freezing"] = Magnitude.Medium },
+        },
+
+        // ── Armor: Medium (Cunning +1 to +2, Injury +1 to +3, Freezing +1 to +5) ──
+
         ["leather"] = new()
         {
             Id = "leather", Name = "Leather", Type = ItemType.Armor,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small },
+            ArmorClass = Rules.ArmorClass.Medium,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Trivial, ["freezing"] = Magnitude.Trivial },
             Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
         },
+        ["hide_armor"] = new()
+        {
+            Id = "hide_armor", Name = "Hide Armor", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Medium,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Trivial, ["freezing"] = Magnitude.Small },
+            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["buff_coat"] = new()
+        {
+            Id = "buff_coat", Name = "Buff Coat", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Medium,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small, ["freezing"] = Magnitude.Medium },
+            Biome = "forest", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["lamellar"] = new()
+        {
+            Id = "lamellar", Name = "Lamellar", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Medium,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small, ["freezing"] = Magnitude.Medium },
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["frostward"] = new()
+        {
+            Id = "frostward", Name = "Frostward Harness", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Medium,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Medium, ["freezing"] = Magnitude.Huge },
+        },
+
+        // ── Armor: Heavy (Injury +1 to +5, Cunning +0, Freezing +0 to +2) ──
+
         ["gambeson"] = new()
         {
             Id = "gambeson", Name = "Gambeson", Type = ItemType.Armor,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small },
+            ArmorClass = Rules.ArmorClass.Heavy,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Trivial, ["freezing"] = Magnitude.Trivial },
             Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["chainmail"] = new()
         {
             Id = "chainmail", Name = "Chainmail", Type = ItemType.Armor,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = -3 },
-            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Medium },
-            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
+            ArmorClass = Rules.ArmorClass.Heavy,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["scale_armor"] = new()
         {
             Id = "scale_armor", Name = "Scale Armor", Type = ItemType.Armor,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = -3 },
+            ArmorClass = Rules.ArmorClass.Heavy,
             ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Medium },
             Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["brigandine"] = new()
+        {
+            Id = "brigandine", Name = "Brigandine", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Heavy,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Large, ["freezing"] = Magnitude.Trivial },
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["wardens_plate"] = new()
+        {
+            Id = "wardens_plate", Name = "Warden's Plate", Type = ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Heavy,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Huge, ["freezing"] = Magnitude.Small },
         },
 
         // ── Boots ──
