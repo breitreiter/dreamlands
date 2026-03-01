@@ -368,6 +368,7 @@ export default function MarketScreen({
                                    text-action hover:text-action-hover transition-colors flex items-center gap-1"
                         style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
                       >
+                        <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
                         {item.buyPrice}g
                       </button>
                     </div>
@@ -493,6 +494,7 @@ export default function MarketScreen({
                                  text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
                       style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
                     >
+                      <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
                       {sellPrice}g
                     </button>
                   </div>
