@@ -119,7 +119,8 @@ export default function Explore({ state }: { state: GameResponse }) {
     setActiveService(service);
   }
 
-  function closeService() {
+  async function closeService() {
+    await doAction({ action: "leave_settlement" });
     setActiveService(null);
   }
 
