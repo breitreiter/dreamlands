@@ -38,8 +38,8 @@ public class InnTests
     {
         var state = Fresh();
         state.ActiveConditions["injured"] = 2;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
 
         var (allowed, disqualifying) = Inn.CanUseInn(state, Balance);
 
@@ -52,7 +52,7 @@ public class InnTests
     {
         var state = Fresh();
         state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot")); // only 1, need 3
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // only 1, need 3
 
         var (allowed, disqualifying) = Inn.CanUseInn(state, Balance);
 
@@ -121,9 +121,9 @@ public class InnTests
 
         var quote = Inn.GetQuote(state, Balance);
 
-        // Base rest = +1 health/night (no balanced meal at inn), so 5 nights
-        Assert.Equal(5, quote.Nights);
-        Assert.Equal(4 * Balance.Character.InnNightlyCost, quote.GoldCost);
+        // Inn recovery = BaseRest + BalancedMeal = 2 health/night, so ceil(5/2) = 3 nights
+        Assert.Equal(3, quote.Nights);
+        Assert.Equal(2 * Balance.Character.InnNightlyCost, quote.GoldCost);
         Assert.Equal(5, quote.HealthRecovered);
     }
 
@@ -136,8 +136,8 @@ public class InnTests
 
         var quote = Inn.GetQuote(state, Balance);
 
-        Assert.Equal(7, quote.Nights); // spirits deficit is larger
-        Assert.Equal(6 * Balance.Character.InnNightlyCost, quote.GoldCost);
+        Assert.Equal(4, quote.Nights); // spirits deficit is larger, ceil(7/2) = 4
+        Assert.Equal(3 * Balance.Character.InnNightlyCost, quote.GoldCost);
         Assert.Equal(3, quote.HealthRecovered);
         Assert.Equal(7, quote.SpiritsRecovered);
     }
@@ -160,14 +160,14 @@ public class InnTests
         var state = Fresh();
         state.Health = state.MaxHealth - 3;
         state.ActiveConditions["injured"] = 1; // HealthDrain = Small (2 HP/night)
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot")); // 1 cure for 1 stack
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // 1 cure for 1 stack
 
         var quote = Inn.GetQuote(state, Balance);
 
-        // Night 1: consume medicine (cures injured), drain 0 (condition cleared), recover +1
-        // Then pure recovery at +1/night with no drain
-        // Should take more than 3 nights due to initial drain interaction
-        Assert.True(quote.Nights >= 3);
+        // Night 1: consume medicine (cures injured), drain 0 (condition cleared), recover +2
+        // Then pure recovery at +2/night with no drain
+        // Should take more than 1 night due to initial drain interaction
+        Assert.True(quote.Nights >= 2);
     }
 
     // ── StayOneNight ──
@@ -221,8 +221,8 @@ public class InnTests
         Assert.Equal(state.MaxSpirits, state.Spirits);
         Assert.Equal(10, result.HealthRecovered);
         Assert.Equal(8, result.SpiritsRecovered);
-        Assert.Equal(10, result.NightsStayed); // max(10, 8) via simulation
-        Assert.Equal(dayBefore + 10, state.Day);
+        Assert.Equal(5, result.NightsStayed); // max(ceil(10/2), ceil(8/2)) = 5 at 2/night
+        Assert.Equal(dayBefore + 5, state.Day);
     }
 
     [Fact]
@@ -234,8 +234,8 @@ public class InnTests
 
         var result = Inn.StayFullRecovery(state, Balance);
 
-        // 3 nights, first free, 2 × InnNightlyCost
-        Assert.Equal(2 * Balance.Character.InnNightlyCost, result.GoldSpent);
+        // ceil(3/2) = 2 nights, first free, 1 × InnNightlyCost
+        Assert.Equal(1 * Balance.Character.InnNightlyCost, result.GoldSpent);
         Assert.Equal(100 - result.GoldSpent, state.Gold);
     }
 
@@ -260,12 +260,12 @@ public class InnTests
         state.Health = 15;
         state.Gold = 100;
         state.ActiveConditions["injured"] = 1;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
 
         var result = Inn.StayFullRecovery(state, Balance);
 
-        Assert.DoesNotContain(state.Haversack, i => i.DefId == "thumbroot");
-        Assert.Contains("thumbroot", result.MedicinesConsumed);
+        Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
+        Assert.Contains("bandages", result.MedicinesConsumed);
         Assert.Contains("injured", result.ConditionsCleared);
     }
 
@@ -276,15 +276,15 @@ public class InnTests
         state.Health = 15;
         state.Gold = 100;
         state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
 
         var result = Inn.StayFullRecovery(state, Balance);
 
         Assert.False(state.ActiveConditions.ContainsKey("injured"));
         Assert.Contains("injured", result.ConditionsCleared);
-        Assert.Equal(3, result.MedicinesConsumed.Count(m => m == "thumbroot"));
+        Assert.Equal(3, result.MedicinesConsumed.Count(m => m == "bandages"));
     }
 
     [Fact]
@@ -294,13 +294,13 @@ public class InnTests
         state.Health = 15;
         state.Gold = 100;
         state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot")); // only 1, need 3
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // only 1, need 3
 
         var result = Inn.StayFullRecovery(state, Balance);
 
         // 3 stacks - 1 = 2 remaining
         Assert.Equal(2, state.ActiveConditions["injured"]);
-        Assert.Contains("thumbroot", result.MedicinesConsumed);
+        Assert.Contains("bandages", result.MedicinesConsumed);
         Assert.DoesNotContain("injured", result.ConditionsCleared);
     }
 
@@ -358,12 +358,12 @@ public class InnTests
         var state = Fresh();
         state.Health = 15;
         state.ActiveConditions["injured"] = 1;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
 
         var result = Inn.StayChapterhouse(state, Balance);
 
         Assert.Empty(result.MedicinesConsumed);
-        Assert.Contains(state.Haversack, i => i.DefId == "thumbroot");
+        Assert.Contains(state.Haversack, i => i.DefId == "bandages");
         Assert.False(state.ActiveConditions.ContainsKey("injured"));
     }
 
@@ -381,7 +381,7 @@ public class InnTests
         Assert.Equal(state.MaxSpirits, state.Spirits);
         Assert.Equal(15, result.HealthRecovered);
         Assert.Equal(12, result.SpiritsRecovered);
-        Assert.Equal(15, result.NightsStayed); // max(15, 12)
-        Assert.Equal(dayBefore + 15, state.Day);
+        Assert.Equal(8, result.NightsStayed); // max(ceil(15/2), ceil(12/2)) = 8 at 2/night
+        Assert.Equal(dayBefore + 8, state.Day);
     }
 }

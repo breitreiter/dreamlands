@@ -71,6 +71,7 @@ public sealed class ConditionDef
         {
             Id = "lost", Name = "Lost", Biome = "none", Tier = "none",
             Stacks = 1, ResistDifficulty = Difficulty.Easy,
+            ClearedOnSettlement = true,
             SpecialEffect = "Erase a random number of previously-discovered map tile routes.",
         },
         ["injured"] = new()
@@ -82,6 +83,7 @@ public sealed class ConditionDef
         {
             Id = "disheartened", Name = "Disheartened", Biome = "none", Tier = "none",
             Stacks = 1,
+            SpecialCure = "Raise spirits above 9.",
             SpecialEffect = "Disadvantage on all rolls.",
         },
     };

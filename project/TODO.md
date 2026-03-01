@@ -132,8 +132,8 @@ GameServer running with save persistence.
 - [x] Screen shells — Splash, Explore, Encounter, Inventory, Market, Settlement, GameOver
 - [ ] Landing — connect to server, new game / load game
 - [ ] Explore/Map/Status — Leaflet integration, movement
-- [ ] Inventory — equipment, consumables
-- [ ] Encounter — choice rendering, conditional branches
+- [x] Inventory — full-screen build with character, mechanics, and inventory panels
+- [x] Encounter — immersive two-panel layout, choice rendering, conditional branches
 - [ ] Dungeon continuous scroll — scene transitions clear and redraw instead of accumulating.
       Server sends combined outcome+encounter for NavigatedTo but the client resets segments
       on each new encounter title. Need to track dungeon context so continuation detection works
@@ -143,16 +143,16 @@ GameServer running with save persistence.
 - [x] Town — Temple
 - [x] Town — Market
 - [ ] Town — Guild storage
-- [ ] Town — Inn / Chapterhouse
+- [x] Town — Inn / Chapterhouse
 - [ ] Review UX for exiting inventory and market screens — both feel awkward
 - [ ] shadcn/tailwind based design system
 
 ## Rules / Game Mechanics
 
 ### Settlement Mechanics
-`SettlementRunner` in Orchestration handles entering settlements. `AtSettlement` session
-mode added. Balance data and Flavor stubs exist but game logic for individual services
-is not yet built.
+`SettlementRunner` in Orchestration handles entering settlements. Settlement presence is
+derived from player position (no separate mode). Inn/Chapterhouse logic and tests are done.
+Market buy/sell with auto-equip works. Remaining services need game logic.
 
 - [ ] Town — Shop
 - [ ] Town — Temple
@@ -170,8 +170,10 @@ is not yet built.
 
 ### Resource Systems
 - [x] Finalize food and medicine
-- [ ] Finalize end-of-day (design exists in `project/design/end_of_day_maintenance.md`)
-- [ ] Finalize equipment
+- [x] Finalize end-of-day — auto-consume food/medicine, ambient threats, condition drain,
+      rest recovery, disheartened threshold, death check. Full `EndOfDay.cs` implementation.
+- [x] Finalize equipment — full roster overhaul: 17 weapons (+1 to +5), 16 armor pieces
+      (light/medium/heavy), 5-tier boot ladder, 12 single-purpose tools.
 
 ### End-of-Day Blockers
 These must be resolved before end-of-day can be implemented.
@@ -198,11 +200,11 @@ balanced endgame progression.
 - [ ] **Condition resist bonus path** — `ResistModifiers` are `Magnitude` enums (Small/Medium/Large),
       not integers. No code converts them into numeric check bonuses. Either add Magnitude→int
       conversion or give items `SkillModifiers` for resist checks. Affects all 6 condition resist types.
-- [ ] **+5 weapon** — best weapons are +4 (bardiche, scimitar, arming_sword). Need one +5 tier 3 / dungeon reward.
-- [ ] **Cunning armor** — no armor has a positive Cunning modifier. Need armor progression toward +5.
-- [ ] **Negotiation tool** — need a +2 tool to pair with peoples_borderlands (+3) for +5 total.
-- [ ] **Bushcraft tool** — need a +3 tool to pair with yoriks_guide (+2) for +5 total.
-- [ ] **Mercantile tool** — need a +3 tool to pair with writing_kit (+2) for +5 total.
+- [x] **+5 weapon** — zweihander (Combat +5).
+- [x] **Cunning armor** — light armor ladder: silks (+1) → nightveil (+5).
+- [x] **Negotiation tool** — letters_of_introduction (+2) pairs with peoples_borderlands (+3).
+- [ ] **Bushcraft tool** — no Bushcraft-boosting tools exist yet. Need +2 and +3 items for +5 total.
+- [x] **Mercantile tool** — assayers_kit (+3) pairs with traders_ledger (+2).
 
 ### Data Authoring
 These are design/content tasks that block codegen — the code scaffolding exists but the
@@ -254,7 +256,8 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Infrastructure
 
-- [x] Test projects — xUnit tests for Rules (31), Game (41), Encounter (18) in `tests/`.
+- [x] Test projects — xUnit tests: Rules (42), Game (120), Encounter (18), Map (16),
+      Orchestration (37) in `tests/`. All passing.
 - [x] GameServer — ASP.NET Minimal API with file-based save store in `server/GameServer/`.
 - [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
 - [ ] Web UI — flesh out screens, connect to GameServer, real game loop.

@@ -76,8 +76,8 @@ public class MarketTests
         Assert.NotNull(settlement.FeaturedBuyItem);
         // Featured sell should be a trade good from the catalog
         Assert.Equal(ItemType.TradeGood, Balance.Items[settlement.FeaturedSellItem].Type);
-        // Featured buy should be cross-biome
-        Assert.NotEqual("forest", Balance.Items[settlement.FeaturedBuyItem].Biome);
+        // Featured buy is an in-biome good the settlement wants to purchase from players
+        Assert.Equal("forest", Balance.Items[settlement.FeaturedBuyItem].Biome);
     }
 
     [Fact]
@@ -133,7 +133,9 @@ public class MarketTests
 
         Assert.True(result.Success);
         Assert.True(state.Gold < 100);
-        Assert.Contains(state.Pack, i => i.DefId == "bodkin");
+        // Bodkin is a weapon — auto-equips to empty weapon slot
+        Assert.NotNull(state.Equipment.Weapon);
+        Assert.Equal("bodkin", state.Equipment.Weapon.DefId);
         Assert.Equal(1, settlement.Stock["bodkin"]);
     }
 
@@ -169,6 +171,8 @@ public class MarketTests
         var state = Fresh();
         state.Gold = 100;
         state.PackCapacity = 0; // no room
+        // Pre-equip a weapon so auto-equip doesn't bypass pack capacity
+        state.Equipment.Weapon = new ItemInstance("dagger", "Dagger");
         var settlement = MakeSettlement();
         settlement.Prices["bodkin"] = 15;
         settlement.Stock["bodkin"] = 1;

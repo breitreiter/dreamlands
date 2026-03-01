@@ -119,6 +119,7 @@ public class SettlementRunnerTests
         Assert.NotNull(data);
         Assert.Contains("chapterhouse", data.Services);
         Assert.Contains("market", data.Services);
-        Assert.Contains("inn", data.Services);
+        // Starting city has chapterhouse instead of inn, not both
+        Assert.DoesNotContain("inn", data.Services);
     }
 }
