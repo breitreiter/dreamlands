@@ -139,9 +139,9 @@ GameServer running with save persistence.
       on each new encounter title. Need to track dungeon context so continuation detection works
       across scene boundaries (Encounter.tsx).
 - [ ] Daily rest
-- [ ] Town — Home
-- [ ] Town — Temple
-- [ ] Town — Market
+- [x] Town — Home
+- [x] Town — Temple
+- [x] Town — Market
 - [ ] Town — Guild storage
 - [ ] Town — Inn / Chapterhouse
 - [ ] shadcn/tailwind based design system
