@@ -99,7 +99,7 @@ export default function Inventory({
         </div>
 
         {/* Right: Inventory */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {inventory ? (
             <InventoryPanel inventory={inventory} />
           ) : (
@@ -351,10 +351,10 @@ function ItemCard({
           )}
         </div>
         {mods && (
-          <div className="text-dim mt-0.5 truncate">{mods}</div>
+          <div className="text-dim mt-0.5 truncate" title={mods}>{mods}</div>
         )}
         {item.description && !mods && (
-          <div className="text-muted mt-0.5 truncate">{item.description}</div>
+          <div className="text-muted mt-0.5 truncate" title={item.description}>{item.description}</div>
         )}
       </div>
       <div className="flex gap-1 flex-shrink-0 items-center">

@@ -39,6 +39,12 @@
   outline: 1px solid transparent;
 }
 
+button,
+[role="button"],
+a {
+  cursor: pointer;
+}
+
 html {
   font-size: 20px;
 }
