@@ -317,24 +317,36 @@ public sealed class ItemDef
             ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Huge, ["freezing"] = Magnitude.Small },
         },
 
-        // ── Boots ──
+        // ── Boots (Exhaustion resist +1 to +5) ──
 
         ["fine_boots"] = new()
         {
             Id = "fine_boots", Name = "Fine Boots", Type = ItemType.Boots,
-            Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
-        },
-        ["riding_boots"] = new()
-        {
-            Id = "riding_boots", Name = "Riding Boots", Type = ItemType.Boots,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Small },
-            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Trivial },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["heavy_work_boots"] = new()
         {
             Id = "heavy_work_boots", Name = "Heavy Work Boots", Type = ItemType.Boots,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Small },
+            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["riding_boots"] = new()
+        {
+            Id = "riding_boots", Name = "Riding Boots", Type = ItemType.Boots,
             ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Medium },
-            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Medium,
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["trail_boots"] = new()
+        {
+            Id = "trail_boots", Name = "Trail Boots", Type = ItemType.Boots,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Large },
+            Biome = "forest", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["windstriders"] = new()
+        {
+            Id = "windstriders", Name = "Windstriders", Type = ItemType.Boots,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Huge },
         },
 
         // ── Tools ──
