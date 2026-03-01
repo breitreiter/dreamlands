@@ -141,7 +141,7 @@ export default function Explore({ state }: { state: GameResponse }) {
         <MapContainer
           crs={CRS.Simple}
           center={position}
-          zoom={5}
+          zoom={MAX_ZOOM}
           maxBounds={bounds.pad(0.1)}
           minZoom={0}
           maxZoom={MAX_ZOOM}
