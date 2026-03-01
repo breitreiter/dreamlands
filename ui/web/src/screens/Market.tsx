@@ -84,6 +84,18 @@ export default function MarketScreen({
   const [sellTab, setSellTab] = useState<SellTab>("pack");
 
   useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setPendingBuys(new Map());
+        setPendingSells([]);
+        onBack();
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onBack]);
+
+  useEffect(() => {
     if (!gameId) return;
     setLoadingStock(true);
     api
