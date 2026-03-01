@@ -3,6 +3,7 @@ import type {
   NewGameResponse,
   MarketStockResponse,
   MarketOrder,
+  InnQuoteResponse,
 } from "./types";
 
 const BASE = "/api/game";
@@ -56,4 +57,10 @@ export async function getMarketStock(
   id: string
 ): Promise<MarketStockResponse> {
   return get(`${BASE}/${id}/market`);
+}
+
+export async function getInnQuote(
+  id: string
+): Promise<InnQuoteResponse> {
+  return get(`${BASE}/${id}/inn`);
 }

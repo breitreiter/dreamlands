@@ -147,23 +147,34 @@ StatusInfo BuildStatus(PlayerState p) => new()
     }).ToList(),
 };
 
-NodeInfo BuildNodeInfo(Node node, PlayerState p) => new()
+NodeInfo BuildNodeInfo(Node node, PlayerState p)
 {
-    X = node.X,
-    Y = node.Y,
-    Terrain = node.Terrain.ToString().ToLowerInvariant(),
-    Region = node.Region?.Name,
-    RegionTier = node.Region?.Tier,
-    Description = node.Description,
-    Poi = node.Poi != null ? new PoiInfo
+    List<string>? services = null;
+    if (node.Poi?.Kind == PoiKind.Settlement)
     {
-        Kind = node.Poi.Kind.ToString().ToLowerInvariant(),
-        Name = node.Poi.Name,
-        DungeonId = node.Poi.DungeonId,
-        DungeonCompleted = node.Poi.DungeonId != null
-            ? p.CompletedDungeons.Contains(node.Poi.DungeonId) : null,
-    } : null,
-};
+        var isChapterhouse = node == map.StartingCity;
+        services = ["market", isChapterhouse ? "chapterhouse" : "inn"];
+    }
+
+    return new()
+    {
+        X = node.X,
+        Y = node.Y,
+        Terrain = node.Terrain.ToString().ToLowerInvariant(),
+        Region = node.Region?.Name,
+        RegionTier = node.Region?.Tier,
+        Description = node.Description,
+        Poi = node.Poi != null ? new PoiInfo
+        {
+            Kind = node.Poi.Kind.ToString().ToLowerInvariant(),
+            Name = node.Poi.Name,
+            DungeonId = node.Poi.DungeonId,
+            DungeonCompleted = node.Poi.DungeonId != null
+                ? p.CompletedDungeons.Contains(node.Poi.DungeonId) : null,
+            Services = services,
+        } : null,
+    };
+}
 
 List<ExitInfo> BuildExits(GameSession session) =>
     Movement.GetExits(session).Select(e => new ExitInfo
@@ -537,6 +548,122 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
     switch (req.Action)
     {
+        case "rest_at_inn":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot rest while not exploring" });
+
+            var innNode = session.CurrentNode;
+            if (innNode.Poi?.Kind != PoiKind.Settlement)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            var innBiome = innNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
+            var innTier = innNode.Region?.Tier ?? 1;
+            var innEvents = Inn.StayOneNight(player, innBiome, innTier, balance, session.Rng);
+
+            if (player.Health <= 0)
+            {
+                await store.Save(player);
+                return Results.Ok(new GameResponse
+                {
+                    Mode = "game_over",
+                    Status = BuildStatus(player),
+                    Reason = "You have perished in the Dreamlands.",
+                    Camp = new CampInfo { Threats = [], Events = FormatCampEvents(innEvents) },
+                });
+            }
+
+            session.Mode = SessionMode.Exploring;
+            await store.Save(player);
+            response = new GameResponse
+            {
+                Mode = "camp_resolved",
+                Status = BuildStatus(player),
+                Node = BuildNodeInfo(innNode, player),
+                Exits = BuildExits(session),
+                Camp = new CampInfo { Threats = [], Events = FormatCampEvents(innEvents) },
+                Inventory = BuildInventory(player),
+            };
+            break;
+        }
+
+        case "inn_full_recovery":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot rest while not exploring" });
+
+            var innNode = session.CurrentNode;
+            if (innNode.Poi?.Kind != PoiKind.Settlement)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            var (canRecover, _) = Inn.CanUseInn(player, balance);
+            if (!canRecover)
+                return Results.BadRequest(new { error = "Cannot fully recover — untreatable conditions" });
+
+            var quote = Inn.GetQuote(player, balance);
+            if (player.Gold < quote.GoldCost)
+                return Results.BadRequest(new { error = "Not enough gold" });
+
+            var innResult = Inn.StayFullRecovery(player, balance);
+            await store.Save(player);
+
+            response = new GameResponse
+            {
+                Mode = "exploring",
+                Status = BuildStatus(player),
+                Node = BuildNodeInfo(innNode, player),
+                Exits = BuildExits(session),
+                InnRecovery = new InnRecoveryInfo
+                {
+                    NightsStayed = innResult.NightsStayed,
+                    GoldSpent = innResult.GoldSpent,
+                    HealthRecovered = innResult.HealthRecovered,
+                    SpiritsRecovered = innResult.SpiritsRecovered,
+                    ConditionsCleared = innResult.ConditionsCleared,
+                    MedicinesConsumed = innResult.MedicinesConsumed,
+                },
+                Inventory = BuildInventory(player),
+                Mechanics = BuildMechanics(player),
+            };
+            break;
+        }
+
+        case "chapterhouse_recover":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot rest while not exploring" });
+
+            var innNode = session.CurrentNode;
+            if (innNode.Poi?.Kind != PoiKind.Settlement)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            if (innNode != session.Map.StartingCity)
+                return Results.BadRequest(new { error = "Not at the chapterhouse" });
+
+            var chResult = Inn.StayChapterhouse(player, balance);
+            await store.Save(player);
+
+            response = new GameResponse
+            {
+                Mode = "exploring",
+                Status = BuildStatus(player),
+                Node = BuildNodeInfo(innNode, player),
+                Exits = BuildExits(session),
+                InnRecovery = new InnRecoveryInfo
+                {
+                    NightsStayed = chResult.NightsStayed,
+                    GoldSpent = 0,
+                    HealthRecovered = chResult.HealthRecovered,
+                    SpiritsRecovered = chResult.SpiritsRecovered,
+                    ConditionsCleared = chResult.ConditionsCleared,
+                    MedicinesConsumed = [],
+                },
+                Inventory = BuildInventory(player),
+                Mechanics = BuildMechanics(player),
+            };
+            break;
+        }
+
         case "move":
         {
             if (session.Mode != SessionMode.Exploring)
@@ -917,6 +1044,41 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         sellPrices,
         featuredBuyItem = settlementState.FeaturedBuyItem,
         featuredBuyPremium = balance.Trade.FeaturedBuyPremium,
+    });
+});
+
+app.MapGet("/api/game/{id}/inn", async (string id) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var session = BuildSession(player);
+    var node = session.CurrentNode;
+
+    if (node.Poi?.Kind != PoiKind.Settlement)
+        return Results.BadRequest(new { error = "Not at a settlement" });
+
+    var isChapterhouse = node == session.Map.StartingCity;
+    var (canFullRecover, disqualifying) = Inn.CanUseInn(player, balance);
+    var quote = Inn.GetQuote(player, balance);
+    var needsRecovery = player.Health < player.MaxHealth
+                     || player.Spirits < player.MaxSpirits
+                     || player.ActiveConditions.Count > 0;
+
+    return Results.Ok(new
+    {
+        isChapterhouse,
+        canFullRecover = isChapterhouse || canFullRecover,
+        disqualifyingConditions = isChapterhouse ? Array.Empty<string>() : disqualifying.ToArray(),
+        quote = new
+        {
+            nights = quote.Nights,
+            goldCost = isChapterhouse ? 0 : quote.GoldCost,
+            healthRecovered = quote.HealthRecovered,
+            spiritsRecovered = quote.SpiritsRecovered,
+        },
+        needsRecovery,
+        canAfford = player.Gold >= (isChapterhouse ? 0 : quote.GoldCost),
     });
 });
 

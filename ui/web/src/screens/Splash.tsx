@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useGame } from "../GameContext";
+import splashStars from "../assets/splash_stars.jpg";
+import splashTower from "../assets/splash_tower.png";
 
 const credits = [
   { name: "Leaflet", license: "BSD 2-Clause", author: "Vladimir Agafonkin" },
@@ -14,39 +16,50 @@ export default function Splash() {
   const [showCredits, setShowCredits] = useState(false);
 
   return (
-    <div className="h-full flex items-center justify-center bg-page text-primary">
-      <div className="text-center space-y-8">
-        <h1 className="text-5xl font-header tracking-wider text-accent">
+    <div
+      className="h-full flex items-center justify-center text-primary overflow-hidden relative"
+      style={{ background: `url(${splashStars}) repeat center center / 1400px 800px` }}
+    >
+      <img
+        src={splashTower}
+        alt=""
+        className="absolute left-0 top-0 pointer-events-none"
+        width={715}
+        height={1554}
+      />
+
+      <div className="text-center space-y-8 relative z-10">
+        <h1 className="font-header text-[32px] tracking-wider text-accent">
           DREAMLANDS
         </h1>
-        <p className="text-dim text-sm">
+        <p className="text-dim">
           A journey into the unknown
         </p>
         <button
           onClick={startNewGame}
           disabled={loading}
           className="px-8 py-3 bg-action hover:bg-action-hover disabled:bg-btn
-                     text-contrast font-medium tracking-wide transition-colors"
+                     text-contrast font-medium tracking-wide transition-colors rounded-lg"
         >
           {loading ? "Starting..." : "New Game"}
         </button>
         {error && (
-          <p className="text-negative text-sm">{error}</p>
+          <p className="text-negative">{error}</p>
         )}
         <div>
           <button
             onClick={() => setShowCredits(!showCredits)}
-            className="text-muted hover:text-dim text-xs tracking-wide transition-colors"
+            className="text-muted hover:text-dim tracking-wide transition-colors"
           >
             {showCredits ? "Close Credits" : "Credits"}
           </button>
           {showCredits && (
             <div className="mt-4 text-left mx-auto max-w-xs space-y-2">
-              <p className="text-dim text-xs font-medium tracking-wide mb-3">
+              <p className="text-dim font-bold tracking-wide mb-3">
                 Third-party libraries
               </p>
               {credits.map((c) => (
-                <div key={c.name} className="text-xs text-muted">
+                <div key={c.name} className="text-muted">
                   <span className="text-primary/80">{c.name}</span>
                   {" — "}
                   {c.license} ({c.author})

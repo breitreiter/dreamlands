@@ -105,11 +105,10 @@ public static class EndOfDay
         var failed = new HashSet<string>();
         var threats = GetThreats(biome, tier, balance);
 
+        if (noBiome) return failed;
+
         foreach (var threat in threats)
         {
-            if (noBiome && threat.Biome != "none")
-                continue;
-
             var dc = threat.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
             var check = SkillChecks.RollResist(threat.Id, dc, state, balance, rng);
 

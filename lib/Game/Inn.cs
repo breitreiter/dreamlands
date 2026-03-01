@@ -78,9 +78,9 @@ public static class Inn
             }
         }
 
-        // Inn recovery: base rest only (no balanced meal bonus — food included in price but not a triad)
-        var baseHealthGain = balance.Character.BaseRestHealth;
-        var baseSpiritsGain = balance.Character.BaseRestSpirits;
+        // Inn recovery: base rest + balanced meal bonus (9gp/night covers meals)
+        var baseHealthGain = balance.Character.BaseRestHealth + balance.Character.BalancedMealHealthBonus;
+        var baseSpiritsGain = balance.Character.BaseRestSpirits + balance.Character.BalancedMealSpiritsBonus;
 
         int nights = 0;
         const int maxNights = 100; // safety cap

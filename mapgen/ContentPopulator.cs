@@ -57,6 +57,12 @@ public static class ContentPopulator
             if (node.Poi?.Kind != PoiKind.Settlement)
                 continue;
 
+            if (node == map.StartingCity)
+            {
+                node.Poi.Name = "Aldgate";
+                continue;
+            }
+
             var tier = node.Region?.Tier ?? 1;
             var size = node.Poi.Size ?? SettlementSize.Village;
             node.Poi.Name = FlavorText.SettlementName(node.Terrain, tier, size);

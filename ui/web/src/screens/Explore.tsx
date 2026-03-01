@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
 import MarketScreen from "./Market";
+import Inn from "./Inn";
 import CompassRose from "../components/CompassRose";
 import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
 import { formatDateTime } from "../calendar";
@@ -62,13 +63,14 @@ const CONDITION_ICONS: Record<string, string> = {
 
 const TIER_LABELS: Record<number, string> = { 1: "Village", 2: "Town", 3: "City" };
 
-const IMPLEMENTED_SERVICES = new Set(["market"]);
+const IMPLEMENTED_SERVICES = new Set(["market", "inn", "chapterhouse"]);
 
 const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   market: { icon: "two-coins.svg", label: "Market" },
   healer: { icon: "caduceus.svg", label: "Healer" },
   temple: { icon: "tied-scroll.svg", label: "Temple" },
-  inn: { icon: "camping-tent.svg", label: "Inn" },
+  inn: { icon: "wood-cabin.svg", label: "Inn" },
+  chapterhouse: { icon: "wood-cabin.svg", label: "Chapterhouse" },
   guild: { icon: "shaking-hands.svg", label: "Guild" },
 };
 
@@ -127,6 +129,11 @@ export default function Explore({ state }: { state: GameResponse }) {
   // Show Market as full-screen
   if (activeService === "market") {
     return <MarketScreen state={state} onBack={closeService} />;
+  }
+
+  // Show Inn / Chapterhouse as full-screen
+  if (activeService === "inn" || activeService === "chapterhouse") {
+    return <Inn state={state} isChapterhouse={activeService === "chapterhouse"} onBack={closeService} />;
   }
 
   // Show Inventory as full-screen
@@ -198,7 +205,7 @@ export default function Explore({ state }: { state: GameResponse }) {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {(["market"]).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
+                  {(poi.services ?? []).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
                     const info = SERVICE_ICONS[service];
                     if (!info) return null;
                     return (

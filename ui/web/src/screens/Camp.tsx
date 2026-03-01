@@ -1,83 +1,119 @@
+import { useState, useEffect, useRef } from "react";
 import { useGame } from "../GameContext";
-import StatusBar from "./StatusBar";
 import type { GameResponse } from "../api/types";
+import parchment from "../assets/parchment.png";
+
+const roadIntros = [
+  "It is dark, you make camp.",
+  "Night falls, you set up camp.",
+  "Another night, another campsite.",
+  "The day is done, you make camp.",
+];
+
+const innIntro = "The interior of the inn is warm and inviting.";
+
+const chapterhouseIntro =
+  "The lobby silently attests the Merchant Guild's might. Marble floors veined with gold, walls hung with maps of trade routes that span three continents, and above it all a vaulted dome painted with a rising sun. The air smells of woodsmoke and roasting meat.";
+
+function pickRoadIntro(day: number) {
+  return roadIntros[day % roadIntros.length];
+}
 
 export default function Camp({ state }: { state: GameResponse }) {
   const { doAction, refreshState, loading } = useGame();
   const camp = state.camp;
+  const node = state.node;
   const resolved = state.mode === "camp_resolved";
+  const [vignetteError, setVignetteError] = useState(false);
+  const didResolve = useRef(false);
 
-  function resolve() {
-    doAction({ action: "camp_resolve" });
-  }
+  // Auto-resolve on mount — no preamble screen
+  useEffect(() => {
+    if (!resolved && !didResolve.current) {
+      didResolve.current = true;
+      doAction({ action: "camp_resolve" });
+    }
+  }, [resolved, doAction]);
 
-  function continueJourney() {
-    refreshState();
-  }
+  const isSettlement = node?.poi?.kind === "settlement";
+  const isChapterhouse = isSettlement && node?.poi?.name === "Aldgate";
+  const isInn = isSettlement && !isChapterhouse;
+
+  const terrain = node?.terrain ?? "plains";
+  const vignetteSrc = isChapterhouse
+    ? "/world/assets/vignettes/chapterhouse_camp.png"
+    : isInn
+      ? "/world/assets/vignettes/inn_camp.png"
+      : `/world/assets/vignettes/${terrain}/${terrain}_camp.png`;
+
+  const title = isChapterhouse
+    ? "The Chapterhouse"
+    : isInn
+      ? "A Quiet Inn"
+      : "Night on the Road";
+
+  const intro = isChapterhouse
+    ? chapterhouseIntro
+    : isInn
+      ? innIntro
+      : pickRoadIntro(state.status.day);
 
   return (
-    <div className="h-full flex flex-col bg-page text-primary">
-      <StatusBar status={state.status} />
+    <div className="h-full flex bg-page text-primary">
+      {/* Left panel — vignette over parchment */}
+      <div
+        className="hidden md:block w-[45%] shrink-0"
+        style={{
+          backgroundImage: `url(${parchment})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {!vignetteError && (
+          <img
+            src={vignetteSrc}
+            alt=""
+            className="w-full h-full object-cover"
+            onError={() => setVignetteError(true)}
+          />
+        )}
+      </div>
 
-      <div className="flex-1 flex items-start justify-center overflow-y-auto p-6">
-        <div className="max-w-2xl w-full space-y-6">
-          <h2 className="text-2xl font-header text-accent">
-            {resolved ? "Dawn Breaks" : "Make Camp"}
+      {/* Right panel — narrative content */}
+      <div className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
+        <div className="max-w-2xl space-y-6">
+          <h2 className="text-3xl md:text-4xl font-header text-accent uppercase">
+            {title}
           </h2>
 
-          <p className="text-primary/80 leading-relaxed">
-            {resolved
-              ? "You pack up your camp as the new day begins."
-              : "Night falls. You set up camp and prepare to rest."}
-          </p>
-
-          {/* Threats */}
-          {camp && camp.threats.length > 0 && !resolved && (
-            <div className="space-y-2">
-              <div className="text-xs text-dim uppercase tracking-wide">
-                Threats
-              </div>
-              {camp.threats.map((t, i) => (
-                <div
-                  key={i}
-                  className="p-2 border border-negative/40 bg-negative/10 text-sm"
-                >
-                  <span className="text-negative font-medium">{t.name}</span>
-                  <span className="text-dim"> — {t.warning}</span>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="text-primary/80 leading-loose">{intro}</div>
 
           {/* Resolution events */}
           {resolved && camp && camp.events.length > 0 && (
             <div className="space-y-1 border-t border-edge pt-3">
               {camp.events.map((e, i) => (
-                <div key={i} className="text-sm text-primary/80">
+                <div key={i} className="text-primary/80">
                   {e.description}
                 </div>
               ))}
             </div>
           )}
 
-          {/* Action button */}
-          {!resolved ? (
+          {/* Continue button — only after resolution */}
+          {resolved && (
             <button
-              onClick={resolve}
+              onClick={() => refreshState()}
               disabled={loading}
-              className="px-6 py-2 bg-action hover:bg-action-hover disabled:bg-btn
-                         text-contrast transition-colors"
+              className="flex items-start gap-3 transition-colors group cursor-pointer"
             >
-              Rest for the Night
-            </button>
-          ) : (
-            <button
-              onClick={continueJourney}
-              disabled={loading}
-              className="px-6 py-2 bg-action hover:bg-action-hover disabled:bg-btn
-                         text-contrast transition-colors"
-            >
-              Continue
+              <img
+                src="/world/assets/icons/sun.svg"
+                alt=""
+                className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
+              />
+              <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                Continue
+              </span>
             </button>
           )}
         </div>

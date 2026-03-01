@@ -40,6 +40,7 @@ export interface PoiInfo {
   name: string | null;
   dungeonId: string | null;
   dungeonCompleted: boolean | null;
+  services?: string[];
 }
 
 export interface ExitInfo {
@@ -124,6 +125,29 @@ export interface CampInfo {
   events: CampEventInfo[];
 }
 
+export interface InnRecoveryInfo {
+  nightsStayed: number;
+  goldSpent: number;
+  healthRecovered: number;
+  spiritsRecovered: number;
+  conditionsCleared: string[];
+  medicinesConsumed: string[];
+}
+
+export interface InnQuoteResponse {
+  isChapterhouse: boolean;
+  canFullRecover: boolean;
+  disqualifyingConditions: string[];
+  quote: {
+    nights: number;
+    goldCost: number;
+    healthRecovered: number;
+    spiritsRecovered: number;
+  };
+  needsRecovery: boolean;
+  canAfford: boolean;
+}
+
 export interface GameResponse {
   mode: "exploring" | "encounter" | "outcome" | "game_over" | "camp" | "camp_resolved";
   status: StatusInfo;
@@ -136,6 +160,7 @@ export interface GameResponse {
   inventory?: InventoryInfo;
   mechanics?: MechanicsInfo;
   marketResult?: MarketOrderResult;
+  innRecovery?: InnRecoveryInfo;
 }
 
 export interface MechanicsInfo {

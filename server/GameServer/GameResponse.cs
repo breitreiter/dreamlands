@@ -30,11 +30,24 @@ public class GameResponse
     // Camp
     public CampInfo? Camp { get; init; }
 
+    // Inn recovery summary
+    public InnRecoveryInfo? InnRecovery { get; init; }
+
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
 
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
+}
+
+public class InnRecoveryInfo
+{
+    public int NightsStayed { get; init; }
+    public int GoldSpent { get; init; }
+    public int HealthRecovered { get; init; }
+    public int SpiritsRecovered { get; init; }
+    public List<string> ConditionsCleared { get; init; } = [];
+    public List<string> MedicinesConsumed { get; init; } = [];
 }
 
 public class MarketOrderResultInfo
@@ -98,6 +111,7 @@ public class PoiInfo
     public string? Name { get; init; }
     public string? DungeonId { get; init; }
     public bool? DungeonCompleted { get; init; }
+    public List<string>? Services { get; init; }
 }
 
 public class ExitInfo
