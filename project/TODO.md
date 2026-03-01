@@ -160,6 +160,9 @@ is not yet built.
 - [ ] Town — Guild storage
 - [x] Town — Inn / Chapterhouse (game logic)
 - [ ] Stock medicine in biome-appropriate markets (medicines may not spawn yet)
+- [ ] Review trade pricing for distant settlements — cross-biome trading is punishing in
+      far-flung regions, compounded by weak inventory at remote settlements. May need price
+      curve adjustments or better stocking at high-tier locations.
 - [ ] Courier system — markets sell Dispatches (tier-matched), player delivers to named
       destination settlement for payment. Design in `project/design/courier_system.md`.
 - [x] Gathering action
