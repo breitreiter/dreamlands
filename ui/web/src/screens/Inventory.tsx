@@ -35,6 +35,25 @@ function iconUrl(file: string): string {
   return `/world/assets/icons/${file}`;
 }
 
+function MaskedIcon({ icon, className, color }: { icon: string; className?: string; color: string }) {
+  return (
+    <div
+      className={`inline-block flex-shrink-0 ${className || ""}`}
+      style={{
+        backgroundColor: color,
+        maskImage: `url(${iconUrl(icon)})`,
+        maskSize: "contain",
+        maskRepeat: "no-repeat",
+        maskPosition: "center",
+        WebkitMaskImage: `url(${iconUrl(icon)})`,
+        WebkitMaskSize: "contain",
+        WebkitMaskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+      }}
+    />
+  );
+}
+
 export default function Inventory({
   state,
   onClose,
@@ -219,7 +238,7 @@ function MechanicsSection({ title, lines, iconType }: { title: string; lines: Me
                 <td className="py-0.5 pr-2 whitespace-nowrap">
                   <span className="inline-flex items-center gap-1.5">
                     {icon && (
-                      <img src={iconUrl(icon)} alt="" className="w-5 h-5 inline-block" style={{ filter: "brightness(0)" }} />
+                      <MaskedIcon icon={icon} className="w-5 h-5" color="var(--color-contrast)" />
                     )}
                     {line.label} <span className="font-bold">{line.value}</span>
                   </span>
