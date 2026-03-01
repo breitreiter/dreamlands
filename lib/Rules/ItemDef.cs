@@ -35,50 +35,122 @@ public sealed class ItemDef
 
     static Dictionary<string, ItemDef> BuildAll() => new()
     {
-        // ── Weapons ──
+        // ── Weapons: Daggers (Combat +1 cap, Foraging +1 to +5) ──
 
         ["bodkin"] = new()
         {
             Id = "bodkin", Name = "Bodkin", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 1,
             Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["skinning_knife"] = new()
+        {
+            Id = "skinning_knife", Name = "Skinning Knife", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 2,
+            Biome = "swamp", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["jambiya"] = new()
         {
             Id = "jambiya", Name = "Jambiya", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 2,
             Biome = "scrub", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["seax"] = new()
         {
             Id = "seax", Name = "Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
             ForagingBonus = 3,
-            Biome = "mountains", ShopTier = 1, Cost = Magnitude.Small,
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Medium,
         },
+        ["kukri"] = new()
+        {
+            Id = "kukri", Name = "Kukri", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 3,
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["hunting_knife"] = new()
+        {
+            Id = "hunting_knife", Name = "Hunting Knife", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 4,
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["kopis"] = new()
+        {
+            Id = "kopis", Name = "Kopis", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Dagger,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 5,
+        },
+
+        // ── Weapons: Axes (Combat +1 to +4, Foraging +1 to +3) ──
+
         ["hatchet"] = new()
         {
             Id = "hatchet", Name = "Hatchet", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            ForagingBonus = 1,
+            Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
+        },
+        ["tomahawk"] = new()
+        {
+            Id = "tomahawk", Name = "Tomahawk", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Axe,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            ForagingBonus = 1,
             Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["war_axe"] = new()
         {
             Id = "war_axe", Name = "War Axe", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            ForagingBonus = 2,
+            Biome = "forest", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["broadaxe"] = new()
+        {
+            Id = "broadaxe", Name = "Broadaxe", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Axe,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
-            Biome = "plains", ShopTier = 2, Cost = Magnitude.Medium,
+            ForagingBonus = 2,
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
         },
         ["bardiche"] = new()
         {
             Id = "bardiche", Name = "Bardiche", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
+            ForagingBonus = 1,
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["labrys"] = new()
+        {
+            Id = "labrys", Name = "Labrys", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Axe,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
-            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
+            ForagingBonus = 3,
+        },
+
+        // ── Weapons: Swords (Foraging +0 cap, Combat +1 to +5) ──
+
+        ["falchion"] = new()
+        {
+            Id = "falchion", Name = "Falchion", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Sword,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["short_sword"] = new()
         {
@@ -86,6 +158,13 @@ public sealed class ItemDef
             WeaponClass = Rules.WeaponClass.Sword,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Medium,
+        },
+        ["tulwar"] = new()
+        {
+            Id = "tulwar", Name = "Tulwar", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Sword,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
         },
         ["scimitar"] = new()
         {
@@ -99,7 +178,13 @@ public sealed class ItemDef
             Id = "arming_sword", Name = "Arming Sword", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
-            Biome = "plains", ShopTier = 1, Cost = Magnitude.Huge,
+            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["zweihander"] = new()
+        {
+            Id = "zweihander", Name = "Zweihänder", Type = ItemType.Weapon,
+            WeaponClass = Rules.WeaponClass.Sword,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
         },
 
         // ── Armor ──
