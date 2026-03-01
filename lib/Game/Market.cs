@@ -202,7 +202,15 @@ public static class Market
             ? createFood(ft, settlement.Biome, rng)
             : new ItemInstance(def.Id, def.Name) { FoodType = def.FoodType };
 
-        if (def.IsPackItem)
+        // Auto-equip weapon/armor/boots if the slot is empty (bypasses pack capacity)
+        var autoEquipped = false;
+        if (def.Type is ItemType.Weapon && player.Equipment.Weapon == null)
+            { player.Equipment.Weapon = instance; autoEquipped = true; }
+        else if (def.Type is ItemType.Armor && player.Equipment.Armor == null)
+            { player.Equipment.Armor = instance; autoEquipped = true; }
+        else if (def.Type is ItemType.Boots && player.Equipment.Boots == null)
+            { player.Equipment.Boots = instance; autoEquipped = true; }
+        else if (def.IsPackItem)
         {
             if (player.Pack.Count >= player.PackCapacity)
                 return new MarketResult(false, "Pack is full");
@@ -218,7 +226,8 @@ public static class Market
         player.Gold -= price;
         if (def.FoodType == null) // food has unlimited stock in settlements
             settlement.Stock[itemId] = stock - 1;
-        return new MarketResult(true, $"Bought {def.Name} for {price} gold");
+        var verb = autoEquipped ? "Bought and equipped" : "Bought";
+        return new MarketResult(true, $"{verb} {def.Name} for {price} gold");
     }
 
     public static MarketResult Sell(PlayerState player, string itemDefId, string settlementBiome,

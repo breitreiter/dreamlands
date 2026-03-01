@@ -131,14 +131,42 @@ export default function MarketScreen({
       return true;
     });
 
-    // Count buys going to pack vs haversack
+    // Determine which equipment slots are free after pending sells
+    const projectedEquipment = {
+      weapon: inventory?.equipment.weapon ?? null,
+      armor: inventory?.equipment.armor ?? null,
+      boots: inventory?.equipment.boots ?? null,
+    };
+    for (const defId of pendingSells) {
+      if (projectedEquipment.weapon?.defId === defId) projectedEquipment.weapon = null;
+      else if (projectedEquipment.armor?.defId === defId) projectedEquipment.armor = null;
+      else if (projectedEquipment.boots?.defId === defId) projectedEquipment.boots = null;
+    }
+
+    // Identify "floating" buys: equippable items that auto-equip into empty slots
+    const claimedSlots = new Set<string>();
+    const floatingBuys = new Set<string>();
+    for (const [itemId] of pendingBuys) {
+      const item = stock.find((s) => s.id === itemId);
+      if (!item) continue;
+      const slot = item.type as string; // "weapon" | "armor" | "boots"
+      if ((slot === "weapon" || slot === "armor" || slot === "boots")
+          && !claimedSlots.has(slot)
+          && projectedEquipment[slot] === null) {
+        claimedSlots.add(slot);
+        floatingBuys.add(itemId);
+      }
+    }
+
+    // Count buys going to pack vs haversack (subtract 1 for floating buys)
     let packBuys = 0;
     let haversackBuys = 0;
     for (const [itemId, qty] of pendingBuys) {
       const item = stock.find((s) => s.id === itemId);
       if (!item) continue;
+      const floatCount = floatingBuys.has(itemId) ? 1 : 0;
       if (isPackType(item.type)) {
-        packBuys += qty;
+        packBuys += qty - floatCount;
       } else {
         haversackBuys += qty;
       }
@@ -149,7 +177,7 @@ export default function MarketScreen({
     const packCapacity = inventory?.packCapacity ?? 0;
     const haversackCapacity = inventory?.haversackCapacity ?? 0;
 
-    return { gold, projectedStock, projectedPack, projectedHaversack, packCount, haversackCount, packCapacity, haversackCapacity, buyCost };
+    return { gold, projectedStock, projectedPack, projectedHaversack, packCount, haversackCount, packCapacity, haversackCapacity, buyCost, claimedSlots, projectedEquipment };
   }, [state.status.gold, pendingBuys, pendingSells, stock, sellPrices, inventory]);
 
   function addBuy(itemId: string) {
@@ -182,7 +210,16 @@ export default function MarketScreen({
     const pendingQty = pendingBuys.get(item.id) ?? 0;
     if (pendingQty >= item.quantity) return false;
     if (projected.gold < item.buyPrice) return false;
-    if (isPackType(item.type) && projected.packCount >= projected.packCapacity) return false;
+    if (isPackType(item.type) && projected.packCount >= projected.packCapacity) {
+      // Allow if this item would float (auto-equip into an empty, unclaimed slot)
+      const slot = item.type as string;
+      if ((slot === "weapon" || slot === "armor" || slot === "boots")
+          && !projected.claimedSlots.has(slot)
+          && projected.projectedEquipment[slot] === null) {
+        return true;
+      }
+      return false;
+    }
     if (!isPackType(item.type) && projected.haversackCount >= projected.haversackCapacity) return false;
     return true;
   }
