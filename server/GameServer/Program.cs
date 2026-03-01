@@ -678,9 +678,13 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             Movement.Execute(session, dir);
 
-            // Clear conditions on arriving at a settlement
+            // Clear conditions on arriving at a settlement and suppress
+            // ambient threats overnight — the player has shelter and water.
             if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
+            {
                 player.ActiveConditions.Clear();
+                player.PendingNoBiome = true;
+            }
 
             // Advance time by one segment per move
             if (player.Time < TimePeriod.Night)
