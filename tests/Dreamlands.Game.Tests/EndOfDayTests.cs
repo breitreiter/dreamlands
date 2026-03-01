@@ -213,15 +213,15 @@ public class EndOfDayTests
     {
         var state = Fresh();
         state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("thumbroot", "Thumbroot")); // cures injured
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // cures injured
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
-        // Thumbroot auto-consumed, injured 3 → 2
-        Assert.DoesNotContain(state.Haversack, i => i.DefId == "thumbroot");
+        // Bandages auto-consumed, injured 3 → 2
+        Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
         Assert.Contains(events, e => e is EndOfDayEvent.CureApplied);
     }
 

@@ -448,48 +448,42 @@ public sealed class ItemDef
         ["bandages"] = new()
         {
             Id = "bandages", Name = "Bandages", Type = ItemType.Consumable,
+            Description = "Clean linen strips treated with pine resin. Cures injured.",
             Cures = new HashSet<string> { "injured" },
             Cost = Magnitude.Trivial,
         },
         ["gravediggers_ear"] = new()
         {
             Id = "gravediggers_ear", Name = "Gravedigger's Ear", Type = ItemType.Consumable,
+            Description = "A leathery fungus that grows on coffin-wood. Brew it into a bitter tea to break swamp fever.",
             Cures = new HashSet<string> { "swamp_fever" },
             Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
-        },
-        ["thumbroot"] = new()
-        {
-            Id = "thumbroot", Name = "Thumbroot", Type = ItemType.Consumable,
-            Cures = new HashSet<string> { "injured" },
-            Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
-        },
-        ["wound_sealant"] = new()
-        {
-            Id = "wound_sealant", Name = "Wound Sealant", Type = ItemType.Consumable,
-            Cures = new HashSet<string> { "injured" },
-            Biome = "plains", ShopTier = 3, Cost = Magnitude.Medium,
         },
         ["creeping_baldric"] = new()
         {
             Id = "creeping_baldric", Name = "Creeping Baldric", Type = ItemType.Consumable,
+            Description = "A coil of pale vine that tightens when warmed. Chew a length to purge gut worms.",
             Cures = new HashSet<string> { "gut_worms" },
             Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["pale_knot_berry"] = new()
         {
             Id = "pale_knot_berry", Name = "Pale Knot Berry", Type = ItemType.Consumable,
+            Description = "Waxy white berries found on wind-stunted shrubs. A handful restores vigor and cures exhaustion.",
             Cures = new HashSet<string> { "exhausted" },
             Biome = "plains", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["shustov_tonic"] = new()
         {
             Id = "shustov_tonic", Name = "Shustov Tonic", Type = ItemType.Consumable,
+            Description = "A smoky distillation of charcoal and salt-marsh herbs. Flushes radiation sickness over several nights.",
             Cures = new HashSet<string> { "irradiated" },
             Biome = "plains", ShopTier = 3, Cost = Magnitude.Medium,
         },
         ["mudcap_fungus"] = new()
         {
             Id = "mudcap_fungus", Name = "Mudcap Fungus", Type = ItemType.Consumable,
+            Description = "A squat brown mushroom with a gritty cap. Eaten raw, it draws poison from the blood.",
             Cures = new HashSet<string> { "poisoned" },
             Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
         },

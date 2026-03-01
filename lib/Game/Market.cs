@@ -18,6 +18,15 @@ public static class Market
         foreach (var foodId in new[] { "food_protein", "food_grain", "food_sweets" })
             catalog.Add(foodId);
 
+        // Medicines — always stocked if biome + tier match (or no biome = universal)
+        var medicines = balance.Items.Values
+            .Where(i => i.Type == ItemType.Consumable && i.Cures.Count > 0
+                        && (i.Biome == null || i.Biome == biome)
+                        && (i.ShopTier == null || i.ShopTier <= tier))
+            .ToList();
+        foreach (var med in medicines)
+            catalog.Add(med.Id);
+
         var inBiomeTierGoods = balance.Items.Values
             .Where(i => i.Type == ItemType.TradeGood && i.Biome == biome && i.ShopTier != null && i.ShopTier <= tier)
             .ToList();
@@ -103,10 +112,10 @@ public static class Market
         int maxStock = balance.Trade.MaxStock[size];
         int perDay = balance.Trade.RestockPerDay[size];
 
-        // Trade goods restock; food has unlimited stock, equipment never restocks
+        // Trade goods and medicines restock; food has unlimited stock, equipment never restocks
         var restockIds = settlement.Stock.Keys
             .Where(id => balance.Items.TryGetValue(id, out var def)
-                         && def.Type == ItemType.TradeGood)
+                         && (def.Type == ItemType.TradeGood || def.Cures.Count > 0))
             .ToList();
 
         if (restockIds.Count == 0)
