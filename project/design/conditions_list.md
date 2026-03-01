@@ -151,3 +151,16 @@ Flavor text for conditions should be written in pure prose — no meta-language 
 - HealFailure: New injuries piled atop old. Your body cannot withstand much more of this.
 - HealComplete: It will leave a scar, but your wound is mended.
 - Death: The smell is awful. You cannot bear to look beneath the bandages. You press on, but stumble after a few steps.
+
+# Disheartened
+- Trigger: end-of-day, when spirits fall below threshold
+- Stacks: 1
+- SpecialEffect: Disadvantage on all skill checks
+- SpecialCure: Spirits recover above threshold (automatic, checked end-of-day)
+- Ongoing: The world is grey and far away. Your hands do what they must, but the will behind them has gone quiet.
+- Resist: The road is hard, and the dark thoughts circle — but something in you holds the line. Not joy. Just stubbornness.
+- Succumb: The last bright thing gutters out. You keep walking because stopping is worse, but you cannot remember why.
+- HealProgress: (n/a — binary, no stacks to reduce)
+- HealFailure: (n/a)
+- HealComplete: Something shifts. Not happiness — not yet — but the weight lifts enough to breathe. The road ahead has color in it again.
+- Death: (n/a — does not drain health or spirits)

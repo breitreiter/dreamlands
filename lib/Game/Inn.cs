@@ -10,34 +10,31 @@ public record InnResult(int NightsStayed, int GoldSpent, int HealthRecovered, in
 public static class Inn
 {
     /// <summary>
-    /// Check whether the player can use an inn. Disqualified if any active condition
-    /// has HealthDrain, is NOT ClearedOnSettlement, and the player lacks a matching
-    /// Cures item in the Haversack.
+    /// Check whether the player can use the inn for a full recovery.
+    /// Blocked if any active condition has HealthDrain, is NOT ClearedOnSettlement,
+    /// and the player lacks enough matching Cures items to cover all stacks.
     /// </summary>
     public static (bool Allowed, List<string> DisqualifyingConditions) CanUseInn(
         PlayerState state, BalanceData balance)
     {
         var disqualifying = new List<string>();
 
-        foreach (var (conditionId, _) in state.ActiveConditions)
+        foreach (var (conditionId, stacks) in state.ActiveConditions)
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
             if (def.HealthDrain == null) continue;
             if (def.ClearedOnSettlement) continue;
 
-            // Check if player has a medicine that cures this condition
-            bool hasCure = false;
+            // Count available cures in haversack for this condition
+            int cureCount = 0;
             foreach (var item in state.Haversack)
             {
                 if (balance.Items.TryGetValue(item.DefId, out var itemDef)
                     && itemDef.Cures.Contains(conditionId))
-                {
-                    hasCure = true;
-                    break;
-                }
+                    cureCount++;
             }
 
-            if (!hasCure)
+            if (cureCount < stacks)
                 disqualifying.Add(conditionId);
         }
 
@@ -46,18 +43,91 @@ public static class Inn
 
     /// <summary>
     /// Calculate the cost and duration of a full-recovery inn stay.
+    /// Accounts for condition drain during multi-night stays: each night the player
+    /// gets base rest recovery (+1/+1) but conditions drain health/spirits.
+    /// Medicines consumed 1/night as applicable.
     /// </summary>
     public static InnQuote GetQuote(PlayerState state, BalanceData balance)
     {
-        var healthDeficit = state.MaxHealth - state.Health;
-        var spiritsDeficit = state.MaxSpirits - state.Spirits;
-        var nights = Math.Max(healthDeficit, spiritsDeficit);
-        nights = Math.Max(nights, 1); // at least one night
+        // Simulate nights to find how many it takes to reach full
+        var simHealth = state.Health;
+        var simSpirits = state.Spirits;
+
+        // Build drain-per-night from active conditions
+        int healthDrain = 0, spiritsDrain = 0;
+        var conditionStacks = new Dictionary<string, int>(state.ActiveConditions);
+
+        foreach (var (conditionId, _) in conditionStacks)
+        {
+            if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
+            if (def.HealthDrain is { } hMag)
+                healthDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(hMag, 0);
+            if (def.SpiritsDrain is { } sMag)
+                spiritsDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(sMag, 0);
+        }
+
+        // Count available medicines per condition
+        var curesAvailable = new Dictionary<string, int>();
+        foreach (var item in state.Haversack)
+        {
+            if (!balance.Items.TryGetValue(item.DefId, out var itemDef)) continue;
+            foreach (var condId in itemDef.Cures)
+            {
+                if (conditionStacks.ContainsKey(condId))
+                    curesAvailable[condId] = curesAvailable.GetValueOrDefault(condId) + 1;
+            }
+        }
+
+        // Inn recovery: base rest only (no balanced meal bonus — food included in price but not a triad)
+        var baseHealthGain = balance.Character.BaseRestHealth;
+        var baseSpiritsGain = balance.Character.BaseRestSpirits;
+
+        int nights = 0;
+        const int maxNights = 100; // safety cap
+        while (nights < maxNights &&
+               (simHealth < state.MaxHealth || simSpirits < state.MaxSpirits))
+        {
+            nights++;
+
+            // Consume medicines this night (reduces drain for subsequent nights)
+            foreach (var condId in conditionStacks.Keys.ToList())
+            {
+                if (curesAvailable.GetValueOrDefault(condId) <= 0) continue;
+                curesAvailable[condId]--;
+                conditionStacks[condId]--;
+
+                if (conditionStacks[condId] <= 0)
+                {
+                    conditionStacks.Remove(condId);
+                    // Recalculate drain
+                    healthDrain = 0;
+                    spiritsDrain = 0;
+                    foreach (var (cid, _) in conditionStacks)
+                    {
+                        if (!balance.Conditions.TryGetValue(cid, out var d)) continue;
+                        if (d.HealthDrain is { } h)
+                            healthDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(h, 0);
+                        if (d.SpiritsDrain is { } s)
+                            spiritsDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(s, 0);
+                    }
+                }
+            }
+
+            // Apply drain then recovery
+            simHealth = Math.Max(0, simHealth - healthDrain);
+            simSpirits = Math.Max(0, simSpirits - spiritsDrain);
+            simHealth = Math.Min(state.MaxHealth, simHealth + baseHealthGain);
+            simSpirits = Math.Min(state.MaxSpirits, simSpirits + baseSpiritsGain);
+        }
+
+        nights = Math.Max(nights, 1);
+        var healthRecovered = state.MaxHealth - state.Health;
+        var spiritsRecovered = state.MaxSpirits - state.Spirits;
 
         // First night free, remaining nights at InnNightlyCost each
         var goldCost = Math.Max(0, nights - 1) * balance.Character.InnNightlyCost;
 
-        return new InnQuote(nights, goldCost, healthDeficit, spiritsDeficit);
+        return new InnQuote(nights, goldCost, healthRecovered, spiritsRecovered);
     }
 
     /// <summary>
@@ -66,15 +136,14 @@ public static class Inn
     /// </summary>
     public static List<EndOfDayEvent> StayOneNight(
         PlayerState state, string biome, int tier,
-        List<string> foodDefIds, List<string> medicineDefIds,
         BalanceData balance, Random rng)
     {
         state.PendingNoBiome = true;
         state.PendingEndOfDay = true;
 
-        var events = EndOfDay.Resolve(state, biome, tier, foodDefIds, medicineDefIds, balance, rng);
+        var events = EndOfDay.Resolve(state, biome, tier, balance, rng);
 
-        // Inn clears exhausted (its SpecialCure is "Rest in an inn.")
+        // Inn clears exhausted
         if (state.ActiveConditions.Remove("exhausted"))
             events.Add(new EndOfDayEvent.ConditionCured("exhausted"));
 
@@ -82,9 +151,8 @@ public static class Inn
     }
 
     /// <summary>
-    /// Full recovery inn stay. Single step: deduct gold, restore health/spirits to max,
-    /// clear exhausted, consume medicines for treatable conditions, advance day counter.
-    /// No per-night EndOfDay loop. Food is included in the inn price.
+    /// Full recovery inn stay. Deduct gold, consume all medicine for treatable conditions,
+    /// clear ClearedOnSettlement conditions, restore to max, advance days per quote.
     /// </summary>
     public static InnResult StayFullRecovery(PlayerState state, BalanceData balance)
     {
@@ -102,7 +170,7 @@ public static class Inn
         if (state.ActiveConditions.Remove("exhausted"))
             conditionsCleared.Add("exhausted");
 
-        // Consume medicines for treatable conditions (no failed-resist negation)
+        // Consume medicines for treatable conditions (1 per stack)
         ConsumeMedicines(state, balance, conditionsCleared, medicinesConsumed);
 
         return new InnResult(quote.Nights, quote.GoldCost,
@@ -133,46 +201,34 @@ public static class Inn
     static void ConsumeMedicines(PlayerState state, BalanceData balance,
         List<string> conditionsCleared, List<string> medicinesConsumed)
     {
-        // Find all active conditions that have a matching cure in haversack
-        var curable = new List<(string ConditionId, int ItemIndex, string ItemDefId)>();
-
-        foreach (var (conditionId, _) in state.ActiveConditions)
+        // Consume enough medicine to cure all stacks (1 per stack)
+        foreach (var (conditionId, stacks) in state.ActiveConditions.ToList())
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
-            if (def.ClearedOnSettlement) continue; // these clear on their own
+            if (def.ClearedOnSettlement) continue;
 
-            for (int i = 0; i < state.Haversack.Count; i++)
+            var remaining = stacks;
+            while (remaining > 0)
             {
-                var item = state.Haversack[i];
-                if (balance.Items.TryGetValue(item.DefId, out var itemDef)
-                    && itemDef.Cures.Contains(conditionId))
-                {
-                    curable.Add((conditionId, i, item.DefId));
-                    break;
-                }
+                var idx = state.Haversack.FindIndex(i =>
+                    balance.Items.TryGetValue(i.DefId, out var itemDef)
+                    && itemDef.Cures.Contains(conditionId));
+
+                if (idx < 0) break;
+
+                medicinesConsumed.Add(state.Haversack[idx].DefId);
+                state.Haversack.RemoveAt(idx);
+                remaining--;
             }
-        }
 
-        // Process in reverse index order so removals don't shift earlier indices
-        foreach (var (conditionId, _, defId) in curable.OrderByDescending(c => c.ItemIndex))
-        {
-            // Re-find index since earlier removals may have shifted things
-            var idx = state.Haversack.FindIndex(i => i.DefId == defId);
-            if (idx < 0) continue;
-
-            state.Haversack.RemoveAt(idx);
-            medicinesConsumed.Add(defId);
-
-            var stacks = state.ActiveConditions.GetValueOrDefault(conditionId);
-            var newStacks = stacks - 1;
-            if (newStacks <= 0)
+            if (remaining <= 0)
             {
                 state.ActiveConditions.Remove(conditionId);
                 conditionsCleared.Add(conditionId);
             }
             else
             {
-                state.ActiveConditions[conditionId] = newStacks;
+                state.ActiveConditions[conditionId] = remaining;
             }
         }
 

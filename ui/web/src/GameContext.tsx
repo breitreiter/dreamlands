@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import type { GameResponse, MarketOrder, CampResolveChoices } from "./api/types";
+import type { GameResponse, MarketOrder } from "./api/types";
 import * as api from "./api/client";
 
 interface GameState {
@@ -20,7 +20,6 @@ interface GameContextValue extends GameState {
     slot?: string;
     quantity?: number;
     order?: MarketOrder;
-    campChoices?: CampResolveChoices;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
 }
@@ -95,7 +94,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
       slot?: string;
       quantity?: number;
       order?: MarketOrder;
-      campChoices?: CampResolveChoices;
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));

@@ -3,7 +3,6 @@ import type {
   NewGameResponse,
   MarketStockResponse,
   MarketOrder,
-  CampResolveChoices,
 } from "./types";
 
 const BASE = "/api/game";
@@ -48,7 +47,6 @@ export async function action(
     slot?: string;
     quantity?: number;
     order?: MarketOrder;
-    campChoices?: CampResolveChoices;
   }
 ): Promise<GameResponse> {
   return post(`${BASE}/${id}/action`, body);

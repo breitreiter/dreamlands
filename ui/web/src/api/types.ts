@@ -174,11 +174,6 @@ export interface MarketStockResponse {
   sellPrices: Record<string, number>;
 }
 
-export interface CampResolveChoices {
-  food: string[];
-  medicine: string[];
-}
-
 export interface MarketOrder {
   buys: { itemId: string; quantity: number }[];
   sells: { itemDefId: string }[];

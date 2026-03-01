@@ -450,6 +450,9 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
                 ? $"{c.ItemDefId} reduced {c.ConditionId} by {c.StacksRemoved} ({c.Remaining} remaining)"
                 : $"{c.ItemDefId} cured {c.ConditionId}!",
             EndOfDayEvent.CureNegated c => $"{c.ItemDefId} negated — {c.ConditionId} contracted tonight",
+            EndOfDayEvent.ConditionAcquired a => a.Stacks > 1
+                ? $"Contracted {a.ConditionId} ({a.Stacks} stacks)"
+                : $"Contracted {a.ConditionId}",
             EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",
             EndOfDayEvent.ConditionDrain d => $"{d.ConditionId}: -{d.HealthLost} health, -{d.SpiritsLost} spirits",
             EndOfDayEvent.SpecialEffect s => $"{s.ConditionId}: {s.Effect}",
@@ -720,14 +723,12 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (session.Mode != SessionMode.Camp)
                 return Results.BadRequest(new { error = "Not in camp mode" });
 
-            var campChoices = req.CampChoices ?? new CampResolveRequest();
             var node = session.CurrentNode;
             var campBiome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
             var campTier = node.Region?.Tier ?? 1;
 
             var campEvents = EndOfDay.Resolve(
                 player, campBiome, campTier,
-                campChoices.Food, campChoices.Medicine,
                 balance, session.Rng);
 
             var campInfo = BuildCampThreats(session);

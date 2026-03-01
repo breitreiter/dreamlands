@@ -11,6 +11,7 @@ public abstract record EndOfDayEvent
     public record ResistFailed(string ConditionId, SkillCheckResult Check, int Stacks) : EndOfDayEvent;
     public record CureApplied(string ItemDefId, string ConditionId, int StacksRemoved, int Remaining) : EndOfDayEvent;
     public record CureNegated(string ItemDefId, string ConditionId) : EndOfDayEvent;
+    public record ConditionAcquired(string ConditionId, int Stacks) : EndOfDayEvent;
     public record ConditionCured(string ConditionId) : EndOfDayEvent;
     public record ConditionDrain(string ConditionId, int HealthLost, int SpiritsLost) : EndOfDayEvent;
     public record SpecialEffect(string ConditionId, string Effect) : EndOfDayEvent;

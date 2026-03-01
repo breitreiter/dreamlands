@@ -219,13 +219,6 @@ public class ActionRequest
     public string? Slot { get; set; }
     public int? Quantity { get; set; }
     public MarketOrderRequest? Order { get; set; }
-    public CampResolveRequest? CampChoices { get; set; }
-}
-
-public class CampResolveRequest
-{
-    public List<string> Food { get; set; } = [];
-    public List<string> Medicine { get; set; } = [];
 }
 
 public class MarketOrderRequest
