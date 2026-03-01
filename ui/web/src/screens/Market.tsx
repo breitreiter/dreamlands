@@ -23,6 +23,15 @@ function itemTypeIcon(type: string): string {
   return ITEM_TYPE_ICONS[type] || "wooden-crate.svg";
 }
 
+const TAB_ICONS: Record<string, string> = {
+  trade: "two-coins.svg",
+  foods: "pouch-with-beads.svg",
+  equipment: "sword-brandish.svg",
+  pack: "backpack.svg",
+  haversack: "knapsack.svg",
+  equipped: "sword-brandish.svg",
+};
+
 function MaskedIcon({ icon, className, color }: { icon: string; className?: string; color: string }) {
   return (
     <div
@@ -254,19 +263,23 @@ export default function MarketScreen({
     return entries;
   }, [pendingBuys, pendingSells, stock, sellPrices, inventory]);
 
-  const TabButton = ({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) => (
-    <button
-      onClick={onClick}
-      className={`px-3 py-1 transition-colors ${
-        active
-          ? "bg-btn border border-accent text-primary"
-          : "bg-transparent border border-transparent text-muted hover:text-primary"
-      }`}
-      style={{ borderRadius: "999px" }}
-    >
-      {children}
-    </button>
-  );
+  const TabBtn = ({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) => {
+    const icon = TAB_ICONS[id];
+    return (
+      <button
+        onClick={onClick}
+        className={`h-12 px-4 flex items-center gap-2 transition-colors ${
+          active
+            ? "bg-btn border border-accent text-accent"
+            : "bg-transparent border border-transparent text-action-dim hover:text-action"
+        }`}
+        style={{ borderRadius: "999px" }}
+      >
+        {icon && <MaskedIcon icon={icon} className="w-5 h-5" color={active ? "#D0BD62" : "currentColor"} />}
+        {children}
+      </button>
+    );
+  };
 
   return (
     <div className="h-full flex flex-col bg-page text-primary">
@@ -283,9 +296,9 @@ export default function MarketScreen({
           <div className="p-3 border-b border-edge">
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
-              <TabButton active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabButton>
-              <TabButton active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabButton>
-              <TabButton active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabButton>
+              <TabBtn id="trade" active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabBtn>
+              <TabBtn id="foods" active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabBtn>
+              <TabBtn id="equipment" active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabBtn>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
@@ -419,9 +432,9 @@ export default function MarketScreen({
           <div className="p-3 border-b border-edge">
             <h3 className="font-header text-accent text-[32px] leading-tight">Sell</h3>
             <div className="flex gap-1 mt-2">
-              <TabButton active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
-              <TabButton active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabButton>
-              <TabButton active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabButton>
+              <TabBtn id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabBtn>
+              <TabBtn id="haversack" active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabBtn>
+              <TabBtn id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabBtn>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
