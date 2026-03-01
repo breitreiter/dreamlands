@@ -150,7 +150,8 @@ public static class SkillChecks
             Skill.Combat => GetEquippedMod(state.Equipment.Weapon, Skill.Combat, balance),
             Skill.Cunning => GetEquippedMod(state.Equipment.Armor, Skill.Cunning, balance),
             Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
-            Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
+            Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance)
+                            + GetForagingBonus(state, balance),
             Skill.Mercantile => GetBestToolBonuses(Skill.Mercantile, state, balance),
             _ => 0, // Luck gets no gear bonus
         };
@@ -202,6 +203,14 @@ public static class SkillChecks
             && def.ResistModifiers.TryGetValue(conditionId, out var mag)
             && magnitudes.TryGetValue(mag, out var bonus))
             return bonus;
+        return 0;
+    }
+
+    static int GetForagingBonus(PlayerState state, BalanceData balance)
+    {
+        if (state.Equipment.Weapon == null) return 0;
+        if (balance.Items.TryGetValue(state.Equipment.Weapon.DefId, out var def))
+            return def.ForagingBonus;
         return 0;
     }
 

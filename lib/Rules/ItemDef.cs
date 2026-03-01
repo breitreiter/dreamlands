@@ -349,67 +349,78 @@ public sealed class ItemDef
             ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Huge },
         },
 
-        // ── Tools ──
+        // ── Tools: Shopable ──
 
-        ["cartographers_kit"] = new()
-        {
-            Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["lost"] = Magnitude.Large },
-            Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
-        },
-        ["sleeping_kit"] = new()
-        {
-            Id = "sleeping_kit", Name = "Sleeping Kit", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Medium },
-            Biome = "any", Cost = Magnitude.Small,
-        },
-        ["cooking_supplies"] = new()
-        {
-            Id = "cooking_supplies", Name = "Cooking Supplies", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Small },
-            Biome = "any", Cost = Magnitude.Small,
-        },
-        ["writing_kit"] = new()
-        {
-            Id = "writing_kit", Name = "Writing Kit", Type = ItemType.Tool,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 2, [Skill.Negotiation] = 1 },
-            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Medium,
-        },
-        ["yoriks_guide"] = new()
-        {
-            Id = "yoriks_guide", Name = "Yorik's Guide to Plant and Beast", Type = ItemType.Tool,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Bushcraft] = 2 },
-            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
-        },
         ["canteen"] = new()
         {
             Id = "canteen", Name = "Canteen", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["thirsty"] = Magnitude.Small },
+            Cost = Magnitude.Small,
+        },
+        ["waterskin"] = new()
+        {
+            Id = "waterskin", Name = "Waterskin", Type = ItemType.Tool,
             ResistModifiers = new Dictionary<string, Magnitude> { ["thirsty"] = Magnitude.Medium },
-            Biome = "any", Cost = Magnitude.Small,
+            Biome = "scrub", ShopTier = 2, Cost = Magnitude.Medium,
         },
-        ["insect_netting"] = new()
+        ["letters_of_introduction"] = new()
         {
-            Id = "insect_netting", Name = "Insect Netting", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["swamp_fever"] = Magnitude.Medium },
-            Biome = "swamp", Cost = Magnitude.Small,
-        },
-        ["breathing_apparatus"] = new()
-        {
-            Id = "breathing_apparatus", Name = "Intricate Breathing Apparatus", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Medium, ["gut_worms"] = Magnitude.Medium },
-            Biome = "plains", ShopTier = 2, Cost = Magnitude.Large,
-        },
-        ["heavy_furs"] = new()
-        {
-            Id = "heavy_furs", Name = "Heavy Furs", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["freezing"] = Magnitude.Large },
-            Biome = "mountains", Cost = Magnitude.Small,
+            Id = "letters_of_introduction", Name = "Letters of Introduction", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 2 },
+            Biome = "scrub", ShopTier = 1, Cost = Magnitude.Medium,
         },
         ["peoples_borderlands"] = new()
         {
             Id = "peoples_borderlands", Name = "Peoples of the Borderlands", Type = ItemType.Tool,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["traders_ledger"] = new()
+        {
+            Id = "traders_ledger", Name = "Trader's Ledger", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 2 },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Medium,
+        },
+        ["assayers_kit"] = new()
+        {
+            Id = "assayers_kit", Name = "Assayer's Kit", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 3 },
+            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Large,
+        },
+        ["cartographers_kit"] = new()
+        {
+            Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["lost"] = Magnitude.Huge },
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Large,
+        },
+        ["sleeping_kit"] = new()
+        {
+            Id = "sleeping_kit", Name = "Sleeping Kit", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Large },
+            Biome = "forest", ShopTier = 2, Cost = Magnitude.Large,
+        },
+
+        // ── Tools: Dungeon-only ──
+
+        ["fever_ward"] = new()
+        {
+            Id = "fever_ward", Name = "Fever Ward", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["swamp_fever"] = Magnitude.Huge },
+        },
+        ["bilestone"] = new()
+        {
+            Id = "bilestone", Name = "Bilestone", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["gut_worms"] = Magnitude.Huge },
+        },
+        ["lead_lined_case"] = new()
+        {
+            Id = "lead_lined_case", Name = "Lead-Lined Case", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Huge },
+        },
+        ["antivenom_kit"] = new()
+        {
+            Id = "antivenom_kit", Name = "Antivenom Kit", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["poison"] = Magnitude.Huge },
         },
 
         // ── Food ──
