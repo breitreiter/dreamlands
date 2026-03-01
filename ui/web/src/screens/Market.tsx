@@ -358,7 +358,7 @@ export default function MarketScreen({
                   <div
                     key={i}
                     onClick={entry.undo}
-                    className="flex justify-between cursor-pointer"
+                    className="flex justify-between cursor-pointer hover:line-through hover:text-red-800 transition-colors"
                   >
                     <span className="truncate mr-2">{entry.label}</span>
                     <span className="flex-shrink-0">
