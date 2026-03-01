@@ -164,7 +164,7 @@ public static class SkillChecks
     /// Injury = armor(big) + token, Poison = armor(big) + token,
     /// Exhausted = boots(big) + best equipment(small) + token,
     /// Freezing/Thirsty = two best small gear + token,
-    /// Swamp Fever/Gut Worms/Irradiated = consumable(big) + best equipment(small) + token.
+    /// Swamp Fever/Gut Worms/Irradiated = best equipment(small) + token.
     /// </summary>
     public static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
     {
@@ -178,8 +178,7 @@ public static class SkillChecks
                          + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
             "freezing" or "thirsty" or "lost" => GetBestPackResist(conditionId, magnitudes, state, balance, 2),
             "swamp_fever" or "gut_worms" or "irradiated" =>
-                GetBestConsumedResist(conditionId, magnitudes, state, balance)
-                + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
+                GetBestPackResist(conditionId, magnitudes, state, balance, 1),
             _ => 0,
         };
 
@@ -271,19 +270,4 @@ public static class SkillChecks
         return total;
     }
 
-    /// <summary>Best consumed (haversack consumable) resist bonus for a condition.</summary>
-    static int GetBestConsumedResist(string conditionId, IReadOnlyDictionary<Magnitude, int> magnitudes,
-        PlayerState state, BalanceData balance)
-    {
-        int best = 0;
-        foreach (var item in state.Haversack)
-        {
-            if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
-            if (def.Type != ItemType.Consumable) continue;
-            if (def.ResistModifiers.TryGetValue(conditionId, out var mag)
-                && magnitudes.TryGetValue(mag, out var bonus) && bonus > best)
-                best = bonus;
-        }
-        return best;
-    }
 }

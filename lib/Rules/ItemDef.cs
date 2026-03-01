@@ -247,23 +247,11 @@ public sealed class ItemDef
             Cures = new HashSet<string> { "injured" },
             Cost = Magnitude.Trivial,
         },
-        ["jorgo_root"] = new()
-        {
-            Id = "jorgo_root", Name = "Jorgo Root", Type = ItemType.Consumable,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["swamp_fever"] = Magnitude.Small },
-            Biome = "mountains", ShopTier = 2, Cost = Magnitude.Small,
-        },
         ["gravediggers_ear"] = new()
         {
             Id = "gravediggers_ear", Name = "Gravedigger's Ear", Type = ItemType.Consumable,
             Cures = new HashSet<string> { "swamp_fever" },
             Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
-        },
-        ["duskwort"] = new()
-        {
-            Id = "duskwort", Name = "Duskwort", Type = ItemType.Consumable,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["injured"] = Magnitude.Small },
-            Biome = "plains", ShopTier = 2, Cost = Magnitude.Small,
         },
         ["thumbroot"] = new()
         {
@@ -283,18 +271,6 @@ public sealed class ItemDef
             Cures = new HashSet<string> { "gut_worms" },
             Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
         },
-        ["dustseed"] = new()
-        {
-            Id = "dustseed", Name = "Dustseed", Type = ItemType.Consumable,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["gut_worms"] = Magnitude.Small },
-            Biome = "plains", ShopTier = 2, Cost = Magnitude.Trivial,
-        },
-        ["widows_veil"] = new()
-        {
-            Id = "widows_veil", Name = "Widow's Veil", Type = ItemType.Consumable,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["exhausted"] = Magnitude.Small },
-            Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
-        },
         ["pale_knot_berry"] = new()
         {
             Id = "pale_knot_berry", Name = "Pale Knot Berry", Type = ItemType.Consumable,
@@ -304,7 +280,6 @@ public sealed class ItemDef
         ["shustov_tonic"] = new()
         {
             Id = "shustov_tonic", Name = "Shustov Tonic", Type = ItemType.Consumable,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["irradiated"] = Magnitude.Small },
             Cures = new HashSet<string> { "irradiated" },
             Biome = "plains", ShopTier = 3, Cost = Magnitude.Medium,
         },

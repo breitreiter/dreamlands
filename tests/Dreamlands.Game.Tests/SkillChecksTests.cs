@@ -273,13 +273,12 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetResistBonus_SwampFever_UsesConsumablePlusTool()
+    public void GetResistBonus_SwampFever_UsesTool()
     {
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("jorgo_root", "Jorgo Root")); // swamp_fever = Small → +2
         state.Pack.Add(new ItemInstance("insect_netting", "Insect Netting")); // swamp_fever = Medium → +3
 
-        Assert.Equal(5, SkillChecks.GetResistBonus("swamp_fever", state, Balance)); // 2 + 3
+        Assert.Equal(3, SkillChecks.GetResistBonus("swamp_fever", state, Balance));
     }
 
     [Fact]
