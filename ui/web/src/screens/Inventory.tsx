@@ -65,17 +65,7 @@ export default function Inventory({
   const inventory = state.inventory;
 
   return (
-    <div className="h-full flex flex-col bg-page text-primary relative">
-      {/* Close button — top right */}
-      <button
-        onClick={onClose}
-        className="absolute top-3 right-4 z-10 w-8 h-8 flex items-center justify-center
-                   text-action hover:text-action-hover transition-colors"
-        title="Close"
-      >
-        ✕
-      </button>
-
+    <div className="h-full flex flex-col bg-page text-primary">
       {/* Three-column layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Character Panel */}
@@ -89,22 +79,30 @@ export default function Inventory({
           />
         </div>
 
-        {/* Middle: Mechanics — parchment background, fixed 380px */}
-        <div className="w-[420px] flex flex-col border-r border-edge overflow-y-auto flex-shrink-0 bg-parchment text-contrast">
-          {state.mechanics ? (
-            <MechanicsPanel mechanics={state.mechanics} />
-          ) : (
-            <div className="p-4 text-contrast/50">No mechanics data</div>
-          )}
-        </div>
-
-        {/* Right: Inventory */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Middle: Inventory */}
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden border-r border-edge">
           {inventory ? (
             <InventoryPanel inventory={inventory} />
           ) : (
             <div className="p-4 text-muted">No inventory data</div>
           )}
+        </div>
+
+        {/* Right: Mechanics — parchment background, fixed 420px */}
+        <div className="w-[420px] flex flex-col overflow-y-auto flex-shrink-0 bg-parchment text-contrast">
+          {state.mechanics ? (
+            <MechanicsPanel mechanics={state.mechanics} />
+          ) : (
+            <div className="p-4 text-contrast/50">No mechanics data</div>
+          )}
+          <div className="mt-auto p-4">
+            <button
+              onClick={onClose}
+              className="w-full py-2 cursor-pointer bg-btn hover:bg-btn-hover text-action hover:text-action-hover transition-colors rounded-lg"
+            >
+              Back to Map
+            </button>
+          </div>
         </div>
       </div>
 

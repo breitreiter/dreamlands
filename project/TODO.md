@@ -144,6 +144,7 @@ GameServer running with save persistence.
 - [x] Town — Market
 - [ ] Town — Guild storage
 - [ ] Town — Inn / Chapterhouse
+- [ ] Review UX for exiting inventory and market screens — both feel awkward
 - [ ] shadcn/tailwind based design system
 
 ## Rules / Game Mechanics
