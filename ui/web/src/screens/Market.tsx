@@ -356,7 +356,7 @@ export default function MarketScreen({
 
         {/* CASH BOOK column */}
         <div className="w-64 flex flex-col bg-parchment text-parchment-text flex-shrink-0">
-          <div className="p-3 border-b border-parchment-text/20">
+          <div className="p-3">
             <h3 className="font-header text-parchment-text text-[32px] leading-tight">Cash Book</h3>
           </div>
           <div className="flex-1 overflow-y-auto p-4 font-hand">
@@ -392,39 +392,39 @@ export default function MarketScreen({
                 <span>{projected.gold}g</span>
               </div>
             </div>
+
+            {hasOrder && (
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={submitOrder}
+                  disabled={loading}
+                  className="flex-1 px-3 py-2 rounded-lg bg-btn text-action hover:text-action-hover
+                             disabled:opacity-40 transition-colors flex items-center justify-center gap-1 font-body"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={cancelOrder}
+                  className="flex-1 px-3 py-2 rounded-lg bg-btn text-action hover:text-action-hover
+                             transition-colors flex items-center justify-center gap-1 font-body"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            {!hasOrder && (
+              <div className="mt-4">
+                <button
+                  onClick={onBack}
+                  className="w-full px-3 py-2 rounded-lg bg-btn text-action hover:text-action-hover
+                             transition-colors font-body"
+                >
+                  Leave Market
+                </button>
+              </div>
+            )}
           </div>
-
-          {hasOrder && (
-            <div className="p-3 border-t border-parchment-text/20 flex gap-2">
-              <button
-                onClick={submitOrder}
-                disabled={loading}
-                className="flex-1 px-3 py-2 bg-parchment-text/80 hover:bg-parchment-text
-                           disabled:opacity-50 text-parchment transition-colors flex items-center justify-center gap-1"
-              >
-                <span>&#x2713;</span> Accept
-              </button>
-              <button
-                onClick={cancelOrder}
-                className="flex-1 px-3 py-2 bg-parchment-text/20 hover:bg-parchment-text/30
-                           text-parchment-text transition-colors flex items-center justify-center gap-1"
-              >
-                <span>&#x2717;</span> Cancel
-              </button>
-            </div>
-          )}
-
-          {!hasOrder && (
-            <div className="p-3 border-t border-parchment-text/20">
-              <button
-                onClick={onBack}
-                className="w-full px-3 py-2 bg-parchment-text/20 hover:bg-parchment-text/30
-                           text-parchment-text transition-colors"
-              >
-                Leave Market
-              </button>
-            </div>
-          )}
         </div>
 
         {/* SELL column */}
