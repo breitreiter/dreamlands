@@ -288,3 +288,14 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 - [x] Remove dead `FlavorNames` class and YAML files — deleted `FlavorNames.cs`,
       `food_names.yaml`, `trade_names.yaml`, `equipment_names.yaml`. Removed YamlDotNet
       from Flavor csproj. Food names now served by static `FoodNames.cs`.
+
+## Deployment & Hosting
+
+- [ ] Cloudflare R2 asset CDN — create bucket, attach custom domain, wire up push.sh,
+      update web client to use CDN base URL in production. Existing push.sh skeleton works.
+      Plan in `project/architecture/cdn_deployment.md`.
+- [ ] React app hosting — Cloudflare Pages or Azure Static Web Apps, git-connected deploys.
+- [ ] GameServer hosting — Azure Functions, App Service, Fly.io, or similar.
+      Needs Cosmos DB or equivalent for player state persistence.
+- [ ] World build + deploy pipeline — build.sh + push.sh + app deploy as one scripted flow.
+      Version-prefix assets for cache busting.
