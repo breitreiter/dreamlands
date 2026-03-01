@@ -1,0 +1,38 @@
+Placeholder Recurring Encounter
+
+Something happens!
+
+choices:
+
+* Negotiate = Try to convince them
+    @if check negotiation hard {
+      You convince them!
+      +heal_spirits medium
+      +give_gold medium
+    } @else {
+      You fail!
+      +rem_gold medium
+      +damage_spirits medium
+    }
+
+* Fight = Do the ultimate punchies
+    @if check combat medium {
+        You win!
+        +heal_spirits medium
+        +give_gold medium
+    } @else {
+        You lose!
+        +damage_health medium
+        +damage_spirits medium
+    }
+
+* Sneak = Use big sneaky skills
+    @if check cunning medium {
+        You win!
+        +heal_spirits medium
+        +give_gold medium
+    } @else {
+        You lose!
+        +damage_health medium
+        +damage_spirits medium
+    }
