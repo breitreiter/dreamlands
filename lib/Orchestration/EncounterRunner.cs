@@ -18,7 +18,8 @@ public static class EncounterRunner
         session.Mode = SessionMode.InEncounter;
         session.CurrentEncounter = encounter;
         session.Player.CurrentEncounterId = encounter.Id;
-        session.Player.UsedEncounterIds.Add(encounter.Id);
+        if (!encounter.Recurring)
+            session.Player.UsedEncounterIds.Add(encounter.Id);
         var visible = Choices.GetVisible(encounter, session.Player, session.Balance);
         return new EncounterStep.ShowEncounter(encounter, visible);
     }

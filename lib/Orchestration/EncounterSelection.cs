@@ -29,7 +29,7 @@ public static class EncounterSelection
         if (category == null) return null;
 
         var pool = session.Bundle.GetByCategory(category);
-        var available = pool.Where(e => !session.Player.UsedEncounterIds.Contains(e.Id)).ToList();
+        var available = pool.Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id)).ToList();
         if (available.Count == 0) return null;
 
         return available[session.Rng.Next(available.Count)];

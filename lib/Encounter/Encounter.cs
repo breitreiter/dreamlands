@@ -7,5 +7,6 @@ public sealed class Encounter
     public string Category { get; init; } = "";
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
+    public bool Recurring { get; init; }
     public IReadOnlyList<Choice> Choices { get; init; } = Array.Empty<Choice>();
 }

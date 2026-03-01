@@ -53,6 +53,8 @@ static class BundleCommand
             var rel = Path.GetRelativePath(path, file);
             var category = Path.GetDirectoryName(rel) ?? "";
             var id = Path.GetFileNameWithoutExtension(file);
+            var recurring = id.StartsWith("recur-", StringComparison.OrdinalIgnoreCase);
+            if (recurring) id = id["recur-".Length..];
             var text = File.ReadAllText(file);
             var result = EncounterParser.Parse(text);
             if (!result.IsSuccess)
@@ -65,7 +67,7 @@ static class BundleCommand
             }
 
             var enc = result.Encounter!;
-            var doc = EncounterToJson(enc, id, category);
+            var doc = EncounterToJson(enc, id, category, recurring);
             encounters.Add(doc);
             byId[id] = new { category, encounterIndex = encounters.Count - 1 };
             if (!byCategory.TryGetValue(category, out var list))
@@ -103,7 +105,7 @@ static class BundleCommand
         return 0;
     }
 
-    static object EncounterToJson(Encounter enc, string id, string category)
+    static object EncounterToJson(Encounter enc, string id, string category, bool recurring)
     {
         var choices = new List<object>();
         foreach (var c in enc.Choices)
@@ -155,6 +157,7 @@ static class BundleCommand
         {
             id,
             category,
+            recurring,
             title = enc.Title,
             body = enc.Body,
             choices
