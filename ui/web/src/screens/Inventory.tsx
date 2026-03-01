@@ -302,12 +302,12 @@ function TabButton({ id, active, onClick, children }: { id: string; active: bool
       onClick={onClick}
       className={`h-12 px-4 flex items-center gap-2 transition-colors ${
         active
-          ? "bg-btn border border-action text-action"
+          ? "bg-btn border border-accent text-accent"
           : "bg-transparent border border-transparent text-action-dim hover:text-action"
       }`}
       style={{ borderRadius: "999px" }}
     >
-      {icon && <img src={iconUrl(icon)} alt="" className="w-5 h-5 opacity-80" />}
+      {icon && <MaskedIcon icon={icon} className="w-5 h-5" color={active ? "#D0BD62" : "currentColor"} />}
       {children}
     </button>
   );
@@ -339,7 +339,7 @@ function ItemCard({
 }) {
   const mods = itemModifierSummary(item);
   return (
-    <div className="flex items-start gap-3 p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
+    <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
       <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
         <MaskedIcon icon={itemTypeIcon(item.type)} className="w-6 h-6" color="#D0BD62" />
       </div>
