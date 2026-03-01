@@ -216,7 +216,7 @@ MechanicsInfo BuildMechanics(PlayerState p)
     // Resistances: for each condition, compute total resist bonus
     foreach (var (condId, condDef) in balance.Conditions)
     {
-        if (condId == "disheartened") continue;
+        if (condId is "disheartened" or "hungry") continue;
         // Map condition to its resist skill (mirrors SkillChecks.RollResist)
         var resistSkill = condId switch
         {
