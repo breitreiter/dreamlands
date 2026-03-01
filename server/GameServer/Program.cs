@@ -374,6 +374,7 @@ GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, Li
 {
     Mode = "encounter",
     Status = BuildStatus(session.Player),
+    Node = BuildNodeInfo(session.CurrentNode, session.Player),
     Encounter = BuildEncounterInfo(encounter, choices),
     Inventory = BuildInventory(session.Player),
     Mechanics = BuildMechanics(session.Player),
