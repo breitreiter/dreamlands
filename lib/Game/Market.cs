@@ -38,13 +38,10 @@ public static class Market
         if (size >= SettlementSize.Village)
             AddRandomItems(catalog, inBiomeTierGoods, 1, rng, catalog);
 
-        // Town: +1 out-of-biome tier 1-2 trade good, +1 equipment
+        // Town: +1 in-biome/in-tier trade good, +1 equipment
         if (size >= SettlementSize.Town)
         {
-            var outBiomeGoods = balance.Items.Values
-                .Where(i => i.Type == ItemType.TradeGood && i.Biome != biome && i.ShopTier is >= 1 and <= 2)
-                .ToList();
-            AddRandomItems(catalog, outBiomeGoods, 1, rng, catalog);
+            AddRandomItems(catalog, inBiomeTierGoods, 1, rng, catalog);
             AddRandomItems(catalog, equipment, 1, rng, catalog);
         }
 
@@ -60,13 +57,10 @@ public static class Market
         if (tradeGoodsInCatalog.Count > 0)
             state.FeaturedSellItem = tradeGoodsInCatalog[rng.Next(tradeGoodsInCatalog.Count)];
 
-        // Featured buy item: cross-biome trade good, unique across settlements if possible
-        var crossBiomeGoods = balance.Items.Values
-            .Where(i => i.Type == ItemType.TradeGood && i.Biome != biome)
-            .Select(i => i.Id)
-            .ToList();
-        var unclaimed = crossBiomeGoods.Where(id => !player.ClaimedFeaturedBuys.Contains(id)).ToList();
-        var buyPool = unclaimed.Count > 0 ? unclaimed : crossBiomeGoods;
+        // Featured buy item: in-biome trade good, unique across settlements if possible
+        var inBiomeGoods = inBiomeTierGoods.Select(i => i.Id).ToList();
+        var unclaimed = inBiomeGoods.Where(id => !player.ClaimedFeaturedBuys.Contains(id)).ToList();
+        var buyPool = unclaimed.Count > 0 ? unclaimed : inBiomeGoods;
         if (buyPool.Count > 0)
         {
             state.FeaturedBuyItem = buyPool[rng.Next(buyPool.Count)];
