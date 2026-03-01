@@ -309,7 +309,6 @@ export default function MarketScreen({
             ) : (
               filteredStock.map((item) => {
                 const projQty = projected.projectedStock.get(item.id) ?? item.quantity;
-                const pendingQty = pendingBuys.get(item.id) ?? 0;
                 return (
                   <div key={item.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
                     <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
@@ -325,18 +324,6 @@ export default function MarketScreen({
                       )}
                     </div>
                     <div className="flex items-center gap-1 flex-shrink-0">
-                      {pendingQty > 0 && (
-                        <button
-                          onClick={() => removeBuy(item.id)}
-                          className="px-2 py-1 rounded-lg text-action hover:text-action-hover transition-colors"
-                          style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                        >
-                          -
-                        </button>
-                      )}
-                      {pendingQty > 0 && (
-                        <span className="text-accent w-4 text-center">{pendingQty}</span>
-                      )}
                       <button
                         onClick={() => addBuy(item.id)}
                         disabled={!canBuy(item)}
