@@ -48,7 +48,8 @@ There are three typefaces, each used at exactly one size and weight. No exceptio
 | Action-Secondary | #b29073   | `text-action-dim`   | Dimmed/inactive interactive  |
 
 **Rule: Every clickable element uses #D0925D.** Buttons, tabs, links, close buttons — all of them.
-Icon-based buttons use `bg-action` background. Text-based interactive elements use `text-action`.
+Buttons use `text-action` on `bg-btn` (dark background). All buttons have **8px rounded corners** (`rounded-lg`).
+Non-interactive icons use `#D0BD62` (accent gold) — never the bronze action color.
 
 ### Semantic
 

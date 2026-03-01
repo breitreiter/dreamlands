@@ -339,9 +339,9 @@ function ItemCard({
 }) {
   const mods = itemModifierSummary(item);
   return (
-    <div className="flex items-start gap-3 bg-btn p-3 border-l-2 border-accent">
-      <div className="w-10 h-10 bg-btn-hover flex-shrink-0 flex items-center justify-center">
-        <img src={iconUrl(itemTypeIcon(item.type))} alt="" className="w-6 h-6 opacity-80" />
+    <div className="flex items-start gap-3 p-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
+      <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
+        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-6 h-6" color="#D0BD62" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-primary">
@@ -375,11 +375,12 @@ function ActionBtn({ label, disabled, onClick }: { label: string; disabled: bool
     <button
       onClick={onClick}
       disabled={disabled}
-      className="w-10 h-10 bg-action hover:bg-action-hover disabled:opacity-40
-                 flex items-center justify-center transition-colors"
+      className="w-10 h-10 rounded-lg disabled:opacity-40
+                 flex items-center justify-center transition-colors text-action hover:text-action-hover"
+      style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
       title={label}
     >
-      <img src={iconUrl(ACTION_ICONS[label] || "sun.svg")} alt={label} className="w-5 h-5" />
+      <MaskedIcon icon={ACTION_ICONS[label] || "sun.svg"} className="w-5 h-5" color="currentColor" />
     </button>
   );
 }
