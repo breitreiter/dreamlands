@@ -18,12 +18,12 @@ Just a list of things that need doing, roughly grouped.
 
 ## Map Visual
 
-- [ ] Add a safe border to the map so the edge looks intentional against the background
+- [x] Add a safe border to the map so the edge looks intentional against the background
 - [ ] Replace lake sprite
 - [ ] Hand-drawn river decals — 800x800 tiles chained lake-to-edge.
       Design in `project/design/river_decals.md`.
-- [ ] Fix mountain coloring
-- [ ] Finish mountain POI sprites
+- [x] Fix mountain coloring
+- [x] Finish mountain POI sprites
 - [ ] Improve settlement sprite variability — avoid placing identical decals near each other;
       may need more decals (recolored variants)
 - [ ] Fix dungeon sprite scaling (PoiPass shares a scale factor derived from settlement decals;
@@ -36,13 +36,10 @@ Just a list of things that need doing, roughly grouped.
 
 ## Game UI Assets
 
-- [ ] Icons for all condition types
-- [ ] Icons for all core inventory types
+- [x] Icons for all condition types
+- [x] Icons for all core inventory types
 - [ ] Vignettes for all encounter types
 - [ ] Vignettes for key encounters
-- [ ] Game-ready armor
-- [ ] Game-ready weapons
-- [ ] Game-ready portraits
 
 ## World Building
 
@@ -112,16 +109,15 @@ Each tier is ~5 encounters (~30 min each). Each dungeon is ~1 hour.
 Screen designs live in `project/screens/`. Some are well-specified, some are empty.
 
 - [ ] Landing
-- [ ] Explore/Map/Status
-- [ ] Inventory
-- [ ] Encounter
-- [ ] Daily rest
-- [ ] Town — Home
-- [ ] Town — Shop
-- [ ] Town — Temple
-- [ ] Town — Market
-- [ ] Town — Guild
+- [x] Explore/Map/Status
+- [x] Inventory
+- [x] Encounter
+- [x] Daily rest
+- [x] Town — Shop
+- [x] Town — Market
+- [ ] Town — Guild Bank
 - [ ] shadcn/tailwind based design system
+- [ ] Clean up rest screen and improve legibility
 
 ## Frontend Implementation
 
@@ -131,10 +127,10 @@ GameServer running with save persistence.
 - [x] Scaffold React app with Vite, API client, game context
 - [x] Screen shells — Splash, Explore, Encounter, Inventory, Market, Settlement, GameOver
 - [ ] Landing — connect to server, new game / load game
-- [ ] Explore/Map/Status — Leaflet integration, movement
+- [x] Explore/Map/Status — Leaflet integration, movement
 - [x] Inventory — full-screen build with character, mechanics, and inventory panels
 - [x] Encounter — immersive two-panel layout, choice rendering, conditional branches
-- [ ] Dungeon continuous scroll — scene transitions clear and redraw instead of accumulating.
+- [x] Dungeon continuous scroll — scene transitions clear and redraw instead of accumulating.
       Server sends combined outcome+encounter for NavigatedTo but the client resets segments
       on each new encounter title. Need to track dungeon context so continuation detection works
       across scene boundaries (Encounter.tsx).
@@ -155,11 +151,10 @@ derived from player position (no separate mode). Inn/Chapterhouse logic and test
 Market buy/sell with auto-equip works. Remaining services need game logic.
 
 - [ ] Town — Shop
-- [ ] Town — Temple
 - [ ] Town — Market
 - [ ] Town — Guild storage
 - [x] Town — Inn / Chapterhouse (game logic)
-- [ ] Stock medicine in biome-appropriate markets (medicines may not spawn yet)
+- [x] Stock medicine in biome-appropriate markets
 - [ ] Review trade pricing for distant settlements — cross-biome trading is punishing in
       far-flung regions, compounded by weak inventory at remote settlements. May need price
       curve adjustments or better stocking at high-tier locations.
@@ -203,7 +198,7 @@ balanced endgame progression.
 - [x] **+5 weapon** — zweihander (Combat +5).
 - [x] **Cunning armor** — light armor ladder: silks (+1) → nightveil (+5).
 - [x] **Negotiation tool** — letters_of_introduction (+2) pairs with peoples_borderlands (+3).
-- [ ] **Bushcraft tool** — no Bushcraft-boosting tools exist yet. Need +2 and +3 items for +5 total.
+- [x] **Bushcraft tool** — no Bushcraft-boosting tools exist yet. Need +2 and +3 items for +5 total.
 - [x] **Mercantile tool** — assayers_kit (+3) pairs with traders_ledger (+2).
 
 ### Data Authoring
@@ -288,7 +283,7 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 - [x] Remove `CombatBalance` — combat is just a skill check, no separate system needed.
 - [x] Remove `UsesPerLevel` from `CharacterBalance` — no use-based skill advancement, gear only.
-- [ ] Remove `SkillUses` dict from `PlayerState` — no use-based skill advancement, gear only.
+- [x] Remove `SkillUses` dict from `PlayerState` — never existed in code, vestigial TODO.
 - [ ] Stale reference docs — `project/reference/mapgen_design.md` references ocean/coast
       terrain that no longer exists. Several reference docs may have similar staleness.
 - [ ] `project/design/gaps.md` checkbox audit — many checked items may not reflect current code.
