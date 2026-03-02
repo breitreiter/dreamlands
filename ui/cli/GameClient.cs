@@ -32,13 +32,19 @@ class GameClient(string baseUrl)
         return await ReadResponse(resp);
     }
 
+    public async Task<string> GetInn(string gameId)
+    {
+        var resp = await _http.GetAsync($"/api/game/{gameId}/inn");
+        return await ReadResponse(resp);
+    }
+
     public async Task<bool> IsReachable()
     {
         try
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
-            var resp = await _http.GetAsync("/api/game/healthcheck", cts.Token);
-            return true;
+            var resp = await _http.GetAsync("/api/health", cts.Token);
+            return resp.IsSuccessStatusCode;
         }
         catch
         {

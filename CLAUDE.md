@@ -20,7 +20,12 @@ dotnet run --project ui/cli -- new                     # create game, save sessi
 dotnet run --project ui/cli -- status                  # GET current state
 dotnet run --project ui/cli -- move north              # move direction
 dotnet run --project ui/cli -- choose 0                # pick encounter choice
+dotnet run --project ui/cli -- inn                     # GET inn/chapterhouse info
+dotnet run --project ui/cli -- rest                    # stay one night at inn
+dotnet run --project ui/cli -- inn-recover             # full recovery at inn (costs gold)
+dotnet run --project ui/cli -- chapterhouse            # free recovery at chapterhouse
 dotnet run --project ui/cli -- market                  # GET market stock (when at settlement)
+dotnet run --project ui/cli -- market-order '<json>'   # submit market buy/sell order
 dotnet run --project ui/cli -- equip hatchet           # equip item from pack
 dotnet run --project ui/cli -- unequip weapon          # unequip slot (weapon|armor|boots)
 dotnet run --project ui/cli -- discard bodkin          # discard item from inventory

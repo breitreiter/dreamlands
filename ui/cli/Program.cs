@@ -41,8 +41,15 @@ if (positional.Count == 0)
     Console.Error.WriteLine("  end-encounter        End current encounter");
     Console.Error.WriteLine("  end-dungeon          End dungeon (after completion/flee)");
     Console.Error.WriteLine("  camp                 Resolve end-of-day (auto-selects food+medicine)");
-    Console.Error.WriteLine("  market-order <json>   Submit market buy/sell order");
+    Console.Error.WriteLine("  inn                  Get inn/chapterhouse info at current settlement");
+    Console.Error.WriteLine("  rest                 Stay one night at inn");
+    Console.Error.WriteLine("  inn-recover          Full recovery at inn (costs gold)");
+    Console.Error.WriteLine("  chapterhouse         Free recovery at chapterhouse");
     Console.Error.WriteLine("  market               Get market stock");
+    Console.Error.WriteLine("  market-order <json>  Submit market buy/sell order");
+    Console.Error.WriteLine("  equip <item_id>      Equip item from pack");
+    Console.Error.WriteLine("  unequip <slot>       Unequip slot (weapon|armor|boots)");
+    Console.Error.WriteLine("  discard <item_id>    Discard item from inventory");
     return 1;
 }
 
@@ -208,6 +215,22 @@ try
             result = await client.Action(ResolveGameId(), campJson);
             break;
         }
+
+        case "inn":
+            result = await client.GetInn(ResolveGameId());
+            break;
+
+        case "rest":
+            result = await client.Action(ResolveGameId(), """{"action":"rest_at_inn"}""");
+            break;
+
+        case "inn-recover":
+            result = await client.Action(ResolveGameId(), """{"action":"inn_full_recovery"}""");
+            break;
+
+        case "chapterhouse":
+            result = await client.Action(ResolveGameId(), """{"action":"chapterhouse_recover"}""");
+            break;
 
         case "market-order":
         {

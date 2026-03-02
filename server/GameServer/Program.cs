@@ -481,6 +481,8 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
 
 // ── Endpoints ──
 
+app.MapGet("/api/health", () => Results.Ok(new { status = "ok" }));
+
 app.MapPost("/api/game/new", async () =>
 {
     var rng = new Random();
