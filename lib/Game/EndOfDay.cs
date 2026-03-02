@@ -48,7 +48,8 @@ public static class EndOfDay
     /// </summary>
     public static List<EndOfDayEvent> Resolve(
         PlayerState state, string biome, int tier,
-        BalanceData balance, Random rng)
+        BalanceData balance, Random rng,
+        Func<FoodType, Random, ItemInstance>? createFood = null)
     {
         var events = new List<EndOfDayEvent>();
 
@@ -67,28 +68,31 @@ public static class EndOfDay
         // 1. Roll resists silently — record pass/fail, do NOT apply new conditions yet
         var resistResults = RollResists(state, biome, tier, noBiome, balance, rng, events);
 
-        // 2. Auto-consume food
+        // 2. Forage for food (wilderness only)
+        ResolveForaging(state, noBiome, balance, rng, createFood, events);
+
+        // 3. Auto-consume food
         bool balanced = false;
         if (!noMeal)
             balanced = ResolveFood(state, balance, events);
 
-        // 3. Auto-consume medicine (only cures pre-existing conditions)
+        // 4. Auto-consume medicine (only cures pre-existing conditions)
         ResolveMedicines(state, preExisting, resistResults, balance, events);
 
-        // 4. Apply new conditions from failed resists (for conditions player didn't already have)
+        // 5. Apply new conditions from failed resists (for conditions player didn't already have)
         ApplyNewConditions(state, resistResults, balance, events);
 
-        // 5. Condition drain
+        // 6. Condition drain
         string? worstDrainCondition = ResolveConditionDrain(state, balance, events);
 
-        // 6. Rest recovery
+        // 7. Rest recovery
         if (!noSleep)
             ResolveRest(state, balanced, balance, events);
 
-        // 7. Evaluate disheartened
+        // 8. Evaluate disheartened
         ResolveDisheartened(state, balance, events);
 
-        // 8. Death check
+        // 9. Death check
         if (state.Health <= 0)
             events.Add(new EndOfDayEvent.PlayerDied(worstDrainCondition));
 
@@ -123,6 +127,48 @@ public static class EndOfDay
         }
 
         return failed;
+    }
+
+    /// <summary>
+    /// Automatic foraging: roll bushcraft + gear bonus against 3 DC thresholds.
+    /// Yield 0-3 food items added to haversack. Skipped at settlements (noBiome).
+    /// </summary>
+    static void ResolveForaging(PlayerState state, bool noBiome,
+        BalanceData balance, Random rng,
+        Func<FoodType, Random, ItemInstance>? createFood,
+        List<EndOfDayEvent> events)
+    {
+        if (noBiome) return;
+
+        var skillLevel = state.Skills.GetValueOrDefault(Skill.Bushcraft);
+        var itemBonus = SkillChecks.GetItemBonus(Skill.Bushcraft, state, balance);
+        var modifier = skillLevel + itemBonus;
+
+        var rollMode = state.ActiveConditions.ContainsKey("disheartened")
+            ? RollMode.Disadvantage : RollMode.Normal;
+        var natural = SkillChecks.RollD20(rollMode, rng);
+        var total = natural + modifier;
+
+        var dc = balance.Character;
+        int yield = total >= dc.ForageDC3 ? 3
+                  : total >= dc.ForageDC2 ? 2
+                  : total >= dc.ForageDC1 ? 1
+                  : 0;
+
+        var itemsFound = new List<string>();
+        var foodTypes = new[] { FoodType.Protein, FoodType.Grain, FoodType.Sweets };
+
+        for (int i = 0; i < yield; i++)
+        {
+            var type = foodTypes[i % foodTypes.Length];
+            var item = createFood?.Invoke(type, rng)
+                ?? new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", type.ToString())
+                    { FoodType = type };
+            state.Haversack.Add(item);
+            itemsFound.Add(item.DisplayName);
+        }
+
+        events.Add(new EndOfDayEvent.Foraged(total, modifier, itemsFound));
     }
 
     /// <summary>

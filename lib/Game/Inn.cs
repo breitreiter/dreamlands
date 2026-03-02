@@ -141,6 +141,7 @@ public static class Inn
         state.PendingNoBiome = true;
         state.PendingEndOfDay = true;
 
+        // noBiome=true for inn stays, so foraging is skipped — no createFood needed
         var events = EndOfDay.Resolve(state, biome, tier, balance, rng);
 
         // Inn clears exhausted

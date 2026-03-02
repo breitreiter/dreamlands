@@ -287,4 +287,157 @@ public class EndOfDayTests
 
         Assert.DoesNotContain(events, e => e is EndOfDayEvent.RestRecovery);
     }
+
+    [Fact]
+    public void ResolveForaging_HighModifier_FindsFood()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Bushcraft] = 4;
+        // Add food so the character survives the night
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        // Try multiple seeds — with +4 modifier, should find food on many rolls
+        bool foundAny = false;
+        for (int seed = 0; seed < 20; seed++)
+        {
+            var s = Fresh();
+            s.Skills[Skill.Bushcraft] = 4;
+            s.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+            s.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+            s.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+            var events = EndOfDay.Resolve(s, "plains", 1, Balance, new Random(seed));
+            var foraged = events.OfType<EndOfDayEvent.Foraged>().Single();
+            if (foraged.ItemsFound.Count > 0) { foundAny = true; break; }
+        }
+        Assert.True(foundAny, "High bushcraft should find food on at least one seed");
+    }
+
+    [Fact]
+    public void ResolveForaging_ZeroModifier_FindsLessFood()
+    {
+        // With 0 modifier, need natural 16+ to find anything (25% chance)
+        // Over many seeds, total yield should be low
+        int totalYield = 0;
+        for (int seed = 0; seed < 50; seed++)
+        {
+            var s = Fresh();
+            foreach (var skill in s.Skills.Keys.ToList()) s.Skills[skill] = 0;
+            s.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+            s.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+            s.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+            var events = EndOfDay.Resolve(s, "plains", 1, Balance, new Random(seed));
+            totalYield += events.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count;
+        }
+        // Average should be well under 1 per night with 0 modifier
+        Assert.True(totalYield < 50, $"Zero modifier should rarely find food, but found {totalYield} in 50 trials");
+    }
+
+    [Fact]
+    public void ResolveForaging_ForagedEventEmitted()
+    {
+        var state = Fresh();
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        var foraged = events.OfType<EndOfDayEvent.Foraged>().SingleOrDefault();
+        Assert.NotNull(foraged);
+        Assert.True(foraged.Rolled > 0);
+    }
+
+    [Fact]
+    public void ResolveForaging_NoBiome_SkipsForaging()
+    {
+        var state = Fresh();
+        state.PendingNoBiome = true;
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        Assert.DoesNotContain(events, e => e is EndOfDayEvent.Foraged);
+    }
+
+    [Fact]
+    public void ResolveForaging_Disheartened_ImposesDisadvantage()
+    {
+        // With disheartened, the foraging roll should use disadvantage (min of 2 d20s)
+        // This means lower rolls on average, so less food found
+        int normalYield = 0, disheartenedYield = 0;
+        for (int seed = 0; seed < 100; seed++)
+        {
+            // Normal
+            var s1 = Fresh();
+            s1.Skills[Skill.Bushcraft] = 4;
+            s1.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+            s1.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+            s1.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+            var e1 = EndOfDay.Resolve(s1, "plains", 1, Balance, new Random(seed));
+            normalYield += e1.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count;
+
+            // Disheartened
+            var s2 = Fresh();
+            s2.Skills[Skill.Bushcraft] = 4;
+            s2.Spirits = 0;
+            s2.ActiveConditions["disheartened"] = 1;
+            s2.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+            s2.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+            s2.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+            var e2 = EndOfDay.Resolve(s2, "plains", 1, Balance, new Random(seed));
+            disheartenedYield += e2.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count;
+        }
+
+        Assert.True(disheartenedYield < normalYield,
+            $"Disheartened ({disheartenedYield}) should find less food than normal ({normalYield})");
+    }
+
+    [Fact]
+    public void ResolveForaging_CreateFoodDelegate_UsedWhenProvided()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+
+        // Find a seed where foraging succeeds (need 16+ with modifier)
+        int? goodSeed = null;
+        for (int seed = 0; seed < 50; seed++)
+        {
+            var probe = Fresh();
+            probe.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+            probe.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+            probe.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+            probe.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+            var probeEvents = EndOfDay.Resolve(probe, "plains", 1, Balance, new Random(seed));
+            if (probeEvents.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count > 0)
+            {
+                goodSeed = seed;
+                break;
+            }
+        }
+        Assert.NotNull(goodSeed);
+
+        state = Fresh();
+        state.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        bool delegateCalled = false;
+        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(goodSeed.Value),
+            createFood: (type, rng) =>
+            {
+                delegateCalled = true;
+                return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", $"Foraged {type}");
+            });
+
+        Assert.True(delegateCalled);
+        var foraged = events.OfType<EndOfDayEvent.Foraged>().Single();
+        Assert.True(foraged.ItemsFound.All(n => n.StartsWith("Foraged")));
+    }
 }

@@ -72,7 +72,7 @@ public static class SkillChecks
         return new SkillCheckResult(passed, natural + modifier, dc, modifier, skillLevel, skill, rollMode, natural);
     }
 
-    static int RollD20(RollMode mode, Random rng)
+    internal static int RollD20(RollMode mode, Random rng)
     {
         var first = rng.Next(1, 21);
         if (mode == RollMode.Normal) return first;

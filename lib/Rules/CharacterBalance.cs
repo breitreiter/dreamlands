@@ -31,6 +31,11 @@ public sealed class CharacterBalance
     // Ambient resist check difficulty (single DC for all conditions)
     public Difficulty AmbientResistDifficulty { get; init; } = Difficulty.Medium;
 
+    // Foraging DC thresholds (multi-tier: beat DC1 = 1 food, DC2 = 2, DC3 = 3)
+    public int ForageDC1 { get; init; } = 16;
+    public int ForageDC2 { get; init; } = 18;
+    public int ForageDC3 { get; init; } = 20;
+
     // End-of-day rest recovery (before meal bonuses)
     public int BaseRestHealth { get; init; } = 1;
     public int BaseRestSpirits { get; init; } = 1;

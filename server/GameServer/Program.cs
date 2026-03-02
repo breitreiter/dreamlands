@@ -468,6 +468,9 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
             EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",
             EndOfDayEvent.ConditionDrain d => $"{d.ConditionId}: -{d.HealthLost} health, -{d.SpiritsLost} spirits",
             EndOfDayEvent.SpecialEffect s => $"{s.ConditionId}: {s.Effect}",
+            EndOfDayEvent.Foraged f => f.ItemsFound.Count > 0
+                ? $"Foraged: {string.Join(", ", f.ItemsFound)} (rolled {f.Rolled})"
+                : $"Found nothing while foraging (rolled {f.Rolled})",
             EndOfDayEvent.RestRecovery r => $"Rest: +{r.HealthGained} health, +{r.SpiritsGained} spirits",
             EndOfDayEvent.PlayerDied d => d.ConditionId != null
                 ? $"Perished from {d.ConditionId}."
@@ -859,9 +862,15 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             var campBiome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
             var campTier = node.Region?.Tier ?? 1;
 
+            var campTerrain = node.Region?.Terrain ?? Terrain.Plains;
             var campEvents = EndOfDay.Resolve(
                 player, campBiome, campTier,
-                balance, session.Rng);
+                balance, session.Rng,
+                createFood: (type, rng) =>
+                {
+                    var (name, _) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
+                    return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name) { FoodType = type };
+                });
 
             var campInfo = BuildCampThreats(session);
             campInfo = new CampInfo
