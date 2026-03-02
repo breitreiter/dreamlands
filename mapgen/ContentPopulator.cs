@@ -13,6 +13,8 @@ public static class ContentPopulator
         SettlementPlacer.PlaceSettlements(map, rng);
         Console.Error.WriteLine("  Tiers...");
         TierAssigner.Assign(map);
+        Console.Error.WriteLine("  Trade routes...");
+        TradeRouteBuilder.Build(map);
         SizeSettlements(map);
         NameRegions(map);
         NameSettlements(map);
@@ -26,20 +28,25 @@ public static class ContentPopulator
 
     private static void SizeSettlements(Map map)
     {
+        // Count children per settlement in the trade DAG
+        var childCount = new Dictionary<Node, int>();
+        foreach (var (from, to) in map.TradeEdges)
+        {
+            childCount.TryGetValue(to, out var count);
+            childCount[to] = count + 1;
+        }
+
         foreach (var node in map.AllNodes())
         {
             if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Size != null)
                 continue;
 
-            var tier = node.Region?.Tier ?? 1;
-            int connections = map.LandNeighbors(node).Count();
-            bool high = connections >= 4;
-
-            node.Poi.Size = tier switch
+            var children = childCount.GetValueOrDefault(node, 0);
+            node.Poi.Size = children switch
             {
-                1 => high ? SettlementSize.Town : SettlementSize.Village,
-                2 => high ? SettlementSize.Village : SettlementSize.Outpost,
-                _ => high ? SettlementSize.Outpost : SettlementSize.Camp,
+                >= 3 => SettlementSize.Town,
+                >= 1 => SettlementSize.Village,
+                _ => SettlementSize.Outpost,
             };
         }
     }

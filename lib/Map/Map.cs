@@ -7,6 +7,7 @@ public class Map
     public int Width { get; }
     public int Height { get; }
     public List<Region> Regions { get; } = new();
+    public List<(Node From, Node To)> TradeEdges { get; } = new();
     public Node? StartingCity { get; set; }
 
     public Map(int width, int height)

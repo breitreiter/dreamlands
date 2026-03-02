@@ -80,6 +80,16 @@ public static class MapSerializer
         if (dto.StartingCity is { Length: 2 })
             map.StartingCity = map[dto.StartingCity[0], dto.StartingCity[1]];
 
+        // Restore trade edges
+        if (dto.TradeEdges != null)
+        {
+            foreach (var e in dto.TradeEdges)
+            {
+                if (e is { Length: 4 })
+                    map.TradeEdges.Add((map[e[0], e[1]], map[e[2], e[3]]));
+            }
+        }
+
         return map;
     }
 
@@ -94,7 +104,10 @@ public static class MapSerializer
             Height = map.Height,
             StartingCity = map.StartingCity != null ? new[] { map.StartingCity.X, map.StartingCity.Y } : null,
             Regions = map.Regions.Select(ToDto).ToList(),
-            Nodes = map.AllNodes().Select(ToDto).ToList()
+            Nodes = map.AllNodes().Select(ToDto).ToList(),
+            TradeEdges = map.TradeEdges.Count > 0
+                ? map.TradeEdges.Select(e => new[] { e.From.X, e.From.Y, e.To.X, e.To.Y }).ToList()
+                : null
         };
     }
 
@@ -147,6 +160,7 @@ public static class MapSerializer
         public int[]? StartingCity { get; init; }
         public List<RegionDto> Regions { get; init; } = new();
         public List<NodeDto> Nodes { get; init; } = new();
+        public List<int[]>? TradeEdges { get; init; }
     }
 
     internal record RegionDto

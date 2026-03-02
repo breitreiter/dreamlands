@@ -48,6 +48,8 @@ public static class ImageRenderer
             using var terrainSnapshot = surface.Snapshot();
             Console.Error.WriteLine("  POIs...");
             PoiPass.Draw(canvas, map, terrainSnapshot, seed);
+            Console.Error.WriteLine("  Trade routes...");
+            TradeRoutePass.Draw(canvas, map);
 
             return surface.Snapshot();
         }
