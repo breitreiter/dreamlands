@@ -294,23 +294,19 @@ export default function MarketScreen({
     }
   }, [inventory, sellTab]);
 
-  // Ledger entries for the cash book, each with an undo callback
-  const ledgerEntries = useMemo(() => {
-    const entries: { label: string; amount: number; type: "buy" | "sell"; undo: () => void }[] = [];
-    pendingSells.forEach((defId, idx) => {
-      const allItems = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? [])];
-      const name = allItems.find((it) => it.defId === defId)?.name ?? defId;
-      entries.push({ label: `sell: ${name}`, amount: sellPrices[defId] ?? 0, type: "sell", undo: () => removeSell(idx) });
-    });
-    for (const [itemId, qty] of pendingBuys) {
-      const item = stock.find((s) => s.id === itemId);
-      const name = item?.name ?? itemId;
-      for (let q = 0; q < qty; q++) {
-        entries.push({ label: `buy: ${name}`, amount: item?.buyPrice ?? 0, type: "buy", undo: () => removeBuy(itemId) });
-      }
-    }
-    return entries;
-  }, [pendingBuys, pendingSells, stock, sellPrices, inventory]);
+  // Resolve sell defIds to display names
+  const stagedSells = useMemo(() => {
+    const allItems = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? []),
+      ...(inventory?.equipment.weapon ? [inventory.equipment.weapon] : []),
+      ...(inventory?.equipment.armor ? [inventory.equipment.armor] : []),
+      ...(inventory?.equipment.boots ? [inventory.equipment.boots] : [])];
+    return pendingSells.map((defId, idx) => ({
+      defId,
+      name: allItems.find((it) => it.defId === defId)?.name ?? defId,
+      price: sellPrices[defId] ?? 0,
+      index: idx,
+    }));
+  }, [pendingSells, inventory, sellPrices]);
 
   const TabBtn = ({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) => {
     const icon = TAB_ICONS[id];
@@ -334,10 +330,49 @@ export default function MarketScreen({
     <div className="h-full flex flex-col bg-page text-primary">
 
       {message && (
-        <div className="px-4 py-2 text-sm text-center text-primary/80 bg-panel border-b border-edge">
+        <div className="px-4 py-2 text-center text-primary/80 bg-panel border-b border-edge">
           {message}
         </div>
       )}
+
+      {/* Gold & action bar */}
+      <div className="flex items-center gap-4 px-4 py-3 bg-parchment text-parchment-text flex-shrink-0">
+        <div className="flex items-center gap-2 font-hand">
+          <MaskedIcon icon="two-coins.svg" className="w-5 h-5" color="#3a3520" />
+          <span className="font-bold">{projected.gold}g</span>
+          {hasOrder && projected.gold !== state.status.gold && (
+            <span className="text-parchment-text/60">(was {state.status.gold}g)</span>
+          )}
+        </div>
+        <div className="flex-1" />
+        {hasOrder ? (
+          <div className="flex gap-2">
+            <button
+              onClick={submitOrder}
+              disabled={loading}
+              className="px-4 py-1 rounded-lg bg-btn text-action hover:text-action-hover
+                         disabled:opacity-40 transition-colors"
+            >
+              Confirm
+            </button>
+            <button
+              onClick={cancelOrder}
+              className="px-4 py-1 rounded-lg bg-btn text-action hover:text-action-hover
+                         transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onBack}
+            className="px-4 py-1 rounded-lg bg-btn text-action hover:text-action-hover
+                       transition-colors"
+          >
+            Leave Market
+          </button>
+        )}
+      </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* BUY column */}
@@ -358,6 +393,7 @@ export default function MarketScreen({
             ) : (
               filteredStock.map((item) => {
                 const projQty = projected.projectedStock.get(item.id) ?? item.quantity;
+                const pendingQty = pendingBuys.get(item.id) ?? 0;
                 return (
                   <div key={item.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
                     <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
@@ -373,6 +409,16 @@ export default function MarketScreen({
                       )}
                     </div>
                     <div className="flex items-center gap-1 flex-shrink-0">
+                      {pendingQty > 0 && (
+                        <button
+                          onClick={() => removeBuy(item.id)}
+                          className="px-2 py-1 rounded-lg text-action hover:text-action-hover transition-colors flex items-center gap-1"
+                          style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
+                        >
+                          <span className="text-accent">{pendingQty}x</span>
+                          <span>&times;</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => addBuy(item.id)}
                         disabled={!canBuy(item)}
@@ -391,79 +437,6 @@ export default function MarketScreen({
           </div>
         </div>
 
-        {/* CASH BOOK column */}
-        <div className="w-64 flex flex-col bg-parchment text-parchment-text flex-shrink-0">
-          <div className="p-3">
-            <h3 className="font-header text-parchment-text text-[32px] leading-tight">Cash Book</h3>
-          </div>
-          <div className="flex-1 overflow-y-auto p-4 font-hand">
-            <div className="flex justify-between mb-3">
-              <span>Opening balance</span>
-              <span>{state.status.gold}g</span>
-            </div>
-
-            {ledgerEntries.length > 0 && (
-              <div className="space-y-1 mb-3">
-                {ledgerEntries.map((entry, i) => (
-                  <div
-                    key={i}
-                    onClick={entry.undo}
-                    className="flex justify-between cursor-pointer hover:line-through hover:text-red-800 transition-colors"
-                  >
-                    <span className="truncate mr-2">{entry.label}</span>
-                    <span className="flex-shrink-0">
-                      {entry.type === "sell" ? (
-                        <span className="text-green-800">+{entry.amount}g</span>
-                      ) : (
-                        <span className="text-red-800">-{entry.amount}g</span>
-                      )}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="border-t border-parchment-text/30 pt-2 mt-2">
-              <div className="flex justify-between font-bold">
-                <span>Closing balance</span>
-                <span>{projected.gold}g</span>
-              </div>
-            </div>
-
-            {hasOrder && (
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={submitOrder}
-                  disabled={loading}
-                  className="flex-1 px-3 py-2 rounded-lg bg-btn text-action hover:text-action-hover
-                             disabled:opacity-40 transition-colors flex items-center justify-center gap-1 font-body"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={cancelOrder}
-                  className="flex-1 px-3 py-2 rounded-lg bg-btn text-action hover:text-action-hover
-                             transition-colors flex items-center justify-center gap-1 font-body"
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
-
-            {!hasOrder && (
-              <div className="mt-4">
-                <button
-                  onClick={onBack}
-                  className="w-full px-3 py-2 rounded-lg bg-btn text-action hover:text-action-hover
-                             transition-colors font-body"
-                >
-                  Leave Market
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* SELL column */}
         <div className="flex-1 flex flex-col border-l border-edge min-w-0">
           <div className="p-3 border-b border-edge">
@@ -474,45 +447,64 @@ export default function MarketScreen({
               <TabBtn id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabBtn>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto p-2 space-y-2">
-            {sellItems.length === 0 ? (
-              <div className="p-4 text-muted">Nothing to sell</div>
-            ) : (
-              sellItems.map(({ item, source }, i) => {
-                const sellPrice = sellPrices[item.defId] ?? 0;
-                const soldOut = !canSell(item.defId);
-                return (
-                  <div
-                    key={`${source}-${item.defId}-${i}`}
-                    className={`flex items-start gap-3 p-3 rounded-lg ${soldOut ? "opacity-40" : ""}`}
-                    style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
+          <div className="flex-1 overflow-y-auto p-2">
+            {/* Staged sells */}
+            {stagedSells.length > 0 && (
+              <div className="flex flex-wrap gap-1 mb-2 p-2 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
+                {stagedSells.map((s) => (
+                  <button
+                    key={s.index}
+                    onClick={() => removeSell(s.index)}
+                    className="px-2 py-1 rounded-lg text-action hover:text-action-hover transition-colors flex items-center gap-1"
+                    style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
                   >
-                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                      <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-primary">{item.name}</div>
-                      {item.description && (
-                        <div className="text-muted mt-0.5 truncate">{item.description}</div>
-                      )}
-                      {sellTab === "equipped" && (
-                        <div className="text-dim mt-0.5">equipped ({source})</div>
-                      )}
-                    </div>
-                    <button
-                      onClick={() => addSell(item.defId)}
-                      disabled={soldOut}
-                      className="px-3 py-1 rounded-lg disabled:opacity-40
-                                 text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
-                      style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                    >
-                      <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
-                      {sellPrice}g
-                    </button>
-                  </div>
-                );
-              })
+                    <span className="text-primary">{s.name}</span>
+                    <span className="text-positive">+{s.price}g</span>
+                    <span>&times;</span>
+                  </button>
+                ))}
+              </div>
             )}
+            <div className="space-y-2">
+              {sellItems.length === 0 ? (
+                <div className="p-4 text-muted">Nothing to sell</div>
+              ) : (
+                sellItems.map(({ item, source }, i) => {
+                  const sellPrice = sellPrices[item.defId] ?? 0;
+                  const isSold = pendingSells.includes(item.defId) && !canSell(item.defId);
+                  return (
+                    <div
+                      key={`${source}-${item.defId}-${i}`}
+                      className={`flex items-start gap-3 p-3 rounded-lg ${isSold ? "opacity-40" : ""}`}
+                      style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
+                    >
+                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-primary">{item.name}</div>
+                        {item.description && (
+                          <div className="text-muted mt-0.5 truncate">{item.description}</div>
+                        )}
+                        {sellTab === "equipped" && (
+                          <div className="text-dim mt-0.5">equipped ({source})</div>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => addSell(item.defId)}
+                        disabled={isSold}
+                        className="px-3 py-1 rounded-lg disabled:opacity-40
+                                   text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
+                        style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
+                      >
+                        <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
+                        {sellPrice}g
+                      </button>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
       </div>
