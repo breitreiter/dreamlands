@@ -233,6 +233,8 @@ public class ActionRequest
     public string? Slot { get; set; }
     public int? Quantity { get; set; }
     public MarketOrderRequest? Order { get; set; }
+    public string? Source { get; set; }
+    public int? BankIndex { get; set; }
 }
 
 public class MarketOrderRequest

@@ -8,4 +8,5 @@ public class SettlementState
     public string? FeaturedSellItem { get; set; }
     public string? FeaturedBuyItem { get; set; }
     public int LastRestockDay { get; set; }
+    public List<ItemInstance> Bank { get; set; } = new();
 }

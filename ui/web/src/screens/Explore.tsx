@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
 import MarketScreen from "./Market";
+import BankScreen from "./Bank";
 import Inn from "./Inn";
 import CompassRose from "../components/CompassRose";
 import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
@@ -63,15 +64,13 @@ const CONDITION_ICONS: Record<string, string> = {
 
 const TIER_LABELS: Record<number, string> = { 1: "Village", 2: "Town", 3: "City" };
 
-const IMPLEMENTED_SERVICES = new Set(["market", "inn", "chapterhouse"]);
+const IMPLEMENTED_SERVICES = new Set(["market", "bank", "inn", "chapterhouse"]);
 
 const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   market: { icon: "two-coins.svg", label: "Market" },
-  healer: { icon: "caduceus.svg", label: "Healer" },
-  temple: { icon: "tied-scroll.svg", label: "Temple" },
+  bank: { icon: "locked-chest.svg", label: "Bank" },
   inn: { icon: "wood-cabin.svg", label: "Inn" },
   chapterhouse: { icon: "wood-cabin.svg", label: "Chapterhouse" },
-  guild: { icon: "shaking-hands.svg", label: "Guild" },
 };
 
 export default function Explore({ state }: { state: GameResponse }) {
@@ -129,6 +128,11 @@ export default function Explore({ state }: { state: GameResponse }) {
   // Show Market as full-screen
   if (activeService === "market") {
     return <MarketScreen state={state} onBack={closeService} />;
+  }
+
+  // Show Bank as full-screen
+  if (activeService === "bank") {
+    return <BankScreen state={state} onBack={closeService} />;
   }
 
   // Show Inn / Chapterhouse as full-screen

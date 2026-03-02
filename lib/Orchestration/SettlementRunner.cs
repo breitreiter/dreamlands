@@ -39,7 +39,7 @@ public static class SettlementRunner
         Market.Restock(settlement, size, session.Player.Day, session.Balance, session.Rng);
 
         var isChapterhouse = node == session.Map.StartingCity;
-        var services = new List<string> { "market", isChapterhouse ? "chapterhouse" : "inn" };
+        var services = new List<string> { "market", "bank", isChapterhouse ? "chapterhouse" : "inn" };
 
         return new SettlementData(node.Poi.Name, tier, biome, size, services);
     }

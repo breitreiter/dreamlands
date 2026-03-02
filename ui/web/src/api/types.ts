@@ -199,6 +199,14 @@ export interface MarketStockResponse {
   sellPrices: Record<string, number>;
 }
 
+export interface BankResponse {
+  settlementName: string;
+  items: ItemInfo[];
+  capacity: number;
+  packFull: boolean;
+  haversackFull: boolean;
+}
+
 export interface MarketOrder {
   buys: { itemId: string; quantity: number }[];
   sells: { itemDefId: string }[];

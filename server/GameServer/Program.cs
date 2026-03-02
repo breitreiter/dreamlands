@@ -153,7 +153,7 @@ NodeInfo BuildNodeInfo(Node node, PlayerState p)
     if (node.Poi?.Kind == PoiKind.Settlement)
     {
         var isChapterhouse = node == map.StartingCity;
-        services = ["market", isChapterhouse ? "chapterhouse" : "inn"];
+        services = ["market", "bank", isChapterhouse ? "chapterhouse" : "inn"];
     }
 
     return new()
@@ -962,6 +962,50 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             break;
         }
 
+        case "bank_deposit":
+        {
+            var bNode = session.CurrentNode;
+            if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.Name == null)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            if (string.IsNullOrEmpty(req.ItemId) || string.IsNullOrEmpty(req.Source))
+                return Results.BadRequest(new { error = "itemId and source required" });
+
+            SettlementRunner.EnsureSettlement(session);
+            if (!player.Settlements.TryGetValue(bNode.Poi.Name, out var bDepositState))
+                return Results.BadRequest(new { error = "Settlement not initialized" });
+
+            var depositError = Bank.Deposit(player, req.ItemId, req.Source, bDepositState, balance);
+            if (depositError != null)
+                return Results.BadRequest(new { error = depositError });
+
+            await store.Save(player);
+            response = BuildInventoryResponse(session, player);
+            break;
+        }
+
+        case "bank_withdraw":
+        {
+            var bNode = session.CurrentNode;
+            if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.Name == null)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            if (req.BankIndex == null)
+                return Results.BadRequest(new { error = "bankIndex required" });
+
+            SettlementRunner.EnsureSettlement(session);
+            if (!player.Settlements.TryGetValue(bNode.Poi.Name, out var bWithdrawState))
+                return Results.BadRequest(new { error = "Settlement not initialized" });
+
+            var withdrawError = Bank.Withdraw(player, req.BankIndex.Value, bWithdrawState, balance);
+            if (withdrawError != null)
+                return Results.BadRequest(new { error = withdrawError });
+
+            await store.Save(player);
+            response = BuildInventoryResponse(session, player);
+            break;
+        }
+
         case "equip":
         {
             if (string.IsNullOrEmpty(req.ItemId))
@@ -1094,6 +1138,31 @@ app.MapGet("/api/game/{id}/inn", async (string id) =>
         },
         needsRecovery,
         canAfford = player.Gold >= (isChapterhouse ? 0 : quote.GoldCost),
+    });
+});
+
+app.MapGet("/api/game/{id}/bank", async (string id) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var session = BuildSession(player);
+    var node = session.CurrentNode;
+
+    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Name == null)
+        return Results.BadRequest(new { error = "Not at a settlement" });
+
+    SettlementRunner.EnsureSettlement(session);
+    if (!player.Settlements.TryGetValue(node.Poi.Name, out var settlementState))
+        return Results.BadRequest(new { error = "Settlement not initialized" });
+
+    return Results.Ok(new
+    {
+        settlementName = node.Poi.Name,
+        items = settlementState.Bank.Select(BuildItemInfo).ToList(),
+        capacity = balance.Settlements.BankCapacity,
+        packFull = player.Pack.Count >= player.PackCapacity,
+        haversackFull = player.Haversack.Count >= player.HaversackCapacity,
     });
 });
 
