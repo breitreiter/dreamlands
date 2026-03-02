@@ -25,6 +25,7 @@ ACTION VERBS
 ------------------------------------
 
 Flow control        @if check <skill> <difficulty> { ... } @else { ... }
+                    @if meets <skill> <target> { ... } @else { ... }
                     @if has <item_id> { ... } @elif check <skill> <difficulty> { ... } @else { ... }
                     @if tag <tag_id> { ... } @else { ... }
 

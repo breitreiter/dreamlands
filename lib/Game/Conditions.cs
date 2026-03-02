@@ -18,6 +18,7 @@ public static class Conditions
             "check" when parts.Count >= 3 => EvaluateCheck(parts, state, balance, rng),
             "has" when parts.Count >= 2 => EvaluateHas(parts[1], state),
             "tag" when parts.Count >= 2 => EvaluateTag(parts[1], state),
+            "meets" when parts.Count >= 3 => EvaluateMeets(parts, state, balance),
             _ => false,
         };
     }
@@ -37,4 +38,14 @@ public static class Conditions
 
     static bool EvaluateTag(string tagId, PlayerState state) =>
         state.Tags.Contains(tagId);
+
+    static bool EvaluateMeets(List<string> parts, PlayerState state, BalanceData balance)
+    {
+        var skill = Skills.FromScriptName(parts[1]);
+        if (skill == null || !int.TryParse(parts[2], out var target)) return false;
+
+        var skillLevel = state.Skills.GetValueOrDefault(skill.Value);
+        var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
+        return skillLevel + itemBonus >= target;
+    }
 }

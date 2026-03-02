@@ -71,6 +71,11 @@ public sealed class ActionVerb
         VerbUsage.Condition, "Branch on whether a world-state tag is set",
         new ArgDef("tag_id", ArgType.Id));
 
+    public static readonly ActionVerb Meets = new("meets",
+        VerbUsage.Condition, "Branch on whether total skill bonus meets a threshold",
+        new ArgDef("skill", ArgType.Skill),
+        new ArgDef("target", ArgType.Int));
+
     // ── Navigation ──────────────────────────────────────────────
 
     public static readonly ActionVerb Open = new("open",
@@ -193,7 +198,7 @@ public sealed class ActionVerb
     /// <summary>All defined verbs.</summary>
     public static IReadOnlyList<ActionVerb> All { get; } = new ActionVerb[]
     {
-        Check, Has, Tag,
+        Check, Has, Tag, Meets,
         Open,
         AddTag, RemoveTag,
         AddItem, AddRandomItems, LoseRandomItem, GetRandomTreasure,

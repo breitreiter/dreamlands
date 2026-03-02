@@ -170,7 +170,8 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 
 | Verb | Arguments | Description |
 |------|-----------|-------------|
-| `check <skill> <difficulty>` | skill, difficulty | Branch on a skill check |
+| `check <skill> <difficulty>` | skill, difficulty | Branch on a skill check (d20 roll) |
+| `meets <skill> <target>` | skill, int | Branch on whether total skill bonus (skill + gear) meets a threshold — deterministic, no dice |
 | `has <item_id>` | item id | Branch on whether player has an item |
 | `tag <tag_id>` | tag id | Branch on whether a world-state tag is set |
 
