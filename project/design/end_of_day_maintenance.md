@@ -2,181 +2,236 @@
 
 End-of-day is the core survival loop. It runs every time the day counter advances.
 
-## Terminology
-
-This is "end-of-day", not "resting". Some days end without rest — fleeing a monster all
-night, trapped in a collapsing ruin. End-of-day always happens; rest is a component that
-can be skipped.
-
 ## When It Triggers
 
 End-of-day fires whenever `Day` increments. This includes:
-- Normal time advancement (time wraps past Night → Morning)
+- Normal time advancement (time wraps past Night to Morning)
 - `skip_time` advancing past midnight
-
-**No free lunches.** If a modal encounter or `skip_time` jumps you forward multiple days,
-you true up on end-of-day for each skipped day. A 3-day time skip means 3 end-of-day
-cycles, resolved in order.
 
 ### skip_time Flags
 
 The `skip_time` verb accepts flags that modify end-of-day when the day boundary is crossed:
-- `no_sleep` — skip rest recovery (base + meal bonus). You were fleeing, not sleeping.
-- `no_meal` — skip meal consumption. You didn't have time to eat.
-- `no_biome` — skip ambient condition checks. You were indoors/underground/etc.
+- `no_sleep` — skip rest recovery. You were fleeing, not sleeping.
+- `no_meal` — skip food consumption. You didn't have time to eat.
+- `no_biome` — skip ambient condition checks AND foraging. You were indoors.
 
-These flags exist for fiction reasons. If you're running from something all night, it's
-absurd to suggest you stopped to cook. The flags let encounters tell end-of-day what
-actually happened.
+These flags are stored as pending booleans on PlayerState and consumed at the start of
+resolution. Inn stays set `no_biome` (sheltered from threats, no wilderness to forage in).
 
-## The Two-Phase Model
+## Resolution Sequence
 
-End-of-day is presented as a camp screen with two phases.
+Everything is automatic — no player choices. Food and medicine are auto-selected from the
+haversack. The sequence runs in `EndOfDay.Resolve()`:
 
-### Phase 1: Warning (START of camp screen)
+### 1. Read and Clear Flags
 
-1. **Roll ambient condition checks** based on camping tile biome (and tier)
-2. **Display ominous warnings** if conditions would be applied:
-   - "The cold wind cuts through your camp..." (Freezing imminent)
-   - "You feel feverish and your joints ache..." (Swamp fever imminent)
-3. **Show existing active conditions**
-4. **Player makes decisions**: select meal, use medicines, spend supplies
+Consume `PendingEndOfDay`, `PendingNoSleep`, `PendingNoMeal`, `PendingNoBiome`.
 
-The normative case is that most warnings are unavoidable — you don't have warm gear, so
-you're going to freeze. The warning creates tension and teaches consequences. The edge case
-is consumable preventatives: "You feel feverish" → eat jorgo root → condition prevented.
+### 2. Snapshot Pre-existing Conditions
 
-### Phase 2: Resolution (END of camp screen)
+Record which conditions the player already has. This matters for medicine: cures only
+target pre-existing conditions (not ones acquired tonight).
 
-Executed in this order:
+### 3. Roll Resist Checks
 
-1. **Consume food** — remove selected food items from haversack
-2. **Ambient condition resist checks** — for each biome/tier condition that applies:
-   - Roll resist check: d20 + skill + gear resist bonus vs DC (see `dice_mechanics.md`)
-   - Gear resist bonuses computed from `ResistModifiers` via `ResistBonusMagnitudes` table
-   - If failed and condition not already active: apply condition (Succumb text)
-   - If failed and condition already active: no stack reset, show HealFailure text
-   - If passed: show Resist text (unless auto-pass from gear)
-3. **Apply medicines** — for each medicine the player chose to use:
-   - If the player failed the resist check for this same condition (step 2): cure negated,
-     show HealFailure text, medicine still consumed
-   - Otherwise: deterministic — consume the item, reduce condition stacks by cure magnitude
-   - If stacks reach 0: condition removed (HealComplete text)
-4. **Condition drain** — for each active condition:
-   - Apply HealthDrain (flat, not per-stack)
-   - Apply SpiritsDrain (flat, not per-stack)
-   - Apply SpecialEffect if any (e.g. `lost` erases map routes)
-5. **Rest recovery** (skipped if `no_sleep` flag):
-   - Base: +1 Health, +1 Spirits (from `CharacterBalance`)
-   - Balanced meal bonus: +1 Health, +1 Spirits (if triad met)
-   - Capped at MaxHealth / MaxSpirits
-6. **Death check** — if Health <= 0, game over (show condition Death text if applicable)
+For each ambient threat based on camping biome and tier:
+- Roll: `d20 + skill + gear resist bonus` vs condition DC
+- Disheartened imposes disadvantage
+- Luck reroll on failure (same as encounter checks)
+- Natural 1 always fails, natural 20 always passes
+- Results recorded but NOT applied yet — new conditions are deferred to step 7
 
-### Ordering Rationale
+**Events emitted**: `ResistPassed` or `ResistFailed` for each threat.
 
-Drain before recovery means a bad night can still kill you even if you ate well. Recovery
-after drain means food and rest are damage mitigation, not damage prevention. Medicine
-before drain means treating a condition in time reduces tonight's suffering — but you still
-take the hit from whatever conditions remain.
+Skipped entirely when `no_biome` is true.
 
-Resist before cure means: if you're camping in the mountains and you fail the freezing resist
-check, your medicine for freezing is wasted — the environment overwhelmed it. You can't
-outrun the biome with medicine alone; you need to leave or find shelter. But if you passed
-the resist (or the condition came from an encounter, not tonight's biome), the cure works
-automatically — no roll needed.
+### 4. Forage for Food
 
-## Food & Meals
+Automatic bushcraft check against three DC thresholds:
+- Roll: `d20 + bushcraft skill + equipment bonus` (same bonus sources as encounter checks)
+- Disheartened imposes disadvantage
+- No luck reroll (background activity, not dramatic)
+- No nat 1/20 rules (multi-tier harvest, not pass/fail)
 
-### The Triad
+| Total Roll | Yield |
+|------------|-------|
+| < 16       | 0 food |
+| 16+        | 1 food |
+| 18+        | 2 food |
+| 20+        | 3 food |
 
-Players consume up to 3 food units per day. Food has a category — Protein, Grain, Sweets —
-and names are regional color (biome-flavored), exactly like weapon types.
+Foraged items cycle through protein, grain, sweets for variety. They are real ItemInstances
+added to the haversack with biome-appropriate flavor names (via `FoodNames.Pick` with
+`foraged: true`). They sit alongside any purchased food already in the haversack.
 
-| Meal Quality | Requirement | Effect |
-|---|---|---|
-| Balanced | 1 protein + 1 grain + 1 sweet | +1 Health, +1 Spirits bonus |
-| Partial / Monotone | 3 units, incomplete triad | No bonus, no penalty |
-| Skimped | 1-2 units | No bonus, no penalty, but risky |
-| Starving | 0 units | Hungry condition applied |
+**Event emitted**: `Foraged(rolled, modifier, itemsFound)` — always emitted, even if 0 items.
 
-### Hungry Condition
+Skipped when `no_biome` is true (settlements, inns).
 
-Hungry is triggered by eating 0 food. It has 2 stacks with trivial health and spirits drain.
+### 5. Consume Food
 
-**Hungry is cured by food.** Eating a meal (any food at all) removes a stack. This is
-intentionally forgiving — we don't want the player starving while eating as much as the game
-allows. But we also don't want alternate-day fasting to be free, so the condition lags
-slightly: skip a day, get hungry (2 stacks), eat next day (-1 stack), eat again (-1 stack,
-cured). One missed meal costs you two days of mild drain. Harsh enough to notice, forgiving
-enough to recover from.
+Auto-select up to 3 food items from haversack. Strategy:
+1. **Try balanced meal first**: find one protein + one grain + one sweets
+2. **If balanced impossible**: grab up to 3 food items in haversack order
+
+This includes any food just added by foraging. Items are removed from haversack.
+
+**Balanced meal** = all three food types present. Grants bonus rest recovery in step 9.
+
+**Hungry stacks**:
+- Full meal (3 food): cure 1 existing hungry stack
+- Shortage (ate < 3): if `(3 - eaten) > current stacks`, set stacks to shortage
+- Shortage never reduces existing stacks (missing 1 meal when already at 3 stacks = no change)
+- Hungry max stacks = 3 (from condition definition)
+
+**Events emitted**: `FoodConsumed(eaten, balanced)` or `Starving` (if 0 food).
+Plus `HungerChanged(newStacks)` or `HungerCured` as applicable.
+
+### 6. Consume Medicine
+
+Auto-consume medicine from haversack for pre-existing active conditions only. One medicine
+per condition per night.
+
+- If the player **failed tonight's resist** for the same condition AND already had it:
+  medicine consumed but cure negated (`CureNegated` event). The biome overwhelmed it.
+- Otherwise: deterministic cure. Reduce stacks by 1. If stacks reach 0, condition removed.
+
+Medicine never targets conditions acquired tonight (step 7 hasn't run yet, and only
+pre-existing conditions are eligible).
+
+**Events emitted**: `CureApplied` or `CureNegated` per medicine, plus `ConditionCured`
+when stacks hit 0.
+
+### 7. Apply New Conditions
+
+For each failed resist from step 3: if the player doesn't already have that condition,
+apply it now at full stacks (from condition definition).
+
+This ordering means medicine only treats what you came in with. New conditions from
+tonight's failed resists won't be cured until tomorrow night.
+
+**Event emitted**: `ConditionAcquired(conditionId, stacks)` for each new condition.
+
+### 8. Condition Drain
+
+For each active condition (pre-existing and newly acquired):
+- Apply `HealthDrain` (flat per condition, not per-stack)
+- Apply `SpiritsDrain` (flat per condition, not per-stack)
+- Apply `SpecialEffect` if defined (e.g. `lost` erases explored tiles)
+
+**Events emitted**: `ConditionDrain(conditionId, healthLost, spiritsLost)` and/or
+`SpecialEffect(conditionId, effect)`.
+
+### 9. Rest Recovery
+
+Skipped if `no_sleep` flag was set.
+
+- Base: +1 Health, +1 Spirits (from `CharacterBalance`)
+- Balanced meal bonus: +1 Health, +1 Spirits (if step 5 achieved a balanced meal)
+- Capped at MaxHealth / MaxSpirits
+
+**Event emitted**: `RestRecovery(healthGained, spiritsGained)`.
+
+### 10. Evaluate Disheartened
+
+- If Spirits < threshold (10) and not disheartened: gain disheartened
+- If Spirits >= threshold and disheartened: clear disheartened
+
+Disheartened imposes disadvantage on all skill checks (encounter, resist, and foraging).
+
+**Event emitted**: `DisheartendGained` or `DisheartendCleared`.
+
+### 11. Death Check
+
+If Health <= 0, the player is dead.
+
+**Event emitted**: `PlayerDied(conditionId)` — names the condition that dealt the killing
+drain, if applicable.
+
+## Ordering Rationale
+
+**Foraging before food consumption** means foraged items are immediately available for
+tonight's meal. A skilled bushcrafter can partially self-sustain.
+
+**Drain before recovery** means a bad night can kill you even if you ate well. Recovery
+after drain means food and rest are damage mitigation, not damage prevention.
+
+**Medicine before new conditions** means cures only help what you already had. You can't
+pre-emptively cure tonight's new affliction. But if you passed the resist (or the condition
+came from an encounter), the cure works automatically.
+
+**Resist negates cure** means: if you're camping in the mountains with freezing and you
+fail the resist, your medicine is wasted. You can't outrun the biome with medicine alone.
+Leave or find shelter.
 
 ## Ambient Conditions
 
 Checked based on **camping tile only**, not tiles traveled through.
 
-- Travel through 3 swamp hexes, camp in plains → no swamp fever risk
-- Travel through 1 swamp hex, camp in swamp → swamp fever risk
-
-This is simple (one check per rest), tactical (push through danger to reach safe ground),
-and narratively coherent (you get sick from sleeping in hazards, not passing through them).
-
 ### Biome Conditions
 
-| Condition | Biome | Tier | Trigger |
-|---|---|---|---|
-| Freezing | Mountains | Any | Camping in mountains |
-| Thirsty | Scrub | Any | Camping in scrub |
-| Swamp Fever | Swamp | Any | Camping in swamp |
-| Irradiated | Plains | Tier 3 only | Camping in tier-3 plains |
-| Gut Worms | Forest | Tier 2 only | Camping in tier-2 forest |
+| Condition | Biome | Tier |
+|---|---|---|
+| Freezing | Mountains | Any |
+| Thirsty | Scrub | Any |
+| Swamp Fever | Swamp | Any |
+| Irradiated | Plains | Tier 3 |
+| Gut Worms | Forest | Tier 2 |
 
-### Universal Conditions (checked every rest)
+### Universal Conditions (every wilderness rest)
 
-| Condition | Trigger |
+| Condition | Notes |
 |---|---|
-| Hungry | No food consumed |
-| Exhausted | Every rest (resist check) |
-| Lost | Every rest (resist check) |
+| Exhausted | Resist check every night |
+| Lost | Resist check every night |
 
 ### Encounter-Only Conditions
 
-These are never acquired from ambient checks — only from encounter mechanics:
+Never acquired from ambient checks:
+- **Poisoned** — from encounters
+- **Injured** — from encounters
+- **Disheartened** — from low spirits (evaluated in step 10, not a resist check)
 
-| Condition | Typical Source |
-|---|---|
-| Poisoned | Failed encounter combat/trap |
-| Injured | Lost medium+ health in one encounter |
+## Food & Meals
 
-## Condition Recovery Rules
+### The Triad
 
-From `conditions_list.md` (authoritative source), updated per `dice_mechanics.md`:
+Up to 3 food items consumed per night. Each has a type: Protein, Grain, or Sweets.
 
-- **Conditions do not improve on their own.** No automatic stack decay.
-- **Recovery is deterministic.** Consume the right curative item → reduce stacks by cure
-  magnitude. No skill check for the cure itself.
-- **Exception: failed resist negates cure.** If you failed tonight's resist check for
-  this same condition, the medicine is consumed but does nothing (HealFailure text).
-  This only applies to ambient conditions checked during this end-of-day — encounter-sourced
-  conditions always respond to medicine.
-- **0 stacks = cured.** Condition removed, HealComplete text shown.
-- **Drain is flat per condition**, not per-stack. 1 stack of Injured drains the same as
-  3 stacks of Injured.
-- **SpecialCure** conditions (Freezing, Thirsty, Exhausted) have alternate cure paths
-  that bypass the normal medicine system.
+| Meal Quality | Requirement | Rest Bonus |
+|---|---|---|
+| Balanced | 1 protein + 1 grain + 1 sweet | +1 Health, +1 Spirits |
+| Partial | 1-3 items, incomplete triad | None |
+| Starving | 0 items | Hungry condition |
 
-## Blockers
+### Food Sources
 
-All blockers resolved. End-of-day is ready for implementation.
+- **Market**: all settlements stock all 3 food types
+- **Foraging**: automatic nightly bushcraft check yields 0-3 items
 
-### Resolved
+### Hungry
 
-- ~~**Food item definitions**~~ — 3 food ItemDefs (protein/grain/sweets), biome-aware flavor
-  names via `FlavorText.FoodName()`.
-- ~~**Food in marketplace**~~ — all settlements stock all 3 food types at max stock, food
-  restocks alongside trade goods.
-- ~~**Condition resist/cure mechanics**~~ — resist is a standard skill check with gear
-  bonuses from `ResistModifiers` → `ResistBonusMagnitudes`. Cure is deterministic (consume
-  item → heal stacks), negated only by a same-night failed resist. See `dice_mechanics.md`.
-- ~~**Skill check formalization**~~ — unified formula in `SkillChecks.cs`: `d20 + skill +
-  gear bonus vs DC`, with nat 1/20, advantage/disadvantage, luck rerolls. Resist bonuses
-  via `GetResistBonus()`, encounter bonuses via `GetItemBonus()`.
+- Stacking condition (max 3 stacks)
+- Gained when food shortage exceeds current stacks
+- Cured 1 stack per full meal (3 food items eaten)
+- Has health and spirits drain like other conditions
+
+## Condition Recovery
+
+- **No automatic decay.** Conditions never improve on their own.
+- **Deterministic cures.** Consume the right medicine, reduce stacks by 1. No roll.
+- **Exception: resist negation.** Failed same-night resist for the same condition wastes
+  the medicine.
+- **ClearedOnSettlement conditions** (exhausted, lost, thirsty) clear automatically
+  during full inn recovery.
+- **Drain is flat per condition**, not per-stack.
+
+## Inn Stays
+
+Inn calls `EndOfDay.Resolve` with `no_biome = true`:
+- No ambient resist checks
+- No foraging
+- Normal food consumption, medicine, drain, rest recovery
+- Inn additionally clears exhausted after resolution
+- Full recovery stay (`StayFullRecovery`) bypasses the normal sequence entirely:
+  restores to max, consumes all needed medicine, clears ClearedOnSettlement conditions
