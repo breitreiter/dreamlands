@@ -37,6 +37,8 @@ public static class ImageRenderer
             LakePass.Draw(canvas, map);
             Console.Error.WriteLine("  Plains...");
             PlainsPass.Draw(canvas, map, seed);
+            Console.Error.WriteLine("  Trade routes...");
+            TradeRoutePass.Draw(canvas, map);
             Console.Error.WriteLine("  Hills...");
             HillPass.Draw(canvas, map, seed);
             Console.Error.WriteLine("  Swamp...");
@@ -48,8 +50,6 @@ public static class ImageRenderer
             using var terrainSnapshot = surface.Snapshot();
             Console.Error.WriteLine("  POIs...");
             PoiPass.Draw(canvas, map, terrainSnapshot, seed);
-            Console.Error.WriteLine("  Trade routes...");
-            TradeRoutePass.Draw(canvas, map);
 
             return surface.Snapshot();
         }
