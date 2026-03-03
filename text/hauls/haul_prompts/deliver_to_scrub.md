@@ -4,7 +4,7 @@ You are writing flavor text for trade hauls in a low-fantasy RPG. Each haul is a
 
 ## Rules
 
-- **Flavor story**: 1 sentence. Who wants this and why. Shown when the player claims the haul.
+- **Origin flavor**: 1 sentence. Who wants this and why. Shown when the player claims the haul.
 - **Delivery flavor**: 1-3 sentences. What happens when the player hands it over. Shown on delivery. Should feel like a small, grounded human interaction — no heroics, no melodrama. The recipient is a person with a specific need.
 - **No place names, NPC names, or landmark names.** Use roles and descriptions instead ("a clan compound elder", "a Kesharat depot master").
 - **Tone**: quiet, practical, lived-in. People are busy. Transactions are real. The world is not waiting for the player.
@@ -18,27 +18,27 @@ You are writing flavor text for trade hauls in a low-fantasy RPG. Each haul is a
 
 ### Army Surplus Spearheads
 - **Origin biome**: plains
-- **Flavor story**: A clan checkpoint buyer near the mesa border placed an order for any imperial military iron available cheap—spearheads, blades, whatever the frontier is willing to offload.
+- **Origin flavor**: A clan checkpoint buyer near the mesa border placed an order for any imperial military iron available cheap—spearheads, blades, whatever the frontier is willing to offload.
 - **Delivery flavor**: The clansman hefts one, tests the balance, taps the tip with his thumbnail. He says something in clan dialect to the man beside him and they both nod. He counts your coin without haggling, which means he got what he wanted.
 
 ### Charcoal Bundle
 - **Origin biome**: mountains
-- **Flavor story**: A Kesharat depot master requisitioned charcoal for the forge at his signal tower complex—the local acacia scrub burns too fast for sustained metalwork, and the rail maintenance can't wait.
+- **Origin flavor**: A Kesharat depot master requisitioned charcoal for the forge at his signal tower complex—the local acacia scrub burns too fast for sustained metalwork, and the rail maintenance can't wait.
 - **Delivery flavor**: The depot master signs your receipt without looking at you, hands it to a laborer, and goes back to his diagram. The charcoal is unloaded efficiently. Everything here runs on procedure. You feel briefly like a delivery mechanism, which is accurate.
 
 ### Master Snare Mechanism
 - **Origin biome**: forest
-- **Flavor story**: A clan trapper near the mesa border put out word that he'd buy a properly engineered forest snare—the mesa game is elusive, and the local mechanics can't match what's made in the deep wood.
+- **Origin flavor**: A clan trapper near the mesa border put out word that he'd buy a properly engineered forest snare—the mesa game is elusive, and the local mechanics can't match what's made in the deep wood.
 - **Delivery flavor**: He doesn't share much trade tongue. He sets the mechanism, releases it, examines the trigger. He resets it. He demonstrates with two fingers—sets it, trips it with a twig—and looks at you. You nod. He nods. Money changes hands. Some negotiations don't need words.
 
 ### Rail Line Survey
 - **Origin biome**: scrub
-- **Flavor story**: A clan elder near the mesa is paying well for any Kesharat survey documents—he needs to know whether the next rail extension crosses his family's well before the spring caravan season.
+- **Origin flavor**: A clan elder near the mesa is paying well for any Kesharat survey documents—he needs to know whether the next rail extension crosses his family's well before the spring caravan season.
 - **Delivery flavor**: He spreads it on a stone table and calls in his son, who can read the notation. They speak in clan dialect, pointing at different sections. The elder looks up. "The second pass," he says, and nothing else. He pays in old coin, pre-Kesharat. He doesn't ask about the source.
 
 ### Peat Fuel Brick
 - **Origin biome**: swamp
-- **Flavor story**: A clan compound elder put in an advance order for peat bricks before the cold season—the acacia scrub burns too fast for their forge and the Kesharat fuel depot prices have gone up again.
+- **Origin flavor**: A clan compound elder put in an advance order for peat bricks before the cold season—the acacia scrub burns too fast for their forge and the Kesharat fuel depot prices have gone up again.
 - **Delivery flavor**: The compound fire-tender picks up a brick, sniffs it, weighs it in her hand. "Dense," she says approvingly. She stacks three to test the count and nods. The unloading begins without further ceremony.
 
 ## Entries to Fill
@@ -105,5 +105,5 @@ Return each entry in this exact format:
 ### [Item Name]
 - **Origin biome**: [biome]
 - **Destination biome**: scrub
-- **Flavor story**: [1 sentence]
+- **Origin flavor**: [1 sentence]
 - **Delivery flavor**: [1-3 sentences]

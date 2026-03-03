@@ -53,6 +53,7 @@ ui/web/           React + Leaflet map viewer (early stage)
 text/
   encounters/     .enc encounter files, dungeon content, LLM generation tooling
   encounter-tool/ CLI for check/bundle/fixme/generate commands
+  hauls/          Haul catalog, examples, generation oracle files + prompt template
   lore/           Locale guides (biome-specific world context for encounter generation)
 ```
 
@@ -74,7 +75,7 @@ project/
 Design docs, specs, plans, and notes go in `project/`. The only markdown that belongs
 alongside code is README.md (user-facing) and CLAUDE.md (developer context for that subproject).
 If you catch the user creating a new .md file outside `project/`, `text/lore/`,
-`text/encounters/generation/`, or `lib/Flavor/biomes/`, flag it and suggest moving it to `project/`.
+`text/encounters/generation/`, `text/hauls/`, or `lib/Flavor/biomes/`, flag it and suggest moving it to `project/`.
 
 ## Key Conventions
 

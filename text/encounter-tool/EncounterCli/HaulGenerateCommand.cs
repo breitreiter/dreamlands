@@ -11,7 +11,7 @@ static class HaulGenerateCommand
     const string ExamplesPath = HaulDir + "/haul_fixme.md";
     const string SystemPrompt = "You are a narrative designer for a computer RPG. Follow instructions precisely. Output only the requested content.";
 
-    record HaulEntry(string Name, string Origin, string Destination, string FlavorStory, string DeliveryFlavor, int HeaderLine);
+    record HaulEntry(string Name, string Origin, string Destination, string OriginFlavor, string DeliveryFlavor, int HeaderLine);
 
     public static async Task<int> RunAsync(string[] args)
     {
@@ -73,7 +73,7 @@ static class HaulGenerateCommand
 
         var catalogLines = File.ReadAllLines(catalogPath);
         var entries = ParseCatalog(catalogLines);
-        var blanks = entries.Where(e => string.IsNullOrWhiteSpace(e.FlavorStory)).ToList();
+        var blanks = entries.Where(e => string.IsNullOrWhiteSpace(e.OriginFlavor)).ToList();
 
         Console.WriteLine($"Catalog: {entries.Count} entries, {blanks.Count} blank.");
         if (blanks.Count == 0)
@@ -173,9 +173,9 @@ static class HaulGenerateCommand
                 }
 
                 response = StripCodeFences(response);
-                var (flavorStory, deliveryFlavor) = ParseResponse(response);
+                var (originFlavor, deliveryFlavor) = ParseResponse(response);
 
-                if (string.IsNullOrWhiteSpace(flavorStory) || string.IsNullOrWhiteSpace(deliveryFlavor))
+                if (string.IsNullOrWhiteSpace(originFlavor) || string.IsNullOrWhiteSpace(deliveryFlavor))
                 {
                     Console.WriteLine();
                     Console.WriteLine("Could not parse response. Raw output:");
@@ -187,7 +187,7 @@ static class HaulGenerateCommand
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"  Flavor story:   {flavorStory}");
+                Console.WriteLine($"  Origin flavor:   {originFlavor}");
                 Console.WriteLine($"  Delivery flavor: {deliveryFlavor}");
                 Console.Write("\nAccept? [Y/n/r/e] ");
 
@@ -199,9 +199,9 @@ static class HaulGenerateCommand
 
                 if (accept == "e")
                 {
-                    Console.Write("Flavor story (enter to keep): ");
-                    var editFs = Console.ReadLine()?.Trim() ?? "";
-                    if (!string.IsNullOrEmpty(editFs)) flavorStory = editFs;
+                    Console.Write("Origin flavor (enter to keep): ");
+                    var editOf = Console.ReadLine()?.Trim() ?? "";
+                    if (!string.IsNullOrEmpty(editOf)) originFlavor = editOf;
 
                     Console.Write("Delivery flavor (enter to keep): ");
                     var editDf = Console.ReadLine()?.Trim() ?? "";
@@ -210,7 +210,7 @@ static class HaulGenerateCommand
 
                 // Write back to catalog
                 catalogLines = File.ReadAllLines(catalogPath);
-                WriteToCatalog(catalogLines, blank.HeaderLine, blank.Name, flavorStory, deliveryFlavor);
+                WriteToCatalog(catalogLines, blank.HeaderLine, blank.Name, originFlavor, deliveryFlavor);
                 File.WriteAllLines(catalogPath, catalogLines);
                 Console.WriteLine($"  Written to catalog.");
                 break;
@@ -225,7 +225,7 @@ static class HaulGenerateCommand
     static List<HaulEntry> ParseCatalog(string[] lines)
     {
         var entries = new List<HaulEntry>();
-        string? name = null, origin = null, dest = null, flavorStory = null, deliveryFlavor = null;
+        string? name = null, origin = null, dest = null, originFlavor = null, deliveryFlavor = null;
         int headerLine = -1;
 
         for (int i = 0; i < lines.Length; i++)
@@ -235,20 +235,20 @@ static class HaulGenerateCommand
             if (line.StartsWith("### "))
             {
                 if (name != null)
-                    entries.Add(new HaulEntry(name, origin ?? "", dest ?? "", flavorStory ?? "", deliveryFlavor ?? "", headerLine));
+                    entries.Add(new HaulEntry(name, origin ?? "", dest ?? "", originFlavor ?? "", deliveryFlavor ?? "", headerLine));
 
                 name = line[4..].Trim();
                 headerLine = i;
-                origin = dest = flavorStory = deliveryFlavor = null;
+                origin = dest = originFlavor = deliveryFlavor = null;
             }
             else if (line.StartsWith("- **Origin biome**: "))
                 origin = line["- **Origin biome**: ".Length..].Trim();
             else if (line.StartsWith("- **Destination biome**: "))
                 dest = line["- **Destination biome**: ".Length..].Trim();
-            else if (line.StartsWith("- **Flavor story**: "))
-                flavorStory = line["- **Flavor story**: ".Length..].Trim();
-            else if (line.StartsWith("- **Flavor story**:"))
-                flavorStory = line["- **Flavor story**:".Length..].Trim();
+            else if (line.StartsWith("- **Origin flavor**: "))
+                originFlavor = line["- **Origin flavor**: ".Length..].Trim();
+            else if (line.StartsWith("- **Origin flavor**:"))
+                originFlavor = line["- **Origin flavor**:".Length..].Trim();
             else if (line.StartsWith("- **Delivery flavor**: "))
                 deliveryFlavor = line["- **Delivery flavor**: ".Length..].Trim();
             else if (line.StartsWith("- **Delivery flavor**:"))
@@ -256,7 +256,7 @@ static class HaulGenerateCommand
         }
 
         if (name != null)
-            entries.Add(new HaulEntry(name, origin ?? "", dest ?? "", flavorStory ?? "", deliveryFlavor ?? "", headerLine));
+            entries.Add(new HaulEntry(name, origin ?? "", dest ?? "", originFlavor ?? "", deliveryFlavor ?? "", headerLine));
 
         return entries;
     }
@@ -265,16 +265,15 @@ static class HaulGenerateCommand
     {
         // Same format as catalog — just parse all entries that have non-empty flavor
         var all = ParseCatalog(lines);
-        return all.Where(e => !string.IsNullOrWhiteSpace(e.FlavorStory) && !string.IsNullOrWhiteSpace(e.DeliveryFlavor)).ToList();
+        return all.Where(e => !string.IsNullOrWhiteSpace(e.OriginFlavor) && !string.IsNullOrWhiteSpace(e.DeliveryFlavor)).ToList();
     }
 
-    static void WriteToCatalog(string[] lines, int headerLine, string name, string flavorStory, string deliveryFlavor)
+    static void WriteToCatalog(string[] lines, int headerLine, string name, string originFlavor, string deliveryFlavor)
     {
-        // Find the flavor story and delivery flavor lines after the header
         for (int i = headerLine + 1; i < lines.Length && i < headerLine + 10; i++)
         {
-            if (lines[i].StartsWith("- **Flavor story**"))
-                lines[i] = $"- **Flavor story**: {flavorStory}";
+            if (lines[i].StartsWith("- **Origin flavor**"))
+                lines[i] = $"- **Origin flavor**: {originFlavor}";
             else if (lines[i].StartsWith("- **Delivery flavor**"))
                 lines[i] = $"- **Delivery flavor**: {deliveryFlavor}";
         }
@@ -294,27 +293,27 @@ static class HaulGenerateCommand
         {
             sb.AppendLine($"### {ex.Name}");
             sb.AppendLine($"- Origin: {ex.Origin} → Destination: {ex.Destination}");
-            sb.AppendLine($"- Flavor story: {ex.FlavorStory}");
+            sb.AppendLine($"- Origin flavor: {ex.OriginFlavor}");
             sb.AppendLine($"- Delivery flavor: {ex.DeliveryFlavor}");
             sb.AppendLine();
         }
         return sb.ToString().TrimEnd();
     }
 
-    static (string flavorStory, string deliveryFlavor) ParseResponse(string text)
+    static (string originFlavor, string deliveryFlavor) ParseResponse(string text)
     {
-        string flavorStory = "", deliveryFlavor = "";
+        string originFlavor = "", deliveryFlavor = "";
 
         foreach (var line in text.Split('\n'))
         {
             var trimmed = line.Trim();
-            if (trimmed.StartsWith("Flavor story:", StringComparison.OrdinalIgnoreCase))
-                flavorStory = trimmed["Flavor story:".Length..].Trim();
+            if (trimmed.StartsWith("Origin flavor:", StringComparison.OrdinalIgnoreCase))
+                originFlavor = trimmed["Origin flavor:".Length..].Trim();
             else if (trimmed.StartsWith("Delivery flavor:", StringComparison.OrdinalIgnoreCase))
                 deliveryFlavor = trimmed["Delivery flavor:".Length..].Trim();
         }
 
-        return (flavorStory, deliveryFlavor);
+        return (originFlavor, deliveryFlavor);
     }
 
     static string StripCodeFences(string text)
