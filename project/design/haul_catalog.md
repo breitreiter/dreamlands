@@ -448,3 +448,499 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Destination biome**: plains
 - **Flavor story**: An imperial natural-history collector paid for whatever unusual organic specimens an Alwati trader could source—the Root Head came with no explanation and the trader who sold it seemed uncertain whether it was a plant, an artifact, or something else.
 - **Delivery flavor**: The collector sets it on his examination table and looks at it for a long time. He turns it. He picks it up and sets it back down. "What did they say it was?" You tell him what you were told. "And what did they not say?" You tell him that too. He covers it with a cloth and pays. He does not uncover it again while you are there.
+
+---
+
+## New Entries (Unfilled)
+
+### Surveyor's Chain
+- **Origin biome**: plains
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Sack of Milled Flour
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Roll of Canvas Sailcloth
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Crate of Tallow Candles
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bundle of Quill Pens
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bolt of Dyed Linen
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Glazed Terracotta Tiles
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Tin of Rendered Tallow
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Wheelwright's Iron Tire
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Set of Standard Measures
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Notarized Land Survey
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Barrel Stave Bundle
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bundle of Imperial Dispatches
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Brass Compass Housing
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Military Cartographer's Kit
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Copper Still Parts
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Muster Roll (Incomplete)
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Iron Bucket Set
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Certified Assay Report
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Stack of Petition Blanks
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Hand-Ground Pigment Set
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Leather-Bound Almanac
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Roll of Lead Sheeting
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Tin of Smelter's Flux
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Copper Pipe Sections
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Box of Iron Nails
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Crate of Slate Shingles
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Cast Bronze Door Pull
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Pressed Edelweiss Collection
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Zinc Casting Mold
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Crucible Set
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Surveyor's Plumb Weight
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bound Court Transcript
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Mine Timber Brace
+- **Origin biome**: mountains
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Mine Cart Axle Pin
+- **Origin biome**: mountains
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Sealed Ore Sample Box
+- **Origin biome**: mountains
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bundle of Willow Withies
+- **Origin biome**: forest
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Jar of Wild Honey
+- **Origin biome**: forest
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Coil of Hempen Rope
+- **Origin biome**: forest
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Carved Antler Buttons
+- **Origin biome**: forest
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Beeswax Block
+- **Origin biome**: forest
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Basket of Dried Mushrooms
+- **Origin biome**: forest
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Boar Tusk Necklace
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bundle of Arrow Shafts
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Fox Pelt
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Cedar Oil Flask
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Birch Bark Scroll Case
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Forester's Marking Axe
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Dried Herb Bundle
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Woven Bark Mat
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Acorn Flour Sack
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Smoked Venison Joint
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Wooden Bowl Set
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Root Dye Concentrate
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Dried Date Cakes
+- **Origin biome**: scrub
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bolt of Mesa Cotton
+- **Origin biome**: scrub
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Brass Tea Service
+- **Origin biome**: scrub
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Desert Glass Pendant
+- **Origin biome**: scrub
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Clan Genealogy Scroll
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Woven Saddlebag
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Goatskin Water Flask
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Copper Wire Coil
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Nomad's Repair Kit
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Box of Mesa Ochre
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Camel-Hair Blanket
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Clay Incense Burner
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Sandstone Carving
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Bundle of Dried Sage
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Signal Mirror
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Carved Meerschaum Pipe
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Sun-Dried Brick Mold
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Smoked Eel Bundle
+- **Origin biome**: swamp
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Jar of Rendered Fish Oil
+- **Origin biome**: swamp
+- **Destination biome**: plains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Treated Crocodile Hide
+- **Origin biome**: swamp
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Tidal Chart Scroll
+- **Origin biome**: swamp
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Swamp Willow Bark Strips
+- **Origin biome**: swamp
+- **Destination biome**: mountains
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Alwati Basket Set
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Dried Water Lily Roots
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Woven Reed Fish Trap
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Jar of Marsh Mud
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Mangrove Root Carvings
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
+
+### Jar of Preserved Spawn
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Flavor story**:
+- **Delivery flavor**:
