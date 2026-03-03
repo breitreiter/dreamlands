@@ -34,6 +34,11 @@ Just a list of things that need doing, roughly grouped.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
 
+## Game UI Components
+
+- [ ] Extract the parchment gold bar (Market top strip) into a reusable component —
+      normalize the pattern for use in other screens (Bank, Settlement, etc.)
+
 ## Game UI Assets
 
 - [x] Icons for all condition types
