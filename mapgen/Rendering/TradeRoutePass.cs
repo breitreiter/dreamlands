@@ -14,7 +14,8 @@ public static class TradeRoutePass
             Color = SKColors.Black.WithAlpha(38),
             StrokeWidth = 4,
             IsAntialias = true,
-            Style = SKPaintStyle.Stroke
+            Style = SKPaintStyle.Stroke,
+            PathEffect = SKPathEffect.CreateDash(new float[] { 12, 8 }, 0)
         };
 
         foreach (var (from, to) in map.TradeEdges)
