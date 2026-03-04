@@ -16,6 +16,7 @@ public static class ContentPopulator
         Console.Error.WriteLine("  Trade routes...");
         TradeRouteBuilder.Build(map);
         SizeSettlements(map);
+        AssignSettlementIds(map);
         NameRegions(map);
         NameSettlements(map);
         AssignNodeDescriptions(map);
@@ -24,6 +25,15 @@ public static class ContentPopulator
         DungeonPlacer.PlaceDungeons(map, roster, rng);
         Console.Error.WriteLine("  Encounters...");
         EncounterPlacer.Place(map);
+    }
+
+    private static void AssignSettlementIds(Map map)
+    {
+        foreach (var node in map.AllNodes())
+        {
+            if (node.Poi?.Kind == PoiKind.Settlement)
+                node.Poi.SettlementId = $"s{node.X}_{node.Y}";
+        }
     }
 
     private static void SizeSettlements(Map map)

@@ -70,6 +70,7 @@ public static class MapSerializer
                 {
                     Name = n.Poi.Name,
                     Size = n.Poi.Size != null ? Enum.Parse<SettlementSize>(n.Poi.Size) : null,
+                    SettlementId = n.Poi.SettlementId,
                     DungeonId = n.Poi.DungeonId,
                     DecalFile = n.Poi.DecalFile
                 };
@@ -145,6 +146,7 @@ public static class MapSerializer
             Type = poi.Type,
             Name = poi.Name,
             Size = poi.Size?.ToString(),
+            SettlementId = poi.SettlementId,
             DungeonId = poi.DungeonId,
             DecalFile = poi.DecalFile
         };
@@ -189,6 +191,7 @@ public static class MapSerializer
         public string Type { get; init; } = "";
         public string? Name { get; init; }
         public string? Size { get; init; }
+        public string? SettlementId { get; init; }
         public string? DungeonId { get; init; }
         public string? DecalFile { get; init; }
     }
