@@ -12,778 +12,926 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ---
 
 
+
 ## Plains
 
 ### Blank Ledger Book
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A scriptorium ran out of blank pages mid-petition and sent an urgent order to the nearest stationer.
-- **Delivery flavor**: The scrivener snatches it without looking up, already ruling lines with a straight edge. "Finally. Leave it here." The order already has three amendments.
+- **Origin flavor**: The county ordered forty ledgers for the tax assessors but someone wrote "four hundred" on the requisition, and now they're selling off the surplus at cost rather than pay for warehouse space.
+- **Delivery flavor**: The scholar takes the ledger from you and opens it flat on her desk, running her palm across the binding to test the spine. She nods once, satisfied, then reaches for her purse. "We always need more of these. The archives go through them faster than anyone plans for." She counts out your payment and offers you tea before you go, gesturing to a pot already warming by the stove.
 
 ### Bolt of Undyed Wool Cloth
 - **Origin biome**: plains
 - **Destination biome**: forest
-- **Origin flavor**: A forest settlement ran short of cloth before the cold set in, and a factor placed an order with the nearest plains merchant before the roads muddied.
-- **Delivery flavor**: The factor measures it twice against the bolt, nods, and counts coin into your palm. "Should last the winter. Maybe two." She folds one corner to check the weave and says nothing else.
+- **Origin flavor**: The weaver's guild ran out of stock during the disputes last month, and none of the local merchants will extend credit anymore. They had to source directly from a farm cooperative at twice the usual rate.
+- **Delivery flavor**: A girl of maybe fourteen waits at the edge of the settlement, not the woman whose name is on the contract. "My mother's laid up with fever. I'll take it." She unfolds a corner of the bolt and checks the weave against the light filtering through the canopy, then nods and produces a purse from her belt. "She said to pay you and get a receipt."
 
 ### Stamped Grain Weights
 - **Origin biome**: plains
 - **Destination biome**: plains
-- **Origin flavor**: A market dispute in a neighboring settlement hinges on whether the current weights are imperial-certified; a bailiff offered to pay above rate for a set that clearly is.
-- **Delivery flavor**: The bailiff holds each weight up to the light, checking the stamp. "These'll do," he says, setting them in a row on his desk. He's already drafting the ruling before you've left.
+- **Origin flavor**: The weaver's guild ran out of stock during the disputes last month, and none of the local merchants will extend credit anymore. They had to source directly from a farm cooperative at twice the usual rate.
+- **Delivery flavor**: The buyer sets them on his scale one by one, comparing each against his own certified weights. He marks the differences in a ledger with careful notation. "Off by a quarter-ounce on three of them," he says, tapping the page. "Still useful for rough work." He pays without comment and slides the weights into a drawer beneath his counter.
 
 ### Silver Trade Bar
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A ridge-town assayer is buying silver in any form—the company scrip has been unreliable and something hard needs to back the ledger.
-- **Delivery flavor**: Deke Pickard turns the bar over, scratches it with a thumbnail, and sets it on the scale. He writes you a receipt in pencil and tucks the bar under the counter with the others. The scale is the only thing in the room that looks recently cleaned.
+- **Origin flavor**: A merchant's estate is being quietly liquidated before the creditors finish their audit. The bars moved fast, no questions, and you're carrying one toward a buyer who doesn't keep books.
+- **Delivery flavor**: You hand the bar to a woman in a wool coat who unwraps it, weighs it in her palm, and nods once. "My brother sent word you were coming." She tucks it into her satchel without ceremony, counts out your payment in small coins, and walks back toward the ridge without another word.
 
 ### Army Surplus Spearheads
 - **Origin biome**: plains
 - **Destination biome**: scrub
-- **Origin flavor**: A clan checkpoint buyer near the mesa border placed an order for any imperial military iron available cheap—spearheads, blades, whatever the frontier is willing to offload.
-- **Delivery flavor**: The clansman hefts one, tests the balance, taps the tip with his thumbnail. He says something in clan dialect to the man beside him and they both nod. He counts your coin without haggling, which means he got what he wanted.
+- **Origin flavor**: The garrison withdrew three months ago and left a cache behind. No one else will buy obsolete military stock, so the scavengers are selling what they can.
+- **Delivery flavor**: You hand over the bundle and a dozen men gather around as the headman unwraps the oilcloth. He tests an edge with his thumb, holds one up to the light, checks the tang. "Socket's wrong for our shafts," someone mutters. "We'll make it work," another says. The headman nods and counts out your payment while two younger men are already arguing about the reforging.
 
 ### Salvaged Signal Lantern
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A ridge community lost their only signal lantern to a rockfall last winter and has been sending runners to the valley ever since; they'd pay above scrap value for one that still works.
-- **Delivery flavor**: An old woman climbs down from the porch to inspect it. She opens the shutter, checks the wick holder, swings the handle. "It'll do," she says. That evening, you can see a light blinking from the ridge above the pass that wasn't there before.
+- **Origin flavor**: The garrison commander finally admitted the old signal network isn't coming back online. He's selling off the lanterns piece by piece rather than watch them rust in a warehouse.
+- **Delivery flavor**: You arrive at the ridgeline watchtower to find three trappers already there, arguing about whether the thing still works. The watch captain takes the lantern, oils the shutters, tests the mechanism. "Imperial issue. Good lens." One of the trappers leans in. "Needs new oil, new wick—" The captain cuts him off. "I know what it needs." He counts out your payment while the trappers continue their debate.
 
 ### Cracked Surveyor's Transit
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at a mountain institution wants the cracked transit—not for use, but to study why the optical axis drifted, which tells her something about how the plains survey teams worked.
-- **Delivery flavor**: Regula Felber turns the instrument slowly in the pale institutional light. "The crack is here," she says, pointing, "but the drift started earlier. Look." She is already explaining before you've set down your pack. You are not sure she remembers you are still in the room.
+- **Origin flavor**: The old transit hasn't worked properly in years, but with the new surveyor dead and his replacement weeks away, someone remembered seeing it gathering dust in a barn loft.
+- **Delivery flavor**: The engineer takes the transit from you and sets it on her workbench without a word. She runs her thumb along the cracked arc, then opens the case fully and stares at the inscription inside the lid. Her hand stays there a moment. "My father's," she says quietly. "I thought it was lost in the valley floods." She pays you and turns back to the bench.
 
 ### Vitrified Stone Shards
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A mountain scholar is paying for physical samples from the vitrified sections of the plains campaign zone—she has a theory about what weapon system did this and needs proof.
-- **Delivery flavor**: She lays the shards on a white cloth in order of size without being asked. She doesn't say anything for almost a minute. Then: "This is consistent." She picks up a quill. Her handwriting is very fast and very small.
+- **Origin flavor**: Someone found these fused to the ground near an old wildlands garrison — lightning strike, maybe, or something from the failed campaign. They've been sitting in a scavenger's collection for years.
+- **Delivery flavor**: You hand over the box at the assay office. The clerk opens it, examines one shard briefly, then fills out a requisition form in triplicate. He stamps each copy with practiced efficiency, hands you one along with your payment, and files the rest without looking at the shards again.
 
 ### Depot Iron Mess Kit
 - **Origin biome**: plains
 - **Destination biome**: forest
-- **Origin flavor**: A forest factor is collecting military surplus for resale to the deep-wood camps—the exiles can't get new ironware through normal channels, but they'll pay for something already made.
-- **Delivery flavor**: The factor checks the rivet on the bail, tips water in to check for seep, and sets it in a crate with others. "Good condition," she says, and means it. She doesn't ask where you found it.
+- **Origin flavor**: A scavenger turned up a depot mess kit in good condition, still stacked and wrapped. The buyer wanted it immediately and paid double the asking price without haggling.
+- **Delivery flavor**: You hand over the kit to a forest woman outside a timber cabin. She opens it carefully, runs her thumb along the spoon's edge, then holds up the canteen and shakes it near her ear. A small crowd gathers—two men and a boy—murmuring about the markings stamped into the metal. One of them says something you don't catch. The woman closes the kit, nods once, and counts out your payment without looking at you again.
 
 ### Collapsed Tower Bell Fragment
 - **Origin biome**: plains
 - **Destination biome**: plains
-- **Origin flavor**: A church wants whatever's left of this old watch bell—a soldier from the village rang it on his last day alive, and his family wants a piece for the churchyard memorial.
-- **Delivery flavor**: The priest turns it over in both hands, reading the crack like a sentence. "I'll have the smith clean the edge," he says quietly. He sets it on the altar cloth with more care than it probably deserves. You get the sense this transaction was about something other than metal.
+- **Origin flavor**: The bell was cast two centuries ago for a tower that fell in the last war. The town council voted to sell it rather than recast it, but the vote was narrow.
+- **Delivery flavor**: You hand over the fragment. The buyer turns it in his hands, checking the maker's mark stamped into the bronze. He sets it on his desk with the others—five pieces, all different bells. He counts your payment without comment.
 
 ### Imperial Road Marker Plaque
 - **Origin biome**: plains
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat registrar at a border depot is paying well for official imperial road markers—she needs certified precedents to justify the route alignment she's filing, and apparently the empire's own archives have gaps.
-- **Delivery flavor**: Registrar Velyr logs the plaque's inscription number, copies it twice, and stamps both copies. She hands you a receipt before you've said a word. "This satisfies Form 14-B," she says. You're not sure what Form 14-B is, but she seems very relieved.
+- **Origin flavor**: The old marker from the main road cracked through the center during last season's floods. The replacement was commissioned from a plains foundry and sat in a warehouse until someone remembered to arrange transport.
+- **Delivery flavor**: You hand over the plaque to the Kesharat road surveyor, who unfolds a diagram and places the marker against it for comparison. He measures twice with calipers, then shakes his head. "The bore holes are offset by three finger-widths. This was cast to the old imperial standard, not the revised specification." He fills out a voucher for your payment anyway, muttering about coordinating with antiquated suppliers.
 
 ### Grid Regulator Plate
 - **Origin biome**: plains
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat technical officer is buying anything recovered from the grid infrastructure of the abandoned plains city—no explanation given, and the price is high enough that no one's asking for one.
-- **Delivery flavor**: The officer logs the plate number in silence. Two others in the room, neither of whom speaks, come over to look at it. It is placed in a felt-lined case. "Satisfactory," says the officer. No one celebrates. The case is locked before you leave.
+- **Origin flavor**: The salvagers recovered a crate of grid regulators from an old garrison depot, but only one buyer responded to the listing — some Kesharat clerk who needs it for rail maintenance.
+- **Delivery flavor**: You hand over the plate at the requisitions depot. The clerk compares the stamped serial number against his ledger, runs his finger down three columns of text, and marks a box with red ink. He slides a receipt across the counter. "Sign here. And here." He files the plate in a numbered drawer without looking at it again.
 
 ### Untouched Market Coin Chest
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A petitioner needs physical evidence that the empire abandoned a functioning market—the coin chest, still sealed, proves the city wasn't looted but left.
-- **Delivery flavor**: The petitioner holds the sealed chest for a long moment before handing it to the clerk. "Log it," he says. The clerk stamps it, assigns it a case number, and sets it on a shelf with thirty others. "That's the one that'll move things," the petitioner says. You'd like to believe him.
+- **Origin flavor**: The market master's been holding an emergency reserve chest since the grain shortage scare last spring. Now that the harvest came through strong, he's sending it up to the peaks before winter closes the passes.
+- **Delivery flavor**: The clerk who accepts the chest doesn't open it. She sets it on her desk, runs her finger along the seal, then slides it under her workspace without counting the contents. "We don't actually need this yet," she says, "but we will in eleven weeks when the Goravic petition enters monetary phase." She pays you and returns to her ledgers.
 
 ### Golem Memory Cylinder
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at the library has been studying the plains defense grid for a decade and will pay above any reasonable rate for a memory cylinder from one of the units—she believes she can read it.
-- **Delivery flavor**: She takes it with both hands and does not speak. She carries it to a back room. After a while you hear her moving things, then going very quiet. When she comes back she says only: "Come back in a week." She looks like she slept badly, though you only left ten minutes ago.
+- **Origin flavor**: A scavenger claims he pulled the cylinder from a deactivated golem in the frontier zone, though he won't say which garrison or what became of the rest of it.
+- **Delivery flavor**: You hand the cylinder to a woman in scholar's robes, but she barely glances at it. "For the magistrate," she says, tucking it into a leather satchel already packed for the ascent. She counts out your payment and leaves before you can ask anything. Through the window, you watch her join a small party heading up the mountain trail.
 
----
+### Surveyor's Chain
+- **Origin biome**: plains
+- **Destination biome**: mountains
+- **Origin flavor**: The surveyor retired after decades of measuring property lines across the plains, and his son would rather have the coin than keep the chain rusting in a shed.
+- **Delivery flavor**: You hand over the chain and the foreman uncoils it across his work table, running his thumb along each link to check for wear. He nods once, counts out your payment in scrip, and turns back to his maps without another word.
+
+### Finest Imported Whetstones
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Origin flavor**: A merchant bought the stones from a traveling buyer who didn't say where they came from. The quality is exceptional, but the previous owner's mark has been filed off.
+- **Delivery flavor**: You hand over the wrapped bundle. The woodsman unwraps it slowly, selects a stone, and tests it against his hatchet blade with three careful strokes. He holds the edge to the light, studying the burr. "Garnet grit. Deep quarry stone." He wraps them back up without looking at you. "I know what these are worth. Here's your coin."
+
+### Roll of Canvas Sailcloth
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Origin flavor**: The sailcloth belonged to a trader's father, who never made it to the coast but kept it folded in his chest anyway. His son finally let it go to someone who might use it.
+- **Delivery flavor**: The woodworker already has the canvas spread across his workbench before you've closed the door, running his hands along the weave to check for rot. "Good. Tight enough." He's measuring it against a half-built frame in the corner—some kind of pavilion or shade structure. He pays you without looking up, already marking cut lines with charcoal.
+
+### Crate of Tallow Candles
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Origin flavor**: The festival starts in three days and someone miscounted the candles for the vigil lanterns. The plains chandler packed them still warm from the molds.
+- **Delivery flavor**: You find the vigil keeper standing beside rows of unlit lanterns, each waiting for its candle. She opens the crate and her shoulders drop with relief. She lifts one candle, tests its weight, then begins placing them one by one into the tin frames. "My daughter's name will be spoken tonight after all," she says quietly, and pays you without looking up from her work.
+
+### Bundle of Quill Pens
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Origin flavor**: The festival starts in three days and someone miscounted the candles for the vigil lanterns. The plains chandler packed them still warm from the molds.
+- **Delivery flavor**: You hand over the bundle to the forester's clerk, who unties the cord and fans the quills across his desk. He picks one up, tests the nib against his thumbnail, and frowns. "These are goose, not crow. Wrong width for the ledger columns." He calls over another clerk, and they argue in low voices about whether the contract specified the bird. Eventually he pays you, but keeps two quills back as a penalty.
+
+### Bolt of Dyed Linen
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Origin flavor**: A merchant commissioned the fabric for his daughter's wedding gift, but she called off the engagement and left for the coast. He wants it gone rather than keeping it as a reminder.
+- **Delivery flavor**: The recipient unfolds the bolt and holds it up to the light filtering through the canopy. Her face tightens. "This is rose madder, not sorrel root. The dye's all wrong." She argues that you've brought the wrong cloth entirely, but the manifest matches what you carry. She pays, but makes it clear she'll be writing a complaint.
+
+### Glazed Terracotta Tiles
+- **Origin biome**: plains
+- **Destination biome**: forest
+- **Origin flavor**: The tiles came from a manor house teardown — owner died without heirs, debts settled, everything sold off. The buyer specified these particular tiles, from the cellar room.
+- **Delivery flavor**: The builder sets each tile face-down on his workbench and taps the back with a wooden mallet, listening. He flips them over, checks the glaze for hairline cracks with his thumbnail, holds one up to catch the light through the cabin door. "Good fired clay. No spalting." He stacks them carefully and counts out your payment without looking up.
+
+### Tin of Rendered Tallow
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Origin flavor**: The renderer filled an order for six tins, but the buyer only wanted five. The math was checked twice, the contract was clear, but somewhere the count went wrong.
+- **Delivery flavor**: You hand over the tin and the man pries it open immediately, sniffing once before dipping two fingers into the pale fat. He rubs it between his fingertips for longer than seems necessary, eyes half-closed, then wipes his hand on his trousers. "Good consistency," he says, and pays without looking at you again.
+
+### Wheelwright's Iron Tire
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Origin flavor**: The wheelwright forged a tire to specification, but the merchant who ordered it sent measurements for a donkey cart instead of his grain hauler. Now he's stuck with expensive ironwork gathering dust.
+- **Delivery flavor**: You hand over the tire to a woman at the inn who checks it against a scrap of paper, nods once, and sets it behind the bar. "My brother will collect it when he passes through next week." She counts out your payment without comment, already turning back to her ledgers.
+
+### Exhaustive Land Deed Research
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Origin flavor**: Someone at the land registry ordered the full deed history on a property — boundary disputes, every transfer, every annotation going back a century. When it arrived, they realized they'd requested the wrong parcel number entirely.
+- **Delivery flavor**: You hand the research to a woman sitting alone at a table in the back of the grain exchange. She doesn't open it. She runs her finger along the sealed edge, then sets it flat on the table and rests both palms on top of it. She sits like that for a long moment. "Good," she says finally, and pays you without looking up.
+
+### Notarized Land Survey
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Origin flavor**: A landowner's selling off parcels and hired a surveyor to mark the boundaries properly. The buyer's in another district and wants the notarized copy before funds clear.
+- **Delivery flavor**: You hand over the document and she unfolds it on her kitchen table, smoothing the creases with her palm. She traces the boundary lines with one finger, checking the measurements against a letter she pulls from her pocket. "Good. That matches what we agreed." She pours you a cup of small beer while she counts out your payment, and you drink it standing.
+
+### Barrel Stave Bundle
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Origin flavor**: The cooperage needs white oak staves by week's end or the grain buyers will take their casks elsewhere. Harvest season doesn't wait.
+- **Delivery flavor**: You arrive to find the cooper's yard already crowded with apprentices sorting lumber. The master pulls three staves from your bundle and checks them for grain, running his thumb along the edge. "Too green," someone mutters from the stack of rejected wood. The cooper ignores him, nods once, and waves you toward the counting house for payment.
+
+### Bundle of Imperial Dispatches
+- **Origin biome**: plains
+- **Destination biome**: plains
+- **Origin flavor**: The dispatches were pulled from a courier's satchel after he disappeared near the frontier. No one opened them, but someone paid well to have them delivered anyway.
+- **Delivery flavor**: You hand over the bundle and the clerk cuts the binding cord with a small knife. He checks each seal against a register, running his thumb along the wax to feel for tampering. One dispatch makes him pause — he holds it up to the window light, studying the paper grain. He sets them all in a locked drawer and counts out your payment without comment.
+
+### Brass Compass Housing
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Origin flavor**: The housing arrived with no return address and a scrawled note reading "better someone uses it." The compass mechanism itself was smashed beyond repair, but the brass case is pristine.
+- **Delivery flavor**: The Kesharat surveyor turns the housing over in his hands, checking the interior threads with a fingernail. He produces a brass compass mechanism from a drawer and tests the fit three times, rotating it each time to confirm the seal. "Acceptable," he says, setting both pieces on his desk. He counts out your payment in small coins without looking up.
+
+### Unusual Medical Kit
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Origin flavor**: A garrison physician left the territory without filing transfer papers. His equipment sat in the quartermaster's lockbox until someone decided to sell it rather than let it gather dust.
+- **Delivery flavor**: The clan healer unwraps the kit and examines each instrument in turn — probe, bone saw, extraction forceps. She tests the spring tension on a pair of clamps, holds a scalpel to the light to check the edge. "Military issue. Good steel." She sets aside three pieces that duplicate what she already owns, but keeps the rest. She pays without haggling.
+
+### Copper Still Parts
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Origin flavor**: An old brewer passed without heirs, and his nephews sold the equipment off piecemeal rather than learn the trade themselves.
+- **Delivery flavor**: A thin man in dusty robes accepts the parts and immediately hands them to a younger woman waiting behind him. She turns the coil over in her hands, checking the seams. "Good enough," she says. "My cousin's been waiting two months." The man counts out your payment while she wraps the parts back up.
+
+### History of the Empire Volume VI
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Origin flavor**: A local scribe purchased the volume from an estate sale, then changed his mind about keeping it—said he didn't like the way certain passages were annotated in the margins.
+- **Delivery flavor**: The old woman takes the book with both hands and opens it to a page near the middle. Her finger traces a line of text, then stops. She closes her eyes for a long moment. "My father's unit," she says quietly. "They're listed here." She wraps the book in cloth and pays you without another word.
+
+### Iron Bucket Set
+- **Origin biome**: plains
+- **Destination biome**: scrub
+- **Origin flavor**: Someone offloaded a set of buckets with no maker's mark and rust already showing at the seams. The price was good enough that no one asked where they came from.
+- **Delivery flavor**: You arrive during market day and a dozen plateau traders immediately gather to inspect your delivery. They pass the buckets around, tapping the metal, testing the handles, arguing in their own tongue about whether the iron will last a season or crack in the heat. The buyer finally waves them off and counts out your payment while two others are still debating the quality of the rivets.
 
 ## Mountains
 
 ### Ridge Salt Slab
 - **Origin biome**: mountains
 - **Destination biome**: swamp
-- **Origin flavor**: An Alwati factor has been buying ridge-cut salt for two seasons—clean mineral salt is scarce in the swamp, and the Alwati need it for preserving smoked eel through the flood months.
-- **Delivery flavor**: She breaks a corner off and touches it to her tongue. "Same vein?" You tell her what you know. She nods and passes it to the man behind her without ceremony. The eel-smoking shed is already in use.
+- **Origin flavor**: A ridge family cuts slabs from a private salt vein they're not supposed to have rights to. They sell quiet, through intermediaries, to buyers who don't ask questions.
+- **Delivery flavor**: You hand over the slab in the village square and immediately three grandmothers appear to examine it. One scrapes it with her thumbnail. Another licks the edge and nods approvingly. The third announces it's genuine ridge salt, not that coastal trash, and worth the price. The buyer pays you while the grandmothers argue over whether to cure eel or preserve it whole.
 
 ### Charcoal Bundle
 - **Origin biome**: mountains
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat depot master requisitioned charcoal for the forge at his signal tower complex—the local acacia scrub burns too fast for sustained metalwork, and the rail maintenance can't wait.
-- **Delivery flavor**: The depot master signs your receipt without looking at you, hands it to a laborer, and goes back to his diagram. The charcoal is unloaded efficiently. Everything here runs on procedure. You feel briefly like a delivery mechanism, which is accurate.
+- **Origin flavor**: The charcoal burner's daughter says her father spent three days on this batch and won't let her sell the rest — claims the mesa folk don't appreciate quality work, but the contract was already signed.
+- **Delivery flavor**: The clan metalsmith breaks open the bundle and selects a piece at random. He snaps it cleanly in half, studies the break, then touches his tongue to the fresh surface. He nods once, sets it with the rest, and counts out your payment without comment.
 
 ### Company Scrip Stack
 - **Origin biome**: mountains
 - **Destination biome**: mountains
-- **Origin flavor**: A petition concerns scrip fraud—this stack is evidence, carried from the mine valley to the upper slopes because no one in the valley trusts the postal relay.
-- **Delivery flavor**: The intake clerk takes the bundle, stamps each receipt with exhausting thoroughness, and places them in a labeled folder. "Your petitioner's case is now in queue," she says. "Estimated hearing: four to six months." She does not seem to find this unusual.
+- **Origin flavor**: A scholar at the academy is collecting evidence of labor practices in the valley mining companies. He's particularly interested in the denominations and circulation patterns.
+- **Delivery flavor**: You hand over the stack and she spreads the scrip across her desk, sorting by issuing company and year. Her fingers move quickly, checking watermarks against lamplight. "Redemption clauses here, here — both voided within eighteen months." She makes a notation in her ledger, then counts out your payment in real coin.
 
 ### Raw Silver Ore Chunk
 - **Origin biome**: mountains
 - **Destination biome**: plains
-- **Origin flavor**: A plains merchant who deals in refined coin has started buying raw ore to have it assayed and smelted in the heartland, cutting out the mountain middlemen—this chunk is part of a test order.
-- **Delivery flavor**: The assayer weighs it, scratches it, drops it in acid, and peers at the result through a glass. He writes a number on a slip and slides it to you. "Tell him it's consistent with the valley ore." He doesn't elaborate. The number on the slip is good enough that you don't need him to.
+- **Origin flavor**: A ridge family needed coin fast after a roof collapse and sold off a specimen their grandfather kept on the mantle. The scholars who usually buy such things weren't interested this time.
+- **Delivery flavor**: The assayer breaks off a corner with practiced force, examines the fracture under afternoon light, then scratches it against a test stone. She studies the streak, nods once, and weighs the chunk on her scale. "Seventy percent, maybe better. Mountain ore always runs clean." She counts out your payment in silver coins without looking up.
 
 ### Annotated Legal Codex
 - **Origin biome**: mountains
 - **Destination biome**: swamp
-- **Origin flavor**: An Alwati village factor commissioned the annotated codex through an imperial trader—she's been handling census disputes with better results since she started reading law, and this edition has the inheritance statutes she needs.
-- **Delivery flavor**: She takes it without ceremony and sets it on the same shelf as her fishing records. "Does it have the census exemption clause?" You tell her what you know. She's already opened it to the index before you finish the sentence.
+- **Origin flavor**: The local magistrate died without an heir, and his annotated codex — margin notes from forty years of rulings — is the only copy. A scholar arranged the sale rather than see it pulped.
+- **Delivery flavor**: The recipient meets you at the edge of the village, barefoot in the mud, and takes the codex without introduction. She flips through it methodically, pausing at certain pages, her lips moving slightly as though counting something. "Good. Very good." She pays you exact coin and walks into the deeper swamp, still reading.
 
 ### Precision Astrolabe
 - **Origin biome**: mountains
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat survey team requisitioned a precision astrolabe for a new rail route through the mesa passes—their own instruments were damaged in a dust storm, and the Kesharat standard is uncompromising about tolerances.
-- **Delivery flavor**: The survey team leader inspects it with practiced efficiency, checks the bubble levels, holds it to the sun. "Within tolerance," he says. This appears to be the highest compliment available. The instrument is wrapped in felt before you've left the tent.
+- **Origin flavor**: An astronomer at one of the upper academies died without heirs, and her instruments went to the University council. They kept what they needed and sold the rest.
+- **Delivery flavor**: The Kesharat surveyor sets the astrolabe on his desk and rotates the rete with one finger, checking each gear's tolerance. He sights through the alidade at a distant peak, makes a small adjustment with a jeweler's tool, then sights again. "Pre-Lattice Verani work. The graduations are still accurate." He counts out your payment without looking up from the instrument.
 
 ### Printed Reform Pamphlets
 - **Origin biome**: mountains
 - **Destination biome**: plains
-- **Origin flavor**: A scholar at a mountain press paid to have a run of pamphlets carried to the heartland markets—she believes ideas spread faster through trade routes than through petitions.
-- **Delivery flavor**: The bookseller takes the bundle with visible reluctance and puts it under the counter, not on the shelf. "I'll sell them," he says, "but I won't display them." He looks at the door. "Someone already complained about the last lot."
+- **Origin flavor**: A reformist faction among the scholars is distributing their arguments in print—land reform, debt abolition, new voting structures. They're targeting the plains merchants who benefit most from the status quo.
+- **Delivery flavor**: You hand the stack to a clerk at the administrative hall. He flips through the first pamphlet, expression carefully neutral, then stamps a receiving form twice and files one copy in a cabinet already thick with similar documents. "We'll review the content and determine distribution permissions within six weeks." He slides your payment across the desk without looking up.
 
 ### Sealed Research Dossier
 - **Origin biome**: mountains
 - **Destination biome**: mountains
-- **Origin flavor**: A mountain institution is submitting a research dossier to the petition office as supporting evidence in a long-running petition—the seal means no one reads it until it reaches the right desk, which is the point.
-- **Delivery flavor**: The intake clerk logs the seal number without breaking it, assigns a case reference, and puts it in a pile that is somehow both urgent and going nowhere. "It'll be reviewed," she says. "When?" She checks a schedule. "There's no estimate at this time."
+- **Origin flavor**: A scholar's daughter is sending her father's final research to a colleague who helped him years ago. The seal on the dossier is wax, but also a promise.
+- **Delivery flavor**: You hand the dossier to a clerk at the observatory, who checks the seal and nods. "Professor Anselm is in the high country for another month. I'll hold it in his office." She slides the package onto a shelf already crowded with correspondence and pays you from a lockbox without looking up.
 
 ### Engineered Retort Glassware
 - **Origin biome**: mountains
 - **Destination biome**: swamp
-- **Origin flavor**: A swamp healer has been trading for glass equipment for two years—the retort will let her concentrate the fever-bark extract instead of just brewing it weak in pots.
-- **Delivery flavor**: She unwraps each piece slowly, holds it up against the grey sky, and sets it on a cloth. She says something under her breath in what might be old-tongue. Then: "Does the seal hold against steam?" You pass along what the mountain glasswright told you. She nods and begins making room on the shelf.
+- **Origin flavor**: The alchemist's workshop has been scrambling to produce fever remedies before the warm season arrives. They burned through three sets of glassware already and need replacements within the week.
+- **Delivery flavor**: You arrive at a stillhouse where half a dozen Alwati are gathered around a table, arguing in low voices about proportions. The eldest takes the retort from you, holds it to the light, checks the seals. "The neck is too narrow," someone says. "It'll work," another counters. The elder sets it carefully on the table with the other equipment and pays you without looking up from the debate.
 
 ### Corrected Mine Safety Blueprint
 - **Origin biome**: mountains
 - **Destination biome**: mountains
-- **Origin flavor**: A ridge-family advocate paid to have the official company blueprint reviewed by a scholar; the corrected version shows three safety failures the company's inspector ignored, and she needs it delivered before the next survey.
-- **Delivery flavor**: She spreads it on the table beside the official version without a word. Her brother leans over and reads the margin notes. Something passes between them—not words. She folds both copies and puts them under the floorboard. "He comes Thursday," she says.
+- **Origin flavor**: A scholar submitted the blueprint as evidence in a grievance case and the magistrate caught errors that would doom any miner who used it. The mining company needs the corrections before their liability deepens.
+- **Delivery flavor**: You hand over the corrected blueprint to the foreman, who unrolls it next to the original on his plank table. He runs a finger along the support beam measurements, then stops. "This says sixteen inches. We already cut to fourteen." He looks at you like you've brought him a problem instead of a solution. After a long silence, he pays you and rolls both blueprints back up without another word.
 
 ### Observatory Lens Disc
 - **Origin biome**: mountains
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat signal tower overseer requested a precision lens disc—the standard-issue mirrors don't hold calibration in the dust, and the tower is too important to let fail.
-- **Delivery flavor**: The overseer checks the grinding with a loupe, holds it at arm's length toward the sun, and sets it on the workbench. "Acceptable," he says, and makes a note. He looks up. "You came through the passes. What's the road condition?" He's already writing before you answer.
+- **Origin flavor**: The observatory director retired after thirty years and left the disc behind, but his successor prefers newer glass and won't mount it. The institution is selling it off rather than let it gather dust.
+- **Delivery flavor**: The woman who takes delivery is maybe seventy, her hands shaking slightly as she unwraps the lens. She holds it up to the late afternoon light and her breath catches. "This is from Kaspar's workshop. I knew him before—" She stops, wipes the edge with her sleeve, and sets it carefully in a wooden frame already prepared on her table. She counts your payment twice, distracted, her eyes never leaving the glass.
 
 ### Filed Petition (Year 73)
 - **Origin biome**: mountains
 - **Destination biome**: mountains
-- **Origin flavor**: An aging miner finally had his claim properly witnessed and sealed—the Filed Petition needs to reach the petition office's intake before the Year 73 deadline closes the case record.
-- **Delivery flavor**: The intake clerk takes it, stamps the arrival date, reads the case number aloud. "Year 73 series." She places it in a box with other Year 73 petitions. The box is not small. "Is the petitioner still living?" You tell her what you know. She nods once and writes something. The petition is filed.
+- **Origin flavor**: Someone paid good coin to have a petition filed under a different year's docket. We didn't ask why the date matters.
+- **Delivery flavor**: You hand over the packet to a clerk in a back office of the registry. He opens it, glances at the year stamp, and slides it into a drawer already thick with similar documents. His eyes meet yours for a moment before he counts out your payment in silence.
 
 ### Binding Judgment Writ
 - **Origin biome**: mountains
 - **Destination biome**: mountains
-- **Origin flavor**: After years of waiting, the petition office produced a binding writ on the scrip case; the writ needs to reach the company factor before he leaves for the season, or the judgment lapses.
-- **Delivery flavor**: The factor reads it twice. You watch his face carefully. He sets it on the desk, smooths the paper with one finger, and calls for his ledger. Whatever the writ says, he doesn't argue with it out loud. The clerk beside him has gone very still. "I'll need a copy witnessed," the factor says at last, to no one in particular.
+- **Origin flavor**: The court clerk pushed the finalization through in two days instead of the usual two months — the binding takes effect at month's end and the property changes hands whether the document arrives or not.
+- **Delivery flavor**: You hand the writ to a woman standing outside a stone cottage with her daughter beside her. She breaks the seal and reads in silence, her lips moving slightly. When she finishes, she folds it carefully and holds it against her chest. "It's ours now," she says to the girl, who nods once, solemn. She pays you and goes inside without another word.
 
 ### Wegtafel Fragment
 - **Origin biome**: mountains
 - **Destination biome**: plains
-- **Origin flavor**: A plains town clerk heard the Wegtafel mapped every step of every possible legal proceeding and sent coin ahead for whatever piece of it could be had—she's been trying to reform the market court for years.
-- **Delivery flavor**: She spreads it flat on her desk and starts reading the notation system aloud, slowly, working out the logic. "This is for grievance resolution?" she asks, pointing. You tell her what you know. She writes a note in the margin of something else. She does not say thank you, but she also does not look up, which means the same thing.
+- **Origin flavor**: A scholar's daughter is sending this piece of an old wayside marker to her father, who retired to the plains last year. He used to study the old road networks.
+- **Delivery flavor**: You find him in a small rented room above a grain merchant's office. He takes the fragment and immediately starts brushing at it with a horsehair brush, muttering about erosion patterns. He sets it on his desk next to three similar pieces, comparing the carved lettering. "Third mile marker from the pass," he says, mostly to himself. He pays you without looking up.
 
----
+### Certified Assay Report
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Origin flavor**: The report certifies a claim that turned up richer than expected. The original prospector sold out early, and now someone on the plains wants proof of what they missed.
+- **Delivery flavor**: You hand over the report. The merchant unfolds it, scans the mineral content columns, then stops. "This is last season's report. I paid for the new drift survey." He taps the date stamp. "Someone's playing games or you picked up the wrong envelope." He pays you anyway, mouth tight, already composing a letter.
+
+### Stack of Petition Blanks
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Origin flavor**: A court functionary passed last winter and left behind drawers full of unused blanks. His successor says the peak has too many already, and the plainsmen are always filing something.
+- **Delivery flavor**: You hand over the stack to a clerk at the municipal hall. She fans them once, checks the watermark against the light from the window, then runs her finger down the margin to test the ruling. "Peak standard. We go through a hundred of these a month." She counts out your payment between approvals of other documents.
+
+### Hand-Ground Pigment Set
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Origin flavor**: A painter died this winter without family to claim his belongings. The landlord bundled what seemed valuable and arranged a sale rather than let it sit.
+- **Delivery flavor**: You hand over the wooden case and the merchant opens it on her counter, tilting each vial to catch the light. She wets a fingertip, touches it to the vermilion, and rubs it against her thumb. "Ground with a granite mortar. See how it doesn't clump?" She closes the case and counts out your payment without haggling.
+
+### Leather-Bound Almanac
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Origin flavor**: The printer ordered three hundred almanacs but the binder mis-measured and cut the pages too wide for the covers. Someone down in the plains bought the lot at a discount, but only needed one copy sent ahead.
+- **Delivery flavor**: The clerk flips through the almanac, checking the lunar tables and planting calendars. She notices the pages extend slightly past the leather cover and runs her finger along the uneven edge. "It'll do." She counts out your payment and shelves it behind her desk.
+
+### Roll of Lead Sheeting
+- **Origin biome**: mountains
+- **Destination biome**: plains
+- **Origin flavor**: The sheeting came off a church roof in one of the valley towns — replaced after forty years of weather, but still good enough to sell rather than scrap.
+- **Delivery flavor**: The roofer unrolls it across two sawhorses and runs her hand over the surface, checking for soft spots where the metal's gone thin. She finds a crease, flexes it twice, nods. She's already climbing the ladder with it tucked under one arm when her apprentice comes over to pay you.
+
+### Tin of Smelter's Flux
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Origin flavor**: The old smelter kept this tin aside for forty years, always said he'd need it someday. His widow decided someday never came.
+- **Delivery flavor**: You arrive at the forge to find three smiths arguing over a cracked crucible, voices rising over the clang of hammering. The youngest takes your tin, pries it open with a blade, and sniffs it. "This is mountain flux—twice the strength we use." The eldest leans in, dips a finger in the gray powder, rubs it between his fingers. "We'll cut it with local ash. It'll work." He counts out your payment while the argument resumes.
+
+### Copper Pipe Sections
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Origin flavor**: The mountain waterworks replaced a section of conduit and sold off the old copper piping for scrap value.
+- **Delivery flavor**: You hand over the pipes to a woman sitting cross-legged in the shade of a rail shed. She doesn't weigh them or check the metal. She stacks them carefully beside her, one atop another, then taps each with her knuckle and listens. When she's satisfied, she pays you the exact amount and returns to her listening.
+
+### Box of Iron Nails
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Origin flavor**: Someone ordered five boxes of nails but the blacksmith sent five *crates*—enough to roof half the mountain. The buyer paid for what he asked for and left the surplus for resale.
+- **Delivery flavor**: You set the box on the carpenter's workbench. She opens it, takes out a single nail, and holds it to the light, checking the taper and the head. She tests the point against her thumbnail, then drops it back in and closes the lid. She counts out your payment in small coins and turns back to her work.
+
+### Box of Slate Shingles
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Origin flavor**: The slates came off an old mine office roof during repairs — worn gray rectangles with chips at the corners and nail holes that tell decades of weather.
+- **Delivery flavor**: You arrive at the plateau settlement during a roof repair, and three different relatives immediately cluster around to inspect your delivery. The eldest runs her finger along the worn surface and nods. "Mountain slate. Better than the clay we've been using." A younger man holds one up to the light, checking for cracks, while another taps it with his knuckle to test the ring. They argue briefly in their own dialect before handing over your payment.
+
+### Cast Bronze Door Pull
+- **Origin biome**: mountains
+- **Destination biome**: scrub
+- **Origin flavor**: The old smelter's widow found it half-buried in the yard where her husband's workshop stood before the fire. She won't say why she's selling it, but she wrapped it three times before handing it over.
+- **Delivery flavor**: The metalworker sets it on his anvil and taps it with a small hammer, listening to the ring. He turns it over, checking the thickness at the mounting points, then runs his finger along the interior curve where the casting shows its grain. "Pre-Administration work. Maybe two hundred years old—they poured it hotter than we do now." He pays you and sets it carefully aside from his other stock.
+
+### Pressed Edelweiss Collection
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Origin flavor**: A botanist had pressed samples for a thesis she never finished. The collection's been sitting in a drawer for years, and she'd rather have the space.
+- **Delivery flavor**: The buyer unwraps the cloth and examines each flower through a small magnifying lens, checking for rot or discoloration. She nods once, satisfied, and sets them carefully in a wooden case lined with wax paper. She counts out your payment and turns back to her work without another word.
+
+### Zinc Casting Mold
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Origin flavor**: The foundry's old mold cracked straight through after years of use. They need a replacement before the next batch of fittings is due.
+- **Delivery flavor**: You hand the mold to a young woman at the dock who checks it against a scrap of paper, then wraps it in oilcloth without comment. "For the metalworker two villages south," she says. "He'll get it when the water's low enough to pass." She counts out your payment and turns back to sorting crates.
+
+### Crucible Set
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Origin flavor**: The workshop order came through a middleman who paid double the usual rate and wouldn't say what the crucibles were for. The metalsmith packed them carefully and mentioned he'd prefer not to take another commission from that buyer.
+- **Delivery flavor**: The woman who meets you wears Alwati cloth but her hands are stained with chemicals that don't belong in the swamp. She opens the case and taps each crucible with a fingernail, listening to the ring. "Good thickness," she says, then looks at you too long without blinking. She pays exact weight in old imperial coinage that hasn't been minted in twenty years.
+
+### Surveyor's Plumb Weight
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Origin flavor**: A retired surveyor donated his instruments to the university's mathematics collection. The plumb weight didn't match any contemporary standard, and someone thought it might be older Alwati work.
+- **Delivery flavor**: The woman who meets you is older, her hands scarred from decades of reed-cutting. She takes the weight and turns it slowly, tracing the incised pattern with one fingertip. "My grandfather made instruments in the valley cities. I know his mark." She pays you carefully, counting each coin twice, then wraps the weight in oiled cloth without looking up again.
+
+### Bound Court Transcript
+- **Origin biome**: mountains
+- **Destination biome**: swamp
+- **Origin flavor**: A mountain court case wrapped up after eight years of deliberation. The losing party requested a certified transcript—not for appeal, but to prove they exhausted every legal avenue before taking the matter elsewhere.
+- **Delivery flavor**: The reader sits at a tilework table and cracks the seal without ceremony. She flips through sections, pausing at key passages, her finger tracking margin notes. "The procedural arguments are competent. The substantive law is garbage." She closes it and slides your payment across the table. "Tell me—did they really think this would hold up anywhere that isn't a monastery?"
+
+### Iron Brace Joints
+- **Origin biome**: mountains
+- **Destination biome**: mountains
+- **Origin flavor**: Someone at the company store let these joints walk out the back door at cost. No paperwork, no questions about what happened to the inventory log.
+- **Delivery flavor**: You hand the package to a woman in a mine foreman's coat who opens it in an alley behind the company offices. She counts each piece twice, her lips moving silently, then wraps them back up without testing the fit. She pays you in mixed coin—some scrip, some real money—and walks back inside through the main entrance like she's been there all along.
+
+### Mine Cart Axle Pin
+- **Origin biome**: mountains
+- **Destination biome**: mountains
+- **Origin flavor**: The old pin sheared clean three weeks ago and the workers have been running loads by hand. The mine cart must be the size of a house.
+- **Delivery flavor**: The engineer is waiting for you when you arrive. He takes the pin out of its wood box and stares blankly. "What am I supposed to do with this? It's four times the size of the fitting." He insists you take the item back, but a contract is a contract. By the time he's fetched the payment, a crowd of miners has gathered around to offer their opinions on the pin.
+
+### Sealed Ore Sample Box
+- **Origin biome**: mountains
+- **Destination biome**: mountains
+- **Origin flavor**: A company supervisor sealed samples from a contested vein before the rival outfit could file their claim. Speed matters more than discretion.
+- **Delivery flavor**: The clerk at the land office takes the box and checks the seal against a registry. She frowns. "This was supposed to arrive yesterday. The hearing already happened." She sets it on a crowded shelf with three other identical boxes, all sealed and logged. "We'll still need to process it. Standard fee."
 
 ## Forest
 
 ### Stacked Firewood Bundle
 - **Origin biome**: forest
 - **Destination biome**: scrub
-- **Origin flavor**: A clan compound near the mesa border contracted for firewood before the cold season—the local acacia scrub burns too fast for sustained cooking, and the compound elder refuses to rely on Kesharat-controlled fuel depots.
-- **Delivery flavor**: The compound's fire-keeper checks the split on a few pieces, sniffs the wood, stacks three against his arm to check the length. "Good dry split," he says. He nods at two young men who begin unloading without being told again.
+- **Origin flavor**: The forester says the wood came from a tree marked for the sawmill, but it fell the wrong way and landed in a gully. Easier to sell it quiet than explain the loss to the tallyman.
+- **Delivery flavor**: The clan matriarch crouches beside the bundle and pulls a single log free. She turns it in her hands, checking the grain, then scrapes at the bark with her thumbnail and sniffs the pale wood beneath. "Green cut. Maybe two weeks." She nods to her nephew, who counts out your payment. "We'll dry it properly."
 
 ### Tanned Deerhide
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A cobbler in a ridge town has been struggling to get consistent quality hide through the valley factor and placed a direct order with a forest contact—she needs it for miners' boots, and bad leather costs lives.
-- **Delivery flavor**: She works the leather between her hands, checks the grain, smells the tannage. "Who cured this?" You tell her what you know. She cuts a small piece from the corner and stretches it. "Good," she says, which in her shop means exceptional.
+- **Origin flavor**: The tanner's been sitting on this hide for two seasons, unwilling to sell it — says the grain and color are too fine for most buyers. A mountain scholar finally offered enough to make him reconsider.
+- **Delivery flavor**: You hand over the hide and the scholar unfolds it across his workbench. He examines it for a moment, then shakes his head. "This isn't deer. Elk, maybe. The grain's too coarse." He calls over two colleagues and they debate the matter in low voices, pointing at different sections of the leather. Eventually he sighs and counts out your payment. "It'll do for what we need."
 
 ### Charcoal Sack
 - **Origin biome**: forest
 - **Destination biome**: plains
-- **Origin flavor**: A heartland blacksmith runs through charcoal faster than the local burners can supply and has started buying from forest contacts—forest charcoal burns cleaner, and she can taste the difference in her iron.
-- **Delivery flavor**: She hauls one sack, cuts the knot, and scoops a handful. She lets it fall through her fingers, watches the dust. "Forest burn," she says. "Good." She drags all three sacks to the forge shed without asking for help.
+- **Origin flavor**: The charcoal burner's nephew ran a double batch through the kiln without telling anyone — good quality, but no buyer lined up and questions about where the timber came from.
+- **Delivery flavor**: The baker's already untying the sack before you've set it down. He scoops a handful, crushes it between his fingers, nods once. "Fine enough." He's pouring it into his bread oven while counting out your payment with his free hand, ash already dusting his knuckles.
 
 ### Pitch Resin Pot
 - **Origin biome**: forest
 - **Destination biome**: swamp
-- **Origin flavor**: An Alwati carpenter who builds and repairs the stilt walkways has been asking merchants for forest pitch for a year—the local mangrove resin seals poorly against flood cycles and the main village walkway is rotting.
-- **Delivery flavor**: He opens the pot, dips a finger, smells it. He says something to the woman beside him. "This is the right kind," he tells you. He covers it immediately—pitch goes stiff in the air. He is already looking at the walkway behind you, calculating.
+- **Origin flavor**: The cooper's stock of pitch resin cracked and dried out after his storage shed flooded last spring. He's been buying small batches wherever he can find them until a proper shipment arrives from the coast.
+- **Delivery flavor**: You hand the pot to a woman who's sitting cross-legged on a stilt platform, surrounded by rows of identical clay vessels. She opens it, sniffs once, then dips two fingers in and rubs the resin between them slowly, watching how it moves. She wipes her hand on a rag that's already black with the stuff and pays you without explaining what any of it's for.
 
 ### Ghostcap Extract Vials
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at a mountain institution commissioned the extract for a formal study on fungal pharmacology—she needs a consistent prepared source rather than dried specimens that vary by season.
-- **Delivery flavor**: She checks the seal on each vial, holds one up against the window. "Prepared how?" You relay what the forest factor told you. She makes a note. "Cold extraction or heat?" You tell her. She writes faster. "Good. Thank you." She's already writing the next note before you pocket your coin.
+- **Origin flavor**: An herbalist's widow had no use for the vials her husband prepared before he died. She sold them rather than let them sit.
+- **Delivery flavor**: You hand the vials to a pale scholar who works in a windowless room lit by a single candle. She holds each one up to the flame, studying the way the extract refracts the light, and makes small satisfied sounds. She sets them in a wooden rack beside two dozen identical vials, already arranged. "For my work on luminescence and decay," she says, counting out your payment. Her fingernails are stained black.
 
 ### Figured Heartwood Planks
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A cabinetmaker contracted to furnish a new dormitory wing at the petition house put in an order for figured wood—the delegates staying for months expect something better than raw pine, and the institution is paying.
-- **Delivery flavor**: The cabinetmaker runs his thumb along the grain, lifts the plank to the light, tilts it. He says nothing for almost a minute. Then: "How many more of this figure?" When you tell him, he nods once, carefully, and begins stacking them against the wall with the care of a man who knows the difference.
+- **Origin flavor**: A woodwright's daughter is marrying into a mountain family, and her father cut planks from his best stock for her wedding gift — something that will last generations in her new home.
+- **Delivery flavor**: The bride's father-in-law meets you at the workshop door. He lifts each plank, checking the grain in the afternoon light, running his fingertips across the figured patterns. He sets them down carefully, one by one, and nods once. He counts out your payment and turns back to his bench without another word.
 
 ### Luck Charms
 - **Origin biome**: forest
 - **Destination biome**: plains
-- **Origin flavor**: A scavenger band captain at a frontier depot sent coin ahead for whatever luck goods were available—after the last salvage run, the band has decided it needs all the help it can get.
-- **Delivery flavor**: She takes them without looking and passes one to each member of her crew without ceremony. The last one she keeps for herself. "Any good?" she asks you. You tell her what the forest factor said. "Good enough," she says. She pockets it and doesn't look at it again.
+- **Origin flavor**: A well-known trapper died last winter, and his daughter is selling off the luck charms he kept strung above his door. She says they didn't work for him.
+- **Delivery flavor**: You hand over the bundle and the farmhand unwraps it on the fence post. He picks through them—carved wood, knotted cord, a few painted stones—then selects two and loops them over a nail by the barn door. "For the lambing season," he says. He counts out your payment and pockets the rest.
 
 ### Dryad's Knot Fungus
 - **Origin biome**: forest
 - **Destination biome**: swamp
-- **Origin flavor**: A swamp healer has been trading for this fungus for two seasons—she believes it stabilizes the fever-bark extract and stops it losing potency in the humidity, though she hasn't been able to test a large enough batch to be sure.
-- **Delivery flavor**: She weighs it in her palm, smells it, breaks a small piece off to check the color inside. "Dried correctly," she says finally. She adds it to a shelf with other careful preparations. "You can tell the factor I'll order again if it works."
+- **Origin flavor**: A forager brought in a pouch of the fungus and wouldn't say where he got it. The herbalist who usually buys declined, so it's being sold south instead.
+- **Delivery flavor**: You hand over the pouch to a clerk behind a narrow desk. She opens it, pulls out a specimen, and checks it against a chart pinned to the wall. She makes a notation in a ledger, stamps a receipt twice, and slides you payment across the desk. "We'll log it with the rest," she says, already looking past you to the next courier.
 
 ### Trail Kit Roll
 - **Origin biome**: forest
 - **Destination biome**: plains
-- **Origin flavor**: Quartermaster Renold Pike placed a standing order for forest-made trail kits—the standard imperial issue falls apart in two months, and the forest-made rolls last a season.
-- **Delivery flavor**: Pike inventories the contents of one roll without unpacking it, checking by feel. He signs a receipt. "Consistent?" You confirm. He stamps it. "Good." He stacks it with the others. The whole transaction takes forty seconds.
+- **Origin flavor**: A deep wood exile stitched the kit together from surplus without asking where it all came from. Better sold on the plains where no one checks the provenance.
+- **Delivery flavor**: The merchant unfolds the canvas roll and spreads it flat. His finger stops on a faded regimental mark still visible on the inner pocket. "Where did you get this?" You show him the contract. He folds it back up slowly, glances toward the garrison watchtower visible from his shop, and pays you in silence.
 
 ### Unusual Local Writings
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at the library pays for any written text that comes out of the deep wood—she's building a collection of exile accounts and is particularly interested in anything touching on the Kesharat.
-- **Delivery flavor**: She opens it immediately, reads the first page standing, then carries it to a reading desk without saying anything to you. After several minutes she looks up. "How was this obtained?" You tell her what you know. She writes the date, the provenance, and your description in a small log. "Thank you," she says, meaning it.
+- **Origin flavor**: An exile scribe kept notebooks in a cipher only he understood. His widow thinks scholars might make something of them where she cannot.
+- **Delivery flavor**: The archivist pages through the notebooks slowly, pausing at certain marks. "Coastal script mixed with forest cant. And this—" She taps a margin note. "militia movement records, I think. Twenty years old at least." She sets them carefully in a cloth-lined box, then pours you tea without asking and pays you while it cools.
 
 ### Caged Songbird
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A long-term petitioner, now essentially a resident at the petition house, sent word back through the valley for a caged songbird—he's been there for two years and the granite halls have no birds.
-- **Delivery flavor**: He opens the cage just enough to look, then closes it. The bird sings. He stands there longer than necessary. When he finally moves toward his dormitory, you hear him humming a few bars of the same melody. He seems to know it very well.
+- **Origin flavor**: A woman from the exile camps is sending the bird to her sister — they haven't spoken in years, but the sister always loved its song.
+- **Delivery flavor**: The woman opens the cage door and lets the bird hop onto her finger. She watches how it moves, tilts her head to listen when it chirps twice. "Still healthy," she says, almost to herself. She closes her eyes when it begins to sing, just for a moment. She pays you and carries the cage inside without another word.
 
 ### Unsettling Wooden Doll
 - **Origin biome**: forest
 - **Destination biome**: plains
-- **Origin flavor**: An imperial trader bought this from a forest contact and wants it delivered to a collector in the heartland—he insists it's just a carved toy, but he's kept it wrapped for the entire journey.
-- **Delivery flavor**: The collector unwraps it herself. She holds it at arm's length, tilts it. "Where was this made?" You tell her what you know. She sets it facing away from the window, then toward it, then away again. She pays without comment. You don't ask.
+- **Origin flavor**: The doll was found in an abandoned exile camp deeper in than most people go. No one wanted to keep it in their home, but a collector on the plains sent word he'd pay for oddities.
+- **Delivery flavor**: You hand over the doll and the collector turns it slowly in his hands, examining the joints, the carved face, the way the wood grain runs against the expression. He holds it at arm's length, tilts his head. "The proportions are wrong on purpose," he says, more to himself than to you. He wraps it in cloth without looking at it again and counts out your payment.
 
-### Imperial Standard
+### Legion Standard Banner
 - **Origin biome**: forest
 - **Destination biome**: plains
-- **Origin flavor**: Captain Ivor Strake sent word through a factor that he'd pay field rate for any imperial standard recovered from the forest—one of his patrols came back without theirs three months ago and he hasn't filed the report yet.
-- **Delivery flavor**: Strake takes it without expression, checks the device, checks the shaft for the unit number. He folds it under his arm and doesn't look at you again. "Log it as recovered," he says to his sergeant. The sergeant does not ask from where. Neither do you.
+- **Origin flavor**: A deserter's daughter found the standard rolled in a hollow log near her father's old camp. She says he would have wanted it returned, though she never met him.
+- **Delivery flavor**: You present the banner at the garrison's records office. The clerk unfurls it halfway, checks the unit marking against a ledger, then makes two notations in separate books. "Fourth company, disbanded eighteen years back. I'll need you to sign here, and here." He slides a receipt across the desk and counts out your payment while the ink dries.
 
-### Master Snare Mechanism
+### Intricate Snare Mechanism
 - **Origin biome**: forest
 - **Destination biome**: scrub
-- **Origin flavor**: A clan trapper near the mesa border put out word that he'd buy a properly engineered forest snare—the mesa game is elusive, and the local mechanics can't match what's made in the deep wood.
-- **Delivery flavor**: He doesn't share much trade tongue. He sets the mechanism, releases it, examines the trigger. He resets it. He demonstrates with two fingers—sets it, trips it with a twig—and looks at you. You nod. He nods. Money changes hands. Some negotiations don't need words.
+- **Origin flavor**: A trapper's grandfather built the mechanism decades ago—delicate work, bronze and spring steel, precise as a clockmaker's hand. The old man is gone now, and the trapper says he'd rather it went to someone who'd use it than let it rust in a drawer.
+- **Delivery flavor**: The clan hunter turns it over in her hands, testing each spring with her fingernail, watching how the trigger plate responds. "My uncle made traps like this," she says quietly. "Before the fever took him." She sets it down carefully and gestures for you to sit. She pours tea from a worn copper pot and counts out your payment while it steeps.
 
----
+### Bundle of Willow Withies
+- **Origin biome**: forest
+- **Destination biome**: plains
+- **Origin flavor**: The basket maker's usual supplier died last winter, and no one else in the settlement knows where the good willows grow.
+- **Delivery flavor**: A young apprentice meets you at the workshop door. "For the master," she says, taking the bundle without unwrapping it. She tests the weight, nods, and carries it inside. You hear an older voice call from the back room asking if they're flexible. The girl returns with your payment.
+
+### One Queen Bee
+- **Origin biome**: forest
+- **Destination biome**: plains
+- **Origin flavor**: The local beekeeper's prize colony swarmed two weeks ago, and a buyer in the plains needs a replacement queen before her hives collapse entirely.
+- **Delivery flavor**: She lifts the small wooden cage to her ear and listens, then slides the cork partway out to inspect the attendants clustered around the queen. Without a word, she walks directly to the nearest hive, pries the top off, and begins the introduction while you're still standing there. She comes back wiping propolis from her fingers and counts out your payment.
+
+### Imperial Army Uniform
+- **Origin biome**: forest
+- **Destination biome**: plains
+- **Origin flavor**: The local beekeeper's prize colony swarmed two weeks ago, and a buyer in the plains needs a replacement queen before her hives collapse entirely.
+- **Delivery flavor**: The old quartermaster unrolls the bundle and appraises it carefully. "Shemati wool. Fine stitching. Mountain Corps. Maybe 40 years old? Rough campaign, hard winters." He frowns slightly, "I'll see to the uniform, take your pay and be off."
+
+### Carved Antler Buttons
+- **Origin biome**: forest
+- **Destination biome**: mountains
+- **Origin flavor**: A tailor needs the buttons for a scholar's coat. The client has an important case coming up and wants to look sharp.
+- **Delivery flavor**: She spreads them on a piece of black velvet and compares them to the coat already laid out on her table. She picks four that match in tone. She holds each to the buttonhole. "These," she says, setting them aside. She pays for all of them and takes the remainder for stock.
+
+### Beeswax Block
+- **Origin biome**: forest
+- **Destination biome**: mountains
+- **Origin flavor**: The apiary keeper says the season's turning and we need to move the surplus before the next extraction. There's a standing order with a candlemaker up in the mountains who's run low.
+- **Delivery flavor**: An older woman answers the door, takes the wax block, and weighs it in both hands. "For my husband. He's at the workshop." She calls over her shoulder in a language you don't speak, and a boy appears to carry it inside. She counts out your payment from a tin on the mantle.
+
+### Packet of Hallucinogenic Mushrooms
+- **Origin biome**: forest
+- **Destination biome**: mountains
+- **Origin flavor**: A forager has been gathering the right kind all season and finally has enough surplus to sell. The scholars always pay well for research material.
+- **Delivery flavor**: The woman who accepts the packet wears the robes of an academic, but her eyes are unfocused and her fingernails are stained dark. She opens the packet immediately and brings one cap to her nose, inhaling deeply. "Yes. Good. These will do." She counts out your payment twice, as if she's forgotten she already did it once.
+
+### Boar Tusk Necklace
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Origin flavor**: A woodsman's daughter inherited the necklace but refuses to wear it — her father took the boar in his last hunt, and she'd rather have coin than memories.
+- **Delivery flavor**: You hand over the necklace at the Kesharat import station. The clerk holds it against a printed diagram, counts the tusks twice, and marks something on a form in small, precise script. He slides the necklace into a numbered bin with three others like it. "Quota fulfilled," he says, and stamps your receipt without looking up from his ledger.
+
+### Bundle of Arrow Shafts
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Origin flavor**: A fletcher broke his lathe and has been waiting on metal parts from the plains. He's selling off what stock he has while the workshop sits idle.
+- **Delivery flavor**: The woman who meets you outside the compound doesn't look like an archer. She's dressed in loose desert robes, but her hands are wrong — too smooth, fingers too long. She counts the shafts twice, then snaps one in half to check the grain. "Good," she says, and pays you from a purse that seems heavier than it should be. As you leave, you see her carrying the bundle toward a structure half-buried in the hillside.
+
+### Fox Pelt
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Origin flavor**: A trapper sold the forest folk a dozen pelts, but local demand is light. The scrub dealers pay better for quality fox.
+- **Delivery flavor**: You hand over the pelt at the customs hall. The clerk unfolds it across his desk, measures the length with a marked stick, and notes the figure in his ledger. He inspects the fur for damage, finds none, and stamps three separate forms before counting out your payment in clipped silver.
+
+### Cedar Oil Flask
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Origin flavor**: A woman in the exile camp sold us the flask. She said it came from a locked storehouse, and the less you knew about how she got in, the better for both of you.
+- **Delivery flavor**: The merchant unscrews the cap and sniffs cautiously, then tips a drop onto his palm and rubs it between his fingers. His face darkens. "This is pine resin, not cedar. Whoever sold you this didn't know the difference or didn't care." He argues for half the agreed price, citing the error. You argue back—a contract is a contract. He finally pays in full, muttering about forest thieves.
+
+### Birch Bark Scroll Case
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Origin flavor**: A clerk at the exile camp says the case belonged to someone who left in a hurry. He won't say more, but he's eager to sell it and asks that you deliver it quickly.
+- **Delivery flavor**: The Kesharat official who receives it turns it over slowly, examining the birch bark with uncommon attention. He opens it, peers inside, closes it again. "Empty," he says quietly, as though confirming something. He sets it on his desk among identical scroll cases — seven, maybe eight of them, all birch bark. He pays precisely and dismisses you without looking up again.
+
+### Forester's Marking Axe
+- **Origin biome**: forest
+- **Destination biome**: scrub
+- **Origin flavor**: A forester's workshop needs to clear out redundant stock after a gear consolidation. The local crews all use the same style now.
+- **Delivery flavor**: You hand the axe to a rail supervisor outside the station. He turns it over once, then walks it to a flatbed cart where a young Kesharat surveyor is loading equipment. "For the boundary work," he says. The surveyor nods, straps it to his pack without comment. The supervisor counts out your payment from a lockbox on the cart.
+
+### Dried Herb Bundle
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Origin flavor**: A forester's widow bundled these herbs herself before she died — meadowsweet, yarrow, and something darker underneath. Her son sold them cheap and wouldn't meet your eyes when you asked what the third plant was.
+- **Delivery flavor**: The herbalist takes the bundle and unwinds the cord slowly, spreading the dried stems across her workbench. She picks through them with practiced fingers, then pauses over something deep in the center. "This is kind work," she says quietly. "My grandmother suffered the same way at the end." She wraps a portion back up and presses it into your hands along with the payment. "Brew this if you can't sleep."
+
+### Woven Bark Mat
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Origin flavor**: The mat was promised to a swamp merchant two weeks ago, but the weaver's hands locked up with joint-sickness and she couldn't finish until yesterday.
+- **Delivery flavor**: You hand the mat to a clerk who unrolls it across his desk and measures the dimensions with a notched stick. He marks figures in a ledger, compares them to a previous entry, then stamps the page twice. He slides your payment across without comment and re-rolls the mat with practiced efficiency.
+
+### Acorn Flour Sack
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Origin flavor**: The miller's grandmother used to grind acorns before the mill had grain contracts. The equipment still works, and someone down in the wetlands is paying.
+- **Delivery flavor**: The cook opens the sack and pinches a measure between her fingers, rubbing it slowly to test the grind. She wets her fingertip, dabs it in the flour, and tastes it carefully. "Good leaching," she says. "No bitterness." She measures out payment in small coins and sets the sack beside two others already waiting.
+
+### Impressive Deer Antlers
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Origin flavor**: A woodsman's trophy rack finally came down after his widow remarried. The antlers are wide and symmetrical — worth more as material than memory.
+- **Delivery flavor**: The knifemaker turns them over in his hands, checking the tines for cracks and the base for rot. He sets them on his workbench next to a stack of salvaged spearhead fragments. "Good stock. I can get eight handles from these." He counts out your payment and returns to his grinding wheel.
+
+### Wooden Bowl Set
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Origin flavor**: A woodworker promised a matched set to a swamp merchant three weeks ago, but the final bowl split in the oil cure and had to be replaced.
+- **Delivery flavor**: You hand over the wrapped bundle to a clerk in a stilted customs house. She unwraps each bowl, checks the count against a form on her desk, initials three separate lines, then stamps the receipt twice with practiced efficiency. She slides your payment across without looking up, already reaching for the next item in her queue.
+
+### Root Dye Concentrate
+- **Origin biome**: forest
+- **Destination biome**: swamp
+- **Origin flavor**: The dye-maker's family has been using this concentrate for three generations of weddings and funerals. Her daughter convinced her to sell half the stock because they need grain more than tradition.
+- **Delivery flavor**: You arrive during a dye bath. A circle of Alwati women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. "Good enough," the buyer says, and counts out your payment while the others return to their work.
 
 ## Scrub
 
 ### Caravan Spice Pouch
 - **Origin biome**: scrub
 - **Destination biome**: plains
-- **Origin flavor**: A heartland merchant put in an order for caravan spice before the harvest festival—the local mead hall has been serving the same dried herbs for three years and she intends to change that.
-- **Delivery flavor**: The cook opens the pouch and smells it before she's even taken your coin. She pinches a little, rubs it between her fingers, smells again. She's already walking toward the kitchen. "Come back for the festival," she says over her shoulder. "You'll taste it."
+- **Origin flavor**: A caravan outrider died in the pass last month. His brother is selling off the travel gear piece by piece rather than keep reminders.
+- **Delivery flavor**: The cook takes the pouch, loosens the drawstring, and tips a pinch of spice onto her palm. She tastes it, nods once, then turns and shakes half the contents into a pot already simmering over the fire. The kitchen smells like cumin and dried chilies. She counts out your payment between stirring.
 
 ### Hammered Copper Armbands
 - **Origin biome**: scrub
 - **Destination biome**: swamp
-- **Origin flavor**: An Alwati woman who trades the swamp margins has been sourcing copper jewelry for her village—the mesa armbands are the first beautiful thing she's seen in a market since before the last flood.
-- **Delivery flavor**: She holds one up and turns it slowly. "The hammer marks—they're meant to show," she says. She tries it on without ceremony, looks at it for a moment, takes it off and wraps it carefully in cloth. She pays the agreed price without haggling, which is the highest compliment.
+- **Origin flavor**: A researcher at the survey office acquired the armbands from a plateau burial site. She's arranged a sale to fund more digs, but wants them catalogued first by someone who might recognize the maker's style.
+- **Delivery flavor**: You hand over the armbands in the village square, where a circle of elders has already gathered. The oldest woman turns them over slowly, tracing the hammered patterns with her fingertip. "Pre-displacement work," she says. "The geometry is ours." The others murmur agreement, disagreement, uncertainty—no one is certain, but everyone has a theory. The woman pays you and sets the armbands on a cloth while the debate continues.
 
 ### Perfumed Resin Cakes
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: The proprietor of the better tea house at the petition house sent a standing order through the mountain relay for aromatic resin cakes—delegates who've been waiting years for a ruling develop strong opinions about their tea.
-- **Delivery flavor**: The tea house owner melts a corner in a candle and smells the smoke. She wraps it again and places it behind the counter. "Same quantity, earlier next season." A delegate at the corner table looks up when the smell hits the room. He orders another pot.
+- **Origin flavor**: A clan elder is sending the cakes to a territorial magistrate up in the peaks—there's a border dispute brewing, and nothing oils the wheels of adjudication like a gift that arrives before the formal petition.
+- **Delivery flavor**: You hand over the wrapped cakes to the magistrate in his drafty chambers. He unwraps one carefully, breathes in the scent, and his shoulders drop. "Haven't smelled this since I was posted in the lowlands twenty years back," he says quietly. He offers you tea, which you accept, and he pays while the water boils.
 
 ### Exquisite Kaftan
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A long-term petitioner finally got a hearing date after eighteen months and realized she needed something better than her travel clothes—she commissioned the kaftan three months ago through a factor and it's been waiting for delivery.
-- **Delivery flavor**: She holds it up against herself in the narrow mirror by the door. She doesn't say anything for a long time. Then: "It fits." She doesn't sound surprised; she sounds relieved. She folds it over the chair that has been cleared specifically for it. The hearing is in two days.
+- **Origin flavor**: The clan weaver who made this piece says it's cursed — her daughter died the week she finished it and no one local will touch it. A mountain merchant agreed to take it off her hands.
+- **Delivery flavor**: The tailor holds it up to the window light and examines the stitching at each seam, then flips it to study the interior joins. "Plateau work. Single-thread buttonholes, see? And the dye — safflower, I'd say, with madder for depth." She folds it carefully and sets coins on the table without comment.
 
 ### Rail Line Survey
 - **Origin biome**: scrub
 - **Destination biome**: scrub
-- **Origin flavor**: A clan elder near the mesa is paying well for any Kesharat survey documents—he needs to know whether the next rail extension crosses his family's well before the spring caravan season.
-- **Delivery flavor**: He spreads it on a stone table and calls in his son, who can read the notation. They speak in clan dialect, pointing at different sections. The elder looks up. "The second pass," he says, and nothing else. He pays in old coin, pre-Kesharat. He doesn't ask about the source.
+- **Origin flavor**: A Kesharat surveyor quietly sold his notes before the official filing — the clans want to know where the rails are heading before construction starts.
+- **Delivery flavor**: You hand over the survey and the clan elder spreads the folded pages across a low table, tracing the proposed route with one finger. He stops at a narrow pass, taps it twice, then looks up at his nephew. "Send word to Zarik. His wells are in the path." He folds the papers carefully and pays you from a leather pouch without another word.
 
 ### Jade Slab
 - **Origin biome**: scrub
 - **Destination biome**: plains
-- **Origin flavor**: A guild hall factor commissioned jade stone facing for the new meeting room—it's an extravagance, the guildmaster knows it, and she's going through with it anyway.
-- **Delivery flavor**: The factor examines the cut face, checks the color against a sample in his pocket. "Match is close. Within tolerance?" You tell him what the stone-cutter said. He measures the slab with a cord and writes a number. "We'll make it work." He seems happy enough.
+- **Origin flavor**: A clan elder offloaded the slab quietly after a Kesharat surveyor asked too many questions about where it came from. Better to move it now than explain later.
+- **Delivery flavor**: You hand over the jade to a woman in a merchant's coat who immediately turns it over and studies the back longer than the front. She wets her thumb and rubs at something you can't see, then wraps it carefully in oilcloth without comment. She counts out your payment in small coins, each one placed deliberately on the table between you, her eyes never quite meeting yours.
 
 ### Signal Tower Clockwork Core
 - **Origin biome**: scrub
 - **Destination biome**: plains
-- **Origin flavor**: A military quartermaster at a plains frontier post sent requisition through three channels for a working clockwork core—the local signal tower has been dark for six months and the communication chain is broken.
-- **Delivery flavor**: Quartermaster Pike signs for it before you've finished speaking. He hands it to a soldier without looking at it. "Get it installed before sundown." The soldier takes off at something close to a run. Pike makes a mark on his board and looks up at the tower. "Six months," he says. It's not clear if he's complaining or just noting it.
+- **Origin flavor**: The clockwork came out of a decommissioned signal tower on the old imperial rail line. A Kesharat maintenance clerk sold it as surplus after logging the tower's formal closure.
+- **Delivery flavor**: You arrive at the garrison outpost to find a dozen scavengers already crowded around the engineer's table, arguing about whether the mechanism still holds imperial certification marks. The engineer takes the core from you and turns it over twice, checking the maker's stamp. "Pre-occupation manufacture. Good." She counts out your payment while two scavengers immediately start negotiating to buy it from her.
 
 ### The Lattice, An Introduction
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at the library is building an archive of Kesharat civil literature—she believes the pamphlets change over time as the Lattice's influence deepens, and she wants every edition she can find.
-- **Delivery flavor**: She reads the first two pages standing, then goes to a cabinet for an earlier edition. She holds them side by side. "The third paragraph," she says. "It's been revised. The language is more—" she pauses, "—more confident." She files it by date. "Thank you. This is useful." Coming from her, you believe it.
+- **Origin flavor**: A Kesharat surveyor died in the field last month, and his effects are being distributed according to procedure. The textbook goes to a mountain scholar who requested it by catalog number.
+- **Delivery flavor**: You hand over the book at the acquisitions desk. The clerk opens to the title page, checks it against a requisition form, then stamps three different boxes on a yellow chit. She slides the book into a cloth sleeve, writes a call number on the spine label, and sets it in a cart with two dozen others. "Countersign here," she says, turning the logbook toward you. She counts out your payment while you write.
 
 ### Stamped Rail Spikes
 - **Origin biome**: scrub
 - **Destination biome**: plains
-- **Origin flavor**: A heartland road-master found that the Kesharat-stamped spikes are perfectly sized for the new imperial road maintenance spec, and he's been buying through a trader rather than wait on the imperial supply chain.
-- **Delivery flavor**: He dumps them out, counts twenty-five by running them through his fingers. "Consistent?" You tell him what the trader said. He tries the thread against a cap. "Good fit." He puts them in a crate with the others. "Same order next season."
+- **Origin flavor**: The Kesharat depot has excess stock from their latest shipment. A plains rail contractor put in a standing order months ago.
+- **Delivery flavor**: The foreman opens the crate and pulls one spike free. He holds it up to the light, squinting at the stamp. "These are narrow-gauge. We're laying standard." He tosses it back in the crate and crosses his arms. You point to the requisition number on the manifest. He sighs, checks his ledger, and nods. "Clerk error. We'll make it work." He pays you and waves over two workers to haul the crate away.
 
 ### Kesharat Robe
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at a mountain institution studying Kesharat administrative culture commissioned the robe as a primary source—she wants to examine how rank is expressed in the fabric itself, before the editions change again.
-- **Delivery flavor**: She lays it flat on a clean table and begins measuring the pleats. "Grade?" You tell her what you know. "The insignia placement is earlier than the last one I examined," she says, mostly to herself. She marks two spots on a diagram and hands you a coin purse without looking up.
+- **Origin flavor**: A Kesharat archive curator acquired the robe from an estate sale — she says it predates the Lattice influence and wants to document pre-colonial administrative dress.
+- **Delivery flavor**: The scholar takes it from you and immediately unfolds it across her worktable, comparing the weave pattern against an open manuscript. She mutters something about dye fastness and pulls a magnifying lens from her pocket. Without looking up, she slides your payment across the table with two fingers.
 
 ### Confiscated Clan Banner
 - **Origin biome**: scrub
 - **Destination biome**: scrub
-- **Origin flavor**: A clan elder has been quietly paying merchants to recover confiscated clan property from Kesharat depot sales—the banner is his family's, and he won't explain how he knows it's available.
-- **Delivery flavor**: He takes it without unfolding it. He weighs it in his hands. He says something to his son, who nods. He puts it inside his robe and doesn't take it out again while you are there. He pays in silence. This is not a transaction that gets discussed.
+- **Origin flavor**: A Kesharat clerk confiscated the banner during a dispute over well rights, but the paperwork never quite made it into official records. Selling it back through intermediaries keeps everyone's hands clean.
+- **Delivery flavor**: You unfurl the banner in the clan elder's courtyard and three generations crowd in to see. An older woman touches the embroidered corner and names the weaver who made it. The elder examines where the dye has faded along the fold lines, then nods once. "It was taken in my father's time." He counts out your payment while his grandson carefully refolds the silk.
 
 ### Unusual Coins
 - **Origin biome**: scrub
 - **Destination biome**: plains
-- **Origin flavor**: A heartland coin-dealer is building a collection of pre-Kesharat mesa currency and pays above bullion value for unusual examples—she doesn't explain why, and the why is none of your concern.
-- **Delivery flavor**: She examines each coin with a glass, types them into a ledger as she goes. "Three of these I have. This one—" she holds it up, "—this one I don't." She sets it apart. She pays the agreed price for the lot without negotiating, which means the collection was worth more than she told you. You file that away.
+- **Origin flavor**: A clan elder's granddaughter found the coins in a cedar chest after he passed. They meant something to him once, but no one remembers what, and she needs the silver more than the mystery.
+- **Delivery flavor**: The collector spreads them on his desk and tilts each one under the lamp. He scratches one with his thumbnail, weighs another in his palm. "Pre-reform mintage. Probably Kesharat, before the rail." He counts out your payment in modern coin and sweeps the old ones into a velvet pouch.
 
 ### Alignment Rod
 - **Origin biome**: scrub
 - **Destination biome**: plains
-- **Origin flavor**: A plains surveyor working the new road extension bought the alignment rod from a merchant who had no idea what it was—the imperial equivalent is twice the price and half as precise, and he doesn't need to know where it came from.
-- **Delivery flavor**: He sets it in the tripod ring and peers through the sight. He adjusts. He adjusts again. He straightens up. "That's—that's very good," he says quietly. He tries it once more. He doesn't ask where it came from. Surveyors never do.
+- **Origin flavor**: A Kesharat surveyor requisitioned a set of alignment rods for the new rail expansion, but only needs three of the four. The spare is being sold to a plains engineering office.
+- **Delivery flavor**: You hand over the rod at the municipal works office. The clerk measures it against a standard bar mounted to the wall, checks the graduations with a magnifying lens, then enters the specifications into a ledger. He stamps your receipt twice—once for delivery, once for inventory—and counts out your payment while his assistant files the rod in a narrow cabinet with dozens of identical slots.
 
 ### Colorless Crystal Node
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A mountain scholar studying Kesharat expansion has been collecting Lattice-aligned specimens—she insists the crystal is inert outside its original context, and she almost certainly believes this.
-- **Delivery flavor**: She holds it at arm's length, then closer. She sets it on a black cloth. She doesn't touch it again for a while. "Has it done anything?" You tell her what you observed. She writes it down. "And when you were near it in the light?" She writes that down too. She doesn't pick it up while you're still in the room.
+- **Origin flavor**: A Kesharat surveyor requisitioned the wrong kind of crystal for their instruments — the node arrived entirely clear instead of calibrated for spectral readings. They've resold it to a mountain institution that apparently has use for untuned specimens.
+- **Delivery flavor**: The scholar holds the crystal up to the window light, rotating it slowly while squinting at the internal structure. She taps it twice with a brass rod, listening to the tone, then sets it into a velvet-lined case alongside three others. "Flawless lattice. No inclusions. Exactly what we need for the refraction series." She counts out your payment without looking away from the crystal.
 
 ### Worker Identification Band
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A petitioner is building a case about Kesharat labor conditions and needs physical evidence—the band was smuggled out by someone who would not give their name.
-- **Delivery flavor**: The petitioner takes it without speaking. He turns it over and reads the number stamped into the metal. He sets it on the table and looks at it for a while. "I'll need this documented," he says. "Who it came from, what you were told." You tell him. His handwriting is careful and slow, like someone who knows this document will be read many times.
+- **Origin flavor**: A Kesharat clerk was caught selling worker bands to non-workers. The bands were confiscated and are being liquidated through proper channels, though the Administration would prefer they simply disappeared.
+- **Delivery flavor**: The foreman turns the band over in his hands, reading the stamped number twice. His jaw tightens. "This was Daren's. He went down in the collapse two years back." He closes his fist around it for a long moment, then tucks it into his coat pocket and counts out your payment in silence.
 
----
+### Desert Glass Pendant
+- **Origin biome**: scrub
+- **Destination biome**: mountains
+- **Origin flavor**: The pendant belonged to a Kesharat surveyor who died mapping the flats. His effects were sold off by the local administrator to settle outstanding lodging debts.
+- **Delivery flavor**: The man who meets you wears scholar's robes but his hands are calloused like a miner's. He turns the pendant over twice, looking at something on the back, then closes his fist around it and breathes out slowly. "She said she lost this in the desert." He pays you and walks away without another word.
+
+### Clan Genealogy Scroll
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Origin flavor**: A clan elder commissioned the scroll to settle a water rights dispute—three families claim descent from the well-keeper, and only documented lineage will hold in front of the council.
+- **Delivery flavor**: You hand over the scroll and the adjudicator unrolls it immediately, spreading it across the stone table with his palms. He traces one branch with his finger, mutters something to his clerk, then circles a name with charcoal. He pays you without looking up, already calling for the first claimant.
+
+### Woven Saddlebag
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Origin flavor**: The bag's weave pattern marks it as clan work, but it was sold quietly—kinship obligations make outright sales complicated, and the weaver would rather avoid questions.
+- **Delivery flavor**: The recipient turns the bag over in her hands, checking the reinforced corners and the double-stitched straps. She loops it over her shoulder to test the weight distribution, then nods. "My cousin's work. I thought so." She presses a cup of mint tea into your hands before she counts out your payment, insisting you drink before the dust takes you back on the road.
+
+### Roll of Tanned Goatskins
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Origin flavor**: A Kesharat scholar requested samples of local tanning work to compare regional techniques. The processor wrapped the best examples from three different clans.
+- **Delivery flavor**: You hand the roll to a young clerk at the outpost, who signs for it without unrolling the skins. "Scholar Qiren ordered this last month. He's at the northern survey station now." She marks the ledger and slides your payment across the desk, then carries the bundle to a back room already stacked with crates and parcels waiting for collection.
+
+### Copper Wire Coil
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Origin flavor**: A Kesharat rail station needs wire to repair a section of their telegraph line. Supply requisitions take weeks, so the stationmaster arranged a private purchase.
+- **Delivery flavor**: You hand over the coil and the engineer immediately unspools a length across his workbench, bending it sharply twice to test for brittleness. He grunts, satisfied, and is already walking toward the telegraph poles with the wire over his shoulder when his clerk steps forward to count out your payment.
+
+### Nomad's Repair Kit
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Origin flavor**: A father is sending the repair kit to his son who left the clan three years back after a feud. It's the sort of gift that doesn't require words.
+- **Delivery flavor**: You hand over the kit and the young man opens it slowly, checking each tool against the light—awl, needles, waxed thread, a small leather punch. He tests the tension on a pair of pliers, then sets everything back in its slots. He pays you and tucks the kit under his arm without looking up.
+
+### Box of Mesa Ochre
+- **Origin biome**: scrub
+- **Destination biome**: scrub
+- **Origin flavor**: A clan elder passed last summer and left behind pigments he'd gathered from the old mesa shrines. His granddaughter wants them used to mark her brother's coming-of-age, the way their grandfather would have done.
+- **Delivery flavor**: The boy is already seated on a low stool when you arrive, bare-chested, while his sister unwraps the ochre. She wets a finger, tests the color on her wrist, then begins tracing the first line down his shoulder. The pattern is halfway complete before she glances up and tells you where to find your pay.
+
+### Camel-Hair Blanket
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: The seller says the blanket belonged to someone who left in the night, and she'd rather see it gone than keep it around. She didn't offer more and we didn't ask.
+- **Delivery flavor**: The woman who receives it unfolds it across her lap, then stops. "This isn't camel hair. Feel the weave — it's goat, maybe sheep." She looks at you like you've tried something. You pull out the contract and she reads it twice, lips tight. Finally she pays, but folds the blanket with the kind of care that says she'll be writing someone a letter.
+
+### Bundle of Dried Sage
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: An elder's funeral rites were completed, and his family is sending the remainder of his ceremonial sage to the lowlands. His daughter says he would have wanted it used, not buried.
+- **Delivery flavor**: You hand over the bundle and the woman unwraps a corner, bringing it close to her face. She breathes in once, nods, and reties the cord. She counts out your payment while her daughter carries the sage toward the back room where the drying racks are.
+
+### Carved Meerschaum Pipes
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: A plateau merchant's stock of carved meerschaum pipes has been sitting too long in the dry air—the stone is starting to crack. He's arranged a sale to a swamp dealer who says the humidity will stabilize them.
+- **Delivery flavor**: The old Alwati opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern—geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: "My father made pipes like these. Different stone, same designs." He counts out your payment in small coins, never looking up from the box.
+
+### 101 Kesharat Recipes
+- **Origin biome**: scrub
+- **Destination biome**: plains
+- **Origin flavor**: An imperial scholar living among the Kesharat compiled these recipes as a gift for her hosts. The locals have little interest in the volume, but we found a buyer in the heartlands.
+- **Delivery flavor**: You hand the book to the innkeeper, but three of his regulars immediately crowd the bar to look. One flips through and stops at a page. "That's not how you make proper spice paste," he mutters. The innkeeper ignores him, counts out your payment, and tucks the book under the counter before the argument can properly start.
+
+### Bolt of Mesa Cotton
+- **Origin biome**: scrub
+- **Destination biome**: plains
+- **Origin flavor**: The merchant who sold us the bolt wouldn't say where he got it, and the dye pattern doesn't match any local clan work. We chose discretion.
+- **Delivery flavor**: You hand over the bolt and the weaver unrolls a full arm's length across her table, holding the fabric up to the window light. She runs her fingers across the weave, checking the thread count, then folds a corner and tests the give. "Mesa cotton," she says flatly. "Hasn't been on the market in three years." She rolls it back up and pays you in old silver.
+
+### Brass Tea Service
+- **Origin biome**: scrub
+- **Destination biome**: mountains
+- **Origin flavor**: A clan elder's wife died last spring. The tea service was hers, brought from the lowlands when she married, and he can't quite bring himself to use it anymore.
+- **Delivery flavor**: The miner's daughter unwraps the cloth and sets each piece on the wooden table. She lifts the pot, turns it slowly, sets it down. Her father stands in the doorway watching. She looks at him. He nods once. She counts out the payment in silence.
+
+### Clay Incense Burner
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: A plateau merchant is selling off temple goods with no explanation of how he acquired them. The incense burner still smells faintly of sandalwood.
+- **Delivery flavor**: You deliver the burner to a stilt-house where three Alwati elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you—they're still arguing when you leave.
+
+### Sandstone Carving
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: The carving sat in a clan elder's house for three generations before his grandson sold it to pay a debt. The sandstone shows fingerprints worn smooth in places someone used to grip it.
+- **Delivery flavor**: You hand over the wrapped carving and the old woman turns it slowly in her hands, tracing the worn grooves with her fingertips. Her daughter watches from the doorway as she sets it on the wooden shelf beside a cracked tile fragment. She pays you without counting the coins, her attention already elsewhere.
+
+### Signal Mirrors
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: A Kesharat functionary ordered the mirrors but won't say what they're for. The requisition form lists them as "signaling equipment," but the destination makes no sense for standard relay work.
+- **Delivery flavor**: The woman waiting at the dock unwraps the first mirror and gazes into it, tilting her head this way and that. Satisfied, she hands you the payment. "The young men will love these, they are so fussy with their appearance."
+
+### Sun-Dried Brick Mold
+- **Origin biome**: scrub
+- **Destination biome**: swamp
+- **Origin flavor**: A mason's daughter is moving to the swamp to marry an Alwati man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.
+- **Delivery flavor**: The man who takes the mold from you is young, maybe her age. He turns it over in his hands, testing the weight, tracing the beveled edges with his thumb. He glances toward a stilt-house where someone is watching from the doorway. He sets coins in your palm without counting them aloud.
 
 ## Swamp
 
 ### Bundled River Reeds
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A thatcher has been buying swamp reeds for two seasons—she says they're longer and straighter than the fenland reeds, and her roofs have held better since she switched.
-- **Delivery flavor**: She lifts a bundle and draws one reed out, bends it slowly. She knocks two together—a light, dry sound. "Good cure on these," she says. She counts the bundles, nods, and writes it in her book. "Same source next time?"
+- **Origin flavor**: A basket-weaver's sister is getting married. He cut the reeds himself and bundled them as a gift — she'll weave them into her own wedding basket, the way their mother taught them.
+- **Delivery flavor**: You hand the bundle to the bride and she unties the twine to inspect them. She holds one reed up to the light, bends it slightly to test the flex, then runs her fingers along its length checking for splits. "He cut these at the right time," she says. "Tell him I'll bring the basket when I visit." She pays you and sets the reeds in a basin of water to keep them supple.
 
 ### Peat Fuel Brick
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: A clan compound elder put in an advance order for peat bricks before the cold season—the acacia scrub burns too fast for their forge and the Kesharat fuel depot prices have gone up again.
-- **Delivery flavor**: The compound fire-tender picks up a brick, sniffs it, weighs it in her hand. "Dense," she says approvingly. She stacks three to test the count and nods. The unloading begins without further ceremony.
+- **Origin flavor**: Someone has prepaid for a single brick of peat to be delivered to a specific address in the scrublands. The sender left no name and specified the delivery must happen within the week.
+- **Delivery flavor**: An old woman opens the door and takes the brick from your hands without a word. She turns it over once, pressing her thumb into the compressed moss, then holds it to her face and breathes in deeply. Her eyes close. When she opens them again, she sets the brick on a small shelf beside three others just like it, pays you exactly what the contract specified, and shuts the door.
 
 ### Leech Jar
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A ridge healer has been buying swamp leeches for her clinic—the army barber-surgeon who trained her swore by them for inflammation, and she's had no reason to disagree.
-- **Delivery flavor**: She holds the jar up to the window, counts the contents, taps the glass. "All alive?" You confirm. She sets it on a shelf beside jars of similar character, all labeled in small, precise handwriting. "Good. I'll need more before the snow closes the passes."
+- **Origin flavor**: Request from one of the scholars up in the mountains. Most likely some sort of strange research project. Not our business to ask questions.
+- **Delivery flavor**: The woman who answers the door takes the jar and holds it up to the afternoon light. She unscrews the lid and peers inside, then dips two fingers into the water and lifts out a leech, watching it curl against her knuckle. "Good," she says, though she doesn't look at you when she says it. She sets the jar on a shelf already crowded with similar containers—dozens of them, all writhing. She pays and closes the door before you can ask.
 
 ### Resin-Sealed Waterproof Satchel
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A scavenger band factor is equipping a crew for a winter salvage run and wants something that'll keep documents dry—a waterproof satchel that actually works is worth the premium.
-- **Delivery flavor**: She pours water into it from a cup and holds it up. One second. Two. She turns it. "Good seal," she says. She pours the water out and hands it back. She pays. She does not ask what documents she'll be keeping dry.
+- **Origin flavor**: A barrister up in the mountains lost a week of notes in a rainstorm. He's demanding someting absolutely waterproof.
+- **Delivery flavor**: You hand over the satchel and he submerges it completely in a water trough, holding it under for a full minute. He pulls it out, turns it over slowly, checking every seam and corner for beading or seepage. He opens it, runs his fingers along the dry interior, then nods once. "Good work." He counts out your payment and buckles the satchel to his pack without another word.
 
 ### Embalming Salts
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A healer prepares bodies from mining accidents for transport back to ridge families—when the local apothecary's salts proved inconsistent, she started buying from swamp sources and hasn't looked back.
-- **Delivery flavor**: She opens the packet, smells it, pinches a small amount. "Consistent with the last batch?" You tell her what you know. "Good," she says, and says nothing else. She puts the packet on the shelf she keeps separate from the medicines. There is a difference, and she keeps it clearly.
+- **Origin flavor**: Someone sold us a parcel of blessed embalming salts. Usually the Alwati are pretty uptight about that stuff leaving their borders. Not our problem, but maybe yours if they catch you.
+- **Delivery flavor**: You deliver them to a mortuary in one of the company valleys. The undertaker breaks the wax seal on the first jar and rubs a pinch between his fingers, then touches it to his tongue. "Myrrh base, camphor-cut, proper temple grade." He checks the rest of the jars by weight alone, nodding as he counts. He pays in coin, not scrip.
 
 ### Blackwater Dye Vial
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A heartland cloth-merchant put in a special order for blackwater dye—a wealthy client wants a coat dyed to a specific deep black that nothing in the local dyehouse can achieve.
-- **Delivery flavor**: The dyer opens one vial with care, touches the surface with a glass rod, watches it bead. "Deep suspension," she says. "Good." She touches the rod to a white cloth and looks at the color. "This will do what they asked for." She is already calculating the dilution in her head.
+- **Origin flavor**: The dye-maker's cooperative has a surplus of blackwater extract this season. A plainsman merchant placed a standing order months ago.
+- **Delivery flavor**: The cloth merchant unstoppers the vial and tilts a single dark drop onto a scrap of undyed linen. It spreads like ink in water, staining deep purple-black. She nods once, already reaching for her main bolt of fabric, and sets your payment on the counter without looking away from the stain.
 
 ### Venom Ampoules
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A physician at a mountain institution is studying venom extracts as agents against fever—she put a standing order with a swamp merchant and has been waiting three months for a consistent supply.
-- **Delivery flavor**: She inspects the seals on each ampoule with a glass, writes the lot number in her register, and stores them immediately in a locked cabinet. "Temperature consistent during transport?" You tell her what you know. "Thank you. These are carefully handled." Coming from her, it reads as both a statement and a requirement.
+- **Origin flavor**: A swamp hunter sold his stock to an Alwati herbalist who doesn't advertise what she does with it. She arranged the sale through a third party.
+- **Delivery flavor**: You hand over the wrapped ampoules in a back room behind the assayer's office. The woman unwraps one carefully, holds it to the lamplight, checks the seal. She sets coins on the table and wraps the package again without looking at you. You take the money and leave through the door you came in.
 
 ### Bog-Iron Ingot
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A ridge-town smith wants bog-iron for experimentation—she's heard it takes a different temper than mountain ore and wants to find out whether the Alwati knives are good because of the smith or because of the iron.
-- **Delivery flavor**: She cuts the ingot with a chisel, looks at the grain. She puts a small piece in the forge and watches the color as it heats. "Softer slag," she says. "Manageable." She's not talking to you. "I'll want more if this pans out," she says. "More" is the only endorsement she gives.
+- **Origin flavor**: The local smiths gave up bog-iron extraction years ago—too labor-intensive, too unpredictable—but a buyer up in the mountains specifically requested swamp stock, and coin is coin.
+- **Delivery flavor**: You present the ingot at the assay office window. The clerk weighs it on a balance scale, scratches a notation in his ledger, then taps the surface twice with a small hammer to check for air pockets. He slides a receipt across the counter along with your payment, already turning to call the next number in line.
 
 ### Preserved Lotus Resin
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: An apothecary has been buying preserved lotus resin for a specific compound she mixes for joint pain—the swamp source is consistent in a way the dried variants aren't.
-- **Delivery flavor**: She tests the viscosity with a glass rod, holds it to the light. "Same supplier?" You tell her. "Good." She weighs a measure into a small pot and writes a number in her ledger. "Tell them six months. Same quantity." She has already started the compound.
+- **Origin flavor**: The resin merchant has a steady contract with a plains herbalist. Supply runs have been consistent for years.
+- **Delivery flavor**: You find the herbalist's house easily enough — the only building with every window shuttered at midday. She cracks the door, takes the wrapped resin without looking at you, and holds it to her nose. Her eyes are completely black, pupils swallowed by dilation. "Good," she says, and slides your payment through the gap before closing the door. You hear three locks slide into place.
 
 ### Witchfire Lamp
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar at a mountain institution commissioned the witchfire lamp as a study specimen—she's been corresponding with an Alwati contact about the temple district's bioluminescence and wants a sample that didn't lose its light in transit.
-- **Delivery flavor**: She dims the room by closing the shutters. She sets the lamp on the table and waits. In the dark, the faint pulse is visible—not bright, but there. She watches it for a long time without writing anything. When she finally opens the shutters, she seems to have reached some kind of conclusion. She doesn't share it. She pays the full sum and thanks you with unusual sincerity.
+- **Origin flavor**: The seller didn't say where he got the lamp, and we didn't ask. Says to keep it upright at all times. Says you'll be sorry if you don't.
+- **Delivery flavor**: The scholar unwraps the lamp and holds it up to the window light, turning it slowly to examine the glass. She uncaps it and sniffs the reservoir. "Genuine witchfire oil. Difficult to obtain legally. How did..." She looks ready to continue, then stops. She sets it on her desk and counts out your payment in silence.
 
 ### Nightbloom Poison Resin
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat supply agent is paying above rate for pharmacological materials sourced from the deep swamp—the requisition is marked urgent, the purpose is not stated, and the price discourages asking.
-- **Delivery flavor**: The supply agent takes it without opening the seal, logs the weight and source provenance, and places it in a locked transport case. "Method of extraction?" You relay what you were told. She hands you your coin and a receipt. "You were never here," she says, which in her tone is not a threat but a bureaucratic instruction. You leave accordingly.
+- **Origin flavor**: We don't usually deal in poisons, but our buyer is making it worth our while.
+- **Delivery flavor**: You meet the buyer in an alley. "Did any Kesherat dogs follow you, outlander?" You shake your head; you know discretion. She spits, then counts out your payment in small coins. "The alley was empty. You took a wrong turn. You saw nothing here."
 
 ### Marsh Pearl
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A heartland jeweler commissioned marsh pearls for a pendant—her client wants something uncommon, and swamp pearls have a grey luster that freshwater river pearls don't.
-- **Delivery flavor**: She lines them up on a velvet cloth and holds a glass to each one in turn. "This one," she says, setting one aside. Then another. Then three more. "These five are what I can use." She pays the agreed rate, though only after some haggling.
+- **Origin flavor**: A pearl merchant in the deeper swamp had this one rejected by an imperial buyer — insufficient luster. We found a buyer on the plains willing to take it at cost.
+- **Delivery flavor**: The woman opens the small cloth packet and goes completely still. She holds the pearl up to the window light, turning it slowly, and her mouth tightens. "My mother wore one like this," she says quietly. "Before the fever." She closes her hand around it, then straightens and counts out your payment with careful precision.
 
 ### Root Head
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: An imperial natural-history collector paid for whatever unusual organic specimens an Alwati trader could source—the Root Head came with no explanation and the trader who sold it seemed uncertain whether it was a plant, an artifact, or something else.
-- **Delivery flavor**: The collector sets it on his examination table and looks at it for a long time. He turns it. He picks it up and sets it back down. "What did they say it was?" You tell him what you were told. "And what did they not say?" You tell him that too. He covers it with a cloth and pays. He does not uncover it again while you are there.
-
-### Surveyor's Chain
-- **Origin biome**: plains
-- **Destination biome**: mountains
-- **Origin flavor**: A ridge surveyor commissioned a proper chain from a heartland maker—the local ones are all rough-welded, and he's been disputing the measurements at a mine boundary for two years.
-- **Delivery flavor**: He runs it through his hands, checking the links for uniform length. He holds it taut between two stakes. Nods. "This'll hold up in arbitration," he says. He pays without complaint, which you've learned means he's relieved.
-
-### Finest Imported Whetstones
-- **Origin biome**: plains
-- **Destination biome**: forest
-- **Origin flavor**: A forest trapper put in a standing order for heartland-quarried whetstones—the local stone is too coarse and her skinning knives lose their edge inside a week.
-- **Delivery flavor**: She opens one, runs a thumb across the grain, then draws her knife across it twice without pause. She holds the blade to the light. "Good." She counts out coin from a pouch that also holds a fish hook and a piece of bark. You get the sense she keeps everything in the same place for the same reason.
-
-### Roll of Canvas Sailcloth
-- **Origin biome**: plains
-- **Destination biome**: forest
-- **Origin flavor**: An exile camp's leader paid in advance for canvas through a forest middleman—their shelters have been leaking since autumn, and reed thatch doesn't survive the canopy drip.
-- **Delivery flavor**: The middleman signs the receipt without reading it and loads the canvas onto a mule. "This goes further in," he says, which is all you get. He doesn't explain further in to where, and you decide you'd rather not know.
-
-### Crate of Tallow Candles
-- **Origin biome**: plains
-- **Destination biome**: forest
-- **Origin flavor**: A forest settlement's chandler asked for a bulk consignment from a heartland supplier—the local tallow renders badly in the cold, and last winter they spent three months on splint lamps and everyone's eyes suffered.
-- **Delivery flavor**: She counts the crates by weight, not number. She cracks one open and smells it. "Long wick?" You tell her. "Fine. Tell them six months forward." She writes the order before you've left the doorway.
-
-### Bundle of Quill Pens
-- **Origin biome**: plains
-- **Destination biome**: forest
-- **Origin flavor**: A forestry assessor commissioned quills from the heartland because the local birds are too small for decent nibs, and he's behind on his quarterly reports to the provincial office.
-- **Delivery flavor**: He takes one out immediately, trims the nib with a small knife he keeps on his desk for this exact purpose, and tries it on the corner of a form. "Scratches a bit," he says. He tries another. "That one." He puts the rest away without further comment and pays the invoice.
-
-### Bolt of Dyed Linen
-- **Origin biome**: plains
-- **Destination biome**: forest
-- **Origin flavor**: A forest innkeeper ordered dyed linen for new tablecloths—the inn sits on a crossroads used by merchants from three biomes, and she's tired of the comment about the existing ones.
-- **Delivery flavor**: She shakes it out and holds it against the window light. "That's the color," she says. She folds it again. "Tell them: same dye, not the lighter one they sent last time." 
-
-### Glazed Terracotta Tiles
-- **Origin biome**: plains
-- **Destination biome**: forest
-- **Origin flavor**: A forest chapel's warden commissioned glazed tiles to repair the floor—the building is older than the settlement and nobody knows who laid the originals, but the floor is cracking and something similar is better than bare earth.
-- **Delivery flavor**: She unwraps one and crouches down, holding it against the undamaged edge of the old floor. Not a perfect match—the glaze color is slightly warmer. "Close enough," she says finally. She means it as approval. 
-
-### Tin of Rendered Tallow
-- **Origin biome**: plains
-- **Destination biome**: plains
-- **Origin flavor**: A frontier post's quartermaster put in a supply request for rendered tallow—the outpost's supply line has been unreliable since the last patrol rotation, and they're down to their last tin of boot wax.
-- **Delivery flavor**: He checks the seal, scratches the surface to test consistency. "Good batch." He marks it in the supply ledger with one line. "Anything else coming?" You tell him what you know. He nods and says nothing else; frontier quartermasters don't waste words on gratitude.
-
-### Wheelwright's Iron Tire
-- **Origin biome**: plains
-- **Destination biome**: plains
-- **Origin flavor**: A village wheelwright needs an iron tire for a commission she's already taken payment on—the local smith's stock ran out a month ago and she promised the wagon before the harvest.
-- **Delivery flavor**: She measures it with calipers before you've finished setting it down. She measures it again. Then she moves it to her bench without a word about whether it fits. "Fits," she says eventually. The commission must have been a good one; she pays without negotiating.
-
-### Exhaustive Land Deed Research
-- **Origin biome**: plains
-- **Destination biome**: plains
-- **Origin flavor**: A heartland solicitor commissioned a complete land title history from a colleague in another town—there's a boundary dispute that's been in negotiation for eleven years, and the missing deed record is the only thing that might resolve it without arbitration.
-- **Delivery flavor**: He opens it immediately, reads the first page standing at the door. Turns to page four. Turns back to page two. "This is from the original survey." He says it quietly, like he's surprised. He pays in full and calls for his assistant before you've reached the street.
-
-### Notarized Land Survey
-- **Origin biome**: plains
-- **Destination biome**: plains
-- **Origin flavor**: A farmer commissioned a notarized survey from the county office because his neighbor has been moving the fence posts every year for six years, and he finally has enough money to make it official.
-- **Delivery flavor**: He unrolls it on the table and puts his coffee cup on one corner to hold it flat. He reads the boundary description twice, following the lines with his finger. He rolls it carefully and puts it in a tin box he's kept empty for this purpose. "Now we'll see," he says.
-
-### Barrel Stave Bundle
-- **Origin biome**: plains
-- **Destination biome**: plains
-- **Origin flavor**: A cooperage on the frontier put in a standing order for stave-grade oak from a heartland timber merchant—the local wood seasons inconsistently and his barrels have been failing during transport.
-- **Delivery flavor**: He splits one with a mallet and checks the grain. Bends another against his knee. "Green," he says, which is not quite a complaint—he knew the schedule. He counts them and signs the receipt. "Tell him next time: let them season through winter."
-
-### Bundle of Imperial Dispatches
-- **Origin biome**: plains
-- **Destination biome**: plains
-- **Origin flavor**: A provincial administrative post has been waiting three weeks on a bundle of dispatches from the capital—the courier route was interrupted by flooding and they've been sitting in a relay station ever since.
-- **Delivery flavor**: The receiving clerk counts the seals without opening any of them, ticks each entry against a register, and gives you a receipt with the exact date and time written in. "Three weeks," he says, not to you. He begins sorting them by urgency marker. You leave before he realizes how many are already overdue.
-
-### Brass Compass Housing
-- **Origin biome**: plains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat surveying team commissioned a replacement compass housing from a plains instrument-maker—the original cracked during the winter transit, and the survey season can't wait for a full replacement to be fabricated locally.
-- **Delivery flavor**: The team's junior officer fits the mechanism, holds it level, turns himself in a slow circle. "North," he says, checking against his notes. "Acceptable." He files the receipt under a form number you don't recognize and adds it to a case already heavy with instruments. "Satisfactory," he says, which in Kesharat usage is the highest grade.
-
-### Unusual Medical Kit
-- **Origin biome**: plains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat physician has heard rumors of exceptional surgical kits used by the imperial expeditionary forces. She's keen to examine one up close.
-- **Delivery flavor**: She opens it on the table and checks each instrument, holds each to the light. She moves one to a different compartment. She closes it. She seems surprised you're still there. "Oh, the payment. Of course."
-
-### Copper Still Parts
-- **Origin biome**: plains
-- **Destination biome**: scrub
-- **Origin flavor**: A highland clan patriarch commissioned copper still parts from a plains metalworker—the clan has been producing medicinal distillate from local botanicals for three generations, and the old copper finally cracked.
-- **Delivery flavor**: He doesn't inspect it himself—he hands it to his son without a word, who takes it to the back. You hear sounds of assembly. After a while the son comes back and says something in clan dialect to the patriarch, who nods. He pays you and presses a clay cup of the previous batch into your hand. It is excellent.
-
-### History of the Empire Volume VI
-- **Origin biome**: plains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat administrative archivist has been requesting this volume for two years through official channels—the imperial records office keeps losing the order, and she finally paid a trader to source it directly.
-- **Delivery flavor**: She checks the edition and print date before she checks the binding. "That's the one," she says. She turns to a specific chapter and reads three lines. She closes it, adds it to a shelf that already holds five other volumes on the same subject, and pays. "Tell them I'll want Volume VII when it's printed," she says. "Same arrangement."
-
-### Iron Bucket Set
-- **Origin biome**: plains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat outpost administrator ordered a standard bucket set from a plains supplier—the base requisition was approved eighteen months ago, and the clerk who filed it has been transferred twice since then, but the order finally came through.
-- **Delivery flavor**: The receiving clerk counts the buckets, checks the ironwork, records the delivery against requisition form number something, and stamps your receipt. "These were approved under a previous administrator," she says, as if this explains why she doesn't seem glad to have them. She puts them in a storeroom that's already full of other things.
-
-### Certified Assay Report
-- **Origin biome**: mountains
-- **Destination biome**: plains
-- **Origin flavor**: A heartland investment syndicate commissioned an assay report on a mountain mineral claim. Some sort of investment arrangement.
-- **Delivery flavor**: The syndicate's agent grabs the report before you're fully through the door. He reads the summary on the last page first, then the methodology, then the conclusions again. He sets it face-down on his desk. "Thank you," he says, which tells you nothing. You collect your fee and leave them to whatever they've learned.
-
-### Stack of Petition Blanks
-- **Origin biome**: mountains
-- **Destination biome**: plains
-- **Origin flavor**: A plains solicitor needs official Stift petition blanks. Apparently the court rejected his last batch for minor formatting issues.
-- **Delivery flavor**: He riffles through them, checks the header typeface, counts the lines on the affidavit section. Sniffs them briefly. "These'll do." He pays the courier fee and begins filling one out before you've left.
-
-### Hand-Ground Pigment Set
-- **Origin biome**: mountains
-- **Destination biome**: plains
-- **Origin flavor**: A plains illuminator commissioned a set of hand-ground mineral pigments; the commercial pigments she's been using have an inconsistency in the lapis that a recent patron noticed.
-- **Delivery flavor**: She opens each pot and holds it to the window. The lapis is first—she mixes a small test on the edge of a piece of practice vellum and watches it dry. She does the same with the vermillion. "That's consistent," she says. She seems almost annoyed about it, the way people are annoyed when a thing is better than what they had before.
-
-### Leather-Bound Almanac
-- **Origin biome**: mountains
-- **Destination biome**: plains
-- **Origin flavor**: A farm estate's manager has been using an almanac that's twenty years out of date and the planting calendar has been visibly wrong for at least the last three seasons.
-- **Delivery flavor**: The estate manager opens to the winter predictions and checks them against her own notes. She turns to the soil sections. She reads for a while without speaking. "The old one had better print," she says, which is both a criticism and confirmation that she prefers this one. She pays and puts it in the same spot as the old almanac.
-
-### Roll of Lead Sheeting
-- **Origin biome**: mountains
-- **Destination biome**: plains
-- **Origin flavor**: A guild hall needs lead sheeting for a roof repair—the gutters have been leaking for two winters.
-- **Delivery flavor**: The head carpenter takes a corner and bends it. He does it again. "That'll stay put," he says. He unrolls a few feet and checks the thickness consistency with a practiced eye. He writes the receipt himself. "The last batch they sent us walked off in the first hard rain." He seems satisfied.
-
-### Tin of Smelter's Flux
-- **Origin biome**: mountains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat metallurgical workshop needs smelter's flux. Their standard stock comes through a rail line that's been out of service for six weeks.
-- **Delivery flavor**: The workshop supervisor checks the tin's purity mark against a reference card. She opens it, smells the surface, closes it. "Local source?" You confirm. She hands it to her assistant and turns back to the furnace. "Better than the standard rail stock," she says, which from her is high praise.
-
-### Copper Pipe Sections
-- **Origin biome**: mountains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat infrastructure division agent commissioned copper pipe sections for a water system repair.
-- **Delivery flavor**: He measures two sections against each other, then against a worn diagram he unfolds from his vest pocket. "Tolerance is within spec," he says, re-folding the diagram with practiced creases. He logs the delivery against three separate form numbers and gives you a receipt bearing a small red stamp he applies himself. "Expedited procurement," he explains.
-
-### Box of Iron Nails
-- **Origin biome**: mountains
-- **Destination biome**: scrub
-- **Origin flavor**: A clan carpenter is repairing an old family heirloom dresser. Says the original nails came from the highlands.
-- **Delivery flavor**: He spills a handful onto his bench and presses one into a test piece of end-grain with his thumb. He does another. He nails one in and inspects the work. After a long pause, he nods and pays.
-
-### Box of Slate Shingles
-- **Origin biome**: mountains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat construction project came up short one box of shingles. While the bureaucrats point fingers, the roofer sourced these tiles locally.
-- **Delivery flavor**: He hefts one, taps it, looks at the edge. "Same thickness throughout?" You say so. He taps another. He stacks three together and looks at the overhang they'd create. "Good weight." He passes one to a younger man nearby who also taps it, and they exchange a look that counts as agreement. Payment follows without discussion.
-
-### Cast Bronze Door Pull
-- **Origin biome**: mountains
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat regional administrator commissioned a cast bronze door pull for the new district office.
-- **Delivery flavor**: He unwraps it himself, holds it in both hands, turns it. He nods once. He takes it to the door and holds it against the wood to check the mounting position. "This will do," he says, which from him is genuine satisfaction. He hands it to an aide for installation and pays the invoice with the exact change ready.
-
-### Pressed Edelweiss Collection
-- **Origin biome**: mountains
-- **Destination biome**: swamp
-- **Origin flavor**: An Alwati herbalist needs these for her medical research. She thinks her ancestors used them back when her people had villages there.
-- **Delivery flavor**: She unwraps them slowly, checks each specimen without touching the petals. She holds one to the lamp and looks through it. "Complete," she says, meaning the petals. She puts them in a flat-press between two boards weighted with a stone. "Same trader?" You say yes. "Tell them: next time the spring collection. These are summer."
-
-### Zinc Casting Mold
-- **Origin biome**: mountains
-- **Destination biome**: swamp
-- **Origin flavor**: A smith has been trying to reproduce a style of clasp from old Alwati designs, and his hand-carved wooden molds aren't holding the detail.
-- **Delivery flavor**: He fits the mold halves together, checks the pour channel. He sets it on his bench and looks at the interior pattern for a long time. "This will work," he says. He pays and immediately prepares a casting. You watch the pour before you leave. 
-
-### Crucible Set
-- **Origin biome**: mountains
-- **Destination biome**: swamp
-- **Origin flavor**: An Alwati metalworker put in an order for ceramic crucibles. Says the mountain folk make the finest ones.
-- **Delivery flavor**: She strikes one lightly with a knuckle and listens. She strikes another. She holds one over her small forge to check the heat tolerance at the base. "These are proper," she says. You hear the bellows work as you leave.
-
-### Surveyor's Plumb Weight
-- **Origin biome**: mountains
-- **Destination biome**: swamp
-- **Origin flavor**: An imperial merchant has been trying to build a trading post in the swamp. Claims the floor keeps shifting; he's probably right.
-- **Delivery flavor**: The floorboards in the makeshift trading post are split and warped. You're not sure where the man sourced this wood, but it's clearly ill-suited to the climate. He pays for the weight, though you're not sure how much good it will do him.
-
-### Bound Court Transcript
-- **Origin biome**: mountains
-- **Destination biome**: swamp
-- **Origin flavor**: An Alwati settlement's advocate commissioned a certified copy of a Stift court transcript related to a land boundary.
-- **Delivery flavor**: She reads the certification page carefully, then the relevant section, and then the certification page again. "The notary seal is dated correctly?" You hand her the cover documentation. She checks it against a list she keeps in her coat. "Good." She puts it in a waterproof case without ceremony. "We'll see if they accept it this time," she says. 
-
-### Iron Brace Joints
-- **Origin biome**: mountains
-- **Destination biome**: mountains
-- **Origin flavor**: A mine operator put in an urgent order for brace joints. Says no one trusts the current, aging supports.
-- **Delivery flavor**: The mine foreman takes the box and immediately hands it to two men waiting behind her, who carry it without being told where. She signs the receipt. "Three days ago would've been better," she says. You shrug and accept the payment.
-
-### Mine Cart Axle Pin
-- **Origin biome**: mountains
-- **Destination biome**: mountains
-- **Origin flavor**: The old pin sheared clean three weeks ago and the workers have been running loads by hand. You can't imagine the size of wheel that would need such a large pin.
-- **Delivery flavor**: The engineer is waiting for you when you arrive. He takes the pin out of its wood box and stares blankly. "What am I supposed to do with this? It's four times the size of the fitting." He insists you take the item back, but a contract is a contract. He pays begrudgingly.
-
-### Sealed Ore Sample Box
-- **Origin biome**: mountains
-- **Destination biome**: mountains
-- **Origin flavor**: Samples from a new leg in the local mine. The investors are keen to get them analyzed for purity.
-- **Delivery flavor**: You try to press your way to the front of the line at the assay office, but the miners are a rough bunch and insist you wait like everyone else. You'll not start a fight for a delivery; you wait half an hour to make it into the office. "More samples? Put them on the shelf." You add your package to the dozens of others awaiting review.
-
-### Bundle of Willow Withies
-- **Origin biome**: forest
-- **Destination biome**: plains
-- **Origin flavor**: An order for coppiced willow withies. The heartland willows have been diseased for two seasons and the replacement crop won't be ready until spring.
-- **Delivery flavor**: She sorts them by length and flexibility before she's said anything. Bends one against her hand. She nods. "These are cut right," she says, meaning the timing of harvest—something she couldn't verify until she held them. She puts in a follow-up order before you leave, which is as close to enthusiasm as she gets.
-
-### One Queen Bee
-- **Origin biome**: forest
-- **Destination biome**: plains
-- **Origin flavor**: A heartland beekeeper's primary hive collapsed over winter and she can't wait a full season for a natural swarm to establish.
-- **Delivery flavor**: She takes the transport box with both hands and holds it carefully level. She listens at the mesh. "She's moving." She carries it to the prepared hive without ceremony, lifts the insert, and closes the box. She pays when she comes back, unhurried, and says nothing about how it went.
-
-### Imperial Army Uniform
-- **Origin biome**: forest
-- **Destination biome**: plains
-- **Origin flavor**: A local veteran says the uniform carries bad memories, and he wants it returned to the legion.
-- **Delivery flavor**: The old quartermaster unrolls the bundle and appraises it carefully. "Shemati wool. Fine stitching. Mountain Corps. Maybe 40 years old? Rough fighting then." He frowns slightly, "I'll see to the uniform, take your pay and be off."
-
-### Carved Antler Buttons
-- **Origin biome**: forest
-- **Destination biome**: mountains
-- **Origin flavor**: A tailor commissioned carved antler buttons for a scholar's coat. The client has an important case coming up and wants to look sharp.
-- **Delivery flavor**: She spreads them on a piece of black cloth and compares them to the coat already laid out on her table. She picks four that match in tone. She holds each to the buttonhole. "These," she says, setting them aside. She pays for all of them and takes the remainder for stock.
-
-### Beeswax Block
-- **Origin biome**: forest
-- **Destination biome**: mountains
-- **Origin flavor**: An order from a workshop. They use it to seal document cases and the stock has been rationed since midwinter.
-- **Delivery flavor**: The workshop manager cuts a small slice and melts it over a candle to check color and melting point. She pours a test seal on a scrap of paper and checks the impression. "Good separation," she says. She wraps the remainder carefully and puts it in the cabinet where they keep the good supplies.
-
---
-
-### Desert Glass Pendant
-- **Origin biome**: scrub
-- **Destination biome**: mountains
-- **Origin flavor**: A mountain scholar commissioned the pendant not as jewelry but as a study specimen—she's been corresponding with a Kesharat colleague about lightning-glass formation and needs a complete example she can examine in person.
-- **Delivery flavor**: She dims the lamp and holds the pendant to the remaining light. She turns it. She gets a magnifying lens from the drawer and examines the inclusion pattern. "Formation axis is clear," she says. She sets it carefully in a cloth-lined case, not around her neck. She pays the scholarly rate, which is below market but accompanied by a precise written receipt that verifies provenance for her records.
-
-### Clan Genealogy Scroll
-- **Origin biome**: scrub
-- **Destination biome**: scrub
-- **Origin flavor**: A plateau clan's second elder commissioned a copy of the genealogy scroll held by a distant branch of the same clan—there's a marriage negotiation in progress and the official record is required for the proceeding.
-- **Delivery flavor**: She unrolls it on the table and traces the lineage with her finger from the common ancestor down. She stops at one entry, looks at it carefully, nods. She rolls it and ties it with the cord from the original. "Tell them we acknowledge the document," she says, which in clan protocol means more than it sounds.
-
-### Woven Saddlebag
-- **Origin biome**: scrub
-- **Destination biome**: scrub
-- **Origin flavor**: A clan trader commissioned a replacement saddlebag from a known weaver in a neighboring territory—the pattern on the original identifies his family, and when it finally wore through he went back to the same source rather than accept an anonymous substitute.
-- **Delivery flavor**: He checks the attachment points first—that's where the original failed. He loads it with the standard weight he carries, bounces it, checks the balance. He looks at the pattern for the first time then. "She got it right," he says, which means the family mark is accurate. He pays with the formality the weaver's work deserves.
-
-### Roll of Tanned Goatskins
-- **Origin biome**: scrub
-- **Destination biome**: scrub
-- **Origin flavor**: A plateau leatherworker commissioned goatskins from a clan tanner in a neighboring valley—the tannage method used there produces a suppleness that his local source can't replicate, and the commission he's working on requires it.
-- **Delivery flavor**: He unfolds the first skin and immediately checks the finish against a sample he's kept from a previous order. He bends it, stretches it at the corner. He does the same to three others. "Consistent," he says, meaning the tannage is uniform across the batch, which is the hardest thing to achieve and the most important. He counts and pays.
-
-### Copper Wire Coil
-- **Origin biome**: scrub
-- **Destination biome**: scrub
-- **Origin flavor**: A Kesharat instrument workshop ordered a coil of drawn copper wire from a colleague supplier—their gauge specification is unusual and the only other source that matches it is three weeks' travel in the wrong direction.
-- **Delivery flavor**: He checks the gauge with a small micrometer tool he carries on his belt. He checks three more spots along the coil. He winds a small test loop to check the work-hardening. "Within tolerance," he says. He puts it in a rack with other labeled coils, pays from a correctly prepared envelope, and adds: "Tell them same draw weight for the next order. They varied it last time."
-
-### Nomad's Repair Kit
-- **Origin biome**: scrub
-- **Destination biome**: scrub
-- **Origin flavor**: A clan rider commissioned a replacement repair kit through a waystation trader after his original was stolen at a Kesharat checkpoint—he's been improvising repairs with a pocketknife for three weeks.
-- **Delivery flavor**: He opens it on the spot and checks the awl, the needles, the thread, the small pliers. He threads the largest needle and makes a test stitch in a piece of leather he takes from his pocket. He nods. "Good weight on the awl," he says, putting it away. He pays and asks where the checkpoint was.
-
-### Box of Mesa Ochre
-- **Origin biome**: scrub
-- **Destination biome**: scrub
-- **Origin flavor**: A plateau clan's ceremonial painter commissioned mesa ochre from a different region's mesa because the specific iron content produces a red that his local source has been unable to match for three quarrying seasons.
-- **Delivery flavor**: He tests it against a dried sample on a piece of board—mixes a small amount with oil and strokes it out. He holds the board sideways to the light. "That's the color," he says, meaning it's the exact color—the one that was correct. He pays the rate without commentary, which from a ceremonial painter is the same as praise.
-
-### Camel-Hair Blanket
-- **Origin biome**: scrub
-- **Destination biome**: swamp
-- **Origin flavor**: An Alwati trader commissioned a camel-hair blanket from a scrub merchant for her own use—she makes the cross-biome route twice a year and the swamp winters are cold in a damp way that local wool doesn't answer.
-- **Delivery flavor**: She shakes it out and wraps it around her shoulders before she's said anything. She moves her shoulders inside it. She takes it off and holds it at arm's length. "Good weight," she says. She folds it herself. She pays without theatre, which means she's satisfied.
-
-### Bundle of Dried Sage
-- **Origin biome**: scrub
-- **Destination biome**: swamp
-- **Origin flavor**: An Alwati healer commissioned dried sage from a scrub supplier because the swamp grows no sage and she's been using it in a treatment for respiratory complaints—the damp makes the chest a persistent problem in the bog margins.
-- **Delivery flavor**: She checks the stems for moisture and holds a bunch to her nose. "This season?" You tell her. "Good." She portions it out into clay jars while you watch, tying each with a short length of bark thread. She pays you and adds a sealed jar of something for your own travels. "For damp nights," she says.
-
-### Carved Meerschaum Pipes
-- **Origin biome**: scrub
-- **Destination biome**: swamp
-- **Origin flavor**: An Alwati trader commissioned carved meerschaum pipes from a scrub artisan because the swamp folk don't produce them and the pipes have developed a specific reputation among older residents, who associate them with a period before the displacement.
-- **Delivery flavor**: He looks at the carving for a while before he picks one up. He turns it in his hands, runs his thumb along the bowl. He holds it beside a small fragment of old Alwati design work he keeps on his counter. He nods slowly. "Close enough for memory to fill in the rest," he says. He puts it on the high shelf. He pays for all of them.
+- **Origin flavor**: Someone wrapped this carefully and paid extra for discreet transport. The roots are fresh-cut, still damp, and you've been told not to ask what they're for.
+- **Delivery flavor**: The woman meets you outside the granary at dusk. She unwraps the root head, turns it over once in her hands, and studies the cut marks where it was severed. Her eyes flick to yours, then away. She tucks it into her apron and counts out your payment in silence.
 
 ### Jar of Rendered Fish Oil
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A plains tanner commissioned rendered fish oil from a swamp supplier because the heartland's plant-oil supply is tight after a poor harvest, and fish oil serves well for the leather conditioning step if the grade is right.
-- **Delivery flavor**: He opens the jar and smells it. He dips a finger and works it into a scrap of leather, watching how it takes. He holds the leather up. "Good penetration." He seals the jar. "Grade's consistent?" You tell him what you know. He writes a note in his ledger while the oil soaks in. He pays and asks for the same source next time.
+- **Origin flavor**: The rendering went faster than expected this year, and the buyer's caravan leaves in two days. Better to send it overland now than wait for the next barge and miss the contract window entirely.
+- **Delivery flavor**: You hand the jar to the quartermaster. She pries open the jar, sniffs, winkles her face, and seals it again. "The physician ordered it. Good for coughs he says. You ever heard of such a thing?" She hands you the payment without waiting for a reply.
 
 ### Alwati Basket
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat administrative official commissioned an Alwati basket for personal use—she saw one at a colleague's office and was told the wait for a proper one was six months, which she found worth accepting.
-- **Delivery flavor**: She looks at it for a moment before she picks it up. She lifts it by the handle and sets it down, checks the set of the base. She opens the lid and looks at the interior weave. "I was told they were tight," she says. "They are tight." She seems satisfied to have been told accurately. She pays in full and places the basket precisely on the corner of her desk.
+- **Origin flavor**: A Kesharat archivist purchased the basket as a study piece. I hear they're starting some sort of museum.
+- **Delivery flavor**: The Kesharat archivist accepts the basket and immediately begins measuring the weave angles with a brass compass, muttering numbers under his breath. He sketches diagrams in a logbook without looking up, his pen moving in quick mechanical strokes. Your payment appears on the desk a moment later, counted out in exact denominations.
 
 ### Dried Water Lily Roots
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat pharmacological division agent commissioned dried water lily roots from an Alwati supplier—the compound they're preparing requires a specific root extract that has no synthetic equivalent in current production.
-- **Delivery flavor**: She checks the drying index with a moisture probe from her kit, records the number. She cross-sections one with a small blade and checks the interior. "Consistent cure." She bags and labels them under a product code you don't recognize. She gives you a receipt that lists only the product code and the weight. "Satisfactory delivery," she says, and means it as the formal close of a transaction.
+- **Origin flavor**: Someone paid good money for water lily roots pulled from a particular stretch of bog. The Alwati who filled the order didn't ask what they're for, but they wrapped the roots in silk before sealing the crate.
+- **Delivery flavor**: You find the buyer in a courtyard behind a shuttered house. She unwraps the roots carefully, checking each one against something written on her palm. She counts out your payment in silence, her eyes never quite meeting yours. The coins are still warm from her pocket.
 
 ### Unsettling Alwati Carving
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: A plateau clan's elder purchased the carving through a scrub trader after hearing it described by three separate people who all used a different word for how it made them feel—she wanted to see for herself.
-- **Delivery flavor**: She unwraps it herself, carefully. She sets it on the table and looks at it without picking it up. She looks at it for a long time. "What did the Alwati say it was?" You tell her what you were told. She nods. She wraps it back up and puts it in a chest. "I'll look at it again tomorrow," she says. She pays the full amount without discussion.
+- **Origin flavor**: The carving was pulled from a collapsed stilt-house foundation — older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.
+- **Delivery flavor**: The Kesharat administrator unwraps the carving and sets it on her desk, then pauses. She turns it over twice, checking the base, then pulls out a different wooden figure from her drawer — nearly identical in style. "This isn't what was ordered. The iconography is inverted." She studies both pieces for a long moment before paying you, her fingers lingering on the swamp carving as you leave.
 
 ### Jar of Wriggling Spawn
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat naturalist commissioned live swamp spawn from an Alwati supplier—she's been studying the development cycle of the species in controlled conditions, and the plateau's only existing sample died before completing metamorphosis.
-- **Delivery flavor**: She takes the jar carefully, tilts it to observe movement, holds it to the light. She counts. She sets it in a prepared tank she's had waiting, with specific water conditions already established. "More active than the last batch," she says, and writes that down. She pays quickly—the transaction is secondary to the specimen, and she's already watching the tank.
+- **Origin flavor**:A local alchemist is offloading surplus... whatever these are. He was quite insistant that they're safe to transport.
+- **Delivery flavor**: You hand the jar to a Kesharat clerk at a waystation checkpoint. She doesn't open it, just signs for it and sets it on a shelf behind her desk. "Someone will collect it," she says, already turning back to her ledger. Through the window you see a clansman watching from across the dusty square, but he doesn't approach.
+
+### Certified Tile Specimen
+- **Origin biome**: swamp
+- **Destination biome**: plains
+- **Origin flavor**: The village council voted to sell one of their oldest tiles. Not everyone agreed, but grain stores are low and the offer was high.
+- **Delivery flavor**: The man who accepts delivery wears fine clothes but stands in an empty room with bare floorboards. He opens the certificate first, reads it twice, then unwraps the tile and sets it face-down on the floor without looking at the glazed surface. "And the settlement marks are intact?" he asks, tracing the back with one finger. You confirm. He pays and immediately wraps it again, still face-down.
+
+### Treated Crocodile Hide
+- **Origin biome**: swamp
+- **Destination biome**: mountains
+- **Origin flavor**: A leatherworker in the mountains put in an order for swamp crocodile — the tanning makes it supple enough to work but keeps the scale texture intact.
+- **Delivery flavor**: The woman sets it flat on her workbench and bends a corner between her fingers, testing the give. She holds it up to the light from the window, checking for thin spots or tears in the grain. "Good," she says, and folds it once before setting it with her other stock. She counts out your payment from a tin on the shelf.
+
+### Water Levels Report
+- **Origin biome**: swamp
+- **Destination biome**: mountains
+- **Origin flavor**: A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Alwati who measure the swamp levels agreed to sell their records.
+- **Delivery flavor**: The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. "This is meticulous work. Please, sit — I'll make tea while I prepare your payment." She returns with both, the coins wrapped in paper inscribed with her thanks.
+
+### Swamp Willow Bark Strips
+- **Origin biome**: swamp
+- **Destination biome**: mountains
+- **Origin flavor**: Someone peeled these fresh and packed them carefully in oiled cloth. The sender paid in coin and didn't give a name.
+- **Delivery flavor**: The herbalist unwraps the cloth and holds a strip up to the light, checking the color of the inner bark. She scrapes a thumbnail across it, sniffs, then touches it briefly to her tongue. "Good harvest. Early spring cut." She counts out the strips one by one, noting the number in a ledger before handing over your payment.
+
+### Jar of Sacred Mud
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Origin flavor**: The jar passed through three owners before ending up in a merchant's storage. Temple mud from one of the old Alwati sanctuaries, sealed with wax that's cracked and been resealed twice.
+- **Delivery flavor**: The Kesharat clerk sets the jar on a ledger and breaks the wax seal to inspect the contents. She takes a sample on a wooden spatula, rubs it between her fingers, and notes the texture in a column you can't read. "Consistency acceptable. Origin verified." She stamps the receipt twice, and counts out your payment while the ink is still wet.
+
+### Mangrove Root Wood
+- **Origin biome**: swamp
+- **Destination biome**: scrub
+- **Origin flavor**: A clan woodworker is working on some sort of statement piece. Wants to pair local spicewood with swamp wood.
+- **Delivery flavor**: The carver sets the pieces on her workbench and runs a finger across the grain, then picks up the darkest piece and scores it lightly with her thumbnail. "Dense. Old growth, probably fifty years in the bog before harvest." She flexes it between her hands, testing for weak points that aren't there. She counts out your payment and sets the wood in a locked chest with her other stock.
+

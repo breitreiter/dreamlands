@@ -8,7 +8,7 @@ static class HaulGenerateCommand
     const string HaulGenerationDir = HaulDir + "/generation";
     const string BiomeBriefsDir = "/home/joseph/repos/dreamlands/project/reference/biome-briefs";
     const string DefaultCatalogPath = HaulDir + "/haul_catalog.md";
-    const string ExamplesPath = HaulDir + "/haul_fixme.md";
+    const string ExamplesPath = HaulDir + "/generation/examples.md";
     const string SystemPrompt = "You are a narrative designer for a computer RPG. Follow instructions precisely. Output only the requested content.";
 
     record HaulEntry(string Name, string Origin, string Destination, string OriginFlavor, string DeliveryFlavor, int HeaderLine);
@@ -118,13 +118,7 @@ static class HaulGenerateCommand
                 Console.WriteLine();
                 Console.WriteLine($"  Origin vibe:   {originVibe}");
                 Console.WriteLine($"  Delivery vibe: {deliveryVibe}");
-                Console.Write("\nProceed? [Y/n/r] ");
-
-                var key = Console.ReadLine()?.Trim().ToLowerInvariant() ?? "";
-                if (key == "n")
-                    return 0;
-                if (key == "r")
-                    continue;
+                Console.WriteLine();
 
                 // Assemble prompt
                 var selectedExamples = SelectExamples(examples, random, 3, 4);
@@ -189,12 +183,12 @@ static class HaulGenerateCommand
                 Console.WriteLine();
                 Console.WriteLine($"  Origin flavor:   {originFlavor}");
                 Console.WriteLine($"  Delivery flavor: {deliveryFlavor}");
-                Console.Write("\nAccept? [Y/n/r/e] ");
+                Console.Write("\nAccept? [y/n/r/e] ");
 
-                var accept = Console.ReadLine()?.Trim().ToLowerInvariant() ?? "";
-                if (accept == "n")
+                var accept = Console.ReadLine()?.Trim().ToLowerInvariant();
+                if (accept is null or "n")
                     return 0;
-                if (accept == "r")
+                if (accept is "" or "r")
                     continue;
 
                 if (accept == "e")
@@ -207,10 +201,19 @@ static class HaulGenerateCommand
                     var editDf = Console.ReadLine()?.Trim() ?? "";
                     if (!string.IsNullOrEmpty(editDf)) deliveryFlavor = editDf;
                 }
+                else if (accept != "y")
+                    continue;
 
-                // Write back to catalog
+                // Write back to catalog — re-parse to get current line numbers
                 catalogLines = File.ReadAllLines(catalogPath);
-                WriteToCatalog(catalogLines, blank.HeaderLine, blank.Name, originFlavor, deliveryFlavor);
+                var freshEntries = ParseCatalog(catalogLines);
+                var target = freshEntries.FirstOrDefault(e => e.Name == blank.Name);
+                if (target == null)
+                {
+                    Console.Error.WriteLine($"Could not find '{blank.Name}' in catalog. Skipping write.");
+                    break;
+                }
+                WriteToCatalog(catalogLines, target.HeaderLine, target.Name, originFlavor, deliveryFlavor);
                 File.WriteAllLines(catalogPath, catalogLines);
                 Console.WriteLine($"  Written to catalog.");
                 break;
