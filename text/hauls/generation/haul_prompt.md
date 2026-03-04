@@ -28,9 +28,13 @@ GOOD: A bride wants to follow the old traditions for her wedding, including hand
 - Dialogue is spare. People say what they mean. No speeches.
 - Payment happens without drama unless the vibe says otherwise.
 - The recipient never tips
-- Avoid overusing hackneyed phrases like "runs his thumb along" or "pays without looking up"
 - Keep both sections consistent. If the Origin says a barrel maker ordered the haul, don't say a ship builder accepts delivery.
 - Items come from the origin. Items are to be delivered to the destination.
+
+## Themes to avoid
+- Avoid using hackneyed phrases like "runs his thumb along" or "pays without looking up."
+- Avoid marriages and widows
+- Avoid complications arising from incorrect sizing or producing excess quantities
 
 ## Origin vibe seed
 

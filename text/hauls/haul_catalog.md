@@ -207,6 +207,54 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin flavor**: Someone offloaded a set of buckets with no maker's mark and rust already showing at the seams. The price was good enough that no one asked where they came from.
 - **Delivery flavor**: You arrive during market day and a dozen plateau traders immediately gather to inspect your delivery. They pass the buckets around, tapping the metal, testing the handles, arguing in their own tongue about whether the iron will last a season or crack in the heat. The buyer finally waves them off and counts out your payment while two others are still debating the quality of the rivets.
 
+### Sealed Jar of Acid
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: An alchemist's apprentice says the master refused to work with the acid anymore after an accident left scars on both hands. The guild won't buy it back, but someone in the swamp might need it.
+- **Delivery flavor**: The Alwati woman sets the jar on a wood plank and tilts it slowly, watching how the liquid moves inside the glass. She opens a leather pouch and counts out coins one at a time, each one placed deliberately on the plank between you. You take the payment and leave her crouched beside the jar, still watching it.
+
+### An Exquisite Comb
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: A trader came through with the comb wrapped in plain linen, no questions about provenance. We found a buyer in the swamp who's willing to pay more than it's probably worth.
+- **Delivery flavor**: The woman unwraps it slowly, turning it over in her hands. Her fingers trace the carved pattern — flowers that haven't grown in the lowlands for two generations. "My grandmother had one like this," she says quietly. She sets it carefully on the table and pours you tea before she counts out your payment, insisting you finish the cup before you go.
+
+### Spool of Hemp Twine
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: A fisherman's order — he needs line that won't rot in swamp water. The hemp stock from the plains lasts twice as long as anything local.
+- **Delivery flavor**: You hand over the spool and the man pulls several arm-lengths free, testing the lay of the twist between his fingers. He wets a short section with his tongue, watching how the fibers take moisture, then coils it back with practiced speed. "Good," he says, and counts out your payment in small copper.
+
+### Tin of Preservative Paste
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: The fur buyer's trying to finish a batch before the weather turns. The pelts will rot if they're not treated soon.
+- **Delivery flavor**: You hand over the tin and the woman pries it open with her knife, not bothering to look up from the stretched pelt on her workbench. She scoops paste onto two fingers and works it into the hide in long, practiced strokes. "Good," she says, still working. She wipes her hand on her apron and counts out your payment.
+
+### Bundle of Iron Fishhooks
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: A local smith secured a bulk order from the swamps. The hooks are bundled in oiled cloth to keep them from rusting before delivery.
+- **Delivery flavor**: The Alwati woman opens the bundle and picks through the hooks one by one, testing points against her thumbnail and checking the eyes for burrs. She sets aside three with flaws, counts the rest twice, and places your payment on the table without meeting your eyes.
+
+### An Atwali Family Crest
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: The crest was pulled from a collapsed house in the old river valley—someone's grandfather wore it on formal occasions. His grandson thought it should go back to the people who made it, not sit in a box.
+- **Delivery flavor**: The elder takes the crest and turns it over slowly, tracing the inscription with one finger. She calls to someone in the next room, and a younger woman appears, already holding a wooden frame half-assembled. They begin fitting the crest into place without looking at you. The elder counts out your payment while the daughter adjusts the backing.
+
+### Roll of Oilcloth
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: A freighter's widow is selling off her husband's trade stock piece by piece. The oilcloth has been in storage for two years now, still good, but she has no use for it.
+- **Delivery flavor**: You arrive during a boat repair, and half the village is standing in the shallows arguing about whether the hull needs replacing or just patching. The builder takes the oilcloth, unrolls a section across the damaged planking, and presses it flat with both hands to test the coverage. "This'll do," she says. Three people immediately start debating whether it should be laid in strips or as a single sheet. She pays you while they're still talking.
+
+### Imported Woodworking Tools
+- **Origin biome**: plains
+- **Destination biome**: swamp
+- **Origin flavor**: The tools arrived at the grain cooperative with no sender's mark and a bill of sale signed with initials only. The cooperative head decided it was easier to sell them on than ask questions.
+- **Delivery flavor**: The Alwati woodworker opens the wrapped bundle and immediately selects a narrow gouge, testing its edge against a piece of bog-oak he's been shaping into what might be a door panel. He works in silence for several minutes, carving a geometric pattern that matches the fragments of tilework set into his wall. When he finally looks up, he counts out your payment without meeting your eyes.
+
 ## Mountains
 
 ### Ridge Salt Slab
@@ -400,6 +448,54 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Destination biome**: mountains
 - **Origin flavor**: A company supervisor sealed samples from a contested vein before the rival outfit could file their claim. Speed matters more than discretion.
 - **Delivery flavor**: The clerk at the land office takes the box and checks the seal against a registry. She frowns. "This was supposed to arrive yesterday. The hearing already happened." She sets it on a crowded shelf with three other identical boxes, all sealed and logged. "We'll still need to process it. Standard fee."
+
+### A Sealed Stift Verdict
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: A sealed verdict from the peak courts. Someone paid to have it delivered privately rather than through official channels. The wax is stamped with the sigil of the high bench.
+- **Delivery flavor**: You hand the sealed document to a woman standing outside a timber cabin at the forest's edge. She opens the case at once, letting it fall to the ground. Her face goes pale as she reads. She does not meet your gaze. "Take your coin, outlander," she says quietly.
+
+### A Case for Pessimism
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: Banned by the empire. Moral rot or something. Maybe keep it in the bottom of your pack.
+- **Delivery flavor**: You hand over the package in a small clearing where three exiles are sharpening tools. One of them breaks the seal and pages through it while the others lean in to read over his shoulder. "Thought they burned all of these," one mutters. The reader closes it carefully, tucks it under his coat, and counts out your payment while the others watch the treeline.
+
+### Set of Steel Traps
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: The snows came early this year and a trapper's order sat unfinished through the whole season. Now the thaw's brief and he needs them before the game moves to higher ground.
+- **Delivery flavor**: You find the trapper sharpening stakes outside a low cabin. He sets down his work and tests each trap's spring mechanism with his boot, watching the jaw snap shut. He counts out your payment in silence, already turning back to his work before you've pocketed the coins.
+
+### The Illustrated Languilo Volume 2
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: This book has been sitting in the storehouse for years, but we've finally found a buyer.
+- **Delivery flavor**: A young woman meets you at the forest edge, glancing back toward the settlement. She opens the book to check the illustrations, then rotates the book on its side. "Larger than I had heard," she says pensively. She pays quickly and walks back without another word.
+
+### Cast Iron Cookpot
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: A foundry in the lowlands cast more cookware than the valley towns could buy. A merchant arranged a sale to a settlement that's been relying on clay.
+- **Delivery flavor**: The woman takes the pot in both hands, turns it slowly, then sets it on the hearthstone and kneels beside it. She runs her fingers along the rim, presses her palm to the base. "My mother had one like this," she says quietly. She pays you and doesn't look up again.
+
+### Woodworking Tools
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: A carpenter's planer cracked at the tang and the blade chipped beyond sharpening. He's ordered replacements rather than wait for the smith to finish repairs.
+- **Delivery flavor**: A boy of maybe twelve meets you at the workshop door. He takes the wrapped bundle and calls back over his shoulder. An older voice from inside tells him to check the chisel edges. He unfolds the cloth, runs his thumbnail carefully across each blade, and nods. He counts out your payment from a pouch at his belt, already walking back inside.
+
+### Box of Glass Jars
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: The glassworks produces for the local market. Not sure how we ended up with a case, but we have a buyer.
+- **Delivery flavor**: You hand over the box to a woman outside a low timber cabin. She opens it, counts the jars, then holds one up to the light and frowns. "These are the small ones. I ordered the large." She argues that the difference matters for preserving whole mushrooms, not sliced. You show her the manifest. She reads it twice, mutters something about the glassworks, and pays you what's owed.
+
+### Axehead Mold
+- **Origin biome**: mountains
+- **Destination biome**: forest
+- **Origin flavor**: We do a good trade of axeheads to forest folk, but one of them thinks he can start casting his own.
+- **Delivery flavor**: The smith has a stack of bog iron ingots ready to smelt. He inspects the mold with a grin. "Expensive, but this is the last time those highlanders will rob me." He pays what's owed.
 
 ## Forest
 
@@ -595,6 +691,54 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin flavor**: The dye-maker's family has been using this concentrate for three generations of weddings and funerals. Her daughter convinced her to sell half the stock because they need grain more than tradition.
 - **Delivery flavor**: You arrive during a dye bath. A circle of Alwati women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. "Good enough," the buyer says, and counts out your payment while the others return to their work.
 
+### Decorated Hat
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: The hat was promised for a ceremony three days ago, but the dyer only just finished the featherwork this morning.
+- **Delivery flavor**: You hand the hat to a man sitting alone outside a cabin at the edge of the settlement. He holds it in both hands without putting it on, studying the decoration with an expression you can't read. After a long silence, he sets it on the stump beside him and counts out your payment in small coins, one at a time.
+
+### Jar of Pine Tar
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: The rope works ran through their last batch of tar before they finished cording the winter stores. They need enough to seal two hundred fathoms by week's end.
+- **Delivery flavor**: You find the rope maker working in the yard, his hands already black with pitch. He uncaps the jar, dips two fingers in, and works the tar between them to test the consistency. "Good. This'll do." He sets the jar on a stump beside three others and counts out your payment while his apprentice hauls the next coil into position.
+
+### Sanja's Favorite Rope
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: Sanja died three months back and his daughter wants the rope sent to his old partner. They worked a timber claim together before the falling-out.
+- **Delivery flavor**: You hand the rope to a younger man at the cabin door. He looks at it, then calls back inside. An older woodsman comes out, takes the coil without a word, and turns it over in his hands. He nods once and sets your payment on the step.
+
+### Allegedly Magical Staff
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: A woman from the exile camps says the staff belonged to someone she cared about. She wants it in the hands of someone who still believes, even if she can't anymore.
+- **Delivery flavor**: The man who receives it wears no shoes and keeps his hair tied with grass. He holds the staff vertically between his palms and closes his eyes for a long moment. When he opens them, he says only, "Such. Power." He sets down your payment in a cloth pouch that smells faintly of smoke and turned earth.
+
+### Box of Shrill Whistles
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: A woodcarver made these as toys for his children, but the locals demanded he sell them. Lucky for him, we found a buyer.
+- **Delivery flavor**: You hand over the box and the hunter lifts the lid, counts quickly, then pulls one out and blows. The sound is wrong—too high, almost painful. "These aren't marsh loon calls," she says flatly. She closes the box and stares at you for a long moment before paying.
+
+### Bundle of Tanned Rabbit Pelts
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: A naturalist is cataloging the pelting patterns of regional rabbit populations. He requested six specimens with intact winter fur.
+- **Delivery flavor**: You hand over the bundle at the forest warden's station. The clerk unfolds each pelt across her desk, checks the tanning marks against a reference sheet, and copies a series of numbers into a ledger. She signs the receipt twice, stamps it with pine pitch, and slides your payment across without comment.
+
+### Creepy Bark Mask
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: Someone wants this returned to the person who carved it years ago — a debt settled, or an apology they can't make in person.
+- **Delivery flavor**: The woman takes the mask and turns it over in her hands. She holds it up to her face briefly, then lowers it and looks at you. She sets coins on the table and wraps the mask in oilcloth without another word.
+
+### Eighty Page List of Grievances
+- **Origin biome**: forest
+- **Destination biome**: forest
+- **Origin flavor**: One of the exiles drafted an extensive list of personal grievances and wants it delivered by hand. Not our normal wheelhouse, but the job is here if you want it.
+- **Delivery flavor**: The old man flips through the pages slowly, lips moving as he counts. He stops after a few pages, then closes the bundle. "You understand I'll need time to draft a response." He pays you and sets the list on a stump weighted down with a rock.
+
 ## Scrub
 
 ### Caravan Spice Pouch
@@ -789,6 +933,54 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin flavor**: A mason's daughter is moving to the swamp to marry an Alwati man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.
 - **Delivery flavor**: The man who takes the mold from you is young, maybe her age. He turns it over in his hands, testing the weight, tracing the beveled edges with his thumb. He glances toward a stilt-house where someone is watching from the doorway. He sets coins in your palm without counting them aloud.
 
+### Pouch of Mesa Saffron
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: A local's daughter is fled to the exiles camps in the forest. He worries she misses home cooking, and wants to send her a pouch of saffron.
+- **Delivery flavor**: You find her in a shared cabin near the tree line. She opens the pouch and pinches a few threads between her fingers, holding them up to the light. "He sent the autumn harvest." She closes her eyes briefly, then pays you and turns back to her workbench without another word.
+
+### Bolt of Woven Goat Hair
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: A dye-house ran out of prepared fiber two weeks ago and their standing orders won't wait. The bolt is rough-woven, undyed, ready for immediate work.
+- **Delivery flavor**: You find the dyer outside her workshop, hands already stained blue to the wrists. She unrolls a length of the goat hair and nods approvingly at the weave. "You've saved me three days of delay." She brings you a cup of pine tea while she counts out your payment, still smiling.
+
+### Tin of Ground Cumin
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: Someone bought this in bulk and now needs it gone quickly — no story about where it came from, just a price too good to ask questions about.
+- **Delivery flavor**: The exile takes the tin from your hand and twists the lid open. She tilts it toward her face, closes her eyes briefly, then seals it again. She counts out your payment in mixed coin and turns back to her fire without another word.
+
+### Jar of Rendered Tallow
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: A clan grandmother is settling her affairs and wants a jar of her family's tallow recipe sent to her nephew in the forest. She says he'll know what it means.
+- **Delivery flavor**: The woodsman cracks the seal and dips two fingers into the rendered fat. He works it between his thumb and fingertips, testing the texture, then rubs it into the blade of his hatchet in long, even strokes. The steel darkens with the coating. He sets three coins on the stump beside him and goes back to his work.
+
+### Kesharat Abacus
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: A Kesharat clerk retired after thirty years of ledger work. His counting frame still functions perfectly, though the lacquer has worn smooth where his fingers pressed the beads.
+- **Delivery flavor**: You meet a young woman at the edge of the settlement who accepts the package and unwraps it carefully. She tests each bead, sliding them back and forth, checking for binding. "My uncle ordered this weeks ago," she says. "He's upstream at the lumber camp." She wraps it again and tucks it under her arm, then counts out your payment from a pouch at her belt.
+
+### Date Tree Sapling
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: A clan elder wants the sapling delivered to his exiled nephew. He says nothing about forgiveness, but the tree was always meant to be the boy's.
+- **Delivery flavor**: You find the recipient at the edge of a clearing, kneeling beside three other saplings already planted in a precise line. He doesn't look up when you arrive. He takes the sapling, unwraps the root ball, and sets it in the last hole without a word. When he finally stands to pay you, his hands are shaking.
+
+### Packet of Dye Powder
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: A dye merchant's stockpile is running low on a particular shade, and the local scrub lichen produces the exact pigment his clients want.
+- **Delivery flavor**: The dyer opens the packet and pinches a small amount between her fingers, rubbing it to test the texture. She drops a measure into a clay bowl of water and watches how it disperses, then holds it to the light filtering through the canopy. "Good concentration. Clean harvest." She wraps the packet carefully and counts out your payment.
+
+### Clay Oil Lamp
+- **Origin biome**: scrub
+- **Destination biome**: forest
+- **Origin flavor**: An old clan matriarch passed last month, and her belongings are being dispersed according to her wishes. The lamp goes to a daughter who took exile in the forest years ago.
+- **Delivery flavor**: You hand the lamp to a woman sitting outside a half-sunken cabin. She turns it over twice, sniffs the clay, then sets it on a stump and stares at it without blinking for nearly a minute. "My mother had one like this," she says finally, though her voice suggests she's talking to the lamp, not you. She pays and carries it inside without another word.
+
 ## Swamp
 
 ### Bundled River Reeds
@@ -934,4 +1126,100 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Destination biome**: scrub
 - **Origin flavor**: A clan woodworker is working on some sort of statement piece. Wants to pair local spicewood with swamp wood.
 - **Delivery flavor**: The carver sets the pieces on her workbench and runs a finger across the grain, then picks up the darkest piece and scores it lightly with her thumbnail. "Dense. Old growth, probably fifty years in the bog before harvest." She flexes it between her hands, testing for weak points that aren't there. She counts out your payment and sets the wood in a locked chest with her other stock.
+
+### Bundle of Dried Cattails
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: Someone in the forest placed an order for cattails—a full bundle, not a handful. They specified they needed them dried, not fresh, and paid in advance.
+- **Delivery flavor**: The woman who receives them lays three stalks flat on her workbench and splits them lengthwise with a thin blade. She examines the pith, then bends a section until it nearly breaks. She nods once, satisfied with the fiber structure. "Good," she says, and counts your payment from a pouch at her belt.
+
+### Jar of Peat Ash
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: A medicine man packed a jar of ash from the temple hearths. He says it's for wound poultices, but the buyer's letter mentioned other uses.
+- **Delivery flavor**: The herbalist uncaps the jar before you've set your pack down and presses a pinch between her fingers. She holds it to her nose, then touches it to her tongue. "Good concentration. Dark enough." She's already measuring it into smaller vessels when she gestures toward the coin purse on her table.
+
+### Spool of Reed Cordage
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: An old weaver says the cordage is payment for shelter given years ago, when she fell ill while travelling through the forest.
+- **Delivery flavor**: The woodsman accepts the spool and unwinds a length between his hands, testing the tension. He nods once, sets two coins on the stump between you, and turns back toward his cabin.
+
+### Packet of Water Lily Seeds
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: The seeds came from a nearly extinct lily strain. The grower agreed to sell some of his stock, but only after the village elder spoke on the guild's behalf.
+- **Delivery flavor**: You hand over the packet to a woman who opens it immediately and tips the seeds into her palm. She counts them three times, her lips moving silently, then closes her fist around them and stands perfectly still for what feels like a full minute. When she finally looks up, her eyes are wet, though her voice is steady when she pays you.
+
+### Flask of Bog Myrtle Oil
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: A healer's apprentice wants the oil sent to her mentor. The girl says her teacher asked for it in a letter.
+- **Delivery flavor**: You find the recipient standing outside her cabin with two other forest folk, all three of them examining dried herbs spread on a plank table. She uncorks the flask and holds it under her nose, then passes it to the others. One wrinkles his face. The other nods slowly. "That's the real thing," she says, recorking it carefully. She pays you while the others argue about whether bog myrtle even works.
+
+### Alwati Fish Trap
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: A local Alwati craftsman has been making these traps for years. He has a few extra and we've found a buyer.
+- **Delivery flavor**: A group of fisherman cluster around you, eager to examine the trap. They flex and twist it and debate how it will work with the local fish. Remembering your presence, one of them thanks and pays you.
+
+### Crooked Walking Stick
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: The stick came from deeper than most Alwati go; old growth bog-oak, twisted just so. 
+- **Delivery flavor**: The exile takes it from you and immediately leans his weight into it, testing the curve against his hip. He walks a tight circle, adjusting his grip twice, then nods. "Better than the last one." He's already halfway down the path when he tosses the coins back over his shoulder.
+
+### Woven Rush Mat
+- **Origin biome**: swamp
+- **Destination biome**: forest
+- **Origin flavor**: An elder is sending the mat to her sister in the forest. They haven't spoken in years, but the weave pattern is one their mother taught them both.
+- **Delivery flavor**: The woman who answers the door takes the mat and unrolls it halfway across the threshold. Her fingers find the edge binding, then trace inward to where the pattern shifts from plain to complex. She stands there a long moment, then refolds it carefully and pays you without meeting your eyes.
+
+### Vaguely Threatening Carving
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: A fisher in the village pulled this thing from the peat, but his children won't stay in the house with it. He needs someone else to take it off his hands.
+- **Delivery flavor**: You hand over the carving to an old woman sitting outside her stilt-house. She unwraps it slowly, traces one finger along the carved lines, then sets it on a cloth beside three others like it. "I thought these were all gone," she says quietly. She brings you tea before she pays you, and doesn't say anything else.
+
+### Firefly lantern
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: The temple guide needed the lantern two days ago for a night ceremony in the deep complex. The fireflies only glow at full strength for a week after harvest.
+- **Delivery flavor**: You hand over the lantern and she lifts it to eye level in the dim light of the stilt-house. The fireflies pulse weakly, their glow already fading to amber. She sets it down without comment and counts out your payment.
+
+### Antique Alwati Sword
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: The owner grievously offended the folk in a nearby village. He's been searching for a gift precious enough to mend the rift, and believes this will do.
+- **Delivery flavor**: You hand over the sword and three elders gather to examine it. One tests the balance, another traces the pattern on the crossguard with her fingertip. "This was carried at the water festivals," the third says quietly. They argue in low voices about which family it belonged to, then pay you and wrap it in undyed cloth.
+
+### Sack of Dried Mushrooms
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: The forager says these are the last from a good patch near an old temple. Blessed. The location is her secret.
+- **Delivery flavor**: You hand over the sack to a woman standing knee-deep in the water beneath her stilt-house. She opens it, sniffs once, then upends the entire contents into the murk. The mushrooms float briefly before sinking. She watches them descend, nods to herself, and pays you from a pouch tied to her belt.
+
+### Box of Salvaged Tile Shards
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: An old ranger collected these fragments from the swamp. He says someone else should have them now.
+- **Delivery flavor**: You hand the box to a woman sitting cross-legged on a platform above the water. She opens it and begins arranging the shards in patterns on the boards, not looking at them, her fingers moving like she's reading something written in the glazework. After several minutes of silence she stops, leaves the fragments scattered, and pays you without explaining what she found.
+
+### Coil of Waxed Fishing Line
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: The village's line-maker is sick with fever and no one else knows the work. They're buying from another settlement until the woman recovers.
+- **Delivery flavor**: You hand over the coil and the fisherman unwinds an arm's length, holding it taut between his hands. He bends it sharply, watches how it holds the crease, then pulls it across the calloused edge of his palm to test the wax coating. "This'll do. Ours peels after two days in the water." He counts out your payment in small coin.
+
+### Bag of Crayfish Seasoning
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: A batch came out stronger than expected—enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.
+- **Delivery flavor**: You find the buyer already standing over a pot of boiling crawfish, and she opens the bag before you've set it down. She pinches some between her fingers, sniffs it, then tosses a handful into the water. The smell hits immediately—sharp ginger and something darker. She nods once and counts out your payment while stirring.
+
+### Pot of Marsh Glue
+- **Origin biome**: swamp
+- **Destination biome**: swamp
+- **Origin flavor**: A batch came out stronger than expected—enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.
+- **Delivery flavor**: You hand over the pot to a reed-worker who pries the lid off and dips a thin stick into the amber paste. She smears it between two scraps of bark and presses them flat, counting silently. After twenty breaths she tries to pry them apart, fails, then nods. "Good batch," she says, and pays you from a leather pouch at her hip.
 
