@@ -11,6 +11,8 @@ public class PlayerState
     // Identity
     public string GameId { get; set; } = "";
     public int Seed { get; set; }
+    public string Name { get; set; } = "";
+    public string Bio { get; set; } = "";
 
     // Position
     public int X { get; set; }
@@ -78,6 +80,10 @@ public class PlayerState
             PackCapacity = balance.Character.StartingPackSlots,
             HaversackCapacity = balance.Character.StartingHaversackSlots,
         };
+
+        // Placeholder identity until the character creation encounter is wired up
+        state.Name = "Wanderer";
+        state.Bio = "A restless soul drawn to the Dreamlands by forces unknown.";
 
         // Temporary random skill spread until the player creation encounter chain is wired up
         var rng = new Random(seed);
