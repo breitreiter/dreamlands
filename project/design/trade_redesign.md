@@ -139,3 +139,41 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 | Design | `project/screens/trade.md` | UI spec needs full rewrite for load-based interaction. |
 | Orchestration | `tests/Dreamlands.Orchestration.Tests/SettlementRunnerTests.cs` | Settlement entry tests need delivery hook coverage. |
 
+---
+
+# Implementation Audit (2026-03-03)
+
+## What's Done
+- **Settlement DAG** — built (`TradeRouteBuilder.cs`), sized by child count (3+ = Town, 1-2 = Village, 0 = Outpost), rendered on the map (`TradeRoutePass.cs`)
+- **DAG serialized** in map.json as coordinate-pair edges, round-trips through `MapSerializer`
+- **152 haul catalog entries** authored in `text/hauls/haul_catalog.md` with origin biome, destination biome, origin flavor, delivery flavor
+- **Bank deposit/withdraw** exists in `Bank.cs` (could evolve into general storage)
+- **`haul-generate` authoring tool** fills blank catalog entries via LLM
+
+## What's Not Started
+- No `Haul` item type — `ItemType` enum still only has `TradeGood`
+- `ItemInstance` has no destination/payout/hint/delivery fields (4 fields total)
+- No code reads the haul catalog at runtime — it's pure markdown
+- `Market.cs` is 100% arbitrage (buy/sell/pricing/restock) — zero load mechanics
+- No delivery-on-arrival hook in `SettlementRunner`
+- No payout formula, no load generation balance constants
+- The 71 old `TradeGood` ItemDefs are still in `BuildAll()`
+- No server endpoints for load claiming or delivery results
+
+## Decisions Needed Before Implementation
+
+### 1. Settlement identity is fragile
+Settlements are identified by `Poi.Name` (flavor strings like "Grassgate"). If flavor generation ever changes, every saved game's `PlayerState.Settlements` dictionary breaks. Hauls referencing destination settlements by name inherit this fragility. Worth adding a stable ID (coordinate-based or sequential) before building on top of it?
+
+### 2. No parent/child per settlement at runtime
+Edges are serialized as raw coordinate pairs, but there's no per-settlement "my parent is X, my children are Y/Z" lookup. The payout formula (hops + tile distance) and load generation both need DAG traversal. Re-deriving the tree at server startup is straightforward but needs to be an explicit step.
+
+### 3. Haul catalog → game data pipeline is undefined
+The 152 markdown entries need to become something the game can use at runtime. Options: parse markdown at startup, convert to a structured format (JSON/YAML) as a build step, or bake into C# like the current `ItemDef.BuildAll()`. This is an architectural decision that affects how content authoring flows into the game.
+
+### 4. Destination biome vs. destination settlement
+The catalog specifies destination *biome*, not a specific settlement. At runtime, "destination biome: mountains" needs to resolve to a particular mountain settlement. When does that happen — when the load spawns at a market, or earlier?
+
+### 5. Load availability and refresh
+The design doc says hubs get "more loads" but no numbers. The old system restocked trade goods daily by settlement size. Loads are unique authored content, not fungible stock — does a settlement offer 2-3 loads from the catalog pool, rotating on some schedule?
+

@@ -165,6 +165,10 @@ Market buy/sell with auto-equip works. Remaining services need game logic.
       curve adjustments or better stocking at high-tier locations.
 - [ ] Courier system — markets sell Dispatches (tier-matched), player delivers to named
       destination settlement for payment. Design in `project/design/courier_system.md`.
+- [ ] Dynamic haul generation — when a player exhausts all bespoke hauls for a given route,
+      generate vague/generic hauls on the fly (e.g. "sealed guild casket", "unmarked parcel",
+      "bonded cargo") so trade never dead-ends. Keep flavor minimal and mysterious to avoid
+      clashing with hand-written hauls.
 - [x] Gathering action
       /home/joseph/repos/dreamlands/project/design/foraging.md
 
