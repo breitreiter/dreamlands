@@ -114,6 +114,8 @@ GameSession BuildSession(PlayerState player)
 
 StatusInfo BuildStatus(PlayerState p) => new()
 {
+    Name = p.Name,
+    Bio = p.Bio,
     Health = p.Health,
     MaxHealth = p.MaxHealth,
     Spirits = p.Spirits,

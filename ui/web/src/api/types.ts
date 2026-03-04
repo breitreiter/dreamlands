@@ -1,4 +1,6 @@
 export interface StatusInfo {
+  name: string;
+  bio: string;
   health: number;
   maxHealth: number;
   spirits: number;

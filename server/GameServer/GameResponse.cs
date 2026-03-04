@@ -66,6 +66,8 @@ public class MarketLineResultInfo
 
 public class StatusInfo
 {
+    public string Name { get; init; } = "";
+    public string Bio { get; init; } = "";
     public int Health { get; init; }
     public int MaxHealth { get; init; }
     public int Spirits { get; init; }

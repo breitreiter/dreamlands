@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
 import { useGame } from "../GameContext";
-import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
 
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",
@@ -79,11 +78,8 @@ export default function Inventory({
         {/* Left: Character Panel */}
         <div className="flex-1 flex flex-col border-r border-edge overflow-y-auto">
           <CharacterPanel
+            name={status.name}
             skills={status.skills}
-            health={status.health}
-            maxHealth={status.maxHealth}
-            spirits={status.spirits}
-            maxSpirits={status.maxSpirits}
           />
         </div>
 
@@ -96,12 +92,12 @@ export default function Inventory({
           )}
         </div>
 
-        {/* Right: Mechanics — parchment background, fixed 420px */}
-        <div className="w-[420px] flex flex-col overflow-y-auto flex-shrink-0 bg-parchment text-contrast">
+        {/* Right: Mechanics — fixed 420px */}
+        <div className="w-[420px] flex flex-col overflow-y-auto flex-shrink-0">
           {state.mechanics ? (
             <MechanicsPanel mechanics={state.mechanics} />
           ) : (
-            <div className="p-4 text-contrast/50">No mechanics data</div>
+            <div className="p-4 text-muted">No mechanics data</div>
           )}
           <div className="mt-auto p-4">
             <button
@@ -140,29 +136,17 @@ export default function Inventory({
 }
 
 function CharacterPanel({
+  name,
   skills,
-  health,
-  maxHealth,
-  spirits,
-  maxSpirits,
 }: {
+  name: string;
   skills: SkillInfoDto[];
-  health: number;
-  maxHealth: number;
-  spirits: number;
-  maxSpirits: number;
 }) {
   return (
     <div className="flex flex-col h-full p-4">
       <h2 className="font-header text-accent text-[32px] leading-tight mb-4">
-        The Merchant
+        {name || "The Merchant"}
       </h2>
-
-      {/* Vitals */}
-      <div className="space-y-2 mb-6">
-        <StatBar label="Health" value={health} max={maxHealth} gradient={HEALTH_GRADIENT} />
-        <StatBar label="Spirits" value={spirits} max={maxSpirits} gradient={SPIRITS_GRADIENT} />
-      </div>
 
       {/* Skills */}
       <div className="space-y-3">
@@ -189,70 +173,42 @@ function CharacterPanel({
 function MechanicsPanel({ mechanics }: { mechanics: MechanicsInfo }) {
   return (
     <div className="p-4">
-      <h2 className="font-header text-parchment-text text-[32px] leading-tight mb-4">
+      <h2 className="font-header text-accent text-[32px] leading-tight mb-4">
         Mechanics
       </h2>
 
       {mechanics.resistances.length > 0 && (
-        <MechanicsSection title="Resistances" lines={mechanics.resistances} iconType="resistance" />
+        <MechanicsSection title="Resistances" lines={mechanics.resistances} />
       )}
 
       {mechanics.encounterChecks.length > 0 && (
-        <MechanicsSection title="Encounter Checks" lines={mechanics.encounterChecks} iconType="skill" />
+        <MechanicsSection title="Encounter Checks" lines={mechanics.encounterChecks} />
       )}
 
       {mechanics.other.length > 0 && (
-        <MechanicsSection title="Other" lines={mechanics.other} iconType="other" />
+        <MechanicsSection title="Other" lines={mechanics.other} />
       )}
     </div>
   );
 }
 
-const RESISTANCE_ICONS: Record<string, string> = {
-  ...CONDITION_ICONS,
-};
-
-const OTHER_ICONS: Record<string, string> = {
-  "better prices": "pay-money.svg",
-  "reroll any failure": "foamy-disc.svg",
-  "foraging checks": "knapsack.svg",
-};
-
-function mechanicIcon(label: string, iconType: string): string | null {
-  const key = label.toLowerCase();
-  if (iconType === "resistance") return RESISTANCE_ICONS[key] || null;
-  if (iconType === "skill") return "sun.svg";
-  for (const [pattern, icon] of Object.entries(OTHER_ICONS)) {
-    if (key.includes(pattern)) return icon;
-  }
-  return null;
-}
-
-function MechanicsSection({ title, lines, iconType }: { title: string; lines: MechanicLine[]; iconType: string }) {
+function MechanicsSection({ title, lines }: { title: string; lines: MechanicLine[] }) {
   return (
     <div className="mb-3">
       <div className="font-bold mb-1 flex justify-between">
         <span>{title}</span>
-        <span className="text-contrast/50 font-normal">Source</span>
+        <span className="text-muted font-normal">Source</span>
       </div>
       <table className="w-full">
         <tbody>
-          {lines.map((line, i) => {
-            const icon = mechanicIcon(line.label, iconType);
-            return (
-              <tr key={i}>
-                <td className="py-0.5 pr-2 whitespace-nowrap">
-                  <span className="inline-flex items-center gap-1.5">
-                    {icon && (
-                      <MaskedIcon icon={icon} className="w-5 h-5" color="var(--color-contrast)" />
-                    )}
-                    {line.label} <span className="font-bold">{line.value}</span>
-                  </span>
-                </td>
-                <td className="py-0.5 pl-2 text-contrast/50 text-right">{line.source}</td>
-              </tr>
-            );
-          })}
+          {lines.map((line, i) => (
+            <tr key={i}>
+              <td className="py-0.5 pr-2 whitespace-nowrap">
+                {line.label} <span className="font-bold">{line.value}</span>
+              </td>
+              <td className="py-0.5 pl-2 text-muted text-right">{line.source}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
