@@ -160,22 +160,28 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 - The 71 old `TradeGood` ItemDefs are still in `BuildAll()`
 - No server endpoints for load claiming or delivery results
 
-## Decisions Needed Before Implementation
+## Design Decisions (resolved 2026-03-04)
 
-### 1. Settlement identity is fragile
-Settlements are identified by `Poi.Name` (flavor strings like "Grassgate"). If flavor generation ever changes, every saved game's `PlayerState.Settlements` dictionary breaks. Hauls referencing destination settlements by name inherit this fragility. Worth adding a stable ID (coordinate-based or sequential) before building on top of it?
+### 1. Settlement identity → coordinate-based IDs
+Settlements are identified by grid coordinates (e.g. `"16,5"`), not flavor names. Flavor names are display-only. Player state, haul destinations, storage — everything keys on the coordinate ID. This is stable across flavor regeneration and map rerenders.
 
-### 2. No parent/child per settlement at runtime
-Edges are serialized as raw coordinate pairs, but there's no per-settlement "my parent is X, my children are Y/Z" lookup. The payout formula (hops + tile distance) and load generation both need tree traversal. Re-deriving the tree at server startup is straightforward but needs to be an explicit step.
+### 2. Trade tree structure → serialized per-settlement in map.json
+Drop the raw edge list. Each settlement gets its parent coordinate and children list baked into map.json. The tree is generated once in mapgen and read many times at runtime. No re-derivation needed — the function just deserializes and goes. This matters because the final server form is Azure Functions, where every cold start pays the cost.
 
-### 3. Haul catalog → game data pipeline is undefined
-The 152 markdown entries need to become something the game can use at runtime. Options: parse markdown at startup, convert to a structured format (JSON/YAML) as a build step, or bake into C# like the current `ItemDef.BuildAll()`. This is an architectural decision that affects how content authoring flows into the game.
+### 3. Haul catalog → static C#, partitioned by biome
+Haul definitions live in C# like every other content type (`ItemDef.BuildAll()`, `ConditionDef.All`, etc.). No markdown parsing or JSON loading at runtime. Partitioned into `HaulDef.Plains()`, `HaulDef.Mountains()`, `HaulDef.Forest()`, `HaulDef.Scrub()`, `HaulDef.Swamp()` — each in its own file or partial class (~30 entries each) for context-window friendliness. `BuildAll()` concatenates the five lists. The markdown catalog remains the authoring surface; transcription to C# is a separate step (manual now, automatable later).
 
-### 4. Destination biome vs. destination settlement
-The catalog specifies destination *biome*, not a specific settlement. At runtime, "destination biome: mountains" needs to resolve to a particular mountain settlement. When does that happen — when the load spawns at a market, or earlier?
+### 4. Destination resolution → dynamic at market spawn time
+`HaulDef` specifies destination *biome*, not a specific settlement. When the market generates hauls, it picks a concrete destination settlement from that biome. This decouples authored content from map generation and gives us tuning levers for the "feel" of available runs. The generation logic will be churny and full of knobs — that's where the game design lives.
 
-### 5. Load availability and refresh
-The design doc says hubs get "more loads" but no numbers. The old system restocked trade goods daily by settlement size. Loads are unique authored content, not fungible stock — does a settlement offer 2-3 loads from the catalog pool, rotating on some schedule?
+### 5. Load availability → dumbest possible starting system
+Start simple, tune from observed play:
+- **Non-leaf settlements**: generate until they have exactly **2** hauls when the player checks the market.
+- **Leaf settlements**: generate up to **1** haul. This prevents the player from delivering to a leaf and getting stuck with a full inventory and no room to pick up the return cargo.
+- **Destination**: both hauls go exactly **2 hops away** on the trade tree.
+- **Persistence**: hauls stick around until claimed, not on a timer. No market volatility.
+- **Refresh**: new hauls appear when existing ones are claimed, filling back to the cap.
+- **Generation sees player state**: inventory doesn't exist until you look at it, so generation can quietly factor in what the player is carrying, where they've been, and how broke they are. Biggest lever for the "getting lucky" vibe.
 
 # Package Placement Math
 
