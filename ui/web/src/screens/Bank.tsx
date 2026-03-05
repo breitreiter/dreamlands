@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useGame } from "../GameContext";
 import type { GameResponse, ItemInfo, BankResponse } from "../api/types";
 import * as api from "../api/client";
+import MaskedIcon from "../components/MaskedIcon";
+import TopBar from "../components/TopBar";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
 
@@ -14,31 +16,8 @@ const ITEM_TYPE_ICONS: Record<string, string> = {
   tradegood: "two-coins.svg",
 };
 
-function iconUrl(file: string): string {
-  return `/world/assets/icons/${file}`;
-}
-
 function itemTypeIcon(type: string): string {
   return ITEM_TYPE_ICONS[type] || "wooden-crate.svg";
-}
-
-function MaskedIcon({ icon, className, color }: { icon: string; className?: string; color: string }) {
-  return (
-    <div
-      className={`inline-block flex-shrink-0 ${className || ""}`}
-      style={{
-        backgroundColor: color,
-        maskImage: `url(${iconUrl(icon)})`,
-        maskSize: "contain",
-        maskRepeat: "no-repeat",
-        maskPosition: "center",
-        WebkitMaskImage: `url(${iconUrl(icon)})`,
-        WebkitMaskSize: "contain",
-        WebkitMaskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-      }}
-    />
-  );
 }
 
 const TAB_ICONS: Record<string, string> = {
@@ -154,24 +133,18 @@ export default function BankScreen({
         </div>
       )}
 
+      <TopBar status={state.status} onBack={onBack} />
+
       <div className="flex-1 flex overflow-hidden">
         {/* STORED column (bank contents) */}
         <div className="flex-1 flex flex-col border-r border-edge min-w-0">
-          <div className="p-3 border-b border-edge flex items-center justify-between">
-            <div>
-              <h3 className="font-header text-accent text-[32px] leading-tight">Stored</h3>
-              {bankData && (
-                <div className="text-muted mt-1">
-                  {bankData.items.length}/{bankData.capacity} slots
-                </div>
-              )}
-            </div>
-            <button
-              onClick={onBack}
-              className="px-4 py-2 rounded-lg bg-btn text-action hover:text-action-hover transition-colors"
-            >
-              Leave Bank
-            </button>
+          <div className="p-3 border-b border-edge">
+            <h3 className="font-header text-accent text-[32px] leading-tight">Stored</h3>
+            {bankData && (
+              <div className="text-muted mt-1">
+                {bankData.items.length}/{bankData.capacity} slots
+              </div>
+            )}
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
             {loadingBank ? (

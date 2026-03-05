@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
 import { useGame } from "../GameContext";
+import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
+import TopBar from "../components/TopBar";
 
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",
@@ -30,29 +32,6 @@ const TAB_ICONS: Record<string, string> = {
   equipped: "sword-brandish.svg",
 };
 
-function iconUrl(file: string): string {
-  return `/world/assets/icons/${file}`;
-}
-
-function MaskedIcon({ icon, className, color }: { icon: string; className?: string; color: string }) {
-  return (
-    <div
-      className={`inline-block flex-shrink-0 ${className || ""}`}
-      style={{
-        backgroundColor: color,
-        maskImage: `url(${iconUrl(icon)})`,
-        maskSize: "contain",
-        maskRepeat: "no-repeat",
-        maskPosition: "center",
-        WebkitMaskImage: `url(${iconUrl(icon)})`,
-        WebkitMaskSize: "contain",
-        WebkitMaskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-      }}
-    />
-  );
-}
-
 export default function Inventory({
   state,
   onClose,
@@ -73,6 +52,8 @@ export default function Inventory({
 
   return (
     <div className="h-full flex flex-col bg-page text-primary">
+      <TopBar status={status} onBack={onClose} />
+
       {/* Three-column layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Character Panel */}
@@ -99,14 +80,6 @@ export default function Inventory({
           ) : (
             <div className="p-4 text-muted">No mechanics data</div>
           )}
-          <div className="mt-auto p-4">
-            <button
-              onClick={onClose}
-              className="w-full py-2 cursor-pointer bg-btn hover:bg-btn-hover text-action hover:text-action-hover transition-colors rounded-lg"
-            >
-              Back to Map
-            </button>
-          </div>
         </div>
       </div>
 
