@@ -375,7 +375,7 @@ List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
         },
     }).ToList();
 
-GameResponse BuildExploringResponse(GameSession session) => new()
+GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? deliveries = null) => new()
 {
     Mode = "exploring",
     Status = BuildStatus(session.Player),
@@ -383,6 +383,7 @@ GameResponse BuildExploringResponse(GameSession session) => new()
     Exits = BuildExits(session),
     Inventory = BuildInventory(session.Player),
     Mechanics = BuildMechanics(session.Player),
+    Deliveries = deliveries,
 };
 
 GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<Choice> choices) => new()
@@ -698,10 +699,24 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             // Clear conditions on arriving at a settlement and suppress
             // ambient threats overnight — the player has shelter and water.
+            List<DeliveryInfo>? deliveries = null;
             if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
             {
                 player.ActiveConditions.Clear();
                 player.PendingNoBiome = true;
+
+                // Auto-deliver hauls destined for this settlement
+                if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
+                {
+                    var delivered = HaulDelivery.Deliver(player, arrivalId, balance.Hauls);
+                    if (delivered.Count > 0)
+                        deliveries = delivered.Select(d => new DeliveryInfo
+                        {
+                            Name = d.DisplayName,
+                            Payout = d.Payout,
+                            Flavor = d.DeliveryFlavor,
+                        }).ToList();
+                }
             }
 
             // Advance time by one segment per move
@@ -739,7 +754,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             else
             {
                 if (noCamp) player.PendingEndOfDay = false;
-                response = BuildExploringResponse(session);
+                response = BuildExploringResponse(session, deliveries);
             }
             break;
         }

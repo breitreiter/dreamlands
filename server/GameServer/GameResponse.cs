@@ -33,11 +33,21 @@ public class GameResponse
     // Inn recovery summary
     public InnRecoveryInfo? InnRecovery { get; init; }
 
+    // Haul deliveries (populated on move when arriving at a settlement)
+    public List<DeliveryInfo>? Deliveries { get; init; }
+
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
 
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
+}
+
+public class DeliveryInfo
+{
+    public string Name { get; init; } = "";
+    public int Payout { get; init; }
+    public string? Flavor { get; init; }
 }
 
 public class InnRecoveryInfo
