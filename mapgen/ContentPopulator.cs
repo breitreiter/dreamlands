@@ -38,7 +38,7 @@ public static class ContentPopulator
 
     private static void SizeSettlements(Map map)
     {
-        // Count children per settlement in the trade DAG
+        // Count children per settlement in the trade tree
         var childCount = new Dictionary<Node, int>();
         foreach (var (from, to) in map.TradeEdges)
         {

@@ -56,7 +56,7 @@ We want to avoid sticking the player with empty-load trips.
 We want to build "trade routes" that encourage players to transit packages in predictable routes. This ensures that players can
 "work an area," shuffling packages closer to their final destinations.
 
-Place settlements first with your density falloff. Then sort every settlement by Manhattan distance to the capitol, farthest first. Each settlement connects to the nearest settlement that is closer to the capitol than itself. That's it. That's the whole DAG construction.
+Place settlements first with your density falloff. Then sort every settlement by Manhattan distance to the capitol, farthest first. Each settlement connects to the nearest settlement that is closer to the capitol than itself. That's it. That's the whole tree construction.
 What falls out of this:
 Clusters form organically from spatial proximity. If five villages are scattered in a region, they'll mostly connect to the same nearer settlement, which becomes a hub by virtue of having several children. You didn't designate it as a hub — it just sits in the right spot. The further from the capitol, the sparser settlements are, so outer leaves connect over longer distances while inner areas form tighter clusters. The density gradient you already wanted does double duty as economic geography.
 After building the tree, derive hub status from child count. Any settlement with 3+ children is a hub. Give it a more impressive name, a bigger factor operation, more loads. A settlement with 1-2 children is a waypoint. Zero children is a leaf. The game's economic hierarchy is an emergent property of the map rather than a separate authored layer.
@@ -64,7 +64,7 @@ One tuning lever you'll want: when a settlement picks its parent, you might add 
 The opposite tuning lever: if hubs get too dominant (one settlement hoovers up every connection in a region), cap the child count and force overflow to the next-nearest parent. This creates secondary hubs, which is more interesting for gameplay — two competing market towns in a region rather than one monopoly.
 The thing I'd prototype first is just the raw "connect to nearest closer node" pass on a few random maps and see what the trees look like. My guess is it'll be 80% right out of the box and you'll spend your tuning time on the edge cases — weird long-distance connections that skip over logical intermediate stops, or clusters that don't coalesce cleanly.
 
-The trade route graph should live in mapgen as a first-class generation step. Generate settlements, then build the DAG, then use DAG position to assign settlement size/services. This is cleaner than fitting a graph to an already-sized map after the fact.
+The trade route graph should live in mapgen as a first-class generation step. Generate settlements, then build the trade tree, then use tree position to assign settlement size/services. This is cleaner than fitting a graph to an already-sized map after the fact.
 
 Let's start with baking this trade route graph into mapgen, so we can generate very ugly blue lines between graph-connected settlements. These are temporary, but useful for understanding the state of connectivity.
 
@@ -77,9 +77,9 @@ Load payouts are a blend of trade route hops and BFS tile distance, but the play
 Deposit/withdraw means settlement state grows with every item the player stashes. The current `SettlementState` tracks stock as `Dictionary<string, int>` (item counts), but storing deposited items with per-instance data (loads with destinations, equipment with modifiers) requires full `ItemInstance` lists per settlement. This is a structural change to persistence.
 
 ## Deadheading is stated but not solved
-The doc flags empty-load trips as a problem but doesn't propose a solution. If loads are only available at the settlement you're standing in, the player must walk somewhere empty-handed to pick up the next load. The DAG helps by clustering routes, but doesn't eliminate the problem — leaf nodes especially will strand the player.
+The doc flags empty-load trips as a problem but doesn't propose a solution. If loads are only available at the settlement you're standing in, the player must walk somewhere empty-handed to pick up the next load. The trade tree helps by clustering routes, but doesn't eliminate the problem — leaf nodes especially will strand the player.
 
-## DAG construction depends on settlement density
+## Trade tree construction depends on settlement density
 The "connect to nearest closer node" algorithm assumes enough settlements exist that connections are reasonable distances apart. In sparse frontier zones (spacing ~35 nodes), a leaf settlement might connect to a parent 40+ tiles away with no intermediate stops. The player experience of hauling a load across 40 empty tiles is worse than the current system.
 
 ## Removing trade goods deletes 62 items of authored content
@@ -94,9 +94,9 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 - **Load generation**: Where do load names and flavor text come from? The current 62 trade goods are hand-authored in `ItemDef.BuildAll()`. Do loads reuse that content, get LLM-generated per settlement, or draw from a new authored pool?
 - **How many loads per settlement?** The doc says hubs get "more loads" but doesn't specify numbers. Current market stock scales by `SettlementSize` (Camp=1 through City=5 max stock). Does the same progression apply?
 - **Load transit/relay**: Yes — the player deposits loads at intermediate settlements and picks them up on later trips. The player is the only sorter, moving loads closer to their destinations over multiple passes through the network. The key question is UX: how do we make it clear which deposited loads at a settlement are "closer to done" vs. freshly arrived?
-- **Storage availability**: Should deposit/withdraw be available at every settlement, or only hubs/waypoints? Restricting it makes the DAG structure matter more for the sorting game but punishes players at leaf nodes.
-- **Settlement size assignment**: Currently only the starting city gets `SettlementSize.City`; everything else defaults to `Camp`. The DAG-derived hub/waypoint/leaf classification is a new sizing axis. Does it replace `SettlementSize`, map onto it, or sit alongside it?
-- **SettlementSize vs hub status**: The DAG doc says hub status comes from child count (3+ = hub). Does this feed into `SettlementSize` (hub = Town, waypoint = Village, leaf = Outpost)? Or is it a separate property?
+- **Storage availability**: Should deposit/withdraw be available at every settlement, or only hubs/waypoints? Restricting it makes the trade tree structure matter more for the sorting game but punishes players at leaf nodes.
+- **Settlement size assignment**: Currently only the starting city gets `SettlementSize.City`; everything else defaults to `Camp`. The tree-derived hub/waypoint/leaf classification is a new sizing axis. Does it replace `SettlementSize`, map onto it, or sit alongside it?
+- **SettlementSize vs hub status**: The trade tree doc says hub status comes from child count (3+ = hub). Does this feed into `SettlementSize` (hub = Town, waypoint = Village, leaf = Outpost)? Or is it a separate property?
 - **Payout formula specifics**: Payout blends trade route hops and BFS tile distance. Exact weighting TBD — route hops reward staying on the arteries, tile distance rewards long hauls. Need to prototype both axes and find a ratio that makes on-route deliveries reliably profitable while off-route detours are risky-but-lucrative.
 
 # Affected Systems
@@ -109,13 +109,13 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 | Rules | `lib/Rules/TradeBalance.cs` | Gut and replace. Featured buy/sell, cross-biome pricing, same-biome penalty, jitter — all gone. New constants for load payout scaling, max loads per settlement size. |
 | Rules | `lib/Rules/SettlementBalance.cs` | Remove `storage` service tiers (bank is gone). Possibly add hub/waypoint/leaf classification. |
 | Game | `lib/Game/Market.cs` | Major rewrite. Remove buy/sell pricing engine, trade good stocking, featured items, restock logic for trade goods. Replace with load pickup and delivery mechanics. |
-| Game | `lib/Game/SettlementState.cs` | Add load inventory. Add deposit/withdraw storage (full `ItemInstance` lists, not just counts). Track DAG parent/children if needed at runtime. |
+| Game | `lib/Game/SettlementState.cs` | Add load inventory. Add deposit/withdraw storage (full `ItemInstance` lists, not just counts). Track trade tree parent/children if needed at runtime. |
 | Game | `lib/Game/ItemInstance.cs` | Add per-instance load fields (destination, hint, payout, delivery flavor) — similar to `courier_system.md`'s proposed `DestinationSettlementId` etc. |
 | Game | `lib/Game/PlayerState.cs` | Remove `ClaimedFeaturedBuys`. Possibly adjust pack/haversack semantics for loads. |
 | Orchestration | `lib/Orchestration/SettlementRunner.cs` | Add delivery-on-arrival hook (scan inventory for loads matching current settlement). Rename market references to "market." |
-| MapGen | `mapgen/SettlementPlacer.cs` | Build settlement DAG after placement. Derive hub/waypoint/leaf from child count. Assign `SettlementSize` from DAG position. |
-| MapGen | `mapgen/` (new or existing render pass) | Render DAG edges as debug lines on the map image. |
-| Map | `lib/Map/Poi.cs` or new DTO | Serialize DAG edges (parent settlement ID per settlement) into `map.json`. |
+| MapGen | `mapgen/SettlementPlacer.cs` | Build trade tree after placement. Derive hub/waypoint/leaf from child count. Assign `SettlementSize` from tree position. |
+| MapGen | `mapgen/` (new or existing render pass) | Render trade tree edges as debug lines on the map image. |
+| Map | `lib/Map/Poi.cs` or new DTO | Serialize trade tree edges (parent settlement ID per settlement) into `map.json`. |
 | Server | `server/GameServer/Program.cs` | Update market endpoint to return loads instead of trade goods. Add delivery results to settlement entry response. Build settlement lookup from map for load generation. |
 | Server | `server/GameServer/GameResponse.cs` | Replace `MarketOrderResultInfo` trade good fields with load fields. Add delivery notification DTOs. |
 | Tests | `tests/Dreamlands.Game.Tests/MarketTests.cs` | 18 tests, all invalidated. Full rewrite against new load mechanics. |
@@ -144,8 +144,8 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 # Implementation Audit (2026-03-03)
 
 ## What's Done
-- **Settlement DAG** — built (`TradeRouteBuilder.cs`), sized by child count (3+ = Town, 1-2 = Village, 0 = Outpost), rendered on the map (`TradeRoutePass.cs`)
-- **DAG serialized** in map.json as coordinate-pair edges, round-trips through `MapSerializer`
+- **Trade tree** — built (`TradeRouteBuilder.cs`), sized by child count (3+ = Town, 1-2 = Village, 0 = Outpost), rendered on the map (`TradeRoutePass.cs`)
+- **Trade tree serialized** in map.json as coordinate-pair edges, round-trips through `MapSerializer`
 - **152 haul catalog entries** authored in `text/hauls/haul_catalog.md` with origin biome, destination biome, origin flavor, delivery flavor
 - **Bank deposit/withdraw** exists in `Bank.cs` (could evolve into general storage)
 - **`haul-generate` authoring tool** fills blank catalog entries via LLM
@@ -166,7 +166,7 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 Settlements are identified by `Poi.Name` (flavor strings like "Grassgate"). If flavor generation ever changes, every saved game's `PlayerState.Settlements` dictionary breaks. Hauls referencing destination settlements by name inherit this fragility. Worth adding a stable ID (coordinate-based or sequential) before building on top of it?
 
 ### 2. No parent/child per settlement at runtime
-Edges are serialized as raw coordinate pairs, but there's no per-settlement "my parent is X, my children are Y/Z" lookup. The payout formula (hops + tile distance) and load generation both need DAG traversal. Re-deriving the tree at server startup is straightforward but needs to be an explicit step.
+Edges are serialized as raw coordinate pairs, but there's no per-settlement "my parent is X, my children are Y/Z" lookup. The payout formula (hops + tile distance) and load generation both need tree traversal. Re-deriving the tree at server startup is straightforward but needs to be an explicit step.
 
 ### 3. Haul catalog → game data pipeline is undefined
 The 152 markdown entries need to become something the game can use at runtime. Options: parse markdown at startup, convert to a structured format (JSON/YAML) as a build step, or bake into C# like the current `ItemDef.BuildAll()`. This is an architectural decision that affects how content authoring flows into the game.
@@ -177,3 +177,46 @@ The catalog specifies destination *biome*, not a specific settlement. At runtime
 ### 5. Load availability and refresh
 The design doc says hubs get "more loads" but no numbers. The old system restocked trade goods daily by settlement size. Loads are unique authored content, not fungible stock — does a settlement offer 2-3 loads from the catalog pool, rotating on some schedule?
 
+# Package Placement Math
+
+Since the trade route graph is a tree (acyclic, undirected traversal), and the player moves freely along it, the problem has clean structure.
+
+The key concept is **edge crossing number**. For any edge in your tree, removing it partitions the graph into two subtrees. Count how many packages have their origin in one partition and destination in the other — that's the crossing number for that edge. Every one of those packages *must* be carried across that edge at some point. With capacity *k*, the player must traverse that edge at least ⌈crossings / k⌉ times in each direction. That gives you a tight lower bound on optimal play for any given package configuration.
+
+This puts you squarely in the territory of the **k-delivery TSP on trees**, which is well-studied and has the nice property of being polynomially solvable (unlike the general graph case). The optimal strategy is essentially: do a DFS-like traversal, but at each edge, batch your deliveries to maximize how many crossing-packages you carry per traversal. The total optimal cost ends up being roughly proportional to the sum across all edges of ⌈crossings(e) / k⌉ × 2 × weight(e).
+
+For your design purposes, the terms and concepts I'd focus on:
+
+**k-delivery TSP on trees** — the direct formulation. Frederickson, Hecht, and Kim did foundational work here. Sometimes called "capacitated delivery on a tree."
+
+**Multi-commodity flow on trees** — each package is a commodity with a source and sink. The tree structure means each commodity has a unique path, so flow decomposition is trivial and you can reason about edge loads directly.
+
+**Edge congestion / load** — the ratio of crossing number to capacity at each edge. This is your single most useful design metric. Edges where this ratio exceeds 1 are where the player is forced into repeated traversals, which is where the game becomes a planning puzzle rather than a simple walk.
+
+**Separator edges / bridge analysis** — in your tree, every edge is a bridge. The edges closest to the root with high crossing numbers are your natural "trade route bottlenecks." The deeper leaf-adjacent edges with low crossings define your "remote outposts." You're essentially designing a congestion gradient.
+
+The practical balancing lever: you control difficulty by tuning how many packages cross each edge relative to capacity, and how *conflicting* the directions are. An edge where 3 packages go left-to-right and 3 go right-to-left is much harder to plan around than one where all 6 go the same direction, because the player can't batch them efficiently. That directional conflict ratio on bottleneck edges is probably the most interesting knob you have.
+
+## Levers we have
+- Limited information - since you have to visit a settlement to see the market inventory, that means the inventory doesn't exist until you look at it. We can do some limited correction to avoid bad experiences.
+- NPC traders - not a formal concept, but if goods move between markets, or disappear from markets, it's not unreasonable to assume some other trader took the job.
+- Trade graph - We now have a trade route tree, which means we can create clusters of delivery
+- Rumors - We can communicate to the user the health of a node or branch and whether it's worthwhile to continue working it
+
+## Gameplay to avoid
+
+### Deadheading
+We'll want to avoid players making a delivery to a settlement and having no pickups.
+
+### Market volatility
+If players see something in the market, they should have a reasonable expectation for how long it will be there. If they make a side trip to deliver another package, then return to the market, it will be frustrating if their planning is undermined by random inventory shuffles
+
+### Mandatory inventory exhaustion
+We should keep in mind that the delivery system is primarily a way to nudge players to explore new parts of the world, or to make treks to distant locations profitable/desirable. We should not expect or require players to sort the entire tree.
+
+### Infinite milk runs
+We need to be careful with this one. We absolutely do want to nudge players to keep moving, and one way to do that is to communicate that local work is drying up. We also have a limited number of predefined packages. Looping short runs will exhaust that pool and force us into bland flavorless deliveries.
+
+We'll need to balance this with mechanics that keep the player engaged. If we guarantee subsistence income (to prevent bricking) we risk some players deciding the game is no fun because subsistence grinding seems to be a viable strategy.
+
+Hopefully out-of-branch deliveries can help with this, but we'll want to keep a close eye on it.
