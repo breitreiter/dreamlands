@@ -47,6 +47,7 @@ export default function Inventory({
           <CharacterPanel
             name={status.name}
             skills={status.skills}
+            conditions={status.conditions}
           />
         </div>
 
@@ -69,27 +70,6 @@ export default function Inventory({
         </div>
       </div>
 
-      {/* Conditions footer — full-width strip */}
-      {status.conditions.length > 0 && (
-        <div className="px-4 py-2 border-t border-edge bg-panel-alt flex flex-wrap gap-x-6 gap-y-1">
-          {status.conditions.map((c) => (
-            <div key={c.id} className="flex items-center gap-1.5">
-              <img
-                src={iconUrl(CONDITION_ICONS[c.id] || "sun.svg")}
-                alt=""
-                className="w-5 h-5 flex-shrink-0"
-              />
-              <span className="text-negative">
-                {c.name}
-                {c.stacks > 1 && <span className="text-muted ml-1">x{c.stacks}</span>}
-              </span>
-              {c.description && (
-                <span className="text-muted">{c.description}</span>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -97,9 +77,11 @@ export default function Inventory({
 function CharacterPanel({
   name,
   skills,
+  conditions,
 }: {
   name: string;
   skills: SkillInfoDto[];
+  conditions: GameResponse["status"]["conditions"];
 }) {
   return (
     <div className="flex flex-col h-full p-4">
@@ -125,6 +107,25 @@ function CharacterPanel({
           </div>
         ))}
       </div>
+
+      {/* Conditions */}
+      {conditions.length > 0 && (
+        <div className="mt-6 space-y-2">
+          {conditions.map((c) => (
+            <div key={c.id} className="flex items-center gap-2">
+              <img
+                src={iconUrl(CONDITION_ICONS[c.id] || "sun.svg")}
+                alt=""
+                className="w-5 h-5 flex-shrink-0"
+              />
+              <span className="text-negative">
+                {c.name}
+                {c.stacks > 1 && <span className="text-muted ml-1">x{c.stacks}</span>}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -163,7 +164,7 @@ function MechanicsSection({ title, lines }: { title: string; lines: MechanicLine
           {lines.map((line, i) => (
             <tr key={i}>
               <td className="py-0.5 pr-2 whitespace-nowrap">
-                {line.label} <span className="font-bold">{line.value}</span>
+                {line.label} <span className="font-bold text-accent">{line.value}</span>
               </td>
               <td className="py-0.5 pl-2 text-muted text-right">{line.source}</td>
             </tr>
