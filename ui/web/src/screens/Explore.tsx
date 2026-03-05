@@ -1,13 +1,12 @@
-import { useState, useMemo, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
-import { CRS, LatLngBounds, Icon, type LatLngExpression } from "leaflet";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
+import { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
 import MarketScreen from "./Market";
 import BankScreen from "./Bank";
 import Inn from "./Inn";
-import CompassRose from "../components/CompassRose";
 import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
 import { formatDateTime } from "../calendar";
 import type { GameResponse } from "../api/types";
@@ -44,6 +43,74 @@ function MapFollower({ position }: { position: LatLngExpression }) {
     map.setView(position, map.getZoom(), { animate: true });
   }, [map, position]);
   return null;
+}
+
+const DIR_VECTORS: Record<string, { dx: number; dy: number; rotation: number }> = {
+  east:  { dx: 1,  dy: 0,  rotation: 0 },
+  south: { dx: 0,  dy: 1,  rotation: 90 },
+  west:  { dx: -1, dy: 0,  rotation: 180 },
+  north: { dx: 0,  dy: -1, rotation: 270 },
+};
+
+function DirectionIndicator({
+  playerX,
+  playerY,
+  exits,
+  loading,
+  hidden,
+  onMove,
+}: {
+  playerX: number;
+  playerY: number;
+  exits: string[];
+  loading: boolean;
+  hidden: boolean;
+  onMove: (dir: string) => void;
+}) {
+  const [direction, setDirection] = useState<string | null>(null);
+
+  const computeDirection = useCallback(
+    (latlng: { lat: number; lng: number }) => {
+      const playerPos = gridToLatLng(playerX, playerY) as [number, number];
+      const dlat = latlng.lat - playerPos[0];
+      const dlng = latlng.lng - playerPos[1];
+      if (Math.abs(dlat) > Math.abs(dlng)) {
+        return dlat > 0 ? "north" : "south";
+      } else {
+        return dlng > 0 ? "east" : "west";
+      }
+    },
+    [playerX, playerY]
+  );
+
+  useMapEvents({
+    mousemove(e) {
+      if (loading || hidden) { setDirection(null); return; }
+      const dir = computeDirection(e.latlng);
+      setDirection(exits.includes(dir) ? dir : null);
+    },
+    mouseout() {
+      setDirection(null);
+    },
+    click(e) {
+      if (loading) return;
+      const dir = computeDirection(e.latlng);
+      if (exits.includes(dir)) onMove(dir);
+    },
+  });
+
+  if (!direction) return null;
+
+  const vec = DIR_VECTORS[direction];
+  const pos = gridToLatLng(playerX + vec.dx, playerY + vec.dy);
+  const icon = new DivIcon({
+    html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:32px;height:32px;transform:rotate(${vec.rotation}deg);pointer-events:none;"><path d="M106.854 106.002a26.003 26.003 0 0 0-25.64 29.326c16 124 16 117.344 0 241.344a26.003 26.003 0 0 0 35.776 27.332l298-124a26.003 26.003 0 0 0 0-48.008l-298-124a26.003 26.003 0 0 0-10.136-1.994z" fill="#6bffae"/></svg>`,
+    className: "",
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
+
+  return <Marker position={pos} icon={icon} interactive={false} />;
 }
 
 const DIR_KEYS: Record<string, string> = {
@@ -124,6 +191,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   const { node, exits, status } = state;
   const poi = node.poi;
   const isSettlement = poi?.kind === "settlement";
+  const isLost = status.conditions.some((c) => c.id === "lost");
 
   // Show Market as full-screen
   if (activeService === "market") {
@@ -167,7 +235,15 @@ export default function Explore({ state }: { state: GameResponse }) {
             minZoom={0}
             maxZoom={MAX_ZOOM}
           />
-          {!status.conditions.some(c => c.id === "lost") && <Marker position={position} icon={playerIcon} />}
+          {!isLost && <Marker position={position} icon={playerIcon} />}
+          <DirectionIndicator
+            playerX={node.x}
+            playerY={node.y}
+            exits={exits.map((e) => e.direction)}
+            loading={loading}
+            hidden={isLost}
+            onMove={(dir) => doAction({ action: "move", direction: dir })}
+          />
           <MapFollower position={position} />
         </MapContainer>
       </div>
@@ -185,9 +261,20 @@ export default function Explore({ state }: { state: GameResponse }) {
         )}
 
         <div className="flex-1 flex flex-col gap-3 p-3 min-h-0">
-          {/* Region name */}
-          <div className="font-header text-accent text-lg">
-            {node.region || node.terrain}
+          {/* Region name + inventory */}
+          <div className="flex items-center justify-between">
+            <div className="font-header text-accent text-lg">
+              {node.region || node.terrain}
+            </div>
+            <button
+              onClick={() => setShowInventory((v) => !v)}
+              disabled={loading}
+              title="Inventory (I)"
+              className="w-9 h-9 bg-btn rounded-lg flex items-center justify-center
+                         hover:bg-btn-hover disabled:opacity-50 transition-colors"
+            >
+              <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
+            </button>
           </div>
 
           {/* Date + coordinates */}
@@ -248,14 +335,6 @@ export default function Explore({ state }: { state: GameResponse }) {
               </div>
             )}
           </div>
-
-          {/* Compass Rose */}
-          <CompassRose
-            exits={exits}
-            onMove={(dir) => doAction({ action: "move", direction: dir })}
-            onInventory={() => setShowInventory((v) => !v)}
-            disabled={loading}
-          />
 
           {/* Conditions — flex-1 fills remaining space, items align to bottom */}
           <div className="flex-1 flex flex-col justify-end gap-1">
