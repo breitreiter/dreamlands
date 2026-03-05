@@ -36,8 +36,14 @@ Just a list of things that need doing, roughly grouped.
 
 ## Game UI Components
 
-- [ ] Extract the parchment gold bar (Market top strip) into a reusable component —
+- [x] Extract the parchment gold bar (Market top strip) into a reusable component —
       normalize the pattern for use in other screens (Bank, Settlement, etc.)
+
+## Game UI — Map
+
+- [ ] POI name markers on map — show name plaques for visited settlements/dungeons on the
+      Leaflet map. Needed for trade trip planning. Server sends `visitedPois` in GameResponse,
+      client renders as Leaflet markers. Plan in `project/architecture/poi_markers.md`.
 
 ## Game UI Assets
 
