@@ -7,7 +7,7 @@ import Inventory from "./Inventory";
 import MarketScreen from "./Market";
 import BankScreen from "./Bank";
 import Inn from "./Inn";
-import StatBar, { HEALTH_GRADIENT, SPIRITS_GRADIENT } from "../components/StatBar";
+import MaskedIcon from "../components/MaskedIcon";
 import { formatDateTime } from "../calendar";
 import type { GameResponse } from "../api/types";
 
@@ -350,21 +350,25 @@ export default function Explore({ state }: { state: GameResponse }) {
             ))}
           </div>
 
-          {/* Health bar */}
-          <StatBar
-            label="Health"
-            value={status.health}
-            max={status.maxHealth}
-            gradient={HEALTH_GRADIENT}
-          />
-
-          {/* Spirits bar */}
-          <StatBar
-            label="Spirits"
-            value={status.spirits}
-            max={status.maxSpirits}
-            gradient={SPIRITS_GRADIENT}
-          />
+          {/* Health & Spirits KPI blocks */}
+          <div className="flex gap-2">
+            <div className="flex-1 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+              <div className="flex items-center gap-2">
+                <MaskedIcon icon="heart-plus.svg" className="w-7 h-7" color="#d4c9a8" />
+                <span className="text-2xl font-bold text-primary">{status.health}</span>
+                <span className="text-xl text-dim">/ {status.maxHealth}</span>
+              </div>
+              <div className="text-xs text-muted mt-0.5">Health</div>
+            </div>
+            <div className="flex-1 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
+              <div className="flex items-center gap-2">
+                <MaskedIcon icon="sensuousness.svg" className="w-7 h-7" color="#d4c9a8" />
+                <span className="text-2xl font-bold text-primary">{status.spirits}</span>
+                <span className="text-xl text-dim">/ {status.maxSpirits}</span>
+              </div>
+              <div className="text-xs text-muted mt-0.5">Spirits</div>
+            </div>
+          </div>
         </div>
       </div>
 
