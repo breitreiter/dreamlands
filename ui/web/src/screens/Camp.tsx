@@ -36,7 +36,7 @@ export default function Camp({ state }: { state: GameResponse }) {
   }, [resolved, doAction]);
 
   const isSettlement = node?.poi?.kind === "settlement";
-  const isChapterhouse = isSettlement && node?.poi?.name === "Aldgate";
+  const isChapterhouse = isSettlement && node?.poi?.services?.includes("chapterhouse");
   const isInn = isSettlement && !isChapterhouse;
 
   const terrain = node?.terrain ?? "plains";

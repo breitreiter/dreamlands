@@ -16,7 +16,7 @@ public static class SettlementRunner
     public static SettlementData? EnsureSettlement(GameSession session)
     {
         var node = session.CurrentNode;
-        if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Name == null)
+        if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.SettlementId == null)
             return null;
 
         var tier = node.Region?.Tier ?? 1;
@@ -24,23 +24,23 @@ public static class SettlementRunner
         var size = node.Poi.Size ?? SettlementSize.Camp;
 
         // Initialize settlement state on first visit
-        if (!session.Player.Settlements.ContainsKey(node.Poi.Name))
+        if (!session.Player.Settlements.ContainsKey(node.Poi.SettlementId))
         {
-            var seed = session.Player.Seed ^ node.Poi.Name.GetHashCode();
+            var seed = session.Player.Seed ^ node.Poi.SettlementId.GetHashCode();
             var rng = new Random(seed);
             var state = Market.InitializeSettlement(
-                node.Poi.Name, biome, tier, size,
+                node.Poi.SettlementId, biome, tier, size,
                 session.Player, session.Balance, rng);
-            session.Player.Settlements[node.Poi.Name] = state;
+            session.Player.Settlements[node.Poi.SettlementId] = state;
         }
 
         // Restock for elapsed days
-        var settlement = session.Player.Settlements[node.Poi.Name];
+        var settlement = session.Player.Settlements[node.Poi.SettlementId];
         Market.Restock(settlement, size, session.Player.Day, session.Balance, session.Rng);
 
         var isChapterhouse = node == session.Map.StartingCity;
         var services = new List<string> { "market", "bank", isChapterhouse ? "chapterhouse" : "inn" };
 
-        return new SettlementData(node.Poi.Name, tier, biome, size, services);
+        return new SettlementData(node.Poi.Name ?? node.Poi.SettlementId, tier, biome, size, services);
     }
 }

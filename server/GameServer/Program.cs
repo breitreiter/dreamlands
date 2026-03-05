@@ -912,13 +912,13 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
         case "market_order":
         {
             var sNode = session.CurrentNode;
-            if (sNode.Poi?.Kind != PoiKind.Settlement || sNode.Poi.Name == null)
+            if (sNode.Poi?.Kind != PoiKind.Settlement || sNode.Poi.SettlementId == null)
                 return Results.BadRequest(new { error = "Not at a settlement" });
 
             if (req.Order == null)
                 return Results.BadRequest(new { error = "order required" });
 
-            var settlementId = sNode.Poi.Name;
+            var settlementId = sNode.Poi.SettlementId;
             SettlementRunner.EnsureSettlement(session);
             if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
                 return Results.BadRequest(new { error = "Settlement not initialized" });
@@ -967,14 +967,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
         case "bank_deposit":
         {
             var bNode = session.CurrentNode;
-            if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.Name == null)
+            if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.SettlementId == null)
                 return Results.BadRequest(new { error = "Not at a settlement" });
 
             if (string.IsNullOrEmpty(req.ItemId) || string.IsNullOrEmpty(req.Source))
                 return Results.BadRequest(new { error = "itemId and source required" });
 
             SettlementRunner.EnsureSettlement(session);
-            if (!player.Settlements.TryGetValue(bNode.Poi.Name, out var bDepositState))
+            if (!player.Settlements.TryGetValue(bNode.Poi.SettlementId, out var bDepositState))
                 return Results.BadRequest(new { error = "Settlement not initialized" });
 
             var depositError = Bank.Deposit(player, req.ItemId, req.Source, bDepositState, balance);
@@ -989,14 +989,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
         case "bank_withdraw":
         {
             var bNode = session.CurrentNode;
-            if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.Name == null)
+            if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.SettlementId == null)
                 return Results.BadRequest(new { error = "Not at a settlement" });
 
             if (req.BankIndex == null)
                 return Results.BadRequest(new { error = "bankIndex required" });
 
             SettlementRunner.EnsureSettlement(session);
-            if (!player.Settlements.TryGetValue(bNode.Poi.Name, out var bWithdrawState))
+            if (!player.Settlements.TryGetValue(bNode.Poi.SettlementId, out var bWithdrawState))
                 return Results.BadRequest(new { error = "Settlement not initialized" });
 
             var withdrawError = Bank.Withdraw(player, req.BankIndex.Value, bWithdrawState, balance);
@@ -1065,10 +1065,10 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
     var node = session.CurrentNode;
     var tier = node.Region?.Tier ?? 1;
 
-    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Name == null)
+    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.SettlementId == null)
         return Results.BadRequest(new { error = "Not at a settlement" });
 
-    var settlementId = node.Poi.Name;
+    var settlementId = node.Poi.SettlementId;
     SettlementRunner.EnsureSettlement(session);
     if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
         return Results.BadRequest(new { error = "Settlement not initialized" });
@@ -1151,11 +1151,11 @@ app.MapGet("/api/game/{id}/bank", async (string id) =>
     var session = BuildSession(player);
     var node = session.CurrentNode;
 
-    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.Name == null)
+    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.SettlementId == null)
         return Results.BadRequest(new { error = "Not at a settlement" });
 
     SettlementRunner.EnsureSettlement(session);
-    if (!player.Settlements.TryGetValue(node.Poi.Name, out var settlementState))
+    if (!player.Settlements.TryGetValue(node.Poi.SettlementId, out var settlementState))
         return Results.BadRequest(new { error = "Settlement not initialized" });
 
     return Results.Ok(new

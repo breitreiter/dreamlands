@@ -8,7 +8,7 @@ public static class Market
         item.Cost != null && balance.Character.CostMagnitudes.TryGetValue(item.Cost.Value, out var price) ? price : 0;
 
     public static SettlementState InitializeSettlement(
-        string name, string biome, int tier, SettlementSize size,
+        string settlementId, string biome, int tier, SettlementSize size,
         PlayerState player, BalanceData balance, Random rng)
     {
         var state = new SettlementState { Biome = biome };

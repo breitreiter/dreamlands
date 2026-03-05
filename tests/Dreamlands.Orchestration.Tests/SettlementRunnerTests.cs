@@ -14,6 +14,7 @@ public class SettlementRunnerTests
         map[1, 1].Poi = new Poi(PoiKind.Settlement, "town")
         {
             Name = "Riverton",
+            SettlementId = "s1_1",
             Size = size
         };
 
@@ -48,7 +49,7 @@ public class SettlementRunnerTests
 
         SettlementRunner.EnsureSettlement(session);
 
-        Assert.True(session.Player.Settlements.ContainsKey("Riverton"));
+        Assert.True(session.Player.Settlements.ContainsKey("s1_1"));
     }
 
     [Fact]
@@ -57,7 +58,7 @@ public class SettlementRunnerTests
         var session = MakeSessionWithSettlement();
 
         SettlementRunner.EnsureSettlement(session);
-        var firstState = session.Player.Settlements["Riverton"];
+        var firstState = session.Player.Settlements["s1_1"];
         var initialLastRestock = firstState.LastRestockDay;
 
         // Advance days and re-ensure
@@ -65,7 +66,7 @@ public class SettlementRunnerTests
         SettlementRunner.EnsureSettlement(session);
 
         // Settlement should still exist (restocked, not re-initialized)
-        Assert.True(session.Player.Settlements.ContainsKey("Riverton"));
+        Assert.True(session.Player.Settlements.ContainsKey("s1_1"));
     }
 
     [Fact]
@@ -109,6 +110,7 @@ public class SettlementRunnerTests
         map[1, 1].Poi = new Poi(PoiKind.Settlement, "city")
         {
             Name = "Aldgate",
+            SettlementId = "s1_1",
             Size = SettlementSize.City
         };
         map.StartingCity = map[1, 1];
