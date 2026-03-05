@@ -2,33 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { useGame } from "../GameContext";
 import type { GameResponse, MarketItem, ItemInfo } from "../api/types";
 import * as api from "../api/client";
-import MaskedIcon from "../components/MaskedIcon";
+import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
-
-const ITEM_TYPE_ICONS: Record<string, string> = {
-  weapon: "sword-brandish.svg",
-  armor: "chain-mail.svg",
-  boots: "boots.svg",
-  tool: "knapsack.svg",
-  consumable: "pouch-with-beads.svg",
-  tradegood: "two-coins.svg",
-};
-
-function itemTypeIcon(type: string): string {
-  return ITEM_TYPE_ICONS[type] || "wooden-crate.svg";
-}
-
-const TAB_ICONS: Record<string, string> = {
-  trade: "two-coins.svg",
-  foods: "pouch-with-beads.svg",
-  equipment: "sword-brandish.svg",
-  pack: "backpack.svg",
-  haversack: "knapsack.svg",
-  equipped: "sword-brandish.svg",
-};
 
 type BuyTab = "trade" | "foods" | "equipment";
 type SellTab = "pack" | "haversack" | "equipped";
@@ -287,24 +265,6 @@ export default function MarketScreen({
     }));
   }, [pendingSells, inventory, sellPrices]);
 
-  const TabBtn = ({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) => {
-    const icon = TAB_ICONS[id];
-    return (
-      <button
-        onClick={onClick}
-        className={`h-12 px-4 flex items-center gap-2 transition-colors ${
-          active
-            ? "bg-btn border border-accent text-accent"
-            : "bg-transparent border border-transparent text-action-dim hover:text-action"
-        }`}
-        style={{ borderRadius: "999px" }}
-      >
-        {icon && <MaskedIcon icon={icon} className="w-5 h-5" color={active ? "#D0BD62" : "currentColor"} />}
-        {children}
-      </button>
-    );
-  };
-
   return (
     <div className="h-full flex flex-col bg-page text-primary">
 
@@ -349,9 +309,9 @@ export default function MarketScreen({
           <div className="p-3 border-b border-edge">
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
-              <TabBtn id="trade" active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabBtn>
-              <TabBtn id="foods" active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabBtn>
-              <TabBtn id="equipment" active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabBtn>
+              <TabButton id="trade" active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabButton>
+              <TabButton id="foods" active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabButton>
+              <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabButton>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
@@ -411,9 +371,9 @@ export default function MarketScreen({
           <div className="p-3 border-b border-edge">
             <h3 className="font-header text-accent text-[32px] leading-tight">Sell</h3>
             <div className="flex gap-1 mt-2">
-              <TabBtn id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabBtn>
-              <TabBtn id="haversack" active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabBtn>
-              <TabBtn id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabBtn>
+              <TabButton id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
+              <TabButton id="haversack" active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabButton>
+              <TabButton id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabButton>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2">

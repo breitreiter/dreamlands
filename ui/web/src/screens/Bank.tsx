@@ -2,29 +2,10 @@ import { useState, useEffect, useMemo } from "react";
 import { useGame } from "../GameContext";
 import type { GameResponse, ItemInfo, BankResponse } from "../api/types";
 import * as api from "../api/client";
-import MaskedIcon from "../components/MaskedIcon";
+import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
-
-const ITEM_TYPE_ICONS: Record<string, string> = {
-  weapon: "sword-brandish.svg",
-  armor: "chain-mail.svg",
-  boots: "boots.svg",
-  tool: "knapsack.svg",
-  consumable: "pouch-with-beads.svg",
-  tradegood: "two-coins.svg",
-};
-
-function itemTypeIcon(type: string): string {
-  return ITEM_TYPE_ICONS[type] || "wooden-crate.svg";
-}
-
-const TAB_ICONS: Record<string, string> = {
-  pack: "backpack.svg",
-  haversack: "knapsack.svg",
-  equipped: "sword-brandish.svg",
-};
 
 type CarriedTab = "pack" | "haversack" | "equipped";
 
@@ -107,24 +88,6 @@ export default function BankScreen({
     return isPackItem ? !packFull : !haversackFull;
   }
 
-  const TabBtn = ({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) => {
-    const icon = TAB_ICONS[id];
-    return (
-      <button
-        onClick={onClick}
-        className={`h-12 px-4 flex items-center gap-2 transition-colors ${
-          active
-            ? "bg-btn border border-accent text-accent"
-            : "bg-transparent border border-transparent text-action-dim hover:text-action"
-        }`}
-        style={{ borderRadius: "999px" }}
-      >
-        {icon && <MaskedIcon icon={icon} className="w-5 h-5" color={active ? "#D0BD62" : "currentColor"} />}
-        {children}
-      </button>
-    );
-  };
-
   return (
     <div className="h-full flex flex-col bg-page text-primary">
       {error && (
@@ -184,9 +147,9 @@ export default function BankScreen({
           <div className="p-3 border-b border-edge">
             <h3 className="font-header text-accent text-[32px] leading-tight">Carried</h3>
             <div className="flex gap-1 mt-2">
-              <TabBtn id="pack" active={carriedTab === "pack"} onClick={() => setCarriedTab("pack")}>Pack</TabBtn>
-              <TabBtn id="haversack" active={carriedTab === "haversack"} onClick={() => setCarriedTab("haversack")}>Haversack</TabBtn>
-              <TabBtn id="equipped" active={carriedTab === "equipped"} onClick={() => setCarriedTab("equipped")}>Equipped</TabBtn>
+              <TabButton id="pack" active={carriedTab === "pack"} onClick={() => setCarriedTab("pack")}>Pack</TabButton>
+              <TabButton id="haversack" active={carriedTab === "haversack"} onClick={() => setCarriedTab("haversack")}>Haversack</TabButton>
+              <TabButton id="equipped" active={carriedTab === "equipped"} onClick={() => setCarriedTab("equipped")}>Equipped</TabButton>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">

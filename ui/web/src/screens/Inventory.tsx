@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
 import { useGame } from "../GameContext";
-import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
+import MaskedIcon, { iconUrl, itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
 
 const CONDITION_ICONS: Record<string, string> = {
@@ -17,20 +17,6 @@ const CONDITION_ICONS: Record<string, string> = {
   injured: "bloody-stash.svg",
 };
 
-const ITEM_TYPE_ICONS: Record<string, string> = {
-  weapon: "sword-brandish.svg",
-  armor: "chain-mail.svg",
-  boots: "boots.svg",
-  tool: "knapsack.svg",
-  consumable: "pouch-with-beads.svg",
-  tradegood: "two-coins.svg",
-};
-
-const TAB_ICONS: Record<string, string> = {
-  pack: "backpack.svg",
-  haversack: "knapsack.svg",
-  equipped: "sword-brandish.svg",
-};
 
 export default function Inventory({
   state,
@@ -230,24 +216,6 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
   );
 }
 
-function TabButton({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) {
-  const icon = TAB_ICONS[id];
-  return (
-    <button
-      onClick={onClick}
-      className={`h-12 px-4 flex items-center gap-2 transition-colors ${
-        active
-          ? "bg-btn border border-accent text-accent"
-          : "bg-transparent border border-transparent text-action-dim hover:text-action"
-      }`}
-      style={{ borderRadius: "999px" }}
-    >
-      {icon && <MaskedIcon icon={icon} className="w-5 h-5" color={active ? "#D0BD62" : "currentColor"} />}
-      {children}
-    </button>
-  );
-}
-
 function itemModifierSummary(item: ItemInfo): string {
   const parts: string[] = [];
   for (const [skill, val] of Object.entries(item.skillModifiers)) {
@@ -259,10 +227,6 @@ function itemModifierSummary(item: ItemInfo): string {
   if (item.foragingBonus) parts.push(`+${item.foragingBonus} foraging`);
   if (item.cures.length > 0) parts.push(`cures ${item.cures.join(", ")}`);
   return parts.join(", ");
-}
-
-function itemTypeIcon(type: string): string {
-  return ITEM_TYPE_ICONS[type] || "wooden-crate.svg";
 }
 
 function ItemCard({
