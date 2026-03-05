@@ -104,7 +104,7 @@ function DirectionIndicator({
   const vec = DIR_VECTORS[direction];
   const pos = gridToLatLng(playerX + vec.dx, playerY + vec.dy);
   const icon = new DivIcon({
-    html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:32px;height:32px;transform:rotate(${vec.rotation}deg);pointer-events:none;"><path d="M106.854 106.002a26.003 26.003 0 0 0-25.64 29.326c16 124 16 117.344 0 241.344a26.003 26.003 0 0 0 35.776 27.332l298-124a26.003 26.003 0 0 0 0-48.008l-298-124a26.003 26.003 0 0 0-10.136-1.994z" fill="#6bffae"/></svg>`,
+    html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:32px;height:32px;transform:rotate(${vec.rotation}deg);pointer-events:none;"><path d="M106.854 106.002a26.003 26.003 0 0 0-25.64 29.326c16 124 16 117.344 0 241.344a26.003 26.003 0 0 0 35.776 27.332l298-124a26.003 26.003 0 0 0 0-48.008l-298-124a26.003 26.003 0 0 0-10.136-1.994z" fill="#6bffae" stroke="#232d46" stroke-width="80" paint-order="stroke"/></svg>`,
     className: "",
     iconSize: [32, 32],
     iconAnchor: [16, 16],
