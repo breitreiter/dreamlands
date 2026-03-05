@@ -1,7 +1,7 @@
 namespace Dreamlands.Rules;
 
 /// <summary>Type of equipment item.</summary>
-public enum ItemType { Tool, Consumable, Token, Weapon, Armor, Boots, TradeGood }
+public enum ItemType { Tool, Consumable, Token, Weapon, Armor, Boots, TradeGood, Haul }
 
 /// <summary>Weapon class for weapon-type items.</summary>
 public enum WeaponClass { Dagger, Axe, Sword }
@@ -33,7 +33,7 @@ public sealed class ItemDef
     public int ForagingBonus { get; init; }
 
     /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
-    public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.TradeGood;
+    public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.TradeGood or ItemType.Haul;
 
     internal static IReadOnlyDictionary<string, ItemDef> All { get; } = BuildAll();
 
@@ -930,6 +930,14 @@ public sealed class ItemDef
             Id = "root_head", Name = "Root Head", Type = ItemType.TradeGood,
             Description = "A life-sized replica of your own head, formed from a twisted knot of tiny roots.",
             Biome = "swamp", ShopTier = 3, Cost = Magnitude.Medium,
+        },
+
+        // ── Haul (generic def — per-haul identity comes from HaulDefId on ItemInstance) ──
+
+        ["haul"] = new()
+        {
+            Id = "haul", Name = "Haul", Type = ItemType.Haul,
+            Description = "A delivery bound for a specific settlement.",
         },
     };
 }

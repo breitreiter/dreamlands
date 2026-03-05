@@ -9,6 +9,7 @@ public sealed class BalanceData
     public IReadOnlyDictionary<string, ConditionDef> Conditions { get; init; } = ConditionDef.All;
     public IReadOnlyDictionary<string, ItemDef> Items { get; init; } = ItemDef.All;
     public IReadOnlyDictionary<string, ConditionFlavor> ConditionFlavors { get; init; } = ConditionFlavor.All;
+    public IReadOnlyDictionary<string, HaulDef> Hauls { get; init; } = HaulDef.All;
     public TradeBalance Trade { get; init; } = TradeBalance.Default;
     public SettlementBalance Settlements { get; init; } = SettlementBalance.Default;
 }
