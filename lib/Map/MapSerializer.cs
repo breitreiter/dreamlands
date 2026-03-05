@@ -72,7 +72,9 @@ public static class MapSerializer
                     Size = n.Poi.Size != null ? Enum.Parse<SettlementSize>(n.Poi.Size) : null,
                     SettlementId = n.Poi.SettlementId,
                     DungeonId = n.Poi.DungeonId,
-                    DecalFile = n.Poi.DecalFile
+                    DecalFile = n.Poi.DecalFile,
+                    TradeParentId = n.Poi.TradeParentId,
+                    TradeChildIds = n.Poi.TradeChildIds
                 };
             }
         }
@@ -81,7 +83,7 @@ public static class MapSerializer
         if (dto.StartingCity is { Length: 2 })
             map.StartingCity = map[dto.StartingCity[0], dto.StartingCity[1]];
 
-        // Restore trade edges
+        // Legacy: restore trade edges if present (old format, harmlessly ignored going forward)
         if (dto.TradeEdges != null)
         {
             foreach (var e in dto.TradeEdges)
@@ -106,9 +108,7 @@ public static class MapSerializer
             StartingCity = map.StartingCity != null ? new[] { map.StartingCity.X, map.StartingCity.Y } : null,
             Regions = map.Regions.Select(ToDto).ToList(),
             Nodes = map.AllNodes().Select(ToDto).ToList(),
-            TradeEdges = map.TradeEdges.Count > 0
-                ? map.TradeEdges.Select(e => new[] { e.From.X, e.From.Y, e.To.X, e.To.Y }).ToList()
-                : null
+            TradeEdges = null
         };
     }
 
@@ -148,7 +148,9 @@ public static class MapSerializer
             Size = poi.Size?.ToString(),
             SettlementId = poi.SettlementId,
             DungeonId = poi.DungeonId,
-            DecalFile = poi.DecalFile
+            DecalFile = poi.DecalFile,
+            TradeParentId = poi.TradeParentId,
+            TradeChildIds = poi.TradeChildIds
         };
     }
 
@@ -194,5 +196,7 @@ public static class MapSerializer
         public string? SettlementId { get; init; }
         public string? DungeonId { get; init; }
         public string? DecalFile { get; init; }
+        public string? TradeParentId { get; init; }
+        public List<string>? TradeChildIds { get; init; }
     }
 }

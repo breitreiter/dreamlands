@@ -11,6 +11,8 @@ public class Poi
     public string? SettlementId { get; set; }
     public string? DungeonId { get; set; }
     public string? DecalFile { get; set; }
+    public string? TradeParentId { get; set; }
+    public List<string>? TradeChildIds { get; set; }
 
     public Poi(PoiKind kind, string type)
     {

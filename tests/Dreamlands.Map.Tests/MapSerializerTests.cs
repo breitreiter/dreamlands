@@ -95,6 +95,44 @@ public class MapSerializerTests
     }
 
     [Fact]
+    public void Roundtrip_PreservesTradeTree()
+    {
+        var map = MakeMap();
+        map[0, 0].Poi = new Poi(PoiKind.Settlement, "town")
+        {
+            Name = "Parent",
+            SettlementId = "s0_0",
+            TradeChildIds = new List<string> { "s1_1", "s2_2" }
+        };
+        map[1, 1].Poi = new Poi(PoiKind.Settlement, "village")
+        {
+            Name = "Child1",
+            SettlementId = "s1_1",
+            TradeParentId = "s0_0"
+        };
+        map[2, 2].Poi = new Poi(PoiKind.Settlement, "village")
+        {
+            Name = "Child2",
+            SettlementId = "s2_2",
+            TradeParentId = "s0_0"
+        };
+
+        var result = Roundtrip(map);
+
+        var parent = result[0, 0].Poi!;
+        Assert.Null(parent.TradeParentId);
+        Assert.Equal(new[] { "s1_1", "s2_2" }, parent.TradeChildIds!);
+
+        var child1 = result[1, 1].Poi!;
+        Assert.Equal("s0_0", child1.TradeParentId);
+        Assert.Null(child1.TradeChildIds);
+
+        var child2 = result[2, 2].Poi!;
+        Assert.Equal("s0_0", child2.TradeParentId);
+        Assert.Null(child2.TradeChildIds);
+    }
+
+    [Fact]
     public void Roundtrip_PreservesDistanceFromCity()
     {
         var map = MakeMap();

@@ -17,6 +17,7 @@ public static class ContentPopulator
         TradeRouteBuilder.Build(map);
         SizeSettlements(map);
         AssignSettlementIds(map);
+        StampTradeTree(map);
         NameRegions(map);
         NameSettlements(map);
         AssignNodeDescriptions(map);
@@ -33,6 +34,22 @@ public static class ContentPopulator
         {
             if (node.Poi?.Kind == PoiKind.Settlement)
                 node.Poi.SettlementId = $"s{node.X}_{node.Y}";
+        }
+    }
+
+    private static void StampTradeTree(Map map)
+    {
+        // TradeEdges are (From=child, To=parent) — stamp onto Poi fields
+        foreach (var (from, to) in map.TradeEdges)
+        {
+            var childId = from.Poi?.SettlementId;
+            var parentId = to.Poi?.SettlementId;
+            if (childId == null || parentId == null) continue;
+
+            from.Poi!.TradeParentId = parentId;
+
+            to.Poi!.TradeChildIds ??= [];
+            to.Poi.TradeChildIds.Add(childId);
         }
     }
 

@@ -71,17 +71,20 @@ public class SettlementGraph
             };
         }
 
-        // TradeEdges are (From=child, To=parent) — child points toward city
-        foreach (var (from, to) in map.TradeEdges)
+        // Wire parent/child from per-settlement Poi fields
+        foreach (var info in settlements.Values)
         {
-            var childId = from.Poi?.SettlementId;
-            var parentId = to.Poi?.SettlementId;
-            if (childId == null || parentId == null) continue;
+            var node = map[info.X, info.Y];
+            var poi = node.Poi!;
 
-            if (settlements.TryGetValue(childId, out var child))
-                child.ParentId = parentId;
-            if (settlements.TryGetValue(parentId, out var parent))
-                parent.ChildIds.Add(childId);
+            if (poi.TradeParentId != null)
+                info.ParentId = poi.TradeParentId;
+
+            if (poi.TradeChildIds != null)
+            {
+                foreach (var childId in poi.TradeChildIds)
+                    info.ChildIds.Add(childId);
+            }
         }
 
         var rootId = map.StartingCity?.Poi?.SettlementId
