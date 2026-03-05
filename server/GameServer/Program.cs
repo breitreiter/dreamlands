@@ -337,6 +337,8 @@ GameResponse BuildInventoryResponse(GameSession s, PlayerState p) => new()
 
 EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => new()
 {
+    Id = encounter.Id,
+    Category = encounter.Category,
     Title = encounter.Title,
     Body = encounter.Body,
     Choices = choices.Select((c, i) => new ChoiceInfo
@@ -500,8 +502,17 @@ app.MapPost("/api/game/new", async () =>
 
     var session = BuildSession(player);
     session.MarkVisited();
-    await store.Save(player);
 
+    // Start with the intro encounter if available
+    var introEnc = bundle.GetById("00_Intro");
+    if (introEnc != null)
+    {
+        var step = EncounterRunner.Begin(session, introEnc);
+        await store.Save(player);
+        return Results.Ok(new { gameId, state = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices) });
+    }
+
+    await store.Save(player);
     return Results.Ok(new { gameId, state = BuildExploringResponse(session) });
 });
 

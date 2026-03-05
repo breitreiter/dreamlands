@@ -13,93 +13,97 @@
         "category": "dungeons/brides_cave",
         "encounterIndex": 2
       },
+      "Placeholder": {
+        "category": "swamp/tier3",
+        "encounterIndex": 39
+      },
       "00_Intro": {
         "category": "intro",
-        "encounterIndex": 3
+        "encounterIndex": 6
       },
-      "01_Docks_1": {
+      "01_Gameplay_Intro": {
         "category": "intro",
-        "encounterIndex": 4
+        "encounterIndex": 7
       },
       "Blockade at Copper Gap": {
         "category": "mountains/tier1",
-        "encounterIndex": 5
+        "encounterIndex": 8
       },
       "The Festival Gate": {
         "category": "mountains/tier1",
-        "encounterIndex": 6
+        "encounterIndex": 10
       },
       "The Old Assay Station": {
         "category": "mountains/tier1",
-        "encounterIndex": 7
+        "encounterIndex": 11
       },
       "The Priests Vow": {
         "category": "mountains/tier1",
-        "encounterIndex": 8
+        "encounterIndex": 12
       },
       "The Trailside Verdict": {
         "category": "mountains/tier1",
-        "encounterIndex": 9
+        "encounterIndex": 13
       },
       "A Debt Owed": {
         "category": "plains/tier1",
-        "encounterIndex": 10
+        "encounterIndex": 16
       },
       "A Gift for the Harvest": {
         "category": "plains/tier1",
-        "encounterIndex": 11
+        "encounterIndex": 17
       },
       "Celebration": {
         "category": "plains/tier1",
-        "encounterIndex": 12
+        "encounterIndex": 18
       },
       "The Burning Field": {
         "category": "plains/tier1",
-        "encounterIndex": 13
+        "encounterIndex": 20
       },
       "The Grain Cart": {
         "category": "plains/tier1",
-        "encounterIndex": 14
+        "encounterIndex": 21
       },
-      "recur-Bandits": {
+      "Bandits": {
         "category": "scrub/tier1",
-        "encounterIndex": 15
+        "encounterIndex": 24
       },
-      "recur-Dust Storm": {
+      "Dust Storm": {
         "category": "scrub/tier1",
-        "encounterIndex": 16
+        "encounterIndex": 25
       },
       "The Courier": {
         "category": "scrub/tier1",
-        "encounterIndex": 17
+        "encounterIndex": 27
       },
       "Unusual Cargo": {
         "category": "scrub/tier1",
-        "encounterIndex": 18
+        "encounterIndex": 28
       },
       "A Sons Responsibility": {
         "category": "swamp/tier1",
-        "encounterIndex": 19
+        "encounterIndex": 31
       },
       "An Unpaid Debt": {
         "category": "swamp/tier1",
-        "encounterIndex": 20
+        "encounterIndex": 32
       },
       "The Cartographers Kit": {
         "category": "swamp/tier1",
-        "encounterIndex": 21
+        "encounterIndex": 34
       },
       "The Gatekeeper": {
         "category": "swamp/tier1",
-        "encounterIndex": 22
+        "encounterIndex": 35
       },
       "The Hunted Woman": {
         "category": "swamp/tier1",
-        "encounterIndex": 23
+        "encounterIndex": 36
       },
       "The Hermit of Sallow Fen": {
         "category": "swamp/tier2",
-        "encounterIndex": 24
+        "encounterIndex": 38
       }
     },
     "byCategory": {
@@ -108,39 +112,74 @@
         "Start",
         "The Ghosts"
       ],
+      "forest/tier1": [
+        "Placeholder"
+      ],
+      "forest/tier2": [
+        "Placeholder"
+      ],
+      "forest/tier3": [
+        "Placeholder"
+      ],
       "intro": [
         "00_Intro",
-        "01_Docks_1"
+        "01_Gameplay_Intro"
       ],
       "mountains/tier1": [
         "Blockade at Copper Gap",
+        "Placeholder",
         "The Festival Gate",
         "The Old Assay Station",
         "The Priests Vow",
         "The Trailside Verdict"
       ],
+      "mountains/tier2": [
+        "Placeholder"
+      ],
+      "mountains/tier3": [
+        "Placeholder"
+      ],
       "plains/tier1": [
         "A Debt Owed",
         "A Gift for the Harvest",
         "Celebration",
+        "Placeholder",
         "The Burning Field",
         "The Grain Cart"
       ],
+      "plains/tier2": [
+        "Placeholder"
+      ],
+      "plains/tier3": [
+        "Placeholder"
+      ],
       "scrub/tier1": [
-        "recur-Bandits",
-        "recur-Dust Storm",
+        "Bandits",
+        "Dust Storm",
+        "Placeholder",
         "The Courier",
         "Unusual Cargo"
+      ],
+      "scrub/tier2": [
+        "Placeholder"
+      ],
+      "scrub/tier3": [
+        "Placeholder"
       ],
       "swamp/tier1": [
         "A Sons Responsibility",
         "An Unpaid Debt",
+        "Placeholder",
         "The Cartographers Kit",
         "The Gatekeeper",
         "The Hunted Woman"
       ],
       "swamp/tier2": [
+        "Placeholder",
         "The Hermit of Sallow Fen"
+      ],
+      "swamp/tier3": [
+        "Placeholder"
       ]
     }
   },
@@ -148,6 +187,7 @@
     {
       "id": "A Record in Stone",
       "category": "dungeons/brides_cave",
+      "recurring": false,
       "title": "A Record in Stone",
       "body": "\nYou run your fingers along the etchings, the marks damp and ragged.\n\nLove oaths. Prayers. Names unknown to you. The script shifts every few paces. Fine calligraphy, jagged scrawls, deep gouges hacked by frantic hands. A few catch your eye.\n\nSome passages end mid-sentence, the final letter trailing off into nothing. Others overlap, newer words carved atop old, layer upon layer of desperate testimony.\n\n*Alain, you swore by the harvest moon. I kneel where the stone drinks tears and lay your name before the deep. If the spirits hear, let them turn you. If they do not, let them judge you as they judge me.*\n\n*Matthis, I have brought your token and my last candle. The flame gutters, yet I keep vigil. Let the dark teach you constancy. Let it scour from you the forgetfulness that has made this cavern my only witness.*\n\nYou find a name, inscribed a hundred times over. Messages to family. Regrets for things not said, mistakes, misdeeds. Tally marks stand ranked in columns. Five-bar gates repeat by the hundreds, scored hard into the stone.\n",
       "choices": [
@@ -193,6 +233,7 @@
     {
       "id": "Start",
       "category": "dungeons/brides_cave",
+      "recurring": false,
       "title": "The Bride\u0027s Cave",
       "body": "\nYour torch casts its glow upon a cathedral of stone. Light strikes wall and stalagmite, crawls across the floor, and reveals words carved into every span of rock. \n\nPassageways wind away in all directions.\n\nThe air hangs cold and unmoving.\n",
       "choices": [
@@ -238,6 +279,7 @@
     {
       "id": "The Ghosts",
       "category": "dungeons/brides_cave",
+      "recurring": false,
       "title": "The Ghosts",
       "body": "\nThe passage opens into a vast chamber. Water drips somewhere in the darkness beyond your light.\n\nShe stands in a pool of white fabric - no, multiple figures, overlapping, their edges uncertain. Sometimes one, sometimes many. Tally marks cover every inch of stone around them. The scratches go up twelve feet high in places, as if clawed by someone climbing.\n\n\u0022You came,\u0022 she says. They say. The voices layer. \u0022Finally, you came back.\u0022\n\nYour hand finds your weapon. The temperature drops.\n\n\u0022We waited. We counted every dawn through the cracks. We wrote you poems. Why did it take so long?\u0022\n\nThe figures drift closer. You can smell limestone and old cloth and something else - desperation, maybe, or longing, faded and confused.\n",
       "choices": [
@@ -289,7 +331,7 @@
             "preamble": "You lower your hands. \u0022I\u0027m listening,\u0022 you say.",
             "branches": [
               {
-                "condition": "check negotiation easy",
+                "condition": "meets negotiation 4",
                 "text": "The cold eases. The figures become clearer - still translucent, still overlapping, but more distinct. A young woman with dark hair. An older one with work-roughened features. A girl who couldn\u0027t have been more than sixteen.\n    \u0022We came here to dream,\u0022 the dark-haired one says. \u0022That\u0027s what the old women told us. Spend one night in the Bride\u0027s Cave, and you\u0027ll dream true. Your beloved will return. Your husband will come back. The man who promised...\u0022\n    \u0022Marta was first,\u0022 another voice. \u0022Sixty years ago, maybe more. We found her marks when we came. We thought - we thought they meant the ritual worked.\u0022\n    \u0022I came in winter,\u0022 says the girl. Sixteen, you think. Maybe younger. \u0022The passages flooded. I could hear the water rising but I couldn\u0027t find the way back. I counted twenty-three days.\u0022\n    They speak over each other now, a dozen voices.\n    *I was left at the altar, my father wouldn\u0027t take me back\u2014*\n    *He took my dowry and disappeared, I had nothing\u2014*\n    *The old women said it was ancient magic, older than the village\u2014*\n    *I wrote him poems, thinking he would feel them somehow\u2014*\n    *We counted the days. We thought someone would notice\u2014*\n    The dark-haired woman\u2014Marta, perhaps\u2014steps forward. \u0022The village finally sealed it. But by then we were already here. Already waiting. Already...\u0022\n    She gestures at the tally marks climbing the walls.\n    \u0022We thought you were someone coming to find us. We always think that.\u0022 Her smile is unbearably sad. \u0022But you listened. That\u0027s... that\u0027s something.\u0022\n    The cold has become almost comfortable now. One of them presses something into your palm - you feel its weight, though her fingers pass through yours like mist.\n    \u0022Remember us,\u0022 they say together, then disperse, like mist in daylight.",
                 "mechanics": [
                   "add_item ivory_comb",
@@ -308,10 +350,268 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "forest/tier1",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Placeholder",
+      "category": "forest/tier2",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Placeholder",
+      "category": "forest/tier3",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation hard",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "00_Intro",
       "category": "intro",
+      "recurring": false,
       "title": "Who Are You?",
-      "body": "\n*The Harrower\u0027s* hold stinks of bilge and bodies, but at least it\u0027s dry. You\u0027ve claimed a corner between cargo nets and a stack of water casks, far enough from the lanterns that no one takes much interest in you. Above, you hear the crew working the rigging, voices sharp with the urgency of landfall. \n\nAldgate. The name tastes like opportunity and threat in equal measure. Fortunes to those willing to take them; death to those who underestimate the land.\n\nYou turn the seal ring over in your fingers, feeling the weight of gold against your palm. A signet ring, worn smooth from years of use. It has stamped contracts, treaties, death sentences. It is a ring that opens doors for the bearer, loosens tongues, carries the grim authority of the Trade Guild.\n\nThe ring catches the dim light as you slide it back onto your finger. The weight still feels new and unfamiliar.\n\nHow did you come by this ring?\n",
+      "body": "\nThe caravan yard still clings to you: dust in your throat, grit in the folds of your clothes, the long ache of weeks spent jolting in a wagon seat. The covered freight cart you rode in stank of leather, mule sweat, and packed bodies, but at least it kept the wind off. Now you\u0027ve claimed a quiet corner between stacked cargo crates and a bundle of spare harness, far enough from the lanterns that no one takes much interest in you. Outside, you hear drivers shouting to one another as the caravan creaks toward the city gates.\n\nAldgate. Fortunes to those with the will to take them; early death to those who underestimate the land.\n\nYou turn the heavy ring over in your fingers, feeling the weight of gold against your palm. A signet ring, worn smooth from years of use. The ring has stamped contracts, treaties, death sentences. It opens doors for the bearer, loosens tongues, carries the grim authority of the Trade Guild.\n\nThe ring catches the dim light as you slide it back onto your finger. The weight still feels new and unfamiliar.\n\nHow did you come by this ring?\n",
       "choices": [
         {
           "optionText": "Murder = I took it by force",
@@ -321,10 +621,11 @@
           "single": {
             "text": "REVIEW: The fat bastard bled more than you\u0027d expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but their reach doesn\u0027t extend to Aldgate\u0027s hungry shores. You\u0027ve heard it is a land of blood and gold and shadow, and you were born for all three.",
             "mechanics": [
-              "increase_skill combat huge",
-              "decrease_skill negotiation huge",
-              "increase_skill cunning huge",
-              "decrease_skill mercantile huge"
+              "set_skill combat 4",
+              "set_skill negotiation 0",
+              "set_skill cunning 4",
+              "set_skill mercantile 0",
+              "open 01_Gameplay_Intro"
             ]
           }
         },
@@ -336,10 +637,11 @@
           "single": {
             "text": "This was your mother\u0027s ring, a prize she fought for with ink and iron. She wore it like a blade, and men twice her size bent when its seal pressed wax. You remember the smell of hot resin and sea-salt in her hair, the way she would turn the signet once before a bargain, as if testing the world\u0027s grain for weakness. She said the ring would secure the family\u0027s future, and you mean to see that through.",
             "mechanics": [
-              "decrease_skill combat huge",
-              "increase_skill negotiation huge",
-              "increase_skill mercantile huge",
-              "decrease_skill bushcraft huge"
+              "set_skill combat 0",
+              "set_skill negotiation 4",
+              "set_skill mercantile 4",
+              "set_skill bushcraft 0",
+              "open 01_Gameplay_Intro"
             ]
           }
         },
@@ -351,10 +653,11 @@
           "single": {
             "text": "You still remember the trader\u0027s face when you called his bluff; the way his confidence shattered as you laid down your cards. The whole den had gone silent, unsure of what this meant. The man had thought a Guild signet would cow a room of dockside rabble, but you\u0027ve always had the devil\u0027s luck. Now his ruin buys your passage to Aldgate, where your luck will surely unlock even greater fortunes.",
             "mechanics": [
-              "decrease_skill combat huge",
-              "increase_skill negotiation huge",
-              "decrease_skill bushcraft huge",
-              "increase_skill luck huge"
+              "set_skill combat 0",
+              "set_skill negotiation 4",
+              "set_skill bushcraft 0",
+              "set_skill luck 4",
+              "open 01_Gameplay_Intro"
             ]
           }
         },
@@ -366,10 +669,11 @@
           "single": {
             "text": "The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father\u0027s finest hunters gave up the search after the first week, muttering of spirits and spoor that walked in circles. You did not. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with smoke and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You\u0027ve come here to make your own story, where your name will be remembered.",
             "mechanics": [
-              "decrease_skill combat huge",
-              "decrease_skill negotiation huge",
-              "increase_skill bushcraft huge",
-              "increase_skill luck huge"
+              "set_skill combat 0",
+              "set_skill negotiation 0",
+              "set_skill bushcraft 4",
+              "set_skill luck 4",
+              "open 01_Gameplay_Intro"
             ]
           }
         },
@@ -381,90 +685,55 @@
           "single": {
             "text": "The ring is yours. Not stolen, not inherited, not won, earned. Twelve years in the Guild\u0027s cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You\u0027ve bled for every league of parchment, fought off things in uncharted places that don\u0027t appear on any map because you decided they shouldn\u0027t. When the Guild needed someone to survey a new island they chose you. The commission came with the signet, the authority to requisition supplies and act in the Guild\u0027s name. You intend to draw the definitive map of this land. If you happen to turn a profit along the way, well. You are Guild, after all.",
             "mechanics": [
-              "increase_skill combat huge",
-              "decrease_skill negotiation huge",
-              "increase_skill cunning huge"
+              "set_skill combat 4",
+              "set_skill negotiation 0",
+              "set_skill cunning 4",
+              "open 01_Gameplay_Intro"
             ]
           }
         }
       ]
     },
     {
-      "id": "01_Docks_1",
+      "id": "01_Gameplay_Intro",
       "category": "intro",
-      "title": "The Docks of Aldgate",
-      "body": "\nThe harbour stinks of empire.\n\nPitch and bilgewater, the cloying sweetness of spice-rot, fish blood guttering between cobblestones older than any living dynasty\u2014Aldgate presses its gifts upon you before your boots have touched the quay. The Harrower groans against the mooring lines and already the city\u0027s hunger announces itself: brown hands grasping for rope, dock-boys swarming the gunwale, and behind them the stevedores, sullen-eyed, appraising the hold with the cold arithmetic of men who tithe to three masters and steal from all of them.\n\nBeyond the wharves the city rises in tiers of crumbling grandeur\u2014warehouses faced in cracked marble, temples gone green with verdigris, and above all the counting-houses of the great guilds, their windows watching the harbour like the lidless eyes of old lizards. Wealth built this place. Wealth and the patient labour of corruption, which hollowed its pillars and made of its courts a labyrinth where gold moves more freely than justice.\n\nYou descend the gangplank with one sea-chest and a ring.\n\nThe ring matters more than anything in the chest. A Merchant Seal\u2014heavy, tarnished silver, stamped with the sigil of the island compact\u2014it sits on your third finger like a quiet declaration of war. With it you may trade beyond the frontier tariff lines, deal in rawstone and blackwood, keep what the guilds would otherwise devour. Without it you are meat.\n\nIt is the ring that draws the woman\u0027s gaze.\n\nShe waits at the foot of the plank where the customs men have set their folding table\u2014tall, sashed in the coat of a harbour official, her hair drawn back with a severity that matches the line of her mouth. Two pike-bearing guards flank her. She extends one hand, palm upward, with the rehearsed authority of a thousand repetitions.\n\n\u0022The Seal. Registered cargo and letters of compact. You will present them before you set foot on sovereign stone.\u0022\n\nHer eyes are on the ring. Not the chest, not your face\u2014the ring. And behind her, half-lost in the press of dockworkers and brazier smoke, a second figure watches: a lean man in no uniform at all, whose stillness amid the chaos is its own species of announcement.\n\nThe woman\u0027s fingers curl. The guards shift their weight. The lean man tilts his head, as a bird does when it has found something bright and worth taking.\n\nNo one else on the dock will meet your eye.\n",
+      "recurring": false,
+      "title": "Aldgate",
+      "body": "\nFIXME: The player has just disembarked at Aldgate, the starting city. Describe the first moments on the dock -- the bustle, the smells, the sense of a new frontier. Establish that the player carries a Trade Guild seal ring and must now decide how to begin their journey into the Dreamlands.\n",
       "choices": [
         {
-          "optionText": "Present the Seal and demand lawful passage = Meet authority with authority, and let every watching eye see that you do not flinch.",
-          "optionLink": "Present the Seal and demand lawful passage",
-          "optionPreview": "Meet authority with authority, and let every watching eye see that you do not flinch.",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check negotiation medium",
-                "text": "You lay the Seal on the table. The woman\u0027s jaw tightens. The lean man smiles once, then melts into the crowd.",
-                "mechanics": [
-                  "add_tag passed_customs",
-                  "open docks_warehouse"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "Your tone wavers. She snaps her fingers; the guards close in. \u0022The Seal. Now.\u0022",
-              "mechanics": [
-                "damage_health small",
-                "add_tag detained"
-              ]
-            }
-          }
-        },
-        {
-          "optionText": "Offer the documents but keep the ring hidden = Comply enough to pass the table while letting the woman believe the Seal is elsewhere.",
-          "optionLink": "Offer the documents but keep the ring hidden",
-          "optionPreview": "Comply enough to pass the table while letting the woman believe the Seal is elsewhere.",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check negotiation easy",
-                "text": "You hand over the papers. Her eyes linger on your empty fingers. You are waved through. She has not stopped watching.",
-                "mechanics": []
-              }
-            ],
-            "fallback": {
-              "text": "She spots the ring. Her smile is thin. \u0022Attempting to evade registration. Escort him.\u0022 Strong hands grab your arms.\n    You spend your first day in a holding cell, but eventually talk your way out.",
-              "mechanics": [
-                "skip_time morning"
-              ]
-            }
-          }
-        },
-        {
-          "optionText": "Address the lean man directly = Ignore the official\u0027s outstretched hand and speak to the silent watcher, making plain you see him and intend to know the game before you show your hand.",
-          "optionLink": "Address the lean man directly",
-          "optionPreview": "Ignore the official\u0027s outstretched hand and speak to the silent watcher, making plain you see him and intend to know the game before you show your hand.",
+          "optionText": "Visit the market = Survey the stalls near the harbour",
+          "optionLink": "Visit the market",
+          "optionPreview": "Survey the stalls near the harbour",
           "requires": null,
           "single": {
-            "text": "You step past the table. The lean man\u0027s smile does not reach his eyes. He nods toward the warehouse district. \u0022A word. In private.\u0022",
+            "text": "FIXME: The player browses the dockside market. Describe the press of traders, the unfamiliar goods. They find a practical item to start their journey.",
             "mechanics": [
-              "open docks_lean_man"
+              "add_item waterskin"
             ]
           }
         },
         {
-          "optionText": "Turn back toward the gangplank = The Harrower has not yet cast off, and a night aboard buys time to learn what manner of welcome Aldgate has prepared.",
-          "optionLink": "Turn back toward the gangplank",
-          "optionPreview": "The Harrower has not yet cast off, and a night aboard buys time to learn what manner of welcome Aldgate has prepared.",
+          "optionText": "Ask around for work = Speak to the dockworkers and merchants",
+          "optionLink": "Ask around for work",
+          "optionPreview": "Speak to the dockworkers and merchants",
           "requires": null,
           "single": {
-            "text": "The Harrower\u0027s deck is cold. In the dark, you plan. Dawn will bring the same choice\u2014or a different one.",
+            "text": "FIXME: The player talks to locals, gathering rumours about the roads ahead. They learn something useful about the dangers beyond the city walls.",
             "mechanics": [
-              "add_tag delayed_landing",
-              "skip_time morning"
+              "add_item rations"
+            ]
+          }
+        },
+        {
+          "optionText": "Explore the city walls = Walk the perimeter and study the land beyond",
+          "optionLink": "Explore the city walls",
+          "optionPreview": "Walk the perimeter and study the land beyond",
+          "requires": null,
+          "single": {
+            "text": "FIXME: The player climbs to a vantage point on the walls. Describe what they see -- the terrain stretching into the Dreamlands, the roads leading out. They spot something useful left behind by a previous traveller.",
+            "mechanics": [
+              "add_item rations"
             ]
           }
         }
@@ -473,6 +742,7 @@
     {
       "id": "Blockade at Copper Gap",
       "category": "mountains/tier1",
+      "recurring": false,
       "title": "Blockade at Copper Gap",
       "body": "\nThe pass ahead chokes with miners. Thirty, maybe forty of them, blocking the switchback with overturned carts and piled stones. They\u0027ve barricaded the only maintained route through this section of the Ranges. Their faces show the gray dust of underground work, and their hands grip tools that were splitting rock this morning. A man with a dust-caked beard stands atop the largest cart, calling out grievances about wages cut in half, about an overseer who changed the terms after ore was already hauled. The crowd rumbles agreement. They\u0027re not letting anyone through until the mining company sends someone to negotiate.\n\nThe merchant behind you has already started complaining about spoiled goods and lost profits. More travelers bunch up at your back, a growing knot of impatience and cargo that can\u0027t afford delay. \n\nThe bearded man notices you studying the barricade. He climbs down, approaches with careful steps. \u0022I know your ring, friend, but I don\u0027t know you.\u0022 He gestures at the strikers, \u0022these are good men, hard workers, but they\u0027ve been done wrong by the company. It would mean a lot to have a guild member speak on their behalf.\u0022 His voice drops low enough that only you can hear it. \u0022Perhaps we could also find a way to get you through the blockade, if you\u0027re a friend of the miners.\u0022\n\nThe miners picked this spot with care. You can see no other way forward.\n",
       "choices": [
@@ -542,8 +812,92 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "mountains/tier1",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "The Festival Gate",
       "category": "mountains/tier1",
+      "recurring": false,
       "title": "The Festival Gate",
       "body": "\nThe high meadow beyond the toll gate is crowded with miners and their families\u2014tables laid with food, a barrel tapped and flowing, children weaving between the adults. First ore day, when last season\u0027s claims finally paid out. Even the wind seems to have taken the afternoon off. The toll collector sits unmoved on his stool, his toll station blocking the trail.\n\n\u0022Triple rate today, traveler. Festival tax.\u0022 His voice carries the certainty of stone. \u0022Or you turn back down the switchbacks.\u0022 Behind the collector, a grey-bearded miner watches from a bench, his gaze deliberate and assessing. Others have noticed too. The celebration hasn\u0027t stopped, but a pocket of attention has formed around you, faces turning with the casual interest of those watching a play they\u0027ve seen before.\n\nYou take a breath to speak, but the collector interjects. \u0022New folk always have opinions about what\u0027s fair. Up here, fair is what we say.\u0022 The watching miner sets down his cup. The price demanded is dear; who ever heard of triple tolls?\n\nThe collector smiles. \u0022You look like a a merchant of some measure. You can afford it, surely.\u0022\n",
       "choices": [
@@ -602,8 +956,9 @@
     {
       "id": "The Old Assay Station",
       "category": "mountains/tier1",
+      "recurring": false,
       "title": "The Old Assay Station",
-      "body": "\nThe trail switchbacks through loose scree to a stone structure wedged between two boulders like a tooth in a broken jaw. The assay station has been abandoned long enough that moss mats the north wall and the hinges have swollen with rust, but not so long that the roof has surrendered. A rockslide blocks the main trail ahead\u2014fresh enough that dust still ghosts the air when the wind shifts, massive enough that no lone traveler is shifting it. The detour climbs another thousand feet along an exposed ridge. To the west, the sky darkens to a color like old bruises pressed under skin.\n\nInside, the air is colder than it should be. Not drafty\u2014still. Held. The hearth is laid with ash that looks recently stirred, though no footprints mark the floor. Three different hands have carved warnings into the doorframe, letters cut deep enough to splinter the wood. Along the far wall, half-collapsed against a stack of rotted sample crates, lie two skeletal corpses in the tatters of heavy work coats, ribs laced with mineral stain, skulls tilted toward the scales as if waiting for a verdict.\n\nUp here, folk speak of such places in lowered voices. Where a man dies in the mountains, that ground is no longer mere ground but a kind of tomb. It may lack carved stone or priestly seal, but it holds the same claim. A proper cleric might come with oils and ash and words of severing, lay the restless to quiet, and mark the threshold clean again. A traveler with a bedroll and a flint has no such authority.\n\nThe first cold drops of sleet tick against the stone outside.\n\n",
+      "body": "\nThe trail switchbacks through loose scree to a stone structure wedged between two boulders like a tooth in a broken jaw. The assay station has been abandoned long enough that moss mats the north wall and the hinges have swollen with rust, but not so long that the roof has surrendered. \n\nA rockslide blocks the main trail ahead; fresh enough that dust still ghosts the air when the wind shifts, massive enough that no lone traveler is shifting it. The detour climbs another thousand feet along an exposed ridge. To the west, the sky darkens to a color like old bruises pressed under skin.\n\nInside, the air is colder than it should be. Still, like a held breath. \n\nThe hearth is laid with ash that looks recently stirred, though no footprints mark the floor. Three different hands have carved warnings into the doorframe, letters cut deep enough to splinter the wood. Along the far wall, half-collapsed against a stack of rotted sample crates, lie two skeletal corpses in the tatters of heavy work coats, ribs laced with mineral stain, skulls tilted toward the scales as if waiting for a verdict.\n\nUp here, folk speak of such places in lowered voices. Where a man dies in the mountains, that ground is no longer mere ground but a kind of tomb. It may lack carved stone or priestly seal, but it holds the same claim. A proper cleric might come with oils and ash and words of severing, lay the restless to quiet, and mark the threshold clean again. A traveler with a bedroll and a flint has no such authority.\n\nThe first cold drops of sleet tick against the stone outside.\n",
       "choices": [
         {
           "optionText": "Study = Examine the station carefully before deciding whether to shelter here",
@@ -642,9 +997,9 @@
           }
         },
         {
-          "optionText": "Ignore = Press on immediately, taking the detour route despite the weather",
-          "optionLink": "Ignore",
-          "optionPreview": "Press on immediately, taking the detour route despite the weather",
+          "optionText": "Press on immediately = Take the detour despite the weather",
+          "optionLink": "Press on immediately",
+          "optionPreview": "Take the detour despite the weather",
           "requires": null,
           "single": {
             "text": "You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you\u0027ve gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.\n  The ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.\n  You reach the valley floor two hours after full dark, shaking so hard you can barely strike a spark for fire. The cold has settled into your bones in a way that will ache for days. But you are through, and the trail behind you is passable again, and you did not spend a night in a place where three different travelers felt compelled to carve warnings in stone. Whether that makes you wise or merely lucky is a question the mountain does not answer. The fire builds slowly, and you feed it through the long hours until dawn, grateful for the pain that means you can still feel your fingers.",
@@ -659,6 +1014,7 @@
     {
       "id": "The Priests Vow",
       "category": "mountains/tier1",
+      "recurring": false,
       "title": "The Priest\u0027s Vow",
       "body": "\nYou hear the shouting before you round the switchback, a raw, hoarse voice calling for help. A miner sits wedged between two massive stones where a recent rockfall has shifted the scree. His legs vanish into the gap. The rocks lean against each other like drunk companions, holding him in place without crushing him. Yet. Above, more loose stone perches on the slope, ready to follow the first slide down.\n\nThe miner\u0027s head has a bloodly gash from the rockslide, but he is alive and glad to see you.\n\nA priest is here, furiously praying for the miner\u0027s safety. \u0022Oh, thank goodness you came! I am on pilgrimage, and cannot touch the impure. But you can. And you must! I will bless you, and you will pull him free.\u0022\n\nThe rocks trapping the miner are daunting. With the priest\u0027s help, you could pull the man free, but on your own you\u0027d likely doom both the miner and yourself.\n\nThe rocks creak as the scree settles another finger\u0027s width.\n",
       "choices": [
@@ -715,6 +1071,7 @@
     {
       "id": "The Trailside Verdict",
       "category": "mountains/tier1",
+      "recurring": false,
       "title": "The Trailside Verdict",
       "body": "\nA toll collector sits on a flat rock beside the trail, three miners standing witness behind him. A muleteer kneels in the gravel, hands spread. Before the kneeling man lies an open pack, ore samples spilled across the stone. The muleteer has a dark bruise across his jaw.\n\n\u0022Theft from a registered claim,\u0022 the toll collector pronounces gravely. \u0022Caught red-handed coming down the trail. Standard judgment: restitution double the value, or we turn you over to the mining council.\u0022 \n\nThe muleteer protests. He was a hired hand, just hauling what he was paid to haul, never wanted any trouble.\n\nThen the toll collector\u0027s eyes find you. \u0022You came down same trail. You see this man working any claim up there? You saw something, or you didn\u0027t.\u0022 The wind cuts across the switchback, carrying the distant clang of metal on stone. The muleteer\u0027s face turns toward you, hope and desperation carved into sun-weathered features.\n\nBut you weren\u0027t watching claims or miners. Your attention was on your footing and the trail, not the goings-on of the miners. The toll collector waits, ledger open. The miners shift, hands near their tools. The muleteer\u0027s fate hangs on testimony you cannot honestly provide.\n",
       "choices": [
@@ -769,8 +1126,183 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "mountains/tier2",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Placeholder",
+      "category": "mountains/tier3",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation hard",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "A Debt Owed",
       "category": "plains/tier1",
+      "recurring": false,
       "title": "A Debt Owed",
       "body": "\nThe group of men walk out to meet you in the road. The oldest, sun-worn and serious, is carrying a ledger and a crude charcoal pencil. The others are local folk, their faces sun-dark and unreadable. \n\nOne spits into the dust. \u0022Aye, look at the ring. It\u0027s the same one. Or near enough as matters.\u0022\n\nThe oldest speaks, \u0022Six months back, one of your men took coin from us for seed wheat that never arrived. We keep our books. We know what\u0027s owed us.\u0022 He taps the ledger meaningfully.\n\nYou\u0027ve never been to these fields before. You were told of no deal with these farmers.\n\nThe old man names a sum. Enough to make the farmers whole, he says. Enough to prove you\u0027re not the sort who fleeces honest folk. Chaff dust hangs golden in the slanting light. Someone\u0027s grandmother has come out to watch, arms crossed, waiting to see what kind of person you are.\n",
       "choices": [
@@ -841,6 +1373,7 @@
     {
       "id": "A Gift for the Harvest",
       "category": "plains/tier1",
+      "recurring": false,
       "title": "A Gift for the Harvest",
       "body": "\nThe girl blocks your path at the edge of the wheat field, arms folded across her chest. Thirteen, maybe fourteen. Sunburnt nose, blonde hair escaping a braid, a smudge of dirt on one cheek. Behind her, the wheat stands tall and golden, rippling under the late afternoon breeze like water. The smell of dry grain and sun-baked earth hangs thick in the air.\n\n\u0022You\u0027re not taking the road,\u0022 she says. Not a question. Her jaw is set, her feet planted wide in the dust. \u0022Not unless you help.\u0022\n\nShe nods toward the field behind her. At the far edge, near a listing wooden fence, an older man works alone. He moves slowly, bent double, reaping wheat with a hand sickle. Each stroke is labored. Even from here you can see the hitch in his back, the way he pauses between cuts to straighten, one hand pressed to his spine.\n\n\u0022That\u0027s my grandfather,\u0022 the girl says. \u0022He\u0027s supposed to have three hired hands today. They didn\u0027t come. Said the merchant in Aldgate would pay better for dock work.\u0022 Her voice hardens. \u0022Now he\u0027s out there alone and the field needs cutting before the rains come tomorrow. If it gets wet, it rots. If it rots, we don\u0027t eat this winter.\u0022\n\nShe steps closer. Close enough that you can see the desperation she\u0027s trying to hide beneath the bravado. Her hands are balled into fists at her sides.\n\n\u0022You\u0027ve got that ring,\u0022 she says, eyes flicking to your hand. \u0022Fancy guild folk always have coin. Or time. Or something.\u0022 Her voice cracks, just slightly. \u0022I\u0027ll give you his dinner. Fresh bread, cheese, the good stuff my grandmother made. It\u0027s all we\u0027ve got to trade.\u0022 She swallows. \u0022But if you don\u0027t help, I\u0027m not letting you pass. I don\u0027t care if you\u0027re twice my size.\u0022\n\nThe old man straightens again in the distance, leaning heavily on the fence post. The field stretches wide and golden behind him. The sun is already slanting low.\n",
       "choices": [
@@ -898,6 +1431,7 @@
     {
       "id": "Celebration",
       "category": "plains/tier1",
+      "recurring": false,
       "title": "Celebration",
       "body": "\nThe road cuts through wheat fields bright as hammered brass. In a shallow clearing ahead, ribbons hang from fence posts and a long table blocks the way, set with bread, salt, and cloudy cider. Villagers stand in a loose ring, smiling as you approach.\n\n\u0022Traveler,\u0022 a woman calls, flowers tied to her braids. \u0022Your path is blessed. We\u0027re at the choosing.\u0022\n\nA wreath of barley settles on your head before you can step back. Someone presses a small sack into your hands; grain, tied tight with red thread. The circle closes in, casual as a market crowd. At the center of the table you notice a rough stone bowl, dark with something that isn\u0027t water.\n\nYou glance down the road beyond them. No sign of another traveler. No sign of whoever was meant to be \u0022chosen\u0022 before you arrived.\n\nYour attention returns to the villagers. A fresh faced young woman steps forward, her hands held out. She is presenting you with a rusted iron dagger, blade pitted and stained.\n\nAll eyes are upon you.\n",
       "choices": [
@@ -956,8 +1490,92 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "plains/tier1",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "The Burning Field",
       "category": "plains/tier1",
+      "recurring": false,
       "title": "The Burning Field",
       "body": "\nThe first whiff of smoke reaches you on the wind, acrid and wrong for the season.\n\nYou crest a low rise and see it. A wheat field halfway to harvest, rolling gold and green under a pale sky, and at its heart a ribbon of flame eating its way toward the road. The fire is young yet, barely waist-high, but the grain is tinder-dry and the wind is steady. Already the smoke rises in a grey column that will be visible from the city walls. A farmer stands at the field\u0027s edge, frozen, staring at the destruction with his mouth open. His hands hang at his sides like dead things. Behind him, two children clutch each other, wide-eyed and silent.\n\nBeyond the flame, perhaps fifty paces into the field, a mule brays in panic. It is tangled in something, harness or rope, thrashing as the fire crawls closer. The farmer seems not to hear it. He is muttering numbers under his breath, calculations of loss, the arithmetic of ruin.\n\nA woman runs up from the direction of the village, breathless, carrying two empty sacks. She sees the mule and curses, low and bitter. \u0022The well\u0027s dry,\u0022 she says to no one in particular. \u0022The well\u0027s been dry since yesterday.\u0022 She looks at the field, at the smoke, at the farmer who will not move. Then she looks at you. Her gaze catches on the ring at your hand, the worked gold and the guild sigil, and something like hope flickers across her face before it hardens into expectation.\n\n\u0022You want safe roads to market,\u0022 she says flatly. \u0022This man supplies half the bakers in Aldgate. If his crop burns, bread prices double by week\u0027s end.\u0022\n\nThe mule screams again. The fire creeps forward, a slow bright line dividing the world into what can be saved and what is already lost. The farmer\u0027s children have started to cry. The wind does not care. It pushes the flames steadily toward the road, toward the village beyond, toward the next field and the next.\n\nThe woman holds out one of the sacks. \u0022Help or don\u0027t,\u0022 she says. \u0022But decide now.\u0022\n",
       "choices": [
@@ -1015,6 +1633,7 @@
     {
       "id": "The Grain Cart",
       "category": "plains/tier1",
+      "recurring": false,
       "title": "The Grain Cart",
       "body": "\nThe cart sits alone at the crossroads, tilted on one broken axle. Sacks of grain are piled high beneath canvas, the lashings still tight, the whole load intact and untouched. No driver. No mule. Just the cart and the flies and the afternoon heat pressing down on the wheat fields.\n\nYou see the problem before you reach it. The axle didn\u0027t break from weight or rot. Someone pried the wheel off and left it ten paces down the road, half-hidden in the ditch. The cart\u0027s been abandoned deliberately, set here like bait. Or a message.\n\nMovement catches your eye near the cart. A young man, nearly a boy, is struggling to pull a full sack from the wagon. He freezes under your gaze, pauses a long moment to think, then shouts \u0022take one for yourself or walk on, stranger. It\u0027s been a hard year and this is the first bit of luck my family\u0027s had.\u0022\n\nThe smell of overripe wheat rolls across the fields. Cicadas drone in the heat.\n",
       "choices": [
@@ -1082,8 +1701,183 @@
       ]
     },
     {
-      "id": "recur-Bandits",
+      "id": "Placeholder",
+      "category": "plains/tier2",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Placeholder",
+      "category": "plains/tier3",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation hard",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Bandits",
       "category": "scrub/tier1",
+      "recurring": true,
       "title": "Bandits",
       "body": "\nThere are bandits on the road. You can either fight them or run.\n",
       "choices": [
@@ -1114,8 +1908,9 @@
       ]
     },
     {
-      "id": "recur-Dust Storm",
+      "id": "Dust Storm",
       "category": "scrub/tier1",
+      "recurring": true,
       "title": "Dust Storm",
       "body": "\nThere\u0027s a dust storm coming. You can either wait it out or press on.\n",
       "choices": [
@@ -1146,8 +1941,92 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "scrub/tier1",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "The Courier",
       "category": "scrub/tier1",
+      "recurring": false,
       "title": "The Courier",
       "body": "\nThe Kesharat courier stands in full sun, sweat darkening the collar of his rumpled official coat. The leather document case lies in the dust between his boots and the clan trader\u0027s sandals. The trader picked it up when the courier dropped it\u2014fumbled it, really, after the man made some crack about plateau illiteracy loud enough for the whole watering station to hear. Now the trader holds it at arm\u0027s length, recounting the insult word for word to the gathering crowd. Laughter ripples through them. The courier\u0027s face has gone red, though whether from heat or humiliation is hard to say.\n\nYou catch the shift in the crowd\u0027s mood before the courier does. The laughter has an edge now. Someone mutters about arrogant lowlanders. A woman spits in the dust. The trader is still talking, working them like a merchant working a sale, and the courier keeps demanding his property back in that clipped administrative accent that makes everything sound like a reprimand. The signet ring on your hand catches light\u2014the Merchant Guild mark that means you walk between worlds, neither clan nor Kesharat but trusted by both when coin is involved. The courier sees it. His eyes fix on you like a drowning man spotting driftwood.\n\nThe trader wants an apology. The courier would sooner eat glass. And the crowd\u2014wind carries their voices across the exposed stone, a low buzz of old resentments given sudden shape. If they lay hands on him, the Kesharat will answer it. Not here, not now. But somewhere a clan will wake to soldiers at their gates, and a debt will be collected that has nothing to do with justice and everything to do with the appearance of authority. The elder under the awning hasn\u0027t moved, but his eyes are open. Watching.\n\nThe trader holds the case higher. The crowd presses closer. The courier\u0027s hand drifts toward his belt where no weapon hangs.\n\n",
       "choices": [
@@ -1216,6 +2095,7 @@
     {
       "id": "Unusual Cargo",
       "category": "scrub/tier1",
+      "recurring": false,
       "title": "Unusual Cargo",
       "body": "\nThe canyon pass narrows to a stone throat barely wide enough for two carts abreast. A rope barrier blocks the way, strung between iron stakes driven into the cracked earth. Behind it stands a toll-keeper in dusty indigo, arms crossed, while two merchants argue with the practiced intensity of people who know their words won\u0027t matter. Their loaded carts sit baking in the harsh sun. \n\nOne merchant keeps fishing in a leather document case at his belt, pulling out stamped tokens, putting them back. The toll-keeper doesn\u0027t look at them anymore.\n\nThe lead merchant spots your ring while you\u0027re still appraising the situation. His relief is immediate and desperate. \u0022Guild authority,\u0022 he says loudly. He gestures toward the toll-keeper, \u0022This man is trying to rob us. We paid. We have tokens. He says tokens mean nothing now.\u0022\n\nThe man with the document case pulls out a stamped metal disk and holds it up with some gravity. You can\u0027t read the language, but you understand it\u0027s a contract of some sort.\n\nThe toll-keeper sighs heavily. \u0022I have explained this. All travelers will be searched. It is the new rule. Your tokens do not buy you an exception from the rule.\u0022 He gestures to a pair of nearby guards, who start walking toward the cart.\n\nThe lead merchant leans close to you, voice dropping. \u0022This is robbery. He will search our cargo. He will find so-called contraband. He will steal from both of us.\u0022 The sealed crate on his middle cart sits roped tight, wax stamps intact along every edge. Too many seals for ordinary cargo.\n",
       "choices": [
@@ -1262,8 +2142,183 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "scrub/tier2",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Placeholder",
+      "category": "scrub/tier3",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation hard",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "A Sons Responsibility",
       "category": "swamp/tier1",
+      "recurring": false,
       "title": "A Son\u0027s Responsibility",
       "body": "\nThe dike is failing. You see it from the raised path \u2014 a seeping dark line where the packed earth has begun to weep, water forcing through in thin streams that catch the afternoon light. Beyond it, the paddy fields stretch in careful geometric rows, rice stalks still green, weeks from harvest. A woman stands knee-deep in the breach, packing mud with her bare hands. Her movements are methodical but losing ground. The water wants through.\n\nShe doesn\u0027t look up when you approach, but she knows you\u0027re there. \u0022My son left this morning,\u0022 she says, voice flat as the water. \u0022Took the boat. Said he\u0027d be back before the tide pressed in.\u0022 She shoves another handful of clay into the widening gap. It holds for three heartbeats, then a fresh trickle carves through. \u0022He won\u0027t be. This is the third time.\u0022 \n\nYou watch the woman work, and you think you have the gist of it. Cut reeds, bind them with clay, drive stakes into the ground to hold work. With both you you, it would take an hour, maybe less. But the woman\u0027s hands pause and she finally meets your eyes.\n\n\u0022I can\u0027t let just let the dike wash away, but he needs to see it fail.\u0022\n\nThe words carry no heat, only weight. \u0022He needs to come back to ash and mud and understand there are consequences.\u0022 \n\nA heron lifts from the far paddies, wingbeats heavy in the thick air.\n\nThe dike gives a little more. The first paddy will flood soon.\n",
       "choices": [
@@ -1332,6 +2387,7 @@
     {
       "id": "An Unpaid Debt",
       "category": "swamp/tier1",
+      "recurring": false,
       "title": "An Unpaid Debt",
       "body": "\nThe elder sits beneath the meeting pavilion, reed mat spread before her, contract weighted at the corners with smooth river stones. The ink has run a little in the damp, but the seal is clear enough: the Merchant Guild\u0027s device, pressed deep and smug. Around the platform the villagers mutter, not wild with anger but steady with it \u2014 the sound of people who know when they\u0027ve been handled.\n\nThe guild merchant stands aloof, dry, immaculate, and composed. He taps the parchment with a gloved finger and explains, patiently, that the exclusivity clause extends to \u0022all navigable channels, known or later discovered,\u0022 that the yield guarantee binds the village irrespective of seasonal variance, and that the penalty for breach accrues at a rate any child could calculate. \n\nHe signs deeply, adopting a patronizing tone. \u0022You promised fish,\u0022 he says. \u0022If the western channels failed, you should have found others. The contract does not concern itself with disappointment.\u0022\n\nThe elder\u0027s mouth tightens. The advance coin paid for seed after a blight year. For timber when the flood took three homes. The villagers understood a bad season to be a shared misfortune, not an opportunity for interest to breed like midges. They have no fish in the quantities demanded. They do not have the coin the merchant now claims is owed.\n\nThe merchant closes his ledger with a soft, satisfied sound. He will accept payment in fish, in silver, or in pledged labor at guild rates. Failing that, he will mark the village delinquent and let the Guild pursue remedies less conversational. The elder turns to you, eyes sharp and measuring.\n",
       "choices": [
@@ -1387,8 +2443,92 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "swamp/tier1",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning trivial",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health trivial",
+                "damage_spirits trivial"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "The Cartographers Kit",
       "category": "swamp/tier1",
+      "recurring": false,
       "title": "The Cartographer\u0027s Kit",
       "body": "\nThe trader squats on the raised path through the reeds, his punt already loaded, his shoulders hunched against the humidity like a man who hasn\u0027t been dry in days. He\u0027s sorting through a canvas wrap of goods, mostly common stuff, fish hooks and lamp oil. But tucked among them you catch the edge of something different. A leather bag, a Merchant\u0027s Guild seal stamped into the leather. A guild cartographer\u0027s kit.\n\nHe moves to cover it when he sees you looking, but not quickly enough.\n\nHe names a price that would empty most purses. Says he\u0027s leaving within the hour, heading upriver to drier markets where people pay what things are worth. The kit is in good order, he says, all the pieces intact.\n\nWhat he doesn\u0027t say is how he came by such a treasure. The kit is the mark of a guild cartographer, each custom made for the terrain and conditions of the area they\u0027re assigned to. No one would part with such a thing at any price. The leather bag has a history, and you\u0027ve every reason to imagine it\u0027s a dark one.\n\nThe trader is already wrapping his goods. The punt rocks gently beneath him. In another moment he\u0027ll push off, and the kit goes with him.\n",
       "choices": [
@@ -1458,6 +2598,7 @@
     {
       "id": "The Gatekeeper",
       "category": "swamp/tier1",
+      "recurring": false,
       "title": "The Gatekeeper",
       "body": "\nThe raised path ends at a sluice gate where an old woman sits on a stool, arms crossed over a walking stick planted in the mud. She wears the loose cotton of the fen-folk and the expression of someone who has judged three generations. Behind her, water pools against the closed gate \u2014 your route forward lies on the other side, where the path continues toward the village you need to reach before nightfall. She doesn\u0027t move. Doesn\u0027t speak. Just watches you approach with eyes that have seen every trick.\n\n\u0022Gate\u0027s closed,\u0022 she says finally. \u0022Stays closed until the paddies on the east side finish draining. Two hours, maybe three.\u0022 A group of younger villagers works behind her, knee-deep in a flooded field, moving with the unhurried certainty of people who know the water answers to no one\u0027s schedule. One of them glances your way, then back to the dike they\u0027re patching. The old woman taps her stick once. \u0022You can wait. Or swim. Most outsiders choose wrong.\u0022\n\nBut you\u0027ve noticed the frogs have gone quiet in a channel to the south \u2014 the kind of silence that means a path through shallower water, if you know how to read it. And the workers are watching their elder more than their work, the way people do when authority is performance as much as fact. Someone laid a bundle of cut reeds near the gate\u0027s mechanism, still green enough to bend, and the handle itself is older than the gate it operates.\n\nThe sun measures the time you don\u0027t have. The old woman measures you.\n",
       "choices": [
@@ -1529,6 +2670,7 @@
     {
       "id": "The Hunted Woman",
       "category": "swamp/tier1",
+      "recurring": false,
       "title": "The Hunted Woman",
       "body": "\nYou round the bend in the channel and find a woman waist-deep in the water, braced against a stilt-post. Her eyes track something behind you, back the way you came. She\u0027s breathing hard, clutching a bundle wrapped in oiled cloth to her chest. When she sees you, her hand moves to a gutting knife at her belt, then stops. The frogs have gone silent. In the distance, a punt pole taps against wood in steady rhythm. Getting closer.\n\nShe hisses at you, not words, just sound. A warning or a plea, you can\u0027t tell which. The bundle shifts against her chest and you catch a glimpse of carved wood, dark with age, wrapped in red cord. The tapping grows louder. Two figures pole into view behind you, maybe fifty yards back. They move with the efficient rhythm of locals, but they\u0027re watching the channels ahead, not the water beneath them. Hunting.\n\nThe woman jerks her head toward a narrow side channel choked with reeds. She could slip through there if you give her time. Or you could step aside, let the pursuers see her, let village justice sort itself. The bundle in her arms looks old. The kind of thing that has a place it belongs, and people who remember where that place is. The punt pole taps closer. The woman\u0027s knuckles are white around the knife handle.\n\nThe pursuers will reach this bend in moments. Whatever she\u0027s taken, it matters enough to chase into the fen.\n",
       "choices": [
@@ -1571,8 +2713,96 @@
       ]
     },
     {
+      "id": "Placeholder",
+      "category": "swamp/tier2",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation easy",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning easy",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits small",
+                  "give_gold small"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health small",
+                "damage_spirits small"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "The Hermit of Sallow Fen",
       "category": "swamp/tier2",
+      "recurring": false,
       "title": "The Hermit of Sallow Fen",
       "body": "\nYou smell the smoke before you see the light.\n\nDeep into the fen and your world has narrowed to a catalogue of miseries. Black water sucking at your boots, the ceaseless drone of biting flies, air so thick with rot it coats the back of your throat like oil. The trail, such as it was, vanished yesterday beneath a carpet of duckweed. Since then you have navigated by the moss on the cypress knees and the slow pull of current beneath the water\u0027s skin, trusting that the deeper channels lead inland toward high ground and the frontier beyond.\n\nYou had not expected to find anyone living here. Nothing lives here that does not bite, sting, or drag itself through the muck on its belly.\n\nYet there it is: a smudge of smoke above the treeline, yellow-grey against the perpetual overcast, and beneath it, as you round a curtain of hanging moss, a dwelling. The world is generous. It is a shack built on stilts above the waterline, patched with bark and river-reed and what appears to be sailcloth long since gone to grey. Animal bones hang from the eaves on cords of sinew, clicking softly in a breeze you cannot feel. A dugout canoe is tethered to one stilt. On the listing porch, a cookfire burns in a ring of river stones, and over it a blackened pot sends up a steam that cuts through the swamp-stink with something almost pleasant\u2014herbs, root vegetables, something warm and human.\n\nThe woman sits beside the fire as though she has been waiting.\n\nShe is old, or perhaps merely weathered beyond reckoning; face like cracked leather, hair a white tangle threaded with feathers and what might be small bones. Her clothes are layered and shapeless, stained with mud and tannin. She watches you with eyes that are, against all expectation, perfectly clear. Pale. Amused.\n\n\u0022Sit,\u0022 she says, as though you are late to supper.\n\nShe does not rise. Does not reach for a weapon. She stirs the pot with a wooden spoon and the smell intensifies; rich, savory, undeniably good. Your stomach clenches. It has been too long since you\u0027ve had a warm meal.\n\n\u0022You\u0027ll want to eat before the water rises,\u0022 she continues, conversational, almost cheerful. \u0022Moon\u0027s pulling the fen tonight. The channels you walked this morning will be six feet deep by dark.\u0022 She taps the spoon against the pot\u0027s rim. \u0022If you know the way through, you\u0027ll manage fine. If you don\u0027t...\u0022 She shrugs, a gesture that carries the weight of absolute indifference to your survival.\n\nHer pale eyes drift to your pack, your boots, the shape of what you carry. She smiles. Three teeth are missing. The rest are very white.\n\n\u0022I don\u0027t get visitors,\u0022 she says. \u0022Not ones who last.\u0022\n\nSomething moves in the shack behind her. A scrape, a settling weight. She does not look back at it.\n",
       "choices": [
@@ -1636,6 +2866,93 @@
               "add_condition lost",
               "skip_time evening"
             ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "Placeholder",
+      "category": "swamp/tier3",
+      "recurring": true,
+      "title": "Placeholder Recurring Encounter",
+      "body": "\nSomething happens!\n",
+      "choices": [
+        {
+          "optionText": "Negotiate = Try to convince them",
+          "optionLink": "Negotiate",
+          "optionPreview": "Try to convince them",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation hard",
+                "text": "You convince them!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You fail!",
+              "mechanics": [
+                "rem_gold medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Fight = Do the ultimate punchies",
+          "optionLink": "Fight",
+          "optionPreview": "Do the ultimate punchies",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Sneak = Use big sneaky skills",
+          "optionLink": "Sneak",
+          "optionPreview": "Use big sneaky skills",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check cunning medium",
+                "text": "You win!",
+                "mechanics": [
+                  "heal_spirits medium",
+                  "give_gold medium"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You lose!",
+              "mechanics": [
+                "damage_health medium",
+                "damage_spirits medium"
+              ]
+            }
           }
         }
       ]

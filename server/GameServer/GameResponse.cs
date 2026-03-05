@@ -125,6 +125,8 @@ public class ExitInfo
 
 public class EncounterInfo
 {
+    public string? Id { get; init; }
+    public string? Category { get; init; }
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
     public List<ChoiceInfo> Choices { get; init; } = [];

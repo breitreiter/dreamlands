@@ -1,0 +1,17 @@
+Aldgate
+
+FIXME: The player has just disembarked at Aldgate, the starting city. Describe the first moments on the dock -- the bustle, the smells, the sense of a new frontier. Establish that the player carries a Trade Guild seal ring and must now decide how to begin their journey into the Dreamlands.
+
+choices:
+
+* Visit the market = Survey the stalls near the harbour
+  FIXME: The player browses the dockside market. Describe the press of traders, the unfamiliar goods. They find a practical item to start their journey.
+  +add_item waterskin
+
+* Ask around for work = Speak to the dockworkers and merchants
+  FIXME: The player talks to locals, gathering rumours about the roads ahead. They learn something useful about the dangers beyond the city walls.
+  +add_item rations
+
+* Explore the city walls = Walk the perimeter and study the land beyond
+  FIXME: The player climbs to a vantage point on the walls. Describe what they see -- the terrain stretching into the Dreamlands, the roads leading out. They spot something useful left behind by a previous traveller.
+  +add_item rations

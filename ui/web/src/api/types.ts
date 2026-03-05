@@ -52,6 +52,8 @@ export interface ExitInfo {
 }
 
 export interface EncounterInfo {
+  id?: string;
+  category?: string;
   title: string;
   body: string;
   choices: ChoiceInfo[];
