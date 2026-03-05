@@ -18,6 +18,8 @@ Just a list of things that need doing, roughly grouped.
 
 ## Map Visual
 
+- [ ] Try different map seeds for production — current seed was the first one generated;
+      explore a few alternatives and pick the most interesting layout
 - [x] Add a safe border to the map so the edge looks intentional against the background
 - [ ] Replace lake sprite
 - [ ] Hand-drawn river decals — 800x800 tiles chained lake-to-edge.
