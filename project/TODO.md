@@ -10,7 +10,7 @@ Just a list of things that need doing, roughly grouped.
       /home/joseph/repos/dreamlands/project/design/conditions_list.md
 [x] Finalize consumables/medicines → update ItemDef.All consumables
       /home/joseph/repos/dreamlands/project/design/haversack.md
-[x] Define trade goods with flavor → flesh out TradeBalance
+[x] Define trade goods with flavor → flesh out TradeBalance (removed — replaced by haul system)
       /home/joseph/repos/dreamlands/project/design/trade_goods.md
 [x] Reconcile settlement screen vs balance data mismatches
 
@@ -150,7 +150,7 @@ GameServer running with save persistence.
 - [ ] Daily rest
 - [x] Town — Home
 - [x] Town — Temple
-- [x] Town — Market
+- [ ] Town — Market (rewrite UI for haul claiming + buy-only shop)
 - [ ] Town — Guild storage
 - [x] Town — Inn / Chapterhouse
 - [ ] Review UX for exiting inventory and market screens — both feel awkward
@@ -164,15 +164,10 @@ derived from player position (no separate mode). Inn/Chapterhouse logic and test
 Market buy/sell with auto-equip works. Remaining services need game logic.
 
 - [ ] Town — Shop
-- [ ] Town — Market
+- [x] Town — Market (haul system: generation, claiming, auto-delivery, market buy-only)
 - [ ] Town — Guild storage
 - [x] Town — Inn / Chapterhouse (game logic)
 - [x] Stock medicine in biome-appropriate markets
-- [ ] Review trade pricing for distant settlements — cross-biome trading is punishing in
-      far-flung regions, compounded by weak inventory at remote settlements. May need price
-      curve adjustments or better stocking at high-tier locations.
-- [ ] Courier system — markets sell Dispatches (tier-matched), player delivers to named
-      destination settlement for payment. Design in `project/design/courier_system.md`.
 - [ ] Dynamic haul generation — when a player exhausts all bespoke hauls for a given route,
       generate vague/generic hauls on the fly (e.g. "sealed guild casket", "unmarked parcel",
       "bonded cargo") so trade never dead-ends. Keep flavor minimal and mysterious to avoid
@@ -226,8 +221,8 @@ data is placeholder or missing.
       stacks system, dual-drain model, flavor text in `ConditionFlavor.cs`
 - [x] Finalize consumables/medicines — reconciled with `haversack.md`,
       magnitude-based cure/resist, 11 new medicines
-- [x] Define trade goods — 62 concrete trade goods as ItemDefs with biome, tier, cost,
-      and flavor descriptions. Old TradeCategory system removed.
+- [x] Define trade goods — removed (replaced by 152-entry haul catalog in `HaulDef.*` files).
+      Old 71 TradeGood ItemDefs deleted from `ItemDef.BuildAll()`.
 - [x] Per-food flavor descriptions — `FoodNames.cs` has ~90 biome×category×source entries
       with evocative per-name descriptions. `FlavorText.FoodName()` picks from static data.
       Market purchases get flavor names + descriptions via `createFood` callback.
@@ -268,7 +263,7 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Infrastructure
 
-- [x] Test projects — xUnit tests: Rules (42), Game (120), Encounter (18), Map (16),
+- [x] Test projects — xUnit tests: Rules (42), Game (158), Encounter (18), Map (17),
       Orchestration (37) in `tests/`. All passing.
 - [x] GameServer — ASP.NET Minimal API with file-based save store in `server/GameServer/`.
 - [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
@@ -278,10 +273,8 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Testing / Regression
 
-- [ ] CLI smoke & integration tests — bash scripts that spin up GameServer and exercise
-      the CLI round-trip. Happy-path smoke suite, error cases, and a random action fuzzer.
-      Design in `project/design/cli_integration_tests.md`. Blocked on API surface stabilizing
-      (settlement services, end-of-day, player creation encounter).
+- [ ] CLI integration tests — exercise core loops via CLI against GameServer: encounters,
+      movement, inventory, market buy/sell. Plan in `project/integration-test-plan.md`.
 - [ ] POI position mismatch — observed a case where the server's in-memory map had a
       settlement at (16,5) but map.json on disk had it at (16,7). Player could enter a
       "ghost" settlement that didn't exist in the data. Server restart fixed it. Root cause

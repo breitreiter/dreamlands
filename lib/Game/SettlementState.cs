@@ -5,8 +5,6 @@ public class SettlementState
     public string Biome { get; set; } = "";
     public Dictionary<string, int> Stock { get; set; } = new();
     public Dictionary<string, int> Prices { get; set; } = new();
-    public string? FeaturedSellItem { get; set; }
-    public string? FeaturedBuyItem { get; set; }
     public int LastRestockDay { get; set; }
     public List<ItemInstance> Bank { get; set; } = new();
     public List<ItemInstance> HaulOffers { get; set; } = new();

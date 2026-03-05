@@ -249,21 +249,16 @@ public class ActionRequest
     public MarketOrderRequest? Order { get; set; }
     public string? Source { get; set; }
     public int? BankIndex { get; set; }
+    public int? OfferIndex { get; set; }
 }
 
 public class MarketOrderRequest
 {
     public List<MarketBuyLine> Buys { get; set; } = [];
-    public List<MarketSellLine> Sells { get; set; } = [];
 }
 
 public class MarketBuyLine
 {
     public string ItemId { get; set; } = "";
     public int Quantity { get; set; } = 1;
-}
-
-public class MarketSellLine
-{
-    public string ItemDefId { get; set; } = "";
 }

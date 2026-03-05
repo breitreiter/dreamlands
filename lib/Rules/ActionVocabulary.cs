@@ -106,9 +106,6 @@ public sealed class ActionVerb
     public static readonly ActionVerb LoseRandomItem = new("lose_random_item",
         VerbUsage.Mechanic, "Player loses a random item");
 
-    public static readonly ActionVerb GetRandomTreasure = new("get_random_treasure",
-        VerbUsage.Mechanic, "Player gets a random valuable");
-
     public static readonly ActionVerb Equip = new("equip",
         VerbUsage.Mechanic, "Equip an item from Pack",
         new ArgDef("item_id", ArgType.Id));
@@ -201,7 +198,7 @@ public sealed class ActionVerb
         Check, Has, Tag, Meets,
         Open,
         AddTag, RemoveTag,
-        AddItem, AddRandomItems, LoseRandomItem, GetRandomTreasure,
+        AddItem, AddRandomItems, LoseRandomItem,
         Equip, Unequip, Discard,
         GiveGold, RemGold,
         DamageHealth, Heal,

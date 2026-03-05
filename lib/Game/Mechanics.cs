@@ -43,7 +43,6 @@ public static class Mechanics
             "add_item" => ApplyAddItem(args, state, balance, rng),
             "add_random_items" => ApplyAddRandomItems(args, state, balance, rng),
             "lose_random_item" => ApplyLoseRandomItem(state, rng),
-            "get_random_treasure" => ApplyGetRandomTreasure(state, balance, rng),
             "equip" => ApplyEquip(args, state, balance),
             "unequip" => ApplyUnequip(args, state, balance),
             "discard" => ApplyDiscard(args, state),
@@ -198,20 +197,6 @@ public static class Mechanics
         var item = state.Pack[index];
         state.Pack.RemoveAt(index);
         return new MechanicResult.ItemLost(item.DefId, item.DisplayName);
-    }
-
-    static MechanicResult? ApplyGetRandomTreasure(PlayerState state, BalanceData balance, Random rng)
-    {
-        var candidates = balance.Items.Values
-            .Where(i => i.Cost is Magnitude.Medium or Magnitude.Large or Magnitude.Huge)
-            .ToList();
-
-        if (candidates.Count == 0) return null;
-
-        var item = candidates[rng.Next(candidates.Count)];
-        var instance = new ItemInstance(item.Id, item.Name);
-        AddItemToInventory(item, instance, state);
-        return new MechanicResult.ItemGained(item.Id, item.Name);
     }
 
     static MechanicResult? ApplyEquip(List<string> args, PlayerState state, BalanceData balance)

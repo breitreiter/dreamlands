@@ -40,7 +40,6 @@ World state         +add_tag <tag_id>
 Items               +add_item <item_id>
                     +add_random_items <count> <category>
                     +lose_random_item
-                    +get_random_treasure
 
 Gold                +give_gold <magnitude>
                     +rem_gold <magnitude>

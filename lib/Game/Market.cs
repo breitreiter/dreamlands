@@ -27,68 +27,34 @@ public static class Market
         foreach (var med in medicines)
             catalog.Add(med.Id);
 
-        var inBiomeTierGoods = balance.Items.Values
-            .Where(i => i.Type == ItemType.TradeGood && i.Biome == biome && i.ShopTier != null && i.ShopTier <= tier)
-            .ToList();
-
         var equipment = balance.Items.Values
             .Where(i => i.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots
                         && i.ShopTier != null && i.ShopTier <= tier && i.Cost != null)
             .ToList();
 
-        // Camp: 2 in-biome/in-tier trade goods
-        AddRandomItems(catalog, inBiomeTierGoods, 2, rng);
-
-        // Outpost: +1 equipment
+        // Outpost+: equipment
         if (size >= SettlementSize.Outpost)
             AddRandomItems(catalog, equipment, 1, rng);
 
-        // Village: +1 in-biome/in-tier trade good
-        if (size >= SettlementSize.Village)
-            AddRandomItems(catalog, inBiomeTierGoods, 1, rng, catalog);
-
-        // Town: +1 in-biome/in-tier trade good, +1 equipment
+        // Town+: additional equipment
         if (size >= SettlementSize.Town)
-        {
-            AddRandomItems(catalog, inBiomeTierGoods, 1, rng, catalog);
             AddRandomItems(catalog, equipment, 1, rng, catalog);
-        }
 
-        // City: +1 in-biome/in-tier trade good, +1 equipment
+        // City: additional equipment
         if (size >= SettlementSize.City)
-        {
-            AddRandomItems(catalog, inBiomeTierGoods, 1, rng, catalog);
             AddRandomItems(catalog, equipment, 1, rng, catalog);
-        }
 
-        // Featured sell item: random from catalog, gets 15% discount
-        var tradeGoodsInCatalog = catalog.Where(id => balance.Items[id].Type == ItemType.TradeGood).ToList();
-        if (tradeGoodsInCatalog.Count > 0)
-            state.FeaturedSellItem = tradeGoodsInCatalog[rng.Next(tradeGoodsInCatalog.Count)];
-
-        // Featured buy item: in-biome trade good, unique across settlements if possible
-        var inBiomeGoods = inBiomeTierGoods.Select(i => i.Id).ToList();
-        var unclaimed = inBiomeGoods.Where(id => !player.ClaimedFeaturedBuys.Contains(id)).ToList();
-        var buyPool = unclaimed.Count > 0 ? unclaimed : inBiomeGoods;
-        if (buyPool.Count > 0)
-        {
-            state.FeaturedBuyItem = buyPool[rng.Next(buyPool.Count)];
-            player.ClaimedFeaturedBuys.Add(state.FeaturedBuyItem);
-        }
-
-        // Calculate sell prices (what the settlement charges when player buys)
+        // Calculate prices
         foreach (var itemId in catalog)
         {
             var def = balance.Items[itemId];
             var basePrice = GetBasePrice(def, balance);
             var jitter = 1.0 + (rng.NextDouble() * 2 - 1) * balance.Trade.PriceJitter;
-            var modifier = itemId == state.FeaturedSellItem ? (1.0 - balance.Trade.FeaturedSellDiscount) : 1.0;
-            state.Prices[itemId] = Math.Max(1, (int)Math.Round(basePrice * jitter * modifier));
+            state.Prices[itemId] = Math.Max(1, (int)Math.Round(basePrice * jitter));
         }
 
         // Set initial stock
         int maxStock = balance.Trade.MaxStock[size];
-        int initialQty = tier == 1 ? maxStock : 1;
         foreach (var itemId in catalog)
         {
             var def = balance.Items[itemId];
@@ -96,7 +62,7 @@ public static class Market
             {
                 { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
                 { FoodType: not null } => maxStock, // food always well-stocked
-                _ => initialQty,
+                _ => tier == 1 ? maxStock : 1, // medicines
             };
         }
 
@@ -112,10 +78,9 @@ public static class Market
         int maxStock = balance.Trade.MaxStock[size];
         int perDay = balance.Trade.RestockPerDay[size];
 
-        // Trade goods and medicines restock; food has unlimited stock, equipment never restocks
+        // Medicines restock; food has unlimited stock, equipment never restocks
         var restockIds = settlement.Stock.Keys
-            .Where(id => balance.Items.TryGetValue(id, out var def)
-                         && (def.Type == ItemType.TradeGood || def.Cures.Count > 0))
+            .Where(id => balance.Items.TryGetValue(id, out var def) && def.Cures.Count > 0)
             .ToList();
 
         if (restockIds.Count == 0)
@@ -145,34 +110,9 @@ public static class Market
             if (qty <= 0) continue;
             if (!balance.Items.TryGetValue(itemId, out var def)) continue;
             var price = settlement.Prices.GetValueOrDefault(itemId, GetBasePrice(def, balance));
-            entries.Add(new StockEntry(def, price, qty, itemId == settlement.FeaturedSellItem));
+            entries.Add(new StockEntry(def, price, qty));
         }
         return entries.OrderBy(e => e.Item.Type).ThenBy(e => e.Price).ToList();
-    }
-
-    public static int GetSellToSettlementPrice(ItemDef item, string settlementBiome, SettlementState settlement, BalanceData balance, int mercantileSkill)
-    {
-        var basePrice = GetBasePrice(item, balance);
-        if (basePrice <= 0) return 0;
-
-        // If the settlement stocks this item, sell price = settlement's own price (no arbitrage)
-        if (settlement.Prices.ContainsKey(item.Id))
-            return settlement.Prices[item.Id];
-
-        double modifier = 1.0;
-        int flat = 0;
-
-        // Featured buy premium
-        if (item.Id == settlement.FeaturedBuyItem)
-            modifier += balance.Trade.FeaturedBuyPremium;
-
-        // Cross-biome flat bonus / same-biome penalty
-        if (item.Biome != settlementBiome)
-            flat += balance.Trade.CrossBiomeFlatBonus;
-        else
-            modifier -= balance.Trade.SameBiomeBuyPenalty;
-
-        return Math.Max(1, (int)Math.Round(basePrice * modifier) + flat);
     }
 
     public static int GetBuyFromSettlementPrice(string itemId, SettlementState settlement, BalanceData balance, int mercantileSkill)
@@ -233,72 +173,34 @@ public static class Market
         return new MarketResult(true, $"{verb} {def.Name} for {price} gold");
     }
 
-    public static MarketResult Sell(PlayerState player, string itemDefId, string settlementBiome,
-        SettlementState settlement, BalanceData balance)
+    public static MarketResult ClaimHaul(PlayerState player, int offerIndex, SettlementState settlement)
     {
-        // Try pack first, then haversack
-        var packItem = player.Pack.FirstOrDefault(i => i.DefId == itemDefId);
-        if (packItem != null)
-        {
-            // Unequip if equipped
-            if (player.Equipment.Weapon?.DefId == itemDefId)
-                player.Equipment.Weapon = null;
-            else if (player.Equipment.Armor?.DefId == itemDefId)
-                player.Equipment.Armor = null;
-            else if (player.Equipment.Boots?.DefId == itemDefId)
-                player.Equipment.Boots = null;
+        if (offerIndex < 0 || offerIndex >= settlement.HaulOffers.Count)
+            return new MarketResult(false, "Invalid haul offer");
 
-            player.Pack.Remove(packItem);
-            var def = balance.Items.GetValueOrDefault(itemDefId);
-            int price = 0;
-            if (def != null)
-            {
-                int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
-                price = GetSellToSettlementPrice(def, settlementBiome, settlement, balance, mercantile);
-            }
-            player.Gold += price;
-            return new MarketResult(true, $"Sold {packItem.DisplayName} for {price} gold");
-        }
+        if (player.Pack.Count >= player.PackCapacity)
+            return new MarketResult(false, "Pack is full");
 
-        var havItem = player.Haversack.FirstOrDefault(i => i.DefId == itemDefId);
-        if (havItem != null)
-        {
-            player.Haversack.Remove(havItem);
-            var def = balance.Items.GetValueOrDefault(itemDefId);
-            int price = 0;
-            if (def != null)
-            {
-                int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
-                price = GetSellToSettlementPrice(def, settlementBiome, settlement, balance, mercantile);
-            }
-            player.Gold += price;
-            return new MarketResult(true, $"Sold {havItem.DisplayName} for {price} gold");
-        }
+        var haul = settlement.HaulOffers[offerIndex];
+        settlement.HaulOffers.RemoveAt(offerIndex);
+        player.Pack.Add(haul);
 
-        return new MarketResult(false, "Item not found in inventory");
+        return new MarketResult(true, $"Claimed {haul.DisplayName} — deliver to {haul.DestinationHint}");
     }
 
     public static MarketOrderResult ApplyOrder(PlayerState player, MarketOrder order,
-        string biome, SettlementState settlement, BalanceData balance, Random rng,
+        SettlementState settlement, BalanceData balance, Random rng,
         Func<FoodType, string, Random, ItemInstance>? createFood = null)
     {
         var results = new List<MarketLineResult>();
 
-        // Sells first — frees inventory space + adds gold
-        foreach (var sell in order.Sells)
-        {
-            var result = Sell(player, sell.ItemDefId, biome, settlement, balance);
-            results.Add(new MarketLineResult("sell", sell.ItemDefId, result.Success, result.Message));
-        }
-
-        // Then buys
         foreach (var buy in order.Buys)
         {
             for (int i = 0; i < buy.Quantity; i++)
             {
                 var result = Buy(player, buy.ItemId, settlement, balance, rng, createFood);
                 results.Add(new MarketLineResult("buy", buy.ItemId, result.Success, result.Message));
-                if (!result.Success) break; // stop buying this item on first failure
+                if (!result.Success) break;
             }
         }
 
@@ -317,12 +219,11 @@ public static class Market
     }
 }
 
-public record StockEntry(ItemDef Item, int Price, int Quantity, bool IsFeaturedSell);
+public record StockEntry(ItemDef Item, int Price, int Quantity);
 
 public record MarketResult(bool Success, string Message);
 
-public record MarketOrder(List<BuyLine> Buys, List<SellLine> Sells);
+public record MarketOrder(List<BuyLine> Buys);
 public record BuyLine(string ItemId, int Quantity);
-public record SellLine(string ItemDefId);
 public record MarketOrderResult(bool Success, List<MarketLineResult> Results);
 public record MarketLineResult(string Action, string ItemId, bool Success, string Message);

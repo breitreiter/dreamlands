@@ -949,11 +949,8 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
                 return Results.BadRequest(new { error = "Settlement not initialized" });
 
-            var sBiome = sNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-
             var order = new MarketOrder(
-                req.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList(),
-                req.Order.Sells.Select(s => new SellLine(s.ItemDefId)).ToList());
+                req.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList());
 
             var mRng = new Random();
             ItemInstance CreateFood(FoodType ft, string biome, Random r)
@@ -965,7 +962,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                     FoodType = ft, Description = desc,
                 };
             }
-            var result = Market.ApplyOrder(player, order, sBiome, settlementState, balance, mRng, CreateFood);
+            var result = Market.ApplyOrder(player, order, settlementState, balance, mRng, CreateFood);
             await store.Save(player);
 
             response = new GameResponse
@@ -985,6 +982,46 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                         Success = r.Success,
                         Message = r.Message,
                     }).ToList(),
+                },
+            };
+            break;
+        }
+
+        case "claim_haul":
+        {
+            var hNode = session.CurrentNode;
+            if (hNode.Poi?.Kind != PoiKind.Settlement || hNode.Poi.SettlementId == null)
+                return Results.BadRequest(new { error = "Not at a settlement" });
+
+            if (req.OfferIndex == null)
+                return Results.BadRequest(new { error = "offerIndex required" });
+
+            SettlementRunner.EnsureSettlement(session);
+            if (!player.Settlements.TryGetValue(hNode.Poi.SettlementId, out var haulState))
+                return Results.BadRequest(new { error = "Settlement not initialized" });
+
+            var claimResult = Market.ClaimHaul(player, req.OfferIndex.Value, haulState);
+            if (!claimResult.Success)
+                return Results.BadRequest(new { error = claimResult.Message });
+
+            await store.Save(player);
+            response = new GameResponse
+            {
+                Mode = "exploring",
+                Status = BuildStatus(player),
+                Node = BuildNodeInfo(hNode, player),
+                Inventory = BuildInventory(player),
+                Mechanics = BuildMechanics(player),
+                MarketResult = new MarketOrderResultInfo
+                {
+                    Success = true,
+                    Results = [new MarketLineResultInfo
+                    {
+                        Action = "claim_haul",
+                        ItemId = "haul",
+                        Success = true,
+                        Message = claimResult.Message,
+                    }],
                 },
             };
             break;
@@ -1099,7 +1136,6 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
     if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
         return Results.BadRequest(new { error = "Settlement not initialized" });
 
-    var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
     int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
 
     var stock = Market.GetStock(settlementState, balance).Select(entry => new
@@ -1108,29 +1144,27 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         name = entry.Item.Name,
         type = entry.Item.Type.ToString().ToLowerInvariant(),
         buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, balance, mercantile),
-        sellPrice = Market.GetSellToSettlementPrice(entry.Item, biome, settlementState, balance, mercantile),
         quantity = entry.Quantity,
-        isFeaturedSell = entry.IsFeaturedSell,
         skillModifiers = entry.Item.SkillModifiers.ToDictionary(
             kv => kv.Key.ScriptName(), kv => kv.Value),
         resistModifiers = entry.Item.ResistModifiers,
         description = FormatItemDescription(entry.Item),
     }).ToList();
 
-    var sellPrices = player.Pack.Concat(player.Haversack)
-        .Select(i => i.DefId)
-        .Distinct()
-        .Where(id => balance.Items.ContainsKey(id))
-        .ToDictionary(id => id, id =>
-            Market.GetSellToSettlementPrice(balance.Items[id], biome, settlementState, balance, mercantile));
+    var hauls = settlementState.HaulOffers.Select((h, i) => new
+    {
+        index = i,
+        name = h.DisplayName,
+        destinationHint = h.DestinationHint,
+        payout = h.Payout,
+        originFlavor = h.Description,
+    }).ToList();
 
     return Results.Ok(new
     {
         tier,
         stock,
-        sellPrices,
-        featuredBuyItem = settlementState.FeaturedBuyItem,
-        featuredBuyPremium = balance.Trade.FeaturedBuyPremium,
+        hauls,
     });
 });
 

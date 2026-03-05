@@ -74,7 +74,7 @@ Let's start with baking this trade route graph into mapgen, so we can generate v
 Load payouts are a blend of trade route hops and BFS tile distance, but the player's actual travel cost depends on terrain, encounters, health, and food consumption. If payouts are too generous, loads become free money. If too stingy, the player can't sustain themselves. The arbitrage system at least had market forces providing some self-correction; flat payouts don't. The two-axis payout (route hops + tile distance) gives us more tuning room than a single metric, but also more ways to get it wrong.
 
 ## Storage grows settlement state unboundedly
-Deposit/withdraw means settlement state grows with every item the player stashes. The current `SettlementState` tracks stock as `Dictionary<string, int>` (item counts), but storing deposited items with per-instance data (loads with destinations, equipment with modifiers) requires full `ItemInstance` lists per settlement. This is a structural change to persistence.
+Deposit/withdraw means settlement state grows with every item the player stashes. `SettlementState.Bank` is already `List<ItemInstance>` per settlement, so the structural change is done. The risk is unbounded growth in serialized player state — may need a per-settlement storage cap or deposit fee to constrain it.
 
 ## Deadheading is stated but not solved
 The doc flags empty-load trips as a problem but doesn't propose a solution. If loads are only available at the settlement you're standing in, the player must walk somewhere empty-handed to pick up the next load. The trade tree helps by clustering routes, but doesn't eliminate the problem — leaf nodes especially will strand the player.
@@ -82,83 +82,102 @@ The doc flags empty-load trips as a problem but doesn't propose a solution. If l
 ## Trade tree construction depends on settlement density
 The "connect to nearest closer node" algorithm assumes enough settlements exist that connections are reasonable distances apart. In sparse frontier zones (spacing ~35 nodes), a leaf settlement might connect to a parent 40+ tiles away with no intermediate stops. The player experience of hauling a load across 40 empty tiles is worse than the current system.
 
-## Removing trade goods deletes 62 items of authored content
-The current catalog has 62 biome-tiered trade goods with flavor text and per-settlement featured buy/sell dynamics. The redesign replaces all of this. The load name/flavor system needs comparable authored depth or the game feels thinner.
+## ~~Removing trade goods deletes 62 items of authored content~~ (resolved)
+Replaced with 152 haul catalog entries — more content than the old trade goods, with origin/delivery flavor per entry.
 
 ## Mercantile skill loses its purpose
-The current Mercantile skill provides a 2% per point discount on purchases. If loads are free to acquire and deliver for a fixed payout, there's nothing for Mercantile to modify. The skill either needs a new role (better load selection, payout bonus, more loads offered) or should be cut.
+Mercantile still provides a 2% per-point discount on market buys (food/medicine/equipment). Haul claiming is free, so mercantile doesn't affect trade income. Needs a new haul-related role (payout bonus, better offers, more offers) or removal.
 
 # Open Questions
 
-- **Relationship to courier_system.md**: The existing `courier_system.md` design doc describes a Dispatch system that overlaps heavily with this proposal (destination-based items, delivery payouts, haversack slots). Is this a replacement for that design, an evolution of it, or should they coexist (loads for big trade, dispatches for small courier jobs)?
-- **Load generation**: Where do load names and flavor text come from? The current 62 trade goods are hand-authored in `ItemDef.BuildAll()`. Do loads reuse that content, get LLM-generated per settlement, or draw from a new authored pool?
-- **How many loads per settlement?** The doc says hubs get "more loads" but doesn't specify numbers. Current market stock scales by `SettlementSize` (Camp=1 through City=5 max stock). Does the same progression apply?
-- **Load transit/relay**: Yes — the player deposits loads at intermediate settlements and picks them up on later trips. The player is the only sorter, moving loads closer to their destinations over multiple passes through the network. The key question is UX: how do we make it clear which deposited loads at a settlement are "closer to done" vs. freshly arrived?
-- **Storage availability**: Should deposit/withdraw be available at every settlement, or only hubs/waypoints? Restricting it makes the trade tree structure matter more for the sorting game but punishes players at leaf nodes.
-- **Settlement size assignment**: Currently only the starting city gets `SettlementSize.City`; everything else defaults to `Camp`. The tree-derived hub/waypoint/leaf classification is a new sizing axis. Does it replace `SettlementSize`, map onto it, or sit alongside it?
-- **SettlementSize vs hub status**: The trade tree doc says hub status comes from child count (3+ = hub). Does this feed into `SettlementSize` (hub = Town, waypoint = Village, leaf = Outpost)? Or is it a separate property?
-- **Payout formula specifics**: Payout blends trade route hops and BFS tile distance. Exact weighting TBD — route hops reward staying on the arteries, tile distance rewards long hauls. Need to prototype both axes and find a ratio that makes on-route deliveries reliably profitable while off-route detours are risky-but-lucrative.
+## Resolved
+- ~~**Relationship to courier_system.md**~~: Superseded. The haul system replaces the courier/dispatch concept entirely.
+- ~~**Load generation**~~: 152 haul entries authored in `text/hauls/haul_catalog.md`, transcribed to static C# in `HaulDef.*.cs`. LLM-assisted authoring via `haul-generate` command.
+- ~~**How many loads per settlement?**~~: Non-leaf = 2, leaf = 1. Fills on visit, persists until claimed.
+- ~~**Settlement size assignment / hub status**~~: Trade tree child count maps to `SettlementSize` (3+ = Town, 1-2 = Village, 0 = Outpost). City reserved for starting settlement.
+- ~~**Payout formula**~~: Manhattan distance × 3. Simple, tunable later.
+
+## Still Open
+- **Storage availability**: Should deposit/withdraw be available at every settlement, or only hubs/waypoints? Deposit fee as a balancing lever? See "Storage on leaves" section below.
+- **Load transit/relay UX**: How to make it clear which deposited loads at a settlement are "closer to done" vs. freshly arrived?
+- **Mercantile skill role**: Currently just discounts market buys. Needs a haul-related role (better offers, payout bonus, more offers) or removal.
+- **Payout tuning**: Manhattan × 3 is the starting formula. Needs playtesting to see if it sustains the player economy across different map positions.
 
 # Affected Systems
 
-## Must Change
+## Done
+
+| Layer | File | Change |
+|-------|------|--------|
+| Rules | `lib/Rules/ItemDef.cs` | ✅ 71 `TradeGood` entries deleted. `TradeGood` removed from `ItemType` enum. `Haul` type exists. |
+| Rules | `lib/Rules/TradeBalance.cs` | ✅ Gutted. Only `PriceJitter`, `MercantileDiscountPerPoint`, `MaxStock`, `RestockPerDay` remain. |
+| Rules | `lib/Rules/HaulDef.*.cs` | ✅ 152 haul entries transcribed to static C#, partitioned by biome. |
+| Rules | `lib/Rules/ActionVocabulary.cs` | ✅ `get_random_treasure` verb removed. |
+| Game | `lib/Game/Market.cs` | ✅ Rewritten. Buy-only (food/medicine/equipment). `ClaimHaul()` added. Sell/featured/arbitrage deleted. |
+| Game | `lib/Game/SettlementState.cs` | ✅ `FeaturedSellItem`/`FeaturedBuyItem` removed. `HaulOffers` list added. |
+| Game | `lib/Game/ItemInstance.cs` | ✅ Haul fields: `HaulDefId`, `DestinationSettlementId`, `DestinationHint`, `Payout`. |
+| Game | `lib/Game/PlayerState.cs` | ✅ `ClaimedFeaturedBuys` removed. |
+| Game | `lib/Game/HaulGeneration.cs` | ✅ Picks destination settlements from trade tree (2-hop distance), generates haul offers. |
+| Game | `lib/Game/HaulDelivery.cs` | ✅ Scans player pack on arrival, auto-delivers matching hauls, pays out gold. |
+| Game | `lib/Game/Mechanics.cs` | ✅ `ApplyGetRandomTreasure` removed. |
+| Orchestration | `lib/Orchestration/SettlementRunner.cs` | ✅ Calls `GenerateHauls()` on settlement visit. |
+| MapGen | `mapgen/TradeRouteBuilder.cs` | ✅ Tree built, hub/waypoint/leaf sizing from child count. |
+| MapGen | `mapgen/TradeRoutePass.cs` | ✅ Trade tree edges rendered on map. |
+| Map | `lib/Map/` | ✅ Trade tree serialized per-settlement in map.json (parent + children). |
+| Server | `server/GameServer/Program.cs` | ✅ `GET /market` returns stock + hauls. `market_order` is buy-only. `claim_haul` action added. Auto-delivery on move. |
+| Server | `server/GameServer/GameResponse.cs` | ✅ `SellLine` removed. `OfferIndex` added. `DeliveryInfo` DTO exists. |
+| Tests | `tests/Dreamlands.Game.Tests/MarketTests.cs` | ✅ 13 tests: stocking, buy, ClaimHaul, restock. |
+| Tests | `tests/Dreamlands.Game.Tests/HaulDeliveryTests.cs` | ✅ Delivery tests exist. |
+
+## Remaining
 
 | Layer | File | Impact |
 |-------|------|--------|
-| Rules | `lib/Rules/ItemDef.cs` | Remove or repurpose 62 `TradeGood` entries. Add load item type. |
-| Rules | `lib/Rules/TradeBalance.cs` | Gut and replace. Featured buy/sell, cross-biome pricing, same-biome penalty, jitter — all gone. New constants for load payout scaling, max loads per settlement size. |
-| Rules | `lib/Rules/SettlementBalance.cs` | Remove `storage` service tiers (bank is gone). Possibly add hub/waypoint/leaf classification. |
-| Game | `lib/Game/Market.cs` | Major rewrite. Remove buy/sell pricing engine, trade good stocking, featured items, restock logic for trade goods. Replace with load pickup and delivery mechanics. |
-| Game | `lib/Game/SettlementState.cs` | Add load inventory. Add deposit/withdraw storage (full `ItemInstance` lists, not just counts). Track trade tree parent/children if needed at runtime. |
-| Game | `lib/Game/ItemInstance.cs` | Add per-instance load fields (destination, hint, payout, delivery flavor) — similar to `courier_system.md`'s proposed `DestinationSettlementId` etc. |
-| Game | `lib/Game/PlayerState.cs` | Remove `ClaimedFeaturedBuys`. Possibly adjust pack/haversack semantics for loads. |
-| Orchestration | `lib/Orchestration/SettlementRunner.cs` | Add delivery-on-arrival hook (scan inventory for loads matching current settlement). Rename market references to "market." |
-| MapGen | `mapgen/SettlementPlacer.cs` | Build trade tree after placement. Derive hub/waypoint/leaf from child count. Assign `SettlementSize` from tree position. |
-| MapGen | `mapgen/` (new or existing render pass) | Render trade tree edges as debug lines on the map image. |
-| Map | `lib/Map/Poi.cs` or new DTO | Serialize trade tree edges (parent settlement ID per settlement) into `map.json`. |
-| Server | `server/GameServer/Program.cs` | Update market endpoint to return loads instead of trade goods. Add delivery results to settlement entry response. Build settlement lookup from map for load generation. |
-| Server | `server/GameServer/GameResponse.cs` | Replace `MarketOrderResultInfo` trade good fields with load fields. Add delivery notification DTOs. |
-| Tests | `tests/Dreamlands.Game.Tests/MarketTests.cs` | 18 tests, all invalidated. Full rewrite against new load mechanics. |
-
-## May Change
-
-| Layer | File | Impact |
-|-------|------|--------|
-| Rules | `lib/Rules/Skill.cs` | Mercantile skill needs a new role or removal. |
-| Rules | `lib/Rules/CharacterBalance.cs` | `CostMagnitudes` may need rethinking if loads are free. |
-| Game | `lib/Game/Mechanics.cs` | Any action verbs tied to trade goods need updating. |
-| Web | `ui/web/src/screens/Market.tsx` | Rewrite buy/sell UI for load pick-up and item deposit. |
-| Web | `ui/web/src/screens/Settlement.tsx` | Delivery notification on arrival. "market" branding. |
-| Web | `ui/web/src/screens/Inventory.tsx` | Load display with destination hints. |
-| Web | `ui/web/src/api/types.ts` | New DTOs for loads, deliveries, deposited items. |
-| CLI | `ui/cli/Program.cs` | Update `market` and `market-order` commands for new response shapes. |
-| Design | `project/design/trade_economy.md` | Obsoleted — archive or replace. |
-| Design | `project/design/trade_goods.md` | 62 trade goods catalog — obsoleted or repurposed as load name source. |
-| Design | `project/design/trade_rumors.md` | Per-good rumors — obsoleted or folded into load flavor. |
-| Design | `project/design/courier_system.md` | Overlapping design — reconcile or supersede. |
-| Design | `project/screens/trade.md` | UI spec needs full rewrite for load-based interaction. |
-| Orchestration | `tests/Dreamlands.Orchestration.Tests/SettlementRunnerTests.cs` | Settlement entry tests need delivery hook coverage. |
+| Rules | `lib/Rules/Skill.cs` | Mercantile skill needs a new role or removal. Currently just discounts market buys. |
+| Game | `lib/Game/Bank.cs` | Rename/rework to general-purpose storage. Open question: deposit fee, leaf restrictions. |
+| Web | `ui/web/src/screens/Market.tsx` | Rewrite UI for haul claiming + buy-only shop (separate task). |
+| Web | `ui/web/src/screens/Settlement.tsx` | Delivery notification on arrival. |
+| Web | `ui/web/src/screens/Inventory.tsx` | Haul display with destination hints. |
+| Web | `ui/web/src/api/types.ts` | Update DTOs for new market/haul response shapes. |
+| Design | `project/design/trade_economy.md` | Obsoleted by haul system. |
+| Design | `project/design/trade_goods.md` | Obsoleted — trade goods deleted. |
+| Design | `project/design/trade_rumors.md` | Obsoleted or folded into haul flavor. |
+| Design | `project/design/courier_system.md` | Superseded by haul system. |
 
 ---
 
-# Implementation Audit (2026-03-03)
+# Implementation Audit (2026-03-05)
 
 ## What's Done
+
+### Infrastructure
 - **Trade tree** — built (`TradeRouteBuilder.cs`), sized by child count (3+ = Town, 1-2 = Village, 0 = Outpost), rendered on the map (`TradeRoutePass.cs`)
-- **Trade tree serialized** in map.json as coordinate-pair edges, round-trips through `MapSerializer`
-- **152 haul catalog entries** authored in `text/hauls/haul_catalog.md` with origin biome, destination biome, origin flavor, delivery flavor
-- **Bank deposit/withdraw** exists in `Bank.cs` (could evolve into general storage)
+- **Trade tree serialized** per-settlement in map.json (parent + children), round-trips through `MapSerializer`
+- **152 haul catalog entries** authored in `text/hauls/haul_catalog.md`, transcribed to static C# in `HaulDef.{Plains,Mountains,Forest,Scrub,Swamp}.cs`
 - **`haul-generate` authoring tool** fills blank catalog entries via LLM
 
+### Haul lifecycle (complete end-to-end)
+- **Haul generation** — `HaulGeneration.Generate()` picks concrete destination settlements from the trade tree (2-hop distance, fallback to 1 then 3). Cap: 2 offers at non-leaf settlements, 1 at leaves. Payout = Manhattan distance × 3.
+- **Haul offer display** — `SettlementRunner.GenerateHauls()` populates `SettlementState.HaulOffers` on settlement visit. `GET /api/game/{id}/market` returns hauls array with name, destinationHint, payout, originFlavor.
+- **Haul claiming** — `Market.ClaimHaul()` validates index/pack capacity, moves haul from offers to player pack. Server exposes via `claim_haul` action with `offerIndex` parameter.
+- **Auto-delivery** — `HaulDelivery.Deliver()` scans player pack on settlement arrival, matches by `DestinationSettlementId`, pays out gold, returns delivery results. Wired into `SettlementRunner`. Server includes `Deliveries` in GameResponse.
+
+### Market rewrite (complete)
+- **Trade goods removed** — all 71 `ItemType.TradeGood` entries deleted from `ItemDef.BuildAll()`. `TradeGood` removed from `ItemType` enum.
+- **Arbitrage pricing removed** — `GetSellToSettlementPrice`, `Sell`, `FeaturedSellItem`, `FeaturedBuyItem`, `FeaturedSellDiscount`, `FeaturedBuyPremium`, `SameBiomeBuyPenalty`, `CrossBiomeFlatBonus` all deleted.
+- **Market is buy-only** — `Market.cs` sells food/medicine/equipment. `ApplyOrder` is buy-only. `MarketOrder` has only `Buys` (no `Sells`/`SellLine`).
+- **`ClaimedFeaturedBuys`** removed from `PlayerState`.
+- **Server endpoints updated** — `GET /market` returns stock + hauls (no sellPrices/featured). `market_order` is buy-only. New `claim_haul` action.
+- **Market tests rewritten** — 13 tests covering food/medicine/equipment stocking, buy, ClaimHaul, and restock. Old 18 arbitrage tests deleted.
+- **`get_random_treasure`** verb and handler removed from `ActionVocabulary` and `Mechanics`.
+- **Bank deposit/withdraw** exists in `Bank.cs` (could evolve into general storage)
+
 ## What's Not Started
-- **Haul generation logic** — no code picks a concrete destination settlement from a biome, enforces the 2-hop distance constraint, or generates N hauls per market based on settlement position
-- **Market rewrite** — `Market.cs` (319 lines) is 100% arbitrage (buy/sell/pricing/restock/featured items). Needs full gut-and-replace with haul claiming and delivery mechanics
-- **Delivery hook** — `SettlementRunner` has no on-arrival scan of player inventory for hauls matching the current settlement, no payout logic
-- **Item storage** — `Bank` list on `SettlementState` is vestigial. Needs replacement with general-purpose per-settlement `ItemInstance` deposit/withdraw
-- **Server endpoints** — no API surface for haul claiming, delivery confirmation, or item storage
-- **Market tests** — `MarketTests.cs` has 18 tests all tied to the old arbitrage system; all will need rewriting
-- The 71 old `TradeGood` ItemDefs are still in `BuildAll()`
-- No payout formula or load generation balance constants
+- **Market screen UI** (`ui/web/src/screens/Market.tsx`) — needs rewrite for haul display and claim interaction
+- **Bank → Storage rename/rework** — `Bank` list on `SettlementState` works but naming and UX need updating. Open question: storage at all settlements vs hubs only, deposit fee
+- **Dynamic haul generation** — when bespoke hauls exhaust for a given route, generate generic fallback hauls so trade never dead-ends
+- **Encounter-sourced hauls** (`add_haul` verb) — encounters awarding hauls directly, design written but no code
+- **Mercantile skill rework** — still provides 2% per-point discount on market buys; new haul-related role TBD
 
 ## Design Decisions (resolved 2026-03-04)
 
@@ -226,3 +245,80 @@ We need to be careful with this one. We absolutely do want to nudge players to k
 We'll need to balance this with mechanics that keep the player engaged. If we guarantee subsistence income (to prevent bricking) we risk some players deciding the game is no fun because subsistence grinding seems to be a viable strategy.
 
 Hopefully out-of-branch deliveries can help with this, but we'll want to keep a close eye on it.
+
+## Production Map Graph Profile (2026-03-05)
+
+78 settlements in the trade tree. Node distribution by edge count:
+
+| Edges | Count | Role |
+|-------|-------|------|
+| 1     | 25    | Leaves (no children) |
+| 2     | 34    | Pass-through (1 parent, 1 child) |
+| 3     | 15    | Minor hubs (1 parent, 2 children) |
+| 4     | 4     | Major hubs (1 parent, 3 children) |
+
+Max connectivity is 4 — no settlement has more than 3 children. The four 4-edge hubs are Grassford (s20_7), Dustford (s40_16), Grassford (s14_36), and Oakford (s21_69). The tree is relatively flat: most nodes are leaves or simple pass-throughs, with a thin layer of branching hubs.
+
+Surprisingly, the root (Aldgate) is only a 2-edge node — not a major hub. The four 3-child hubs sit at hops 1, 4, 8, and 10 from origin, spread through the tree depth rather than clustered near the root. This means the tree's branching structure is driven more by settlement density pockets than by proximity to the capital.
+
+Tree depth is 17. Settlement count by depth:
+
+| Depth | Count | Settlements |
+|------:|------:|-------------|
+| 0 | 1 | Aldgate |
+| 1 | 2 | Grassford, Grasshollow |
+| 2 | 5 | Dusthollow, Grasshollow, Sunhollow, Sunwatch, Thornhollow |
+| 3 | 7 | Granitehollow, Grasshollow, Sandwatch, Sandwatch, Thornhollow, Thornhollow, Wheatwatch |
+| 4 | 5 | Dustford, Sandwatch, Sunhollow, Sunwatch, Windhollow |
+| 5 | 6 | Elmwatch, Flinthollow, Oakhollow, Thornhollow, Wheathollow, Windhollow |
+| 6 | 6 | Grasshollow, Oakhollow, Sunhollow, Sunwatch, Wheathollow, Wheathollow |
+| 7 | 6 | Frosthollow, Mosshollow, Sunwatch, Thornhollow, Wheatwatch, Windhollow |
+| 8 | 8 | Dustwatch, Elmhollow, Elmhollow, Flinthollow, Granitewatch, Grassford, Grasshollow, Oakwatch |
+| 9 | 7 | Granitewatch, Ironwatch, Oakhollow, Sandhollow, Sandhollow, Sandwatch, Thornhollow |
+| 10 | 6 | Flinthollow, Granitehollow, Oakford, Oakhollow, Thornhollow, Wheatwatch |
+| 11 | 7 | Dusthollow, Dustwatch, Elmhollow, Elmwatch, Murkwatch, Sunwatch, Thornhollow |
+| 12 | 4 | Flinthollow, Mosswatch, Sunhollow, Thornhollow |
+| 13 | 3 | Sandhollow, Sunwatch, Wheathollow |
+| 14 | 2 | Elmhollow, Thornwatch |
+| 15 | 1 | Elmhollow |
+| 16 | 1 | Sunhollow |
+| 17 | 1 | Grasswatch |
+
+The bulk of settlements (depths 2–11) form a wide band in the middle of the tree. The long tail from depth 12–17 is a single chain with no branching — a deep linear spine reaching into the frontier.
+
+### Storage on leaves — open tension
+
+The original plan restricts storage to non-leaf settlements to make hub positioning matter for the sorting game. But deep chain endpoints like Grasswatch (depth 17) are natural base camps for frontier exploration — players will want to stage gear there. Denying storage at leaves punishes exploration-mode play that has nothing to do with trade.
+
+Charging for storage (per-deposit gold cost) may thread the needle: leaves can have storage without undermining the sorting game, and the cost also discourages a market-sweeping anti-pattern — arriving at a new settlement, claiming every haul, immediately dumping them into storage to force a market refresh, and cherry-picking from the larger pool. If storage is free, that's a dominant strategy wherever hauls are plentiful. A deposit fee makes it a real tradeoff: you're paying gold now for optionality later.
+
+## Encounter-sourced hauls
+
+Encounters could award hauls directly — "You found an old journal belonging to Jorgo Borgins, you should return it." This gives encounters a way to create delivery obligations organically, tying exploration rewards to the trade network.
+
+### Why this is low-disruption
+
+The delivery pipeline doesn't care where a haul came from. `HaulDelivery.Deliver()` scans the player's pack for any `ItemInstance` with `HaulDefId != null` and a matching `DestinationSettlementId`. Auto-delivery on settlement arrival, payout, flavor text — all of it works identically regardless of whether the haul came from a market or an encounter. No model changes needed; `ItemInstance` already carries all the haul fields.
+
+### What it needs
+
+A new mechanic verb (e.g. `add_haul`) in `Mechanics.cs` that creates an `ItemInstance` with haul fields populated. Two authoring approaches:
+
+1. **Reference a HaulDef by ID**: `+ add_haul exquisite_caftan` — ties the encounter to a catalog entry, reuses its name/flavor/destination biome. Destination settlement resolved at runtime the same way `HaulGeneration` does it.
+2. **Inline definition**: encounter specifies name, payout, and destination hint directly. More flexible for one-off narrative hauls that don't belong in the catalog.
+
+### Quest hauls vs market hauls
+
+Quest hauls (encounter-sourced) are structurally different from market hauls and need separate handling in three areas:
+
+1. **Spawn exclusion**: Quest hauls must never appear in market generation. Use a distinct origin biome (e.g. `"quest"`) so `HaulGeneration` naturally skips them — it filters by origin biome matching the settlement's terrain, and no settlement has terrain `quest`.
+
+2. **Payout**: Quest hauls aren't on the trade graph, so the market payout formula (Manhattan distance × 3) doesn't apply. Payout should be set by the encounter author or by a separate quest-specific formula. Likely higher than equivalent market hauls to reward off-road exploration.
+
+3. **Destination selection**: Market hauls pick destinations by walking the trade tree (2 hops). Quest hauls happen in the wilderness, off the graph. Destination should be the **closest settlement by cartesian distance** from the encounter location. This keeps delivery feel natural — "the nearest town" — rather than routing through trade graph topology the player can't see.
+
+### Design implications
+
+- Encounter hauls are a natural reward for exploration, complementing market hauls rather than competing with them. A player deep in the frontier finds a thing worth carrying back — that's the fantasy.
+- Encounter hauls don't count against the market cap, so they layer on top of the base system without disrupting market generation.
+- No new UI needed — a haul is a haul in the inventory screen regardless of source.

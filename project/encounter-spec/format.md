@@ -107,7 +107,7 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
   The hermit's smile doesn't waver as the thing begins to move...
   @if check combat hard {
     The sailcloth tears away. You fight and win.
-    +get_random_treasure
+    +gold 30
   } @else {
     You flee into the muck.
     +lose_random_item
@@ -185,7 +185,6 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `add_item <id>` | item id | Give player a specific item |
 | `add_random_items <count> <category>` | int, category | Give random items from a category |
 | `lose_random_item` | (none) | Player loses a random item |
-| `get_random_treasure` | (none) | Player gets a random valuable |
 | `give_gold <magnitude>` | magnitude | Give player gold |
 | `rem_gold <magnitude>` | magnitude | Take player's gold |
 | `damage_health <magnitude>` | magnitude | Reduce player health |
