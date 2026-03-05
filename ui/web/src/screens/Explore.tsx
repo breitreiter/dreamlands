@@ -363,7 +363,7 @@ export default function Explore({ state }: { state: GameResponse }) {
             <div className="flex-1 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
               <div className="flex items-center gap-2">
                 <MaskedIcon icon="sensuousness.svg" className="w-7 h-7" color="#d4c9a8" />
-                <span className="text-2xl font-bold text-primary">{status.spirits}</span>
+                <span className={`text-2xl font-bold ${status.conditions.some(c => c.id === "disheartened") ? "text-negative" : "text-primary"}`}>{status.spirits}</span>
                 <span className="text-xl text-dim">/ {status.maxSpirits}</span>
               </div>
               <div className="text-xs text-muted mt-0.5">Spirits</div>
