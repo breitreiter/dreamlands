@@ -28,13 +28,13 @@ const playerIcon = new Icon({
   iconUrl:
     "data:image/svg+xml," +
     encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">' +
         '<circle cx="12" cy="12" r="10" fill="#d0925d" stroke="#232d46" stroke-width="2"/>' +
         '<circle cx="12" cy="12" r="4" fill="#232d46"/>' +
         "</svg>"
     ),
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
+  iconSize: [36, 36],
+  iconAnchor: [18, 18],
 });
 
 function MapFollower({ position }: { position: LatLngExpression }) {

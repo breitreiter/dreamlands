@@ -101,7 +101,7 @@ export default function BankScreen({
       <div className="flex-1 flex overflow-hidden">
         {/* STORED column (bank contents) */}
         <div className="flex-1 flex flex-col border-r border-edge min-w-0">
-          <div className="p-3 border-b border-edge">
+          <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Stored</h3>
             {bankData && (
               <div className="text-muted mt-1">
@@ -144,7 +144,7 @@ export default function BankScreen({
 
         {/* CARRIED column (player inventory) */}
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="p-3 border-b border-edge">
+          <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Carried</h3>
             <div className="flex gap-1 mt-2">
               <TabButton id="pack" active={carriedTab === "pack"} onClick={() => setCarriedTab("pack")}>Pack</TabButton>

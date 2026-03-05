@@ -306,7 +306,7 @@ export default function MarketScreen({
       <div className="flex-1 flex overflow-hidden">
         {/* BUY column */}
         <div className="flex-1 flex flex-col border-r border-edge min-w-0">
-          <div className="p-3 border-b border-edge">
+          <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
               <TabButton id="trade" active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabButton>
@@ -368,7 +368,7 @@ export default function MarketScreen({
 
         {/* SELL column */}
         <div className="flex-1 flex flex-col border-l border-edge min-w-0">
-          <div className="p-3 border-b border-edge">
+          <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Sell</h3>
             <div className="flex gap-1 mt-2">
               <TabButton id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
