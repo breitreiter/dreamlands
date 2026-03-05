@@ -38,9 +38,38 @@ public static class SettlementRunner
         var settlement = session.Player.Settlements[node.Poi.SettlementId];
         Market.Restock(settlement, size, session.Player.Day, session.Balance, session.Rng);
 
+        // Generate haul offers if below cap
+        GenerateHauls(session, node.Poi.SettlementId, node.Terrain, settlement);
+
         var isChapterhouse = node == session.Map.StartingCity;
         var services = new List<string> { "market", "bank", isChapterhouse ? "chapterhouse" : "inn" };
 
         return new SettlementData(node.Poi.Name ?? node.Poi.SettlementId, tier, biome, size, services);
+    }
+
+    private static void GenerateHauls(GameSession session, string settlementId, Terrain biome, SettlementState state)
+    {
+        var graph = session.Graph;
+        if (graph == null || !graph.Settlements.TryGetValue(settlementId, out var info)) return;
+
+        var isLeaf = info.ChildIds.Count == 0 && info.ParentId != null;
+
+        // Try 2 hops, fallback to 1, then 3
+        var candidates = graph.GetSettlementsAtHop(settlementId, 2);
+        if (candidates.Count == 0) candidates = graph.GetSettlementsAtHop(settlementId, 1);
+        if (candidates.Count == 0) candidates = graph.GetSettlementsAtHop(settlementId, 3);
+        if (candidates.Count == 0) return;
+
+        var destinations = candidates
+            .Select(s => new HaulGeneration.HaulDestination(s.Id, s.Name, s.Biome, s.X, s.Y))
+            .ToList();
+
+        var newOffers = HaulGeneration.Generate(
+            info.X, info.Y, biome, isLeaf,
+            destinations, session.Balance.Hauls,
+            session.Map.Width, session.Map.Height,
+            state.HaulOffers, session.Rng);
+
+        state.HaulOffers.AddRange(newOffers);
     }
 }

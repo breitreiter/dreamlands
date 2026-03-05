@@ -46,6 +46,9 @@ public class SettlementGraph
         return -1;
     }
 
+    public IReadOnlyList<SettlementInfo> GetSettlementsAtHop(string fromId, int hops) =>
+        Settlements.Values.Where(s => s.Id != fromId && GetHopDistance(fromId, s.Id) == hops).ToList();
+
     public IReadOnlyList<SettlementInfo> GetSettlementsInBiome(Terrain terrain) =>
         Settlements.Values.Where(s => s.Biome == terrain).ToList();
 

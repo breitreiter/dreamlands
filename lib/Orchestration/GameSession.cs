@@ -31,6 +31,22 @@ public class GameSession
         Rng = rng;
     }
 
+    private Dreamlands.Map.SettlementGraph? _graph;
+    private bool _graphBuilt;
+    public Dreamlands.Map.SettlementGraph? Graph
+    {
+        get
+        {
+            if (!_graphBuilt)
+            {
+                _graphBuilt = true;
+                if (Map.StartingCity?.Poi?.SettlementId != null)
+                    _graph = Dreamlands.Map.SettlementGraph.Build(Map);
+            }
+            return _graph;
+        }
+    }
+
     public Dreamlands.Map.Node CurrentNode => Map[Player.X, Player.Y];
 
     public HashSet<Dreamlands.Map.Node> GetVisitedNodeSet()

@@ -151,14 +151,14 @@ The current Mercantile skill provides a 2% per point discount on purchases. If l
 - **`haul-generate` authoring tool** fills blank catalog entries via LLM
 
 ## What's Not Started
-- No `Haul` item type — `ItemType` enum still only has `TradeGood`
-- `ItemInstance` has no destination/payout/hint/delivery fields (4 fields total)
-- No code reads the haul catalog at runtime — it's pure markdown
-- `Market.cs` is 100% arbitrage (buy/sell/pricing/restock) — zero load mechanics
-- No delivery-on-arrival hook in `SettlementRunner`
-- No payout formula, no load generation balance constants
+- **Haul generation logic** — no code picks a concrete destination settlement from a biome, enforces the 2-hop distance constraint, or generates N hauls per market based on settlement position
+- **Market rewrite** — `Market.cs` (319 lines) is 100% arbitrage (buy/sell/pricing/restock/featured items). Needs full gut-and-replace with haul claiming and delivery mechanics
+- **Delivery hook** — `SettlementRunner` has no on-arrival scan of player inventory for hauls matching the current settlement, no payout logic
+- **Item storage** — `Bank` list on `SettlementState` is vestigial. Needs replacement with general-purpose per-settlement `ItemInstance` deposit/withdraw
+- **Server endpoints** — no API surface for haul claiming, delivery confirmation, or item storage
+- **Market tests** — `MarketTests.cs` has 18 tests all tied to the old arbitrage system; all will need rewriting
 - The 71 old `TradeGood` ItemDefs are still in `BuildAll()`
-- No server endpoints for load claiming or delivery results
+- No payout formula or load generation balance constants
 
 ## Design Decisions (resolved 2026-03-04)
 
