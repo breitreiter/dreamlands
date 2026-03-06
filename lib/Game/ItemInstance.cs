@@ -11,6 +11,7 @@ public record ItemInstance(string DefId, string DisplayName)
     // Haul-specific fields (null for non-haul items)
     public string? HaulDefId { get; init; }
     public string? DestinationSettlementId { get; init; }
+    public string? DestinationName { get; init; }
     public string? DestinationHint { get; init; }
     public int? Payout { get; init; }
 }

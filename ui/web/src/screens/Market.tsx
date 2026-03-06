@@ -365,7 +365,10 @@ export default function MarketScreen({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-primary">{haul.name}</div>
-                      <div className="text-muted mt-0.5">Deliver toward {haul.destinationHint}</div>
+                      <div className="text-muted mt-0.5">
+                        Deliver to {haul.destinationName ?? haul.destinationHint}
+                        {haul.destinationName && <span className="text-dim"> ({haul.destinationHint.toLowerCase()})</span>}
+                      </div>
                       <div className="text-muted mt-0.5">{haul.originFlavor}</div>
                     </div>
                     <button

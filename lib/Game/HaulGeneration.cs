@@ -54,6 +54,7 @@ public static class HaulGeneration
             {
                 HaulDefId = def.Id,
                 DestinationSettlementId = dest.SettlementId,
+                DestinationName = dest.Name,
                 DestinationHint = hint,
                 Payout = payout,
                 Description = def.OriginFlavor

@@ -198,6 +198,7 @@ export interface MarketItem {
 export interface HaulOffer {
   index: number;
   name: string;
+  destinationName: string | null;
   destinationHint: string;
   payout: number;
   originFlavor: string;

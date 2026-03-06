@@ -1156,6 +1156,7 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
     {
         index = i,
         name = h.DisplayName,
+        destinationName = h.DestinationName,
         destinationHint = h.DestinationHint,
         payout = h.Payout,
         originFlavor = h.Description,
