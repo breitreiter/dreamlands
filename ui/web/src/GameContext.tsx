@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useCallback, type ReactNode } from
 import type { GameResponse, MarketOrder } from "./api/types";
 import * as api from "./api/client";
 
+const SAVE_KEY = "dreamlands_gameId";
+
 interface GameState {
   gameId: string | null;
   response: GameResponse | null;
@@ -11,6 +13,8 @@ interface GameState {
 
 interface GameContextValue extends GameState {
   startNewGame: () => Promise<void>;
+  resumeGame: () => Promise<void>;
+  hasSavedGame: boolean;
   refreshState: () => Promise<void>;
   doAction: (body: {
     action: string;
@@ -20,6 +24,9 @@ interface GameContextValue extends GameState {
     slot?: string;
     quantity?: number;
     order?: MarketOrder;
+    source?: string;
+    bankIndex?: number;
+    offerIndex?: number;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
 }
@@ -51,10 +58,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
     error: null,
   });
 
+  const savedGameId = localStorage.getItem(SAVE_KEY);
+
   const startNewGame = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
       const result = await api.newGame();
+      localStorage.setItem(SAVE_KEY, result.gameId);
       setState({
         gameId: result.gameId,
         response: result.state,
@@ -69,6 +79,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
       }));
     }
   }, []);
+
+  const resumeGame = useCallback(async () => {
+    if (!savedGameId) return;
+    setState((s) => ({ ...s, loading: true, error: null }));
+    try {
+      const result = await api.getGame(savedGameId);
+      setState({ gameId: savedGameId, response: result, loading: false, error: null });
+    } catch {
+      localStorage.removeItem(SAVE_KEY);
+      setState((s) => ({ ...s, loading: false, error: null }));
+    }
+  }, [savedGameId]);
 
   const refreshState = useCallback(async () => {
     if (!state.gameId) return;
@@ -94,6 +116,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
       slot?: string;
       quantity?: number;
       order?: MarketOrder;
+      source?: string;
+      bankIndex?: number;
+      offerIndex?: number;
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));
@@ -125,7 +150,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, refreshState, doAction, clearError }}
+      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, clearError }}
     >
       {children}
     </GameContext.Provider>
