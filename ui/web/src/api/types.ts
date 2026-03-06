@@ -155,6 +155,13 @@ export interface InnQuoteResponse {
   canAfford: boolean;
 }
 
+export interface DiscoveryInfo {
+  x: number;
+  y: number;
+  kind: string;
+  name: string;
+}
+
 export interface DeliveryInfo {
   name: string;
   payout: number;

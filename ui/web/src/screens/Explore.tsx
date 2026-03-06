@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useGame } from "../GameContext";
@@ -19,7 +19,8 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { formatDateTime } from "../calendar";
-import type { GameResponse, DeliveryInfo } from "../api/types";
+import { getDiscoveries } from "../api/client";
+import type { GameResponse, DeliveryInfo, DiscoveryInfo } from "../api/types";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -141,6 +142,12 @@ const CONDITION_ICONS: Record<string, string> = {
 
 const TIER_LABELS: Record<number, string> = { 1: "Village", 2: "Town", 3: "City" };
 
+const flagIcon = new Icon({
+  iconUrl: "/world/assets/icons/black-flag.svg",
+  iconSize: [24, 24],
+  iconAnchor: [12, 24],
+});
+
 const IMPLEMENTED_SERVICES = new Set(["market", "bank", "inn", "chapterhouse"]);
 
 const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
@@ -151,16 +158,30 @@ const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
 };
 
 export default function Explore({ state }: { state: GameResponse }) {
-  const { doAction, loading } = useGame();
+  const { doAction, loading, gameId } = useGame();
   const [showInventory, setShowInventory] = useState(false);
   const [vignetteError, setVignetteError] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
   const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
+  const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
+
+  // Fetch discoveries on mount
+  useEffect(() => {
+    if (!gameId) return;
+    getDiscoveries(gameId).then(setDiscoveries).catch(() => {});
+  }, [gameId]);
 
   const move = useCallback(async (dir: string) => {
     const result = await doAction({ action: "move", direction: dir });
     if (result?.deliveries?.length) {
       setPendingDeliveries(result.deliveries);
+    }
+    // Optimistically add current node's POI to discoveries
+    if (result?.node?.poi && (result.node.poi.kind === "settlement" || result.node.poi.kind === "dungeon")) {
+      setDiscoveries(prev => {
+        if (prev.some(d => d.x === result.node!.x && d.y === result.node!.y)) return prev;
+        return [...prev, { x: result.node!.x, y: result.node!.y, kind: result.node!.poi!.kind, name: result.node!.poi!.name ?? result.node!.poi!.kind }];
+      });
     }
   }, [doAction]);
 
@@ -262,6 +283,11 @@ export default function Explore({ state }: { state: GameResponse }) {
             hidden={isLost}
             onMove={move}
           />
+          {discoveries.map((d) => (
+            <Marker key={`${d.x},${d.y}`} position={gridToLatLng(d.x, d.y)} icon={flagIcon}>
+              <Tooltip direction="top" offset={[0, -24]}>{d.name}</Tooltip>
+            </Marker>
+          ))}
           <MapFollower position={position} />
         </MapContainer>
       </div>

@@ -5,6 +5,7 @@ import type {
   MarketOrder,
   InnQuoteResponse,
   BankResponse,
+  DiscoveryInfo,
 } from "./types";
 
 declare const __API_VERSION__: string;
@@ -80,6 +81,12 @@ export async function getMarketStock(
 
 export async function getBank(id: string): Promise<BankResponse> {
   return get(`${BASE}/${id}/bank`);
+}
+
+export async function getDiscoveries(
+  id: string
+): Promise<DiscoveryInfo[]> {
+  return get(`${BASE}/${id}/discoveries`);
 }
 
 export async function getInnQuote(

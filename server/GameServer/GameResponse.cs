@@ -43,6 +43,14 @@ public class GameResponse
     public MechanicsInfo? Mechanics { get; init; }
 }
 
+public class DiscoveryInfo
+{
+    public int X { get; init; }
+    public int Y { get; init; }
+    public string Kind { get; init; } = "";
+    public string Name { get; init; } = "";
+}
+
 public class DeliveryInfo
 {
     public string Name { get; init; } = "";

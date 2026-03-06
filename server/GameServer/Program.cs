@@ -1267,6 +1267,32 @@ app.MapGet("/api/game/{id}/bank", async (string id) =>
     });
 });
 
+app.MapGet("/api/game/{id}/discoveries", async (string id) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var discoveries = new List<DiscoveryInfo>();
+    foreach (var encoded in player.VisitedNodes)
+    {
+        var (x, y) = PlayerState.DecodePosition(encoded);
+        if (!map.InBounds(x, y)) continue;
+        var node = map[x, y];
+        if (node.Poi?.Kind is PoiKind.Settlement or PoiKind.Dungeon)
+        {
+            discoveries.Add(new DiscoveryInfo
+            {
+                X = x,
+                Y = y,
+                Kind = node.Poi.Kind.ToString().ToLowerInvariant(),
+                Name = node.Poi.Name ?? node.Poi.Kind.ToString(),
+            });
+        }
+    }
+
+    return Results.Ok(discoveries);
+});
+
 string FormatSkillLevel(int level) => level >= 0 ? $"+{level}" : $"{level}";
 
 string FormatItemDescription(ItemDef item)
