@@ -370,16 +370,16 @@ export default function MarketScreen({
                         {haul.destinationName && <span className="text-dim"> ({haul.destinationHint.toLowerCase()})</span>}
                       </div>
                       <div className="text-muted mt-0.5">{haul.originFlavor}</div>
+                      <div className="mt-0.5" style={{ color: "#D0BD62" }}>Pays {haul.payout}g on delivery</div>
                     </div>
                     <button
                       onClick={() => claimHaul(haul.index)}
                       disabled={loading || packFull}
                       className="px-3 py-1 rounded-lg disabled:opacity-40
-                                 text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
+                                 text-action hover:text-action-hover transition-colors flex-shrink-0"
                       style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
                     >
                       Claim
-                      <span className="text-positive">+{haul.payout}g</span>
                     </button>
                   </div>
                 ))
