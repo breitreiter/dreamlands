@@ -157,7 +157,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
                 <button
                   key={choice.index}
                   onClick={() => {
-                    setSegments(prev => [...prev, { kind: "chosen", label: choice.label, preview: choice.preview }]);
+                    setSegments(prev => [...prev, { kind: "chosen", label: choice.label, preview: choice.preview ?? undefined }]);
                     doAction({ action: "choose", choiceIndex: choice.index });
                   }}
                   disabled={loading}

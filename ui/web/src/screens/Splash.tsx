@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useGame } from "../GameContext";
 import { Button } from "@/components/ui/button";
-import MaskedIcon from "@/components/MaskedIcon";
 import splashStars from "../assets/splash_stars.jpg";
 import splashTower from "../assets/splash_tower.png";
 

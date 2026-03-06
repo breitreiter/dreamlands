@@ -3,6 +3,7 @@ import { useGame } from "../GameContext";
 import type { GameResponse, MarketItem, HaulOffer, ItemInfo } from "../api/types";
 import * as api from "../api/client";
 import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
+import HaulItem from "../components/HaulItem";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
 
@@ -358,13 +359,13 @@ export default function MarketScreen({
                       <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-primary">{haul.name}</div>
-                      <div className="text-muted mt-0.5">
-                        Deliver to {haul.destinationName ?? haul.destinationHint}
-                        {haul.destinationName && <span className="text-dim"> ({haul.destinationHint.toLowerCase()})</span>}
-                      </div>
-                      <div className="text-muted mt-0.5">{haul.originFlavor}</div>
-                      <div className="mt-0.5" style={{ color: "#D0BD62" }}>Pays {haul.payout}g on delivery</div>
+                      <HaulItem
+                        name={haul.name}
+                        destinationName={haul.destinationName}
+                        destinationHint={haul.destinationHint}
+                        payout={haul.payout}
+                        flavor={haul.originFlavor}
+                      />
                     </div>
                     <Button variant="secondary" size="sm" onClick={() => claimHaul(haul.index)} disabled={loading || packFull} className="flex-shrink-0">
                       <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />

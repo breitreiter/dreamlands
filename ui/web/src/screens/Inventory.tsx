@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
 import { useGame } from "../GameContext";
 import MaskedIcon, { iconUrl, itemTypeIcon, TabButton } from "../components/MaskedIcon";
+import HaulItem from "../components/HaulItem";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -256,20 +257,29 @@ function ItemCard({
         <MaskedIcon icon={itemTypeIcon(item.type)} className="w-6 h-6" color="#D0BD62" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-primary">
-          {item.name}
-          {item.cost != null && item.cost > 0 && (
-            <span className="text-accent ml-2">{item.cost}g</span>
-          )}
-        </div>
-        {item.destinationName && (
-          <div className="text-dim mt-0.5 truncate">Deliver to {item.destinationName}</div>
-        )}
-        {mods && (
-          <div className="text-dim mt-0.5 truncate" title={mods}>{mods}</div>
-        )}
-        {item.description && !mods && !item.destinationName && (
-          <div className="text-muted mt-0.5 truncate" title={item.description}>{item.description}</div>
+        {item.type === "haul" ? (
+          <HaulItem
+            name={item.name}
+            destinationName={item.destinationName}
+            destinationHint={item.destinationHint}
+            payout={item.payout}
+            flavor={item.description}
+          />
+        ) : (
+          <>
+            <div className="text-primary">
+              {item.name}
+              {item.cost != null && item.cost > 0 && (
+                <span className="text-accent ml-2">{item.cost}g</span>
+              )}
+            </div>
+            {mods && (
+              <div className="text-dim mt-0.5 truncate" title={mods}>{mods}</div>
+            )}
+            {item.description && !mods && (
+              <div className="text-muted mt-0.5 truncate" title={item.description}>{item.description}</div>
+            )}
+          </>
         )}
       </div>
       <div className="flex gap-1 flex-shrink-0 items-center">

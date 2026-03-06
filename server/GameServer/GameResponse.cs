@@ -195,6 +195,8 @@ public class ItemInfo
     public List<string> Cures { get; init; } = [];
     public bool IsEquippable { get; init; }
     public string? DestinationName { get; init; }
+    public string? DestinationHint { get; init; }
+    public int? Payout { get; init; }
 }
 
 public class MechanicsInfo

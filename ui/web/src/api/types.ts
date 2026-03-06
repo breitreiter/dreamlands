@@ -98,6 +98,8 @@ export interface ItemInfo {
   cures: string[];
   isEquippable: boolean;
   destinationName: string | null;
+  destinationHint: string | null;
+  payout: number | null;
 }
 
 export interface EquipmentInfo {
