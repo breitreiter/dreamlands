@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import type { GameResponse, MarketOrder } from "./api/types";
 import * as api from "./api/client";
 
@@ -59,6 +59,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
   });
 
   const savedGameId = localStorage.getItem(SAVE_KEY);
+
+  useEffect(() => {
+    api.checkVersion().then((err) => {
+      if (err) setState((s) => ({ ...s, error: err }));
+    });
+  }, []);
 
   const startNewGame = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }));

@@ -43,6 +43,7 @@ string? ParseArg(string[] a, string flag)
 }
 
 var repoRoot = FindRepoRoot();
+var apiVersion = File.ReadAllText(Path.Combine(repoRoot, "api-version")).Trim();
 var mapPath = ParseArg(args, "--map")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_MAP")
     ?? Path.Combine(repoRoot, "worlds/production/map.json");
@@ -204,6 +205,8 @@ ItemInfo BuildItemInfo(ItemInstance i)
         Cures = def?.Cures.ToList() ?? [],
         IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
         DestinationName = i.DestinationName,
+        DestinationHint = i.DestinationHint,
+        Payout = i.Payout,
     };
 }
 
@@ -487,7 +490,7 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
 
 // ── Endpoints ──
 
-app.MapGet("/api/health", () => Results.Ok(new { status = "ok" }));
+app.MapGet("/api/health", () => Results.Ok(new { status = "ok", apiVersion }));
 
 app.MapPost("/api/game/new", async () =>
 {

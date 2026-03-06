@@ -7,7 +7,22 @@ import type {
   BankResponse,
 } from "./types";
 
+declare const __API_VERSION__: string;
+
 const BASE = "/api/game";
+
+export async function checkVersion(): Promise<string | null> {
+  try {
+    const res = await fetch("/api/health");
+    if (!res.ok) return "Server unreachable";
+    const data = await res.json();
+    if (data.apiVersion !== __API_VERSION__)
+      return `Server API version mismatch: server is v${data.apiVersion}, UI expects v${__API_VERSION__}. Restart the server.`;
+    return null;
+  } catch {
+    return "Server unreachable";
+  }
+}
 
 async function post<T>(url: string, body?: object): Promise<T> {
   const res = await fetch(url, {
