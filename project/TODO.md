@@ -168,6 +168,9 @@ Market buy/sell with auto-equip works. Remaining services need game logic.
 - [ ] Town — Guild storage
 - [x] Town — Inn / Chapterhouse (game logic)
 - [x] Stock medicine in biome-appropriate markets
+- [x] Rework haul destination hints — replaced 3x3 sector grid with relative offset:
+      "A plains settlement 2 days east of Aldgate". Manhattan distance ÷ 5 tiles/day,
+      8-way cardinal/intercardinal direction via atan2.
 - [ ] Dynamic haul generation — when a player exhausts all bespoke hauls for a given route,
       generate vague/generic hauls on the fly (e.g. "sealed guild casket", "unmarked parcel",
       "bonded cargo") so trade never dead-ends. Keep flavor minimal and mysterious to avoid

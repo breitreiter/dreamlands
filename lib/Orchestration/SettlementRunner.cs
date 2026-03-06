@@ -66,9 +66,8 @@ public static class SettlementRunner
 
         var playerHauls = session.Player.Pack.Where(i => i.HaulDefId != null).ToList();
         var newOffers = HaulGeneration.Generate(
-            info.X, info.Y, biome, isLeaf,
+            info.X, info.Y, info.Name, biome, isLeaf,
             destinations, session.Balance.Hauls,
-            session.Map.Width, session.Map.Height,
             state.HaulOffers, playerHauls, session.Rng);
 
         state.HaulOffers.AddRange(newOffers);

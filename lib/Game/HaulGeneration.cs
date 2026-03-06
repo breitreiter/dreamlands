@@ -6,20 +6,21 @@ public static class HaulGeneration
 {
     public record HaulDestination(string SettlementId, string Name, Terrain Biome, int X, int Y);
 
-    private static readonly string[] SectorNames =
+    private const int TilesPerDay = 5;
+
+    private static readonly string[] Directions =
     {
-        "northwest", "north",  "northeast",
-        "west",      "center", "east",
-        "southwest", "south",  "southeast"
+        "east", "northeast", "north", "northwest",
+        "west", "southwest", "south", "southeast"
     };
 
     public static List<ItemInstance> Generate(
         int x, int y,
+        string originName,
         Terrain originBiome,
         bool isLeaf,
         IReadOnlyList<HaulDestination> candidates,
         IReadOnlyDictionary<string, HaulDef> hauls,
-        int mapWidth, int mapHeight,
         IReadOnlyList<ItemInstance> existingOffers,
         IReadOnlyList<ItemInstance> playerHauls,
         Random rng)
@@ -51,7 +52,7 @@ public static class HaulGeneration
 
             var def = matching[rng.Next(matching.Count)];
             var payout = (Math.Abs(x - dest.X) + Math.Abs(y - dest.Y)) * 3;
-            var hint = BuildHint(dest, mapWidth, mapHeight);
+            var hint = BuildHint(x, y, originName, dest);
 
             result.Add(new ItemInstance("haul", def.Name)
             {
@@ -70,12 +71,24 @@ public static class HaulGeneration
         return result;
     }
 
-    public static string BuildHint(HaulDestination dest, int mapWidth, int mapHeight)
+    public static string BuildHint(int originX, int originY, string originName, HaulDestination dest)
     {
-        var col = Math.Clamp(dest.X * 3 / mapWidth, 0, 2);
-        var row = Math.Clamp(dest.Y * 3 / mapHeight, 0, 2);
-        var sector = SectorNames[row * 3 + col];
+        var dx = dest.X - originX;
+        var dy = dest.Y - originY;
+        var manhattan = Math.Abs(dx) + Math.Abs(dy);
+        var days = Math.Max(1, (int)Math.Round((double)manhattan / TilesPerDay));
         var biome = dest.Biome.ToString().ToLowerInvariant();
-        return $"A {biome} settlement in the {sector}";
+
+        if (manhattan == 0)
+            return $"A {biome} settlement at {originName}";
+
+        // 8-way direction from angle: atan2 gives radians, divide into 8 sectors
+        var angle = Math.Atan2(-dy, dx); // -dy because y increases southward on the grid
+        var index = (int)Math.Round(angle / (Math.PI / 4));
+        if (index < 0) index += 8;
+        var direction = Directions[index % 8];
+
+        var dayLabel = days == 1 ? "1 day" : $"{days} days";
+        return $"A {biome} settlement {dayLabel} {direction} of {originName}";
     }
 }

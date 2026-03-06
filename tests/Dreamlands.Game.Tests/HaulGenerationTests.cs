@@ -23,8 +23,8 @@ public class HaulGenerationTests
     public void NonLeaf_GeneratesTwo()
     {
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: false,
-            TwoCandidates, TestHauls, 60, 60, [], [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            TwoCandidates, TestHauls, [], [], new Random(42));
 
         Assert.Equal(2, result.Count);
     }
@@ -33,8 +33,8 @@ public class HaulGenerationTests
     public void Leaf_GeneratesOne()
     {
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: true,
-            TwoCandidates, TestHauls, 60, 60, [], [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            TwoCandidates, TestHauls, [], [], new Random(42));
 
         Assert.Single(result);
     }
@@ -48,8 +48,8 @@ public class HaulGenerationTests
         };
 
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: false,
-            TwoCandidates, TestHauls, 60, 60, existing, [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            TwoCandidates, TestHauls, existing, [], new Random(42));
 
         Assert.Single(result);
     }
@@ -64,8 +64,8 @@ public class HaulGenerationTests
         };
 
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: false,
-            TwoCandidates, TestHauls, 60, 60, existing, [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            TwoCandidates, TestHauls, existing, [], new Random(42));
 
         Assert.Empty(result);
     }
@@ -79,8 +79,8 @@ public class HaulGenerationTests
         };
 
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: true,
-            candidates, TestHauls, 60, 60, [], [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            candidates, TestHauls, [], [], new Random(42));
 
         Assert.Single(result);
         // manhattan = |10-20| + |10-15| = 15, payout = 15 * 3 = 45
@@ -98,8 +98,8 @@ public class HaulGenerationTests
         };
 
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: false,
-            candidates, TestHauls, 60, 60, [], [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            candidates, TestHauls, [], [], new Random(42));
 
         Assert.Equal(2, result.Count);
         Assert.NotEqual(result[0].HaulDefId, result[1].HaulDefId);
@@ -114,23 +114,52 @@ public class HaulGenerationTests
         };
 
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: false,
-            candidates, TestHauls, 60, 60, [], [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            candidates, TestHauls, [], [], new Random(42));
 
         Assert.Empty(result);
     }
 
     [Theory]
-    [InlineData(5, 5, 60, 60, "northwest")]
-    [InlineData(30, 30, 60, 60, "center")]
-    [InlineData(55, 55, 60, 60, "southeast")]
-    [InlineData(55, 5, 60, 60, "northeast")]
-    [InlineData(5, 55, 60, 60, "southwest")]
-    public void SectorHint_CorrectForCoordinates(int dx, int dy, int w, int h, string expectedSector)
+    [InlineData(10, 0, "north")]       // due north
+    [InlineData(20, 0, "east")]        // due east
+    [InlineData(10, 20, "south")]      // due south
+    [InlineData(0, 10, "west")]        // due west
+    [InlineData(18, 5, "northeast")]   // mostly east, slightly north
+    [InlineData(20, 20, "southeast")]  // exact diagonal
+    public void Hint_DirectionIsCorrect(int destX, int destY, string expectedDir)
     {
-        var dest = new HaulGeneration.HaulDestination("test", "Test", Terrain.Forest, dx, dy);
-        var hint = HaulGeneration.BuildHint(dest, w, h);
-        Assert.Equal($"A forest settlement in the {expectedSector}", hint);
+        var dest = new HaulGeneration.HaulDestination("test", "Fartown", Terrain.Forest, destX, destY);
+        var hint = HaulGeneration.BuildHint(10, 10, "Aldgate", dest);
+        Assert.Contains(expectedDir, hint);
+        Assert.Contains("of Aldgate", hint);
+    }
+
+    [Fact]
+    public void Hint_DistanceInDays()
+    {
+        // 25 tiles manhattan = 5 days
+        var dest = new HaulGeneration.HaulDestination("test", "Fartown", Terrain.Forest, 30, 15);
+        var hint = HaulGeneration.BuildHint(10, 10, "Aldgate", dest);
+        Assert.Contains("5 days", hint);
+    }
+
+    [Fact]
+    public void Hint_SingleDay()
+    {
+        // 4 tiles manhattan rounds to 1 day
+        var dest = new HaulGeneration.HaulDestination("test", "Neartown", Terrain.Forest, 12, 12);
+        var hint = HaulGeneration.BuildHint(10, 10, "Aldgate", dest);
+        Assert.Contains("1 day", hint);
+        Assert.DoesNotContain("1 days", hint);
+    }
+
+    [Fact]
+    public void Hint_IncludesBiome()
+    {
+        var dest = new HaulGeneration.HaulDestination("test", "Bogtown", Terrain.Swamp, 20, 10);
+        var hint = HaulGeneration.BuildHint(10, 10, "Aldgate", dest);
+        Assert.StartsWith("A swamp settlement", hint);
     }
 
     [Fact]
@@ -142,8 +171,8 @@ public class HaulGenerationTests
         };
 
         var result = HaulGeneration.Generate(
-            10, 10, Terrain.Plains, isLeaf: true,
-            candidates, TestHauls, 60, 60, [], [], new Random(42));
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            candidates, TestHauls, [], [], new Random(42));
 
         Assert.Single(result);
         var item = result[0];
