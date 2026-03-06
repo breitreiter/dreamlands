@@ -1,15 +1,27 @@
 Aldgate
 
-FIXME: The player has just disembarked at Aldgate, the starting city. Describe the first moments on the dock -- the bustle, the smells, the sense of a new frontier. Establish that the player carries a Trade Guild seal ring and must now decide how to begin their journey into the Dreamlands.
+You stand inside Aldgate's walls at last. It is sprawling, filthy, and beautiful.
+
+In the market, you'll find dispatches, sealed goods, and trade cargo bound for settlements across the frontier. Your guild ring gives you the right to claim a contract, carry the goods to their destination, and collect payment once the cargo arrives and the seal is inspected intact.
+
+The arrangement is simple, but the road is not. Aldgate sits at the edge of empire;  beyond its gates, the borderlands open up, and with them, long stretches of rough country between scattered settlements. There are bandits, to be sure, but you'll be lucky to die a clean death by steel. It is thirst, hunger, and fever that kill most travelers out here. It is carelessness, hubris, and ignorance. 
+
+Close to the city, the lands are tame enough. The roads see regular traffic, farmsteads break up the landscape, and imperial patrols pass often enough. Pack a few days food and keep a wary eye on your coinpurse.
+
+But the farther into the borderlands a contract takes you, the thinner the settlements become. Strange folk out there, quiet roads, and things that move in the dark beyond your lantern's reach. The work pays well for those mad enough to take it.
+
+Taking stock, you have: your guild ring, your travelling cloths, a sturdy pack, a pouch of coins, and...
 
 choices:
 
-* Visit the market = Survey the stalls near the harbour
+* A worn canteen = I'd heard the scrublands were harsh
   FIXME: The player browses the dockside market. Describe the press of traders, the unfamiliar goods. They find a practical item to start their journey.
-  +add_item waterskin
+  +add_item canteen
 
-* Ask around for work = Speak to the dockworkers and merchants
+* A skinning knife = You can't be too careful in these lands
   FIXME: The player talks to locals, gathering rumours about the roads ahead. They learn something useful about the dangers beyond the city walls.
+  +add_item skinning_knife
 
-* Explore the city walls = Walk the perimeter and study the land beyond
+* A fine pair of boots = A wanderer's companion
   FIXME: The player climbs to a vantage point on the walls. Describe what they see -- the terrain stretching into the Dreamlands, the roads leading out. They spot something useful left behind by a previous traveller.
+  +add_item fine_boots
