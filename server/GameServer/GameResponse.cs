@@ -194,6 +194,7 @@ public class ItemInfo
     public int ForagingBonus { get; init; }
     public List<string> Cures { get; init; } = [];
     public bool IsEquippable { get; init; }
+    public string? DestinationName { get; init; }
 }
 
 public class MechanicsInfo

@@ -203,6 +203,7 @@ ItemInfo BuildItemInfo(ItemInstance i)
         ForagingBonus = def?.ForagingBonus ?? 0,
         Cures = def?.Cures.ToList() ?? [],
         IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
+        DestinationName = i.DestinationName,
     };
 }
 
@@ -708,14 +709,30 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 // Auto-deliver hauls destined for this settlement
                 if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
                 {
+                    var hauledItems = player.Pack.Where(i => i.HaulDefId != null).ToList();
+                    if (hauledItems.Count > 0)
+                    {
+                        app.Logger.LogInformation("Arriving at settlement {ArrivalId} ({Name}). Pack hauls:",
+                            arrivalId, session.CurrentNode.Poi.Name);
+                        foreach (var h in hauledItems)
+                            app.Logger.LogInformation("  {Name} destId={DestId} destName={DestName}",
+                                h.DisplayName, h.DestinationSettlementId, h.DestinationName);
+                    }
+
                     var delivered = HaulDelivery.Deliver(player, arrivalId, balance.Hauls);
                     if (delivered.Count > 0)
+                    {
+                        app.Logger.LogInformation("Delivered {Count} hauls:", delivered.Count);
+                        foreach (var d in delivered)
+                            app.Logger.LogInformation("  {Name} payout={Payout}", d.DisplayName, d.Payout);
+
                         deliveries = delivered.Select(d => new DeliveryInfo
                         {
                             Name = d.DisplayName,
                             Payout = d.Payout,
                             Flavor = d.DeliveryFlavor,
                         }).ToList();
+                    }
                 }
             }
 

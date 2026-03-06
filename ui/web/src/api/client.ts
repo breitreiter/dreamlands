@@ -51,6 +51,7 @@ export async function action(
     order?: MarketOrder;
     source?: string;
     bankIndex?: number;
+    offerIndex?: number;
   }
 ): Promise<GameResponse> {
   return post(`${BASE}/${id}/action`, body);

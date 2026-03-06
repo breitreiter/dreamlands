@@ -9,8 +9,17 @@ import BankScreen from "./Bank";
 import Inn from "./Inn";
 import MaskedIcon from "../components/MaskedIcon";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { formatDateTime } from "../calendar";
-import type { GameResponse } from "../api/types";
+import type { GameResponse, DeliveryInfo } from "../api/types";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -146,6 +155,14 @@ export default function Explore({ state }: { state: GameResponse }) {
   const [showInventory, setShowInventory] = useState(false);
   const [vignetteError, setVignetteError] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
+  const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
+
+  const move = useCallback(async (dir: string) => {
+    const result = await doAction({ action: "move", direction: dir });
+    if (result?.deliveries?.length) {
+      setPendingDeliveries(result.deliveries);
+    }
+  }, [doAction]);
 
   const position = useMemo(
     () => (state.node ? gridToLatLng(state.node.x, state.node.y) : [0, 0] as LatLngExpression),
@@ -154,14 +171,14 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (loading || activeService != null) return;
+      if (loading || activeService != null || pendingDeliveries.length > 0) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
       for (const [dir, key] of Object.entries(DIR_KEYS)) {
         if (e.key === key) {
           e.preventDefault();
-          doAction({ action: "move", direction: dir });
+          move(dir);
           return;
         }
       }
@@ -172,7 +189,7 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [doAction, loading, activeService]);
+  }, [move, loading, activeService, pendingDeliveries.length]);
 
   // Reset vignette error when terrain or tier changes
   const terrain = state.node?.terrain;
@@ -217,7 +234,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   return (
     <div className="h-full flex bg-page text-primary">
       {/* Map panel */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative isolate">
         <MapContainer
           crs={CRS.Simple}
           center={position}
@@ -243,7 +260,7 @@ export default function Explore({ state }: { state: GameResponse }) {
             exits={exits.map((e) => e.direction)}
             loading={loading}
             hidden={isLost}
-            onMove={(dir) => doAction({ action: "move", direction: dir })}
+            onMove={move}
           />
           <MapFollower position={position} />
         </MapContainer>
@@ -355,6 +372,41 @@ export default function Explore({ state }: { state: GameResponse }) {
           </div>
         </div>
       </div>
+
+      {/* Haul delivery dialog */}
+      <AlertDialog open={pendingDeliveries.length > 0}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-header text-accent text-[32px]">
+              Delivery Complete
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="flex flex-col gap-4">
+            {pendingDeliveries.map((d, i) => (
+              <div key={i} className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <MaskedIcon icon="wooden-crate.svg" className="w-6 h-6" color="#D0BD62" />
+                  <span className="text-accent font-bold">{d.name}</span>
+                </div>
+                {d.flavor && (
+                  <AlertDialogDescription className="text-primary leading-relaxed">
+                    {d.flavor}
+                  </AlertDialogDescription>
+                )}
+                <div className="flex items-center gap-2 text-accent">
+                  <MaskedIcon icon="two-coins.svg" className="w-5 h-5" color="#D0BD62" />
+                  <span>+{d.payout} gold</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setPendingDeliveries([])}>
+              Close
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
     </div>
   );

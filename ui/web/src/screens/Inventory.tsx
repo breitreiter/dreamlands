@@ -262,10 +262,13 @@ function ItemCard({
             <span className="text-accent ml-2">{item.cost}g</span>
           )}
         </div>
+        {item.destinationName && (
+          <div className="text-dim mt-0.5 truncate">Deliver to {item.destinationName}</div>
+        )}
         {mods && (
           <div className="text-dim mt-0.5 truncate" title={mods}>{mods}</div>
         )}
-        {item.description && !mods && (
+        {item.description && !mods && !item.destinationName && (
           <div className="text-muted mt-0.5 truncate" title={item.description}>{item.description}</div>
         )}
       </div>

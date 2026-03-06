@@ -97,6 +97,7 @@ export interface ItemInfo {
   foragingBonus: number;
   cures: string[];
   isEquippable: boolean;
+  destinationName: string | null;
 }
 
 export interface EquipmentInfo {
@@ -152,6 +153,12 @@ export interface InnQuoteResponse {
   canAfford: boolean;
 }
 
+export interface DeliveryInfo {
+  name: string;
+  payout: number;
+  flavor: string | null;
+}
+
 export interface GameResponse {
   mode: "exploring" | "encounter" | "outcome" | "game_over" | "camp" | "camp_resolved";
   status: StatusInfo;
@@ -165,6 +172,7 @@ export interface GameResponse {
   mechanics?: MechanicsInfo;
   marketResult?: MarketOrderResult;
   innRecovery?: InnRecoveryInfo;
+  deliveries?: DeliveryInfo[];
 }
 
 export interface MechanicsInfo {

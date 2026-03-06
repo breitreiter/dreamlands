@@ -8,7 +8,7 @@ const ITEM_TYPE_ICONS: Record<string, string> = {
   boots: "boots.svg",
   tool: "knapsack.svg",
   consumable: "pouch-with-beads.svg",
-  tradegood: "two-coins.svg",
+  haul: "wooden-crate.svg",
 };
 
 export function itemTypeIcon(type: string): string {
@@ -16,9 +16,9 @@ export function itemTypeIcon(type: string): string {
 }
 
 const TAB_ICONS: Record<string, string> = {
-  trade: "two-coins.svg",
   foods: "pouch-with-beads.svg",
   equipment: "sword-brandish.svg",
+  hauls: "wooden-crate.svg",
   pack: "backpack.svg",
   haversack: "knapsack.svg",
   equipped: "sword-brandish.svg",
