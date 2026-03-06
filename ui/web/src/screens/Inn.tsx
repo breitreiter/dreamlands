@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useGame } from "../GameContext";
 import { getInnQuote } from "../api/client";
 import type { GameResponse, InnQuoteResponse, InnRecoveryInfo } from "../api/types";
+import { Button } from "@/components/ui/button";
+import MaskedIcon from "@/components/MaskedIcon";
 import parchment from "../assets/parchment.png";
 
 export default function Inn({
@@ -181,23 +183,15 @@ export default function Inn({
 
               <div className="flex gap-3">
                 {quote.needsRecovery && (
-                  <button
-                    onClick={handleFullRecovery}
-                    disabled={loading}
-                    className="px-4 py-2 bg-btn hover:bg-btn-hover rounded-lg text-action
-                               hover:text-action-hover disabled:opacity-50 transition-colors"
-                  >
+                  <Button variant="secondary" onClick={handleFullRecovery} disabled={loading}>
+                    <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
                     Recover in the Chapterhouse
-                  </button>
+                  </Button>
                 )}
-                <button
-                  onClick={onBack}
-                  disabled={loading}
-                  className="px-4 py-2 bg-btn hover:bg-btn-hover rounded-lg text-action
-                             hover:text-action-hover disabled:opacity-50 transition-colors"
-                >
+                <Button variant="secondary" onClick={onBack} disabled={loading}>
+                  <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
                   Depart
-                </button>
+                </Button>
               </div>
             </>
           )}
@@ -210,14 +204,10 @@ export default function Inn({
               </div>
 
               <div className="flex flex-col gap-3">
-                <button
-                  onClick={handleOneNight}
-                  disabled={loading}
-                  className="self-start px-4 py-2 bg-btn hover:bg-btn-hover rounded-lg text-action
-                             hover:text-action-hover disabled:opacity-50 transition-colors"
-                >
+                <Button variant="secondary" className="self-start" onClick={handleOneNight} disabled={loading}>
+                  <MaskedIcon icon="wood-cabin.svg" className="w-5 h-5" color="currentColor" />
                   Spend One Night
-                </button>
+                </Button>
 
                 {quote.canFullRecover && quote.needsRecovery && (
                   <>
@@ -232,15 +222,11 @@ export default function Inn({
                         : ""}
                       .
                     </div>
-                    <button
-                      onClick={handleFullRecovery}
-                      disabled={loading || !quote.canAfford}
-                      className="self-start px-4 py-2 bg-btn hover:bg-btn-hover rounded-lg text-action
-                                 hover:text-action-hover disabled:opacity-50 transition-colors"
-                    >
+                    <Button variant="secondary" className="self-start" onClick={handleFullRecovery} disabled={loading || !quote.canAfford}>
+                      <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
                       Fully Recover
                       {quote.quote.goldCost > 0 && ` (${quote.quote.goldCost} gold)`}
-                    </button>
+                    </Button>
                     {!quote.canAfford && (
                       <div className="text-negative">
                         You don't have enough gold.
@@ -265,14 +251,10 @@ export default function Inn({
                   )}
               </div>
 
-              <button
-                onClick={onBack}
-                disabled={loading}
-                className="px-4 py-2 bg-btn hover:bg-btn-hover rounded-lg text-action
-                           hover:text-action-hover disabled:opacity-50 transition-colors"
-              >
+              <Button variant="secondary" onClick={onBack} disabled={loading}>
+                <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
                 Depart
-              </button>
+              </Button>
             </>
           )}
         </div>

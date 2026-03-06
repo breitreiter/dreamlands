@@ -1,5 +1,7 @@
 import { useGame } from "../GameContext";
 import type { GameResponse } from "../api/types";
+import { Button } from "@/components/ui/button";
+import MaskedIcon from "@/components/MaskedIcon";
 
 export default function GameOver({ state }: { state: GameResponse }) {
   const { startNewGame, loading } = useGame();
@@ -11,14 +13,10 @@ export default function GameOver({ state }: { state: GameResponse }) {
         <p className="text-primary/80">
           {state.reason || "You have perished in the Dreamlands."}
         </p>
-        <button
-          onClick={startNewGame}
-          disabled={loading}
-          className="px-8 py-3 bg-action hover:bg-action-hover disabled:bg-btn
-                     text-contrast transition-colors"
-        >
+        <Button size="lg" onClick={startNewGame} disabled={loading}>
+          <MaskedIcon icon="play-button.svg" className="w-5 h-5" color="currentColor" />
           {loading ? "Starting..." : "New Game"}
-        </button>
+        </Button>
       </div>
     </div>
   );

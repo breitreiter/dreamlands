@@ -4,6 +4,7 @@ import type { GameResponse, MarketItem, HaulOffer, ItemInfo } from "../api/types
 import * as api from "../api/client";
 import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
+import { Button } from "@/components/ui/button";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
@@ -321,21 +322,14 @@ export default function MarketScreen({
       >
         {hasOrder ? (
           <div className="flex gap-2">
-            <button
-              onClick={submitOrder}
-              disabled={loading}
-              className="px-4 py-1 rounded-lg bg-btn text-action hover:text-action-hover
-                         disabled:opacity-40 transition-colors"
-            >
+            <Button variant="secondary" size="sm" onClick={submitOrder} disabled={loading}>
+              <MaskedIcon icon="shaking-hands.svg" className="w-4 h-4" color="currentColor" />
               Confirm
-            </button>
-            <button
-              onClick={cancelOrder}
-              className="px-4 py-1 rounded-lg bg-btn text-action hover:text-action-hover
-                         transition-colors"
-            >
+            </Button>
+            <Button variant="secondary" size="sm" onClick={cancelOrder}>
+              <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
               Cancel
-            </button>
+            </Button>
           </div>
         ) : undefined}
       </TopBar>
@@ -372,15 +366,10 @@ export default function MarketScreen({
                       <div className="text-muted mt-0.5">{haul.originFlavor}</div>
                       <div className="mt-0.5" style={{ color: "#D0BD62" }}>Pays {haul.payout}g on delivery</div>
                     </div>
-                    <button
-                      onClick={() => claimHaul(haul.index)}
-                      disabled={loading || packFull}
-                      className="px-3 py-1 rounded-lg disabled:opacity-40
-                                 text-action hover:text-action-hover transition-colors flex-shrink-0"
-                      style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                    >
+                    <Button variant="secondary" size="sm" onClick={() => claimHaul(haul.index)} disabled={loading || packFull} className="flex-shrink-0">
+                      <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
                       Claim
-                    </button>
+                    </Button>
                   </div>
                 ))
               )
@@ -406,25 +395,15 @@ export default function MarketScreen({
                     </div>
                     <div className="flex items-center gap-1 flex-shrink-0">
                       {pendingQty > 0 && (
-                        <button
-                          onClick={() => removeBuy(item.id)}
-                          className="px-2 py-1 rounded-lg text-action hover:text-action-hover transition-colors flex items-center gap-1"
-                          style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                        >
+                        <Button variant="secondary" size="sm" onClick={() => removeBuy(item.id)}>
                           <span className="text-accent">{pendingQty}x</span>
-                          <span>&times;</span>
-                        </button>
+                          <MaskedIcon icon="cancel.svg" className="w-3 h-3" color="currentColor" />
+                        </Button>
                       )}
-                      <button
-                        onClick={() => addBuy(item.id)}
-                        disabled={!canBuy(item)}
-                        className="px-3 py-1 rounded-lg disabled:opacity-40
-                                   text-action hover:text-action-hover transition-colors flex items-center gap-1"
-                        style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                      >
+                      <Button variant="secondary" size="sm" onClick={() => addBuy(item.id)} disabled={!canBuy(item)}>
                         <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
                         {item.buyPrice}g
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 );
@@ -463,16 +442,11 @@ export default function MarketScreen({
                   counts.set(defId, { name: item?.name ?? defId, count: 1 });
                 }
                 return [...counts.entries()].map(([defId, { name, count }]) => (
-                  <button
-                    key={defId}
-                    onClick={() => removeSell(defId)}
-                    className="px-2 py-0.5 rounded text-action hover:text-action-hover transition-colors flex items-center gap-1"
-                    style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                  >
+                  <Button key={defId} variant="secondary" size="sm" onClick={() => removeSell(defId)}>
                     <span className="text-accent">{count > 1 ? `${count}x ` : ""}{name}</span>
                     <span className="text-positive">+{(sellPrices[defId] ?? 0) * count}g</span>
-                    <span>&times;</span>
-                  </button>
+                    <MaskedIcon icon="cancel.svg" className="w-3 h-3" color="currentColor" />
+                  </Button>
                 ));
               })()}
             </div>
@@ -504,15 +478,11 @@ export default function MarketScreen({
                       )}
                     </div>
                     {sellable && (
-                      <button
-                        onClick={() => addSell(item.defId)}
-                        className="px-3 py-1 rounded-lg
-                                   text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
-                        style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                      >
+                      <Button variant="secondary" size="sm" onClick={() => addSell(item.defId)} className="flex-shrink-0">
+                        <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
                         Sell
                         <span className="text-positive">+{price}g</span>
-                      </button>
+                      </Button>
                     )}
                   </div>
                 );

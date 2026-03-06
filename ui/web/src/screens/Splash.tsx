@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useGame } from "../GameContext";
+import { Button } from "@/components/ui/button";
+import MaskedIcon from "@/components/MaskedIcon";
 import splashStars from "../assets/splash_stars.jpg";
 import splashTower from "../assets/splash_tower.png";
 
@@ -12,7 +14,7 @@ const credits = [
 ];
 
 export default function Splash() {
-  const { startNewGame, loading, error } = useGame();
+  const { startNewGame, resumeGame, hasSavedGame, loading, error } = useGame();
   const [showCredits, setShowCredits] = useState(false);
 
   return (
@@ -35,24 +37,26 @@ export default function Splash() {
         <p className="text-dim">
           A journey into the unknown
         </p>
-        <button
-          onClick={startNewGame}
-          disabled={loading}
-          className="px-8 py-3 bg-action hover:bg-action-hover disabled:bg-btn
-                     text-contrast font-medium tracking-wide transition-colors rounded-lg"
-        >
-          {loading ? "Starting..." : "New Game"}
-        </button>
+        <div className="space-y-3">
+          {hasSavedGame && (
+            <Button size="lg" className="w-full tracking-wide" onClick={resumeGame} disabled={loading}>
+              <MaskedIcon icon="play-button.svg" className="w-5 h-5" color="currentColor" />
+              {loading ? "Loading..." : "Continue"}
+            </Button>
+          )}
+          <Button size="lg" className="w-full tracking-wide" onClick={startNewGame} disabled={loading}>
+            <MaskedIcon icon="play-button.svg" className="w-5 h-5" color="currentColor" />
+            {loading ? "Starting..." : "New Game"}
+          </Button>
+        </div>
         {error && (
           <p className="text-negative">{error}</p>
         )}
         <div>
-          <button
-            onClick={() => setShowCredits(!showCredits)}
-            className="text-muted hover:text-dim tracking-wide transition-colors"
-          >
+          <Button variant="ghost" className="tracking-wide" onClick={() => setShowCredits(!showCredits)}>
+            <MaskedIcon icon="tied-scroll.svg" className="w-5 h-5" color="currentColor" />
             {showCredits ? "Close Credits" : "Credits"}
-          </button>
+          </Button>
           {showCredits && (
             <div className="mt-4 text-left mx-auto max-w-xs space-y-2">
               <p className="text-dim font-bold tracking-wide mb-3">

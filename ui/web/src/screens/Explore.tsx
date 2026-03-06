@@ -8,6 +8,7 @@ import MarketScreen from "./Market";
 import BankScreen from "./Bank";
 import Inn from "./Inn";
 import MaskedIcon from "../components/MaskedIcon";
+import { Button } from "@/components/ui/button";
 import { formatDateTime } from "../calendar";
 import type { GameResponse } from "../api/types";
 
@@ -266,15 +267,9 @@ export default function Explore({ state }: { state: GameResponse }) {
             <div className="font-header text-accent text-lg">
               {node.region || node.terrain}
             </div>
-            <button
-              onClick={() => setShowInventory((v) => !v)}
-              disabled={loading}
-              title="Inventory (I)"
-              className="w-9 h-9 bg-btn rounded-lg flex items-center justify-center
-                         hover:bg-btn-hover disabled:opacity-50 transition-colors"
-            >
+            <Button variant="secondary" size="icon-sm" onClick={() => setShowInventory((v) => !v)} disabled={loading} title="Inventory (I)">
               <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
-            </button>
+            </Button>
           </div>
 
           {/* Date + coordinates */}
@@ -300,34 +295,23 @@ export default function Explore({ state }: { state: GameResponse }) {
                     const info = SERVICE_ICONS[service];
                     if (!info) return null;
                     return (
-                      <button
-                        key={service}
-                        onClick={() => openService(service)}
-                        disabled={loading}
-                        title={info.label}
-                        className="w-11 h-11 bg-btn rounded-lg flex items-center justify-center
-                                   hover:bg-btn-hover disabled:opacity-50 transition-colors"
-                      >
+                      <Button key={service} variant="secondary" size="icon-lg" onClick={() => openService(service)} disabled={loading} title={info.label}>
                         <img
                           src={`/world/assets/icons/${info.icon}`}
                           alt={info.label}
                           className="w-6 h-6 opacity-80"
                         />
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
               </div>
             )}
             {poi?.kind === "dungeon" && !poi.dungeonCompleted && (
-              <button
-                onClick={() => doAction({ action: "enter_dungeon" })}
-                disabled={loading}
-                className="w-full py-2 px-3 bg-btn hover:bg-btn-hover disabled:opacity-50 text-negative rounded-lg flex items-center gap-2 transition-colors"
-              >
+              <Button variant="destructive" className="w-full" onClick={() => doAction({ action: "enter_dungeon" })} disabled={loading}>
                 <img src="/world/assets/icons/dungeon-gate.svg" alt="" className="w-5 h-5" />
                 <span>Enter {poi.name || "Dungeon"}</span>
-              </button>
+              </Button>
             )}
             {poi?.kind === "dungeon" && poi.dungeonCompleted && (
               <div className="text-muted text-center w-full">

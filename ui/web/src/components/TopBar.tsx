@@ -1,5 +1,6 @@
 import type { StatusInfo } from "../api/types";
 import MaskedIcon from "./MaskedIcon";
+import { Button } from "@/components/ui/button";
 
 export default function TopBar({
   status,
@@ -34,14 +35,10 @@ export default function TopBar({
       </div>
       <div className="flex-1" />
       {children ?? (
-        <button
-          onClick={onBack}
-          className="px-4 py-1 rounded-lg bg-btn text-action hover:text-action-hover
-                     transition-colors flex items-center gap-2"
-        >
+        <Button variant="secondary" size="sm" onClick={onBack}>
           <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
           Return to Map
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -3,6 +3,18 @@ import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo
 import { useGame } from "../GameContext";
 import MaskedIcon, { iconUrl, itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",
@@ -264,24 +276,31 @@ function ItemCard({
   );
 }
 
-const ACTION_ICONS: Record<string, string> = {
-  Equip: "sword-brandish.svg",
-  Unequip: "cancel.svg",
-  Discard: "cancel.svg",
-};
-
-function ActionBtn({ label, disabled, onClick }: { label: string; disabled: boolean; onClick: () => void }) {
+function DiscardButton({ item, doAction, loading }: { item: ItemInfo; doAction: (body: { action: string; itemId?: string }) => void; loading: boolean }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="w-10 h-10 rounded-lg disabled:opacity-40
-                 flex items-center justify-center transition-colors text-action hover:text-action-hover"
-      style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-      title={label}
-    >
-      <MaskedIcon icon={ACTION_ICONS[label] || "sun.svg"} className="w-5 h-5" color="currentColor" />
-    </button>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="secondary" size="icon" disabled={loading} title="Discard">
+          <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Destroy {item.name}?</AlertDialogTitle>
+          <AlertDialogDescription>This item will be lost forever.</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
+            Keep
+          </AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={() => doAction({ action: "discard", itemId: item.defId })}>
+            <MaskedIcon icon="trash-can.svg" className="w-4 h-4" color="currentColor" />
+            Destroy
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
@@ -303,11 +322,12 @@ function PackTab({
         <ItemCard key={i} item={item} actions={
           <>
             {item.isEquippable && (
-              <ActionBtn label="Equip" disabled={loading}
-                onClick={() => doAction({ action: "equip", itemId: item.defId })} />
+              <Button variant="secondary" size="icon" disabled={loading} title="Equip"
+                onClick={() => doAction({ action: "equip", itemId: item.defId })}>
+                <MaskedIcon icon="sword-brandish.svg" className="w-5 h-5" color="currentColor" />
+              </Button>
             )}
-            <ActionBtn label="Discard" disabled={loading}
-              onClick={() => doAction({ action: "discard", itemId: item.defId })} />
+            <DiscardButton item={item} doAction={doAction} loading={loading} />
           </>
         } />
       ))}
@@ -336,8 +356,7 @@ function HaversackTab({
     <>
       {items.map((item, i) => (
         <ItemCard key={i} item={item} actions={
-          <ActionBtn label="Discard" disabled={loading}
-            onClick={() => doAction({ action: "discard", itemId: item.defId })} />
+          <DiscardButton item={item} doAction={doAction} loading={loading} />
         } />
       ))}
       {Array.from({ length: emptySlots }, (_, i) => (
@@ -366,8 +385,10 @@ function EquippedTab({
         const item = equipment[slot];
         return item ? (
           <ItemCard key={slot} item={item} actions={
-            <ActionBtn label="Unequip" disabled={loading}
-              onClick={() => doAction({ action: "unequip", slot })} />
+            <Button variant="secondary" size="icon" disabled={loading} title="Unequip"
+              onClick={() => doAction({ action: "unequip", slot })}>
+              <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+            </Button>
           } />
         ) : (
           <div key={slot} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">

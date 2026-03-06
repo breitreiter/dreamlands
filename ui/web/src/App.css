@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-page: #232d46;
@@ -18,7 +22,6 @@
 
   --color-negative: #ff6b6b;
   --color-positive: #6bffae;
-
 
   --color-btn: #0d0d0dcc;
   --color-btn-hover: #292929;
@@ -58,4 +61,34 @@ body,
   width: 100%;
   overflow: hidden;
   font-family: 'Alegreya Sans', sans-serif;
+}
+
+@theme inline {
+  --radius-lg: var(--radius);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: #232d46;
+  --foreground: #f3f3f3;
+  --popover: #262626;
+  --popover-foreground: #f3f3f3;
+  --destructive: #ff6b6b;
+  --border: #4a5568;
+  --input: #4a5568;
+  --ring: #d0925d;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
 }

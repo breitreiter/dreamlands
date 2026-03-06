@@ -4,6 +4,7 @@ import type { GameResponse, ItemInfo, BankResponse } from "../api/types";
 import * as api from "../api/client";
 import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
+import { Button } from "@/components/ui/button";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
 
@@ -126,16 +127,10 @@ export default function BankScreen({
                       <div className="text-muted mt-0.5 truncate">{item.description}</div>
                     )}
                   </div>
-                  <button
-                    onClick={() => withdraw(i)}
-                    disabled={loading || !canWithdraw(item)}
-                    className="px-3 py-1 rounded-lg disabled:opacity-40
-                               text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
-                    style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                  >
+                  <Button variant="secondary" size="sm" onClick={() => withdraw(i)} disabled={loading || !canWithdraw(item)} className="flex-shrink-0">
                     <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
                     Withdraw
-                  </button>
+                  </Button>
                 </div>
               ))
             )}
@@ -174,16 +169,10 @@ export default function BankScreen({
                       <div className="text-dim mt-0.5">equipped ({source})</div>
                     )}
                   </div>
-                  <button
-                    onClick={() => deposit(item.defId, source)}
-                    disabled={loading || bankFull}
-                    className="px-3 py-1 rounded-lg disabled:opacity-40
-                               text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
-                    style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
-                  >
+                  <Button variant="secondary" size="sm" onClick={() => deposit(item.defId, source)} disabled={loading || bankFull} className="flex-shrink-0">
                     <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
                     Deposit
-                  </button>
+                  </Button>
                 </div>
               ))
             )}
