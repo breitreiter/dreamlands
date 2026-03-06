@@ -15,13 +15,22 @@ Taking stock, you have: your guild ring, your travelling cloths, a sturdy pack, 
 choices:
 
 * A worn canteen = I'd heard the scrublands were harsh
-  FIXME: The player browses the dockside market. Describe the press of traders, the unfamiliar goods. They find a practical item to start their journey.
+  You have sold most of your belongings along the route here, piece by piece, traded for passage or bread or a night's shelter from the rain. Yet this old canteen remains. An old woman from your village pressed it into your hands before you left. She told you she had wandered lost in the dry mesas for two days; thirst had nearly killed her. She would not let you refuse it.
   +add_item canteen
 
 * A skinning knife = You can't be too careful in these lands
-  FIXME: The player talks to locals, gathering rumours about the roads ahead. They learn something useful about the dangers beyond the city walls.
-  +add_item skinning_knife
+  @if check bushcraft easy {
+    You rest your hand on the grip of the knife, its presence reassuring. You will need it to forage, to cut bark for kindling, to dress whatever game you can trap or kill. And perhaps to defend yourself, should it come to that.
+
+    It is no weapon of war, but out here it will serve.
+    +add_item skinning_knife
+  } @else {
+    Your father gave you the knife when you were still a child, small enough to carry on your hip like a tiny sword. You have never ventured far from the city walls, not truly, but you kept it with you all the same. It's mostly served to open letters and cut fruit.
+
+    The city crowds press close around you, alive with voices and coin and the smell of bread and sweat, but you think ahead to the quiet roads out in the borderlands. Perhaps you will find a use for the knife, or perhaps it will bring you luck.
+    +add_item skinning_knife
+  }
 
 * A fine pair of boots = A wanderer's companion
-  FIXME: The player climbs to a vantage point on the walls. Describe what they see -- the terrain stretching into the Dreamlands, the roads leading out. They spot something useful left behind by a previous traveller.
+  You spent your last coin on a pair of fine boots. The boot-seller was quite certain that no one would take you seriously with the ragged sandals you'd been wearing, and you could find no fault in the man's argument. Whether the boots will endure the grit and mire of the borderlands remains to be seen, but here in the crowded market, beneath the eyes of merchants and imperial functionaries, they cut a sharp figure. You flex your toes within them, testing the seams, and find no complaint. A foolish purchase, perhaps, but a man may be judged by his boots as much as by his word.
   +add_item fine_boots

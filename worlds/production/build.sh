@@ -51,7 +51,8 @@ fi
 
 # --- Encounters ---
 
-echo "==> Encounters: TODO — wire up encounter bundler"
+echo "==> Bundling encounters..."
+"$WORLD_DIR/update-encounters.sh"
 
 # --- Summary ---
 

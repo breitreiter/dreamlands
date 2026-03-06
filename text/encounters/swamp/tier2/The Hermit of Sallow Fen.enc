@@ -6,7 +6,7 @@ Deep into the fen and your world has narrowed to a catalogue of miseries. Black 
 
 You had not expected to find anyone living here. Nothing lives here that does not bite, sting, or drag itself through the muck on its belly.
 
-Yet there it is: a smudge of smoke above the treeline, yellow-grey against the perpetual overcast, and beneath it, as you round a curtain of hanging moss, a dwelling. The world is generous. It is a shack built on stilts above the waterline, patched with bark and river-reed and what appears to be sailcloth long since gone to grey. Animal bones hang from the eaves on cords of sinew, clicking softly in a breeze you cannot feel. A dugout canoe is tethered to one stilt. On the listing porch, a cookfire burns in a ring of river stones, and over it a blackened pot sends up a steam that cuts through the swamp-stink with something almost pleasant—herbs, root vegetables, something warm and human.
+Yet there it is: a smudge of smoke above the treeline, yellow-grey against the perpetual overcast, and beneath it, as you round a curtain of hanging moss, a dwelling. The world is generous. It is a shack built on stilts above the waterline, patched with bark and river-reed and what appears to be sailcloth long since gone to grey. Animal bones hang from the eaves on cords of sinew, clicking softly in a breeze you cannot feel. A dugout canoe is tethered to one stilt. On the listing porch, a cookfire burns in a ring of river stones, and over it a blackened pot sends up a steam that cuts through the swamp-stink with something almost pleasant. Herbs, root vegetables, something warm and human.
 
 The woman sits beside the fire as though she has been waiting.
 
@@ -28,10 +28,10 @@ choices:
 
 * Accept her hospitality = Sit, eat, and trade what information you can, trusting that hunger and the rising water leave you little choice but faith.
   @if check negotiation medium {
-    You trade tales of the world beyond the fen for bowls of her root-stew, and something in your words—perhaps the honesty of exhaustion, or the shape of distant roads in your voice—softens the pale amusement in her eyes. When you depart at dawn, she presses into your hands a small bundle wrapped in oilcloth: dried fish, hard travelers' bread, something that smells of smoke and keeping. "The fen takes," she says, "but I give what I can spare."
+    You trade tales of the world beyond the fen for bowls of her root-stew, and something in your words, perhaps the honesty of exhaustion or the shape of distant roads in your voice, softens the pale amusement in her eyes. When you depart at dawn, she presses into your hands a small bundle wrapped in oilcloth: dried fish, hard travelers' bread, something that smells of smoke and keeping. "The fen takes," she says, "but I give what I can spare."
     +add_random_items 3 food
   } @else {
-    You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind—only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun's pale climb you have lost the night, and perhaps something more.
+    You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind. Only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun's pale climb you have lost the night, and perhaps something more.
     +damage_health small
     +skip_time morning
   }
@@ -44,7 +44,7 @@ choices:
     A thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.
     The crack echoes. It falters. You retrieve your weapon and cut its throat in a single stroke. It collapses into the black water, which closes and stills.
     The hermit is gone. Only the low cookfire and a steaming pot remain. You take what supplies you can and leave the shack behind, bones clicking faintly in the wind as the fen swallows you.
-    +gold 30
+    +give_gold medium
   } @else {
     The sailcloth tears away. A horrid shape fills the door; wrong-jointed, bone-hooked, ghastly mouth splitting wide. It drops into the shallows and lunges.
     You swing your weapon on instinct. The attack skates off its hide. No blood. No pause. A hooked hand snags your shoulder and wrenches you sideways. Another tears through your pack, spilling its contents into the black water.
@@ -53,6 +53,6 @@ choices:
   }
 
 * Press on into the swamp = Thank her and refuse, trusting your own sense of direction over the charity of a woman who lives where nothing should.
-  You barely make it a dozen yards before the shack unfolds impossible legs from beneath its stilts and comes crashing after you through the black water, the hermit's laughter echoing across the fen like a crow's cry. You run until your lungs burn and the darkness is complete, finally collapsing in some nameless hollow where the cypress roots offer meager shelter. By the time you manage a fire, you have no idea which way leads forward—only that the smoke behind you has long since vanished, and with it, any sense of where you've been.
+  You barely make it a dozen yards before the shack unfolds impossible legs from beneath its stilts and comes crashing after you through the black water, the hermit's laughter echoing across the fen like a crow's cry. You run until your lungs burn and the darkness is complete, finally collapsing in some nameless hollow where the cypress roots offer meager shelter. By the time you manage a fire, you have no idea which way leads forward, only that the smoke behind you has long since vanished, and with it, any sense of where you've been.
   +add_condition lost
   +skip_time evening

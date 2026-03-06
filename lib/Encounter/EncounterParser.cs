@@ -344,13 +344,13 @@ public static partial class EncounterParser
             if (inConditional)
             {
                 if (inFallback)
-                    fallbackText.Add(raw);
+                    fallbackText.Add(trimmed);
                 else
-                    branchText.Add(raw);
+                    branchText.Add(trimmed);
             }
             else
             {
-                singleText.Add(raw);
+                singleText.Add(trimmed);
             }
         }
 
