@@ -1014,14 +1014,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (hNode.Poi?.Kind != PoiKind.Settlement || hNode.Poi.SettlementId == null)
                 return Results.BadRequest(new { error = "Not at a settlement" });
 
-            if (req.OfferIndex == null)
-                return Results.BadRequest(new { error = "offerIndex required" });
+            if (string.IsNullOrEmpty(req.OfferId))
+                return Results.BadRequest(new { error = "offerId required" });
 
             SettlementRunner.EnsureSettlement(session);
             if (!player.Settlements.TryGetValue(hNode.Poi.SettlementId, out var haulState))
                 return Results.BadRequest(new { error = "Settlement not initialized" });
 
-            var claimResult = Market.ClaimHaul(player, req.OfferIndex.Value, haulState);
+            var claimResult = Market.ClaimHaul(player, req.OfferId, haulState);
             if (!claimResult.Success)
                 return Results.BadRequest(new { error = claimResult.Message });
 
@@ -1154,6 +1154,7 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
 
     var settlementId = node.Poi.SettlementId;
     SettlementRunner.EnsureSettlement(session);
+    await store.Save(player);
     if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
         return Results.BadRequest(new { error = "Settlement not initialized" });
 
@@ -1172,9 +1173,9 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         description = FormatItemDescription(entry.Item),
     }).ToList();
 
-    var hauls = settlementState.HaulOffers.Select((h, i) => new
+    var hauls = settlementState.HaulOffers.Select(h => new
     {
-        index = i,
+        id = h.HaulOfferId,
         name = h.DisplayName,
         destinationName = h.DestinationName,
         destinationHint = h.DestinationHint,

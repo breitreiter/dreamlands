@@ -132,6 +132,7 @@ public class MarketTests
         var settlement = MakeSettlement();
         var haul = new ItemInstance("haul", "Spice Delivery")
         {
+            HaulOfferId = "offer_1",
             HaulDefId = "test_haul",
             DestinationSettlementId = "dest_1",
             DestinationHint = "A plains settlement in the north",
@@ -139,7 +140,7 @@ public class MarketTests
         };
         settlement.HaulOffers.Add(haul);
 
-        var result = Market.ClaimHaul(state, 0, settlement);
+        var result = Market.ClaimHaul(state, "offer_1", settlement);
 
         Assert.True(result.Success);
         Assert.Contains(state.Pack, i => i.DefId == "haul");
@@ -154,25 +155,23 @@ public class MarketTests
         var settlement = MakeSettlement();
         settlement.HaulOffers.Add(new ItemInstance("haul", "Test Haul")
         {
+            HaulOfferId = "offer_1",
             HaulDefId = "test", DestinationSettlementId = "x",
             DestinationHint = "somewhere", Payout = 10,
         });
 
-        var result = Market.ClaimHaul(state, 0, settlement);
+        var result = Market.ClaimHaul(state, "offer_1", settlement);
         Assert.False(result.Success);
     }
 
     [Fact]
-    public void ClaimHaul_FailsWhenInvalidIndex()
+    public void ClaimHaul_FailsWhenNotFound()
     {
         var state = Fresh();
         var settlement = MakeSettlement();
 
-        var result = Market.ClaimHaul(state, 0, settlement);
+        var result = Market.ClaimHaul(state, "nonexistent", settlement);
         Assert.False(result.Success);
-
-        var result2 = Market.ClaimHaul(state, -1, settlement);
-        Assert.False(result2.Success);
     }
 
     [Fact]
@@ -182,16 +181,18 @@ public class MarketTests
         var settlement = MakeSettlement();
         settlement.HaulOffers.Add(new ItemInstance("haul", "Haul A")
         {
+            HaulOfferId = "offer_a",
             HaulDefId = "a", DestinationSettlementId = "x",
             DestinationHint = "somewhere", Payout = 10,
         });
         settlement.HaulOffers.Add(new ItemInstance("haul", "Haul B")
         {
+            HaulOfferId = "offer_b",
             HaulDefId = "b", DestinationSettlementId = "y",
             DestinationHint = "elsewhere", Payout = 20,
         });
 
-        Market.ClaimHaul(state, 0, settlement);
+        Market.ClaimHaul(state, "offer_a", settlement);
 
         Assert.Single(settlement.HaulOffers);
         Assert.Equal("Haul B", settlement.HaulOffers[0].DisplayName);

@@ -261,6 +261,7 @@ public class ActionRequest
     public string? Source { get; set; }
     public int? BankIndex { get; set; }
     public int? OfferIndex { get; set; }
+    public string? OfferId { get; set; }
 }
 
 public class MarketOrderRequest

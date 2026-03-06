@@ -24,7 +24,7 @@ public class HaulGenerationTests
     {
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: false,
-            TwoCandidates, TestHauls, 60, 60, [], new Random(42));
+            TwoCandidates, TestHauls, 60, 60, [], [], new Random(42));
 
         Assert.Equal(2, result.Count);
     }
@@ -34,7 +34,7 @@ public class HaulGenerationTests
     {
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: true,
-            TwoCandidates, TestHauls, 60, 60, [], new Random(42));
+            TwoCandidates, TestHauls, 60, 60, [], [], new Random(42));
 
         Assert.Single(result);
     }
@@ -49,7 +49,7 @@ public class HaulGenerationTests
 
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: false,
-            TwoCandidates, TestHauls, 60, 60, existing, new Random(42));
+            TwoCandidates, TestHauls, 60, 60, existing, [], new Random(42));
 
         Assert.Single(result);
     }
@@ -65,7 +65,7 @@ public class HaulGenerationTests
 
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: false,
-            TwoCandidates, TestHauls, 60, 60, existing, new Random(42));
+            TwoCandidates, TestHauls, 60, 60, existing, [], new Random(42));
 
         Assert.Empty(result);
     }
@@ -80,7 +80,7 @@ public class HaulGenerationTests
 
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: true,
-            candidates, TestHauls, 60, 60, [], new Random(42));
+            candidates, TestHauls, 60, 60, [], [], new Random(42));
 
         Assert.Single(result);
         // manhattan = |10-20| + |10-15| = 15, payout = 15 * 3 = 45
@@ -99,7 +99,7 @@ public class HaulGenerationTests
 
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: false,
-            candidates, TestHauls, 60, 60, [], new Random(42));
+            candidates, TestHauls, 60, 60, [], [], new Random(42));
 
         Assert.Equal(2, result.Count);
         Assert.NotEqual(result[0].HaulDefId, result[1].HaulDefId);
@@ -115,7 +115,7 @@ public class HaulGenerationTests
 
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: false,
-            candidates, TestHauls, 60, 60, [], new Random(42));
+            candidates, TestHauls, 60, 60, [], [], new Random(42));
 
         Assert.Empty(result);
     }
@@ -143,7 +143,7 @@ public class HaulGenerationTests
 
         var result = HaulGeneration.Generate(
             10, 10, Terrain.Plains, isLeaf: true,
-            candidates, TestHauls, 60, 60, [], new Random(42));
+            candidates, TestHauls, 60, 60, [], [], new Random(42));
 
         Assert.Single(result);
         var item = result[0];

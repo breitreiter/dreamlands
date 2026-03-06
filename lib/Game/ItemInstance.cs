@@ -9,6 +9,7 @@ public record ItemInstance(string DefId, string DisplayName)
     public string? Description { get; init; }
 
     // Haul-specific fields (null for non-haul items)
+    public string? HaulOfferId { get; init; }
     public string? HaulDefId { get; init; }
     public string? DestinationSettlementId { get; init; }
     public string? DestinationName { get; init; }

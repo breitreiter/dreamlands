@@ -213,7 +213,7 @@ export interface MarketItem {
 }
 
 export interface HaulOffer {
-  index: number;
+  id: string;
   name: string;
   destinationName: string | null;
   destinationHint: string;

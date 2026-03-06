@@ -38,7 +38,7 @@ public static class SettlementRunner
         var settlement = session.Player.Settlements[node.Poi.SettlementId];
         Market.Restock(settlement, size, session.Player.Day, session.Balance, session.Rng);
 
-        // Generate haul offers if below cap
+        // Generate haul offers if below cap (exclude hauls player already carries)
         GenerateHauls(session, node.Poi.SettlementId, node.Terrain, settlement);
 
         var isChapterhouse = node == session.Map.StartingCity;
@@ -64,11 +64,12 @@ public static class SettlementRunner
             .Select(s => new HaulGeneration.HaulDestination(s.Id, s.Name, s.Biome, s.X, s.Y))
             .ToList();
 
+        var playerHauls = session.Player.Pack.Where(i => i.HaulDefId != null).ToList();
         var newOffers = HaulGeneration.Generate(
             info.X, info.Y, biome, isLeaf,
             destinations, session.Balance.Hauls,
             session.Map.Width, session.Map.Height,
-            state.HaulOffers, session.Rng);
+            state.HaulOffers, playerHauls, session.Rng);
 
         state.HaulOffers.AddRange(newOffers);
     }

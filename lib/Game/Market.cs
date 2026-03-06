@@ -173,16 +173,17 @@ public static class Market
         return new MarketResult(true, $"{verb} {def.Name} for {price} gold");
     }
 
-    public static MarketResult ClaimHaul(PlayerState player, int offerIndex, SettlementState settlement)
+    public static MarketResult ClaimHaul(PlayerState player, string offerId, SettlementState settlement)
     {
-        if (offerIndex < 0 || offerIndex >= settlement.HaulOffers.Count)
-            return new MarketResult(false, "Invalid haul offer");
+        var idx = settlement.HaulOffers.FindIndex(h => h.HaulOfferId == offerId);
+        if (idx < 0)
+            return new MarketResult(false, "Haul offer not found");
 
         if (player.Pack.Count >= player.PackCapacity)
             return new MarketResult(false, "Pack is full");
 
-        var haul = settlement.HaulOffers[offerIndex];
-        settlement.HaulOffers.RemoveAt(offerIndex);
+        var haul = settlement.HaulOffers[idx];
+        settlement.HaulOffers.RemoveAt(idx);
         player.Pack.Add(haul);
 
         return new MarketResult(true, $"Claimed {haul.DisplayName} — deliver to {haul.DestinationHint}");

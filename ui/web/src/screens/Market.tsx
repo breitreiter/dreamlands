@@ -246,10 +246,10 @@ export default function MarketScreen({
     onBack();
   }
 
-  async function claimHaul(offerIndex: number) {
-    const result = await doAction({ action: "claim_haul", offerIndex });
+  async function claimHaul(offerId: string) {
+    const result = await doAction({ action: "claim_haul", offerId });
     if (result) {
-      setHauls((prev) => prev.filter((h) => h.index !== offerIndex));
+      setHauls((prev) => prev.filter((h) => h.id !== offerId));
       setMessage("Haul claimed");
     }
   }
@@ -354,7 +354,7 @@ export default function MarketScreen({
                 <div className="p-4 text-muted">No hauls available</div>
               ) : (
                 hauls.map((haul) => (
-                  <div key={haul.index} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
+                  <div key={haul.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
                     <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
                       <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
                     </div>
@@ -367,7 +367,7 @@ export default function MarketScreen({
                         flavor={haul.originFlavor}
                       />
                     </div>
-                    <Button variant="secondary" size="sm" onClick={() => claimHaul(haul.index)} disabled={loading || packFull} className="flex-shrink-0">
+                    <Button variant="secondary" size="sm" onClick={() => claimHaul(haul.id)} disabled={loading || packFull} className="flex-shrink-0">
                       <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
                       Claim
                     </Button>

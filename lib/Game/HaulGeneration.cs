@@ -21,6 +21,7 @@ public static class HaulGeneration
         IReadOnlyDictionary<string, HaulDef> hauls,
         int mapWidth, int mapHeight,
         IReadOnlyList<ItemInstance> existingOffers,
+        IReadOnlyList<ItemInstance> playerHauls,
         Random rng)
     {
         var cap = isLeaf ? 1 : 2;
@@ -30,6 +31,8 @@ public static class HaulGeneration
 
         var excluded = new HashSet<string>(
             existingOffers.Where(o => o.HaulDefId != null).Select(o => o.HaulDefId!));
+        foreach (var h in playerHauls.Where(h => h.HaulDefId != null))
+            excluded.Add(h.HaulDefId!);
 
         var origin = originBiome.ToString().ToLowerInvariant();
         var result = new List<ItemInstance>();
@@ -52,6 +55,7 @@ public static class HaulGeneration
 
             result.Add(new ItemInstance("haul", def.Name)
             {
+                HaulOfferId = Guid.NewGuid().ToString("N"),
                 HaulDefId = def.Id,
                 DestinationSettlementId = dest.SettlementId,
                 DestinationName = dest.Name,
