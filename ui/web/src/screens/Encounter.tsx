@@ -6,7 +6,8 @@ import parchment from "../assets/parchment.png";
 
 type Segment =
   | { kind: "outcome"; data: OutcomeInfo }
-  | { kind: "body"; text: string };
+  | { kind: "body"; text: string }
+  | { kind: "chosen"; label: string; preview?: string };
 
 export default function Encounter({ state }: { state: GameResponse }) {
   const { doAction, loading } = useGame();
@@ -108,13 +109,13 @@ export default function Encounter({ state }: { state: GameResponse }) {
 
           {(baseBody || encounter?.body) && segments.length === 0 && !isTerminalOutcome && (
             <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-              {baseBody || encounter?.body}
+              {(baseBody || encounter?.body || "").trim()}
             </div>
           )}
 
           {baseBody && segments.length > 0 && (
             <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-              {baseBody}
+              {baseBody.trim()}
             </div>
           )}
 
@@ -123,9 +124,27 @@ export default function Encounter({ state }: { state: GameResponse }) {
             <div key={i}>
               {seg.kind === "outcome" ? (
                 <OutcomeSegment outcome={seg.data} />
+              ) : seg.kind === "chosen" ? (
+                <div className="flex items-start gap-3 opacity-50">
+                  <img
+                    src="/world/assets/icons/sun.svg"
+                    alt=""
+                    className="w-4 h-4 mt-1 shrink-0"
+                  />
+                  <span>
+                    <span className="font-bold text-dim">
+                      {seg.label}
+                    </span>
+                    {seg.preview && (
+                      <span className="block text-dim mt-0.5">
+                        {seg.preview}
+                      </span>
+                    )}
+                  </span>
+                </div>
               ) : (
                 <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-                  {seg.text}
+                  {seg.text.trim()}
                 </div>
               )}
             </div>
@@ -137,9 +156,10 @@ export default function Encounter({ state }: { state: GameResponse }) {
               {encounter.choices.map((choice) => (
                 <button
                   key={choice.index}
-                  onClick={() =>
-                    doAction({ action: "choose", choiceIndex: choice.index })
-                  }
+                  onClick={() => {
+                    setSegments(prev => [...prev, { kind: "chosen", label: choice.label, preview: choice.preview }]);
+                    doAction({ action: "choose", choiceIndex: choice.index });
+                  }}
                   disabled={loading}
                   className="w-full text-left flex items-start gap-3
                              disabled:text-muted transition-colors group cursor-pointer"
