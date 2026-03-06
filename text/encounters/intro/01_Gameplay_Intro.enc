@@ -10,8 +10,6 @@ choices:
 
 * Ask around for work = Speak to the dockworkers and merchants
   FIXME: The player talks to locals, gathering rumours about the roads ahead. They learn something useful about the dangers beyond the city walls.
-  +add_item rations
 
 * Explore the city walls = Walk the perimeter and study the land beyond
   FIXME: The player climbs to a vantage point on the walls. Describe what they see -- the terrain stretching into the Dreamlands, the roads leading out. They spot something useful left behind by a previous traveller.
-  +add_item rations

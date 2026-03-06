@@ -33,7 +33,6 @@ choices:
   They bind the muleteer's wrists with rope meant for pack loads. He doesn't struggle, doesn't plead further, just stares at the spilled ore samples like a man reading his own grave marker. The toll collector marks something in his ledger, mentions the mining council, mentions examples that need making. They lead him down the trail, boots scuffing gravel, and the sound carries long after they've rounded the switchback.
 
   You're left alone with the scattered ore and the wind.
-  +add_item backpack
 
 * Admit you weren't watching = Confess you saw nothing useful, offering no testimony either way
   The toll collector's face hardens into something carved from the same granite as the peaks above. "No use to me then," he says, closing the ledger with a snap that echoes off the rock face. The miners mutter, dissatisfaction rolling through them like a rockslide's first rattle. One steps forward, jabbing a thick finger toward the muleteer. "Guilty, then. Silence from a witness means he's got nothing good to say."

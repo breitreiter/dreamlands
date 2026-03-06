@@ -70,6 +70,11 @@ static class CheckCommand
         return failed > 0 ? 1 : 0;
     }
 
+    private static readonly HashSet<string> ItemIdVerbs = new()
+    {
+        "add_item", "has", "equip", "discard"
+    };
+
     private static List<string> ValidateVocabulary(Encounter encounter)
     {
         var errors = new List<string>();
@@ -80,6 +85,7 @@ static class CheckCommand
                 var err = ActionVerb.Validate(requires, VerbUsage.Condition);
                 if (err != null)
                     errors.Add($"[requires {requires}]: {err}");
+                ValidateItemId(requires, errors);
             }
 
             if (choice.Conditional is { } conditional)
@@ -89,6 +95,7 @@ static class CheckCommand
                     var err = ActionVerb.Validate(branch.Condition, VerbUsage.Condition);
                     if (err != null)
                         errors.Add($"@if {branch.Condition}: {err}");
+                    ValidateItemId(branch.Condition, errors);
                     ValidateMechanics(branch.Outcome.Mechanics, errors);
                 }
 
@@ -142,6 +149,17 @@ static class CheckCommand
             var err = ActionVerb.Validate(mechanic, VerbUsage.Mechanic);
             if (err != null)
                 errors.Add($"+{mechanic}: {err}");
+            ValidateItemId(mechanic, errors);
         }
+    }
+
+    private static void ValidateItemId(string action, List<string> errors)
+    {
+        var tokens = ActionVerb.Tokenize(action);
+        if (tokens.Count < 2) return;
+        if (!ItemIdVerbs.Contains(tokens[0])) return;
+        var itemId = tokens[1];
+        if (!ItemDef.IsValidId(itemId))
+            errors.Add($"'{tokens[0]} {itemId}': unknown item id. Not found in ItemDef.");
     }
 }

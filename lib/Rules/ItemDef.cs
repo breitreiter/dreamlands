@@ -35,7 +35,9 @@ public sealed class ItemDef
     /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
     public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.Haul;
 
-    internal static IReadOnlyDictionary<string, ItemDef> All { get; } = BuildAll();
+    public static IReadOnlyDictionary<string, ItemDef> All { get; } = BuildAll();
+
+    public static bool IsValidId(string id) => All.ContainsKey(id);
 
     static Dictionary<string, ItemDef> BuildAll() => new()
     {

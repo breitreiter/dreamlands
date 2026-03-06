@@ -19,7 +19,7 @@ choices:
     "You have come by some guild property, my friend." Your voice carries no heat, only the flat certainty of stone. "You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do." You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. "Consider this a finder's fee. I will see that the kit is returned to the guild hall in Aldgate."
 
     The trader's face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer's kit rests in your hands now, its leather still warm from where he clutched it.
-    +add_item cartographer_kit
+    +add_item cartographers_kit
     +rem_gold small
   } @else {
     He listens to your reasoning with the expression of a man who has heard it all before. When you finish, he wraps the hide back into his bundle with slow, deliberate movements. Says the price stands or he keeps it. Says there are buyers upriver who understand what the thing is worth, who don't waste his time. He could leave right now.
@@ -33,7 +33,7 @@ choices:
     You ask about the lamp oil, pointing to a specific flask, making him turn to retrieve it from deeper in the bundle. Your hand moves before thought catches up. The hide is in your grasp and you're already three strides down the raised path before he shouts behind you. The path is narrow but you know how to run it, feet finding the solid center while his voice rises in anger and disbelief.
 
     You run until you're out of breath, then hide in the reeds. You wait what seems like an eternity, until the only sound left is the incessant croak of the frogs. You emerge from your hiding place, the kit still in your grasp.
-    +add_item cartographer_kit
+    +add_item cartographers_kit
     +skip_time evening
   } @else {
     You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader's eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.
