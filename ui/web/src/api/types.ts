@@ -189,17 +189,24 @@ export interface MarketItem {
   name: string;
   type: string;
   buyPrice: number;
-  sellPrice: number;
   quantity: number;
-  isFeaturedSell: boolean;
   skillModifiers: Record<string, number>;
   resistModifiers: Record<string, number>;
   description: string;
 }
 
+export interface HaulOffer {
+  index: number;
+  name: string;
+  destinationHint: string;
+  payout: number;
+  originFlavor: string;
+}
+
 export interface MarketStockResponse {
   tier: number;
   stock: MarketItem[];
+  hauls: HaulOffer[];
   sellPrices: Record<string, number>;
 }
 

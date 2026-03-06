@@ -1,19 +1,19 @@
 import { useState, useEffect, useMemo } from "react";
 import { useGame } from "../GameContext";
-import type { GameResponse, MarketItem, ItemInfo } from "../api/types";
+import type { GameResponse, MarketItem, HaulOffer, ItemInfo } from "../api/types";
 import * as api from "../api/client";
 import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import TopBar from "../components/TopBar";
 
-const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
+const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
 
-type BuyTab = "trade" | "foods" | "equipment";
+type BuyTab = "hauls" | "foods" | "equipment";
 type SellTab = "pack" | "haversack" | "equipped";
 
 function matchesBuyTab(item: MarketItem, tab: BuyTab): boolean {
   switch (tab) {
-    case "trade": return item.type === "tradegood";
+    case "hauls": return false; // hauls are not MarketItems
     case "foods": return item.type === "consumable";
     case "equipment": return item.type === "weapon" || item.type === "armor" || item.type === "boots" || item.type === "tool";
   }
@@ -28,6 +28,7 @@ export default function MarketScreen({
 }) {
   const { gameId, doAction, loading } = useGame();
   const [stock, setStock] = useState<MarketItem[]>([]);
+  const [hauls, setHauls] = useState<HaulOffer[]>([]);
   const [sellPrices, setSellPrices] = useState<Record<string, number>>({});
   const [loadingStock, setLoadingStock] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export default function MarketScreen({
   const [pendingSells, setPendingSells] = useState<string[]>([]);
 
   // Tab state
-  const [buyTab, setBuyTab] = useState<BuyTab>("trade");
+  const [buyTab, setBuyTab] = useState<BuyTab>("hauls");
   const [sellTab, setSellTab] = useState<SellTab>("pack");
 
   useEffect(() => {
@@ -57,7 +58,11 @@ export default function MarketScreen({
     setLoadingStock(true);
     api
       .getMarketStock(gameId)
-      .then((res) => { setStock(res.stock); setSellPrices(res.sellPrices); })
+      .then((res) => {
+        setStock(res.stock);
+        setHauls(res.hauls ?? []);
+        setSellPrices(res.sellPrices ?? {});
+      })
       .catch((e) => setMessage(e.message))
       .finally(() => setLoadingStock(false));
   }, [gameId]);
@@ -69,9 +74,11 @@ export default function MarketScreen({
     let gold = state.status.gold;
 
     // Revenue from sells
+    let sellRevenue = 0;
     for (const defId of pendingSells) {
-      gold += sellPrices[defId] ?? 0;
+      sellRevenue += sellPrices[defId] ?? 0;
     }
+    gold += sellRevenue;
 
     // Cost of buys
     let buyCost = 0;
@@ -87,25 +94,13 @@ export default function MarketScreen({
       projectedStock.set(item.id, item.quantity - (pendingBuys.get(item.id) ?? 0));
     }
 
-    // Projected inventory: remove sells
-    const remainingSells = [...pendingSells];
-    const projectedPack = (inventory?.pack ?? []).filter((item) => {
-      const idx = remainingSells.indexOf(item.defId);
-      if (idx >= 0) { remainingSells.splice(idx, 1); return false; }
-      return true;
-    });
-    const projectedHaversack = (inventory?.haversack ?? []).filter((item) => {
-      const idx = remainingSells.indexOf(item.defId);
-      if (idx >= 0) { remainingSells.splice(idx, 1); return false; }
-      return true;
-    });
-
-    // Determine which equipment slots are free after pending sells
     const projectedEquipment = {
       weapon: inventory?.equipment.weapon ?? null,
       armor: inventory?.equipment.armor ?? null,
       boots: inventory?.equipment.boots ?? null,
     };
+
+    // Track which equipment slots are freed by sells
     for (const defId of pendingSells) {
       if (projectedEquipment.weapon?.defId === defId) projectedEquipment.weapon = null;
       else if (projectedEquipment.armor?.defId === defId) projectedEquipment.armor = null;
@@ -118,13 +113,25 @@ export default function MarketScreen({
     for (const [itemId] of pendingBuys) {
       const item = stock.find((s) => s.id === itemId);
       if (!item) continue;
-      const slot = item.type as string; // "weapon" | "armor" | "boots"
+      const slot = item.type as string;
       if ((slot === "weapon" || slot === "armor" || slot === "boots")
           && !claimedSlots.has(slot)
           && projectedEquipment[slot] === null) {
         claimedSlots.add(slot);
         floatingBuys.add(itemId);
       }
+    }
+
+    // Count sells from pack/haversack
+    let packSells = 0;
+    let haversackSells = 0;
+    const remainingPack = [...(inventory?.pack ?? [])];
+    const remainingHaversack = [...(inventory?.haversack ?? [])];
+    for (const defId of pendingSells) {
+      const packIdx = remainingPack.findIndex(i => i.defId === defId);
+      if (packIdx >= 0) { remainingPack.splice(packIdx, 1); packSells++; continue; }
+      const havIdx = remainingHaversack.findIndex(i => i.defId === defId);
+      if (havIdx >= 0) { remainingHaversack.splice(havIdx, 1); haversackSells++; }
     }
 
     // Count buys going to pack vs haversack (subtract 1 for floating buys)
@@ -141,13 +148,13 @@ export default function MarketScreen({
       }
     }
 
-    const packCount = projectedPack.length + packBuys;
-    const haversackCount = projectedHaversack.length + haversackBuys;
+    const packCount = (inventory?.pack ?? []).length - packSells + packBuys;
+    const haversackCount = (inventory?.haversack ?? []).length - haversackSells + haversackBuys;
     const packCapacity = inventory?.packCapacity ?? 0;
     const haversackCapacity = inventory?.haversackCapacity ?? 0;
 
-    return { gold, projectedStock, projectedPack, projectedHaversack, packCount, haversackCount, packCapacity, haversackCapacity, buyCost, claimedSlots, projectedEquipment };
-  }, [state.status.gold, pendingBuys, pendingSells, stock, sellPrices, inventory]);
+    return { gold, projectedStock, packCount, haversackCount, packCapacity, haversackCapacity, buyCost, sellRevenue, claimedSlots, projectedEquipment };
+  }, [state.status.gold, pendingBuys, pendingSells, stock, inventory, sellPrices]);
 
   function addBuy(itemId: string) {
     setPendingBuys((prev) => {
@@ -171,8 +178,14 @@ export default function MarketScreen({
     setPendingSells((prev) => [...prev, defId]);
   }
 
-  function removeSell(index: number) {
-    setPendingSells((prev) => prev.filter((_, i) => i !== index));
+  function removeSell(defId: string) {
+    setPendingSells((prev) => {
+      const idx = prev.indexOf(defId);
+      if (idx < 0) return prev;
+      const next = [...prev];
+      next.splice(idx, 1);
+      return next;
+    });
   }
 
   function canBuy(item: MarketItem): boolean {
@@ -193,12 +206,13 @@ export default function MarketScreen({
     return true;
   }
 
-  function canSell(defId: string): boolean {
-    const allItems = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? [])];
-    const totalOwned = allItems.filter((i) => i.defId === defId).length;
-    const alreadySelling = pendingSells.filter((id) => id === defId).length;
-    return alreadySelling < totalOwned;
+  function canSell(item: ItemInfo): boolean {
+    if (item.type === "haul") return false;
+    if (!(item.defId in sellPrices)) return false;
+    return true;
   }
+
+  const packFull = projected.packCount >= projected.packCapacity;
 
   const hasOrder = pendingBuys.size > 0 || pendingSells.length > 0;
 
@@ -230,40 +244,63 @@ export default function MarketScreen({
     onBack();
   }
 
+  async function claimHaul(offerIndex: number) {
+    const result = await doAction({ action: "claim_haul", offerIndex });
+    if (result) {
+      setHauls((prev) => prev.filter((h) => h.index !== offerIndex));
+      setMessage("Haul claimed");
+    }
+  }
+
   // Filtered stock for buy panel
   const filteredStock = stock.filter((item) => matchesBuyTab(item, buyTab));
 
-  // Sellable items for sell panel
+  // Sell items for right panel — subtract items already staged for sell
   const sellItems = useMemo((): { item: ItemInfo; source: string }[] => {
     if (!inventory) return [];
+
+    // Track which pending sells have been "consumed" by earlier items
+    const remainingSells = [...pendingSells];
+
+    function consumeSell(defId: string): boolean {
+      const idx = remainingSells.indexOf(defId);
+      if (idx >= 0) { remainingSells.splice(idx, 1); return true; }
+      return false;
+    }
+
+    const items: { item: ItemInfo; source: string; sold: boolean }[] = [];
+
     switch (sellTab) {
       case "pack":
-        return inventory.pack.map((item) => ({ item, source: "pack" }));
+        for (const item of inventory.pack) {
+          const sold = consumeSell(item.defId);
+          items.push({ item, source: "pack", sold });
+        }
+        break;
       case "haversack":
-        return inventory.haversack.map((item) => ({ item, source: "haversack" }));
-      case "equipped": {
-        const items: { item: ItemInfo; source: string }[] = [];
-        if (inventory.equipment.weapon) items.push({ item: inventory.equipment.weapon, source: "weapon" });
-        if (inventory.equipment.armor) items.push({ item: inventory.equipment.armor, source: "armor" });
-        if (inventory.equipment.boots) items.push({ item: inventory.equipment.boots, source: "boots" });
-        return items;
-      }
+        for (const item of inventory.haversack) {
+          const sold = consumeSell(item.defId);
+          items.push({ item, source: "haversack", sold });
+        }
+        break;
+      case "equipped":
+        if (inventory.equipment.weapon) {
+          const sold = consumeSell(inventory.equipment.weapon.defId);
+          items.push({ item: inventory.equipment.weapon, source: "weapon", sold });
+        }
+        if (inventory.equipment.armor) {
+          const sold = consumeSell(inventory.equipment.armor.defId);
+          items.push({ item: inventory.equipment.armor, source: "armor", sold });
+        }
+        if (inventory.equipment.boots) {
+          const sold = consumeSell(inventory.equipment.boots.defId);
+          items.push({ item: inventory.equipment.boots, source: "boots", sold });
+        }
+        break;
     }
-  }, [inventory, sellTab]);
 
-  // Resolve sell defIds to display names
-  const stagedSells = useMemo(() => {
-    const allItems = [...(inventory?.pack ?? []), ...(inventory?.haversack ?? []),
-      ...(inventory?.equipment.weapon ? [inventory.equipment.weapon] : []),
-      ...(inventory?.equipment.armor ? [inventory.equipment.armor] : []),
-      ...(inventory?.equipment.boots ? [inventory.equipment.boots] : [])];
-    return pendingSells.map((defId, idx) => ({
-      defId,
-      name: allItems.find((it) => it.defId === defId)?.name ?? defId,
-      price: sellPrices[defId] ?? 0,
-      index: idx,
-    }));
-  }, [pendingSells, inventory, sellPrices]);
+    return items.filter(i => !i.sold);
+  }, [inventory, sellTab, pendingSells]);
 
   return (
     <div className="h-full flex flex-col bg-page text-primary">
@@ -309,7 +346,7 @@ export default function MarketScreen({
           <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
-              <TabButton id="trade" active={buyTab === "trade"} onClick={() => setBuyTab("trade")}>Trade</TabButton>
+              <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => setBuyTab("hauls")}>Hauls</TabButton>
               <TabButton id="foods" active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabButton>
               <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabButton>
             </div>
@@ -317,6 +354,33 @@ export default function MarketScreen({
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
             {loadingStock ? (
               <div className="p-4 text-muted">Loading stock...</div>
+            ) : buyTab === "hauls" ? (
+              hauls.length === 0 ? (
+                <div className="p-4 text-muted">No hauls available</div>
+              ) : (
+                hauls.map((haul) => (
+                  <div key={haul.index} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
+                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                      <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-primary">{haul.name}</div>
+                      <div className="text-muted mt-0.5">Deliver toward {haul.destinationHint}</div>
+                      <div className="text-muted mt-0.5">{haul.originFlavor}</div>
+                    </div>
+                    <button
+                      onClick={() => claimHaul(haul.index)}
+                      disabled={loading || packFull}
+                      className="px-3 py-1 rounded-lg disabled:opacity-40
+                                 text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
+                      style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
+                    >
+                      Claim
+                      <span className="text-positive">+{haul.payout}g</span>
+                    </button>
+                  </div>
+                ))
+              )
             ) : filteredStock.length === 0 ? (
               <div className="p-4 text-muted">Nothing available</div>
             ) : (
@@ -376,64 +440,81 @@ export default function MarketScreen({
               <TabButton id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabButton>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto p-2">
-            {/* Staged sells */}
-            {stagedSells.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2 p-2 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
-                {stagedSells.map((s) => (
+
+          {/* Staged sells chip bar */}
+          {pendingSells.length > 0 && (
+            <div className="px-3 pb-2 flex flex-wrap gap-1">
+              {(() => {
+                // Group by defId for compact display
+                const counts = new Map<string, { name: string; count: number }>();
+                for (const defId of pendingSells) {
+                  const existing = counts.get(defId);
+                  if (existing) { existing.count++; continue; }
+                  // Find name from inventory
+                  const item = inventory?.pack.find(i => i.defId === defId)
+                    ?? inventory?.haversack.find(i => i.defId === defId)
+                    ?? inventory?.equipment.weapon?.defId === defId ? inventory?.equipment.weapon
+                    : inventory?.equipment.armor?.defId === defId ? inventory?.equipment.armor
+                    : inventory?.equipment.boots?.defId === defId ? inventory?.equipment.boots
+                    : null;
+                  counts.set(defId, { name: item?.name ?? defId, count: 1 });
+                }
+                return [...counts.entries()].map(([defId, { name, count }]) => (
                   <button
-                    key={s.index}
-                    onClick={() => removeSell(s.index)}
-                    className="px-2 py-1 rounded-lg text-action hover:text-action-hover transition-colors flex items-center gap-1"
+                    key={defId}
+                    onClick={() => removeSell(defId)}
+                    className="px-2 py-0.5 rounded text-action hover:text-action-hover transition-colors flex items-center gap-1"
                     style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
                   >
-                    <span className="text-primary">{s.name}</span>
-                    <span className="text-positive">+{s.price}g</span>
+                    <span className="text-accent">{count > 1 ? `${count}x ` : ""}{name}</span>
+                    <span className="text-positive">+{(sellPrices[defId] ?? 0) * count}g</span>
                     <span>&times;</span>
                   </button>
-                ))}
-              </div>
-            )}
-            <div className="space-y-2">
-              {sellItems.length === 0 ? (
-                <div className="p-4 text-muted">Nothing to sell</div>
-              ) : (
-                sellItems.map(({ item, source }, i) => {
-                  const sellPrice = sellPrices[item.defId] ?? 0;
-                  const isSold = pendingSells.includes(item.defId) && !canSell(item.defId);
-                  return (
-                    <div
-                      key={`${source}-${item.defId}-${i}`}
-                      className={`flex items-start gap-3 p-3 rounded-lg ${isSold ? "opacity-40" : ""}`}
-                      style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
-                    >
-                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-primary">{item.name}</div>
-                        {item.description && (
-                          <div className="text-muted mt-0.5 truncate">{item.description}</div>
-                        )}
-                        {sellTab === "equipped" && (
-                          <div className="text-dim mt-0.5">equipped ({source})</div>
-                        )}
-                      </div>
+                ));
+              })()}
+            </div>
+          )}
+
+          <div className="flex-1 overflow-y-auto p-2 space-y-2">
+            {sellItems.length === 0 ? (
+              <div className="p-4 text-muted">Nothing here</div>
+            ) : (
+              sellItems.map(({ item, source }, i) => {
+                const price = sellPrices[item.defId];
+                const sellable = canSell(item);
+                return (
+                  <div
+                    key={`${source}-${item.defId}-${i}`}
+                    className="flex items-start gap-3 p-3 rounded-lg"
+                    style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
+                  >
+                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                      <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-primary">{item.name}</div>
+                      {item.description && (
+                        <div className="text-muted mt-0.5 truncate">{item.description}</div>
+                      )}
+                      {sellTab === "equipped" && (
+                        <div className="text-dim mt-0.5">equipped ({source})</div>
+                      )}
+                    </div>
+                    {sellable && (
                       <button
                         onClick={() => addSell(item.defId)}
-                        disabled={isSold}
-                        className="px-3 py-1 rounded-lg disabled:opacity-40
+                        className="px-3 py-1 rounded-lg
                                    text-action hover:text-action-hover transition-colors flex items-center gap-1 flex-shrink-0"
                         style={{ backgroundColor: "rgba(13, 13, 13, 0.8)" }}
                       >
-                        <MaskedIcon icon="receive-money.svg" className="w-4 h-4" color="currentColor" />
-                        {sellPrice}g
+                        Sell
+                        <span className="text-positive">+{price}g</span>
                       </button>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

@@ -188,11 +188,76 @@ public static class Market
         return new MarketResult(true, $"Claimed {haul.DisplayName} — deliver to {haul.DestinationHint}");
     }
 
+    public static int GetSellPrice(ItemDef item, BalanceData balance)
+    {
+        var basePrice = GetBasePrice(item, balance);
+        return basePrice > 0 ? Math.Max(1, (int)(basePrice * balance.Trade.SellRatio)) : 0;
+    }
+
+    public static MarketResult Sell(PlayerState player, string itemDefId, BalanceData balance)
+    {
+        if (!balance.Items.TryGetValue(itemDefId, out var def))
+            return new MarketResult(false, $"Unknown item: {itemDefId}");
+
+        if (def.Type == ItemType.Haul)
+            return new MarketResult(false, "Cannot sell hauls");
+
+        var price = GetSellPrice(def, balance);
+        if (price <= 0)
+            return new MarketResult(false, "Item has no sell value");
+
+        // Search pack first, then haversack, then equipment
+        var packIdx = player.Pack.FindIndex(i => i.DefId == itemDefId);
+        if (packIdx >= 0)
+        {
+            player.Pack.RemoveAt(packIdx);
+            player.Gold += price;
+            return new MarketResult(true, $"Sold {def.Name} for {price} gold");
+        }
+
+        var havIdx = player.Haversack.FindIndex(i => i.DefId == itemDefId);
+        if (havIdx >= 0)
+        {
+            player.Haversack.RemoveAt(havIdx);
+            player.Gold += price;
+            return new MarketResult(true, $"Sold {def.Name} for {price} gold");
+        }
+
+        // Check equipment slots
+        if (player.Equipment.Weapon?.DefId == itemDefId)
+        {
+            player.Equipment.Weapon = null;
+            player.Gold += price;
+            return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
+        }
+        if (player.Equipment.Armor?.DefId == itemDefId)
+        {
+            player.Equipment.Armor = null;
+            player.Gold += price;
+            return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
+        }
+        if (player.Equipment.Boots?.DefId == itemDefId)
+        {
+            player.Equipment.Boots = null;
+            player.Gold += price;
+            return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
+        }
+
+        return new MarketResult(false, $"You don't have {def.Name}");
+    }
+
     public static MarketOrderResult ApplyOrder(PlayerState player, MarketOrder order,
         SettlementState settlement, BalanceData balance, Random rng,
         Func<FoodType, string, Random, ItemInstance>? createFood = null)
     {
         var results = new List<MarketLineResult>();
+
+        // Process sells first (frees space + adds gold)
+        foreach (var sell in order.Sells)
+        {
+            var result = Sell(player, sell.ItemDefId, balance);
+            results.Add(new MarketLineResult("sell", sell.ItemDefId, result.Success, result.Message));
+        }
 
         foreach (var buy in order.Buys)
         {
@@ -223,7 +288,8 @@ public record StockEntry(ItemDef Item, int Price, int Quantity);
 
 public record MarketResult(bool Success, string Message);
 
-public record MarketOrder(List<BuyLine> Buys);
+public record MarketOrder(List<BuyLine> Buys, List<SellLine> Sells);
 public record BuyLine(string ItemId, int Quantity);
+public record SellLine(string ItemDefId);
 public record MarketOrderResult(bool Success, List<MarketLineResult> Results);
 public record MarketLineResult(string Action, string ItemId, bool Success, string Message);

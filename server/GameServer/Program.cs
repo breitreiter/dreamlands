@@ -950,7 +950,8 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 return Results.BadRequest(new { error = "Settlement not initialized" });
 
             var order = new MarketOrder(
-                req.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList());
+                req.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList(),
+                req.Order.Sells?.Select(s => new SellLine(s.ItemDefId)).ToList() ?? []);
 
             var mRng = new Random();
             ItemInstance CreateFood(FoodType ft, string biome, Random r)
@@ -1160,11 +1161,28 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         originFlavor = h.Description,
     }).ToList();
 
+    // Sell prices for all player inventory items (excluding hauls)
+    var sellPrices = new Dictionary<string, int>();
+    void AddSellPrice(ItemInstance item)
+    {
+        if (sellPrices.ContainsKey(item.DefId)) return;
+        if (!balance.Items.TryGetValue(item.DefId, out var def)) return;
+        if (def.Type == ItemType.Haul) return;
+        var price = Market.GetSellPrice(def, balance);
+        if (price > 0) sellPrices[item.DefId] = price;
+    }
+    foreach (var item in player.Pack) AddSellPrice(item);
+    foreach (var item in player.Haversack) AddSellPrice(item);
+    if (player.Equipment.Weapon != null) AddSellPrice(player.Equipment.Weapon);
+    if (player.Equipment.Armor != null) AddSellPrice(player.Equipment.Armor);
+    if (player.Equipment.Boots != null) AddSellPrice(player.Equipment.Boots);
+
     return Results.Ok(new
     {
         tier,
         stock,
         hauls,
+        sellPrices,
     });
 });
 

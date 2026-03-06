@@ -7,6 +7,7 @@ public sealed class TradeBalance
 
     public double PriceJitter { get; init; } = 0.05;
     public double MercantileDiscountPerPoint { get; init; } = 0.02;
+    public double SellRatio { get; init; } = 0.5;
 
     public IReadOnlyDictionary<SettlementSize, int> MaxStock { get; init; } = new Dictionary<SettlementSize, int>
     {
