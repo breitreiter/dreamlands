@@ -31,21 +31,16 @@ export default function Splash() {
       />
 
       <div className="text-center space-y-8 relative z-10">
-        <h1 className="font-header text-[32px] tracking-wider text-accent">
-          DREAMLANDS
+        <h1 className="font-header text-[72px] tracking-wider text-accent">
+          The Merchant
         </h1>
-        <p className="text-dim">
-          A journey into the unknown
-        </p>
-        <div className="space-y-3">
+        <div className="space-x-4">
           {hasSavedGame && (
-            <Button size="lg" className="w-full tracking-wide" onClick={resumeGame} disabled={loading}>
-              <MaskedIcon icon="play-button.svg" className="w-5 h-5" color="currentColor" />
+            <Button size="lg" className="" onClick={resumeGame} disabled={loading}>
               {loading ? "Loading..." : "Continue"}
             </Button>
           )}
-          <Button size="lg" className="w-full tracking-wide" onClick={startNewGame} disabled={loading}>
-            <MaskedIcon icon="play-button.svg" className="w-5 h-5" color="currentColor" />
+          <Button size="lg" className="" onClick={startNewGame} disabled={loading}>
             {loading ? "Starting..." : "New Game"}
           </Button>
         </div>
@@ -54,7 +49,6 @@ export default function Splash() {
         )}
         <div>
           <Button variant="ghost" className="tracking-wide" onClick={() => setShowCredits(!showCredits)}>
-            <MaskedIcon icon="tied-scroll.svg" className="w-5 h-5" color="currentColor" />
             {showCredits ? "Close Credits" : "Credits"}
           </Button>
           {showCredits && (
