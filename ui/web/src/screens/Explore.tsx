@@ -280,7 +280,7 @@ function InstrumentCluster({
 
       {/* Vignette + complication — centered, sits on top of the bar */}
       <div className="relative z-10 pointer-events-auto">
-        <div className="w-[160px] h-[160px] rounded-full border-3 border-edge overflow-hidden bg-black/60">
+        <div className="w-[160px] h-[160px] rounded-full border-5 border-page overflow-hidden bg-black/60">
           {vignetteSrc && (
             <img src={vignetteSrc} alt="" className="w-full h-full object-cover" />
           )}
