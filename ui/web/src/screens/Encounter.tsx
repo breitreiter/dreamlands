@@ -52,10 +52,27 @@ export default function Encounter({ state }: { state: GameResponse }) {
     }
   }, [encounter, outcome]);
 
-  // Auto-scroll on new segments or outcome
+  // Index of the last "chosen" segment — scroll target
+  const scrollTargetIndex = useRef(-1);
+  const scrollTargetEl = useRef<HTMLDivElement | null>(null);
+
+  // When a new "chosen" segment appears, record its index
   useEffect(() => {
-    if (segments.length > 0 && scrollRef.current) {
-      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    for (let i = segments.length - 1; i >= 0; i--) {
+      if (segments[i].kind === "chosen") {
+        scrollTargetIndex.current = i;
+        break;
+      }
+    }
+  }, [segments.length]);
+
+  // Scroll to the chosen marker when it mounts (or when outcome arrives after it)
+  useEffect(() => {
+    if (scrollTargetEl.current && scrollRef.current) {
+      const container = scrollRef.current;
+      const target = scrollTargetEl.current;
+      const top = target.offsetTop - container.offsetTop;
+      container.scrollTo({ top, behavior: "smooth" });
     }
   }, [segments.length]);
 
@@ -122,7 +139,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
 
           {/* Accumulated segments */}
           {segments.map((seg, i) => (
-            <div key={i}>
+            <div key={i} ref={i === scrollTargetIndex.current ? scrollTargetEl : undefined}>
               {seg.kind === "outcome" ? (
                 <OutcomeSegment outcome={seg.data} />
               ) : seg.kind === "chosen" ? (
