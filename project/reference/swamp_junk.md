@@ -1,6 +1,6 @@
 ## Tier 1: The Remnant
 
-The swamp didn't used to be their home. It's where they ended up. The Alwati once held fertile lowlands, river valleys, walled cities with tilework so intricate that imperial soldiers pried it off the walls before they burned the buildings. Now they live in stilt-villages in the margins, in the land nobody else wanted, and they've been here long enough that most of them call it home because they don't remember anything else.
+The swamp didn't used to be their home. It's where they ended up. The Revathi once held fertile lowlands, river valleys, walled cities with tilework so intricate that imperial soldiers pried it off the walls before they burned the buildings. Now they live in stilt-villages in the margins, in the land nobody else wanted, and they've been here long enough that most of them call it home because they don't remember anything else.
 
 **The texture of cultural erosion.** This isn't a community in active crisis. That's what makes it so effective at tier 1. The loss is *mostly finished.* What the player encounters is the quiet aftermath:
 
@@ -13,12 +13,12 @@ The swamp didn't used to be their home. It's where they ended up. The Alwati onc
 
 - An elder is dying and wants someone to travel to an imperial museum to see a specific piece of tilework — a complete panel — so they can describe it to her before she goes. She wants to know if her family arranged their fragments right. The museum may or may not still have it. It may be in storage. The curator may not care.
 - A young man wants to leave for the imperial city. He's not a traitor, he's not naive — he just wants a life that isn't mud and mosquitoes and grief for something he never personally had. His mother doesn't argue. She just asks him to take a knife with him. The wrong-proportioned kind.
-- A trader from the empire is offering good prices for "authentic" Alwati goods. The village needs the money. But the trader wants the tilework fragments, and selling them means the physical evidence of what they were is gone forever. The trader is not a villain. He genuinely thinks he's preserving their culture by putting it in collectors' homes. He might even be right, in a horrible way.
+- A trader from the empire is offering good prices for "authentic" Revathi goods. The village needs the money. But the trader wants the tilework fragments, and selling them means the physical evidence of what they were is gone forever. The trader is not a villain. He genuinely thinks he's preserving their culture by putting it in collectors' homes. He might even be right, in a horrible way.
 - Two families have a dispute over a recipe. Both claim it's the original version. One uses imperial spices that wouldn't have been available before the conquest, but insists the flavor is "closer to what grandmother described." The other uses local ingredients but the result tastes like nothing anyone remembers. Which is more authentic — the one that's technically wrong but feels right, or the one that's technically plausible but carries no recognition?
 
 **The emotional register.** Tier 1 should not feel like a tragedy museum. These are people who laugh, argue, get drunk, fall in love, complain about the weather. The loss is in the background, in the architecture, in the small moments. The player should be able to pass through and just see a swamp village. The weight should only land if they pay attention and ask questions. That's what makes it tier 1 — the horror is optional, quiet, and entirely real.
 
-**How it connects to the biome theme.** The Alwati are living the mundane version of what the tier 3 swamp embodies on a cosmic scale: memory without context. They have *pieces* — fragments, recipes, curse words, blade shapes — but the connective tissue is gone. They can't reconstruct the narrative of who they were because the narrative was stored in daily practice, in living culture, and that was what the empire actually destroyed. Not the things. The *sequence.* The knowledge of how the things fit together, what came first, what led to what, why this pattern goes next to that pattern. They have the data. They've lost the story.
+**How it connects to the biome theme.** The Revathi are living the mundane version of what the tier 3 swamp embodies on a cosmic scale: memory without context. They have *pieces* — fragments, recipes, curse words, blade shapes — but the connective tissue is gone. They can't reconstruct the narrative of who they were because the narrative was stored in daily practice, in living culture, and that was what the empire actually destroyed. Not the things. The *sequence.* The knowledge of how the things fit together, what came first, what led to what, why this pattern goes next to that pattern. They have the data. They've lost the story.
 
 And just like the tier 3 swamp, they'll never know if their reconstructions are right. They arrange the fragments and hope, and no one can tell them otherwise, and that ambiguity is permanent.
 
@@ -30,11 +30,11 @@ These fragments are doing so much work. They're all playing the same note from d
 
 Philosophically, tier 2 is about **the point where human memory and inhuman memory start to blur.** In tier 1, the memory problem is recognizably human — colonized people losing their cultural narrative. In tier 3, it's entirely alien — a vast organism that archives without comprehension. Tier 2 is the border zone where the player can't tell which kind of memory failure they're looking at anymore. Is this a human being affected by trauma, or a human being affected by *the swamp*? Is this a cultural artifact or a biological one? The ground shifts under you.
 
-The old temples are the perfect setting because they're the historical point of contact — the place where the Alwati actually *interfaced* with the swamp entity, probably without fully understanding what it was. The Alwati worshipped a swamp god. They may have been right that something was there. They were almost certainly wrong about what it was.
+The old temples are the perfect setting because they're the historical point of contact — the place where the Revathi actually *interfaced* with the swamp entity, probably without fully understanding what it was. The Revathi worshipped a swamp god. They may have been right that something was there. They were almost certainly wrong about what it was.
 
-### The Young Alwati: The Revivalists
+### The Young Revathi: The Revivalists
 
-A camp of maybe a dozen young Alwati who found a partially intact temple complex — carvings still legible, ritual implements preserved in the peat, even ceremonial garments that the bog kept almost perfect. They're electric with purpose. They've left the stilt-villages and the sad fragment-shuffling of their parents and they're going to *do something about it.*
+A camp of maybe a dozen young Revathi who found a partially intact temple complex — carvings still legible, ritual implements preserved in the peat, even ceremonial garments that the bog kept almost perfect. They're electric with purpose. They've left the stilt-villages and the sad fragment-shuffling of their parents and they're going to *do something about it.*
 
 They're cosplaying. They know they're cosplaying, sort of, and they don't care because the cosplay feels more real than anything they've experienced. One of them wears a headdress that's probably meant for funerals and calls it a war crown. Another has memorized chants from carvings and pronounces them with an imperial accent because that's the only phonology she knows. They've reconstructed a ritual calendar based on the carvings, and they perform ceremonies at what they think are the right times, and every single one of them feels *something* when they do it, which they take as proof they're on the right track.
 
@@ -50,7 +50,7 @@ Do you stop them? Help them? Try to redirect them? They have so little. This is 
 
 She lives in the deep temple district, in a structure that might be a repurposed shrine or might be something she grew. She has no name. Not "she forgot her name" or "she won't tell you her name" — she seems genuinely confused by the concept. Why would you need a label to distinguish yourself from things that aren't you? She knows where she stops.
 
-She insists she's always been here. If you point out that's impossible, she shrugs. "Always" and "a long time" are the same thing, aren't they? What's the difference, practically? She remembers the Alwati cities — or she remembers *something* about them. Details that track with the fragments in tier 1, but also details that don't match anything the Alwati recall. She describes festivals the Alwati have no record of. She uses old-tongue words that aren't in anyone's surviving vocabulary. Either she's the most dedicated fraud in the swamp or she has access to memories that predate living Alwati culture.
+She insists she's always been here. If you point out that's impossible, she shrugs. "Always" and "a long time" are the same thing, aren't they? What's the difference, practically? She remembers the Revathi cities — or she remembers *something* about them. Details that track with the fragments in tier 1, but also details that don't match anything the Revathi recall. She describes festivals the Revathi have no record of. She uses old-tongue words that aren't in anyone's surviving vocabulary. Either she's the most dedicated fraud in the swamp or she has access to memories that predate living Revathi culture.
 
 She's helpful in a sideways fashion. She knows the swamp — its moods, its safe paths, what it's "thinking about" on a given day. She talks about the swamp the way you'd talk about weather. "It's remembering soldiers today, watch the eastern bogs, it gets confused when it remembers violence." She doesn't explain this. She doesn't think it's remarkable.
 
@@ -70,7 +70,7 @@ He's the tier 3 entity in miniature, or maybe he's a *mouthpiece* for it. The sw
 
 Some specific lines, depending on what the player has done in the run:
 
-- If the player helped the Alwati in tier 1: "Good, good. You're nice to them this time. That's usually better."
+- If the player helped the Revathi in tier 1: "Good, good. You're nice to them this time. That's usually better."
 - If the player is aggressive: "Ah, the fighting approach. You always try that first. Rarely works in the deep parts."
 - If the player asks what he means: "I mean what I mean. You've been through here before. Maybe you don't remember. The swamp does."
 
@@ -126,7 +126,7 @@ The first few are normal. Precise, professional, beautiful work. Standard guild 
 
 Then the dates start overlapping. Two maps of the same area, drawn on the same day, showing different terrain. The cartographer's notes remain professional at first: "Discrepancy noted. Resurveying sector." Then: "Third survey. Terrain does not match prior surveys. Suspecting subsidence or seasonal shift." Then, weeks later: "Terrain matches first survey again. Second and third surveys appear to have been of an area I have not yet visited. I do not understand this entry. I am resurveying."
 
-The maps get worse. Not sloppier — the draftsmanship stays perfect, the hand stays steady. But the content unravels. A map dated in autumn shows a lake that a map dated in spring says is a ridge. A map from what appears to be the same week shows the hovel in two different locations. One map is drawn in a script the cartographer doesn't use anywhere else, with annotations in a language the player might recognize as old-tongue Alwati, and at the bottom the cartographer has written in their own hand: "I do not remember drawing this. The handwriting is mine."
+The maps get worse. Not sloppier — the draftsmanship stays perfect, the hand stays steady. But the content unravels. A map dated in autumn shows a lake that a map dated in spring says is a ridge. A map from what appears to be the same week shows the hovel in two different locations. One map is drawn in a script the cartographer doesn't use anywhere else, with annotations in a language the player might recognize as old-tongue Revathi, and at the bottom the cartographer has written in their own hand: "I do not remember drawing this. The handwriting is mine."
 
 The last entry in the journal is calm, which is the worst part. "I have concluded that the territory is not stable and cannot be mapped by conventional survey. I have also concluded that several of my earlier journal entries were not written by me, or were written by me at times I do not recall, which amounts to the same thing. I am not distressed. I would like to go home. I am unsure which direction that is, not because I am lost but because I am no longer confident that 'direction' is consistent here. I will attempt to leave tomorrow. I have attempted to leave tomorrow before. I am certain of this but I cannot find the journal entries. Perhaps I will write them tonight."
 
@@ -134,17 +134,17 @@ No body. No bones. The hovel is maintained. The fire pit has recent ash. The rat
 
 The player can take the maps. They're accurate for the areas they cover. They just can't all be true at the same time.
 
-### The Alwati Poet
+### The Revathi Poet
 
 The player encounters them on a path that shouldn't exist — a well-trodden trail through the deep swamp, complete with bootprints. The poet is walking cheerfully, carrying a skin of something that smells strong and a bundle of what might be gifts. They're heading to a wedding.
 
 They are the single warmest, most *alive* presence in tier 3, and that's what makes them work. Everything else in the deep swamp is uncanny. The poet is aggressively, delightfully normal. They're bawdy. They're funny. They tell the PC a joke about a fisherman's wife that's maybe 60% innuendo and they cackle at their own punchline. They gossip about the wedding couple — "she's too good for him, everyone knows it, he knows it, that's why the free drinks, guilt money" — and they offer the PC a pull from the skin.
 
-They speak old-tongue Alwati. Fluently. Not the scraps from tier 1. Full sentences, idioms, slang. If the player has encountered the tier 1 Alwati, this should be electrifying — this is a living speaker of the language that only survives as curse words in the stilt-villages. The poet doesn't think this is remarkable. Why would it be? Everyone speaks the tongue. What else would you speak?
+They speak old-tongue Revathi. Fluently. Not the scraps from tier 1. Full sentences, idioms, slang. If the player has encountered the tier 1 Revathi, this should be electrifying — this is a living speaker of the language that only survives as curse words in the stilt-villages. The poet doesn't think this is remarkable. Why would it be? Everyone speaks the tongue. What else would you speak?
 
 If the player asks about the empire, the poet is confused. What empire? If the player asks about the conquest, the displacement, the lost cities — the poet laughs uncomfortably, the way you laugh when someone is making a joke you don't understand. "You're a strange one. Come to the wedding, you'll feel better. Good food. I'm performing my new one, about the miller's daughter and the eel. Filthy. The elders will pretend to be scandalized."
 
-**The realization:** The poet is not a ghost. The poet is not an illusion. The poet is the swamp *performing* a pattern — a composite of every Alwati poet it ever absorbed, every wedding-road traveler, every dirty joke told in the old tongue over a thousand years, all compressed into one figure who doesn't know they're a mosaic. The poet is the swamp's most *convincing* output because the source material is so rich. Generations of poets walked these paths. The swamp has so much data on "bawdy Alwati poet heading to a celebration" that the reconstruction is almost perfect.
+**The realization:** The poet is not a ghost. The poet is not an illusion. The poet is the swamp *performing* a pattern — a composite of every Revathi poet it ever absorbed, every wedding-road traveler, every dirty joke told in the old tongue over a thousand years, all compressed into one figure who doesn't know they're a mosaic. The poet is the swamp's most *convincing* output because the source material is so rich. Generations of poets walked these paths. The swamp has so much data on "bawdy Revathi poet heading to a celebration" that the reconstruction is almost perfect.
 
 Almost. If the player walks with the poet long enough, the seams show. The poet tells the same joke twice, with different details, and doesn't notice. They reference "my wife" and "my husband" in the same breath and neither is a correction. They describe the wedding venue and it's a building that can't exist — architectural details from different centuries mashed together, a kitchen that's also a temple, a roof that's underground.
 
@@ -156,7 +156,7 @@ The wedding doesn't exist. The poet will never arrive. They've been walking to t
 
 The player hears it before they see it — shouting, the clash of weapons, war cries in a dozen languages. They come upon a clearing where dozens of warriors are locked in combat. It's chaos. Every fighter for themselves.
 
-But it's *specific* chaos. These aren't mindless combatants. They're shouting accusations, insults, personal grievances. A woman in ancient Alwati armor screams that a man in imperial plate betrayed her oath-bond. The imperial soldier screams back that she poisoned his well. A mercenary in gear from no recognizable era bellows that both of them owe him payment. A knight in colors that haven't been worn in centuries demands satisfaction for a slight to their honor. Everyone is furious. Everyone has a *reason.* No two reasons are related.
+But it's *specific* chaos. These aren't mindless combatants. They're shouting accusations, insults, personal grievances. A woman in ancient Revathi armor screams that a man in imperial plate betrayed her oath-bond. The imperial soldier screams back that she poisoned his well. A mercenary in gear from no recognizable era bellows that both of them owe him payment. A knight in colors that haven't been worn in centuries demands satisfaction for a slight to their honor. Everyone is furious. Everyone has a *reason.* No two reasons are related.
 
 The swamp has composited every conflict it ever witnessed into one event. A thousand years of grievances, betrayals, duels, skirmishes, ambushes — all the emotional data, all the accusations, all the righteous fury — compressed into a single eternal battle. The participants don't know each other. Their grievances don't connect. They fight because the swamp remembers fighting, remembers that these patterns of shouting and violence go together, and it doesn't understand that they were *separate fights between separate people about separate things.*
 
@@ -188,4 +188,4 @@ Or the player can leave. And if they leave, they leave knowing that the swamp wi
 
 ---
 
-The deep swamp doesn't resolve. It can't. The philosophical question — whether memory without narrative is still memory, whether recognition without understanding is still connection, whether the swamp's vast imperfect love is categorically different from the imperfect love humans offer each other — stays open. The Alwati in tier 1 lost their story and kept their fragments. The swamp has every fragment that ever existed and will never have a story. The player walks out of the swamp carrying the same pieces everyone carries, arranged in the order they hope is right, with no way to be sure.
+The deep swamp doesn't resolve. It can't. The philosophical question — whether memory without narrative is still memory, whether recognition without understanding is still connection, whether the swamp's vast imperfect love is categorically different from the imperfect love humans offer each other — stays open. The Revathi in tier 1 lost their story and kept their fragments. The swamp has every fragment that ever existed and will never have a story. The player walks out of the swamp carrying the same pieces everyone carries, arranged in the order they hope is right, with no way to be sure.

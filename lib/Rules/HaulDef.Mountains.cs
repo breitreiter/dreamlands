@@ -83,7 +83,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "swamp",
             OriginFlavor = @"The alchemist's workshop has been scrambling to produce fever remedies before the warm season arrives. They burned through three sets of glassware already and need replacements within the week.",
-            DeliveryFlavor = @"You arrive at a stillhouse where half a dozen Alwati are gathered around a table, arguing in low voices about proportions. The eldest takes the retort from you, holds it to the light, checks the seals. ""The neck is too narrow,"" someone says. ""It'll work,"" another counters. The elder sets it carefully on the table with the other equipment and pays you without looking up from the debate.",
+            DeliveryFlavor = @"You arrive at a stillhouse where half a dozen Revathi are gathered around a table, arguing in low voices about proportions. The eldest takes the retort from you, holds it to the light, checks the seals. ""The neck is too narrow,"" someone says. ""It'll work,"" another counters. The elder sets it carefully on the table with the other equipment and pays you without looking up from the debate.",
         },
         new()
         {
@@ -245,7 +245,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "swamp",
             OriginFlavor = @"The workshop order came through a middleman who paid double the usual rate and wouldn't say what the crucibles were for. The metalsmith packed them carefully and mentioned he'd prefer not to take another commission from that buyer.",
-            DeliveryFlavor = @"The woman who meets you wears Alwati cloth but her hands are stained with chemicals that don't belong in the swamp. She opens the case and taps each crucible with a fingernail, listening to the ring. ""Good thickness,"" she says, then looks at you too long without blinking. She pays exact weight in old imperial coinage that hasn't been minted in twenty years.",
+            DeliveryFlavor = @"The woman who meets you wears Revathi cloth but her hands are stained with chemicals that don't belong in the swamp. She opens the case and taps each crucible with a fingernail, listening to the ring. ""Good thickness,"" she says, then looks at you too long without blinking. She pays exact weight in old imperial coinage that hasn't been minted in twenty years.",
         },
         new()
         {
@@ -253,7 +253,7 @@ public sealed partial class HaulDef
             Name = @"Surveyor's Plumb Weight",
             OriginBiome = "mountains",
             DestBiome = "swamp",
-            OriginFlavor = @"A retired surveyor donated his instruments to the university's mathematics collection. The plumb weight didn't match any contemporary standard, and someone thought it might be older Alwati work.",
+            OriginFlavor = @"A retired surveyor donated his instruments to the university's mathematics collection. The plumb weight didn't match any contemporary standard, and someone thought it might be older Revathi work.",
             DeliveryFlavor = @"The woman who meets you is older, her hands scarred from decades of reed-cutting. She takes the weight and turns it slowly, tracing the incised pattern with one fingertip. ""My grandfather made instruments in the valley cities. I know his mark."" She pays you carefully, counting each coin twice, then wraps the weight in oiled cloth without looking up again.",
         },
         new()

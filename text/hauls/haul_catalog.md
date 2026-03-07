@@ -211,7 +211,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: swamp
 - **Origin flavor**: An alchemist's apprentice says the master refused to work with the acid anymore after an accident left scars on both hands. The guild won't buy it back, but someone in the swamp might need it.
-- **Delivery flavor**: The Alwati woman sets the jar on a wood plank and tilts it slowly, watching how the liquid moves inside the glass. She opens a leather pouch and counts out coins one at a time, each one placed deliberately on the plank between you. You take the payment and leave her crouched beside the jar, still watching it.
+- **Delivery flavor**: The Revathi woman sets the jar on a wood plank and tilts it slowly, watching how the liquid moves inside the glass. She opens a leather pouch and counts out coins one at a time, each one placed deliberately on the plank between you. You take the payment and leave her crouched beside the jar, still watching it.
 
 ### An Exquisite Comb
 - **Origin biome**: plains
@@ -235,7 +235,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: swamp
 - **Origin flavor**: A local smith secured a bulk order from the swamps. The hooks are bundled in oiled cloth to keep them from rusting before delivery.
-- **Delivery flavor**: The Alwati woman opens the bundle and picks through the hooks one by one, testing points against her thumbnail and checking the eyes for burrs. She sets aside three with flaws, counts the rest twice, and places your payment on the table without meeting your eyes.
+- **Delivery flavor**: The Revathi woman opens the bundle and picks through the hooks one by one, testing points against her thumbnail and checking the eyes for burrs. She sets aside three with flaws, counts the rest twice, and places your payment on the table without meeting your eyes.
 
 ### An Atwali Family Crest
 - **Origin biome**: plains
@@ -253,7 +253,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: swamp
 - **Origin flavor**: The tools arrived at the grain cooperative with no sender's mark and a bill of sale signed with initials only. The cooperative head decided it was easier to sell them on than ask questions.
-- **Delivery flavor**: The Alwati woodworker opens the wrapped bundle and immediately selects a narrow gouge, testing its edge against a piece of bog-oak he's been shaping into what might be a door panel. He works in silence for several minutes, carving a geometric pattern that matches the fragments of tilework set into his wall. When he finally looks up, he counts out your payment without meeting your eyes.
+- **Delivery flavor**: The Revathi woodworker opens the wrapped bundle and immediately selects a narrow gouge, testing its edge against a piece of bog-oak he's been shaping into what might be a door panel. He works in silence for several minutes, carving a geometric pattern that matches the fragments of tilework set into his wall. When he finally looks up, he counts out your payment without meeting your eyes.
 
 ## Mountains
 
@@ -309,7 +309,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: mountains
 - **Destination biome**: swamp
 - **Origin flavor**: The alchemist's workshop has been scrambling to produce fever remedies before the warm season arrives. They burned through three sets of glassware already and need replacements within the week.
-- **Delivery flavor**: You arrive at a stillhouse where half a dozen Alwati are gathered around a table, arguing in low voices about proportions. The eldest takes the retort from you, holds it to the light, checks the seals. "The neck is too narrow," someone says. "It'll work," another counters. The elder sets it carefully on the table with the other equipment and pays you without looking up from the debate.
+- **Delivery flavor**: You arrive at a stillhouse where half a dozen Revathi are gathered around a table, arguing in low voices about proportions. The eldest takes the retort from you, holds it to the light, checks the seals. "The neck is too narrow," someone says. "It'll work," another counters. The elder sets it carefully on the table with the other equipment and pays you without looking up from the debate.
 
 ### Corrected Mine Safety Blueprint
 - **Origin biome**: mountains
@@ -417,12 +417,12 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: mountains
 - **Destination biome**: swamp
 - **Origin flavor**: The workshop order came through a middleman who paid double the usual rate and wouldn't say what the crucibles were for. The metalsmith packed them carefully and mentioned he'd prefer not to take another commission from that buyer.
-- **Delivery flavor**: The woman who meets you wears Alwati cloth but her hands are stained with chemicals that don't belong in the swamp. She opens the case and taps each crucible with a fingernail, listening to the ring. "Good thickness," she says, then looks at you too long without blinking. She pays exact weight in old imperial coinage that hasn't been minted in twenty years.
+- **Delivery flavor**: The woman who meets you wears Revathi cloth but her hands are stained with chemicals that don't belong in the swamp. She opens the case and taps each crucible with a fingernail, listening to the ring. "Good thickness," she says, then looks at you too long without blinking. She pays exact weight in old imperial coinage that hasn't been minted in twenty years.
 
 ### Surveyor's Plumb Weight
 - **Origin biome**: mountains
 - **Destination biome**: swamp
-- **Origin flavor**: A retired surveyor donated his instruments to the university's mathematics collection. The plumb weight didn't match any contemporary standard, and someone thought it might be older Alwati work.
+- **Origin flavor**: A retired surveyor donated his instruments to the university's mathematics collection. The plumb weight didn't match any contemporary standard, and someone thought it might be older Revathi work.
 - **Delivery flavor**: The woman who meets you is older, her hands scarred from decades of reed-cutting. She takes the weight and turns it slowly, tracing the incised pattern with one fingertip. "My grandfather made instruments in the valley cities. I know his mark." She pays you carefully, counting each coin twice, then wraps the weight in oiled cloth without looking up again.
 
 ### Bound Court Transcript
@@ -689,7 +689,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: forest
 - **Destination biome**: swamp
 - **Origin flavor**: The dye-maker's family has been using this concentrate for three generations of weddings and funerals. Her daughter convinced her to sell half the stock because they need grain more than tradition.
-- **Delivery flavor**: You arrive during a dye bath. A circle of Alwati women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. "Good enough," the buyer says, and counts out your payment while the others return to their work.
+- **Delivery flavor**: You arrive during a dye bath. A circle of Revathi women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. "Good enough," the buyer says, and counts out your payment while the others return to their work.
 
 ### Decorated Hat
 - **Origin biome**: forest
@@ -889,7 +889,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: swamp
 - **Origin flavor**: A plateau merchant's stock of carved meerschaum pipes has been sitting too long in the dry air—the stone is starting to crack. He's arranged a sale to a swamp dealer who says the humidity will stabilize them.
-- **Delivery flavor**: The old Alwati opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern—geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: "My father made pipes like these. Different stone, same designs." He counts out your payment in small coins, never looking up from the box.
+- **Delivery flavor**: The old Revathi opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern—geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: "My father made pipes like these. Different stone, same designs." He counts out your payment in small coins, never looking up from the box.
 
 ### 101 Kesharat Recipes
 - **Origin biome**: scrub
@@ -913,7 +913,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: swamp
 - **Origin flavor**: A plateau merchant is selling off temple goods with no explanation of how he acquired them. The incense burner still smells faintly of sandalwood.
-- **Delivery flavor**: You deliver the burner to a stilt-house where three Alwati elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you—they're still arguing when you leave.
+- **Delivery flavor**: You deliver the burner to a stilt-house where three Revathi elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you—they're still arguing when you leave.
 
 ### Sandstone Carving
 - **Origin biome**: scrub
@@ -930,7 +930,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Sun-Dried Brick Mold
 - **Origin biome**: scrub
 - **Destination biome**: swamp
-- **Origin flavor**: A mason's daughter is moving to the swamp to marry an Alwati man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.
+- **Origin flavor**: A mason's daughter is moving to the swamp to marry an Revathi man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.
 - **Delivery flavor**: The man who takes the mold from you is young, maybe her age. He turns it over in his hands, testing the weight, tracing the beveled edges with his thumb. He glances toward a stilt-house where someone is watching from the doorway. He sets coins in your palm without counting them aloud.
 
 ### Pouch of Mesa Saffron
@@ -1010,7 +1010,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Embalming Salts
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: Someone sold us a parcel of blessed embalming salts. Usually the Alwati are pretty uptight about that stuff leaving their borders. Not our problem, but maybe yours if they catch you.
+- **Origin flavor**: Someone sold us a parcel of blessed embalming salts. Usually the Revathi are pretty uptight about that stuff leaving their borders. Not our problem, but maybe yours if they catch you.
 - **Delivery flavor**: You deliver them to a mortuary in one of the company valleys. The undertaker breaks the wax seal on the first jar and rubs a pinch between his fingers, then touches it to his tongue. "Myrrh base, camphor-cut, proper temple grade." He checks the rest of the jars by weight alone, nodding as he counts. He pays in coin, not scrip.
 
 ### Blackwater Dye Vial
@@ -1022,7 +1022,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Venom Ampoules
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A swamp hunter sold his stock to an Alwati herbalist who doesn't advertise what she does with it. She arranged the sale through a third party.
+- **Origin flavor**: A swamp hunter sold his stock to an Revathi herbalist who doesn't advertise what she does with it. She arranged the sale through a third party.
 - **Delivery flavor**: You hand over the wrapped ampoules in a back room behind the assayer's office. The woman unwraps one carefully, holds it to the lamplight, checks the seal. She sets coins on the table and wraps the package again without looking at you. You take the money and leave through the door you came in.
 
 ### Bog-Iron Ingot
@@ -1067,7 +1067,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin flavor**: The rendering went faster than expected this year, and the buyer's caravan leaves in two days. Better to send it overland now than wait for the next barge and miss the contract window entirely.
 - **Delivery flavor**: You hand the jar to the quartermaster. She pries open the jar, sniffs, winkles her face, and seals it again. "The physician ordered it. Good for coughs he says. You ever heard of such a thing?" She hands you the payment without waiting for a reply.
 
-### Alwati Basket
+### Revathi Basket
 - **Origin biome**: swamp
 - **Destination biome**: scrub
 - **Origin flavor**: A Kesharat archivist purchased the basket as a study piece. I hear they're starting some sort of museum.
@@ -1076,10 +1076,10 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Dried Water Lily Roots
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: Someone paid good money for water lily roots pulled from a particular stretch of bog. The Alwati who filled the order didn't ask what they're for, but they wrapped the roots in silk before sealing the crate.
+- **Origin flavor**: Someone paid good money for water lily roots pulled from a particular stretch of bog. The Revathi who filled the order didn't ask what they're for, but they wrapped the roots in silk before sealing the crate.
 - **Delivery flavor**: You find the buyer in a courtyard behind a shuttered house. She unwraps the roots carefully, checking each one against something written on her palm. She counts out your payment in silence, her eyes never quite meeting yours. The coins are still warm from her pocket.
 
-### Unsettling Alwati Carving
+### Unsettling Revathi Carving
 - **Origin biome**: swamp
 - **Destination biome**: scrub
 - **Origin flavor**: The carving was pulled from a collapsed stilt-house foundation — older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.
@@ -1106,7 +1106,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Water Levels Report
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Alwati who measure the swamp levels agreed to sell their records.
+- **Origin flavor**: A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Revathi who measure the swamp levels agreed to sell their records.
 - **Delivery flavor**: The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. "This is meticulous work. Please, sit — I'll make tea while I prepare your payment." She returns with both, the coins wrapped in paper inscribed with her thanks.
 
 ### Swamp Willow Bark Strips
@@ -1118,7 +1118,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Jar of Sacred Mud
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: The jar passed through three owners before ending up in a merchant's storage. Temple mud from one of the old Alwati sanctuaries, sealed with wax that's cracked and been resealed twice.
+- **Origin flavor**: The jar passed through three owners before ending up in a merchant's storage. Temple mud from one of the old Revathi sanctuaries, sealed with wax that's cracked and been resealed twice.
 - **Delivery flavor**: The Kesharat clerk sets the jar on a ledger and breaks the wax seal to inspect the contents. She takes a sample on a wooden spatula, rubs it between her fingers, and notes the texture in a column you can't read. "Consistency acceptable. Origin verified." She stamps the receipt twice, and counts out your payment while the ink is still wet.
 
 ### Mangrove Root Wood
@@ -1157,16 +1157,16 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin flavor**: A healer's apprentice wants the oil sent to her mentor. The girl says her teacher asked for it in a letter.
 - **Delivery flavor**: You find the recipient standing outside her cabin with two other forest folk, all three of them examining dried herbs spread on a plank table. She uncorks the flask and holds it under her nose, then passes it to the others. One wrinkles his face. The other nods slowly. "That's the real thing," she says, recorking it carefully. She pays you while the others argue about whether bog myrtle even works.
 
-### Alwati Fish Trap
+### Revathi Fish Trap
 - **Origin biome**: swamp
 - **Destination biome**: forest
-- **Origin flavor**: A local Alwati craftsman has been making these traps for years. He has a few extra and we've found a buyer.
+- **Origin flavor**: A local Revathi craftsman has been making these traps for years. He has a few extra and we've found a buyer.
 - **Delivery flavor**: A group of fisherman cluster around you, eager to examine the trap. They flex and twist it and debate how it will work with the local fish. Remembering your presence, one of them thanks and pays you.
 
 ### Crooked Walking Stick
 - **Origin biome**: swamp
 - **Destination biome**: forest
-- **Origin flavor**: The stick came from deeper than most Alwati go; old growth bog-oak, twisted just so. 
+- **Origin flavor**: The stick came from deeper than most Revathi go; old growth bog-oak, twisted just so. 
 - **Delivery flavor**: The exile takes it from you and immediately leans his weight into it, testing the curve against his hip. He walks a tight circle, adjusting his grip twice, then nods. "Better than the last one." He's already halfway down the path when he tosses the coins back over his shoulder.
 
 ### Woven Rush Mat
@@ -1187,7 +1187,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin flavor**: The temple guide needed the lantern two days ago for a night ceremony in the deep complex. The fireflies only glow at full strength for a week after harvest.
 - **Delivery flavor**: You hand over the lantern and she lifts it to eye level in the dim light of the stilt-house. The fireflies pulse weakly, their glow already fading to amber. She sets it down without comment and counts out your payment.
 
-### Antique Alwati Sword
+### Antique Revathi Sword
 - **Origin biome**: swamp
 - **Destination biome**: swamp
 - **Origin flavor**: The owner grievously offended the folk in a nearby village. He's been searching for a gift precious enough to mend the rift, and believes this will do.

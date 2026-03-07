@@ -46,7 +46,7 @@ public sealed partial class HaulDef
             Name = @"Embalming Salts",
             OriginBiome = "swamp",
             DestBiome = "mountains",
-            OriginFlavor = @"Someone sold us a parcel of blessed embalming salts. Usually the Alwati are pretty uptight about that stuff leaving their borders. Not our problem, but maybe yours if they catch you.",
+            OriginFlavor = @"Someone sold us a parcel of blessed embalming salts. Usually the Revathi are pretty uptight about that stuff leaving their borders. Not our problem, but maybe yours if they catch you.",
             DeliveryFlavor = @"You deliver them to a mortuary in one of the company valleys. The undertaker breaks the wax seal on the first jar and rubs a pinch between his fingers, then touches it to his tongue. ""Myrrh base, camphor-cut, proper temple grade."" He checks the rest of the jars by weight alone, nodding as he counts. He pays in coin, not scrip.",
         },
         new()
@@ -64,7 +64,7 @@ public sealed partial class HaulDef
             Name = @"Venom Ampoules",
             OriginBiome = "swamp",
             DestBiome = "mountains",
-            OriginFlavor = @"A swamp hunter sold his stock to an Alwati herbalist who doesn't advertise what she does with it. She arranged the sale through a third party.",
+            OriginFlavor = @"A swamp hunter sold his stock to an Revathi herbalist who doesn't advertise what she does with it. She arranged the sale through a third party.",
             DeliveryFlavor = @"You hand over the wrapped ampoules in a back room behind the assayer's office. The woman unwraps one carefully, holds it to the lamplight, checks the seal. She sets coins on the table and wraps the package again without looking at you. You take the money and leave through the door you came in.",
         },
         new()
@@ -133,7 +133,7 @@ public sealed partial class HaulDef
         new()
         {
             Id = "alwati_basket",
-            Name = @"Alwati Basket",
+            Name = @"Revathi Basket",
             OriginBiome = "swamp",
             DestBiome = "scrub",
             OriginFlavor = @"A Kesharat archivist purchased the basket as a study piece. I hear they're starting some sort of museum.",
@@ -145,13 +145,13 @@ public sealed partial class HaulDef
             Name = @"Dried Water Lily Roots",
             OriginBiome = "swamp",
             DestBiome = "scrub",
-            OriginFlavor = @"Someone paid good money for water lily roots pulled from a particular stretch of bog. The Alwati who filled the order didn't ask what they're for, but they wrapped the roots in silk before sealing the crate.",
+            OriginFlavor = @"Someone paid good money for water lily roots pulled from a particular stretch of bog. The Revathi who filled the order didn't ask what they're for, but they wrapped the roots in silk before sealing the crate.",
             DeliveryFlavor = @"You find the buyer in a courtyard behind a shuttered house. She unwraps the roots carefully, checking each one against something written on her palm. She counts out your payment in silence, her eyes never quite meeting yours. The coins are still warm from her pocket.",
         },
         new()
         {
             Id = "unsettling_alwati_carving",
-            Name = @"Unsettling Alwati Carving",
+            Name = @"Unsettling Revathi Carving",
             OriginBiome = "swamp",
             DestBiome = "scrub",
             OriginFlavor = @"The carving was pulled from a collapsed stilt-house foundation — older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.",
@@ -190,7 +190,7 @@ public sealed partial class HaulDef
             Name = @"Water Levels Report",
             OriginBiome = "swamp",
             DestBiome = "mountains",
-            OriginFlavor = @"A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Alwati who measure the swamp levels agreed to sell their records.",
+            OriginFlavor = @"A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Revathi who measure the swamp levels agreed to sell their records.",
             DeliveryFlavor = @"The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. ""This is meticulous work. Please, sit — I'll make tea while I prepare your payment."" She returns with both, the coins wrapped in paper inscribed with her thanks.",
         },
         new()
@@ -208,7 +208,7 @@ public sealed partial class HaulDef
             Name = @"Jar of Sacred Mud",
             OriginBiome = "swamp",
             DestBiome = "scrub",
-            OriginFlavor = @"The jar passed through three owners before ending up in a merchant's storage. Temple mud from one of the old Alwati sanctuaries, sealed with wax that's cracked and been resealed twice.",
+            OriginFlavor = @"The jar passed through three owners before ending up in a merchant's storage. Temple mud from one of the old Revathi sanctuaries, sealed with wax that's cracked and been resealed twice.",
             DeliveryFlavor = @"The Kesharat clerk sets the jar on a ledger and breaks the wax seal to inspect the contents. She takes a sample on a wooden spatula, rubs it between her fingers, and notes the texture in a column you can't read. ""Consistency acceptable. Origin verified."" She stamps the receipt twice, and counts out your payment while the ink is still wet.",
         },
         new()
@@ -268,10 +268,10 @@ public sealed partial class HaulDef
         new()
         {
             Id = "alwati_fish_trap",
-            Name = @"Alwati Fish Trap",
+            Name = @"Revathi Fish Trap",
             OriginBiome = "swamp",
             DestBiome = "forest",
-            OriginFlavor = @"A local Alwati craftsman has been making these traps for years. He has a few extra and we've found a buyer.",
+            OriginFlavor = @"A local Revathi craftsman has been making these traps for years. He has a few extra and we've found a buyer.",
             DeliveryFlavor = @"A group of fisherman cluster around you, eager to examine the trap. They flex and twist it and debate how it will work with the local fish. Remembering your presence, one of them thanks and pays you.",
         },
         new()
@@ -280,7 +280,7 @@ public sealed partial class HaulDef
             Name = @"Crooked Walking Stick",
             OriginBiome = "swamp",
             DestBiome = "forest",
-            OriginFlavor = @"The stick came from deeper than most Alwati go; old growth bog-oak, twisted just so.",
+            OriginFlavor = @"The stick came from deeper than most Revathi go; old growth bog-oak, twisted just so.",
             DeliveryFlavor = @"The exile takes it from you and immediately leans his weight into it, testing the curve against his hip. He walks a tight circle, adjusting his grip twice, then nods. ""Better than the last one."" He's already halfway down the path when he tosses the coins back over his shoulder.",
         },
         new()
@@ -313,7 +313,7 @@ public sealed partial class HaulDef
         new()
         {
             Id = "antique_alwati_sword",
-            Name = @"Antique Alwati Sword",
+            Name = @"Antique Revathi Sword",
             OriginBiome = "swamp",
             DestBiome = "swamp",
             OriginFlavor = @"The owner grievously offended the folk in a nearby village. He's been searching for a gift precious enough to mend the rift, and believes this will do.",

@@ -299,7 +299,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "swamp",
             OriginFlavor = @"An alchemist's apprentice says the master refused to work with the acid anymore after an accident left scars on both hands. The guild won't buy it back, but someone in the swamp might need it.",
-            DeliveryFlavor = @"The Alwati woman sets the jar on a wood plank and tilts it slowly, watching how the liquid moves inside the glass. She opens a leather pouch and counts out coins one at a time, each one placed deliberately on the plank between you. You take the payment and leave her crouched beside the jar, still watching it.",
+            DeliveryFlavor = @"The Revathi woman sets the jar on a wood plank and tilts it slowly, watching how the liquid moves inside the glass. She opens a leather pouch and counts out coins one at a time, each one placed deliberately on the plank between you. You take the payment and leave her crouched beside the jar, still watching it.",
         },
         new()
         {
@@ -335,7 +335,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "swamp",
             OriginFlavor = @"A local smith secured a bulk order from the swamps. The hooks are bundled in oiled cloth to keep them from rusting before delivery.",
-            DeliveryFlavor = @"The Alwati woman opens the bundle and picks through the hooks one by one, testing points against her thumbnail and checking the eyes for burrs. She sets aside three with flaws, counts the rest twice, and places your payment on the table without meeting your eyes.",
+            DeliveryFlavor = @"The Revathi woman opens the bundle and picks through the hooks one by one, testing points against her thumbnail and checking the eyes for burrs. She sets aside three with flaws, counts the rest twice, and places your payment on the table without meeting your eyes.",
         },
         new()
         {
@@ -362,7 +362,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "swamp",
             OriginFlavor = @"The tools arrived at the grain cooperative with no sender's mark and a bill of sale signed with initials only. The cooperative head decided it was easier to sell them on than ask questions.",
-            DeliveryFlavor = @"The Alwati woodworker opens the wrapped bundle and immediately selects a narrow gouge, testing its edge against a piece of bog-oak he's been shaping into what might be a door panel. He works in silence for several minutes, carving a geometric pattern that matches the fragments of tilework set into his wall. When he finally looks up, he counts out your payment without meeting your eyes.",
+            DeliveryFlavor = @"The Revathi woodworker opens the wrapped bundle and immediately selects a narrow gouge, testing its edge against a piece of bog-oak he's been shaping into what might be a door panel. He works in silence for several minutes, carving a geometric pattern that matches the fragments of tilework set into his wall. When he finally looks up, he counts out your payment without meeting your eyes.",
         },
     };
 }

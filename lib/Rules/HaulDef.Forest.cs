@@ -290,7 +290,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "swamp",
             OriginFlavor = @"The dye-maker's family has been using this concentrate for three generations of weddings and funerals. Her daughter convinced her to sell half the stock because they need grain more than tradition.",
-            DeliveryFlavor = @"You arrive during a dye bath. A circle of Alwati women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. ""Good enough,"" the buyer says, and counts out your payment while the others return to their work.",
+            DeliveryFlavor = @"You arrive during a dye bath. A circle of Revathi women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. ""Good enough,"" the buyer says, and counts out your payment while the others return to their work.",
         },
         new()
         {

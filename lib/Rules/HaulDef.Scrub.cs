@@ -227,7 +227,7 @@ public sealed partial class HaulDef
             OriginBiome = "scrub",
             DestBiome = "swamp",
             OriginFlavor = @"A plateau merchant's stock of carved meerschaum pipes has been sitting too long in the dry air—the stone is starting to crack. He's arranged a sale to a swamp dealer who says the humidity will stabilize them.",
-            DeliveryFlavor = @"The old Alwati opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern—geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: ""My father made pipes like these. Different stone, same designs."" He counts out your payment in small coins, never looking up from the box.",
+            DeliveryFlavor = @"The old Revathi opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern—geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: ""My father made pipes like these. Different stone, same designs."" He counts out your payment in small coins, never looking up from the box.",
         },
         new()
         {
@@ -263,7 +263,7 @@ public sealed partial class HaulDef
             OriginBiome = "scrub",
             DestBiome = "swamp",
             OriginFlavor = @"A plateau merchant is selling off temple goods with no explanation of how he acquired them. The incense burner still smells faintly of sandalwood.",
-            DeliveryFlavor = @"You deliver the burner to a stilt-house where three Alwati elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you—they're still arguing when you leave.",
+            DeliveryFlavor = @"You deliver the burner to a stilt-house where three Revathi elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you—they're still arguing when you leave.",
         },
         new()
         {
@@ -289,7 +289,7 @@ public sealed partial class HaulDef
             Name = @"Sun-Dried Brick Mold",
             OriginBiome = "scrub",
             DestBiome = "swamp",
-            OriginFlavor = @"A mason's daughter is moving to the swamp to marry an Alwati man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.",
+            OriginFlavor = @"A mason's daughter is moving to the swamp to marry an Revathi man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.",
             DeliveryFlavor = @"The man who takes the mold from you is young, maybe her age. He turns it over in his hands, testing the weight, tracing the beveled edges with his thumb. He glances toward a stilt-house where someone is watching from the doorway. He sets coins in your palm without counting them aloud.",
         },
         new()
