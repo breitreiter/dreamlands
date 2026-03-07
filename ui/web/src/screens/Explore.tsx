@@ -142,11 +142,18 @@ const CONDITION_ICONS: Record<string, string> = {
 
 const TIER_LABELS: Record<number, string> = { 1: "Village", 2: "Town", 3: "City" };
 
-const flagIcon = new Icon({
-  iconUrl: "/world/assets/icons/black-flag.svg",
+const poiPinIcon = new DivIcon({
+  html: `<div style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:2px solid #D0BD62;border-radius:50%;"><div style="width:14px;height:14px;background:#D0BD62;-webkit-mask:url(/world/assets/icons/black-flag.svg) center/contain no-repeat;mask:url(/world/assets/icons/black-flag.svg) center/contain no-repeat;"></div></div>`,
+  className: "",
   iconSize: [24, 24],
-  iconAnchor: [12, 24],
+  iconAnchor: [12, 12],
 });
+
+function gridToLatLngTopRight(x: number, y: number): LatLngExpression {
+  const tileLng = TILE_PX / SCALE; // 2 latlng units per tile
+  const [lat, lng] = gridToLatLng(x, y) as [number, number];
+  return [lat + tileLng * 0.35, lng + tileLng * 0.35];
+}
 
 const IMPLEMENTED_SERVICES = new Set(["market", "bank", "inn", "chapterhouse"]);
 
@@ -284,8 +291,8 @@ export default function Explore({ state }: { state: GameResponse }) {
             onMove={move}
           />
           {discoveries.map((d) => (
-            <Marker key={`${d.x},${d.y}`} position={gridToLatLng(d.x, d.y)} icon={flagIcon}>
-              <Tooltip direction="top" offset={[0, -24]}>{d.name}</Tooltip>
+            <Marker key={`${d.x},${d.y}`} position={gridToLatLngTopRight(d.x, d.y)} icon={poiPinIcon}>
+              <Tooltip direction="top" offset={[0, -12]}>{d.name}</Tooltip>
             </Marker>
           ))}
           <MapFollower position={position} />
