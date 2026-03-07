@@ -186,8 +186,12 @@ function InstrumentCluster({
   const healthLow = status.health < status.maxHealth * 0.5;
   const spiritsLow = status.spirits < status.maxSpirits * 0.5;
 
-  const vignetteSrc = node.terrain && node.regionTier != null && node.regionTier > 0
-    ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`
+  const vignetteSrc = node.terrain
+    ? isSettlement
+      ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_settlement.png`
+      : node.regionTier != null && node.regionTier > 0
+        ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`
+        : null
     : null;
 
   return (
