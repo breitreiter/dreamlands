@@ -320,3 +320,31 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
       Needs Cosmos DB or equivalent for player state persistence.
 - [ ] World build + deploy pipeline — build.sh + push.sh + app deploy as one scripted flow.
       Version-prefix assets for cache busting.
+
+## Unused Code Audit (2026-03-07)
+
+Results from `jb inspectcode`. Most of these are awaiting final system design, not dead.
+None are obviously aged-out — keep for now, revisit when their parent systems are built.
+
+**Stubs awaiting systems:**
+- `FlavorText.cs` — 9 placeholder methods (temple, inn, market, weather, etc.)
+- `ImperialCalendar.cs` — full calendar type, not yet wired into UI
+- `ItemDef.Slots`, `ItemDef.CapacityBonus` — inventory system not finalized
+- `SettlementBalance.Services` — settlement services config not yet used
+- `SettlementGraph.GetParent/GetChildren/GetSettlementsInBiome` — query methods for future use
+
+**Utility methods with no callers yet:**
+- `Direction.Opposite()`
+- `ActionVocabulary.IsValidName()`, `.Validate()`
+- `Difficulty.GetInfo()`, `Magnitude.GetInfo()/.ScriptName()`, `TimePeriod.GetInfo()/.ScriptName()`
+- `ItemDef.IsValidId()`
+
+**Mapgen:**
+- `Noise.Octaves()`, `TerrainPass.Draw()`, `SettlementPlacer.GetTraversableNeighbor()`
+- `MapGenerator.FindRegions()`, `PoiPass.BiomeToDungeonFolder`
+
+**Server DTOs:**
+- `ActionRequest.Quantity`, `ActionRequest.OfferIndex` — request fields not yet read
+
+**Enum member:**
+- `EncounterResult.Completed` — never matched on
