@@ -32,6 +32,7 @@ public sealed class ConditionDef
         {
             Id = "hungry", Name = "Hungry", Biome = "none", Tier = "none",
             Stacks = 3, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
+            ClearedOnSettlement = true,
         },
         ["thirsty"] = new()
         {

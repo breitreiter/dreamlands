@@ -53,13 +53,18 @@ public static class Inn
         var simHealth = state.Health;
         var simSpirits = state.Spirits;
 
-        // Build drain-per-night from active conditions
+        // Build drain-per-night from active conditions (skip ClearedOnSettlement — those clear immediately)
         int healthDrain = 0, spiritsDrain = 0;
         var conditionStacks = new Dictionary<string, int>(state.ActiveConditions);
 
-        foreach (var (conditionId, _) in conditionStacks)
+        foreach (var conditionId in conditionStacks.Keys.ToList())
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
+            if (def.ClearedOnSettlement)
+            {
+                conditionStacks.Remove(conditionId);
+                continue;
+            }
             if (def.HealthDrain is { } hMag)
                 healthDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(hMag, 0);
             if (def.SpiritsDrain is { } sMag)
