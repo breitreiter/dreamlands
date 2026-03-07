@@ -15,7 +15,7 @@ export default function HaulItem({ name, destinationName, destinationHint, payou
       <div className="text-muted mt-0.5">
         Deliver to {destinationName ?? destinationHint}
         {destinationName && destinationHint && (
-          <span className="text-dim"> ({destinationHint.toLowerCase()})</span>
+          <span className="text-dim"> ({destinationHint})</span>
         )}
       </div>
       {flavor && (
