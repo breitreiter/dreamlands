@@ -36,16 +36,9 @@ function gridToLatLng(x: number, y: number): LatLngExpression {
 }
 
 const playerIcon = new Icon({
-  iconUrl:
-    "data:image/svg+xml," +
-    encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">' +
-        '<circle cx="12" cy="12" r="10" fill="#d0925d" stroke="#232d46" stroke-width="2"/>' +
-        '<circle cx="12" cy="12" r="4" fill="#232d46"/>' +
-        "</svg>"
-    ),
-  iconSize: [36, 36],
-  iconAnchor: [18, 18],
+  iconUrl: "/world/assets/ui/player_pin.svg",
+  iconSize: [31, 58],
+  iconAnchor: [15, 58],
 });
 
 function MapFollower({ position }: { position: LatLngExpression }) {
@@ -267,9 +260,8 @@ function InstrumentCluster({
                 <span className="text-accent font-bold whitespace-nowrap">
                   {poi!.name || "Dungeon"}
                 </span>
-                <Button variant="destructive" size="sm" onClick={onEnterDungeon} disabled={loading}>
-                  <img src="/world/assets/icons/dungeon-gate.svg" alt="" className="w-4 h-4" />
-                  Enter
+                <Button variant="secondary" size="icon-sm" onClick={onEnterDungeon} disabled={loading} title="Enter dungeon">
+                  <img src="/world/assets/icons/dungeon-gate.svg" alt="Enter dungeon" className="w-5 h-5 opacity-80" />
                 </Button>
               </>
             )}

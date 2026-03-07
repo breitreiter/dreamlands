@@ -171,6 +171,12 @@ Market buy/sell with auto-equip works. Remaining services need game logic.
 - [x] Rework haul destination hints — replaced 3x3 sector grid with relative offset:
       "A plains settlement 2 days east of Aldgate". Manhattan distance ÷ 5 tiles/day,
       8-way cardinal/intercardinal direction via atan2.
+- [ ] Haul respawn pacing — currently hauls re-populate immediately when re-entering the market,
+      giving settlements effectively infinite hauls. Need a respawn rubric tied to node
+      connectivity: hub nodes (high total child count) should replenish quickly since players
+      pass through often, while leaf/dead-end nodes should replenish slowly or not at all.
+      Figure out the right cooldown curve and whether it's time-based (game days) or
+      visit-based.
 - [ ] Dynamic haul generation — when a player exhausts all bespoke hauls for a given route,
       generate vague/generic hauls on the fly (e.g. "sealed guild casket", "unmarked parcel",
       "bonded cargo") so trade never dead-ends. Keep flavor minimal and mysterious to avoid

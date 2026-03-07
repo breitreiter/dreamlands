@@ -102,6 +102,7 @@ Mercantile still provides a 2% per-point discount on market buys (food/medicine/
 - **Load transit/relay UX**: How to make it clear which deposited loads at a settlement are "closer to done" vs. freshly arrived?
 - **Mercantile skill role**: Currently just discounts market buys. Needs a haul-related role (better offers, payout bonus, more offers) or removal.
 - **Payout tuning**: Manhattan × 3 is the starting formula. Needs playtesting to see if it sustains the player economy across different map positions.
+- **Haul respawn pacing**: Currently hauls re-populate instantly when the player re-opens the market, giving every settlement infinite hauls. Need a cooldown before claimed hauls are replaced. The right metric for respawn speed is **total child nodes in the trade tree** (not edge count — edges only measure direct connections). A node with many descendants is a natural funnel that players pass through constantly en route to downstream destinations, so it should replenish quickly. A leaf with zero children is only visited as a final delivery stop and should replenish slowly or not at all. Open question: time-based cooldown (game days) vs visit-based (replenish after N visits without claiming). This also connects to the "infinite milk runs" problem — fast respawn on short loops is exactly how milk runs form.
 
 # Affected Systems
 
