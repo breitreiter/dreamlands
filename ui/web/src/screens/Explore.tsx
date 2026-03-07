@@ -193,21 +193,17 @@ function InstrumentCluster({
   return (
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[1000] pointer-events-none">
       {/* Left wing */}
-      <div className="absolute bottom-0 right-1/2 bg-page rounded-tl-2xl py-3 pl-5 pr-[96px] pointer-events-auto">
-        <div className="flex items-center gap-3">
-          <Button variant="secondary" size="icon-sm" onClick={() => onOpenInventory()} disabled={loading} title="Inventory (I)">
-            <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
-          </Button>
-
-          {status.conditions.length > 0 && (
-            <div className="flex items-center gap-1">
+      <div className="absolute bottom-0 right-1/2 pointer-events-auto">
+        {/* Conditions bar — above the main bar */}
+        {status.conditions.length > 0 && (
+          <div className="flex justify-end mb-1">
+            <div className="bg-panel rounded-2xl pl-3 pr-[96px] py-2 flex items-center gap-2 leading-none">
               {status.conditions.map((c) => (
                 <div key={c.id} className="relative group">
-                  <img
-                    src={`/world/assets/icons/${CONDITION_ICONS[c.id] || "sun.svg"}`}
-                    alt={c.name}
+                  <MaskedIcon
+                    icon={CONDITION_ICONS[c.id] || "sun.svg"}
                     className="w-5 h-5"
-                    style={{ filter: "brightness(0) saturate(100%) invert(55%) sepia(80%) saturate(500%) hue-rotate(330deg)" }}
+                    color="#ff6b6b"
                   />
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-primary text-sm rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     {c.name}{c.stacks > 1 ? ` x${c.stacks}` : ""}
@@ -215,9 +211,17 @@ function InstrumentCluster({
                 </div>
               ))}
             </div>
-          )}
+          </div>
+        )}
 
-          <div className="flex items-center gap-1">
+        {/* Stats bar */}
+        <div className="bg-page rounded-tl-2xl py-3 pl-5 pr-[96px]">
+          <div className="flex items-center gap-3">
+            <Button variant="secondary" size="icon-sm" onClick={() => onOpenInventory()} disabled={loading} title="Inventory (I)">
+              <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
+            </Button>
+
+            <div className="flex items-center gap-1">
             <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />
             <span className={`font-bold ${spiritsLow ? "text-negative" : "text-primary"}`}>{status.spirits}</span>
             <span className="text-dim opacity-60">/{status.maxSpirits}</span>
@@ -227,6 +231,7 @@ function InstrumentCluster({
             <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="#d4c9a8" />
             <span className={`font-bold ${healthLow ? "text-negative" : "text-primary"}`}>{status.health}</span>
             <span className="text-dim opacity-60">/{status.maxHealth}</span>
+          </div>
           </div>
         </div>
       </div>
