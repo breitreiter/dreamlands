@@ -58,6 +58,16 @@ export default function Camp({ state }: { state: GameResponse }) {
       ? innIntro
       : pickRoadIntro(state.status.day);
 
+  // Close with Enter key once resolved
+  useEffect(() => {
+    if (!resolved) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Enter") refreshState();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [resolved, refreshState]);
+
   return (
     <div className="h-full flex bg-page text-primary">
       {/* Left panel — vignette over parchment */}

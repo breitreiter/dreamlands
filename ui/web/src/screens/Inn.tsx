@@ -46,7 +46,16 @@ export default function Inn({
     }
   }
 
-  // Recovery summary phase
+  // Recovery summary — close with Enter key
+  useEffect(() => {
+    if (!recovery) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Enter") onBack();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [recovery, onBack]);
+
   if (recovery) {
     return (
       <div className="h-full flex bg-page text-primary">
