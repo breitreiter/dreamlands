@@ -93,7 +93,32 @@ public class SettlementGraph
         var rootId = map.StartingCity?.Poi?.SettlementId
             ?? throw new InvalidOperationException("Map has no starting city with SettlementId");
 
+        // Compute depth from root
+        ComputeDepths(settlements, rootId);
+
         return new SettlementGraph(settlements, rootId);
+    }
+
+    private static void ComputeDepths(Dictionary<string, SettlementInfo> settlements, string rootId)
+    {
+        var queue = new Queue<string>();
+        queue.Enqueue(rootId);
+        if (settlements.TryGetValue(rootId, out var root))
+            root.Depth = 0;
+
+        while (queue.Count > 0)
+        {
+            var id = queue.Dequeue();
+            var info = settlements[id];
+            foreach (var childId in info.ChildIds)
+            {
+                if (settlements.TryGetValue(childId, out var child))
+                {
+                    child.Depth = info.Depth + 1;
+                    queue.Enqueue(childId);
+                }
+            }
+        }
     }
 
     private List<string>? PathToRoot(string id)
@@ -125,4 +150,5 @@ public class SettlementInfo
     public required SettlementSize Size { get; init; }
     public string? ParentId { get; set; }
     public List<string> ChildIds { get; } = [];
+    public int Depth { get; set; }
 }

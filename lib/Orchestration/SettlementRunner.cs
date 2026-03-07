@@ -60,16 +60,31 @@ public static class SettlementRunner
         if (candidates.Count == 0) candidates = graph.GetSettlementsAtHop(settlementId, 3);
         if (candidates.Count == 0) return;
 
-        var destinations = candidates
+        // Prefer destinations deeper in the tree (away from root)
+        var currentDepth = info.Depth;
+        var downward = candidates.Where(s => s.Depth > currentDepth)
+            .Select(s => new HaulGeneration.HaulDestination(s.Id, s.Name, s.Biome, s.X, s.Y))
+            .ToList();
+        var upward = candidates.Where(s => s.Depth <= currentDepth)
             .Select(s => new HaulGeneration.HaulDestination(s.Id, s.Name, s.Biome, s.X, s.Y))
             .ToList();
 
         var playerHauls = session.Player.Pack.Where(i => i.HaulDefId != null).ToList();
+
+        // Try downward destinations first, then fill remaining slots with upward
         var newOffers = HaulGeneration.Generate(
             info.X, info.Y, info.Name, biome, isLeaf,
-            destinations, session.Balance.Hauls,
+            downward, session.Balance.Hauls,
             state.HaulOffers, playerHauls, session.Rng);
-
         state.HaulOffers.AddRange(newOffers);
+
+        if (upward.Count > 0)
+        {
+            var moreOffers = HaulGeneration.Generate(
+                info.X, info.Y, info.Name, biome, isLeaf,
+                upward, session.Balance.Hauls,
+                state.HaulOffers, playerHauls, session.Rng);
+            state.HaulOffers.AddRange(moreOffers);
+        }
     }
 }

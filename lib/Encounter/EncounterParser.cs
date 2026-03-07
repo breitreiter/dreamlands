@@ -173,9 +173,25 @@ public static partial class EncounterParser
             var raw = lines[i];
             var trimmed = raw.TrimStart();
 
-            // Skip blank lines
+            // Blank lines become paragraph breaks in prose
             if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                if (currentOptionText != null)
+                {
+                    if (inConditional)
+                    {
+                        if (inFallback)
+                            fallbackText.Add("");
+                        else
+                            branchText.Add("");
+                    }
+                    else
+                    {
+                        singleText.Add("");
+                    }
+                }
                 continue;
+            }
 
             // Choice boundary: "* " at start (only outside braces)
             if (braceDepth == 0 && trimmed.StartsWith("* ", StringComparison.Ordinal))
