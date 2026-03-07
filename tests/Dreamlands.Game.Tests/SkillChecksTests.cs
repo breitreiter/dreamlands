@@ -162,21 +162,21 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetItemBonus_Bushcraft_ForagingBonus()
-    {
-        var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("hatchet", "Hatchet"); // ForagingBonus = 1
-
-        Assert.Equal(1, SkillChecks.GetItemBonus(Skill.Bushcraft, state, Balance));
-    }
-
-    [Fact]
-    public void GetItemBonus_Bushcraft_ForagingBonusHighWeapon()
+    public void GetItemBonus_Bushcraft_WeaponForagingDoesNotCount()
     {
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("kopis", "Kopis"); // ForagingBonus = 5
 
-        Assert.Equal(5, SkillChecks.GetItemBonus(Skill.Bushcraft, state, Balance));
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Bushcraft, state, Balance));
+    }
+
+    [Fact]
+    public void GetForagingBonus_ReturnsWeaponForaging()
+    {
+        var state = Fresh();
+        state.Equipment.Weapon = new ItemInstance("skinning_knife", "Skinning Knife"); // ForagingBonus = 2
+
+        Assert.Equal(2, SkillChecks.GetForagingBonus(state, Balance));
     }
 
     [Fact]

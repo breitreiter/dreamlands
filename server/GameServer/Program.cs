@@ -300,13 +300,9 @@ MechanicsInfo BuildMechanics(PlayerState p)
         Source = "Luck",
     });
 
-    // Foraging bonus: bushcraft + weapon foraging bonus
-    var bushcraft = p.Skills.GetValueOrDefault(Skill.Bushcraft)
-                  + SkillChecks.GetItemBonus(Skill.Bushcraft, p, balance);
-    var weaponForaging = 0;
-    if (p.Equipment.Weapon != null && balance.Items.TryGetValue(p.Equipment.Weapon.DefId, out var weaponDef))
-        weaponForaging = weaponDef.ForagingBonus;
-    var totalForaging = bushcraft + weaponForaging;
+    // Foraging bonus: bushcraft skill + weapon foraging bonus
+    var totalForaging = p.Skills.GetValueOrDefault(Skill.Bushcraft)
+                      + SkillChecks.GetForagingBonus(p, balance);
     other.Add(new MechanicLine
     {
         Label = "Foraging checks",

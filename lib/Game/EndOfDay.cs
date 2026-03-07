@@ -144,7 +144,7 @@ public static class EndOfDay
         if (noBiome) return;
 
         var skillLevel = state.Skills.GetValueOrDefault(Skill.Bushcraft);
-        var itemBonus = SkillChecks.GetItemBonus(Skill.Bushcraft, state, balance);
+        var itemBonus = SkillChecks.GetForagingBonus(state, balance);
         var modifier = skillLevel + itemBonus;
 
         var rollMode = state.ActiveConditions.ContainsKey("disheartened")

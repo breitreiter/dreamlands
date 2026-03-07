@@ -151,8 +151,7 @@ public static class SkillChecks
             Skill.Combat => GetEquippedMod(state.Equipment.Weapon, Skill.Combat, balance),
             Skill.Cunning => GetEquippedMod(state.Equipment.Armor, Skill.Cunning, balance),
             Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
-            Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance)
-                            + GetForagingBonus(state, balance),
+            Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
             Skill.Mercantile => GetBestToolBonuses(Skill.Mercantile, state, balance),
             _ => 0, // Luck gets no gear bonus
         };
@@ -178,7 +177,9 @@ public static class SkillChecks
             "poison" => GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance),
             "exhausted" => GetEquippedResist(state.Equipment.Boots, conditionId, magnitudes, balance)
                          + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
-            "freezing" or "thirsty" or "lost" => GetBestPackResist(conditionId, magnitudes, state, balance, 2),
+            "freezing" or "thirsty" or "lost" =>
+                GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance)
+                + GetBestPackResist(conditionId, magnitudes, state, balance, 2),
             "swamp_fever" or "gut_worms" or "irradiated" =>
                 GetBestPackResist(conditionId, magnitudes, state, balance, 1),
             _ => 0,
@@ -207,7 +208,7 @@ public static class SkillChecks
         return 0;
     }
 
-    static int GetForagingBonus(PlayerState state, BalanceData balance)
+    public static int GetForagingBonus(PlayerState state, BalanceData balance)
     {
         if (state.Equipment.Weapon == null) return 0;
         if (balance.Items.TryGetValue(state.Equipment.Weapon.DefId, out var def))
