@@ -30,9 +30,11 @@ fi
 if [[ "$SKIP_ASSETS" == false ]]; then
     echo "==> Copying assets..."
 
-    for dir in icons portraits equipment vignettes; do
+    for dir in icons portraits equipment vignettes UI; do
         src="$REPO_ROOT/assets/$dir"
-        dest="$WORLD_DIR/assets/$dir"
+        # UI -> ui (lowercase in output)
+        dest_name=$(echo "$dir" | tr '[:upper:]' '[:lower:]')
+        dest="$WORLD_DIR/assets/$dest_name"
 
         if [[ -d "$src" ]]; then
             rm -rf "$dest"
@@ -40,9 +42,9 @@ if [[ "$SKIP_ASSETS" == false ]]; then
             if compgen -G "$src/*" >/dev/null 2>&1; then
                 cp -r "$src"/. "$dest"/
             fi
-            echo "    $dir/ copied"
+            echo "    $dest_name/ copied"
         else
-            echo "    $dir/ not found in assets/, skipping"
+            echo "    $dest_name/ not found in assets/, skipping"
         fi
     done
 else

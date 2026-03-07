@@ -8,6 +8,7 @@ import MarketScreen from "./Market";
 import BankScreen from "./Bank";
 import Inn from "./Inn";
 import MaskedIcon from "../components/MaskedIcon";
+import DayNightComplication from "../components/DayNightComplication";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -18,7 +19,6 @@ import {
   AlertDialogFooter,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { formatDateTime } from "../calendar";
 import { getDiscoveries } from "../api/client";
 import type { GameResponse, DeliveryInfo, DiscoveryInfo } from "../api/types";
 
@@ -140,8 +140,6 @@ const CONDITION_ICONS: Record<string, string> = {
   cursed: "foamy-disc.svg",
 };
 
-const TIER_LABELS: Record<number, string> = { 1: "Village", 2: "Town", 3: "City" };
-
 const poiPinIcon = new DivIcon({
   html: `<div style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:2px solid #D0BD62;border-radius:50%;"><div style="width:14px;height:14px;background:#D0BD62;-webkit-mask:url(/world/assets/icons/black-flag.svg) center/contain no-repeat;mask:url(/world/assets/icons/black-flag.svg) center/contain no-repeat;"></div></div>`,
   className: "",
@@ -150,7 +148,7 @@ const poiPinIcon = new DivIcon({
 });
 
 function gridToLatLngTopRight(x: number, y: number): LatLngExpression {
-  const tileLng = TILE_PX / SCALE; // 2 latlng units per tile
+  const tileLng = TILE_PX / SCALE;
   const [lat, lng] = gridToLatLng(x, y) as [number, number];
   return [lat + tileLng * 0.35, lng + tileLng * 0.35];
 }
@@ -164,15 +162,137 @@ const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   chapterhouse: { icon: "wood-cabin.svg", label: "Chapterhouse" },
 };
 
+function InstrumentCluster({
+  state,
+  loading,
+  onOpenInventory,
+  onOpenService,
+  onEnterDungeon,
+}: {
+  state: GameResponse;
+  loading: boolean;
+  onOpenInventory: () => void;
+  onOpenService: (service: string) => void;
+  onEnterDungeon: () => void;
+}) {
+  const { node, status } = state;
+  if (!node) return null;
+
+  const poi = node.poi;
+  const isSettlement = poi?.kind === "settlement";
+  const isDungeon = poi?.kind === "dungeon";
+  const hasRightWing = isSettlement || isDungeon;
+
+  const healthLow = status.health < status.maxHealth * 0.5;
+  const spiritsLow = status.spirits < status.maxSpirits * 0.5;
+
+  const vignetteSrc = node.terrain && node.regionTier != null && node.regionTier > 0
+    ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`
+    : null;
+
+  return (
+    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[1000] pointer-events-none">
+      {/* Left wing */}
+      <div className="absolute bottom-0 right-1/2 bg-page rounded-tl-2xl py-3 pl-5 pr-[96px] pointer-events-auto">
+        <div className="flex items-center gap-3">
+          <Button variant="secondary" size="icon-sm" onClick={() => onOpenInventory()} disabled={loading} title="Inventory (I)">
+            <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
+          </Button>
+
+          {status.conditions.length > 0 && (
+            <div className="flex items-center gap-1">
+              {status.conditions.map((c) => (
+                <div key={c.id} className="relative group">
+                  <img
+                    src={`/world/assets/icons/${CONDITION_ICONS[c.id] || "sun.svg"}`}
+                    alt={c.name}
+                    className="w-5 h-5"
+                    style={{ filter: "brightness(0) saturate(100%) invert(55%) sepia(80%) saturate(500%) hue-rotate(330deg)" }}
+                  />
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-primary text-sm rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    {c.name}{c.stacks > 1 ? ` x${c.stacks}` : ""}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center gap-1">
+            <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />
+            <span className={`font-bold ${spiritsLow ? "text-negative" : "text-primary"}`}>{status.spirits}</span>
+            <span className="text-dim opacity-60">/{status.maxSpirits}</span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="#d4c9a8" />
+            <span className={`font-bold ${healthLow ? "text-negative" : "text-primary"}`}>{status.health}</span>
+            <span className="text-dim opacity-60">/{status.maxHealth}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right wing */}
+      {hasRightWing && (
+        <div className="absolute bottom-0 left-1/2 bg-page rounded-tr-2xl py-3 pl-[96px] pr-5 pointer-events-auto">
+          <div className="flex items-center gap-3">
+            {isSettlement && (
+              <>
+                <span className="text-accent font-bold whitespace-nowrap">
+                  {poi!.name || "Settlement"}
+                </span>
+                <div className="flex gap-1">
+                  {(poi!.services ?? []).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
+                    const info = SERVICE_ICONS[service];
+                    if (!info) return null;
+                    return (
+                      <Button key={service} variant="secondary" size="icon-sm" onClick={() => onOpenService(service)} disabled={loading} title={info.label}>
+                        <img src={`/world/assets/icons/${info.icon}`} alt={info.label} className="w-5 h-5 opacity-80" />
+                      </Button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+            {isDungeon && !poi!.dungeonCompleted && (
+              <>
+                <span className="text-accent font-bold whitespace-nowrap">
+                  {poi!.name || "Dungeon"}
+                </span>
+                <Button variant="destructive" size="sm" onClick={onEnterDungeon} disabled={loading}>
+                  <img src="/world/assets/icons/dungeon-gate.svg" alt="" className="w-4 h-4" />
+                  Enter
+                </Button>
+              </>
+            )}
+            {isDungeon && poi!.dungeonCompleted && (
+              <span className="text-muted whitespace-nowrap">
+                {poi!.name || "Dungeon"} (completed)
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Vignette + complication — centered, sits on top of the bar */}
+      <div className="relative z-10 pointer-events-auto">
+        <div className="w-[160px] h-[160px] rounded-full border-3 border-edge overflow-hidden bg-black/60">
+          {vignetteSrc && (
+            <img src={vignetteSrc} alt="" className="w-full h-full object-cover" />
+          )}
+        </div>
+        <DayNightComplication time={status.time} />
+      </div>
+    </div>
+  );
+}
+
 export default function Explore({ state }: { state: GameResponse }) {
   const { doAction, loading, gameId } = useGame();
   const [showInventory, setShowInventory] = useState(false);
-  const [vignetteError, setVignetteError] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
   const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
 
-  // Fetch discoveries on mount
   useEffect(() => {
     if (!gameId) return;
     getDiscoveries(gameId).then(setDiscoveries).catch(() => {});
@@ -183,7 +303,6 @@ export default function Explore({ state }: { state: GameResponse }) {
     if (result?.deliveries?.length) {
       setPendingDeliveries(result.deliveries);
     }
-    // Optimistically add current node's POI to discoveries
     if (result?.node?.poi && (result.node.poi.kind === "settlement" || result.node.poi.kind === "dungeon")) {
       setDiscoveries(prev => {
         if (prev.some(d => d.x === result.node!.x && d.y === result.node!.y)) return prev;
@@ -219,192 +338,63 @@ export default function Explore({ state }: { state: GameResponse }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [move, loading, activeService, pendingDeliveries.length]);
 
-  // Reset vignette error when terrain or tier changes
-  const terrain = state.node?.terrain;
-  const tier = state.node?.regionTier;
-  useEffect(() => setVignetteError(false), [terrain, tier]);
-
-  function openService(service: string) {
-    setActiveService(service);
-  }
-
-  function closeService() {
-    setActiveService(null);
-  }
-
   if (!state.node || !state.exits) return null;
 
-  const { node, exits, status } = state;
-  const poi = node.poi;
-  const isSettlement = poi?.kind === "settlement";
-  const isLost = status.conditions.some((c) => c.id === "lost");
+  const { node, exits } = state;
+  const isLost = state.status.conditions.some((c) => c.id === "lost");
 
-  // Show Market as full-screen
-  if (activeService === "market") {
-    return <MarketScreen state={state} onBack={closeService} />;
-  }
-
-  // Show Bank as full-screen
-  if (activeService === "bank") {
-    return <BankScreen state={state} onBack={closeService} />;
-  }
-
-  // Show Inn / Chapterhouse as full-screen
-  if (activeService === "inn" || activeService === "chapterhouse") {
-    return <Inn state={state} isChapterhouse={activeService === "chapterhouse"} onBack={closeService} />;
-  }
-
-  // Show Inventory as full-screen
-  if (showInventory) {
-    return <Inventory state={state} onClose={() => setShowInventory(false)} />;
-  }
+  if (activeService === "market") return <MarketScreen state={state} onBack={() => setActiveService(null)} />;
+  if (activeService === "bank") return <BankScreen state={state} onBack={() => setActiveService(null)} />;
+  if (activeService === "inn" || activeService === "chapterhouse")
+    return <Inn state={state} isChapterhouse={activeService === "chapterhouse"} onBack={() => setActiveService(null)} />;
+  if (showInventory) return <Inventory state={state} onClose={() => setShowInventory(false)} />;
 
   return (
-    <div className="h-full flex bg-page text-primary">
-      {/* Map panel */}
-      <div className="flex-1 relative isolate">
-        <MapContainer
-          crs={CRS.Simple}
-          center={position}
-          zoom={MAX_ZOOM}
-          maxBounds={bounds.pad(0.1)}
+    <div className="h-full relative bg-page text-primary">
+      {/* Map — full screen */}
+      <MapContainer
+        crs={CRS.Simple}
+        center={position}
+        zoom={MAX_ZOOM}
+        maxBounds={bounds.pad(0.1)}
+        minZoom={0}
+        maxZoom={MAX_ZOOM}
+        style={{ height: "100%", width: "100%" }}
+        zoomSnap={1}
+      >
+        <TileLayer
+          url="/world/tiles/{z}/{x}/{y}.png"
+          tileSize={256}
+          noWrap
+          maxNativeZoom={MAX_ZOOM}
           minZoom={0}
           maxZoom={MAX_ZOOM}
-          style={{ height: "100%", width: "100%" }}
-          zoomSnap={1}
-        >
-          <TileLayer
-            url="/world/tiles/{z}/{x}/{y}.png"
-            tileSize={256}
-            noWrap
-            maxNativeZoom={MAX_ZOOM}
-            minZoom={0}
-            maxZoom={MAX_ZOOM}
-          />
-          {!isLost && <Marker position={position} icon={playerIcon} />}
-          <DirectionIndicator
-            playerX={node.x}
-            playerY={node.y}
-            exits={exits.map((e) => e.direction)}
-            loading={loading}
-            hidden={isLost}
-            onMove={move}
-          />
-          {discoveries.map((d) => (
-            <Marker key={`${d.x},${d.y}`} position={gridToLatLngTopRight(d.x, d.y)} icon={poiPinIcon}>
-              <Tooltip direction="top" offset={[0, -12]}>{d.name}</Tooltip>
-            </Marker>
-          ))}
-          <MapFollower position={position} />
-        </MapContainer>
-      </div>
+        />
+        {!isLost && <Marker position={position} icon={playerIcon} />}
+        <DirectionIndicator
+          playerX={node.x}
+          playerY={node.y}
+          exits={exits.map((e) => e.direction)}
+          loading={loading}
+          hidden={isLost}
+          onMove={move}
+        />
+        {discoveries.map((d) => (
+          <Marker key={`${d.x},${d.y}`} position={gridToLatLngTopRight(d.x, d.y)} icon={poiPinIcon}>
+            <Tooltip direction="top" offset={[0, -12]}>{d.name}</Tooltip>
+          </Marker>
+        ))}
+        <MapFollower position={position} />
+      </MapContainer>
 
-      {/* Side panel */}
-      <div className="w-[360px] flex flex-col bg-page border-l border-edge overflow-y-auto">
-        {/* Vignette */}
-        {!vignetteError && node.terrain && node.regionTier != null && node.regionTier > 0 && (
-          <img
-            src={`/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`}
-            alt=""
-            className="w-full h-40 object-cover"
-            onError={() => setVignetteError(true)}
-          />
-        )}
-
-        <div className="flex-1 flex flex-col gap-3 p-3 min-h-0">
-          {/* Region name + inventory */}
-          <div className="flex items-center justify-between">
-            <div className="font-header text-accent text-lg">
-              {node.region || node.terrain}
-            </div>
-            <Button variant="secondary" size="icon-sm" onClick={() => setShowInventory((v) => !v)} disabled={loading} title="Inventory (I)">
-              <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
-            </Button>
-          </div>
-
-          {/* Date + coordinates */}
-          <div className="text-dim -mt-2">
-            {formatDateTime(status.day, status.time)}
-            <span className="ml-2 text-muted">({node.x}, {node.y})</span>
-          </div>
-
-          {/* POI controls — fixed-height slot so compass never shifts */}
-          <div className="h-[84px] flex items-center">
-            {isSettlement && (
-              <div className="w-full rounded-xl p-3 flex items-center gap-3" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
-                <div className="flex-1 min-w-0">
-                  <div className="text-accent text-base truncate">
-                    {poi.name || "Settlement"}
-                  </div>
-                  <div className="text-dim text-sm">
-                    {TIER_LABELS[node.regionTier ?? 0] || "Settlement"}
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  {(poi.services ?? []).filter((s) => IMPLEMENTED_SERVICES.has(s)).map((service) => {
-                    const info = SERVICE_ICONS[service];
-                    if (!info) return null;
-                    return (
-                      <Button key={service} variant="secondary" size="icon-lg" onClick={() => openService(service)} disabled={loading} title={info.label}>
-                        <img
-                          src={`/world/assets/icons/${info.icon}`}
-                          alt={info.label}
-                          className="w-6 h-6 opacity-80"
-                        />
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-            {poi?.kind === "dungeon" && !poi.dungeonCompleted && (
-              <Button variant="destructive" className="w-full" onClick={() => doAction({ action: "enter_dungeon" })} disabled={loading}>
-                <img src="/world/assets/icons/dungeon-gate.svg" alt="" className="w-5 h-5" />
-                <span>Enter {poi.name || "Dungeon"}</span>
-              </Button>
-            )}
-            {poi?.kind === "dungeon" && poi.dungeonCompleted && (
-              <div className="text-muted text-center w-full">
-                {poi.name || "Dungeon"} (completed)
-              </div>
-            )}
-          </div>
-
-          {/* Conditions — flex-1 fills remaining space, items align to bottom */}
-          <div className="flex-1 flex flex-col justify-end gap-1">
-            {status.conditions.map((c) => (
-              <div key={c.id} className="flex items-center gap-2 text-negative">
-                <img
-                  src={`/world/assets/icons/${CONDITION_ICONS[c.id] || "sun.svg"}`}
-                  alt=""
-                  className="w-5 h-5"
-                />
-                <span>{c.name}{c.stacks > 1 ? ` x${c.stacks}` : ""}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Health & Spirits KPI blocks */}
-          <div className="flex gap-2">
-            <div className="flex-1 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
-              <div className="flex items-center gap-2">
-                <MaskedIcon icon="heart-plus.svg" className="w-7 h-7" color="#d4c9a8" />
-                <span className="text-2xl font-bold text-primary">{status.health}</span>
-                <span className="text-xl text-dim">/ {status.maxHealth}</span>
-              </div>
-              <div className="text-xs text-muted mt-0.5">Health</div>
-            </div>
-            <div className="flex-1 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
-              <div className="flex items-center gap-2">
-                <MaskedIcon icon="sensuousness.svg" className="w-7 h-7" color="#d4c9a8" />
-                <span className={`text-2xl font-bold ${status.conditions.some(c => c.id === "disheartened") ? "text-negative" : "text-primary"}`}>{status.spirits}</span>
-                <span className="text-xl text-dim">/ {status.maxSpirits}</span>
-              </div>
-              <div className="text-xs text-muted mt-0.5">Spirits</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Instrument cluster — bottom center overlay */}
+      <InstrumentCluster
+        state={state}
+        loading={loading}
+        onOpenInventory={() => setShowInventory(true)}
+        onOpenService={setActiveService}
+        onEnterDungeon={() => doAction({ action: "enter_dungeon" })}
+      />
 
       {/* Haul delivery dialog */}
       <AlertDialog open={pendingDeliveries.length > 0}>
@@ -440,7 +430,6 @@ export default function Explore({ state }: { state: GameResponse }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
     </div>
   );
 }
