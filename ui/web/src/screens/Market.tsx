@@ -33,7 +33,7 @@ export default function MarketScreen({
   const [hauls, setHauls] = useState<HaulOffer[]>([]);
   const [sellPrices, setSellPrices] = useState<Record<string, number>>({});
   const [loadingStock, setLoadingStock] = useState(true);
-  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Local order state
   const [pendingBuys, setPendingBuys] = useState<Map<string, number>>(new Map());
@@ -65,7 +65,7 @@ export default function MarketScreen({
         setHauls(res.hauls ?? []);
         setSellPrices(res.sellPrices ?? {});
       })
-      .catch((e) => setMessage(e.message))
+      .catch((e) => setError(e.message))
       .finally(() => setLoadingStock(false));
   }, [gameId]);
 
@@ -230,9 +230,7 @@ export default function MarketScreen({
     if (result) {
       const failures = result.marketResult?.results.filter((r) => !r.success) ?? [];
       if (failures.length > 0) {
-        setMessage(failures.map((f) => f.message).join("; "));
-      } else {
-        setMessage("Order completed");
+        setError(failures.map((f) => f.message).join("; "));
       }
       setPendingBuys(new Map());
       setPendingSells([]);
@@ -250,7 +248,6 @@ export default function MarketScreen({
     const result = await doAction({ action: "claim_haul", offerId });
     if (result) {
       setHauls((prev) => prev.filter((h) => h.id !== offerId));
-      setMessage("Haul claimed");
     }
   }
 
@@ -307,9 +304,9 @@ export default function MarketScreen({
   return (
     <div className="h-full flex flex-col bg-page text-primary">
 
-      {message && (
-        <div className="px-4 py-2 text-center text-primary/80 bg-panel border-b border-edge">
-          {message}
+      {error && (
+        <div className="px-4 py-2 text-center text-negative bg-panel border-b border-edge">
+          {error}
         </div>
       )}
 
@@ -471,12 +468,24 @@ export default function MarketScreen({
                         <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-primary">{item.name}</div>
-                        {item.description && (
-                          <div className="text-muted mt-0.5 truncate">{item.description}</div>
-                        )}
-                        {sellTab === "equipped" && (
-                          <div className="text-dim mt-0.5">equipped ({source})</div>
+                        {item.type === "haul" ? (
+                          <HaulItem
+                            name={item.name}
+                            destinationName={item.destinationName}
+                            destinationHint={item.destinationHint}
+                            payout={item.payout}
+                            flavor={item.description}
+                          />
+                        ) : (
+                          <>
+                            <div className="text-primary">{item.name}</div>
+                            {item.description && (
+                              <div className="text-muted mt-0.5 truncate">{item.description}</div>
+                            )}
+                            {sellTab === "equipped" && (
+                              <div className="text-dim mt-0.5">equipped ({source})</div>
+                            )}
+                          </>
                         )}
                       </div>
                       {sellable && (

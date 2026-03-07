@@ -27,6 +27,7 @@ interface GameContextValue extends GameState {
     source?: string;
     bankIndex?: number;
     offerIndex?: number;
+    offerId?: string;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
 }
@@ -125,6 +126,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       source?: string;
       bankIndex?: number;
       offerIndex?: number;
+      offerId?: string;
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));
