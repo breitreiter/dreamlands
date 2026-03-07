@@ -593,10 +593,11 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 await store.Save(player);
                 return Results.Ok(new GameResponse
                 {
-                    Mode = "game_over",
+                    Mode = "camp_resolved",
                     Status = BuildStatus(player),
                     Reason = "You have perished in the Dreamlands.",
                     Camp = new CampInfo { Threats = [], Events = FormatCampEvents(innEvents) },
+                    Node = BuildNodeInfo(innNode, player),
                 });
             }
 
@@ -841,8 +842,11 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                             await store.Save(player);
                             return Results.Ok(new GameResponse
                             {
-                                Mode = "game_over",
+                                Mode = "outcome",
                                 Status = BuildStatus(player),
+                                Outcome = BuildOutcomeInfo(finished.Outcome!),
+                                Inventory = BuildInventory(player),
+                                Mechanics = BuildMechanics(player),
                                 Reason = "You have perished in the Dreamlands.",
                             });
 
@@ -942,10 +946,11 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 await store.Save(player);
                 return Results.Ok(new GameResponse
                 {
-                    Mode = "game_over",
+                    Mode = "camp_resolved",
                     Status = BuildStatus(player),
                     Reason = "You have perished in the Dreamlands.",
                     Camp = campInfo,
+                    Node = BuildNodeInfo(node, player),
                 });
             }
 

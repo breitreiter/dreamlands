@@ -144,8 +144,12 @@ export default function Camp({ state }: { state: GameResponse }) {
                 alt=""
                 className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
               />
-              <span className="font-bold text-action group-hover:text-action-hover transition-colors">
-                Continue
+              <span className={`font-bold transition-colors ${
+                state.reason
+                  ? "text-negative group-hover:text-negative/80"
+                  : "text-action group-hover:text-action-hover"
+              }`}>
+                {state.reason ? "Game Over" : "Continue"}
               </span>
             </button>
           )}
