@@ -19,7 +19,7 @@ public static class ContentPopulator
         AssignSettlementIds(map);
         StampTradeTree(map);
         NameRegions(map);
-        NameSettlements(map);
+        NameSettlements(map, rng);
         AssignNodeDescriptions(map);
         Console.Error.WriteLine("  Dungeons...");
         var roster = DungeonRoster.Load(contentPath);
@@ -84,8 +84,10 @@ public static class ContentPopulator
             region.Name = FlavorText.RegionName(region.Terrain, region.Tier);
     }
 
-    private static void NameSettlements(Map map)
+    private static void NameSettlements(Map map, Random rng)
     {
+        var used = new HashSet<string>();
+
         foreach (var node in map.AllNodes())
         {
             if (node.Poi?.Kind != PoiKind.Settlement)
@@ -98,8 +100,7 @@ public static class ContentPopulator
             }
 
             var tier = node.Region?.Tier ?? 1;
-            var size = node.Poi.Size ?? SettlementSize.Village;
-            node.Poi.Name = FlavorText.SettlementName(node.Terrain, tier, size);
+            node.Poi.Name = FlavorText.SettlementName(node.Terrain, tier, rng, used);
         }
     }
 

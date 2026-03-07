@@ -42,8 +42,12 @@ public static class FlavorText
 
     // --- Settlements (biome, tier, size) ---
 
-    public static string SettlementName(Terrain biome, int tier, SettlementSize size)
+    public static string SettlementName(Terrain biome, int tier, Random rng, HashSet<string> used)
     {
+        // Draw from curated pool; fall back to combinatorial generator if exhausted
+        if (SettlementNames.Draw(biome, tier, rng, used) is { } name)
+            return name;
+
         var root = biome switch
         {
             Terrain.Plains => Pick("Wheat", "Wind", "Sun", "Grass"),
@@ -53,15 +57,7 @@ public static class FlavorText
             Terrain.Swamp => Pick("Fog", "Reed", "Mire", "Murk"),
             _ => "Lake",
         };
-        var suffix = size switch
-        {
-            SettlementSize.City => "gate",
-            SettlementSize.Town => "ford",
-            SettlementSize.Village => "hollow",
-            SettlementSize.Outpost => "watch",
-            SettlementSize.Camp => "rest",
-            _ => "stead",
-        };
+        var suffix = Pick("ford", "hollow", "watch", "rest", "stead");
         return $"{root}{suffix}";
     }
 
