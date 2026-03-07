@@ -48,6 +48,8 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
   }
+  // Deliveries are one-shot — clear unless the response explicitly includes them
+  if (!result.deliveries) cleared.deliveries = undefined;
   return cleared;
 }
 

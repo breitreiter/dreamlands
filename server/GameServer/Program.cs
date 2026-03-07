@@ -427,12 +427,13 @@ GameResponse BuildOutcomeResponse(GameSession session, EncounterStep.ShowOutcome
     Mechanics = BuildMechanics(session.Player),
 };
 
-GameResponse BuildCampResponse(GameSession session, CampInfo camp) => new()
+GameResponse BuildCampResponse(GameSession session, CampInfo camp, List<DeliveryInfo>? deliveries = null) => new()
 {
     Mode = "camp",
     Status = BuildStatus(session.Player),
     Node = BuildNodeInfo(session.CurrentNode, session.Player),
     Camp = camp,
+    Deliveries = deliveries,
     Inventory = BuildInventory(session.Player),
     Mechanics = BuildMechanics(session.Player),
 };
@@ -774,7 +775,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (player.PendingEndOfDay && !noCamp)
             {
                 session.Mode = SessionMode.Camp;
-                response = BuildCampResponse(session, BuildCampThreats(session));
+                response = BuildCampResponse(session, BuildCampThreats(session), deliveries);
             }
             else
             {
@@ -923,8 +924,9 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 balance, session.Rng,
                 createFood: (type, rng) =>
                 {
-                    var (name, _) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
-                    return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name) { FoodType = type };
+                    var (name, desc) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
+                    return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name)
+                        { FoodType = type, Description = desc };
                 });
 
             var campInfo = BuildCampThreats(session);

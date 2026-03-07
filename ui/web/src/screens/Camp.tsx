@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useGame } from "../GameContext";
 import type { GameResponse } from "../api/types";
+import MaskedIcon from "../components/MaskedIcon";
 import parchment from "../assets/parchment.png";
 
 const roadIntros = [
@@ -97,6 +98,28 @@ export default function Camp({ state }: { state: GameResponse }) {
           </h2>
 
           <div className="text-primary/80 leading-loose">{intro}</div>
+
+          {/* Haul deliveries */}
+          {state.deliveries && state.deliveries.length > 0 && (
+            <div className="space-y-3 border-t border-edge pt-3">
+              <div className="text-accent font-bold">Delivery Complete</div>
+              {state.deliveries.map((d, i) => (
+                <div key={i} className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
+                    <span className="text-accent font-bold">{d.name}</span>
+                  </div>
+                  {d.flavor && (
+                    <div className="text-primary/80 leading-relaxed ml-7">{d.flavor}</div>
+                  )}
+                  <div className="flex items-center gap-2 text-accent ml-7">
+                    <MaskedIcon icon="two-coins.svg" className="w-4 h-4" color="#D0BD62" />
+                    <span>+{d.payout} gold</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Resolution events */}
           {resolved && camp && camp.events.length > 0 && (
