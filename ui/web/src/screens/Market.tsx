@@ -43,6 +43,12 @@ export default function MarketScreen({
   const [buyTab, setBuyTab] = useState<BuyTab>("hauls");
   const [sellTab, setSellTab] = useState<SellTab>("pack");
 
+  function switchBuyTab(tab: BuyTab) {
+    setBuyTab(tab);
+    const linked: Record<BuyTab, SellTab> = { hauls: "pack", foods: "haversack", equipment: "equipped" };
+    setSellTab(linked[tab]);
+  }
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -338,9 +344,9 @@ export default function MarketScreen({
           <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
-              <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => setBuyTab("hauls")}>Hauls</TabButton>
-              <TabButton id="foods" active={buyTab === "foods"} onClick={() => setBuyTab("foods")}>Foods</TabButton>
-              <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => setBuyTab("equipment")}>Equipment</TabButton>
+              <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => switchBuyTab("hauls")}>Hauls</TabButton>
+              <TabButton id="foods" active={buyTab === "foods"} onClick={() => switchBuyTab("foods")}>Foods</TabButton>
+              <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => switchBuyTab("equipment")}>Equipment</TabButton>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
