@@ -74,6 +74,7 @@ export interface OutcomeInfo {
 }
 
 export interface SkillCheckInfo {
+  kind: "check" | "meets";
   skill: string;
   passed: boolean;
   rolled: number;

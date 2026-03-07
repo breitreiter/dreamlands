@@ -10,7 +10,8 @@ public record SkillCheckResult(
     int SkillLevel, Skill Skill,
     RollMode RollMode = RollMode.Normal,
     int NaturalRoll = 0,
-    bool WasLuckyReroll = false);
+    bool WasLuckyReroll = false,
+    bool IsMeetsCheck = false);
 
 /// <summary>Skill check dice rolling.</summary>
 public static class SkillChecks

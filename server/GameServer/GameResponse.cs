@@ -168,6 +168,7 @@ public class OutcomeInfo
 
 public class SkillCheckInfo
 {
+    public string Kind { get; init; } = "check";
     public string Skill { get; init; } = "";
     public bool Passed { get; init; }
     public int Rolled { get; init; }

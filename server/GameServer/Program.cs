@@ -170,7 +170,7 @@ NodeInfo BuildNodeInfo(Node node, PlayerState p)
         Poi = node.Poi != null ? new PoiInfo
         {
             Kind = node.Poi.Kind.ToString().ToLowerInvariant(),
-            Name = node.Poi.Name,
+            Name = node.Poi.Name ?? node.Poi.Type,
             DungeonId = node.Poi.DungeonId,
             DungeonCompleted = node.Poi.DungeonId != null
                 ? p.CompletedDungeons.Contains(node.Poi.DungeonId) : null,
@@ -408,6 +408,7 @@ OutcomeInfo BuildOutcomeInfo(EncounterStep.ShowOutcome outcome, string nextActio
     Text = outcome.Resolved.Text,
     SkillCheck = outcome.Resolved.CheckResult is { } ck ? new SkillCheckInfo
     {
+        Kind = ck.IsMeetsCheck ? "meets" : "check",
         Skill = ck.Skill.ScriptName(),
         Passed = ck.Passed,
         Rolled = ck.Rolled,

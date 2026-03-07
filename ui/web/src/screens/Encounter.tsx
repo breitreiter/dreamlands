@@ -260,19 +260,35 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
               : "border-negative bg-negative/15"
           }`}
         >
-          <span className="capitalize">{outcome.skillCheck.skill}</span>
-          {" check: "}
-          <span className="font-medium">
-            {outcome.skillCheck.rolled}
-            {outcome.skillCheck.modifier !== 0 &&
-              ` ${outcome.skillCheck.modifier >= 0 ? "+" : ""}${outcome.skillCheck.modifier}`}
-          </span>
-          {" vs "}
-          <span className="font-medium">{outcome.skillCheck.target}</span>
-          {" — "}
-          <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
-            {outcome.skillCheck.passed ? "Success" : "Failure"}
-          </span>
+          {outcome.skillCheck.kind === "meets" ? (
+            <>
+              <span className="capitalize">{outcome.skillCheck.skill}</span>
+              {" "}
+              <span className="font-medium">{outcome.skillCheck.modifier}</span>
+              {outcome.skillCheck.passed ? " meets " : " doesn't meet "}
+              <span className="font-medium">{outcome.skillCheck.target}</span>
+              {" — "}
+              <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
+                {outcome.skillCheck.passed ? "Qualified" : "Unqualified"}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="capitalize">{outcome.skillCheck.skill}</span>
+              {" check: "}
+              <span className="font-medium">
+                {outcome.skillCheck.rolled}
+                {outcome.skillCheck.modifier !== 0 &&
+                  ` ${outcome.skillCheck.modifier >= 0 ? "+" : ""}${outcome.skillCheck.modifier}`}
+              </span>
+              {" vs "}
+              <span className="font-medium">{outcome.skillCheck.target}</span>
+              {" — "}
+              <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
+                {outcome.skillCheck.passed ? "Success" : "Failure"}
+              </span>
+            </>
+          )}
         </div>
       )}
 

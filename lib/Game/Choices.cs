@@ -64,6 +64,24 @@ public static class Choices
                         passed = false;
                     }
                 }
+                else if (tokens.Count >= 3 && tokens[0] == "meets")
+                {
+                    var skill = Skills.FromScriptName(tokens[1]);
+                    if (skill != null && int.TryParse(tokens[2], out var target))
+                    {
+                        var skillLevel = state.Skills.GetValueOrDefault(skill.Value);
+                        var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
+                        var total = skillLevel + itemBonus;
+                        passed = total >= target;
+                        checkResult = new SkillCheckResult(passed, total, target, total, skillLevel, skill.Value,
+                            IsMeetsCheck: true);
+                        lastCheckResult = checkResult;
+                    }
+                    else
+                    {
+                        passed = false;
+                    }
+                }
                 else
                 {
                     passed = Conditions.Evaluate(branch.Condition, state, balance, rng);
