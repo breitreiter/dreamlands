@@ -46,7 +46,7 @@ public sealed partial class HaulDef
             Name = @"Army Surplus Spearheads",
             OriginBiome = "plains",
             DestBiome = "scrub",
-            OriginFlavor = @"The garrison withdrew three months ago and left a cache behind. No one else will buy obsolete military stock, so the scavengers are selling what they can.",
+            OriginFlavor = @"An imperial unit moved on last month and left these behind. Not sure how they ended up for sale, but someone's willing to pay for them.",
             DeliveryFlavor = @"You hand over the bundle and a dozen men gather around as the headman unwraps the oilcloth. He tests an edge with his thumb, holds one up to the light, checks the tang. ""Socket's wrong for our shafts,"" someone mutters. ""We'll make it work,"" another says. The headman nods and counts out your payment while two younger men are already arguing about the reforging.",
         },
         new()
