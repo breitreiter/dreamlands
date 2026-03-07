@@ -14,5 +14,7 @@ public record ItemInstance(string DefId, string DisplayName)
     public string? DestinationSettlementId { get; init; }
     public string? DestinationName { get; init; }
     public string? DestinationHint { get; init; }
+    public int? DestinationX { get; init; }
+    public int? DestinationY { get; init; }
     public int? Payout { get; init; }
 }

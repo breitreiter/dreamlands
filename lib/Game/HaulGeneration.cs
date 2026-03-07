@@ -61,6 +61,8 @@ public static class HaulGeneration
                 DestinationSettlementId = dest.SettlementId,
                 DestinationName = dest.Name,
                 DestinationHint = hint,
+                DestinationX = dest.X,
+                DestinationY = dest.Y,
                 Payout = payout,
                 Description = def.OriginFlavor
             });
@@ -69,6 +71,25 @@ public static class HaulGeneration
         }
 
         return result;
+    }
+
+    public static string BuildRelativeHint(int playerX, int playerY, int destX, int destY)
+    {
+        var dx = destX - playerX;
+        var dy = destY - playerY;
+        var manhattan = Math.Abs(dx) + Math.Abs(dy);
+        var days = Math.Max(1, (int)Math.Round((double)manhattan / TilesPerDay));
+
+        if (manhattan == 0)
+            return "Right here";
+
+        var angle = Math.Atan2(-dy, dx);
+        var index = (int)Math.Round(angle / (Math.PI / 4));
+        if (index < 0) index += 8;
+        var direction = Directions[index % 8];
+
+        var dayLabel = days == 1 ? "about 1 day" : $"about {days} days";
+        return $"{dayLabel} {direction} of here";
     }
 
     public static string BuildHint(int originX, int originY, string originName, HaulDestination dest)

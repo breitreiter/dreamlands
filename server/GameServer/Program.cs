@@ -187,7 +187,7 @@ List<ExitInfo> BuildExits(GameSession session) =>
         Poi = e.Target.Poi?.Name ?? e.Target.Poi?.Kind.ToString(),
     }).ToList();
 
-ItemInfo BuildItemInfo(ItemInstance i)
+ItemInfo BuildItemInfo(ItemInstance i, int playerX = 0, int playerY = 0)
 {
     var def = balance.Items.GetValueOrDefault(i.DefId);
     return new ItemInfo
@@ -205,16 +205,18 @@ ItemInfo BuildItemInfo(ItemInstance i)
         Cures = def?.Cures.ToList() ?? [],
         IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
         DestinationName = i.DestinationName,
-        DestinationHint = i.DestinationHint,
+        DestinationHint = i.DestinationX != null && i.DestinationY != null
+            ? HaulGeneration.BuildRelativeHint(playerX, playerY, i.DestinationX.Value, i.DestinationY.Value)
+            : i.DestinationHint,
         Payout = i.Payout,
     };
 }
 
 InventoryInfo BuildInventory(PlayerState p) => new()
 {
-    Pack = p.Pack.Select(BuildItemInfo).ToList(),
+    Pack = p.Pack.Select(i => BuildItemInfo(i, p.X, p.Y)).ToList(),
     PackCapacity = p.PackCapacity,
-    Haversack = p.Haversack.Select(BuildItemInfo).ToList(),
+    Haversack = p.Haversack.Select(i => BuildItemInfo(i, p.X, p.Y)).ToList(),
     HaversackCapacity = p.HaversackCapacity,
     Equipment = new EquipmentInfo
     {
@@ -752,8 +754,11 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             }
 
             // Check for encounter trigger at new location
+            // Only during mid-day periods (Midday/Afternoon/Evening) to avoid back-to-back with camp
             var node = session.CurrentNode;
-            if (node.Poi?.Kind == PoiKind.Encounter && !session.SkipEncounterTrigger && !noEncounters)
+            var midDay = player.Time is TimePeriod.Midday or TimePeriod.Afternoon or TimePeriod.Evening;
+            if (node.Poi?.Kind == PoiKind.Encounter && midDay && !session.SkipEncounterTrigger && !noEncounters
+                && session.Rng.NextDouble() < balance.Character.EncounterChance)
             {
                 var enc = EncounterSelection.PickOverworld(session, node);
                 if (enc != null)
@@ -1178,7 +1183,9 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         id = h.HaulOfferId,
         name = h.DisplayName,
         destinationName = h.DestinationName,
-        destinationHint = h.DestinationHint,
+        destinationHint = h.DestinationX != null && h.DestinationY != null
+            ? HaulGeneration.BuildRelativeHint(player.X, player.Y, h.DestinationX.Value, h.DestinationY.Value)
+            : h.DestinationHint,
         payout = h.Payout,
         originFlavor = h.Description,
     }).ToList();
@@ -1261,7 +1268,7 @@ app.MapGet("/api/game/{id}/bank", async (string id) =>
     return Results.Ok(new
     {
         settlementName = node.Poi.Name,
-        items = settlementState.Bank.Select(BuildItemInfo).ToList(),
+        items = settlementState.Bank.Select(i => BuildItemInfo(i)).ToList(),
         capacity = balance.Settlements.BankCapacity,
         packFull = player.Pack.Count >= player.PackCapacity,
         haversackFull = player.Haversack.Count >= player.HaversackCapacity,

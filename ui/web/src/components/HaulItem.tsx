@@ -13,10 +13,10 @@ export default function HaulItem({ name, destinationName, destinationHint, payou
     <>
       <div className="text-primary">{name}</div>
       <div className="text-muted mt-0.5">
-        Deliver to {destinationName ?? destinationHint}
-        {destinationName && destinationHint && (
-          <span className="text-dim"> ({destinationHint})</span>
-        )}
+        {destinationName
+          ? <>Deliver to {destinationName}{destinationHint && <span className="text-dim"> ({destinationHint})</span>}</>
+          : <>Deliver somewhere {destinationHint}</>
+        }
       </div>
       {flavor && (
         <div className="text-muted mt-0.5">{flavor}</div>
