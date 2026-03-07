@@ -33,8 +33,19 @@ Just a list of things that need doing, roughly grouped.
 - [ ] More aggressive mountain settlement placement — aim for at least one per mountain biome
 - [ ] Investigate tier 1 swamp placement — currently lands far from start. May need tier
       assignment tweaks or biome-aware nudging so early-tier regions stay near the cradle.
+- [ ] Bisect oversized T1 regions — same technique as T3 bisect (TierAssigner splits by
+      distance from city), but inner nodes stay T1 and outer nodes become T2. Prevents a
+      mega-T1 region from making an entire biome feel safe.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
+- [ ] Tier-aware decal rendering — render passes (TreePass, PlainsPass, SwampPass, HillPass,
+      MountainPass) currently use one decal pool per biome. Add tier-specific decal sets so
+      T3 regions are visually distinct on the map. Every render pass already has access to
+      `node.Region?.Tier`. Options: tier-specific subdirectories under each decal folder
+      (`assets/map/decals/trees/tier3/`, etc.), density modulation (sparser placement in T3),
+      and/or SkiaSharp color filters (desaturation, cooler tones). Tier-specific decals also
+      solve broader theme problems — T1 vs T2 visual identity, biome mood shifts by depth.
+      Needs art assets per tier; code changes are ~50 lines per render pass.
 
 ## Game UI Components
 
