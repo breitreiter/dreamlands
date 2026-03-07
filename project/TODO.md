@@ -150,10 +150,10 @@ GameServer running with save persistence.
 - [ ] Daily rest
 - [x] Town — Home
 - [x] Town — Temple
-- [ ] Town — Market (rewrite UI for haul claiming + buy-only shop)
-- [ ] Town — Guild storage
+- [x] Town — Market (rewrite UI for haul claiming + buy-only shop)
+- [x] Town — Guild storage
 - [x] Town — Inn / Chapterhouse
-- [ ] Review UX for exiting inventory and market screens — both feel awkward
+- [x] Review UX for exiting inventory and market screens — normalized exit UX across all exitable screens
 - [ ] shadcn/tailwind based design system
 
 ## Rules / Game Mechanics
@@ -163,9 +163,9 @@ GameServer running with save persistence.
 derived from player position (no separate mode). Inn/Chapterhouse logic and tests are done.
 Market buy/sell with auto-equip works. Remaining services need game logic.
 
-- [ ] Town — Shop
+- [x] Town — Shop
 - [x] Town — Market (haul system: generation, claiming, auto-delivery, market buy-only)
-- [ ] Town — Guild storage
+- [x] Town — Guild storage
 - [x] Town — Inn / Chapterhouse (game logic)
 - [x] Stock medicine in biome-appropriate markets
 - [x] Rework haul destination hints — replaced 3x3 sector grid with relative offset:
@@ -201,7 +201,7 @@ These must be resolved before end-of-day can be implemented.
       `Roll()` with nat 1/20, advantage, luck rerolls.
 
 ### Non-Blocking
-- [ ] Implement foraging action — design complete in `project/design/foraging.md`, no code yet
+- [x] Implement foraging action — `ResolveForaging` in `EndOfDay.cs`, design in `project/design/foraging.md`
 
 ### Gear Gaps
 Analysis in `project/design/gear_gap_analysis.md`. Not blocking gameplay loop but needed for

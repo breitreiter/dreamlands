@@ -4,7 +4,7 @@ Let's use this space to show interesting, in-world snippets. Maybe a sentence ea
 
 # Swamp
 ## Tier 1
-- Alwati sayings
+- Revathi sayings
 - Vaguely-forboding imperial reports
 ## Tier 2
 - Imperial histories
