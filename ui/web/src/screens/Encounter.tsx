@@ -3,6 +3,7 @@ import { useGame } from "../GameContext";
 import { formatDateTime } from "../calendar";
 import type { GameResponse, OutcomeInfo } from "../api/types";
 import parchment from "../assets/parchment.png";
+import { formatProse } from "../prose";
 
 type Segment =
   | { kind: "outcome"; data: OutcomeInfo }
@@ -109,13 +110,13 @@ export default function Encounter({ state }: { state: GameResponse }) {
 
           {(baseBody || encounter?.body) && segments.length === 0 && !isTerminalOutcome && (
             <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-              {(baseBody || encounter?.body || "").trim()}
+              {formatProse((baseBody || encounter?.body || "").trim())}
             </div>
           )}
 
           {baseBody && segments.length > 0 && (
             <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-              {baseBody.trim()}
+              {formatProse(baseBody.trim())}
             </div>
           )}
 
@@ -144,7 +145,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
                 </div>
               ) : (
                 <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-                  {seg.text.trim()}
+                  {formatProse(seg.text.trim())}
                 </div>
               )}
             </div>
@@ -230,7 +231,7 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
     <div className="space-y-4">
       {outcome.preamble && (
         <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-          {outcome.preamble}
+          {formatProse(outcome.preamble)}
         </div>
       )}
 
@@ -259,7 +260,7 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
       )}
 
       <div className="text-primary/80 leading-loose whitespace-pre-wrap">
-        {outcome.text}
+        {formatProse(outcome.text)}
       </div>
 
       {outcome.mechanics.length > 0 && (
