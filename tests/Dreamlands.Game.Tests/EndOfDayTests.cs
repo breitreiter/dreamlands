@@ -209,6 +209,24 @@ public class EndOfDayTests
     }
 
     [Fact]
+    public void Resolve_ConditionDrain_KillsBeforeRestCanSave()
+    {
+        var state = Fresh();
+        state.Health = 1;
+        state.ActiveConditions["injured"] = 3; // HealthDrain = Small (2 HP)
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        Assert.Equal(0, state.Health);
+        Assert.Contains(events, e => e is EndOfDayEvent.PlayerDied);
+        // Rest should NOT have fired — player is dead
+        Assert.DoesNotContain(events, e => e is EndOfDayEvent.RestRecovery);
+    }
+
+    [Fact]
     public void Resolve_Medicine_AutoConsumedForActiveCondition()
     {
         var state = Fresh();

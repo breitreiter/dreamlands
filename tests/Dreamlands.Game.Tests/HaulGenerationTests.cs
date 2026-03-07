@@ -162,6 +162,44 @@ public class HaulGenerationTests
         Assert.StartsWith("A swamp settlement", hint);
     }
 
+    [Theory]
+    [InlineData(10, 0, "north")]
+    [InlineData(20, 0, "east")]
+    [InlineData(10, 20, "south")]
+    [InlineData(0, 10, "west")]
+    [InlineData(18, 5, "northeast")]
+    [InlineData(20, 20, "southeast")]
+    public void RelativeHint_DirectionIsCorrect(int destX, int destY, string expectedDir)
+    {
+        var hint = HaulGeneration.BuildRelativeHint(10, 10, destX, destY);
+        Assert.Contains(expectedDir, hint);
+        Assert.Contains("of here", hint);
+    }
+
+    [Fact]
+    public void RelativeHint_SameTile_ReturnsRightHere()
+    {
+        var hint = HaulGeneration.BuildRelativeHint(10, 10, 10, 10);
+        Assert.Equal("Right here", hint);
+    }
+
+    [Fact]
+    public void RelativeHint_DistanceInDays()
+    {
+        // manhattan = |10-30| + |10-15| = 25, days = round(25/5) = 5
+        var hint = HaulGeneration.BuildRelativeHint(10, 10, 30, 15);
+        Assert.Contains("about 5 days", hint);
+    }
+
+    [Fact]
+    public void RelativeHint_SingleDay()
+    {
+        // manhattan = 4, days = max(1, round(4/5)) = 1
+        var hint = HaulGeneration.BuildRelativeHint(10, 10, 12, 12);
+        Assert.Contains("about 1 day", hint);
+        Assert.DoesNotContain("1 days", hint);
+    }
+
     [Fact]
     public void GeneratedItems_HaveCorrectFields()
     {

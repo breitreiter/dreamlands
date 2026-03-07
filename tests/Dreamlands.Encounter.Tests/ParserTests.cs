@@ -224,6 +224,81 @@ public class ParserTests
     }
 
     [Fact]
+    public void BlankLinesInSingleOutcome_CreateParagraphBreaks()
+    {
+        var source = """
+            Test
+            Body.
+            choices:
+            * Look around
+            The room is empty.
+
+            Dust motes drift in the light.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var text = result.Encounter!.Choices[0].Single!.Part.Text;
+        Assert.Contains("The room is empty.", text);
+        Assert.Contains("Dust motes drift", text);
+        // Blank line produces a \n\n paragraph break
+        Assert.Contains("\n\n", text);
+    }
+
+    [Fact]
+    public void BlankLinesInConditionalBranch_Preserved()
+    {
+        var source = """
+            Test
+            Body.
+            choices:
+            * Try it
+            @if check combat easy {
+            You swing your blade.
+
+            The beast falls.
+            } @else {
+            You miss.
+            }
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var branch = result.Encounter!.Choices[0].Conditional!.Branches[0];
+        Assert.Contains("\n\n", branch.Outcome.Text);
+        Assert.Contains("You swing your blade.", branch.Outcome.Text);
+        Assert.Contains("The beast falls.", branch.Outcome.Text);
+    }
+
+    [Fact]
+    public void BlankLinesInFallback_Preserved()
+    {
+        var source = """
+            Test
+            Body.
+            choices:
+            * Try it
+            @if check combat easy {
+            You succeed.
+            } @else {
+            You stumble badly.
+
+            The beast snarls.
+            }
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var fallback = result.Encounter!.Choices[0].Conditional!.Fallback!;
+        Assert.Contains("\n\n", fallback.Text);
+        Assert.Contains("You stumble badly.", fallback.Text);
+        Assert.Contains("The beast snarls.", fallback.Text);
+    }
+
+    [Fact]
     public void MultipleChoices_AllParsed()
     {
         var source = """

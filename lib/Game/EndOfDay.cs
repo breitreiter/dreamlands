@@ -85,16 +85,19 @@ public static class EndOfDay
         // 6. Condition drain
         string? worstDrainCondition = ResolveConditionDrain(state, balance, events);
 
-        // 7. Rest recovery
+        // 7. Death check (before rest — drain to 0 is fatal)
+        if (state.Health <= 0)
+        {
+            events.Add(new EndOfDayEvent.PlayerDied(worstDrainCondition));
+            return events;
+        }
+
+        // 8. Rest recovery
         if (!noSleep)
             ResolveRest(state, balanced, balance, events);
 
-        // 8. Evaluate disheartened
+        // 9. Evaluate disheartened
         ResolveDisheartened(state, balance, events);
-
-        // 9. Death check
-        if (state.Health <= 0)
-            events.Add(new EndOfDayEvent.PlayerDied(worstDrainCondition));
 
         return events;
     }

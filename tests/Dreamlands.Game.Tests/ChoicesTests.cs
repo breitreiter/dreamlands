@@ -190,4 +190,87 @@ public class ChoicesTests
         Assert.NotNull(resolved.CheckResult);
         Assert.Equal(Skill.Cunning, resolved.CheckResult!.Skill);
     }
+
+    [Fact]
+    public void Resolve_MeetsCondition_PassesWhenSkillMeetsTarget()
+    {
+        var choice = new Choice
+        {
+            OptionText = "Barter",
+            Conditional = new ConditionalOutcome
+            {
+                Branches =
+                [
+                    new ConditionalBranch
+                    {
+                        Condition = "meets mercantile 3",
+                        Outcome = new OutcomePart { Text = "You drive a fair bargain." }
+                    }
+                ],
+                Fallback = new OutcomePart { Text = "They won't budge on price." }
+            }
+        };
+
+        var state = Fresh();
+        state.Skills[Skill.Mercantile] = 3;
+
+        var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
+        Assert.Equal("You drive a fair bargain.", resolved.Text);
+    }
+
+    [Fact]
+    public void Resolve_MeetsCondition_FailsWhenSkillBelowTarget()
+    {
+        var choice = new Choice
+        {
+            OptionText = "Barter",
+            Conditional = new ConditionalOutcome
+            {
+                Branches =
+                [
+                    new ConditionalBranch
+                    {
+                        Condition = "meets mercantile 5",
+                        Outcome = new OutcomePart { Text = "You drive a fair bargain." }
+                    }
+                ],
+                Fallback = new OutcomePart { Text = "They won't budge on price." }
+            }
+        };
+
+        var state = Fresh();
+        state.Skills[Skill.Mercantile] = 2;
+
+        var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
+        Assert.Equal("They won't budge on price.", resolved.Text);
+    }
+
+    [Fact]
+    public void Resolve_MeetsCondition_SetsIsMeetsCheckFlag()
+    {
+        var choice = new Choice
+        {
+            OptionText = "Barter",
+            Conditional = new ConditionalOutcome
+            {
+                Branches =
+                [
+                    new ConditionalBranch
+                    {
+                        Condition = "meets combat 2",
+                        Outcome = new OutcomePart { Text = "Success." }
+                    }
+                ],
+                Fallback = new OutcomePart { Text = "Failure." }
+            }
+        };
+
+        var state = Fresh();
+        state.Skills[Skill.Combat] = 5;
+
+        var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
+        Assert.NotNull(resolved.CheckResult);
+        Assert.True(resolved.CheckResult!.IsMeetsCheck);
+        Assert.Equal(Skill.Combat, resolved.CheckResult.Skill);
+    }
 }

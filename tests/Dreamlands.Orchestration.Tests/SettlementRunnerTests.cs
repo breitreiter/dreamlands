@@ -101,6 +101,92 @@ public class SettlementRunnerTests
         Assert.DoesNotContain("chapterhouse", data.Services);
     }
 
+    // ── Haul Generation ──
+
+    static GameSession MakeSessionWithTradeGraph(int playerX = 2, int playerY = 0)
+    {
+        var map = Helpers.MakeMap(size: 5);
+
+        var plainsRegion = new Region(1, Terrain.Plains) { Tier = 1 };
+        var forestRegion = new Region(2, Terrain.Forest) { Tier = 2 };
+
+        // Root: Plains city at (2,2)
+        map[2, 2].Region = plainsRegion;
+        map[2, 2].Poi = new Poi(PoiKind.Settlement, "city")
+        {
+            Name = "Aldgate", SettlementId = "root",
+            Size = SettlementSize.City,
+            TradeChildIds = ["mid"]
+        };
+        map.StartingCity = map[2, 2];
+
+        // Mid: Plains town at (2,0)
+        map[2, 0].Region = plainsRegion;
+        map[2, 0].Poi = new Poi(PoiKind.Settlement, "town")
+        {
+            Name = "Riverton", SettlementId = "mid",
+            Size = SettlementSize.Town,
+            TradeParentId = "root",
+            TradeChildIds = ["leaf"]
+        };
+
+        // Leaf: Forest village at (4,0)
+        map[4, 0].Region = forestRegion;
+        map[4, 0].Terrain = Terrain.Forest;
+        map[4, 0].Poi = new Poi(PoiKind.Settlement, "village")
+        {
+            Name = "Woodhaven", SettlementId = "leaf",
+            Size = SettlementSize.Village,
+            TradeParentId = "mid"
+        };
+
+        return Helpers.MakeSession(map: map, playerX: playerX, playerY: playerY);
+    }
+
+    [Fact]
+    public void EnsureSettlement_GeneratesHauls_PrefersDownward()
+    {
+        // Player at mid (depth 1): hop-2 candidates are root (depth 0) and leaf (depth 2)
+        // Downward = [leaf], upward = [root]. First Generate call uses downward.
+        var session = MakeSessionWithTradeGraph(playerX: 2, playerY: 0);
+
+        SettlementRunner.EnsureSettlement(session);
+
+        var settlement = session.Player.Settlements["mid"];
+        Assert.NotEmpty(settlement.HaulOffers);
+        // First offer should target the downward destination
+        Assert.Contains(settlement.HaulOffers, o => o.DestinationSettlementId == "leaf");
+    }
+
+    [Fact]
+    public void EnsureSettlement_GeneratesHauls_FillsWithUpward()
+    {
+        // Mid is non-leaf, cap=2. Downward has 1 candidate (leaf), upward has 1 (root).
+        // Should fill both slots.
+        var session = MakeSessionWithTradeGraph(playerX: 2, playerY: 0);
+
+        SettlementRunner.EnsureSettlement(session);
+
+        var settlement = session.Player.Settlements["mid"];
+        Assert.Equal(2, settlement.HaulOffers.Count);
+        Assert.Contains(settlement.HaulOffers, o => o.DestinationSettlementId == "leaf");
+        Assert.Contains(settlement.HaulOffers, o => o.DestinationSettlementId == "root");
+    }
+
+    [Fact]
+    public void EnsureSettlement_GeneratesHauls_LeafFallsBackToUpward()
+    {
+        // Player at leaf (depth 2): hop-2 = [root (depth 0)], all upward. No downward candidates.
+        var session = MakeSessionWithTradeGraph(playerX: 4, playerY: 0);
+
+        SettlementRunner.EnsureSettlement(session);
+
+        var settlement = session.Player.Settlements["leaf"];
+        Assert.NotEmpty(settlement.HaulOffers);
+        // Only reachable candidate at hop-2 is root (upward)
+        Assert.All(settlement.HaulOffers, o => Assert.Equal("root", o.DestinationSettlementId));
+    }
+
     [Fact]
     public void EnsureSettlement_StartingCity_HasChapterhouse()
     {

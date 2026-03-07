@@ -170,6 +170,23 @@ public class InnTests
         Assert.True(quote.Nights >= 2);
     }
 
+    [Fact]
+    public void GetQuote_SkipsClearedOnSettlementDrain()
+    {
+        var state = Fresh();
+        state.Health = state.MaxHealth - 4;
+
+        var quoteHealthy = Inn.GetQuote(state, Balance);
+
+        // Add a ClearedOnSettlement condition with drain — should NOT affect night count
+        state.ActiveConditions["freezing"] = 1; // HealthDrain=Trivial, SpiritsDrain=Small, ClearedOnSettlement=true
+
+        var quoteWithFreezing = Inn.GetQuote(state, Balance);
+
+        Assert.Equal(quoteHealthy.Nights, quoteWithFreezing.Nights);
+        Assert.Equal(quoteHealthy.GoldCost, quoteWithFreezing.GoldCost);
+    }
+
     // ── StayOneNight ──
 
     [Fact]
