@@ -454,40 +454,58 @@ export default function MarketScreen({
           )}
 
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
-            {sellItems.length === 0 ? (
+            {sellItems.length === 0 && sellTab === "equipped" ? (
               <div className="p-4 text-muted">Nothing here</div>
             ) : (
-              sellItems.map(({ item, source }, i) => {
-                const price = sellPrices[item.defId];
-                const sellable = canSell(item);
-                return (
-                  <div
-                    key={`${source}-${item.defId}-${i}`}
-                    className="flex items-start gap-3 p-3 rounded-lg"
-                    style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
-                  >
-                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                      <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-primary">{item.name}</div>
-                      {item.description && (
-                        <div className="text-muted mt-0.5 truncate">{item.description}</div>
+              <>
+                {sellItems.map(({ item, source }, i) => {
+                  const price = sellPrices[item.defId];
+                  const sellable = canSell(item);
+                  return (
+                    <div
+                      key={`${source}-${item.defId}-${i}`}
+                      className="flex items-start gap-3 p-3 rounded-lg"
+                      style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
+                    >
+                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-primary">{item.name}</div>
+                        {item.description && (
+                          <div className="text-muted mt-0.5 truncate">{item.description}</div>
+                        )}
+                        {sellTab === "equipped" && (
+                          <div className="text-dim mt-0.5">equipped ({source})</div>
+                        )}
+                      </div>
+                      {sellable && (
+                        <Button variant="secondary" size="sm" onClick={() => addSell(item.defId)} className="flex-shrink-0">
+                          <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
+                          Sell
+                          <span className="text-positive">+{price}g</span>
+                        </Button>
                       )}
-                      {sellTab === "equipped" && (
-                        <div className="text-dim mt-0.5">equipped ({source})</div>
-                      )}
                     </div>
-                    {sellable && (
-                      <Button variant="secondary" size="sm" onClick={() => addSell(item.defId)} className="flex-shrink-0">
-                        <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
-                        Sell
-                        <span className="text-positive">+{price}g</span>
-                      </Button>
-                    )}
-                  </div>
-                );
-              })
+                  );
+                })}
+                {sellTab === "pack" && inventory && Array.from(
+                  { length: inventory.packCapacity - sellItems.length },
+                  (_, i) => (
+                    <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
+                      Empty slot
+                    </div>
+                  )
+                )}
+                {sellTab === "haversack" && inventory && Array.from(
+                  { length: inventory.haversackCapacity - sellItems.length },
+                  (_, i) => (
+                    <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
+                      Empty slot
+                    </div>
+                  )
+                )}
+              </>
             )}
           </div>
         </div>
