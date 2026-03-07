@@ -18,7 +18,7 @@ MAGNITUDE                       TIME PERIODS
 
 CONDITIONS
   freezing  hungry  thirsty  swamp_fever  gut_worms
-  irradiated  exhausted  lost  injured  poisoned
+  irradiated  exhausted  lost  injured  poisoned  disheartened
 
 
 ACTION VERBS
@@ -40,6 +40,9 @@ World state         +add_tag <tag_id>
 Items               +add_item <item_id>
                     +add_random_items <count> <category>
                     +lose_random_item
+                    +equip <item_id>
+                    +unequip <slot>
+                    +discard <item_id>
 
 Gold                +give_gold <magnitude>
                     +rem_gold <magnitude>
@@ -55,6 +58,7 @@ Skills              +set_skill <skill> <level>
                     +decrease_skill <skill> <amount>
 
 Conditions          +add_condition <condition_id>
+                    +remove_condition <condition_id>
 
 Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
 
