@@ -24,18 +24,24 @@ public static class SwampPass
     {
         var rng = new Random(seed ^ 0x53574D50);
 
-        // T1/T2: bogs + tallgrass
+        // T1/T2: bogs + tallgrass + dead trees
         DrawTier(canvas, map, rng, 1, "swamp/t1/bogs", "*.png",
             BogCellSize, BogSkipChance, BogScale, BogJitter);
         DrawTier(canvas, map, rng, 1, "swamp/t1/grass", "*.png",
             GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+        DrawTier(canvas, map, rng, 1, "swamp/t1/trees", "*.png",
+            BogCellSize, BogSkipChance, BogScale, BogJitter);
         DrawTier(canvas, map, rng, 2, "swamp/t1/bogs", "*.png",
             BogCellSize, BogSkipChance, BogScale, BogJitter);
         DrawTier(canvas, map, rng, 2, "swamp/t1/grass", "*.png",
             GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+        DrawTier(canvas, map, rng, 2, "swamp/t1/trees", "*.png",
+            BogCellSize, BogSkipChance, BogScale, BogJitter);
 
-        // T3: placeholder — add decals to swamp/t3/ subdirectories
+        // T3: flesh decals + hairtrees
         DrawTier(canvas, map, rng, 3, "swamp/t3", "*.png",
+            BogCellSize, BogSkipChance, BogScale, BogJitter);
+        DrawTier(canvas, map, rng, 3, "swamp/t3/trees", "*.png",
             BogCellSize, BogSkipChance, BogScale, BogJitter);
     }
 

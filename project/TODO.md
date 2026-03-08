@@ -52,6 +52,16 @@ Just a list of things that need doing, roughly grouped.
       Verification: grep mapgen/Rendering/ for old directory names (`grass_tufts`, `farm_stuff`,
       `bogs`, `"trees"`) — should return zero hits. If any other code references the old paths
       (build scripts, asset pipeline), update those too before deleting.
+- [ ] Pre-scale decal sprites to final size — all render passes (PlainsPass, SwampPass,
+      TreePass, HillPass, MountainPass, PoiPass) scale sprites at draw time via SKRect
+      destination sizing. This wastes memory loading full-res bitmaps and costs CPU on every
+      placement. Batch-resize all decal PNGs in `assets/map/decals/` to their target pixel
+      dimensions so the render passes can draw at 1:1 (scale = 1.0). Per-pass target sizes:
+        - PlainsPass grass: 0.38x, farms: 1.0x (already correct)
+        - SwampPass bogs/trees: 0.42x, tallgrass: 0.38x
+        - TreePass: 0.40x
+      Use an offline script (ImageMagick `mogrify` or similar) to resize in-place, then
+      remove the scale constants from each render pass.
 
 ## Game UI Components
 
