@@ -148,7 +148,7 @@ public class Program
             Console.Error.WriteLine($"Seed {actualSeed} recorded in worlds.yaml");
         }
 
-        var contentPath = Path.Combine(RepoRoot, "text", "notes", "content");
+        var contentPath = Path.Combine(RepoRoot, "mapgen", "content");
         var contentRng = new Random(actualSeed);
         ContentPopulator.Populate(map, contentPath, contentRng);
 
@@ -252,7 +252,7 @@ public class Program
         var (map, actualSeed) = MapGenerator.Generate(width, height, seed, onCycle);
         Console.Error.WriteLine($"Seed: {actualSeed}");
 
-        var contentPath = Path.Combine(RepoRoot, "text", "notes", "content");
+        var contentPath = Path.Combine(RepoRoot, "mapgen", "content");
         var contentRng = new Random(actualSeed);
         ContentPopulator.Populate(map, contentPath, contentRng);
 
