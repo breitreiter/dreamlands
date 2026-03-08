@@ -11,7 +11,7 @@ public static class PlainsPass
     // Grass layer: dense mixed grass
     private const float GrassCellSize = 28f;
     private const float GrassSkipChance = 0.20f;
-    private const float GrassScale = 0.38f;
+    private const float GrassScale = 1.0f;
     private const float GrassJitter = 0.70f;
 
     // Farm layer: sparse farmsteads
@@ -30,13 +30,13 @@ public static class PlainsPass
         DrawTier(canvas, map, rng, 1, "plains/t1/farms", "*.png",
             FarmCellSize, FarmSkipChance, FarmScale, FarmJitter);
 
-        // T2: placeholder — add decals to plains/t2/ subdirectories
+        // T2: sparser scatter
         DrawTier(canvas, map, rng, 2, "plains/t2", "*.png",
-            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+            GrassCellSize, 0.90f, GrassScale, GrassJitter);
 
-        // T3: placeholder — add decals to plains/t3/ subdirectories
+        // T3: sparser scatter
         DrawTier(canvas, map, rng, 3, "plains/t3", "*.png",
-            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+            GrassCellSize, 0.95f, GrassScale, GrassJitter);
     }
 
     static void DrawTier(SKCanvas canvas, Map map, Random rng, int tier,

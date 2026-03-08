@@ -13,7 +13,7 @@ public static class TreePass
     private const float SkipChance = 0.20f;
     private const int ZoneSize = 256; // species clustering zone in pixels
     private const float DominantChance = 0.70f;
-    private const float DecalScale = 0.40f;
+    private const float DecalScale = 1.0f;
     private const float ThinRadius = 192f; // 1.5 tiles
     private const float MaxThinSkip = 0.85f;
 

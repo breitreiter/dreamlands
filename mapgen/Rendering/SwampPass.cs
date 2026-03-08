@@ -11,13 +11,13 @@ public static class SwampPass
     // Bog layer: sparse, larger decals
     private const float BogCellSize = 96f;
     private const float BogSkipChance = 0.50f;
-    private const float BogScale = 0.42f;
+    private const float BogScale = 1.0f;
     private const float BogJitter = 0.60f;
 
     // Tall grass layer: denser, smaller tufts
     private const float GrassCellSize = 28f;
     private const float GrassSkipChance = 0.20f;
-    private const float GrassScale = 0.38f;
+    private const float GrassScale = 1.0f;
     private const float GrassJitter = 0.70f;
 
     public static void Draw(SKCanvas canvas, Map map, int seed)

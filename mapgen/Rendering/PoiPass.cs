@@ -32,19 +32,17 @@ public static class PoiPass
         string decalDir = Path.Combine("..", "assets", "map", "decals", "poi", "settlements");
         string dungeonBaseDir = Path.Combine("..", "assets", "map", "decals", "poi", "dungeons");
         var pools = LoadDecalPools(decalDir);
+        var tierPools = LoadTierPools(decalDir);
         if (pools.Count == 0) return;
 
         var cityDecal = SKBitmap.Decode(Path.Combine(decalDir, "aldgate.png"));
 
-        // Scale: fit 75th-percentile decal width into tile (allows wider decals to overflow slightly)
-        var allDecals = pools.Values.SelectMany(p => p).ToList();
-        var allWidths = allDecals.Select(d => (float)d.Width).OrderBy(w => w).ToList();
-        float referenceWidth = allWidths[allWidths.Count * 3 / 4];
-        float scale = TileSize / referenceWidth;
+        float scale = 1.0f;
 
         // Anchor: center a median-height decal in tile; tall decals extend upward
+        var allDecals = pools.Values.SelectMany(p => p).ToList();
         var allHeights = allDecals.Select(d => (float)d.Height).OrderBy(h => h).ToList();
-        float medianScaledH = allHeights[allHeights.Count / 2] * scale;
+        float medianScaledH = allHeights[allHeights.Count / 2];
 
         var rng = new Random(seed);
         var placements = new List<(float x, float y, SKBitmap decal, bool owned)>();
@@ -63,8 +61,13 @@ public static class PoiPass
                     decal = cityDecal;
                 else
                 {
-                    var pool = TerrainToFolder.TryGetValue(node.Terrain, out var folder) && pools.TryGetValue(folder, out var p)
-                        ? p : pools.Values.First();
+                    int tier = node.Region?.Tier ?? 1;
+                    var folder = TerrainToFolder.GetValueOrDefault(node.Terrain);
+                    var tierKey = folder != null ? $"{folder}/t{tier}" : null;
+
+                    var pool = (tierKey != null && tierPools.TryGetValue(tierKey, out var tp)) ? tp
+                        : (folder != null && pools.TryGetValue(folder, out var p)) ? p
+                        : pools.Values.First();
                     decal = pool[rng.Next(pool.Count)];
                 }
                 placements.Add((cx, cy, decal, false));
@@ -115,6 +118,9 @@ public static class PoiPass
         finally
         {
             foreach (var pool in pools.Values)
+            foreach (var bmp in pool)
+                bmp.Dispose();
+            foreach (var pool in tierPools.Values)
             foreach (var bmp in pool)
                 bmp.Dispose();
             foreach (var bmp in dungeonDecalCache.Values)
@@ -180,6 +186,32 @@ public static class PoiPass
                 if (bmp != null) decals.Add(bmp);
             }
             if (decals.Count > 0) pools[folder] = decals;
+        }
+
+        return pools;
+    }
+
+    static Dictionary<string, List<SKBitmap>> LoadTierPools(string dir)
+    {
+        var pools = new Dictionary<string, List<SKBitmap>>();
+        if (!Directory.Exists(dir)) return pools;
+
+        foreach (var biomeDir in Directory.GetDirectories(dir).Order())
+        {
+            var biome = Path.GetFileName(biomeDir);
+            foreach (var tierDir in Directory.GetDirectories(biomeDir).Order())
+            {
+                var tierName = Path.GetFileName(tierDir);
+                if (!tierName.StartsWith("t")) continue;
+
+                var decals = new List<SKBitmap>();
+                foreach (var file in Directory.GetFiles(tierDir, "*.png").Order())
+                {
+                    var bmp = SKBitmap.Decode(file);
+                    if (bmp != null) decals.Add(bmp);
+                }
+                if (decals.Count > 0) pools[$"{biome}/{tierName}"] = decals;
+            }
         }
 
         return pools;

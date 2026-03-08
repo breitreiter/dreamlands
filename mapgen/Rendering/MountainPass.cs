@@ -30,7 +30,7 @@ public static class MountainPass
     private const float BigMountainCeiling = 0.85f;
 
     // POI sprites layered into mountain rendering (baked-in elevation)
-    private const float PoiScale = 0.32f;
+    private const float PoiScale = 1.0f;
 
     private static readonly (int dx, int dy)[] Directions = { (-1, 0), (1, 0), (0, -1), (0, 1) };
 

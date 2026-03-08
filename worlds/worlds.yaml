@@ -4,6 +4,6 @@ worlds:
     height: 100
     seed: 457364340
   test:
-    width: 10
-    height: 10
+    width: 30
+    height: 30
     seed: 506684263

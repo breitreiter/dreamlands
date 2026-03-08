@@ -13,6 +13,7 @@ public static class ContentPopulator
         SettlementPlacer.PlaceSettlements(map, rng);
         Console.Error.WriteLine("  Tiers...");
         TierAssigner.Assign(map);
+        RemoveT3Settlements(map);
         Console.Error.WriteLine("  Trade routes...");
         TradeRouteBuilder.Build(map);
         SizeSettlements(map);
@@ -26,6 +27,15 @@ public static class ContentPopulator
         DungeonPlacer.PlaceDungeons(map, roster, rng);
         Console.Error.WriteLine("  Encounters...");
         EncounterPlacer.Place(map);
+    }
+
+    private static void RemoveT3Settlements(Map map)
+    {
+        foreach (var node in map.AllNodes())
+        {
+            if (node.Poi?.Kind == PoiKind.Settlement && (node.Region?.Tier ?? 1) == 3)
+                node.Poi = null;
+        }
     }
 
     private static void AssignSettlementIds(Map map)
