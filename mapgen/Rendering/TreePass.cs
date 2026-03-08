@@ -19,9 +19,14 @@ public static class TreePass
 
     public static void Draw(SKCanvas canvas, Map map, int seed)
     {
-        string decalDir = Path.Combine("..", "assets", "map", "decals", "trees");
-        var species = LoadSpecies(decalDir);
-        if (species.Count == 0) return;
+        string t1t2Dir = Path.Combine("..", "assets", "map", "decals", "forest", "t1t2");
+        string t3Dir = Path.Combine("..", "assets", "map", "decals", "forest", "t3");
+
+        var t1t2Species = LoadSpecies(t1t2Dir);
+        var t3Species = LoadSpecies(t3Dir);
+
+        // Fall back to T1/T2 pool if T3 has no art yet
+        var hasT3 = t3Species.Count > 0;
 
         try
         {
@@ -35,6 +40,10 @@ public static class TreePass
 
             foreach (var node in map.AllNodes().Where(n => n.Terrain == Terrain.Forest))
             {
+                int tier = node.Region?.Tier ?? 1;
+                var species = (tier == 3 && hasT3) ? t3Species : t1t2Species;
+                if (species.Count == 0) continue;
+
                 int tileLeft = node.X * TileSize;
                 int tileTop = node.Y * TileSize;
 
@@ -92,7 +101,10 @@ public static class TreePass
         }
         finally
         {
-            foreach (var decals in species)
+            foreach (var decals in t1t2Species)
+            foreach (var bmp in decals)
+                bmp.Dispose();
+            foreach (var decals in t3Species)
             foreach (var bmp in decals)
                 bmp.Dispose();
         }

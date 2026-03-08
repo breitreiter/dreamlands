@@ -22,31 +22,44 @@ public static class SwampPass
 
     public static void Draw(SKCanvas canvas, Map map, int seed)
     {
-        string bogDir = Path.Combine("..", "assets", "map", "decals", "bogs");
-        string grassDir = Path.Combine("..", "assets", "map", "decals", "grass_tufts");
+        var rng = new Random(seed ^ 0x53574D50);
 
-        var bogs = LoadDecals(bogDir, "*bog_*.png");
-        var grass = LoadDecals(grassDir, "*tallgrass_*.png");
+        // T1/T2: bogs + tallgrass
+        DrawTier(canvas, map, rng, 1, "swamp/t1/bogs", "*.png",
+            BogCellSize, BogSkipChance, BogScale, BogJitter);
+        DrawTier(canvas, map, rng, 1, "swamp/t1/grass", "*.png",
+            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+        DrawTier(canvas, map, rng, 2, "swamp/t1/bogs", "*.png",
+            BogCellSize, BogSkipChance, BogScale, BogJitter);
+        DrawTier(canvas, map, rng, 2, "swamp/t1/grass", "*.png",
+            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+
+        // T3: placeholder — add decals to swamp/t3/ subdirectories
+        DrawTier(canvas, map, rng, 3, "swamp/t3", "*.png",
+            BogCellSize, BogSkipChance, BogScale, BogJitter);
+    }
+
+    static void DrawTier(SKCanvas canvas, Map map, Random rng, int tier,
+        string subDir, string pattern,
+        float cellSize, float skipChance, float scale, float jitter)
+    {
+        string dir = Path.Combine("..", "assets", "map", "decals", subDir);
+        var decals = LoadDecals(dir, pattern);
+        if (decals.Count == 0) return;
 
         try
         {
-            var rng = new Random(seed ^ 0x53574D50); // distinct stream
-
-            ScatterLayer(canvas, map, rng, bogs, BogCellSize, BogSkipChance, BogScale, BogJitter);
-            ScatterLayer(canvas, map, rng, grass, GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+            ScatterLayer(canvas, map, rng, decals, tier, cellSize, skipChance, scale, jitter);
         }
         finally
         {
-            foreach (var bmp in bogs) bmp.Dispose();
-            foreach (var bmp in grass) bmp.Dispose();
+            foreach (var bmp in decals) bmp.Dispose();
         }
     }
 
     static void ScatterLayer(SKCanvas canvas, Map map, Random rng,
-        List<SKBitmap> decals, float cellSize, float skipChance, float scale, float jitter)
+        List<SKBitmap> decals, int tier, float cellSize, float skipChance, float scale, float jitter)
     {
-        if (decals.Count == 0) return;
-
         int cellsX = (int)MathF.Ceiling(map.Width * TileSize / cellSize);
         int cellsY = (int)MathF.Ceiling(map.Height * TileSize / cellSize);
 
@@ -65,13 +78,15 @@ public static class SwampPass
             int tileX = (int)(px / TileSize);
             int tileY = (int)(py / TileSize);
             if (!map.InBounds(tileX, tileY)) continue;
-            if (map[tileX, tileY].Terrain != Terrain.Swamp) continue;
+
+            var node = map[tileX, tileY];
+            if (node.Terrain != Terrain.Swamp) continue;
+            if ((node.Region?.Tier ?? 1) != tier) continue;
 
             var decal = decals[rng.Next(decals.Count)];
             float w = decal.Width * scale;
             float h = decal.Height * scale;
 
-            // Don't bleed onto water
             int leftTileX = (int)((px - w * 0.5f) / TileSize);
             int rightTileX = (int)((px + w * 0.5f) / TileSize);
             if (leftTileX >= 0 && map.InBounds(leftTileX, tileY) && map[leftTileX, tileY].IsWater)
@@ -91,6 +106,7 @@ public static class SwampPass
 
         foreach (var file in Directory.GetFiles(dir, pattern).Order())
         {
+            if (file.EndsWith("~")) continue;
             var bmp = SKBitmap.Decode(file);
             if (bmp != null) decals.Add(bmp);
         }

@@ -38,14 +38,20 @@ Just a list of things that need doing, roughly grouped.
       mega-T1 region from making an entire biome feel safe.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
-- [ ] Tier-aware decal rendering — render passes (TreePass, PlainsPass, SwampPass, HillPass,
-      MountainPass) currently use one decal pool per biome. Add tier-specific decal sets so
-      T3 regions are visually distinct on the map. Every render pass already has access to
-      `node.Region?.Tier`. Options: tier-specific subdirectories under each decal folder
-      (`assets/map/decals/trees/tier3/`, etc.), density modulation (sparser placement in T3),
-      and/or SkiaSharp color filters (desaturation, cooler tones). Tier-specific decals also
-      solve broader theme problems — T1 vs T2 visual identity, biome mood shifts by depth.
-      Needs art assets per tier; code changes are ~50 lines per render pass.
+- [x] Tier-aware decal rendering — PlainsPass, SwampPass, TreePass now load from
+      tier-specific subdirectories under `assets/map/decals/{plains,swamp,forest}/`. T2/T3
+      directories exist but are empty until new art is added. Mountains and Scrub unchanged.
+- [ ] Remove old decal directories — the tier-aware passes now load from the new
+      `assets/map/decals/{plains,swamp,forest}/` structure instead of the old flat dirs.
+      After visually confirming the new paths work (`mapgen generate test`, inspect map.png
+      — T1 areas should look identical to before), delete these originals:
+        - `assets/map/decals/grass_tufts/` → split into `plains/t1/grass/` and `swamp/t1/grass/`
+        - `assets/map/decals/farm_stuff/` → moved to `plains/t1/farms/`
+        - `assets/map/decals/bogs/` → moved to `swamp/t1/bogs/`
+        - `assets/map/decals/trees/` → moved to `forest/t1t2/` (palm + beech excluded, same as before)
+      Verification: grep mapgen/Rendering/ for old directory names (`grass_tufts`, `farm_stuff`,
+      `bogs`, `"trees"`) — should return zero hits. If any other code references the old paths
+      (build scripts, asset pipeline), update those too before deleting.
 
 ## Game UI Components
 

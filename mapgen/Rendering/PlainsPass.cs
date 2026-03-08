@@ -22,31 +22,44 @@ public static class PlainsPass
 
     public static void Draw(SKCanvas canvas, Map map, int seed)
     {
-        string grassDir = Path.Combine("..", "assets", "map", "decals", "grass_tufts");
-        string farmDir = Path.Combine("..", "assets", "map", "decals", "farm_stuff");
+        var rng = new Random(seed ^ 0x504C4E53);
 
-        var grass = LoadDecals(grassDir, "*.png");
-        var farm = LoadDecals(farmDir, "*.png");
+        // T1: grass + farms
+        DrawTier(canvas, map, rng, 1, "plains/t1/grass", "*.png",
+            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+        DrawTier(canvas, map, rng, 1, "plains/t1/farms", "*.png",
+            FarmCellSize, FarmSkipChance, FarmScale, FarmJitter);
+
+        // T2: placeholder — add decals to plains/t2/ subdirectories
+        DrawTier(canvas, map, rng, 2, "plains/t2", "*.png",
+            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+
+        // T3: placeholder — add decals to plains/t3/ subdirectories
+        DrawTier(canvas, map, rng, 3, "plains/t3", "*.png",
+            GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
+    }
+
+    static void DrawTier(SKCanvas canvas, Map map, Random rng, int tier,
+        string subDir, string pattern,
+        float cellSize, float skipChance, float scale, float jitter)
+    {
+        string dir = Path.Combine("..", "assets", "map", "decals", subDir);
+        var decals = LoadDecals(dir, pattern);
+        if (decals.Count == 0) return;
 
         try
         {
-            var rng = new Random(seed ^ 0x504C4E53); // distinct stream
-
-            ScatterLayer(canvas, map, rng, grass, GrassCellSize, GrassSkipChance, GrassScale, GrassJitter);
-            ScatterLayer(canvas, map, rng, farm, FarmCellSize, FarmSkipChance, FarmScale, FarmJitter);
+            ScatterLayer(canvas, map, rng, decals, tier, cellSize, skipChance, scale, jitter);
         }
         finally
         {
-            foreach (var bmp in grass) bmp.Dispose();
-            foreach (var bmp in farm) bmp.Dispose();
+            foreach (var bmp in decals) bmp.Dispose();
         }
     }
 
     static void ScatterLayer(SKCanvas canvas, Map map, Random rng,
-        List<SKBitmap> decals, float cellSize, float skipChance, float scale, float jitter)
+        List<SKBitmap> decals, int tier, float cellSize, float skipChance, float scale, float jitter)
     {
-        if (decals.Count == 0) return;
-
         int cellsX = (int)MathF.Ceiling(map.Width * TileSize / cellSize);
         int cellsY = (int)MathF.Ceiling(map.Height * TileSize / cellSize);
 
@@ -65,7 +78,10 @@ public static class PlainsPass
             int tileX = (int)(px / TileSize);
             int tileY = (int)(py / TileSize);
             if (!map.InBounds(tileX, tileY)) continue;
-            if (map[tileX, tileY].Terrain != Terrain.Plains) continue;
+
+            var node = map[tileX, tileY];
+            if (node.Terrain != Terrain.Plains) continue;
+            if ((node.Region?.Tier ?? 1) != tier) continue;
 
             var decal = decals[rng.Next(decals.Count)];
             float w = decal.Width * scale;
@@ -90,7 +106,7 @@ public static class PlainsPass
 
         foreach (var file in Directory.GetFiles(dir, pattern).Order())
         {
-            if (file.EndsWith("~")) continue; // skip backup files
+            if (file.EndsWith("~")) continue;
             var bmp = SKBitmap.Decode(file);
             if (bmp != null) decals.Add(bmp);
         }
