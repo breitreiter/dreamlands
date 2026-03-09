@@ -74,17 +74,7 @@ public static class PoiPass
             }
             else if (node.Poi!.Kind == PoiKind.Dungeon && node.Poi.DecalFile != null)
             {
-                var biomeKey = node.Terrain switch
-                {
-                    Terrain.Forest => "forest",
-                    Terrain.Swamp => "swamp",
-                    Terrain.Scrub => "scrub",
-                    Terrain.Plains => "plains",
-                    _ => null
-                };
-                if (biomeKey == null) continue;
-
-                var decalPath = Path.Combine(dungeonBaseDir, biomeKey, node.Poi.DecalFile);
+                var decalPath = Path.Combine(dungeonBaseDir, node.Poi.DecalFile);
                 if (!dungeonDecalCache.TryGetValue(decalPath, out var decal))
                 {
                     decal = File.Exists(decalPath) ? SKBitmap.Decode(decalPath) : null;

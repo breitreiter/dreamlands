@@ -120,7 +120,7 @@ public static class MountainPass
                 {
                     if (node.Poi.DecalFile != null)
                     {
-                        var path = Path.Combine(poiDir, "dungeons", "mountains", node.Poi.DecalFile);
+                        var path = Path.Combine(poiDir, "dungeons", node.Poi.DecalFile);
                         if (File.Exists(path))
                         {
                             decal = SKBitmap.Decode(path);
