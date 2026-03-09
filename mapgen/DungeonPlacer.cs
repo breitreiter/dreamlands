@@ -35,12 +35,21 @@ public static class DungeonPlacer
             .Where(n => n.Poi?.Kind == PoiKind.Settlement)
             .ToList();
 
+        // Track T3 biome usage — one T3 dungeon per biome
+        var t3BiomesUsed = new HashSet<string>();
+
         // Shuffle roster so tie-breaking isn't biased by file order
         var shuffled = roster.OrderBy(_ => rng.Next()).ToList();
 
         foreach (var entry in shuffled)
         {
             if (!BiomeToTerrain.TryGetValue(entry.Biome, out var terrain))
+                continue;
+
+            bool isT3 = entry.TierMin >= 3;
+
+            // One T3 dungeon per biome
+            if (isT3 && !t3BiomesUsed.Add(entry.Biome))
                 continue;
 
             var candidates = traversable.Values
@@ -53,7 +62,11 @@ public static class DungeonPlacer
                 .ToList();
 
             if (candidates.Count == 0)
+            {
+                // Undo the T3 reservation if we couldn't place
+                if (isT3) t3BiomesUsed.Remove(entry.Biome);
                 continue;
+            }
 
             // Score candidates
             var scored = new List<(Node node, int score)>();
@@ -74,13 +87,25 @@ public static class DungeonPlacer
                 if (minDist < MinSeparation)
                     score -= (MinSeparation - minDist) * 15;
 
-                // Penalize being too close or too far from nearest settlement
-                // Cap the "too far" penalty so remote T3 nodes aren't crushed
-                int settlementDist = MinDistance(node, settlements);
-                if (settlementDist < SettlementTooClose)
-                    score -= (SettlementTooClose - settlementDist) * 20;
-                else if (settlementDist > SettlementTooFar)
-                    score -= Math.Min((settlementDist - SettlementTooFar) * 5, 40);
+                if (isT3)
+                {
+                    // T3 dungeons: prefer the center of their region
+                    var region = node.Region!;
+                    double cx = region.Nodes.Average(n => n.X);
+                    double cy = region.Nodes.Average(n => n.Y);
+                    int distFromCenter = (int)(Math.Abs(node.X - cx) + Math.Abs(node.Y - cy));
+                    score -= distFromCenter * 3;
+                }
+                else
+                {
+                    // Non-T3: penalize being too close or too far from nearest settlement
+                    // Cap the "too far" penalty so remote nodes aren't crushed
+                    int settlementDist = MinDistance(node, settlements);
+                    if (settlementDist < SettlementTooClose)
+                        score -= (SettlementTooClose - settlementDist) * 20;
+                    else if (settlementDist > SettlementTooFar)
+                        score -= Math.Min((settlementDist - SettlementTooFar) * 5, 40);
+                }
 
                 // Randomize tiebreaking
                 score += rng.Next(10);
