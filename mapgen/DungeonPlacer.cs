@@ -8,6 +8,7 @@ public static class DungeonPlacer
     private const int MinSeparation = 8;
     private const int SettlementTooClose = 5;
     private const int SettlementTooFar = 15;
+    private const int EdgeMargin = 3;
 
     private static readonly Dictionary<string, Terrain> BiomeToTerrain = new()
     {
@@ -46,7 +47,9 @@ public static class DungeonPlacer
                 .Where(n => n.Terrain == terrain
                     && n.Poi == null
                     && (n.Region?.Tier ?? 0) >= entry.TierMin
-                    && (n.Region?.Tier ?? 0) <= entry.TierMax)
+                    && (n.Region?.Tier ?? 0) <= entry.TierMax
+                    && n.X >= EdgeMargin && n.X < map.Width - EdgeMargin
+                    && n.Y >= EdgeMargin && n.Y < map.Height - EdgeMargin)
                 .ToList();
 
             if (candidates.Count == 0)
@@ -72,11 +75,12 @@ public static class DungeonPlacer
                     score -= (MinSeparation - minDist) * 15;
 
                 // Penalize being too close or too far from nearest settlement
+                // Cap the "too far" penalty so remote T3 nodes aren't crushed
                 int settlementDist = MinDistance(node, settlements);
                 if (settlementDist < SettlementTooClose)
                     score -= (SettlementTooClose - settlementDist) * 20;
                 else if (settlementDist > SettlementTooFar)
-                    score -= (settlementDist - SettlementTooFar) * 20;
+                    score -= Math.Min((settlementDist - SettlementTooFar) * 5, 40);
 
                 // Randomize tiebreaking
                 score += rng.Next(10);
