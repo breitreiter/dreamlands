@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apocalypse Driver</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111317;
+      --panel: #1a1f26;
+      --panel-2: #242b35;
+      --accent: #f59e0b;
+      --accent-2: #60a5fa;
+      --text: #eef2f7;
+      --muted: #a2adbd;
+      --danger: #f87171;
+      --good: #4ade80;
+      --border: #364152;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 320px 1fr;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .stat,
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 10px;
+      max-height: 70vh;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0f141b;
+      color: var(--text);
+    }
+
+    button {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    button:hover {
+      border-color: var(--accent-2);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #111;
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #0f141b;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      margin: 4px 6px 0 0;
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    .good {
+      color: var(--good);
+    }
+
+    .destination-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .destination-card {
+      display: grid;
+      gap: 10px;
+    }
+
+    .destination-card strong {
+      font-size: 18px;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .log-entry {
+      border-left: 3px solid var(--accent-2);
+      padding-left: 10px;
+      color: var(--muted);
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2,
+      .hero {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div>
+        <h1>Apocalypse Driver</h1>
+        <p class="muted">
+          A tiny browser sandbox for testing a wasteland driving ruleset. Each turn costs food.
+          Driving also costs gas. Minor problems raise the odds of a major breakdown.
+        </p>
+      </div>
+      <div class="button-row">
+        <button id="restartButton" class="primary">Restart Game</button>
+      </div>
+    </section>
+
+    <div class="grid grid-2">
+      <aside class="panel">
+        <div class="section-title">
+          <h2>Balance Levers</h2>
+          <button id="applyBalanceButton">Apply + Restart</button>
+        </div>
+        <div class="controls" id="controls"></div>
+      </aside>
+
+      <main class="grid">
+        <section class="panel">
+          <h2>Run State</h2>
+          <div class="stats" id="stats"></div>
+          <p id="statusLine" class="muted"></p>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">
+            <h2>Vehicle Problems</h2>
+            <div class="button-row">
+              <button id="repairMinorButton">Repair 1 Minor Problem</button>
+            </div>
+          </div>
+          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <div class="card">
+              <h3>Major Problem</h3>
+              <div id="majorProblem"></div>
+            </div>
+            <div class="card">
+              <h3>Minor Problems</h3>
+              <div id="minorProblems"></div>
+            </div>
+            <div class="card">
+              <h3>Parts Inventory</h3>
+              <div id="partsInventory"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Destinations This Turn</h2>
+          <div class="destination-grid" id="destinations"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Event Log</h2>
+          <div class="log" id="log"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const MINOR_PROBLEMS = [
+      "Loose belt",
+      "Clogged filter",
+      "Worn tire",
+      "Bad spark plug",
+      "Bent fan shroud",
+      "Dirty fuel line"
+    ];
+
+    const MAJOR_PROBLEMS = [
+      { name: "Radiator failure", part: "Radiator kit" },
+      { name: "Fuel pump collapse", part: "Fuel pump" },
+      { name: "Axle fracture", part: "Axle assembly" },
+      { name: "Starter burnout", part: "Starter motor" }
+    ];
+
+    const DEFAULT_BALANCE = {
+      startingGas: 10,
+      startingFood: 12,
+      baseMajorChance: 8,
+      majorChancePerMinor: 7,
+      majorDeadlineTurns: 4,
+      minorProblemChance: 30,
+      minorRepairFoodCost: 2,
+      destinationCount: 3,
+      maxDistance: 6,
+      baseGasChance: 45,
+      baseFoodChance: 50,
+      basePartChance: 12,
+      gasMin: 2,
+      gasMax: 4,
+      foodMin: 1,
+      foodMax: 3,
+      partMin: 0,
+      partMax: 1,
+      gasChancePerDistance: 4,
+      foodChancePerDistance: 2,
+      partChancePerDistance: 7,
+      gasMaxPerDistance: 1,
+      foodMaxPerDistance: 1
+    };
+
+    const CONTROL_DEFS = [
+      ["startingGas", "Starting gas"],
+      ["startingFood", "Starting food"],
+      ["baseMajorChance", "Base major problem chance (%)"],
+      ["majorChancePerMinor", "Extra major chance per minor (%)"],
+      ["majorDeadlineTurns", "Turns to solve major problem"],
+      ["minorProblemChance", "Chance to gain a minor problem per drive (%)"],
+      ["minorRepairFoodCost", "Extra food cost to repair a minor problem"],
+      ["destinationCount", "Destinations per turn"],
+      ["maxDistance", "Maximum destination distance"],
+      ["baseGasChance", "Base gas chance at destination (%)"],
+      ["baseFoodChance", "Base food chance at destination (%)"],
+      ["basePartChance", "Base part chance at destination (%)"],
+      ["gasMin", "Gas amount min"],
+      ["gasMax", "Gas amount max"],
+      ["foodMin", "Food amount min"],
+      ["foodMax", "Food amount max"],
+      ["partMin", "Parts found min"],
+      ["partMax", "Parts found max"],
+      ["gasChancePerDistance", "Gas chance bonus per distance (%)"],
+      ["foodChancePerDistance", "Food chance bonus per distance (%)"],
+      ["partChancePerDistance", "Part chance bonus per distance (%)"],
+      ["gasMaxPerDistance", "Gas max bonus per distance"],
+      ["foodMaxPerDistance", "Food max bonus per distance"]
+    ];
+
+    let balance = { ...DEFAULT_BALANCE };
+    let state = null;
+
+    const controlsEl = document.getElementById("controls");
+    const statsEl = document.getElementById("stats");
+    const statusLineEl = document.getElementById("statusLine");
+    const majorProblemEl = document.getElementById("majorProblem");
+    const minorProblemsEl = document.getElementById("minorProblems");
+    const partsInventoryEl = document.getElementById("partsInventory");
+    const destinationsEl = document.getElementById("destinations");
+    const logEl = document.getElementById("log");
+    const repairMinorButton = document.getElementById("repairMinorButton");
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function rollChance(percent) {
+      return Math.random() * 100 < percent;
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomFrom(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function partInventoryArray() {
+      return Object.entries(state.parts).filter(([, count]) => count > 0);
+    }
+
+    function renderControls() {
+      controlsEl.innerHTML = "";
+      CONTROL_DEFS.forEach(([key, label]) => {
+        const wrapper = document.createElement("label");
+        wrapper.innerHTML = `
+          <span>${label}</span>
+          <input type="number" id="control-${key}" value="${balance[key]}" />
+        `;
+        controlsEl.appendChild(wrapper);
+      });
+    }
+
+    function readBalanceFromControls() {
+      const next = {};
+      CONTROL_DEFS.forEach(([key]) => {
+        next[key] = Number(document.getElementById(`control-${key}`).value);
+      });
+
+      next.startingGas = Math.max(1, next.startingGas);
+      next.startingFood = Math.max(1, next.startingFood);
+      next.majorDeadlineTurns = Math.max(1, next.majorDeadlineTurns);
+      next.destinationCount = clamp(next.destinationCount, 1, 6);
+      next.maxDistance = clamp(next.maxDistance, 1, 12);
+      next.gasMin = Math.max(0, next.gasMin);
+      next.foodMin = Math.max(0, next.foodMin);
+      next.partMin = Math.max(0, next.partMin);
+      next.gasMax = Math.max(next.gasMin, next.gasMax);
+      next.foodMax = Math.max(next.foodMin, next.foodMax);
+      next.partMax = Math.max(next.partMin, next.partMax);
+      next.baseMajorChance = clamp(next.baseMajorChance, 0, 100);
+      next.majorChancePerMinor = clamp(next.majorChancePerMinor, 0, 100);
+      next.minorProblemChance = clamp(next.minorProblemChance, 0, 100);
+      next.baseGasChance = clamp(next.baseGasChance, 0, 100);
+      next.baseFoodChance = clamp(next.baseFoodChance, 0, 100);
+      next.basePartChance = clamp(next.basePartChance, 0, 100);
+      next.gasChancePerDistance = clamp(next.gasChancePerDistance, 0, 100);
+      next.foodChancePerDistance = clamp(next.foodChancePerDistance, 0, 100);
+      next.partChancePerDistance = clamp(next.partChancePerDistance, 0, 100);
+      next.minorRepairFoodCost = Math.max(0, next.minorRepairFoodCost);
+      next.gasMaxPerDistance = Math.max(0, next.gasMaxPerDistance);
+      next.foodMaxPerDistance = Math.max(0, next.foodMaxPerDistance);
+
+      return next;
+    }
+
+    function addLog(message) {
+      state.log.unshift(`Turn ${state.turn}: ${message}`);
+      state.log = state.log.slice(0, 16);
+    }
+
+    function createDestinations() {
+      const destinations = [];
+      for (let i = 0; i < balance.destinationCount; i += 1) {
+        const distance = randomInt(1, balance.maxDistance);
+        const partType = randomFrom(MAJOR_PROBLEMS).part;
+        destinations.push({
+          id: crypto.randomUUID(),
+          name: `Site ${String.fromCharCode(65 + i)}`,
+          distance,
+          gasChance: clamp(balance.baseGasChance + distance * balance.gasChancePerDistance, 0, 100),
+          foodChance: clamp(balance.baseFoodChance + distance * balance.foodChancePerDistance, 0, 100),
+          partChance: clamp(balance.basePartChance + distance * balance.partChancePerDistance, 0, 100),
+          gasMin: balance.gasMin,
+          gasMax: balance.gasMax + distance * balance.gasMaxPerDistance,
+          foodMin: balance.foodMin,
+          foodMax: balance.foodMax + distance * balance.foodMaxPerDistance,
+          partMin: balance.partMin,
+          partMax: balance.partMax,
+          partType
+        });
+      }
+      return destinations;
+    }
+
+    function resetGame() {
+      state = {
+        turn: 1,
+        gas: balance.startingGas,
+        food: balance.startingFood,
+        minorProblems: [],
+        majorProblem: null,
+        parts: Object.fromEntries(MAJOR_PROBLEMS.map(item => [item.part, 0])),
+        distanceTraveled: 0,
+        gameOver: false,
+        winText: "",
+        log: []
+      };
+
+      state.destinations = createDestinations();
+      addLog("The engine coughs awake. A new run begins.");
+      render();
+    }
+
+    function spendTurnFood(extraFoodCost = 0) {
+      const total = 1 + extraFoodCost;
+      state.food -= total;
+      return total;
+    }
+
+    function maybeAddMinorProblem() {
+      if (!rollChance(balance.minorProblemChance)) {
+        return;
+      }
+
+      const available = MINOR_PROBLEMS.filter(name => !state.minorProblems.includes(name));
+      if (available.length === 0) {
+        return;
+      }
+
+      const problem = randomFrom(available);
+      state.minorProblems.push(problem);
+      addLog(`A new minor problem appears: ${problem}.`);
+    }
+
+    function maybeTriggerMajorProblem() {
+      if (state.majorProblem || state.gameOver) {
+        return;
+      }
+
+      const chance = clamp(
+        balance.baseMajorChance + state.minorProblems.length * balance.majorChancePerMinor,
+        0,
+        100
+      );
+
+      if (!rollChance(chance)) {
+        return;
+      }
+
+      const template = randomFrom(MAJOR_PROBLEMS);
+      state.majorProblem = {
+        name: template.name,
+        part: template.part,
+        turnsLeft: balance.majorDeadlineTurns
+      };
+      addLog(`Major problem: ${template.name}. Need ${template.part} within ${balance.majorDeadlineTurns} turns.`);
+      consumeMatchingPartIfAvailable();
+    }
+
+    function consumeMatchingPartIfAvailable() {
+      if (!state.majorProblem) {
+        return;
+      }
+
+      const needed = state.majorProblem.part;
+      if ((state.parts[needed] || 0) < 1) {
+        return;
+      }
+
+      state.parts[needed] -= 1;
+      addLog(`Used stored ${needed} to fix ${state.majorProblem.name}.`);
+      state.majorProblem = null;
+    }
+
+    function tickMajorDeadline() {
+      if (!state.majorProblem || state.gameOver) {
+        return;
+      }
+
+      state.majorProblem.turnsLeft -= 1;
+      if (state.majorProblem.turnsLeft <= 0) {
+        state.gameOver = true;
+        state.winText = `You lose. ${state.majorProblem.name} was not fixed in time.`;
+      }
+    }
+
+    function checkResourceLoss() {
+      if (state.gas <= 0 || state.food <= 0) {
+        state.gameOver = true;
+        state.winText = "You lose. The convoy ran out of supplies.";
+      }
+    }
+
+    function advanceTurn() {
+      checkResourceLoss();
+      if (state.gameOver) {
+        render();
+        return;
+      }
+
+      tickMajorDeadline();
+      checkResourceLoss();
+      if (state.gameOver) {
+        render();
+        return;
+      }
+
+      maybeTriggerMajorProblem();
+      state.turn += 1;
+      state.destinations = createDestinations();
+      render();
+    }
+
+    function driveToDestination(index) {
+      if (state.gameOver) {
+        return;
+      }
+
+      const destination = state.destinations[index];
+      state.gas -= destination.distance;
+      state.distanceTraveled += destination.distance;
+      const foodSpent = spendTurnFood(0);
+      addLog(`Drove to ${destination.name} for ${destination.distance} gas and spent ${foodSpent} food.`);
+
+      if (rollChance(destination.gasChance)) {
+        const foundGas = randomInt(destination.gasMin, destination.gasMax);
+        state.gas += foundGas;
+        addLog(`Found ${foundGas} gas.`);
+      } else {
+        addLog("No gas found.");
+      }
+
+      if (rollChance(destination.foodChance)) {
+        const foundFood = randomInt(destination.foodMin, destination.foodMax);
+        state.food += foundFood;
+        addLog(`Scavenged ${foundFood} food.`);
+      } else {
+        addLog("No food found.");
+      }
+
+      if (rollChance(destination.partChance)) {
+        const foundParts = randomInt(destination.partMin, destination.partMax);
+        if (foundParts > 0) {
+          state.parts[destination.partType] += foundParts;
+          addLog(`Recovered ${foundParts}x ${destination.partType}.`);
+          consumeMatchingPartIfAvailable();
+        } else {
+          addLog(`The site hinted at ${destination.partType}, but nothing usable remained.`);
+        }
+      } else {
+        addLog(`No ${destination.partType} found.`);
+      }
+
+      maybeAddMinorProblem();
+      advanceTurn();
+    }
+
+    function repairMinorProblem() {
+      if (state.gameOver || state.minorProblems.length === 0) {
+        return;
+      }
+
+      const foodCost = 1 + balance.minorRepairFoodCost;
+      if (state.food - foodCost < 0) {
+        state.food -= foodCost;
+        addLog("You tried to spend time on repairs without enough food.");
+        checkResourceLoss();
+        render();
+        return;
+      }
+
+      const repaired = state.minorProblems.shift();
+      spendTurnFood(balance.minorRepairFoodCost);
+      addLog(`Repaired minor problem: ${repaired}.`);
+      advanceTurn();
+    }
+
+    function renderStats() {
+      const chance = clamp(
+        balance.baseMajorChance + state.minorProblems.length * balance.majorChancePerMinor,
+        0,
+        100
+      );
+
+      const entries = [
+        ["Turn", state.turn],
+        ["Gas", state.gas],
+        ["Food", state.food],
+        ["Minor Problems", state.minorProblems.length],
+        ["Major Chance", `${chance}%`],
+        ["Distance", state.distanceTraveled]
+      ];
+
+      statsEl.innerHTML = entries.map(([label, value]) => `
+        <div class="stat">
+          <div class="stat-label">${label}</div>
+          <div class="stat-value">${value}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderProblems() {
+      if (!state.majorProblem) {
+        majorProblemEl.innerHTML = `<p class="good">No active major problem.</p>`;
+      } else {
+        majorProblemEl.innerHTML = `
+          <p><strong>${state.majorProblem.name}</strong></p>
+          <p>Needed part: <span class="pill">${state.majorProblem.part}</span></p>
+          <p class="${state.majorProblem.turnsLeft <= 1 ? "danger" : ""}">
+            Turns left: ${state.majorProblem.turnsLeft}
+          </p>
+        `;
+      }
+
+      if (state.minorProblems.length === 0) {
+        minorProblemsEl.innerHTML = `<p class="good">No minor problems.</p>`;
+      } else {
+        minorProblemsEl.innerHTML = state.minorProblems
+          .map(problem => `<span class="pill">${problem}</span>`)
+          .join("");
+      }
+
+      const parts = partInventoryArray();
+      if (parts.length === 0) {
+        partsInventoryEl.innerHTML = `<p class="muted">No spare parts.</p>`;
+      } else {
+        partsInventoryEl.innerHTML = parts
+          .map(([name, count]) => `<span class="pill">${name} x${count}</span>`)
+          .join("");
+      }
+    }
+
+    function renderDestinations() {
+      destinationsEl.innerHTML = "";
+      state.destinations.forEach((destination, index) => {
+        const card = document.createElement("div");
+        card.className = "card destination-card";
+        const isNeededPart = state.majorProblem && state.majorProblem.part === destination.partType;
+        card.innerHTML = `
+          <div>
+            <strong>${destination.name}</strong>
+            <p class="muted">Distance: ${destination.distance} gas</p>
+          </div>
+          <div>
+            <div>Gas: ${destination.gasChance}% chance, ${destination.gasMin}-${destination.gasMax}</div>
+            <div>Food: ${destination.foodChance}% chance, ${destination.foodMin}-${destination.foodMax}</div>
+            <div>
+              Part: ${destination.partChance}% chance,
+              ${destination.partMin}-${destination.partMax}x
+              <span class="pill ${isNeededPart ? "danger" : ""}">${destination.partType}</span>
+            </div>
+          </div>
+        `;
+
+        const button = document.createElement("button");
+        button.textContent = `Drive to ${destination.name}`;
+        button.disabled = state.gameOver;
+        button.addEventListener("click", () => driveToDestination(index));
+        card.appendChild(button);
+        destinationsEl.appendChild(card);
+      });
+    }
+
+    function renderLog() {
+      logEl.innerHTML = state.log.map(entry => `<div class="log-entry">${entry}</div>`).join("");
+    }
+
+    function renderStatus() {
+      if (state.gameOver) {
+        statusLineEl.innerHTML = `<span class="danger">${state.winText}</span>`;
+        return;
+      }
+
+      const lines = [
+        "Each action costs 1 food.",
+        "Driving also costs gas equal to distance.",
+        `Repairing a minor problem costs ${1 + balance.minorRepairFoodCost} food total this turn.`
+      ];
+
+      if (state.majorProblem) {
+        lines.push(`Current emergency: find ${state.majorProblem.part} before the timer expires.`);
+      }
+
+      statusLineEl.textContent = lines.join(" ");
+    }
+
+    function render() {
+      renderStats();
+      renderProblems();
+      renderDestinations();
+      renderLog();
+      renderStatus();
+      repairMinorButton.disabled = state.gameOver || state.minorProblems.length === 0;
+      repairMinorButton.textContent = state.minorProblems.length === 0
+        ? "Repair 1 Minor Problem"
+        : `Repair 1 Minor Problem (${1 + balance.minorRepairFoodCost} food)`;
+    }
+
+    document.getElementById("restartButton").addEventListener("click", resetGame);
+    document.getElementById("applyBalanceButton").addEventListener("click", () => {
+      balance = readBalanceFromControls();
+      renderControls();
+      resetGame();
+    });
+    repairMinorButton.addEventListener("click", repairMinorProblem);
+
+    renderControls();
+    resetGame();
+  </script>
+</body>
+</html>

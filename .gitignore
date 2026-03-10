@@ -9,6 +9,8 @@ appsettings.json
 map_*.png
 map_*.json
 *.kate-swp
+*.png~
+mapgen/sizing.md
 .vscode/
 *.sh
 !worlds/*/build.sh
