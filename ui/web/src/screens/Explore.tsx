@@ -125,12 +125,17 @@ const DIR_KEYS: Record<string, string> = {
 };
 
 const CONDITION_ICONS: Record<string, string> = {
-  lost: "sextant.svg",
-  hungry: "water-drop.svg",
-  exhausted: "camping-tent.svg",
-  injured: "nested-hearts.svg",
-  poisoned: "caduceus.svg",
-  cursed: "foamy-disc.svg",
+  freezing: "mountains.svg",
+  thirsty: "water-drop.svg",
+  swamp_fever: "foamy-disc.svg",
+  gut_worms: "foamy-disc.svg",
+  irradiated: "foamy-disc.svg",
+  poisoned: "foamy-disc.svg",
+  injured: "bloody-stash.svg",
+  hungry: "pouch-with-beads.svg",
+  exhausted: "tread.svg",
+  lost: "compass.svg",
+  disheartened: "sensuousness.svg",
 };
 
 const poiPinIcon = new DivIcon({
@@ -152,7 +157,7 @@ const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   market: { icon: "two-coins.svg", label: "Market" },
   bank: { icon: "locked-chest.svg", label: "Bank" },
   inn: { icon: "wood-cabin.svg", label: "Inn" },
-  chapterhouse: { icon: "wood-cabin.svg", label: "Chapterhouse" },
+  chapterhouse: { icon: "byzantin-temple.svg", label: "Chapterhouse" },
 };
 
 function InstrumentCluster({

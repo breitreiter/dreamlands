@@ -26,8 +26,9 @@ const CONDITION_ICONS: Record<string, string> = {
   gut_worms: "foamy-disc.svg",
   irradiated: "foamy-disc.svg",
   exhausted: "tread.svg",
-  lost: "treasure-map.svg",
+  lost: "compass.svg",
   injured: "bloody-stash.svg",
+  disheartened: "sensuousness.svg",
 };
 
 
@@ -337,7 +338,7 @@ function PackTab({
             {item.isEquippable && (
               <Button variant="secondary" size="icon" disabled={loading} title="Equip"
                 onClick={() => doAction({ action: "equip", itemId: item.defId })}>
-                <MaskedIcon icon="sword-brandish.svg" className="w-5 h-5" color="currentColor" />
+                <MaskedIcon icon="barbute.svg" className="w-5 h-5" color="currentColor" />
               </Button>
             )}
             <DiscardButton item={item} doAction={doAction} loading={loading} />

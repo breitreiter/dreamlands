@@ -17,11 +17,11 @@ export function itemTypeIcon(type: string): string {
 
 const TAB_ICONS: Record<string, string> = {
   foods: "pouch-with-beads.svg",
-  equipment: "sword-brandish.svg",
+  equipment: "barbute.svg",
   hauls: "wooden-crate.svg",
   pack: "backpack.svg",
   haversack: "knapsack.svg",
-  equipped: "sword-brandish.svg",
+  equipped: "barbute.svg",
 };
 
 export function TabButton({ id, active, onClick, children }: { id: string; active: boolean; onClick: () => void; children: React.ReactNode }) {
