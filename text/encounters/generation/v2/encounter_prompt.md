@@ -42,6 +42,7 @@ Characters:
 - Show personality through action and dialogue, not description.
 - Use direct dialogue, not reported speech. "Get off my land," not "He tells you to leave." Characters should speak in their own voice.
 - The cast description tells you who they are. The locale guide tells you how they look, talk, and dress here.
+- When the cast has only an Antagonist, the PC is the other side of the conflict. Do not introduce additional factions or third parties.
 
 Scene:
 - Open with the situation already in motion. No preamble.
