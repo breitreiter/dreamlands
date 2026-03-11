@@ -143,6 +143,8 @@ Each tier is ~5 encounters (~30 min each). Each dungeon is ~1 hour.
 ### Encounter Pipeline
 - [ ] Locale guides for remaining biome/tier combos
 - [ ] Batch-generate skeletons via `generate` command
+- [x] Gitignore `stock_characters_curated.md` and `neutral_archetypes.md` — derived
+      from Wikipedia (CC BY-SA), can't ship under MIT.
 
 ## UX Design
 

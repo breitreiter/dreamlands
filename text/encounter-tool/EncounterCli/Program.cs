@@ -32,8 +32,8 @@ class Program
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter fix-quotes [<path>] [--ext .enc,.txt]");
         Console.WriteLine();
-        Console.WriteLine("generate looks for locale_guide.txt in the current directory and oracle");
-        Console.WriteLine("fragments in /home/joseph/repos/dreamlands/text/encounters/generation/.");
+        Console.WriteLine("generate looks for locale_guide.txt in the current directory and archetype");
+        Console.WriteLine("pools in text/encounters/generation/v2/.");
         return 1;
     }
 }

@@ -41,7 +41,7 @@ dotnet run --project ../../../encounter-tool/EncounterCli -- generate --out gene
 - **check** `[path] [--ext .enc,.txt]` — Validate .enc files for syntax errors. Exit 1 if any fail.
 - **bundle** `<path> [--out dir] [--ext .enc,.txt]` — Parse all encounters, emit `encounters.bundle.json` with index (byId, byCategory) and parsed encounter data.
 - **fixme** `<file.enc> [--config path] [--prompts-only]` — Find `FIXME:` lines, call LLM to expand them into prose, replace with `REVIEW:` lines.
-- **generate** `[--template file] [--out file] [--config path] [--prompts-only]` — Generate an encounter from oracle fragments + locale guide via LLM. Looks for `locale_guide.txt` in cwd. Oracle fragments always at `text/encounters/generation/`.
+- **generate** `[--out file] [--config path] [--prompts-only]` — Generate an encounter using archetype-driven blueprints + locale guide via LLM. Picks a random conflict or trouble archetype, casts characters from stock pools, then makes a single LLM call. Looks for `locale_guide.txt` in cwd. Archetype files at `text/encounters/generation/v2/`.
 
 ## Encounter Format (.enc)
 
@@ -83,11 +83,12 @@ Loaded from next to the executable by default. Use `--config <path>` to override
 
 ## Encounter Generation
 
-Oracle-driven generation using the `generate` command:
+Archetype-driven generation using the `generate` command:
 
-- **Oracle fragments** — Three text files (Situation, Forcing, Twist) with ~30-40 one-line narrative seeds each, at `text/encounters/generation/`. A random combination of three fragments shapes each encounter.
+- **Archetype pools** — `text/encounters/generation/v2/`: conflict archetypes (8 types), trouble archetypes (5 types), neutral characters (101 stock characters), villain archetypes (17 types).
+- **Blueprint** — Random selection of conflict/trouble archetype + participant combo + cast from stock pools. User reviews and can re-roll before LLM call.
 - **Locale guide** — Region-specific context (setting, tone, scene palette, constraints). Always `locale_guide.txt` in the current working directory.
-- **Prompt template** — `encounter_prompt.md` in the generation directory. Substitutes oracle picks + locale guide. LLM generates the encounter body + selects applicable player actions, then a second pass generates epilogues.
+- **Single LLM pass** — `encounter_prompt.md` substitutes locale guide, archetype, and cast. Produces title + body text only (no choices — author writes those by hand).
 
 ## Architecture Notes
 
