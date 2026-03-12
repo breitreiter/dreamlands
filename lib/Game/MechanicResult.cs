@@ -13,6 +13,7 @@ public abstract record MechanicResult
     public record ItemLost(string DefId, string DisplayName) : MechanicResult;
     public record TagAdded(string TagId) : MechanicResult;
     public record TagRemoved(string TagId) : MechanicResult;
+    public record QualityChanged(string QualityId, int Delta, int NewValue) : MechanicResult;
     public record ConditionAdded(string ConditionId, int Stacks) : MechanicResult;
     public record ConditionRemoved(string ConditionId) : MechanicResult;
     public record TimeAdvanced(TimePeriod NewPeriod, int NewDay) : MechanicResult;

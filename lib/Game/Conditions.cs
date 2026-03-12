@@ -19,6 +19,7 @@ public static class Conditions
             "has" when parts.Count >= 2 => EvaluateHas(parts[1], state),
             "tag" when parts.Count >= 2 => EvaluateTag(parts[1], state),
             "meets" when parts.Count >= 3 => EvaluateMeets(parts, state, balance),
+            "quality" when parts.Count >= 3 => EvaluateQuality(parts, state),
             _ => false,
         };
     }
@@ -47,5 +48,13 @@ public static class Conditions
         var skillLevel = state.Skills.GetValueOrDefault(skill.Value);
         var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
         return skillLevel + itemBonus >= target;
+    }
+
+    static bool EvaluateQuality(List<string> parts, PlayerState state)
+    {
+        if (!int.TryParse(parts[2], out var threshold)) return false;
+        var value = state.Qualities.GetValueOrDefault(parts[1]);
+        // Positive threshold: value >= n. Negative threshold: value <= n.
+        return threshold >= 0 ? value >= threshold : value <= threshold;
     }
 }

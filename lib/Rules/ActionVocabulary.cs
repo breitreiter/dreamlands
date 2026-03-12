@@ -26,6 +26,8 @@ public enum ArgType
     Int,
     /// <summary>A signed integer skill level (e.g. -2 to +4).</summary>
     SkillLevel,
+    /// <summary>A signed integer (positive or negative).</summary>
+    SignedInt,
     /// <summary>An item category name (e.g. "food"). Free-form for now.</summary>
     Category,
 }
@@ -76,6 +78,11 @@ public sealed class ActionVerb
         new ArgDef("skill", ArgType.Skill),
         new ArgDef("target", ArgType.Int));
 
+    public static readonly ActionVerb Quality = new("quality",
+        VerbUsage.Condition, "Branch on whether a quality meets a threshold",
+        new ArgDef("quality_id", ArgType.Id),
+        new ArgDef("threshold", ArgType.SignedInt));
+
     // ── Navigation ──────────────────────────────────────────────
 
     public static readonly ActionVerb Open = new("open",
@@ -91,6 +98,11 @@ public sealed class ActionVerb
     public static readonly ActionVerb RemoveTag = new("remove_tag",
         VerbUsage.Mechanic, "Clear a world-state flag",
         new ArgDef("tag_id", ArgType.Id));
+
+    public static readonly ActionVerb SetQuality = new("quality",
+        VerbUsage.Mechanic, "Adjust a numeric quality by a signed amount",
+        new ArgDef("quality_id", ArgType.Id),
+        new ArgDef("amount", ArgType.SignedInt));
 
     // ── Inventory ───────────────────────────────────────────────
 
@@ -195,9 +207,9 @@ public sealed class ActionVerb
     /// <summary>All defined verbs.</summary>
     public static IReadOnlyList<ActionVerb> All { get; } = new ActionVerb[]
     {
-        Check, Has, Tag, Meets,
+        Check, Has, Tag, Meets, Quality,
         Open,
-        AddTag, RemoveTag,
+        AddTag, RemoveTag, SetQuality,
         AddItem, AddRandomItems, LoseRandomItem,
         Equip, Unequip, Discard,
         GiveGold, RemGold,
@@ -209,16 +221,21 @@ public sealed class ActionVerb
         FinishDungeon, FleeDungeon,
     };
 
-    private static readonly Dictionary<string, ActionVerb> ByName =
-        All.ToDictionary(v => v.Name);
+    private static readonly Dictionary<(string Name, VerbUsage Usage), ActionVerb> ByNameAndUsage =
+        All.ToDictionary(v => (v.Name, v.Usage));
 
     /// <summary>Look up a verb by its script name. Returns null if not recognised.</summary>
     public static ActionVerb? FromName(string name) =>
-        ByName.TryGetValue(name, out var verb) ? verb : null;
+        ByNameAndUsage.TryGetValue((name, VerbUsage.Condition), out var c) ? c :
+        ByNameAndUsage.TryGetValue((name, VerbUsage.Mechanic), out var m) ? m : null;
+
+    /// <summary>Look up a verb by its script name and expected usage. Returns null if not recognised.</summary>
+    public static ActionVerb? FromName(string name, VerbUsage usage) =>
+        ByNameAndUsage.TryGetValue((name, usage), out var verb) ? verb : null;
 
     /// <summary>True if <paramref name="name"/> matches a known verb.</summary>
     public static bool IsValidName(string name) =>
-        ByName.ContainsKey(name);
+        FromName(name) != null;
 
     /// <summary>
     /// Validate a full action string (e.g. "check combat hard" or "damage_health small").
@@ -231,15 +248,19 @@ public sealed class ActionVerb
             return "Empty action.";
 
         var verbName = tokens[0];
-        var verb = FromName(verbName);
+        var verb = FromName(verbName, expectedUsage);
         if (verb == null)
-            return $"Unknown verb '{verbName}'.";
-
-        if (verb.Usage != expectedUsage)
         {
-            var expected = expectedUsage == VerbUsage.Condition ? "condition" : "mechanic";
-            var actual = verb.Usage == VerbUsage.Condition ? "condition" : "mechanic";
-            return $"'{verbName}' is a {actual} but was used as a {expected}.";
+            // Check if verb exists with opposite usage for a better error message
+            var otherUsage = expectedUsage == VerbUsage.Condition ? VerbUsage.Mechanic : VerbUsage.Condition;
+            var other = FromName(verbName, otherUsage);
+            if (other != null)
+            {
+                var expected = expectedUsage == VerbUsage.Condition ? "condition" : "mechanic";
+                var actual = other.Usage == VerbUsage.Condition ? "condition" : "mechanic";
+                return $"'{verbName}' is a {actual} but was used as a {expected}.";
+            }
+            return $"Unknown verb '{verbName}'.";
         }
 
         var argTokens = tokens.GetRange(1, Math.Min(verb.Args.Count, tokens.Count - 1));
@@ -326,6 +347,8 @@ public sealed class ActionVerb
             ArgType.Int => int.TryParse(value, out var n) && n > 0
                 ? null : $"'{value}' is not a positive integer.",
             ArgType.SkillLevel => int.TryParse(value, out _)
+                ? null : $"'{value}' is not a valid integer.",
+            ArgType.SignedInt => int.TryParse(value, out _)
                 ? null : $"'{value}' is not a valid integer.",
             ArgType.Category => string.IsNullOrWhiteSpace(value)
                 ? "category must not be empty." : null,

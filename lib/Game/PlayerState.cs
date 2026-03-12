@@ -51,6 +51,7 @@ public class PlayerState
 
     // World state
     public HashSet<string> Tags { get; set; } = new();
+    public Dictionary<string, int> Qualities { get; set; } = new();
     public Dictionary<string, int> ActiveConditions { get; set; } = new();
     public HashSet<string> CompletedDungeons { get; set; } = new();
     public HashSet<string> UsedEncounterIds { get; set; } = new();

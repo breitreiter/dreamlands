@@ -8,4 +8,5 @@ public class SettlementState
     public int LastRestockDay { get; set; }
     public List<ItemInstance> Bank { get; set; } = new();
     public List<ItemInstance> HaulOffers { get; set; } = new();
+    public HashSet<string> Flags { get; set; } = new();
 }

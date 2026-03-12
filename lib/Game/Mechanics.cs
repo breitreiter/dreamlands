@@ -48,6 +48,7 @@ public static class Mechanics
             "discard" => ApplyDiscard(args, state),
             "add_tag" => ApplyAddTag(args, state),
             "remove_tag" => ApplyRemoveTag(args, state),
+            "quality" => ApplyQuality(args, state),
             "add_condition" => ApplyAddCondition(args, state, balance),
             "remove_condition" => ApplyRemoveCondition(args, state),
             "skip_time" => ApplySkipTime(args, state),
@@ -306,6 +307,18 @@ public static class Mechanics
             state.Haversack.Add(instance);
         else
             state.Pack.Add(instance);
+    }
+
+    static MechanicResult? ApplyQuality(List<string> args, PlayerState state)
+    {
+        if (args.Count < 2) return null;
+        if (!int.TryParse(args[1], out var amount)) return null;
+
+        var id = args[0];
+        var current = state.Qualities.GetValueOrDefault(id);
+        var newValue = current + amount;
+        state.Qualities[id] = newValue;
+        return new MechanicResult.QualityChanged(id, amount, newValue);
     }
 
     static MechanicResult? ApplyAddTag(List<string> args, PlayerState state)

@@ -303,4 +303,50 @@ public class MechanicsTests
         Assert.Equal("bandages", r.DefId);
         Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
     }
+
+    [Fact]
+    public void Quality_PositiveAmount_IncreasesValue()
+    {
+        var state = Fresh();
+        var results = Mechanics.Apply(["quality guild 2"], state, Balance, Rng);
+
+        var r = Assert.IsType<MechanicResult.QualityChanged>(results[0]);
+        Assert.Equal("guild", r.QualityId);
+        Assert.Equal(2, r.Delta);
+        Assert.Equal(2, r.NewValue);
+        Assert.Equal(2, state.Qualities["guild"]);
+    }
+
+    [Fact]
+    public void Quality_NegativeAmount_DecreasesValue()
+    {
+        var state = Fresh();
+        state.Qualities["clans"] = 3;
+        var results = Mechanics.Apply(["quality clans -2"], state, Balance, Rng);
+
+        var r = Assert.IsType<MechanicResult.QualityChanged>(results[0]);
+        Assert.Equal(-2, r.Delta);
+        Assert.Equal(1, r.NewValue);
+        Assert.Equal(1, state.Qualities["clans"]);
+    }
+
+    [Fact]
+    public void Quality_DefaultsToZero_WhenUnset()
+    {
+        var state = Fresh();
+        var results = Mechanics.Apply(["quality exiles -1"], state, Balance, Rng);
+
+        var r = Assert.IsType<MechanicResult.QualityChanged>(results[0]);
+        Assert.Equal(-1, r.NewValue);
+        Assert.Equal(-1, state.Qualities["exiles"]);
+    }
+
+    [Fact]
+    public void Quality_Accumulates_AcrossMultipleCalls()
+    {
+        var state = Fresh();
+        Mechanics.Apply(["quality scholars 1"], state, Balance, Rng);
+        Mechanics.Apply(["quality scholars 2"], state, Balance, Rng);
+        Assert.Equal(3, state.Qualities["scholars"]);
+    }
 }
