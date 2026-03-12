@@ -26,6 +26,13 @@ public sealed class EncounterBundle
 
     public IReadOnlyList<string> GetCategories() => _byCategory.Keys.ToList();
 
+    public IReadOnlyList<Encounter> GetByTrigger(string trigger, string? biome = null, int? tier = null) =>
+        Encounters
+            .Where(e => string.Equals(e.Trigger, trigger, StringComparison.OrdinalIgnoreCase))
+            .Where(e => biome == null || e.Category.Split('/').Contains(biome))
+            .Where(e => tier == null || e.Tier == null || e.Tier == tier)
+            .ToList();
+
     public static EncounterBundle Load(string path)
     {
         var json = File.ReadAllText(path);

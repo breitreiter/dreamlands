@@ -41,10 +41,53 @@ public static class SettlementRunner
         // Generate haul offers if below cap (exclude hauls player already carries)
         GenerateHauls(session, node.Poi.SettlementId, node.Terrain, settlement);
 
+        // Stock storylet offers
+        StockStorylets(session, node, settlement);
+
         var isChapterhouse = node == session.Map.StartingCity;
         var services = new List<string> { "market", "bank", isChapterhouse ? "chapterhouse" : "inn" };
+        if (settlement.StoryletOffers.Count > 0)
+            services.Add("notices");
 
         return new SettlementData(node.Poi.Name ?? node.Poi.SettlementId, tier, biome, size, services);
+    }
+
+    private static void StockStorylets(GameSession session, Node node, SettlementState state)
+    {
+        var max = session.Balance.Settlements.MaxStorylets;
+        var restockDays = session.Balance.Settlements.StoryletRestockDays;
+
+        // Prune offers for encounters the player has since used (non-recurring only)
+        state.StoryletOffers.RemoveAll(id =>
+        {
+            var enc = session.Bundle.GetById(id);
+            return enc != null && !enc.Recurring && session.Player.UsedEncounterIds.Contains(id);
+        });
+
+        // Determine how many slots are available
+        var slotsAvailable = max;
+        if (state.LastStoryletStockDay > 0 && state.StoryletOffers.Count < max)
+        {
+            var elapsed = session.Player.Day - state.LastStoryletStockDay;
+            var regained = elapsed / restockDays;
+            slotsAvailable = Math.Min(max, state.StoryletOffers.Count + Math.Max(regained, 0));
+        }
+
+        if (state.StoryletOffers.Count >= slotsAvailable) return;
+
+        var eligible = EncounterSelection.GetEligibleStorylets(session, node, state.StoryletOffers);
+        var toAdd = slotsAvailable - state.StoryletOffers.Count;
+        var candidates = eligible.ToList();
+
+        while (toAdd > 0 && candidates.Count > 0)
+        {
+            var idx = session.Rng.Next(candidates.Count);
+            state.StoryletOffers.Add(candidates[idx].Id);
+            candidates.RemoveAt(idx);
+            toAdd--;
+        }
+
+        state.LastStoryletStockDay = session.Player.Day;
     }
 
     private static void GenerateHauls(GameSession session, string settlementId, Terrain biome, SettlementState state)

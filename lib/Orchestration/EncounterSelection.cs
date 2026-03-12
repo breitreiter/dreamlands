@@ -89,4 +89,26 @@ public static class EncounterSelection
             .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
             .ToList();
     }
+
+    /// <summary>
+    /// Returns all settlement-triggered encounters eligible for stocking at this node,
+    /// excluding any already in the settlement's offers or used by the player.
+    /// </summary>
+    public static IReadOnlyList<Encounter.Encounter> GetEligibleStorylets(
+        GameSession session, Dreamlands.Map.Node node, IReadOnlyList<string> currentOffers)
+    {
+        if (!TerrainDirs.TryGetValue(node.Terrain, out var biome)) return [];
+        var tier = node.Region?.Tier;
+
+        // Combine category-based settlement pool with trigger-based pool
+        var categoryPool = session.Bundle.GetByCategory($"settlements/{biome}");
+        var triggerPool = session.Bundle.GetByTrigger("settlement", biome, tier);
+        var pool = categoryPool.Concat(triggerPool).DistinctBy(e => e.Id);
+
+        return pool
+            .Where(e => !currentOffers.Contains(e.Id))
+            .Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id))
+            .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
+            .ToList();
+    }
 }

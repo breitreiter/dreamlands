@@ -158,7 +158,9 @@ NodeInfo BuildNodeInfo(Node node, PlayerState p, GameSession? session = null)
         var isChapterhouse = node == map.StartingCity;
         services = ["market", "bank", isChapterhouse ? "chapterhouse" : "inn"];
 
-        if (session != null && EncounterSelection.GetAvailableAtPoi(session, node).Count > 0)
+        if (session != null && node.Poi.SettlementId != null
+            && session.Player.Settlements.TryGetValue(node.Poi.SettlementId, out var settlementInfo)
+            && settlementInfo.StoryletOffers.Count > 0)
             services.Add("notices");
     }
 
@@ -734,6 +736,9 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 player.ActiveConditions.Clear();
                 player.PendingNoBiome = true;
 
+                // Initialize settlement state and stock storylets on arrival
+                SettlementRunner.EnsureSettlement(session);
+
                 // Auto-deliver hauls destined for this settlement
                 if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
                 {
@@ -924,10 +929,28 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (string.IsNullOrEmpty(req.EncounterId))
                 return Results.BadRequest(new { error = "encounterId required" });
 
+            // Check dungeon hub encounters
             var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
             var target = available.FirstOrDefault(e => e.Id.Equals(req.EncounterId, StringComparison.OrdinalIgnoreCase));
+
+            // Check settlement storylet offers
+            var curNode = session.CurrentNode;
+            if (target == null && curNode.Poi?.Kind == PoiKind.Settlement && curNode.Poi.SettlementId != null
+                && session.Player.Settlements.TryGetValue(curNode.Poi.SettlementId, out var sState)
+                && sState.StoryletOffers.Contains(req.EncounterId))
+            {
+                target = session.Bundle.GetById(req.EncounterId);
+            }
+
             if (target == null)
                 return Results.BadRequest(new { error = $"Encounter '{req.EncounterId}' not available at this location" });
+
+            // Remove from storylet offers if it was a settlement storylet
+            if (curNode.Poi?.Kind == PoiKind.Settlement && curNode.Poi.SettlementId != null
+                && session.Player.Settlements.TryGetValue(curNode.Poi.SettlementId, out var sState2))
+            {
+                sState2.StoryletOffers.Remove(req.EncounterId);
+            }
 
             var step = EncounterRunner.Begin(session, target);
             await store.Save(player);
@@ -1342,18 +1365,20 @@ app.MapGet("/api/game/{id}/notices", async (string id) =>
     var session = BuildSession(player);
     var node = session.CurrentNode;
 
-    if (node.Poi?.Kind != PoiKind.Settlement)
+    if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.SettlementId == null)
         return Results.BadRequest(new { error = "Not at a settlement" });
 
-    var available = EncounterSelection.GetAvailableAtPoi(session, node);
-    return Results.Ok(new
-    {
-        encounters = available.Select(e => new EncounterSummary
-        {
-            Id = e.Id,
-            Title = e.Title,
-        }).ToList(),
-    });
+    SettlementRunner.EnsureSettlement(session);
+    var settlement = session.Player.Settlements.GetValueOrDefault(node.Poi.SettlementId);
+    var offers = settlement?.StoryletOffers ?? [];
+
+    var encounters = offers
+        .Select(id => session.Bundle.GetById(id))
+        .Where(e => e != null)
+        .Select(e => new EncounterSummary { Id = e!.Id, Title = e.Title })
+        .ToList();
+
+    return Results.Ok(new { encounters });
 });
 
 app.MapGet("/api/game/{id}/discoveries", async (string id) =>

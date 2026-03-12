@@ -18,6 +18,8 @@ public sealed class SettlementBalance
     public static readonly SettlementBalance Default = new();
 
     public int BankCapacity { get; init; } = 10;
+    public int MaxStorylets { get; init; } = 3;
+    public int StoryletRestockDays { get; init; } = 5;
 
     public IReadOnlyDictionary<string, ServiceDef> Services { get; init; } = BuildServices();
 
