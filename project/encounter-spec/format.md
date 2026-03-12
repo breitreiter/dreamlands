@@ -33,6 +33,8 @@ The commune has grown since you last visited...
 
 Same condition syntax as choice-level `[requires]` and `@if` (see section 5). No prerequisites = no gating (backwards compatible).
 
+Encounter-level `[requires]` also controls on-demand encounter visibility at POIs: dungeon hubs and settlement notices only show encounters whose requirements the player meets.
+
 **Encoding:** UTF-8. Normalize line endings to `\n` before parsing.
 
 ---

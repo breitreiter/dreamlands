@@ -6,6 +6,7 @@ import type {
   InnQuoteResponse,
   BankResponse,
   DiscoveryInfo,
+  NoticesResponse,
 } from "./types";
 
 declare const __API_VERSION__: string;
@@ -69,6 +70,7 @@ export async function action(
     bankIndex?: number;
     offerIndex?: number;
     offerId?: string;
+    encounterId?: string;
   }
 ): Promise<GameResponse> {
   return post(`${BASE}/${id}/action`, body);
@@ -88,6 +90,12 @@ export async function getDiscoveries(
   id: string
 ): Promise<DiscoveryInfo[]> {
   return get(`${BASE}/${id}/discoveries`);
+}
+
+export async function getNotices(
+  id: string
+): Promise<NoticesResponse> {
+  return get(`${BASE}/${id}/notices`);
 }
 
 export async function getInnQuote(

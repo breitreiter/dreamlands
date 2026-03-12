@@ -27,6 +27,9 @@ public class GameResponse
     // Market order results
     public MarketOrderResultInfo? MarketResult { get; init; }
 
+    // Dungeon hub
+    public DungeonHubInfo? DungeonHub { get; init; }
+
     // Camp
     public CampInfo? Camp { get; init; }
 
@@ -250,12 +253,26 @@ public class CampEventInfo
     public string Description { get; init; } = "";
 }
 
+public class DungeonHubInfo
+{
+    public string DungeonId { get; init; } = "";
+    public string Name { get; init; } = "";
+    public List<EncounterSummary> Encounters { get; init; } = [];
+}
+
+public class EncounterSummary
+{
+    public string Id { get; init; } = "";
+    public string Title { get; init; } = "";
+}
+
 public class ActionRequest
 {
     public string Action { get; set; } = "";
     public string? Direction { get; set; }
     public int? ChoiceIndex { get; set; }
     public string? ItemId { get; set; }
+    public string? EncounterId { get; set; }
     public string? Slot { get; set; }
     public int? Quantity { get; set; }
     public MarketOrderRequest? Order { get; set; }

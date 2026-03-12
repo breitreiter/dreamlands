@@ -2,7 +2,7 @@ import { GameProvider, useGame } from "./GameContext";
 import Splash from "./screens/Splash";
 import Explore from "./screens/Explore";
 import Encounter from "./screens/Encounter";
-
+import DungeonHub from "./screens/DungeonHub";
 import GameOver from "./screens/GameOver";
 import Camp from "./screens/Camp";
 
@@ -21,7 +21,8 @@ function GameRouter() {
           </button>
         </div>
       )}
-      {response.mode === "exploring" && <Explore state={response} />}
+      {response.mode === "exploring" && response.dungeonHub && <DungeonHub hub={response.dungeonHub} />}
+      {response.mode === "exploring" && !response.dungeonHub && <Explore state={response} />}
       {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
       {response.mode === "game_over" && <GameOver state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}

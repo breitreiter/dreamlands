@@ -19,8 +19,8 @@ import {
   AlertDialogFooter,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { getDiscoveries } from "../api/client";
-import type { GameResponse, DeliveryInfo, DiscoveryInfo } from "../api/types";
+import { getDiscoveries, getNotices } from "../api/client";
+import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo } from "../api/types";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -151,13 +151,14 @@ function gridToLatLngTopRight(x: number, y: number): LatLngExpression {
   return [lat + tileLng * 0.35, lng + tileLng * 0.35];
 }
 
-const IMPLEMENTED_SERVICES = new Set(["market", "bank", "inn", "chapterhouse"]);
+const IMPLEMENTED_SERVICES = new Set(["market", "bank", "inn", "chapterhouse", "notices"]);
 
 const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   market: { icon: "two-coins.svg", label: "Market" },
   bank: { icon: "locked-chest.svg", label: "Bank" },
   inn: { icon: "wood-cabin.svg", label: "Inn" },
   chapterhouse: { icon: "byzantin-temple.svg", label: "Chapterhouse" },
+  notices: { icon: "tied-scroll.svg", label: "Notices" },
 };
 
 function InstrumentCluster({
@@ -292,6 +293,61 @@ function InstrumentCluster({
   );
 }
 
+function NoticesScreen({ gameId, onBack }: { gameId: string; onBack: () => void }) {
+  const { doAction, loading } = useGame();
+  const [notices, setNotices] = useState<EncounterSummaryInfo[]>([]);
+  const [fetching, setFetching] = useState(true);
+
+  useEffect(() => {
+    getNotices(gameId).then(r => setNotices(r.encounters)).catch(() => {}).finally(() => setFetching(false));
+  }, [gameId]);
+
+  return (
+    <div className="h-full flex items-center justify-center bg-page text-primary">
+      <div className="w-full max-w-[520px] px-6">
+        <h1 className="font-header text-[32px] text-accent mb-6">Notices</h1>
+
+        {fetching ? (
+          <p className="text-dim">Loading...</p>
+        ) : notices.length > 0 ? (
+          <div className="space-y-4">
+            {notices.map((enc) => (
+              <button
+                key={enc.id}
+                onClick={async () => {
+                  await doAction({ action: "start_encounter", encounterId: enc.id });
+                  onBack();
+                }}
+                disabled={loading}
+                className="w-full text-left flex items-start gap-3
+                           disabled:text-muted transition-colors group cursor-pointer"
+              >
+                <img
+                  src="/world/assets/icons/sun.svg"
+                  alt=""
+                  className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100
+                             transition-opacity"
+                />
+                <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                  {enc.title}
+                </span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p className="text-dim">No notices posted here.</p>
+        )}
+
+        <div className="mt-8">
+          <Button variant="secondary" onClick={onBack}>
+            Back
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Explore({ state }: { state: GameResponse }) {
   const { doAction, loading, gameId } = useGame();
   const [showInventory, setShowInventory] = useState(false);
@@ -353,6 +409,8 @@ export default function Explore({ state }: { state: GameResponse }) {
   if (activeService === "bank") return <BankScreen state={state} onBack={() => setActiveService(null)} />;
   if (activeService === "inn" || activeService === "chapterhouse")
     return <Inn state={state} isChapterhouse={activeService === "chapterhouse"} onBack={() => setActiveService(null)} />;
+  if (activeService === "notices")
+    return <NoticesScreen gameId={gameId!} onBack={() => setActiveService(null)} />;
   if (showInventory) return <Inventory state={state} onClose={() => setShowInventory(false)} />;
 
   return (

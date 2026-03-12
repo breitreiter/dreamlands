@@ -24,6 +24,20 @@ public static class EncounterSelection
         return $"{dir}/tier{tier}";
     }
 
+    public static string? GetPoiCategory(Dreamlands.Map.Node node)
+    {
+        if (node.Poi == null) return null;
+        if (!TerrainDirs.TryGetValue(node.Terrain, out var dir))
+            return null;
+
+        return node.Poi.Kind switch
+        {
+            PoiKind.Dungeon when node.Poi.DungeonId != null => $"arcs/{dir}/{node.Poi.DungeonId}",
+            PoiKind.Settlement => $"settlements/{dir}",
+            _ => null,
+        };
+    }
+
     public static Encounter.Encounter? PickOverworld(GameSession session, Dreamlands.Map.Node node)
     {
         var category = GetCategory(node);
@@ -39,23 +53,40 @@ public static class EncounterSelection
         return available[session.Rng.Next(available.Count)];
     }
 
-    public static Encounter.Encounter? GetDungeonStart(GameSession session, string dungeonId)
+    public static Encounter.Encounter? GetDungeonStart(GameSession session, Dreamlands.Map.Node node)
     {
-        var category = $"dungeons/{dungeonId}";
+        var category = GetPoiCategory(node);
+        if (category == null) return null;
+
         var pool = session.Bundle.GetByCategory(category);
         return pool.FirstOrDefault(e => e.Id.Equals("Start", StringComparison.OrdinalIgnoreCase))
             ?? pool.FirstOrDefault();
     }
 
-    public static Encounter.Encounter? ResolveNavigation(GameSession session, string encounterId)
+    public static Encounter.Encounter? ResolveNavigation(GameSession session, string encounterId, Dreamlands.Map.Node node)
     {
-        if (session.Player.CurrentDungeonId is { } dungeonId)
+        if (session.Player.CurrentDungeonId != null)
         {
-            var category = $"dungeons/{dungeonId}";
-            var pool = session.Bundle.GetByCategory(category);
-            var match = pool.FirstOrDefault(e => e.Id.Equals(encounterId, StringComparison.OrdinalIgnoreCase));
-            if (match != null) return match;
+            var category = GetPoiCategory(node);
+            if (category != null)
+            {
+                var pool = session.Bundle.GetByCategory(category);
+                var match = pool.FirstOrDefault(e => e.Id.Equals(encounterId, StringComparison.OrdinalIgnoreCase));
+                if (match != null) return match;
+            }
         }
         return session.Bundle.GetById(encounterId);
+    }
+
+    public static IReadOnlyList<Encounter.Encounter> GetAvailableAtPoi(GameSession session, Dreamlands.Map.Node node)
+    {
+        var category = GetPoiCategory(node);
+        if (category == null) return [];
+
+        var pool = session.Bundle.GetByCategory(category);
+        return pool
+            .Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id))
+            .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
+            .ToList();
     }
 }

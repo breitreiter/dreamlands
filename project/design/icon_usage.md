@@ -28,6 +28,7 @@ Definitive icon mapping
 - Inn - `wood-cabin.svg`
 - Chapterhouse - `byzantin-temple.svg`
 - Bank - `locked-chest.svg`
+- Notices - `tied-scroll.svg`
 
 ## Map
 - explored settlements - `black-flag.svg`
@@ -79,5 +80,4 @@ Definitive icon mapping
 - `medieval-gate.svg`
 - `nested-hearts.svg`
 - `sextant.svg`
-- `tied-scroll.svg`
 - `treasure-map.svg`

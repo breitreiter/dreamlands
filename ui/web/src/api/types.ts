@@ -169,6 +169,21 @@ export interface DeliveryInfo {
   flavor: string | null;
 }
 
+export interface DungeonHubInfo {
+  dungeonId: string;
+  name: string;
+  encounters: EncounterSummaryInfo[];
+}
+
+export interface EncounterSummaryInfo {
+  id: string;
+  title: string;
+}
+
+export interface NoticesResponse {
+  encounters: EncounterSummaryInfo[];
+}
+
 export interface GameResponse {
   mode: "exploring" | "encounter" | "outcome" | "game_over" | "camp" | "camp_resolved";
   status: StatusInfo;
@@ -177,6 +192,7 @@ export interface GameResponse {
   encounter?: EncounterInfo;
   outcome?: OutcomeInfo;
   reason?: string;
+  dungeonHub?: DungeonHubInfo;
   camp?: CampInfo;
   inventory?: InventoryInfo;
   mechanics?: MechanicsInfo;

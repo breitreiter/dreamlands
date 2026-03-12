@@ -150,13 +150,16 @@ StatusInfo BuildStatus(PlayerState p) => new()
     }).ToList(),
 };
 
-NodeInfo BuildNodeInfo(Node node, PlayerState p)
+NodeInfo BuildNodeInfo(Node node, PlayerState p, GameSession? session = null)
 {
     List<string>? services = null;
     if (node.Poi?.Kind == PoiKind.Settlement)
     {
         var isChapterhouse = node == map.StartingCity;
         services = ["market", "bank", isChapterhouse ? "chapterhouse" : "inn"];
+
+        if (session != null && EncounterSelection.GetAvailableAtPoi(session, node).Count > 0)
+            services.Add("notices");
     }
 
     return new()
@@ -176,6 +179,23 @@ NodeInfo BuildNodeInfo(Node node, PlayerState p)
                 ? p.CompletedDungeons.Contains(node.Poi.DungeonId) : null,
             Services = services,
         } : null,
+    };
+}
+
+DungeonHubInfo? BuildDungeonHubInfo(GameSession session, Node node)
+{
+    if (session.Player.CurrentDungeonId == null) return null;
+
+    var available = EncounterSelection.GetAvailableAtPoi(session, node);
+    return new DungeonHubInfo
+    {
+        DungeonId = session.Player.CurrentDungeonId,
+        Name = node.Poi?.Name ?? session.Player.CurrentDungeonId,
+        Encounters = available.Select(e => new EncounterSummary
+        {
+            Id = e.Id,
+            Title = e.Title,
+        }).ToList(),
     };
 }
 
@@ -381,11 +401,12 @@ GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? del
 {
     Mode = "exploring",
     Status = BuildStatus(session.Player),
-    Node = BuildNodeInfo(session.CurrentNode, session.Player),
+    Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
     Exits = BuildExits(session),
     Inventory = BuildInventory(session.Player),
     Mechanics = BuildMechanics(session.Player),
     Deliveries = deliveries,
+    DungeonHub = BuildDungeonHubInfo(session, session.CurrentNode),
 };
 
 GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<Choice> choices) => new()
@@ -693,6 +714,9 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (session.Mode != SessionMode.Exploring)
                 return Results.BadRequest(new { error = "Cannot move while not exploring" });
 
+            if (player.CurrentDungeonId != null)
+                return Results.BadRequest(new { error = "Cannot move while in a dungeon — leave the dungeon first" });
+
             if (!Enum.TryParse<Direction>(req.Direction, true, out var dir))
                 return Results.BadRequest(new { error = $"Invalid direction: {req.Direction}" });
 
@@ -806,7 +830,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                     switch (finished.Reason)
                     {
                         case FinishReason.NavigatedTo:
-                            var next = EncounterSelection.ResolveNavigation(session, finished.NavigateToId!);
+                            var next = EncounterSelection.ResolveNavigation(session, finished.NavigateToId!, session.CurrentNode);
                             if (next != null)
                             {
                                 var step = EncounterRunner.Begin(session, next);
@@ -820,6 +844,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                                     Inventory = BuildInventory(player),
                                 });
                             }
+                            // Navigation target not found — if in dungeon, return to hub
                             EncounterRunner.EndEncounter(session);
                             await store.Save(player);
                             return Results.Ok(BuildExploringResponse(session));
@@ -878,7 +903,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 return Results.BadRequest(new { error = "Dungeon already completed" });
 
             player.CurrentDungeonId = node.Poi.DungeonId;
-            var start = EncounterSelection.GetDungeonStart(session, node.Poi.DungeonId);
+            var start = EncounterSelection.GetDungeonStart(session, node);
             if (start == null)
             {
                 player.CurrentDungeonId = null;
@@ -888,6 +913,36 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             var step = EncounterRunner.Begin(session, start);
             await store.Save(player);
             response = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices);
+            break;
+        }
+
+        case "start_encounter":
+        {
+            if (session.Mode != SessionMode.Exploring)
+                return Results.BadRequest(new { error = "Cannot start encounter while not exploring" });
+
+            if (string.IsNullOrEmpty(req.EncounterId))
+                return Results.BadRequest(new { error = "encounterId required" });
+
+            var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
+            var target = available.FirstOrDefault(e => e.Id.Equals(req.EncounterId, StringComparison.OrdinalIgnoreCase));
+            if (target == null)
+                return Results.BadRequest(new { error = $"Encounter '{req.EncounterId}' not available at this location" });
+
+            var step = EncounterRunner.Begin(session, target);
+            await store.Save(player);
+            response = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices);
+            break;
+        }
+
+        case "leave_dungeon":
+        {
+            if (player.CurrentDungeonId == null)
+                return Results.BadRequest(new { error = "Not in a dungeon" });
+
+            player.CurrentDungeonId = null;
+            await store.Save(player);
+            response = BuildExploringResponse(session);
             break;
         }
 
@@ -1276,6 +1331,28 @@ app.MapGet("/api/game/{id}/bank", async (string id) =>
         capacity = balance.Settlements.BankCapacity,
         packFull = player.Pack.Count >= player.PackCapacity,
         haversackFull = player.Haversack.Count >= player.HaversackCapacity,
+    });
+});
+
+app.MapGet("/api/game/{id}/notices", async (string id) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var session = BuildSession(player);
+    var node = session.CurrentNode;
+
+    if (node.Poi?.Kind != PoiKind.Settlement)
+        return Results.BadRequest(new { error = "Not at a settlement" });
+
+    var available = EncounterSelection.GetAvailableAtPoi(session, node);
+    return Results.Ok(new
+    {
+        encounters = available.Select(e => new EncounterSummary
+        {
+            Id = e.Id,
+            Title = e.Title,
+        }).ToList(),
     });
 });
 

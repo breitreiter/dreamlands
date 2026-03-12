@@ -26,6 +26,42 @@ public class EncounterSelectionTests
         Assert.Null(EncounterSelection.GetCategory(node));
     }
 
+    [Theory]
+    [InlineData(Terrain.Plains, "arcs/plains/crypt")]
+    [InlineData(Terrain.Forest, "arcs/forest/crypt")]
+    [InlineData(Terrain.Mountains, "arcs/mountains/crypt")]
+    public void GetPoiCategory_Dungeon_ReturnsArcsBiomePath(Terrain terrain, string expected)
+    {
+        var node = new Node(0, 0, terrain);
+        node.Poi = new Poi(PoiKind.Dungeon, "Dungeon") { DungeonId = "crypt" };
+        Assert.Equal(expected, EncounterSelection.GetPoiCategory(node));
+    }
+
+    [Theory]
+    [InlineData(Terrain.Plains, "settlements/plains")]
+    [InlineData(Terrain.Forest, "settlements/forest")]
+    public void GetPoiCategory_Settlement_ReturnsSettlementsBiomePath(Terrain terrain, string expected)
+    {
+        var node = new Node(0, 0, terrain);
+        node.Poi = new Poi(PoiKind.Settlement, "Settlement");
+        Assert.Equal(expected, EncounterSelection.GetPoiCategory(node));
+    }
+
+    [Fact]
+    public void GetPoiCategory_NoPoi_ReturnsNull()
+    {
+        var node = new Node(0, 0, Terrain.Plains);
+        Assert.Null(EncounterSelection.GetPoiCategory(node));
+    }
+
+    [Fact]
+    public void GetPoiCategory_Lake_ReturnsNull()
+    {
+        var node = new Node(0, 0, Terrain.Lake);
+        node.Poi = new Poi(PoiKind.Dungeon, "Dungeon") { DungeonId = "crypt" };
+        Assert.Null(EncounterSelection.GetPoiCategory(node));
+    }
+
     [Fact]
     public void PickOverworld_FiltersUsedEncounters()
     {
@@ -76,12 +112,15 @@ public class EncounterSelectionTests
     public void GetDungeonStart_PrefersStartId()
     {
         var bundle = Helpers.MakeBundle(
-            new Helpers.BundleEntry("Other", "dungeons/crypt"),
-            new Helpers.BundleEntry("Start", "dungeons/crypt"));
+            new Helpers.BundleEntry("Other", "arcs/plains/crypt"),
+            new Helpers.BundleEntry("Start", "arcs/plains/crypt"));
 
-        var session = Helpers.MakeSession(bundle: bundle);
+        var map = Helpers.MakeMap();
+        map[1, 1].Poi = new Poi(PoiKind.Dungeon, "Dungeon") { DungeonId = "crypt" };
 
-        var enc = EncounterSelection.GetDungeonStart(session, "crypt");
+        var session = Helpers.MakeSession(map: map, bundle: bundle);
+
+        var enc = EncounterSelection.GetDungeonStart(session, session.CurrentNode);
 
         Assert.NotNull(enc);
         Assert.Equal("Start", enc.Id);
@@ -129,18 +168,69 @@ public class EncounterSelectionTests
     [Fact]
     public void ResolveNavigation_InDungeon_SearchesDungeonFirst()
     {
-        // Bundle has "room2" only in the dungeon category.
-        // ResolveNavigation should find it there before falling back to GetById.
         var bundle = Helpers.MakeBundle(
-            new Helpers.BundleEntry("room2", "dungeons/crypt"),
+            new Helpers.BundleEntry("room2", "arcs/plains/crypt"),
             new Helpers.BundleEntry("other_enc", "plains/tier1"));
 
-        var session = Helpers.MakeSession(bundle: bundle);
+        var map = Helpers.MakeMap();
+        map[1, 1].Poi = new Poi(PoiKind.Dungeon, "Dungeon") { DungeonId = "crypt" };
+
+        var session = Helpers.MakeSession(map: map, bundle: bundle);
         session.Player.CurrentDungeonId = "crypt";
 
-        var enc = EncounterSelection.ResolveNavigation(session, "room2");
+        var enc = EncounterSelection.ResolveNavigation(session, "room2", session.CurrentNode);
 
         Assert.NotNull(enc);
-        Assert.Equal("dungeons/crypt", enc.Category);
+        Assert.Equal("arcs/plains/crypt", enc.Category);
+    }
+
+    [Fact]
+    public void GetAvailableAtPoi_FiltersByUsedAndRequires()
+    {
+        var bundle = Helpers.MakeBundle(
+            new Helpers.BundleEntry("Start", "arcs/plains/crypt"),
+            new Helpers.BundleEntry("Room1", "arcs/plains/crypt"),
+            new Helpers.BundleEntry("Room2", "arcs/plains/crypt", Requires: new[] { "tag has_key" }));
+
+        var map = Helpers.MakeMap();
+        map[1, 1].Poi = new Poi(PoiKind.Dungeon, "Dungeon") { DungeonId = "crypt" };
+
+        var session = Helpers.MakeSession(map: map, bundle: bundle);
+        session.Player.UsedEncounterIds.Add("Start");
+
+        var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
+
+        // Start is used, Room2 requires tag — only Room1 remains
+        Assert.Single(available);
+        Assert.Equal("Room1", available[0].Id);
+    }
+
+    [Fact]
+    public void GetAvailableAtPoi_NoCategoryReturnsEmpty()
+    {
+        var map = Helpers.MakeMap();
+        // No POI on node
+        var session = Helpers.MakeSession(map: map);
+
+        var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
+
+        Assert.Empty(available);
+    }
+
+    [Fact]
+    public void GetAvailableAtPoi_Settlement_ReturnsByBiome()
+    {
+        var bundle = Helpers.MakeBundle(
+            new Helpers.BundleEntry("notice1", "settlements/plains"),
+            new Helpers.BundleEntry("notice2", "settlements/plains"));
+
+        var map = Helpers.MakeMap();
+        map[1, 1].Poi = new Poi(PoiKind.Settlement, "Settlement");
+
+        var session = Helpers.MakeSession(map: map, bundle: bundle);
+
+        var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
+
+        Assert.Equal(2, available.Count);
     }
 }

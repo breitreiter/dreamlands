@@ -28,6 +28,7 @@ interface GameContextValue extends GameState {
     bankIndex?: number;
     offerIndex?: number;
     offerId?: string;
+    encounterId?: string;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
 }
