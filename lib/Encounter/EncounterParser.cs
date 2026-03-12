@@ -14,6 +14,9 @@ public static partial class EncounterParser
     [GeneratedRegex(@"\[requires\s+(.+?)\]\s*$")]
     private static partial Regex RequiresPattern();
 
+    [GeneratedRegex(@"^\[(\w+)\s+(.+?)\]\s*$")]
+    private static partial Regex FrontMatterPattern();
+
     /// <summary>Parse encounter source text. Returns a result with either a valid encounter or errors.</summary>
     public static ParseResult Parse(string source)
     {
@@ -29,22 +32,50 @@ public static partial class EncounterParser
         // Title: first line
         var title = lines[0].Trim();
 
-        // Encounter-level [requires ...] lines after the title
+        // Front-matter: [requires ...], [trigger ...], [tier ...] after the title
         var requires = new List<string>();
+        string? trigger = null;
+        int? tier = null;
         int bodyStart = 1;
         for (int i = 1; i < lines.Length; i++)
         {
             var trimmed = lines[i].Trim();
-            if (string.IsNullOrEmpty(trimmed)) continue; // skip blanks between title and requires
-            var reqMatch = RequiresPattern().Match(trimmed);
-            if (reqMatch.Success && trimmed == reqMatch.Value) // entire line is [requires ...]
+            if (string.IsNullOrEmpty(trimmed)) continue; // skip blanks between title and front-matter
+            var fmMatch = FrontMatterPattern().Match(trimmed);
+            if (fmMatch.Success)
             {
-                requires.Add(reqMatch.Groups[1].Value.Trim());
+                var key = fmMatch.Groups[1].Value;
+                var value = fmMatch.Groups[2].Value.Trim();
+                switch (key)
+                {
+                    case "requires":
+                        requires.Add(value);
+                        break;
+                    case "trigger":
+                        if (trigger != null)
+                            errors.Add(new ParseError { Line = i + 1, Message = "Duplicate [trigger]. Only one allowed per encounter." });
+                        else if (value is not ("road" or "settlement"))
+                            errors.Add(new ParseError { Line = i + 1, Message = $"Invalid trigger '{value}'. Must be 'road' or 'settlement'." });
+                        else
+                            trigger = value;
+                        break;
+                    case "tier":
+                        if (tier != null)
+                            errors.Add(new ParseError { Line = i + 1, Message = "Duplicate [tier]. Only one allowed per encounter." });
+                        else if (int.TryParse(value, out var t) && t is >= 1 and <= 3)
+                            tier = t;
+                        else
+                            errors.Add(new ParseError { Line = i + 1, Message = $"Invalid tier '{value}'. Must be 1, 2, or 3." });
+                        break;
+                    default:
+                        goto endFrontMatter;
+                }
                 bodyStart = i + 1;
             }
             else
-                break; // first non-blank, non-requires line starts the body
+                break; // first non-blank, non-front-matter line starts the body
         }
+        endFrontMatter:
 
         // Body: from bodyStart until a line that starts with "choices:" at column 0
         int choicesLineIndex = -1;
@@ -60,7 +91,7 @@ public static partial class EncounterParser
         if (choicesLineIndex < 0)
         {
             errors.Add(new ParseError { Message = "Missing 'choices:' delimiter." });
-            return new ParseResult { Encounter = new Encounter { Title = title, Requires = requires, Body = JoinBody(lines, bodyStart, lines.Length) }, Errors = errors };
+            return new ParseResult { Encounter = new Encounter { Title = title, Trigger = trigger, Tier = tier, Requires = requires, Body = JoinBody(lines, bodyStart, lines.Length) }, Errors = errors };
         }
 
         var body = JoinBody(lines, bodyStart, choicesLineIndex);
@@ -70,7 +101,7 @@ public static partial class EncounterParser
 
         return new ParseResult
         {
-            Encounter = new Encounter { Title = title, Requires = requires, Body = body, Choices = choices },
+            Encounter = new Encounter { Title = title, Trigger = trigger, Tier = tier, Requires = requires, Body = body, Choices = choices },
             Errors = errors
         };
     }

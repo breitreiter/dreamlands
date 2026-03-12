@@ -8,6 +8,8 @@ public sealed class Encounter
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
     public bool Recurring { get; init; }
+    public string? Trigger { get; init; }
+    public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = Array.Empty<string>();
     public IReadOnlyList<Choice> Choices { get; init; } = Array.Empty<Choice>();
 }

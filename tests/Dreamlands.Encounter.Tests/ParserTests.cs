@@ -363,6 +363,149 @@ public class ParserTests
     }
 
     [Fact]
+    public void Trigger_Parsed()
+    {
+        var source = """
+            Test
+            [trigger settlement]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Equal("settlement", result.Encounter!.Trigger);
+    }
+
+    [Fact]
+    public void Tier_Parsed()
+    {
+        var source = """
+            Test
+            [tier 2]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, result.Encounter!.Tier);
+    }
+
+    [Fact]
+    public void AllFrontMatter_Parsed()
+    {
+        var source = """
+            Test
+            [trigger settlement]
+            [tier 3]
+            [requires tag some_flag]
+
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var enc = result.Encounter!;
+        Assert.Equal("settlement", enc.Trigger);
+        Assert.Equal(3, enc.Tier);
+        Assert.Single(enc.Requires);
+        Assert.Equal("tag some_flag", enc.Requires[0]);
+        Assert.Contains("Body.", enc.Body);
+    }
+
+    [Fact]
+    public void NoTriggerOrTier_DefaultsNull()
+    {
+        var source = """
+            Test
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Null(result.Encounter!.Trigger);
+        Assert.Null(result.Encounter!.Tier);
+    }
+
+    [Fact]
+    public void InvalidTrigger_Error()
+    {
+        var source = """
+            Test
+            [trigger dungeon]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Invalid trigger"));
+    }
+
+    [Fact]
+    public void InvalidTier_Error()
+    {
+        var source = """
+            Test
+            [tier 5]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Invalid tier"));
+    }
+
+    [Fact]
+    public void DuplicateTrigger_Error()
+    {
+        var source = """
+            Test
+            [trigger road]
+            [trigger settlement]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Duplicate [trigger]"));
+    }
+
+    [Fact]
+    public void DuplicateTier_Error()
+    {
+        var source = """
+            Test
+            [tier 1]
+            [tier 2]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Duplicate [tier]"));
+    }
+
+    [Fact]
     public void MultipleChoices_AllParsed()
     {
         var source = """

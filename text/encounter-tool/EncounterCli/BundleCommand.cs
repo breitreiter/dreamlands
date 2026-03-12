@@ -158,6 +158,8 @@ static class BundleCommand
             id,
             category,
             recurring,
+            trigger = enc.Trigger,
+            tier = enc.Tier,
             title = enc.Title,
             body = enc.Body,
             requires = enc.Requires,

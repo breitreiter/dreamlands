@@ -13,25 +13,30 @@ Encounter files use a token-driven format. Four sigils identify the role of each
 | Part | Definition |
 |------|------------|
 | **Title** | First line of the file. |
-| **Prerequisites** | Zero or more `[requires <condition>]` lines immediately after the title. |
-| **Body** | All lines after title/prerequisites until `choices:`. Prose, blank lines, and inline markdown are valid. |
+| **Front-matter** | Zero or more `[trigger ...]`, `[tier ...]`, and `[requires ...]` lines immediately after the title. |
+| **Body** | All lines after title/front-matter until `choices:`. Prose, blank lines, and inline markdown are valid. |
 | **Choices block** | From the line `choices:` to end of file. Parsed per section 3. |
 
 The `choices:` delimiter must appear at column 0, on its own line.
 
-### Prerequisites
+### Front-matter
 
-Optional `[requires <condition>]` lines between the title and the body gate the entire encounter. The encounter selection system skips any encounter whose prerequisites are not met. All conditions must pass (AND semantics). Blank lines between title and prerequisites are ignored.
+Optional metadata lines between the title and the body. Order doesn't matter; blank lines between them are ignored. Supported fields:
+
+**`[trigger <value>]`** — Where this encounter fires: `road` or `settlement`. At most one per encounter. No `[trigger]` = road (default, backwards compatible).
+
+**`[tier <value>]`** — Which tier this encounter belongs to: `1`, `2`, or `3`. At most one per encounter. No `[tier]` = any tier.
+
+**`[requires <condition>]`** — Gate the entire encounter. The encounter selection system skips any encounter whose prerequisites are not met. Multiple `[requires]` lines are AND-ed. Same condition syntax as choice-level `[requires]` and `@if` (see section 5). No `[requires]` = no gating.
 
 ```
-Dara's New Commons
-[requires tag briar_backed_dara]
-[requires quality exiles 2]
+The Old Man's Story
+[trigger settlement]
+[tier 1]
+[requires tag brides_cave_known]
 
-The commune has grown since you last visited...
+The market square is winding down...
 ```
-
-Same condition syntax as choice-level `[requires]` and `@if` (see section 5). No prerequisites = no gating (backwards compatible).
 
 Encounter-level `[requires]` also controls on-demand encounter visibility at POIs: dungeon hubs and settlement notices only show encounters whose requirements the player meets.
 
