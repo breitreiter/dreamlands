@@ -188,4 +188,4 @@ dungeons:
 # - Tier 2 (Frontier) — middle regions
 # - Tier 3 (Wildlands) — farthest region from start
 # - decal paths are relative to assets/map/decals/poi/dungeons/
-# - folder paths are relative to text/encounters/dungeons/
+# - folder paths are relative to text/encounters/arcs/{biome}/
