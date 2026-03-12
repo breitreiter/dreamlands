@@ -299,6 +299,70 @@ public class ParserTests
     }
 
     [Fact]
+    public void EncounterRequires_SingleCondition_Parsed()
+    {
+        var source = """
+            The Return
+            [requires tag briar_backed_dara]
+
+            You arrive at the commons.
+            choices:
+            * Enter
+            You step inside.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var enc = result.Encounter!;
+        Assert.Single(enc.Requires);
+        Assert.Equal("tag briar_backed_dara", enc.Requires[0]);
+        Assert.Contains("You arrive", enc.Body);
+        Assert.DoesNotContain("requires", enc.Body);
+    }
+
+    [Fact]
+    public void EncounterRequires_MultipleConditions_Parsed()
+    {
+        var source = """
+            The Return
+            [requires tag briar_backed_dara]
+            [requires quality exiles 2]
+
+            The commune has grown.
+            choices:
+            * Enter
+            You step inside.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var enc = result.Encounter!;
+        Assert.Equal(2, enc.Requires.Count);
+        Assert.Equal("tag briar_backed_dara", enc.Requires[0]);
+        Assert.Equal("quality exiles 2", enc.Requires[1]);
+        Assert.Contains("commune has grown", enc.Body);
+        Assert.DoesNotContain("requires", enc.Body);
+    }
+
+    [Fact]
+    public void EncounterRequires_None_EmptyList()
+    {
+        var source = """
+            The Old Well
+            You peer into the darkness below.
+            choices:
+            * Look down
+            You see nothing but blackness.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Empty(result.Encounter!.Requires);
+    }
+
+    [Fact]
     public void MultipleChoices_AllParsed()
     {
         var source = """

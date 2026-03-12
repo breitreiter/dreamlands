@@ -78,6 +78,13 @@ static class CheckCommand
     private static List<string> ValidateVocabulary(Encounter encounter)
     {
         var errors = new List<string>();
+        foreach (var req in encounter.Requires)
+        {
+            var err = ActionVerb.Validate(req, VerbUsage.Condition);
+            if (err != null)
+                errors.Add($"encounter [requires {req}]: {err}");
+            ValidateItemId(req, errors);
+        }
         foreach (var choice in encounter.Choices)
         {
             if (choice.Requires is { } requires)

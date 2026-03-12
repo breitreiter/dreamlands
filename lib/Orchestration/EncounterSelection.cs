@@ -1,4 +1,5 @@
 using Dreamlands.Encounter;
+using Dreamlands.Game;
 using Dreamlands.Map;
 using Dreamlands.Rules;
 
@@ -29,7 +30,10 @@ public static class EncounterSelection
         if (category == null) return null;
 
         var pool = session.Bundle.GetByCategory(category);
-        var available = pool.Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id)).ToList();
+        var available = pool
+            .Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id))
+            .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
+            .ToList();
         if (available.Count == 0) return null;
 
         return available[session.Rng.Next(available.Count)];

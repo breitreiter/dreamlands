@@ -13,10 +13,25 @@ Encounter files use a token-driven format. Four sigils identify the role of each
 | Part | Definition |
 |------|------------|
 | **Title** | First line of the file. |
-| **Body** | All lines from line 2 until `choices:`. Prose, blank lines, and inline markdown are valid. |
+| **Prerequisites** | Zero or more `[requires <condition>]` lines immediately after the title. |
+| **Body** | All lines after title/prerequisites until `choices:`. Prose, blank lines, and inline markdown are valid. |
 | **Choices block** | From the line `choices:` to end of file. Parsed per section 3. |
 
 The `choices:` delimiter must appear at column 0, on its own line.
+
+### Prerequisites
+
+Optional `[requires <condition>]` lines between the title and the body gate the entire encounter. The encounter selection system skips any encounter whose prerequisites are not met. All conditions must pass (AND semantics). Blank lines between title and prerequisites are ignored.
+
+```
+Dara's New Commons
+[requires tag briar_backed_dara]
+[requires quality exiles 2]
+
+The commune has grown since you last visited...
+```
+
+Same condition syntax as choice-level `[requires]` and `@if` (see section 5). No prerequisites = no gating (backwards compatible).
 
 **Encoding:** UTF-8. Normalize line endings to `\n` before parsing.
 
@@ -174,6 +189,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `meets <skill> <target>` | skill, int | Branch on whether total skill bonus (skill + gear) meets a threshold — deterministic, no dice |
 | `has <item_id>` | item id | Branch on whether player has an item |
 | `tag <tag_id>` | tag id | Branch on whether a world-state tag is set |
+| `quality <id> <threshold>` | quality id, signed int | Branch on a numeric quality. Positive threshold: value ≥ n. Negative threshold: value ≤ n. Unset qualities default to 0. |
 
 ### Game commands (used with `+`)
 
@@ -182,6 +198,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `open <id>` | encounter id | Navigate to another encounter |
 | `add_tag <id>` | tag id | Set a world-state flag |
 | `remove_tag <id>` | tag id | Clear a world-state flag |
+| `quality <id> <amount>` | quality id, signed int | Adjust a numeric quality by a signed amount (positive or negative) |
 | `add_item <id>` | item id | Give player a specific item |
 | `add_random_items <count> <category>` | int, category | Give random items from a category |
 | `lose_random_item` | (none) | Player loses a random item |
@@ -208,6 +225,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | **time period** | `morning`, `afternoon`, `evening`, `night` |
 | **id** | Free-form string (item, tag, encounter, or condition identifier) |
 | **int** | Positive integer |
+| **signed int** | Integer, positive or negative (e.g. `2`, `-1`) |
 | **category** | Item category name (e.g. `food`) |
 | **skip_time flags** | `no_sleep`, `no_meal`, `no_biome` — suppress daily-rest accounting when time transit crosses a rest period |
 

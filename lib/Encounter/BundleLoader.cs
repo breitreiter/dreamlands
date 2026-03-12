@@ -91,6 +91,7 @@ public sealed class EncounterBundle
                 Recurring = e.Recurring,
                 Title = e.Title,
                 Body = e.Body,
+                Requires = e.Requires ?? [],
                 Choices = choices
             });
         }
@@ -121,7 +122,7 @@ public sealed class EncounterBundle
     record BundleDto(IndexDto Index, List<EncounterDto> Encounters);
     record IndexDto(Dictionary<string, IndexEntryDto>? ById, Dictionary<string, List<string>>? ByCategory);
     record IndexEntryDto(string Category, int EncounterIndex);
-    record EncounterDto(string Id, string Category, bool Recurring, string Title, string Body, List<ChoiceDto> Choices);
+    record EncounterDto(string Id, string Category, bool Recurring, string Title, string Body, List<string>? Requires, List<ChoiceDto> Choices);
     record ChoiceDto(string OptionText, string? OptionLink, string? OptionPreview, string? Requires,
         ConditionalDto? Conditional, SingleDto? Single);
     record ConditionalDto(string Preamble, List<BranchDto> Branches, OutcomePartDto? Fallback);

@@ -88,6 +88,45 @@ public class EncounterSelectionTests
     }
 
     [Fact]
+    public void PickOverworld_FiltersOutWhenRequiresFails()
+    {
+        var bundle = Helpers.MakeBundle(
+            new Helpers.BundleEntry("gated", "plains/tier1", Requires: new[] { "tag special_flag" }),
+            new Helpers.BundleEntry("open", "plains/tier1"));
+
+        var map = Helpers.MakeMap();
+        var region = new Region(1, Terrain.Plains) { Tier = 1 };
+        map[1, 1].Region = region;
+
+        var session = Helpers.MakeSession(map: map, bundle: bundle);
+        // Player does NOT have "special_flag" tag, so "gated" should be filtered out
+
+        var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
+
+        Assert.NotNull(picked);
+        Assert.Equal("open", picked.Id);
+    }
+
+    [Fact]
+    public void PickOverworld_IncludesWhenRequiresPasses()
+    {
+        var bundle = Helpers.MakeBundle(
+            new Helpers.BundleEntry("gated", "plains/tier1", Requires: new[] { "tag special_flag" }));
+
+        var map = Helpers.MakeMap();
+        var region = new Region(1, Terrain.Plains) { Tier = 1 };
+        map[1, 1].Region = region;
+
+        var session = Helpers.MakeSession(map: map, bundle: bundle);
+        session.Player.Tags.Add("special_flag");
+
+        var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
+
+        Assert.NotNull(picked);
+        Assert.Equal("gated", picked.Id);
+    }
+
+    [Fact]
     public void ResolveNavigation_InDungeon_SearchesDungeonFirst()
     {
         // Bundle has "room2" only in the dungeon category.

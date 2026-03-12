@@ -34,6 +34,7 @@ internal static class Helpers
                 category = e.Category,
                 title = e.Title ?? e.Id,
                 body = "Test body.",
+                requires = e.Requires ?? Array.Empty<string>(),
                 choices = e.Choices ?? new[]
                 {
                     new
@@ -73,5 +74,6 @@ internal static class Helpers
         string Category,
         string? Title = null,
         string[]? Mechanics = null,
-        object[]? Choices = null);
+        object[]? Choices = null,
+        string[]? Requires = null);
 }

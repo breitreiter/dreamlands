@@ -160,6 +160,7 @@ static class BundleCommand
             recurring,
             title = enc.Title,
             body = enc.Body,
+            requires = enc.Requires,
             choices
         };
     }

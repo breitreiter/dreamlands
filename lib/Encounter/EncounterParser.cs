@@ -29,9 +29,26 @@ public static partial class EncounterParser
         // Title: first line
         var title = lines[0].Trim();
 
-        // Body: from line 2 until a line that starts with "choices:" at column 0
-        int choicesLineIndex = -1;
+        // Encounter-level [requires ...] lines after the title
+        var requires = new List<string>();
+        int bodyStart = 1;
         for (int i = 1; i < lines.Length; i++)
+        {
+            var trimmed = lines[i].Trim();
+            if (string.IsNullOrEmpty(trimmed)) continue; // skip blanks between title and requires
+            var reqMatch = RequiresPattern().Match(trimmed);
+            if (reqMatch.Success && trimmed == reqMatch.Value) // entire line is [requires ...]
+            {
+                requires.Add(reqMatch.Groups[1].Value.Trim());
+                bodyStart = i + 1;
+            }
+            else
+                break; // first non-blank, non-requires line starts the body
+        }
+
+        // Body: from bodyStart until a line that starts with "choices:" at column 0
+        int choicesLineIndex = -1;
+        for (int i = bodyStart; i < lines.Length; i++)
         {
             if (lines[i].TrimEnd() == ChoicesMarker || lines[i].StartsWith(ChoicesMarker, StringComparison.Ordinal))
             {
@@ -43,17 +60,17 @@ public static partial class EncounterParser
         if (choicesLineIndex < 0)
         {
             errors.Add(new ParseError { Message = "Missing 'choices:' delimiter." });
-            return new ParseResult { Encounter = new Encounter { Title = title, Body = JoinBody(lines, 1, lines.Length) }, Errors = errors };
+            return new ParseResult { Encounter = new Encounter { Title = title, Requires = requires, Body = JoinBody(lines, bodyStart, lines.Length) }, Errors = errors };
         }
 
-        var body = JoinBody(lines, 1, choicesLineIndex);
+        var body = JoinBody(lines, bodyStart, choicesLineIndex);
 
         // Parse choices block using token-driven state machine
         var choices = ParseChoices(lines, choicesLineIndex + 1, errors);
 
         return new ParseResult
         {
-            Encounter = new Encounter { Title = title, Body = body, Choices = choices },
+            Encounter = new Encounter { Title = title, Requires = requires, Body = body, Choices = choices },
             Errors = errors
         };
     }
