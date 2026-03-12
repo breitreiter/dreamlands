@@ -1,0 +1,19 @@
+A Chance Meeting
+
+You hear her before you see her: the clatter of loose ironwork against wooden slats, the indignant squawk of a caged bird, and a woman's voice telling it to shut up in a tone that suggests this is an old argument.
+
+She rounds the bend in the trail carrying more than any one person should. Sacks of seed grain slung across both shoulders, a bundle of iron nails wrapped in oilcloth under one arm, a crate of young plants balanced on the other. A chicken in a wicker cage hangs from a strap across her chest, pecking at the latch. She is solidly built, sun-darkened, and moving with the grim momentum of someone who knows that stopping means not starting again.
+
+"Cart broke," she says, not slowing. "Axle snapped about a mile back. I've been hauling since noon." She looks you over. Your pack, your boots, your hands. "You help me carry the rest of this, I'll see you've got a hot meal and a dry bed tonight. My place isn't far."
+
+choices:
+
+* Help carry her supplies = Walk with her and ask about where she's headed
+  You take the crate of seedlings and the nails. She shifts the grain sacks and the chicken settles, mollified by the change in gait. Her name is Dara. She's been to one of the forest settlements to trade, and she's been gone two weeks.
+
+  She talks about home the way a farmer talks about a good field, with quiet satisfaction and practical detail. Three camps that decided to stop hiding from each other. Shared gardens. A storehouse. A communal kitchen. "We use real names," she says, and the pride in her voice is unmistakable. "No code names, no dead drops. We know each other."
+  +open "Along the Way"
+
+* Carry in silence = Take what you can and walk
+  You shoulder the crate and the nails without a word. Dara seems grateful not to have to sell you on it. You walk together through the late afternoon light, the forest closing in overhead, the trail narrowing to a track.
+  +open "The Commons"

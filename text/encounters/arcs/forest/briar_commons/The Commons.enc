@@ -1,0 +1,23 @@
+The Commons
+
+The clearing is real and the buildings are real. Rough timber frames, a half-shingled roof on the communal hall, garden plots marked with string and stakes. A storehouse with a proper door. A rain cistern. It's the most organized settlement you've seen in the deep forest.
+
+It's also nearly empty. A few people sit around a cold fire pit, not talking. They look up when Dara arrives. Nobody greets her. Nobody moves to help with her pack.
+
+Oskar is sitting on the storehouse steps with an axe across his knees. He nods at Dara. He doesn't stand.
+
+Dara sets down the grain sacks. She looks at the cold fire, the empty benches, the people who won't meet her eyes. She starts asking questions. The answers come reluctantly, in fragments, from people who keep glancing at each other before they speak.
+
+While she was gone, Fen left. Not dramatically. He packed his things one night and walked into the forest. The problem was what happened next. The remaining residents realized that Fen knew the location of the Commons. The layout of every building. The sleeping arrangements of every person. He knew where the food was stored and how many people were on watch at any given hour.
+
+This was always true. But nobody thought about it until Fen left.
+
+Now one of them is out there, carrying everything.
+
+choices:
+
+* Talk to Oskar = He's been sitting on those steps like he's guarding the storehouse. Maybe he is.
+  +open "Oskar's Plan"
+
+* Talk to Maren = A woman is dismantling a rain cistern, piece by piece, stacking the components in a handcart.
+  +open "Maren's Plan"
