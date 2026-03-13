@@ -1,8 +1,11 @@
 namespace Dreamlands.Rules;
 
+public enum ConditionSeverity { Minor, Severe }
+
 /// <summary>Definition of a status condition.</summary>
 public sealed class ConditionDef
 {
+    public ConditionSeverity Severity { get; init; } = ConditionSeverity.Minor;
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
     public string Biome { get; init; } = "none";
@@ -38,12 +41,12 @@ public sealed class ConditionDef
         ["irradiated"] = new()
         {
             Id = "irradiated", Name = "Irradiated", Biome = "plains", Tier = "3",
-            Stacks = 3, HealthDrain = Magnitude.Huge,
+            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
         },
         ["lattice_sickness"] = new()
         {
             Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "swamp", Tier = "3",
-            Stacks = 3, HealthDrain = Magnitude.Huge,
+            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
         },
         ["exhausted"] = new()
         {
@@ -54,7 +57,7 @@ public sealed class ConditionDef
         ["poisoned"] = new()
         {
             Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Huge,
+            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
         },
         ["lost"] = new()
         {
@@ -66,7 +69,7 @@ public sealed class ConditionDef
         ["injured"] = new()
         {
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Huge,
+            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
         },
         ["disheartened"] = new()
         {

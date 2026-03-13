@@ -129,6 +129,7 @@ export interface CampEventInfo {
 }
 
 export interface CampInfo {
+  hasSevereCondition: boolean;
   threats: CampThreatInfo[];
   events: CampEventInfo[];
 }

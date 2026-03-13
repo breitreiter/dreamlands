@@ -236,6 +236,7 @@ public class EquipmentInfo
 
 public class CampInfo
 {
+    public bool HasSevereCondition { get; init; }
     public List<CampThreatInfo> Threats { get; init; } = [];
     public List<CampEventInfo> Events { get; init; } = [];
 }

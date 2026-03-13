@@ -1006,9 +1006,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                         { FoodType = type, Description = desc };
                 });
 
+            var hasSevere = player.ActiveConditions.Keys
+                .Any(id => balance.Conditions.TryGetValue(id, out var def)
+                           && def.Severity == ConditionSeverity.Severe);
+
             var campInfo = BuildCampThreats(session);
             campInfo = new CampInfo
             {
+                HasSevereCondition = hasSevere,
                 Threats = campInfo.Threats,
                 Events = FormatCampEvents(campEvents),
             };

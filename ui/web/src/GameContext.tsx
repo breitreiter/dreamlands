@@ -1,14 +1,24 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import type { GameResponse, MarketOrder } from "./api/types";
 import * as api from "./api/client";
 
 const SAVE_KEY = "dreamlands_gameId";
+
+export interface ToastLine {
+  text: string;
+  color?: "positive" | "negative";
+}
+
+export interface ToastData {
+  lines: ToastLine[];
+}
 
 interface GameState {
   gameId: string | null;
   response: GameResponse | null;
   loading: boolean;
   error: string | null;
+  toast: ToastData | null;
 }
 
 interface GameContextValue extends GameState {
@@ -31,6 +41,8 @@ interface GameContextValue extends GameState {
     encounterId?: string;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
+  showToast: (data: ToastData) => void;
+  clearToast: () => void;
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -60,6 +72,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     response: null,
     loading: false,
     error: null,
+    toast: null,
   });
 
   const savedGameId = localStorage.getItem(SAVE_KEY);
@@ -80,6 +93,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         response: result.state,
         loading: false,
         error: null,
+        toast: null,
       });
     } catch (e) {
       setState((s) => ({
@@ -95,7 +109,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
       const result = await api.getGame(savedGameId);
-      setState({ gameId: savedGameId, response: result, loading: false, error: null });
+      setState({ gameId: savedGameId, response: result, loading: false, error: null, toast: null });
     } catch {
       localStorage.removeItem(SAVE_KEY);
       setState((s) => ({ ...s, loading: false, error: null }));
@@ -159,9 +173,25 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, error: null }));
   }, []);
 
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = useCallback((data: ToastData) => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setState((s) => ({ ...s, toast: data }));
+    toastTimer.current = setTimeout(() => {
+      setState((s) => ({ ...s, toast: null }));
+      toastTimer.current = null;
+    }, 4500);
+  }, []);
+
+  const clearToast = useCallback(() => {
+    if (toastTimer.current) { clearTimeout(toastTimer.current); toastTimer.current = null; }
+    setState((s) => ({ ...s, toast: null }));
+  }, []);
+
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, clearError }}
+      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, clearError, showToast, clearToast }}
     >
       {children}
     </GameContext.Provider>

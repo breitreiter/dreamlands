@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useGame } from "../GameContext";
-import type { GameResponse } from "../api/types";
+import { useGame, type ToastLine } from "../GameContext";
+import type { GameResponse, CampEventInfo } from "../api/types";
 import MaskedIcon from "../components/MaskedIcon";
 import parchment from "../assets/parchment.png";
 
@@ -20,13 +20,27 @@ function pickRoadIntro(day: number) {
   return roadIntros[day % roadIntros.length];
 }
 
+function buildToastLines(events: CampEventInfo[]): ToastLine[] {
+  const lines: ToastLine[] = [];
+  for (const e of events) {
+    if (e.type === "FoodConsumed" || e.type === "Starving")
+      lines.push({ text: e.description, color: e.type === "Starving" ? "negative" : undefined });
+    else if (e.type === "ConditionDrain")
+      lines.push({ text: e.description, color: "negative" });
+    else if (e.type === "RestRecovery")
+      lines.push({ text: e.description, color: "positive" });
+  }
+  return lines;
+}
+
 export default function Camp({ state }: { state: GameResponse }) {
-  const { doAction, refreshState, loading } = useGame();
+  const { doAction, refreshState, loading, showToast } = useGame();
   const camp = state.camp;
   const node = state.node;
   const resolved = state.mode === "camp_resolved";
   const [vignetteError, setVignetteError] = useState(false);
   const didResolve = useRef(false);
+  const didToast = useRef(false);
 
   // Auto-resolve on mount — no preamble screen
   useEffect(() => {
@@ -35,6 +49,16 @@ export default function Camp({ state }: { state: GameResponse }) {
       doAction({ action: "camp_resolve" });
     }
   }, [resolved, doAction]);
+
+  // Toast path: minor conditions only — skip crisis screen
+  useEffect(() => {
+    if (resolved && camp && !camp.hasSevereCondition && !state.reason && !didToast.current) {
+      didToast.current = true;
+      const lines = buildToastLines(camp.events);
+      if (lines.length > 0) showToast({ lines });
+      refreshState();
+    }
+  }, [resolved, camp, state.reason, showToast, refreshState]);
 
   const isSettlement = node?.poi?.kind === "settlement";
   const isChapterhouse = isSettlement && node?.poi?.services?.includes("chapterhouse");
