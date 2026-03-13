@@ -1,0 +1,10 @@
+# Known tag and quality IDs for encounter validation.
+# The check command warns on IDs not listed here (with fuzzy "did you mean?" suggestions).
+# Add new IDs here when introducing them in encounters.
+
+# ── Tags (boolean flags: set/not set) ──────────────────────────
+
+brides_cave_heard_harlan
+
+# ── Qualities (numeric, soft range -5 to +5) ───────────────────
+

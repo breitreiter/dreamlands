@@ -27,6 +27,10 @@ static class CheckCommand
             return 1;
         }
 
+        var registry = IdRegistry.Load(path);
+        if (registry == null)
+            Console.WriteLine("  (no known_ids.txt found — skipping tag/quality validation)");
+
         var files = exts.SelectMany(ext => Directory.GetFiles(path, "*" + ext, SearchOption.AllDirectories))
             .Distinct().OrderBy(f => f).ToArray();
         if (files.Length == 0)
@@ -36,37 +40,54 @@ static class CheckCommand
         }
 
         var failed = 0;
+        var warned = 0;
         foreach (var file in files)
         {
             var rel = Path.GetRelativePath(path, file);
             var text = File.ReadAllText(file);
             var result = EncounterParser.Parse(text);
             var vocabErrors = new List<string>();
+            var idWarnings = new List<string>();
 
             if (result.Encounter != null)
+            {
                 vocabErrors = ValidateVocabulary(result.Encounter);
+                if (registry != null)
+                    idWarnings = ValidateKnownIds(result.Encounter, registry);
+            }
 
             var markerWarnings = CheckForMarkers(text);
 
-            if (result.IsSuccess && vocabErrors.Count == 0 && markerWarnings.Count == 0)
+            if (result.IsSuccess && vocabErrors.Count == 0 && markerWarnings.Count == 0 && idWarnings.Count == 0)
             {
                 Console.WriteLine($"  OK  {rel}");
             }
             else
             {
-                failed++;
-                Console.WriteLine($"  ERR {rel}");
+                var hasErrors = !result.IsSuccess || vocabErrors.Count > 0;
+                if (hasErrors)
+                    failed++;
+                else
+                    warned++;
+                Console.WriteLine($"  {(hasErrors ? "ERR" : "WARN")} {rel}");
                 foreach (var err in result.Errors)
                     Console.WriteLine($"      {err}");
                 foreach (var err in vocabErrors)
                     Console.WriteLine($"      {err}");
+                foreach (var warn in idWarnings)
+                    Console.WriteLine($"      {warn}");
                 foreach (var warn in markerWarnings)
                     Console.WriteLine($"      {warn}");
             }
         }
 
         Console.WriteLine();
-        Console.WriteLine(failed == 0 ? $"All {files.Length} file(s) valid." : $"{failed} of {files.Length} file(s) had errors.");
+        if (failed == 0 && warned == 0)
+            Console.WriteLine($"All {files.Length} file(s) valid.");
+        else if (failed == 0)
+            Console.WriteLine($"All {files.Length} file(s) valid ({warned} with warnings).");
+        else
+            Console.WriteLine($"{failed} of {files.Length} file(s) had errors{(warned > 0 ? $", {warned} with warnings" : "")}.");
         return failed > 0 ? 1 : 0;
     }
 
@@ -157,6 +178,57 @@ static class CheckCommand
             if (err != null)
                 errors.Add($"+{mechanic}: {err}");
             ValidateItemId(mechanic, errors);
+        }
+    }
+
+    private static readonly HashSet<string> TagVerbs = new() { "add_tag", "remove_tag", "tag" };
+    private static readonly HashSet<string> QualityVerbs = new() { "quality" };
+
+    private static List<string> ValidateKnownIds(Encounter encounter, IdRegistry registry)
+    {
+        var warnings = new List<string>();
+        CollectIdWarnings(encounter.Requires, registry, warnings);
+        foreach (var choice in encounter.Choices)
+        {
+            if (choice.Requires is { } requires)
+                CheckActionId(requires, registry, warnings);
+            if (choice.Conditional is { } conditional)
+            {
+                foreach (var branch in conditional.Branches)
+                {
+                    CheckActionId(branch.Condition, registry, warnings);
+                    CollectIdWarnings(branch.Outcome.Mechanics, registry, warnings);
+                }
+                if (conditional.Fallback is { } fallback)
+                    CollectIdWarnings(fallback.Mechanics, registry, warnings);
+            }
+            if (choice.Single is { } single)
+                CollectIdWarnings(single.Part.Mechanics, registry, warnings);
+        }
+        return warnings;
+    }
+
+    private static void CollectIdWarnings(IReadOnlyList<string> actions, IdRegistry registry, List<string> warnings)
+    {
+        foreach (var action in actions)
+            CheckActionId(action, registry, warnings);
+    }
+
+    private static void CheckActionId(string action, IdRegistry registry, List<string> warnings)
+    {
+        var tokens = ActionVerb.Tokenize(action);
+        if (tokens.Count < 2) return;
+        var verb = tokens[0];
+
+        if (TagVerbs.Contains(verb))
+        {
+            var warn = IdRegistry.CheckId(tokens[1], registry.Tags, "tag");
+            if (warn != null) warnings.Add(warn);
+        }
+        else if (QualityVerbs.Contains(verb))
+        {
+            var warn = IdRegistry.CheckId(tokens[1], registry.Qualities, "quality");
+            if (warn != null) warnings.Add(warn);
         }
     }
 
