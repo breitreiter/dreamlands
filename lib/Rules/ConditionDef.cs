@@ -27,14 +27,14 @@ public sealed class ConditionDef
         ["freezing"] = new()
         {
             Id = "freezing", Name = "Freezing", Biome = "mountains", Tier = "any",
-            Stacks = 1, SpiritsDrain = Magnitude.Small,
+            Stacks = 1, SpiritsDrain = Magnitude.Medium,
             ClearedOnSettlement = true,
             SpecialCure = "Leave the mountain biome or enter a settlement.",
         },
         ["thirsty"] = new()
         {
             Id = "thirsty", Name = "Thirsty", Biome = "scrub", Tier = "any",
-            Stacks = 1, SpiritsDrain = Magnitude.Small,
+            Stacks = 1, SpiritsDrain = Magnitude.Medium,
             ClearedOnSettlement = true,
             SpecialCure = "Enter a settlement.",
         },
@@ -51,7 +51,7 @@ public sealed class ConditionDef
         ["exhausted"] = new()
         {
             Id = "exhausted", Name = "Exhausted", Biome = "none", Tier = "none",
-            Stacks = 1, SpiritsDrain = Magnitude.Small,
+            Stacks = 1, SpiritsDrain = Magnitude.Medium,
             SpecialCure = "Rest in an inn.",
         },
         ["poisoned"] = new()
