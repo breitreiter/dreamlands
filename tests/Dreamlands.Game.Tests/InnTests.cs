@@ -211,6 +211,20 @@ public class InnTests
         Assert.Equal(quoteHealthy.GoldCost, quoteWithFreezing.GoldCost);
     }
 
+    [Fact]
+    public void GetQuote_ExhaustedDoesNotInflateNights()
+    {
+        var state = Fresh();
+        state.Spirits = state.MaxSpirits - 12; // 8/20
+        state.ActiveConditions["exhausted"] = 1;
+
+        var quote = Inn.GetQuote(state, Balance);
+
+        // Without fix: exhausted drain (3/night) > recovery (2/night) → 100 nights
+        // With fix: exhausted excluded from sim, ceil(12/2) = 6 nights
+        Assert.Equal(6, quote.Nights);
+    }
+
     // ── StayOneNight ──
 
     [Fact]

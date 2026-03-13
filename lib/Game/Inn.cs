@@ -53,14 +53,15 @@ public static class Inn
         var simHealth = state.Health;
         var simSpirits = state.Spirits;
 
-        // Build drain-per-night from active conditions (skip ClearedOnSettlement — those clear immediately)
+        // Build drain-per-night from active conditions
+        // Skip ClearedOnSettlement (cleared on arrival) and exhausted (cleared by inn stay)
         int healthDrain = 0, spiritsDrain = 0;
         var conditionStacks = new Dictionary<string, int>(state.ActiveConditions);
 
         foreach (var conditionId in conditionStacks.Keys.ToList())
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
-            if (def.ClearedOnSettlement)
+            if (def.ClearedOnSettlement || conditionId == "exhausted")
             {
                 conditionStacks.Remove(conditionId);
                 continue;
