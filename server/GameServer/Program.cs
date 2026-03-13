@@ -726,12 +726,15 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             Movement.Execute(session, dir);
 
-            // Clear conditions on arriving at a settlement and suppress
+            // Clear settlement-scoped conditions on arrival and suppress
             // ambient threats overnight — the player has shelter and water.
             List<DeliveryInfo>? deliveries = null;
             if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
             {
-                player.ActiveConditions.Clear();
+                var balance = BalanceData.Default;
+                foreach (var cid in player.ActiveConditions.Keys.ToList())
+                    if (balance.Conditions.TryGetValue(cid, out var cdef) && cdef.ClearedOnSettlement)
+                        player.ActiveConditions.Remove(cid);
                 player.PendingNoBiome = true;
 
                 // Initialize settlement state and stock storylets on arrival
@@ -783,7 +786,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             // Only during mid-day periods (Midday/Afternoon/Evening) to avoid back-to-back with camp
             var node = session.CurrentNode;
             var midDay = player.Time is TimePeriod.Midday or TimePeriod.Afternoon or TimePeriod.Evening;
-            if (node.Poi?.Kind == PoiKind.Encounter && midDay && !session.SkipEncounterTrigger && !noEncounters
+            if (node.Poi?.Kind is not (PoiKind.Settlement or PoiKind.Dungeon) && midDay && !session.SkipEncounterTrigger && !noEncounters
                 && session.Rng.NextDouble() < balance.Character.EncounterChance)
             {
                 var enc = EncounterSelection.PickOverworld(session, node);
