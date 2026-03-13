@@ -56,7 +56,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "mountains",
             OriginFlavor = @"The garrison commander finally admitted the old signal network isn't coming back online. He's selling off the lanterns piece by piece rather than watch them rust in a warehouse.",
-            DeliveryFlavor = @"You arrive at the ridgeline watchtower to find three trappers already there, arguing about whether the thing still works. The watch captain takes the lantern, oils the shutters, tests the mechanism. ""Imperial issue. Good lens."" One of the trappers leans in. ""Needs new oil, new wick—"" The captain cuts him off. ""I know what it needs."" He counts out your payment while the trappers continue their debate.",
+            DeliveryFlavor = @"You arrive at the ridgeline watchtower to find three miners fiddling with a rusty lantern. It flickers to life for a moment before going out again. The foreman takes your lantern, oils the shutters, tests the mechanism. ""Imperial issue. Still good for a few years."" One of the miners leans in. ""Needs new oil, new wick—"" The foreman cuts him off. ""I know what it needs."" He counts out your payment while the minerscontinue their debate.",
         },
         new()
         {
@@ -64,8 +64,8 @@ public sealed partial class HaulDef
             Name = @"Cracked Surveyor's Transit",
             OriginBiome = "plains",
             DestBiome = "mountains",
-            OriginFlavor = @"The old transit hasn't worked properly in years, but with the new surveyor dead and his replacement weeks away, someone remembered seeing it gathering dust in a barn loft.",
-            DeliveryFlavor = @"The engineer takes the transit from you and sets it on her workbench without a word. She runs her thumb along the cracked arc, then opens the case fully and stares at the inscription inside the lid. Her hand stays there a moment. ""My father's,"" she says quietly. ""I thought it was lost in the valley floods."" She pays you and turns back to the bench.",
+            OriginFlavor = @"The old transit hasn't worked properly in years; someone remembered seeing it gathering dust in a barn loft.",
+            DeliveryFlavor = @"The engineer takes the transit from you and sets it on her workbench without a word. She runs her thumb along the cracked arc, then opens the case fully and stares at the internals. Her hand stays there a moment. ""Just like the one my mentor gifted me,"" she says quietly. ""I thought I'd never see another."" She pays you and turns back to the bench.",
         },
         new()
         {

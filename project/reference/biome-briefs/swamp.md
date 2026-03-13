@@ -22,3 +22,26 @@ Deeper in: the old temple complex on clay ridges, half-sunken into peat. Biolumi
 ## People & Tone
 - Revathi: open syllables, vowel-heavy, soft consonants (Orun, Nalith, Kesra, Halisi). Loose-fitting cloth in muted dyes. Bare feet or reed sandals.
 - Voice: quiet, practical, understated grief. People speak at the volume the swamp teaches, which is low. Not sentimental about their situation — they live with it.
+
+## Language Quick Reference
+
+**Two tongues.** *Revathikh* — the ancient language, now fragmentary. *Revashu* — the living modern tongue, simpler and faster. Ancient names sound breathy and long; modern names are short and blunt.
+
+**Names.** Two-part: personal name + carry-name joined by *vo* ("from-within"). The carry-name is whose memory you bear — not a bloodline, a continuation. *Telen vo Asha*, *Duri vo Kethlan*. Using just the personal name signals trust; full name is formal or cold.
+
+**Evidentiality.** Every claim declares how you know it. Modern Revashu has collapsed to two: *-al* (I witnessed this) and *-en* (I didn't). Elders still use the old four-way system (*-al* witnessed, *-ën* inherited, *-oth* reconstructed, *-uri* dreamed). Players can parse NPC reliability from these.
+
+**Key words.**
+- *rev-* — "carry/remember" (inseparable concepts). *Revathi* = "those who carry."
+- *vo* — "from-within." Used in names and origin expressions.
+- *veshkal* — "I hold-for-now." How the Revathi express possession. No native word for "own."
+- *thîkë* — once meant sacred river-memory, now just "river." The sacred freight is gone but the unease remains.
+- *keshî* — the imperial language / empire. Borrowed word.
+
+**Insults** (use sparingly, context teaches meaning):
+- *kesh* — "empire-talker." Aimed at another Revathi, it's devastating: you've been hollowed out.
+- *noth* — "you're guessing and presenting it as truth." An accusation of intellectual fraud.
+- *vesh-ka* — spiritual hoarder, one who clutches what should pass through them.
+- *vo-sul* — "murky inside." Lighter: shady, unreadable intentions.
+
+**Settlement names** are blunt and provisional: *Sulvesh* (held water), *Nakhem* (still breathing), *Thalken* (root-sit). These people didn't choose this land. **Lost city names** sound different — longer, breathy, aspirated: *Thîkëravänoth*, *Kephîralûn*, *Ashëmîr*. The sonic gap signals deep time without exposition.

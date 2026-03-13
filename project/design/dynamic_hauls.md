@@ -24,13 +24,28 @@ any destination can receive them. No origin/destination biome filtering.
 | Sealed Crate | Nondescript wooden crate with a wax seal. Nobody mentions what's inside. |
 | Bonded Cargo | A parcel under guild bond. You signed for it, so don't lose it. |
 | Unmarked Parcel | Brown paper, twine, no label. Someone at the other end is expecting it. |
-| Census Ledger | The guild tallies population counts twice a year. This one's overdue. |
+| Dusty Ledger | Looks like someone's to be audited. Or was audited. Anyway, the book needs to move. |
 | Tax Remittance | A locked strongbox of collected duties. Heavy for its size. |
 | Requisition Forms | A stack of forms requesting supplies. Technically urgent, practically ignored. |
 | Merchant's Samples | Fabric swatches and spice vials. A trader wants them moved to the next market. |
+| Mail Bundle | A stack of letters tied with twine. Courier work but coin is coin. |
+| Blank Guild Ledger | The factor ended up with an extra and needs it moved to the next office in line. |
+| Box of ink jars | They say the guild runs on ink and blood, but we just need you to deliver the former |
 
 Delivery flavor is shared across all generic hauls:
-"Singed and accepted without comment."
+- Signed and accepted without comment.
+- The factor nods to a stack of packages and returns to his work. You add your delivery to the pile.
+- The factor's young assistant accepts the package with genuine enthusiasm.
+- The factor looks the package over with an appraising eye, and, presumably satisfied, signs the ledger.
+- The factor processes the package with remarkable efficiency, then dispatches you on your way.
+- You wait an eternity while the trader in front of you argues about a pricing issue, then finally deliver the package without ceremony.
+- The factor is nowhere to be found. With some trepidation, you stash the package below their desk and sign the ledger yourself.
+- The factor is eating a hearty meal and invites you to join. You decline, but leave the package in his greasy hands.
+- The factor has fallen ill, but insists on performing her duties. She pauses occasionally to cough violently before returning to the work. You're glad to be rid of the package.
+- The factor insists the package was due two days ago. You explain you delivered it as quickly as the roads allowed. He says he'll file a complaint.
+- The factor is asleep at his desk. You nudge him awake and, after a moment's disorientation, he starts to explain that he was entirely awake. You don't argue the point and deliver the package.
+- The factor seems fidgety and furtive, but she has a guild ring. You drop off the package and hope for the best.
+- The factor is having a loud conversation with a local. You are not invited to join. You're directed where to drop the package off with hand signals. You do so and move on.
 
 ## Data Model
 

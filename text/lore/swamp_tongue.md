@@ -1,9 +1,3 @@
-This is a great design challenge, and I appreciate the care you're bringing to it. Let me work through this with you.
-
-The key to avoiding "fantasy [real culture]" is to let the *themes* generate the culture rather than reverse-engineering from a real-world aesthetic. You've already got the engine: memory-as-identity and asymmetric colonial contact. So let's let those do the work.
-
----
-
 ## The People: The Revathi (self-name)
 
 **Endonym:** *Revathi* (singular *revas*), roughly meaning "those who carry." The root *rev-* encodes a concept that doesn't cleanly split into "remember" and "carry" — it's both. You carry memory the way you carry weight. The implication is that identity is a *labor*, not a state.
@@ -122,18 +116,12 @@ These names should sound *different* — longer, more breath in them, aspirated 
 
 This is where you get the most flavor per syllable. The goal is four to six words max that the player absorbs through context, Morrowind-style.
 
-**Keshu** — (borrowed from *keshî*, the imperial language's word for itself). Used as an insult meaning roughly "empire-talker" or "one who speaks like a colonizer." Devastating when aimed at another Revathi. If an NPC calls the player *keshu*, it means "you talk like them." If a Revathi calls *another Revathi* keshu, it's close to a slur — you're accusing them of having been hollowed out. Usage: *"Don't bring me keshu coin and expect thanks."*
+**Kesh** — (borrowed from *keshî*, the imperial language's word for itself). Used as an insult meaning roughly "empire-talker" or "one who speaks like a colonizer." Devastating when aimed at another Revathi. If an NPC calls the player *kesh*, it means "you talk like them." If a Revathi calls *another Revathi* kesh, it's close to a slur — you're accusing them of having been hollowed out. Usage: *"Don't bring me kesh coin and expect thanks."*
 
 **Noth** — literally the evidentiality suffix for "reconstructed from evidence," stripped from a verb and thrown like a stone. Calling someone *noth* means "you weren't there, you don't know, you're guessing and presenting it as truth." It's an accusation of intellectual fraud. Short, sharp, easy to spit. Usage: *"You call yourself a guide? Noth."*
 
 **Vesh-ka** — from *veshkal* (to hold-for-now), but the *-ka* suffix is diminutive/contemptuous. It means a person who clutches, who hoards, who holds things that shouldn't be held. It's the closest thing to calling someone "greedy" but it hits different — it implies a *spiritual* failing, a refusal to let things pass through you the way memory and goods are supposed to. Usage: *"Imperial vesh-ka built a wall around Ashëmîr like you can own grief."*
 
-**Thul** — means "empty" but specifically "empty in the way a container is empty." Not peaceful emptiness. The emptiness of something that should be full and isn't. Calling a person *thul* means they've lost their carry-name, their connection to memory, their *rev-*. It's the worst thing you can call a Revathi. It's rarely said aloud. When it is, it ends conversations and sometimes starts violence. Usage: sparingly. An NPC might whisper it about someone who collaborated with the empire. The player should hear it maybe twice in the entire game, and both times the room should go cold.
-
 **Vo-sul** — literally "from-within water," meaning someone whose inner life has gone murky, unreadable. A lighter insult — more like "you're being shady" or "I can't read your intentions and I don't trust that." Casual enough to throw around. Usage: *"Vo-sul, that one. Watch your pack."*
 
----
 
-Five insults, graduated from casual suspicion (*vo-sul*) to conversational acid (*keshu, noth*) to real venom (*vesh-ka*) to the nuclear option (*thul*). The player learns them in that order through natural exposure, and by the time someone whispers *thul*, they already understand the weight.
-
-Want me to put together a compact reference sheet you can keep next to your biome bible?
