@@ -52,16 +52,8 @@ Just a list of things that need doing, roughly grouped.
       Verification: grep mapgen/Rendering/ for old directory names (`grass_tufts`, `farm_stuff`,
       `bogs`, `"trees"`) — should return zero hits. If any other code references the old paths
       (build scripts, asset pipeline), update those too before deleting.
-- [ ] Pre-scale decal sprites to final size — all render passes (PlainsPass, SwampPass,
-      TreePass, HillPass, MountainPass, PoiPass) scale sprites at draw time via SKRect
-      destination sizing. This wastes memory loading full-res bitmaps and costs CPU on every
-      placement. Batch-resize all decal PNGs in `assets/map/decals/` to their target pixel
-      dimensions so the render passes can draw at 1:1 (scale = 1.0). Per-pass target sizes:
-        - PlainsPass grass: 0.38x, farms: 1.0x (already correct)
-        - SwampPass bogs/trees: 0.42x, tallgrass: 0.38x
-        - TreePass: 0.40x
-      Use an offline script (ImageMagick `mogrify` or similar) to resize in-place, then
-      remove the scale constants from each render pass.
+- [x] Pre-scale decal sprites to final size — all passes now draw at 1.0x scale.
+      MountainPass still uses dynamic height-based scaling (0.22x–0.45x), which is intentional.
 
 ## Game UI Components
 
@@ -203,16 +195,17 @@ Market buy/sell with auto-equip works. Remaining services need game logic.
 - [x] Rework haul destination hints — replaced 3x3 sector grid with relative offset:
       "A plains settlement 2 days east of Aldgate". Manhattan distance ÷ 5 tiles/day,
       8-way cardinal/intercardinal direction via atan2.
-- [ ] Haul respawn pacing — currently hauls re-populate immediately when re-entering the market,
-      giving settlements effectively infinite hauls. Need a respawn rubric tied to node
-      connectivity: hub nodes (high total child count) should replenish quickly since players
-      pass through often, while leaf/dead-end nodes should replenish slowly or not at all.
-      Figure out the right cooldown curve and whether it's time-based (game days) or
-      visit-based.
-- [ ] Dynamic haul generation — when a player exhausts all bespoke hauls for a given route,
-      generate vague/generic hauls on the fly (e.g. "sealed guild casket", "unmarked parcel",
-      "bonded cargo") so trade never dead-ends. Keep flavor minimal and mysterious to avoid
-      clashing with hand-written hauls.
+- [x] Haul respawn pacing — lazy restock on settlement entry. Hubs restock 1 slot per 4 days,
+      leaves per 8 days. Full clear-and-regenerate on tick (fresh destinations, no stale pointers).
+      Balance constants in `SettlementBalance.HaulRestockDaysHub/Leaf`.
+- [x] Dynamic haul generation — 11 generic haul defs with `IsGeneric` flag, fallback logic
+      in `HaulGeneration.Generate()`, generic delivery flavor pool. Tested.
+- [x] Haul stocking mix — at most 1 bespoke haul per settlement, remaining slots filled with
+      generic hauls. Enforced in `HaulGeneration.Generate()` via bespoke counter.
+- [ ] Haul direction balancing — tune destination selection to favor two sweet spots:
+      (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
+      (2) way back toward root (Aldgate), rewarding long return trips and encouraging
+      players to try new branches and pick up fresh storylets.
 - [x] Gathering action
       /home/joseph/repos/dreamlands/project/design/foraging.md
 
@@ -250,6 +243,9 @@ These must be resolved before end-of-day can be implemented.
       Design in `project/design/condition_rework.md`.
 - [ ] Market stocking — all outposts must stock bandages. All T3 biome settlements must
       stock the relevant specialist medicine for their biome's severe condition.
+- [ ] Protective gear in markets — pack-carried protective items (heavy_furs, canteen,
+      lattice_ward, etc.) are not stocked anywhere. Players can only get them from
+      encounters. Need market availability so players can prepare for biome hazards.
 - [ ] Inn upgrade system — convert frontier outpost to chapterhouse for exorbitant cost.
       Endgame prep for final T3 push. Design TBD.
 
