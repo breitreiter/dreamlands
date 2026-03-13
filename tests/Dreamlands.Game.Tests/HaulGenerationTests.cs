@@ -11,12 +11,13 @@ public class HaulGenerationTests
         ["plains_forest_2"] = new() { Id = "plains_forest_2", Name = "Wool Bale", OriginBiome = "plains", DestBiome = "forest", OriginFlavor = "Sheared wool" },
         ["plains_mountains_1"] = new() { Id = "plains_mountains_1", Name = "Salt Barrel", OriginBiome = "plains", DestBiome = "mountains", OriginFlavor = "Mined salt" },
         ["forest_plains_1"] = new() { Id = "forest_plains_1", Name = "Timber Bundle", OriginBiome = "forest", DestBiome = "plains", OriginFlavor = "Fresh timber" },
+        ["generic_parcel"] = new() { Id = "generic_parcel", Name = "Unmarked Parcel", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A parcel" },
     };
 
     static readonly List<HaulGeneration.HaulDestination> TwoCandidates =
     [
-        new("dest1", "Woodhaven", Terrain.Forest, 20, 10),
-        new("dest2", "Stonepeak", Terrain.Mountains, 30, 5),
+        new("dest1", "Woodhaven", Terrain.Forest, 20, 10, Depth: 3),
+        new("dest2", "Stonepeak", Terrain.Mountains, 30, 5, Depth: 5),
     ];
 
     [Fact]
@@ -71,11 +72,11 @@ public class HaulGenerationTests
     }
 
     [Fact]
-    public void Payout_IsManhattanTimesThree()
+    public void Payout_BaseDistanceDepthExploration()
     {
         var candidates = new List<HaulGeneration.HaulDestination>
         {
-            new("dest1", "Woodhaven", Terrain.Forest, 20, 15)
+            new("dest1", "Woodhaven", Terrain.Forest, 20, 15, Depth: 8, IsVisited: false)
         };
 
         var result = HaulGeneration.Generate(
@@ -83,8 +84,42 @@ public class HaulGenerationTests
             candidates, TestHauls, [], [], new Random(42));
 
         Assert.Single(result);
-        // manhattan = |10-20| + |10-15| = 15, payout = 15 * 3 = 45
-        Assert.Equal(45, result[0].Payout);
+        // base=5, manhattan=15 × 2=30, depth=8 × 1=8, exploration=8 → 51
+        Assert.Equal(51, result[0].Payout);
+    }
+
+    [Fact]
+    public void Payout_VisitedDestination_NoExplorationBonus()
+    {
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Woodhaven", Terrain.Forest, 20, 15, Depth: 8, IsVisited: true)
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            candidates, TestHauls, [], [], new Random(42));
+
+        Assert.Single(result);
+        // base=5, manhattan=15 × 2=30, depth=8 × 1=8, no exploration → 43
+        Assert.Equal(43, result[0].Payout);
+    }
+
+    [Fact]
+    public void Payout_ShallowDestination_LowDepthBonus()
+    {
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Aldgate", Terrain.Plains, 20, 15, Depth: 0, IsVisited: true)
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Riverton", Terrain.Plains, isLeaf: true,
+            candidates, TestHauls, [], [], new Random(42));
+
+        Assert.Single(result);
+        // base=5, manhattan=15 × 2=30, depth=0, no exploration → 35
+        Assert.Equal(35, result[0].Payout);
     }
 
     [Fact]
@@ -106,16 +141,69 @@ public class HaulGenerationTests
     }
 
     [Fact]
-    public void NoMatchingDefs_NoGenerics_ReturnsEmpty()
+    public void NonLeaf_AtMostOneBespoke()
     {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["bespoke_1"] = new() { Id = "bespoke_1", Name = "Fine Grain", OriginBiome = "plains", DestBiome = "forest", OriginFlavor = "Grain" },
+            ["bespoke_2"] = new() { Id = "bespoke_2", Name = "Rough Wool", OriginBiome = "plains", DestBiome = "forest", OriginFlavor = "Wool" },
+            ["generic_crate"] = new() { Id = "generic_crate", Name = "Sealed Crate", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A crate" },
+        };
         var candidates = new List<HaulGeneration.HaulDestination>
         {
-            new("dest1", "Bogtown", Terrain.Swamp, 20, 10) // no plains->swamp defs in test data
+            new("dest1", "Woodhaven", Terrain.Forest, 20, 10),
+            new("dest2", "Elmgrove", Terrain.Forest, 25, 15),
         };
 
         var result = HaulGeneration.Generate(
             10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
-            candidates, TestHauls, [], [], new Random(42));
+            candidates, hauls, [], [], new Random(42));
+
+        Assert.Equal(2, result.Count);
+        Assert.Single(result, r => !r.IsGeneric);
+        Assert.Single(result, r => r.IsGeneric);
+    }
+
+    [Fact]
+    public void ExistingBespoke_ForcesGenericOnly()
+    {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["bespoke_1"] = new() { Id = "bespoke_1", Name = "Fine Grain", OriginBiome = "plains", DestBiome = "forest", OriginFlavor = "Grain" },
+            ["generic_crate"] = new() { Id = "generic_crate", Name = "Sealed Crate", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A crate" },
+        };
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Woodhaven", Terrain.Forest, 20, 10),
+        };
+        var existing = new List<ItemInstance>
+        {
+            new("haul", "Existing Bespoke") { HaulDefId = "bespoke_1" }
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            candidates, hauls, existing, [], new Random(42));
+
+        Assert.Single(result);
+        Assert.True(result[0].IsGeneric);
+    }
+
+    [Fact]
+    public void NoMatchingDefs_NoGenerics_ReturnsEmpty()
+    {
+        var bespokeOnly = new Dictionary<string, HaulDef>
+        {
+            ["forest_plains_1"] = new() { Id = "forest_plains_1", Name = "Timber Bundle", OriginBiome = "forest", DestBiome = "plains", OriginFlavor = "Fresh timber" },
+        };
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Bogtown", Terrain.Swamp, 20, 10) // no plains->swamp defs and no generics
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            candidates, bespokeOnly, [], [], new Random(42));
 
         Assert.Empty(result);
     }

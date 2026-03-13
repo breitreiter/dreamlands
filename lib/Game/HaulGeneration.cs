@@ -4,7 +4,7 @@ namespace Dreamlands.Game;
 
 public static class HaulGeneration
 {
-    public record HaulDestination(string SettlementId, string Name, Terrain Biome, int X, int Y);
+    public record HaulDestination(string SettlementId, string Name, Terrain Biome, int X, int Y, int Depth = 0, bool IsVisited = true);
 
     private const int TilesPerDay = 5;
 
@@ -23,9 +23,11 @@ public static class HaulGeneration
         IReadOnlyDictionary<string, HaulDef> hauls,
         IReadOnlyList<ItemInstance> existingOffers,
         IReadOnlyList<ItemInstance> playerHauls,
-        Random rng)
+        Random rng,
+        SettlementBalance? settlementBalance = null,
+        int? maxSlots = null)
     {
-        var cap = isLeaf ? 1 : 2;
+        var cap = maxSlots ?? (isLeaf ? 1 : 2);
         var needed = cap - existingOffers.Count;
         if (needed <= 0 || candidates.Count == 0)
             return [];
@@ -39,14 +41,19 @@ public static class HaulGeneration
         var result = new List<ItemInstance>();
         var shuffled = candidates.OrderBy(_ => rng.Next()).ToList();
 
+        // At most 1 bespoke haul per settlement; fill remaining slots with generic
+        var bespokeCount = existingOffers.Count(o => o.HaulDefId != null && !o.IsGeneric);
+
         foreach (var dest in shuffled)
         {
             if (result.Count >= needed) break;
 
             var destBiome = dest.Biome.ToString().ToLowerInvariant();
-            var matching = hauls.Values
-                .Where(h => !h.IsGeneric && h.OriginBiome == origin && h.DestBiome == destBiome && !excluded.Contains(h.Id))
-                .ToList();
+            var matching = bespokeCount < 1
+                ? hauls.Values
+                    .Where(h => !h.IsGeneric && h.OriginBiome == origin && h.DestBiome == destBiome && !excluded.Contains(h.Id))
+                    .ToList()
+                : [];
 
             if (matching.Count == 0)
                 matching = hauls.Values
@@ -56,7 +63,13 @@ public static class HaulGeneration
             if (matching.Count == 0) continue;
 
             var def = matching[rng.Next(matching.Count)];
-            var payout = (Math.Abs(x - dest.X) + Math.Abs(y - dest.Y)) * 3;
+            if (!def.IsGeneric) bespokeCount++;
+            var bal = settlementBalance ?? SettlementBalance.Default;
+            var manhattan = Math.Abs(x - dest.X) + Math.Abs(y - dest.Y);
+            var payout = bal.HaulPayoutBase
+                + (manhattan * bal.HaulPayoutPerTile)
+                + (dest.Depth * bal.HaulPayoutPerDepth)
+                + (dest.IsVisited ? 0 : bal.HaulPayoutExplorationBonus);
             var hint = BuildHint(x, y, originName, dest);
 
             result.Add(new ItemInstance("haul", def.Name)

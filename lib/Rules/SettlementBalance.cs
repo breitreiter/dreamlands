@@ -20,6 +20,14 @@ public sealed class SettlementBalance
     public int BankCapacity { get; init; } = 10;
     public int MaxStorylets { get; init; } = 3;
     public int StoryletRestockDays { get; init; } = 5;
+    public int HaulRestockDaysHub { get; init; } = 4;
+    public int HaulRestockDaysLeaf { get; init; } = 8;
+
+    // Haul payout formula: base + (manhattan × perTile) + (destDepth × perDepth) + explorationBonus
+    public int HaulPayoutBase { get; init; } = 5;
+    public int HaulPayoutPerTile { get; init; } = 2;
+    public int HaulPayoutPerDepth { get; init; } = 1;
+    public int HaulPayoutExplorationBonus { get; init; } = 8;
 
     public IReadOnlyDictionary<string, ServiceDef> Services { get; init; } = BuildServices();
 

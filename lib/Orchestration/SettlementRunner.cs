@@ -96,29 +96,61 @@ public static class SettlementRunner
         if (graph == null || !graph.Settlements.TryGetValue(settlementId, out var info)) return;
 
         var isLeaf = info.ChildIds.Count == 0 && info.ParentId != null;
+        var restockDays = isLeaf
+            ? session.Balance.Settlements.HaulRestockDaysLeaf
+            : session.Balance.Settlements.HaulRestockDaysHub;
 
+        // First visit: populate fully and stamp the day
+        if (state.LastHaulStockDay == 0)
+        {
+            FillHaulSlots(session, info, biome, isLeaf, state);
+            state.LastHaulStockDay = session.Player.Day;
+            return;
+        }
+
+        // Restock: clear old offers, regenerate based on elapsed ticks
+        var elapsed = session.Player.Day - state.LastHaulStockDay;
+        if (elapsed < restockDays) return;
+
+        var ticks = elapsed / restockDays;
+        var cap = isLeaf ? 1 : 2;
+        var slots = Math.Min(ticks, cap);
+
+        state.HaulOffers.Clear();
+        FillHaulSlots(session, info, biome, isLeaf, state, slots);
+        state.LastHaulStockDay = session.Player.Day;
+    }
+
+    private static void FillHaulSlots(
+        GameSession session, SettlementInfo info,
+        Terrain biome, bool isLeaf, SettlementState state, int? maxSlots = null)
+    {
         // Try 2 hops, fallback to 1, then 3
-        var candidates = graph.GetSettlementsAtHop(settlementId, 2);
-        if (candidates.Count == 0) candidates = graph.GetSettlementsAtHop(settlementId, 1);
-        if (candidates.Count == 0) candidates = graph.GetSettlementsAtHop(settlementId, 3);
+        var candidates = session.Graph!.GetSettlementsAtHop(info.Id, 2);
+        if (candidates.Count == 0) candidates = session.Graph.GetSettlementsAtHop(info.Id, 1);
+        if (candidates.Count == 0) candidates = session.Graph.GetSettlementsAtHop(info.Id, 3);
         if (candidates.Count == 0) return;
 
-        // Prefer destinations deeper in the tree (away from root)
+        var visited = session.Player.VisitedNodes;
         var currentDepth = info.Depth;
         var downward = candidates.Where(s => s.Depth > currentDepth)
-            .Select(s => new HaulGeneration.HaulDestination(s.Id, s.Name, s.Biome, s.X, s.Y))
+            .Select(s => new HaulGeneration.HaulDestination(
+                s.Id, s.Name, s.Biome, s.X, s.Y, s.Depth,
+                visited.Contains(PlayerState.EncodePosition(s.X, s.Y))))
             .ToList();
         var upward = candidates.Where(s => s.Depth <= currentDepth)
-            .Select(s => new HaulGeneration.HaulDestination(s.Id, s.Name, s.Biome, s.X, s.Y))
+            .Select(s => new HaulGeneration.HaulDestination(
+                s.Id, s.Name, s.Biome, s.X, s.Y, s.Depth,
+                visited.Contains(PlayerState.EncodePosition(s.X, s.Y))))
             .ToList();
 
         var playerHauls = session.Player.Pack.Where(i => i.HaulDefId != null).ToList();
 
-        // Try downward destinations first, then fill remaining slots with upward
+        var settlementBalance = session.Balance.Settlements;
         var newOffers = HaulGeneration.Generate(
             info.X, info.Y, info.Name, biome, isLeaf,
             downward, session.Balance.Hauls,
-            state.HaulOffers, playerHauls, session.Rng);
+            state.HaulOffers, playerHauls, session.Rng, settlementBalance, maxSlots);
         state.HaulOffers.AddRange(newOffers);
 
         if (upward.Count > 0)
@@ -126,7 +158,7 @@ public static class SettlementRunner
             var moreOffers = HaulGeneration.Generate(
                 info.X, info.Y, info.Name, biome, isLeaf,
                 upward, session.Balance.Hauls,
-                state.HaulOffers, playerHauls, session.Rng);
+                state.HaulOffers, playerHauls, session.Rng, settlementBalance, maxSlots);
             state.HaulOffers.AddRange(moreOffers);
         }
     }

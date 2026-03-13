@@ -187,6 +187,90 @@ public class SettlementRunnerTests
         Assert.All(settlement.HaulOffers, o => Assert.Equal("root", o.DestinationSettlementId));
     }
 
+    // ── Haul Restock Pacing ──
+
+    [Fact]
+    public void HaulRestock_NoRefillBeforeCooldown()
+    {
+        var session = MakeSessionWithTradeGraph(playerX: 2, playerY: 0);
+        SettlementRunner.EnsureSettlement(session);
+        var state = session.Player.Settlements["mid"];
+
+        // Player takes one haul, leaving one slot empty
+        state.HaulOffers.RemoveAt(0);
+        Assert.Single(state.HaulOffers);
+
+        // Revisit 1 day later — below hub cooldown (4 days)
+        session.Player.Day = 2;
+        SettlementRunner.EnsureSettlement(session);
+
+        // Slot should NOT refill yet
+        Assert.Single(state.HaulOffers);
+    }
+
+    [Fact]
+    public void HaulRestock_HubRefillsAfterCooldown()
+    {
+        var session = MakeSessionWithTradeGraph(playerX: 2, playerY: 0);
+        SettlementRunner.EnsureSettlement(session);
+        var state = session.Player.Settlements["mid"];
+        var originalOffers = state.HaulOffers.Select(o => o.HaulOfferId).ToList();
+
+        // Advance past hub cooldown (4 days)
+        session.Player.Day = 5;
+        SettlementRunner.EnsureSettlement(session);
+
+        // Old offers cleared, new ones generated — 1 tick = 1 slot
+        Assert.Single(state.HaulOffers);
+        Assert.DoesNotContain(state.HaulOffers[0].HaulOfferId, originalOffers);
+    }
+
+    [Fact]
+    public void HaulRestock_TwoTicksRefillsBothSlots()
+    {
+        var session = MakeSessionWithTradeGraph(playerX: 2, playerY: 0);
+        SettlementRunner.EnsureSettlement(session);
+        var state = session.Player.Settlements["mid"];
+
+        // Advance 2 hub ticks (8 days)
+        session.Player.Day = 9;
+        SettlementRunner.EnsureSettlement(session);
+
+        Assert.Equal(2, state.HaulOffers.Count);
+    }
+
+    [Fact]
+    public void HaulRestock_LeafSlowerThanHub()
+    {
+        var session = MakeSessionWithTradeGraph(playerX: 4, playerY: 0);
+        SettlementRunner.EnsureSettlement(session);
+        var state = session.Player.Settlements["leaf"];
+
+        // Advance 5 days — past hub cooldown but below leaf cooldown (8 days)
+        session.Player.Day = 6;
+        SettlementRunner.EnsureSettlement(session);
+
+        // Leaf should not have restocked yet — still has original offer
+        Assert.Single(state.HaulOffers);
+    }
+
+    [Fact]
+    public void HaulRestock_LeafRefillsAfterLeafCooldown()
+    {
+        var session = MakeSessionWithTradeGraph(playerX: 4, playerY: 0);
+        SettlementRunner.EnsureSettlement(session);
+        var state = session.Player.Settlements["leaf"];
+        var originalId = state.HaulOffers[0].HaulOfferId;
+
+        // Advance past leaf cooldown (8 days)
+        session.Player.Day = 9;
+        SettlementRunner.EnsureSettlement(session);
+
+        // Old offer cleared, new one generated
+        Assert.Single(state.HaulOffers);
+        Assert.NotEqual(originalId, state.HaulOffers[0].HaulOfferId);
+    }
+
     [Fact]
     public void EnsureSettlement_StartingCity_HasChapterhouse()
     {
