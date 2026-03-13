@@ -173,9 +173,11 @@ public static class Inn
         var conditionsCleared = new List<string>();
         var medicinesConsumed = new List<string>();
 
-        // Clear exhausted
+        // Clear exhausted and disheartened (spirits now at max)
         if (state.ActiveConditions.Remove("exhausted"))
             conditionsCleared.Add("exhausted");
+        if (state.ActiveConditions.Remove("disheartened"))
+            conditionsCleared.Add("disheartened");
 
         // Consume medicines for treatable conditions (1 per stack)
         ConsumeMedicines(state, balance, conditionsCleared, medicinesConsumed);
