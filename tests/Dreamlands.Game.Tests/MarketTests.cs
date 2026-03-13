@@ -51,6 +51,56 @@ public class MarketTests
     }
 
     [Fact]
+    public void InitializeSettlement_StocksTools_WhenOutpostOrLarger()
+    {
+        var state = Fresh();
+        var camp = Market.InitializeSettlement("Camp", "plains", 1, SettlementSize.Camp, state, Balance, new Random(1));
+        var outpost = Market.InitializeSettlement("Outpost", "plains", 1, SettlementSize.Outpost, state, Balance, new Random(1));
+
+        var campTools = camp.Stock.Keys
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
+            .ToList();
+        var outpostTools = outpost.Stock.Keys
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
+            .ToList();
+
+        Assert.Empty(campTools);
+        Assert.True(outpostTools.Count >= 1);
+    }
+
+    [Fact]
+    public void InitializeSettlement_Tools_RespectBiome()
+    {
+        var state = Fresh();
+        // plains tier 1 tools: traders_ledger, cartographers_kit
+        // scrub-only tools should not appear in plains
+        var settlement = Market.InitializeSettlement("Outpost", "plains", 1, SettlementSize.City, state, Balance, new Random(1));
+
+        var toolIds = settlement.Stock.Keys
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
+            .ToList();
+
+        foreach (var id in toolIds)
+        {
+            var def = Balance.Items[id];
+            Assert.True(def.Biome == null || def.Biome == "plains",
+                $"Tool {id} has biome {def.Biome}, expected plains or universal");
+        }
+    }
+
+    [Fact]
+    public void InitializeSettlement_Tools_ExcludesDungeonOnly()
+    {
+        var state = Fresh();
+        // lattice_ward, lead_lined_case, antivenom_kit have no Cost — should never appear
+        var settlement = Market.InitializeSettlement("City", "forest", 3, SettlementSize.City, state, Balance, new Random(1));
+
+        Assert.False(settlement.Stock.ContainsKey("lattice_ward"));
+        Assert.False(settlement.Stock.ContainsKey("lead_lined_case"));
+        Assert.False(settlement.Stock.ContainsKey("antivenom_kit"));
+    }
+
+    [Fact]
     public void InitializeSettlement_NoTradeGoods()
     {
         var state = Fresh();

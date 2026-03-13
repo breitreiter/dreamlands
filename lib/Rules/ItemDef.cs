@@ -357,7 +357,7 @@ public sealed class ItemDef
         {
             Id = "canteen", Name = "Canteen", Type = ItemType.Tool,
             ResistModifiers = new Dictionary<string, Magnitude> { ["thirsty"] = Magnitude.Small },
-            Cost = Magnitude.Small,
+            Biome = "forest", ShopTier = 1, Cost = Magnitude.Small,
         },
         ["waterskin"] = new()
         {

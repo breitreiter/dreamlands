@@ -32,13 +32,25 @@ public static class Market
                         && i.ShopTier != null && i.ShopTier <= tier && i.Cost != null)
             .ToList();
 
-        // Outpost+: equipment
-        if (size >= SettlementSize.Outpost)
-            AddRandomItems(catalog, equipment, 1, rng);
+        var tools = balance.Items.Values
+            .Where(i => i.Type == ItemType.Tool && i.Cost != null
+                        && (i.Biome == null || i.Biome == biome)
+                        && (i.ShopTier == null || i.ShopTier <= tier))
+            .ToList();
 
-        // Town+: additional equipment
+        // Outpost+: equipment + tool
+        if (size >= SettlementSize.Outpost)
+        {
+            AddRandomItems(catalog, equipment, 1, rng);
+            AddRandomItems(catalog, tools, 1, rng);
+        }
+
+        // Town+: additional equipment + tool
         if (size >= SettlementSize.Town)
+        {
             AddRandomItems(catalog, equipment, 1, rng, catalog);
+            AddRandomItems(catalog, tools, 1, rng, catalog);
+        }
 
         // City: additional equipment
         if (size >= SettlementSize.City)
@@ -61,6 +73,7 @@ public static class Market
             state.Stock[itemId] = def switch
             {
                 { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
+                { Type: ItemType.Tool } => 1,
                 { FoodType: not null } => maxStock, // food always well-stocked
                 _ => tier == 1 ? maxStock : 1, // medicines
             };
