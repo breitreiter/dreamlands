@@ -24,38 +24,26 @@ public sealed class ConditionDef
         ["freezing"] = new()
         {
             Id = "freezing", Name = "Freezing", Biome = "mountains", Tier = "any",
-            Stacks = 1, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Small,
+            Stacks = 1, SpiritsDrain = Magnitude.Small,
             ClearedOnSettlement = true,
             SpecialCure = "Leave the mountain biome or enter a settlement.",
-        },
-        ["hungry"] = new()
-        {
-            Id = "hungry", Name = "Hungry", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
-            ClearedOnSettlement = true,
         },
         ["thirsty"] = new()
         {
             Id = "thirsty", Name = "Thirsty", Biome = "scrub", Tier = "any",
-            Stacks = 1, HealthDrain = Magnitude.Small, SpiritsDrain = Magnitude.Small,
+            Stacks = 1, SpiritsDrain = Magnitude.Small,
             ClearedOnSettlement = true,
             SpecialCure = "Enter a settlement.",
-        },
-        ["swamp_fever"] = new()
-        {
-            Id = "swamp_fever", Name = "Swamp Fever", Biome = "swamp", Tier = "any",
-            Stacks = 4, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
-        },
-        ["gut_worms"] = new()
-        {
-            Id = "gut_worms", Name = "Gut Worms", Biome = "forest", Tier = "2",
-            Stacks = 2, HealthDrain = Magnitude.Trivial, SpiritsDrain = Magnitude.Trivial,
-            ResistDifficulty = Difficulty.Easy,
         },
         ["irradiated"] = new()
         {
             Id = "irradiated", Name = "Irradiated", Biome = "plains", Tier = "3",
-            HealthDrain = Magnitude.Medium, SpiritsDrain = Magnitude.Small,
+            Stacks = 3, HealthDrain = Magnitude.Huge,
+        },
+        ["lattice_sickness"] = new()
+        {
+            Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "swamp", Tier = "3",
+            Stacks = 3, HealthDrain = Magnitude.Huge,
         },
         ["exhausted"] = new()
         {
@@ -66,7 +54,7 @@ public sealed class ConditionDef
         ["poisoned"] = new()
         {
             Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Small,
+            Stacks = 3, HealthDrain = Magnitude.Huge,
         },
         ["lost"] = new()
         {
@@ -78,7 +66,7 @@ public sealed class ConditionDef
         ["injured"] = new()
         {
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Small, SpiritsDrain = Magnitude.Trivial,
+            Stacks = 3, HealthDrain = Magnitude.Huge,
         },
         ["disheartened"] = new()
         {

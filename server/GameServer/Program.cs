@@ -257,7 +257,7 @@ MechanicsInfo BuildMechanics(PlayerState p)
     // Resistances: for each condition, compute total resist bonus
     foreach (var (condId, condDef) in balance.Conditions)
     {
-        if (condId is "disheartened" or "hungry") continue;
+        if (condId is "disheartened") continue;
         // Map condition to its resist skill (mirrors SkillChecks.RollResist)
         var resistSkill = condId switch
         {
@@ -485,9 +485,7 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
             EndOfDayEvent.FoodConsumed f => f.Balanced
                 ? $"Balanced meal: {string.Join(", ", f.FoodEaten)}"
                 : $"Ate: {string.Join(", ", f.FoodEaten)}",
-            EndOfDayEvent.Starving => "No food! Going hungry.",
-            EndOfDayEvent.HungerChanged h => $"Hungry ({h.NewStacks} stacks)",
-            EndOfDayEvent.HungerCured => "No longer hungry!",
+            EndOfDayEvent.Starving => "No food!",
             EndOfDayEvent.ResistPassed r => $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
             EndOfDayEvent.ResistFailed r => $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
             EndOfDayEvent.CureApplied c => c.Remaining > 0

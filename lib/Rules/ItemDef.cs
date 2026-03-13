@@ -404,15 +404,10 @@ public sealed class ItemDef
 
         // ── Tools: Dungeon-only ──
 
-        ["fever_ward"] = new()
+        ["lattice_ward"] = new()
         {
-            Id = "fever_ward", Name = "Fever Ward", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["swamp_fever"] = Magnitude.Huge },
-        },
-        ["bilestone"] = new()
-        {
-            Id = "bilestone", Name = "Bilestone", Type = ItemType.Tool,
-            ResistModifiers = new Dictionary<string, Magnitude> { ["gut_worms"] = Magnitude.Huge },
+            Id = "lattice_ward", Name = "Lattice Ward", Type = ItemType.Tool,
+            ResistModifiers = new Dictionary<string, Magnitude> { ["lattice_sickness"] = Magnitude.Huge },
         },
         ["lead_lined_case"] = new()
         {
@@ -454,19 +449,12 @@ public sealed class ItemDef
             Cures = new HashSet<string> { "injured" },
             Cost = Magnitude.Trivial,
         },
-        ["gravediggers_ear"] = new()
+        ["lattice_draught"] = new()
         {
-            Id = "gravediggers_ear", Name = "Gravedigger's Ear", Type = ItemType.Consumable,
-            Description = "A leathery fungus that grows on coffin-wood. Brew it into a bitter tea to break swamp fever.",
-            Cures = new HashSet<string> { "swamp_fever" },
-            Biome = "swamp", ShopTier = 2, Cost = Magnitude.Small,
-        },
-        ["creeping_baldric"] = new()
-        {
-            Id = "creeping_baldric", Name = "Creeping Baldric", Type = ItemType.Consumable,
-            Description = "A coil of pale vine that tightens when warmed. Chew a length to purge gut worms.",
-            Cures = new HashSet<string> { "gut_worms" },
-            Biome = "forest", ShopTier = 2, Cost = Magnitude.Small,
+            Id = "lattice_draught", Name = "Lattice Draught", Type = ItemType.Consumable,
+            Description = "A thick, iridescent liquid distilled from deep-swamp roots. It tastes of copper and static, and fights the lattice's hold on the blood.",
+            Cures = new HashSet<string> { "lattice_sickness" },
+            Biome = "swamp", ShopTier = 3, Cost = Magnitude.Medium,
         },
         ["pale_knot_berry"] = new()
         {

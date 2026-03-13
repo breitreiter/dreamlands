@@ -1,3 +1,5 @@
+**SUPERSEDED** — See `condition_rework.md` for the current two-tier severity model.
+
 # Conditions System — Design Inventory
 
 ## Overview

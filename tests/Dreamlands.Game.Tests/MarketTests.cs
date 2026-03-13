@@ -30,8 +30,6 @@ public class MarketTests
         var settlement = Market.InitializeSettlement("Camp", "forest", 2, SettlementSize.Camp, state, Balance, new Random(1));
 
         Assert.True(settlement.Stock.ContainsKey("bandages"));
-        // creeping_baldric is forest tier 2 — should be stocked
-        Assert.True(settlement.Stock.ContainsKey("creeping_baldric"));
     }
 
     [Fact]

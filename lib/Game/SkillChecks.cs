@@ -109,7 +109,7 @@ public static class SkillChecks
             "freezing" or "thirsty" or "lost" => (Skill?)Skill.Bushcraft,
             "poisoned" => Skill.Bushcraft,
             "injured" => Skill.Combat,
-            _ => null, // swamp_fever, gut_worms, irradiated, exhausted — gear only
+            _ => null, // irradiated, lattice_sickness, exhausted — gear only
         };
 
         var skillLevel = skill != null ? state.Skills.GetValueOrDefault(skill.Value) : 0;
@@ -180,7 +180,7 @@ public static class SkillChecks
             "freezing" or "thirsty" or "lost" =>
                 GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance)
                 + GetBestPackResist(conditionId, magnitudes, state, balance, 2),
-            "swamp_fever" or "gut_worms" or "irradiated" =>
+            "irradiated" or "lattice_sickness" =>
                 GetBestPackResist(conditionId, magnitudes, state, balance, 1),
             _ => 0,
         };

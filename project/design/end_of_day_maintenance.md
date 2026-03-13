@@ -1,5 +1,7 @@
 # End-of-Day Maintenance
 
+**Note**: Hungry condition and hunger stacking have been removed. See `condition_rework.md`.
+
 End-of-day is the core survival loop. It runs every time the day counter advances.
 
 ## When It Triggers

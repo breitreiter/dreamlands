@@ -27,10 +27,13 @@ public class BalanceDataTests
         var conditions = BalanceData.Default.Conditions;
         Assert.NotEmpty(conditions);
         Assert.True(conditions.ContainsKey("freezing"));
-        Assert.True(conditions.ContainsKey("hungry"));
         Assert.True(conditions.ContainsKey("thirsty"));
         Assert.True(conditions.ContainsKey("exhausted"));
         Assert.True(conditions.ContainsKey("poisoned"));
+        Assert.True(conditions.ContainsKey("lattice_sickness"));
+        Assert.False(conditions.ContainsKey("hungry"));
+        Assert.False(conditions.ContainsKey("gut_worms"));
+        Assert.False(conditions.ContainsKey("swamp_fever"));
     }
 
     [Fact]

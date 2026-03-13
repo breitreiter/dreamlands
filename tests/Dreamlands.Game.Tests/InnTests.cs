@@ -25,7 +25,7 @@ public class InnTests
     public void CanUseInn_HealthDrainCondition_WithoutMedicine_Disqualified()
     {
         var state = Fresh();
-        state.ActiveConditions["injured"] = 2; // HealthDrain = Small
+        state.ActiveConditions["injured"] = 2; // HealthDrain = Huge
 
         var (allowed, disqualifying) = Inn.CanUseInn(state, Balance);
 
@@ -61,15 +61,39 @@ public class InnTests
     }
 
     [Fact]
-    public void CanUseInn_ClearedOnSettlement_NotDisqualifying()
+    public void CanUseInn_FreezingNoHealthDrain_NotDisqualifying()
     {
         var state = Fresh();
-        state.ActiveConditions["freezing"] = 1; // HealthDrain but ClearedOnSettlement = true
+        state.ActiveConditions["freezing"] = 1; // spirit drain only, no health drain
 
         var (allowed, disqualifying) = Inn.CanUseInn(state, Balance);
 
         Assert.True(allowed);
         Assert.Empty(disqualifying);
+    }
+
+    [Fact]
+    public void CanUseInn_ThirstyNoHealthDrain_NotDisqualifying()
+    {
+        var state = Fresh();
+        state.ActiveConditions["thirsty"] = 1; // spirit drain only, no health drain
+
+        var (allowed, disqualifying) = Inn.CanUseInn(state, Balance);
+
+        Assert.True(allowed);
+        Assert.Empty(disqualifying);
+    }
+
+    [Fact]
+    public void CanUseInn_LatticeSickness_Disqualified()
+    {
+        var state = Fresh();
+        state.ActiveConditions["lattice_sickness"] = 3;
+
+        var (allowed, disqualifying) = Inn.CanUseInn(state, Balance);
+
+        Assert.False(allowed);
+        Assert.Contains("lattice_sickness", disqualifying);
     }
 
     [Fact]
@@ -159,7 +183,7 @@ public class InnTests
     {
         var state = Fresh();
         state.Health = state.MaxHealth - 3;
-        state.ActiveConditions["injured"] = 1; // HealthDrain = Small (2 HP/night)
+        state.ActiveConditions["injured"] = 1; // HealthDrain = Huge (4 HP/night)
         state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // 1 cure for 1 stack
 
         var quote = Inn.GetQuote(state, Balance);
@@ -178,8 +202,8 @@ public class InnTests
 
         var quoteHealthy = Inn.GetQuote(state, Balance);
 
-        // Add a ClearedOnSettlement condition with drain — should NOT affect night count
-        state.ActiveConditions["freezing"] = 1; // HealthDrain=Trivial, SpiritsDrain=Small, ClearedOnSettlement=true
+        // Add a ClearedOnSettlement condition — should NOT affect night count
+        state.ActiveConditions["freezing"] = 1; // SpiritsDrain=Small, ClearedOnSettlement=true
 
         var quoteWithFreezing = Inn.GetQuote(state, Balance);
 

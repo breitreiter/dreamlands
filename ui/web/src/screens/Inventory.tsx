@@ -19,11 +19,9 @@ import {
 
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",
-  hungry: "pouch-with-beads.svg",
   thirsty: "water-drop.svg",
+  lattice_sickness: "foamy-disc.svg",
   poisoned: "foamy-disc.svg",
-  swamp_fever: "foamy-disc.svg",
-  gut_worms: "foamy-disc.svg",
   irradiated: "foamy-disc.svg",
   exhausted: "tread.svg",
   lost: "compass.svg",

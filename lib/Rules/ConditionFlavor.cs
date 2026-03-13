@@ -25,16 +25,6 @@ public sealed class ConditionFlavor
             HealComplete = "Your warmth is your own again. The cold retreats to the peaks where it belongs.",
             Death = "You drift rather than wake; numb past cold, past pain, past everything. The mountain takes what it is owed.",
         },
-        ["hungry"] = new()
-        {
-            Ongoing = "The belly gnaws at itself. Another night of empty hands.",
-            Resist = "Thin rations, thin comfort \u2014 but the belly does not yet turn on itself.",
-            Succumb = "Your last scraps are gone. The road ahead looks longer than it did this morning.",
-            HealProgress = "Real food. Your hands have stopped shaking. Your body still remembers the want.",
-            HealFailure = "You scrape the bottom of your pack. Whatever was there, it was not enough.",
-            HealComplete = "Your belly is full. You had forgotten what that felt like.",
-            Death = "You wait for a friendly traveller, but no one comes to save you. The road does not mourn its dead.",
-        },
         ["thirsty"] = new()
         {
             Ongoing = "Your tongue is a strip of leather. The waste watches, and waits.",
@@ -45,25 +35,15 @@ public sealed class ConditionFlavor
             HealComplete = "Water. You had forgotten that water could taste like anything but want.",
             Death = "Something silver gleams between the dunes. Your legs carry you toward it before your mind can object. It is always sand. In the end, it is only sand.",
         },
-        ["swamp_fever"] = new()
+        ["lattice_sickness"] = new()
         {
-            Ongoing = "The fever burns on. The swamp does not give back what it takes.",
-            Resist = "The insects find every inch of exposed skin. Whatever they carry, your body refuses it \u2014 this time.",
-            Succumb = "Your joints are hot iron. The swamp has gotten into your blood.",
-            HealProgress = "The fever breaks, then returns, lessened this time. You are winning, slowly, at great cost.",
-            HealFailure = "The medicine fights. The insects undo its work. The swamp will not release you cheaply.",
-            HealComplete = "The fever breaks for the last time. You are wrung out, hollow, but clean.",
-            Death = "The world blurs and runs together. The swamp has many dead in it. It will have one more.",
-        },
-        ["gut_worms"] = new()
-        {
-            Ongoing = "Something writhes behind your navel. The forest's tiny passengers have made themselves at home.",
-            Resist = "Something in the water looked wrong. You boiled it twice and ate nothing you couldn't identify. Caution, not luck.",
-            Succumb = "It started with the berries, or the stream, or the meat that sat too long in the humid air. The forest feeds you its own way.",
-            HealProgress = "The cramps ease. Whatever is living in you has lost ground, though it hasn't surrendered.",
-            HealFailure = "The medicine passes through you. The worms remain, patient and well-fed.",
-            HealComplete = "The last of them passes. You are hollow and scoured, but the food stays down again.",
-            Death = "You cannot keep water down. The forest takes back everything it gave you, and then the rest.",
+            Ongoing = "The colors bleed at the edges of your vision. Something in the lattice has taken root in you.",
+            Resist = "The swamp hums with a frequency that sets your teeth on edge, but your blood stays clean.",
+            Succumb = "The world splits along lines that shouldn't exist. Color drains from your left eye first, then the pain begins.",
+            HealProgress = "The colors stabilize. The lattice's grip loosens, though it leaves marks you can feel but not see.",
+            HealFailure = "The medicine burns through you and the lattice drinks it down. The sickness has learned your remedies.",
+            HealComplete = "The world snaps back to a single image. The lattice releases you, leaving only the memory of geometries that should not be.",
+            Death = "The colors separate completely. You see the lattice for what it is -- beautiful, perfect, and utterly indifferent to the small thing dying inside it.",
         },
         ["irradiated"] = new()
         {

@@ -1,3 +1,6 @@
+**SUPERSEDED** — See `condition_rework.md` for the current two-tier severity model.
+Hungry, gut_worms, and swamp_fever have been removed. Lattice sickness added.
+
 NOTE TO CLAUDE - "Resisted by" is game design bookkeeping, to make sure we don't have conditions that can't be cured. Do not bake this into the condition datastructure.
 
 # General mechanics

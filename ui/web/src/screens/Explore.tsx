@@ -127,12 +127,10 @@ const DIR_KEYS: Record<string, string> = {
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",
   thirsty: "water-drop.svg",
-  swamp_fever: "foamy-disc.svg",
-  gut_worms: "foamy-disc.svg",
+  lattice_sickness: "foamy-disc.svg",
   irradiated: "foamy-disc.svg",
   poisoned: "foamy-disc.svg",
   injured: "bloody-stash.svg",
-  hungry: "pouch-with-beads.svg",
   exhausted: "tread.svg",
   lost: "compass.svg",
   disheartened: "sensuousness.svg",

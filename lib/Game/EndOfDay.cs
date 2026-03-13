@@ -23,7 +23,6 @@ public static class EndOfDay
 
         foreach (var def in balance.Conditions.Values)
         {
-            if (def.Id == "hungry") continue;
             if (EncounterOnlyIds.Contains(def.Id)) continue;
 
             // Biome-specific conditions
@@ -241,39 +240,6 @@ public static class EndOfDay
             events.Add(new EndOfDayEvent.FoodConsumed(eaten, balanced));
         else
             events.Add(new EndOfDayEvent.Starving());
-
-        // Hungry logic: shortage = 3 - foodEaten
-        int shortage = 3 - eaten.Count;
-        int currentStacks = state.ActiveConditions.GetValueOrDefault("hungry");
-        int maxStacks = balance.Conditions.TryGetValue("hungry", out var hungryDef) ? hungryDef.Stacks : 3;
-
-        if (eaten.Count == 3)
-        {
-            // Full meal: cure 1 stack silently
-            if (currentStacks > 0)
-            {
-                var newStacks = currentStacks - 1;
-                if (newStacks <= 0)
-                {
-                    state.ActiveConditions.Remove("hungry");
-                    events.Add(new EndOfDayEvent.HungerCured());
-                }
-                else
-                {
-                    state.ActiveConditions["hungry"] = newStacks;
-                    events.Add(new EndOfDayEvent.HungerChanged(newStacks));
-                }
-            }
-        }
-        else if (shortage > currentStacks)
-        {
-            // Shortage exceeds current stacks: set stacks to shortage
-            var newStacks = Math.Min(shortage, maxStacks);
-            state.ActiveConditions["hungry"] = newStacks;
-            if (newStacks != currentStacks)
-                events.Add(new EndOfDayEvent.HungerChanged(newStacks));
-        }
-        // Otherwise: no change to hungry stacks
 
         return balanced;
     }

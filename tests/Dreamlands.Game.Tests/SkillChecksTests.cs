@@ -272,12 +272,12 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetResistBonus_SwampFever_UsesDungeonTool()
+    public void GetResistBonus_LatticeSickness_UsesDungeonTool()
     {
         var state = Fresh();
-        state.Pack.Add(new ItemInstance("fever_ward", "Fever Ward")); // swamp_fever = Huge → +5
+        state.Pack.Add(new ItemInstance("lattice_ward", "Lattice Ward")); // lattice_sickness = Huge → +5
 
-        Assert.Equal(5, SkillChecks.GetResistBonus("swamp_fever", state, Balance));
+        Assert.Equal(5, SkillChecks.GetResistBonus("lattice_sickness", state, Balance));
     }
 
     [Fact]
@@ -286,6 +286,6 @@ public class SkillChecksTests
         var state = Fresh();
         Assert.Equal(0, SkillChecks.GetResistBonus("injured", state, Balance));
         Assert.Equal(0, SkillChecks.GetResistBonus("freezing", state, Balance));
-        Assert.Equal(0, SkillChecks.GetResistBonus("swamp_fever", state, Balance));
+        Assert.Equal(0, SkillChecks.GetResistBonus("lattice_sickness", state, Balance));
     }
 }
