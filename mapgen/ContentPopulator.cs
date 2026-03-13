@@ -25,8 +25,6 @@ public static class ContentPopulator
         Console.Error.WriteLine("  Dungeons...");
         var roster = DungeonRoster.Load(contentPath);
         DungeonPlacer.PlaceDungeons(map, roster, rng);
-        Console.Error.WriteLine("  Encounters...");
-        EncounterPlacer.Place(map);
     }
 
     private static void RemoveT3Settlements(Map map)

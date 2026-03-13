@@ -275,10 +275,6 @@ public class Program
         if (dungeonCount > 0)
             Console.WriteLine($"Dungeons: {dungeonCount}");
 
-        var encounterCount = map.AllNodes().Count(n => n.Poi?.Kind == PoiKind.Encounter);
-        if (encounterCount > 0)
-            Console.WriteLine($"Encounters: {encounterCount}");
-
         if (showRegions)
         {
             Console.WriteLine();

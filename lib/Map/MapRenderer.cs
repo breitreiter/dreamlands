@@ -19,7 +19,6 @@ public static class MapRenderer
         [PoiKind.Settlement] = 'S',
         [PoiKind.Dungeon] = 'D',
         [PoiKind.Landmark] = 'L',
-        [PoiKind.Encounter] = 'E',
     };
 
     private const string Reset = "\x1b[0m";
