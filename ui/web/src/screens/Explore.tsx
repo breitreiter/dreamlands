@@ -20,7 +20,6 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { getDiscoveries, getNotices } from "../api/client";
-import NightToast from "../components/NightToast";
 import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo } from "../api/types";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
@@ -414,8 +413,6 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   return (
     <div className="h-full relative bg-page text-primary">
-      <NightToast />
-
       {/* Map — full screen */}
       <MapContainer
         crs={CRS.Simple}

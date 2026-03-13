@@ -7,7 +7,6 @@ export default function NightToast() {
 
   useEffect(() => {
     if (toast) {
-      // Trigger fade-in on next frame
       requestAnimationFrame(() => setVisible(true));
     } else {
       setVisible(false);
@@ -18,7 +17,7 @@ export default function NightToast() {
 
   return (
     <div
-      className={`fixed top-6 left-1/2 -translate-x-1/2 z-[1500] transition-opacity duration-500 cursor-pointer ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`fixed left-1/2 -translate-x-1/2 z-[1500] transition-all duration-500 ease-out cursor-pointer ${visible ? "top-6 opacity-100" : "-top-20 opacity-0"}`}
       onClick={clearToast}
     >
       <div className="bg-panel/90 rounded-lg px-5 py-3 space-y-1 shadow-lg backdrop-blur-sm">

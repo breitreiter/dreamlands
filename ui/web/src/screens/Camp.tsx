@@ -50,13 +50,15 @@ export default function Camp({ state }: { state: GameResponse }) {
     }
   }, [resolved, doAction]);
 
-  // Toast path: minor conditions only — skip crisis screen
+  // Toast path: minor conditions only — skip crisis screen.
+  // Small delay before refreshState so Explore can mount before the toast slides in,
+  // avoiding the flash from simultaneous map remount + toast render.
   useEffect(() => {
     if (resolved && camp && !camp.hasSevereCondition && !state.reason && !didToast.current) {
       didToast.current = true;
       const lines = buildToastLines(camp.events);
       if (lines.length > 0) showToast({ lines });
-      refreshState();
+      setTimeout(() => refreshState(), 50);
     }
   }, [resolved, camp, state.reason, showToast, refreshState]);
 
@@ -92,6 +94,9 @@ export default function Camp({ state }: { state: GameResponse }) {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [resolved, refreshState]);
+
+  // Pre-resolve or toast path — Explore is visible underneath, render nothing
+  if (!resolved || didToast.current) return null;
 
   return (
     <div className="h-full flex bg-page text-primary">

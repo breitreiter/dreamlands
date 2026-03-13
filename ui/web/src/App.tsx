@@ -5,6 +5,7 @@ import Encounter from "./screens/Encounter";
 import DungeonHub from "./screens/DungeonHub";
 import GameOver from "./screens/GameOver";
 import Camp from "./screens/Camp";
+import NightToast from "./components/NightToast";
 
 function GameRouter() {
   const { response, error, clearError } = useGame();
@@ -13,6 +14,7 @@ function GameRouter() {
 
   return (
     <>
+      <NightToast />
       {error && (
         <div className="fixed top-0 left-0 right-0 z-[2000] bg-negative/90 text-contrast px-4 py-2 text-sm flex justify-between items-center">
           <span>{error}</span>
@@ -22,7 +24,10 @@ function GameRouter() {
         </div>
       )}
       {response.mode === "exploring" && response.dungeonHub && <DungeonHub hub={response.dungeonHub} />}
-      {response.mode === "exploring" && !response.dungeonHub && <Explore state={response} />}
+      {/* Keep Explore mounted during camp so Leaflet map stays alive */}
+      {["exploring", "camp", "camp_resolved"].includes(response.mode) && !response.dungeonHub && (
+        <Explore state={response} />
+      )}
       {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
       {response.mode === "game_over" && <GameOver state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
