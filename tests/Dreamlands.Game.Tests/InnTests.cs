@@ -309,6 +309,20 @@ public class InnTests
     }
 
     [Fact]
+    public void StayFullRecovery_ClearsDisheartened()
+    {
+        var state = Fresh();
+        state.Spirits = 5;
+        state.Gold = 100;
+        state.ActiveConditions["disheartened"] = 1;
+
+        var result = Inn.StayFullRecovery(state, Balance);
+
+        Assert.False(state.ActiveConditions.ContainsKey("disheartened"));
+        Assert.Contains("disheartened", result.ConditionsCleared);
+    }
+
+    [Fact]
     public void StayFullRecovery_ConsumesMedicine()
     {
         var state = Fresh();
