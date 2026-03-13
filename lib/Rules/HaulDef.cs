@@ -9,10 +9,11 @@ public sealed partial class HaulDef
     public string DestBiome { get; init; } = "";
     public string OriginFlavor { get; init; } = "";
     public string DeliveryFlavor { get; init; } = "";
+    public bool IsGeneric { get; init; }
 
     internal static IReadOnlyDictionary<string, HaulDef> All { get; } = BuildAll();
 
     static Dictionary<string, HaulDef> BuildAll() =>
-        Plains().Concat(Mountains()).Concat(Forest()).Concat(Scrub()).Concat(Swamp())
+        Plains().Concat(Mountains()).Concat(Forest()).Concat(Scrub()).Concat(Swamp()).Concat(Generic())
             .ToDictionary(h => h.Id);
 }

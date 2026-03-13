@@ -750,7 +750,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                                 h.DisplayName, h.DestinationSettlementId, h.DestinationName);
                     }
 
-                    var delivered = HaulDelivery.Deliver(player, arrivalId, balance.Hauls);
+                    var delivered = HaulDelivery.Deliver(player, arrivalId, balance.Hauls, session.Rng);
                     if (delivered.Count > 0)
                     {
                         app.Logger.LogInformation("Delivered {Count} hauls:", delivered.Count);
@@ -1273,6 +1273,7 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
             : h.DestinationHint,
         payout = h.Payout,
         originFlavor = h.Description,
+        isGeneric = h.IsGeneric,
     }).ToList();
 
     // Sell prices for all player inventory items (excluding hauls)

@@ -17,4 +17,5 @@ public record ItemInstance(string DefId, string DisplayName)
     public int? DestinationX { get; init; }
     public int? DestinationY { get; init; }
     public int? Payout { get; init; }
+    public bool IsGeneric { get; init; }
 }

@@ -106,7 +106,7 @@ public class HaulGenerationTests
     }
 
     [Fact]
-    public void NoMatchingDefs_ReturnsEmpty()
+    public void NoMatchingDefs_NoGenerics_ReturnsEmpty()
     {
         var candidates = new List<HaulGeneration.HaulDestination>
         {
@@ -118,6 +118,94 @@ public class HaulGenerationTests
             candidates, TestHauls, [], [], new Random(42));
 
         Assert.Empty(result);
+    }
+
+    [Fact]
+    public void BespokePreferredOverGeneric()
+    {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["bespoke"] = new() { Id = "bespoke", Name = "Bespoke Grain", OriginBiome = "plains", DestBiome = "forest", OriginFlavor = "Fine grain" },
+            ["generic_crate"] = new() { Id = "generic_crate", Name = "Sealed Crate", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A crate" },
+        };
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Woodhaven", Terrain.Forest, 20, 10),
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            candidates, hauls, [], [], new Random(42));
+
+        Assert.Single(result);
+        Assert.Equal("bespoke", result[0].HaulDefId);
+        Assert.False(result[0].IsGeneric);
+    }
+
+    [Fact]
+    public void GenericHaul_WhenNoBespokeMatch()
+    {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["bespoke"] = new() { Id = "bespoke", Name = "Bespoke Grain", OriginBiome = "plains", DestBiome = "forest", OriginFlavor = "Fine grain" },
+            ["generic_crate"] = new() { Id = "generic_crate", Name = "Sealed Crate", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A crate" },
+        };
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Bogtown", Terrain.Swamp, 20, 10), // no bespoke plains->swamp
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            candidates, hauls, [], [], new Random(42));
+
+        Assert.Single(result);
+        Assert.Equal("generic_crate", result[0].HaulDefId);
+        Assert.True(result[0].IsGeneric);
+    }
+
+    [Fact]
+    public void GenericHauls_ExcludedFromReGeneration()
+    {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["generic_crate"] = new() { Id = "generic_crate", Name = "Sealed Crate", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A crate" },
+        };
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Bogtown", Terrain.Swamp, 20, 10),
+        };
+        var existing = new List<ItemInstance>
+        {
+            new("haul", "Sealed Crate") { HaulDefId = "generic_crate" }
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: false,
+            candidates, hauls, existing, [], new Random(42));
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GenericHaul_SetsIsGenericOnItemInstance()
+    {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["generic_crate"] = new() { Id = "generic_crate", Name = "Sealed Crate", OriginBiome = "", DestBiome = "", IsGeneric = true, OriginFlavor = "A crate" },
+        };
+        var candidates = new List<HaulGeneration.HaulDestination>
+        {
+            new("dest1", "Bogtown", Terrain.Swamp, 20, 10),
+        };
+
+        var result = HaulGeneration.Generate(
+            10, 10, "Aldgate", Terrain.Plains, isLeaf: true,
+            candidates, hauls, [], [], new Random(42));
+
+        Assert.Single(result);
+        Assert.True(result[0].IsGeneric);
+        Assert.Equal("generic_crate", result[0].HaulDefId);
     }
 
     [Theory]

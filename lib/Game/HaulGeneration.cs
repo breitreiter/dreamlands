@@ -45,8 +45,13 @@ public static class HaulGeneration
 
             var destBiome = dest.Biome.ToString().ToLowerInvariant();
             var matching = hauls.Values
-                .Where(h => h.OriginBiome == origin && h.DestBiome == destBiome && !excluded.Contains(h.Id))
+                .Where(h => !h.IsGeneric && h.OriginBiome == origin && h.DestBiome == destBiome && !excluded.Contains(h.Id))
                 .ToList();
+
+            if (matching.Count == 0)
+                matching = hauls.Values
+                    .Where(h => h.IsGeneric && !excluded.Contains(h.Id))
+                    .ToList();
 
             if (matching.Count == 0) continue;
 
@@ -58,6 +63,7 @@ public static class HaulGeneration
             {
                 HaulOfferId = Guid.NewGuid().ToString("N"),
                 HaulDefId = def.Id,
+                IsGeneric = def.IsGeneric,
                 DestinationSettlementId = dest.SettlementId,
                 DestinationName = dest.Name,
                 DestinationHint = hint,

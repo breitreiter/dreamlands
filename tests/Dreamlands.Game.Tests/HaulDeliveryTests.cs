@@ -41,7 +41,7 @@ public class HaulDeliveryTests
             Payout = 25,
         });
 
-        var results = HaulDelivery.Deliver(player, "town_a", TestHauls);
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42));
 
         Assert.Single(results);
         Assert.Equal("test_haul", results[0].HaulDefId);
@@ -63,7 +63,7 @@ public class HaulDeliveryTests
             Payout = 25,
         });
 
-        var results = HaulDelivery.Deliver(player, "town_a", TestHauls);
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42));
 
         Assert.Empty(results);
         Assert.Single(player.Pack);
@@ -75,7 +75,7 @@ public class HaulDeliveryTests
         var player = MakePlayer();
         player.Pack.Add(new ItemInstance("sword", "Iron Sword"));
 
-        var results = HaulDelivery.Deliver(player, "town_a", TestHauls);
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42));
 
         Assert.Empty(results);
         Assert.Single(player.Pack);
@@ -100,7 +100,7 @@ public class HaulDeliveryTests
             Payout = 15,
         });
 
-        var results = HaulDelivery.Deliver(player, "town_a", TestHauls);
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42));
 
         Assert.Equal(2, results.Count);
         Assert.Equal(25, player.Gold);
@@ -113,7 +113,7 @@ public class HaulDeliveryTests
     {
         var player = MakePlayer();
 
-        var results = HaulDelivery.Deliver(player, "town_a", TestHauls);
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42));
 
         Assert.Empty(results);
     }
@@ -129,10 +129,39 @@ public class HaulDeliveryTests
             Payout = 5,
         });
 
-        var results = HaulDelivery.Deliver(player, "dest", TestHauls);
+        var results = HaulDelivery.Deliver(player, "dest", TestHauls, new Random(42));
 
         Assert.Single(results);
         Assert.Equal("Another delivery", results[0].DeliveryFlavor);
+    }
+
+    [Fact]
+    public void Generic_haul_delivery_returns_flavor_from_generic_pool()
+    {
+        var hauls = new Dictionary<string, HaulDef>
+        {
+            ["generic_sealed_crate"] = new()
+            {
+                Id = "generic_sealed_crate",
+                Name = "Sealed Crate",
+                IsGeneric = true,
+                OriginFlavor = "A crate",
+            },
+        };
+
+        var player = MakePlayer();
+        player.Pack.Add(new ItemInstance("h", "Sealed Crate")
+        {
+            HaulDefId = "generic_sealed_crate",
+            DestinationSettlementId = "dest",
+            Payout = 10,
+        });
+
+        var results = HaulDelivery.Deliver(player, "dest", hauls, new Random(42));
+
+        Assert.Single(results);
+        Assert.NotNull(results[0].DeliveryFlavor);
+        Assert.Contains(results[0].DeliveryFlavor, HaulDef.GenericDeliveryFlavors);
     }
 
     [Fact]
@@ -146,7 +175,7 @@ public class HaulDeliveryTests
             Payout = 5,
         });
 
-        var results = HaulDelivery.Deliver(player, "dest", TestHauls);
+        var results = HaulDelivery.Deliver(player, "dest", TestHauls, new Random(42));
 
         Assert.Single(results);
         Assert.Null(results[0].DeliveryFlavor);
