@@ -100,10 +100,7 @@ A side effect of every combat is the risk of gaining the Injured condition. Mech
 ### Freezing, Thirsty resist
 - Bushcraft + two highest small gear bonuses + token
 
-### Hungry resist
-- N/A - alternate system based entirely on food volume consumed
-
-### Swamp Fever, Gut Worms, Irradiated resist
+### Lattice Sickness, Irradiated resist
 - just-eaten (nightly maintenance) consumable bonus (big) + single highest pack-held equipment bonus (small) + bonus
 
 ### Poison resist

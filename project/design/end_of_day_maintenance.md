@@ -80,14 +80,7 @@ This includes any food just added by foraging. Items are removed from haversack.
 
 **Balanced meal** = all three food types present. Grants bonus rest recovery in step 9.
 
-**Hungry stacks**:
-- Full meal (3 food): cure 1 existing hungry stack
-- Shortage (ate < 3): if `(3 - eaten) > current stacks`, set stacks to shortage
-- Shortage never reduces existing stacks (missing 1 meal when already at 3 stacks = no change)
-- Hungry max stacks = 3 (from condition definition)
-
 **Events emitted**: `FoodConsumed(eaten, balanced)` or `Starving` (if 0 food).
-Plus `HungerChanged(newStacks)` or `HungerCured` as applicable.
 
 ### 6. Consume Medicine
 
@@ -176,9 +169,8 @@ Checked based on **camping tile only**, not tiles traveled through.
 |---|---|---|
 | Freezing | Mountains | Any |
 | Thirsty | Scrub | Any |
-| Swamp Fever | Swamp | Any |
+| Lattice Sickness | Swamp | Tier 3 |
 | Irradiated | Plains | Tier 3 |
-| Gut Worms | Forest | Tier 2 |
 
 ### Universal Conditions (every wilderness rest)
 
@@ -204,19 +196,12 @@ Up to 3 food items consumed per night. Each has a type: Protein, Grain, or Sweet
 |---|---|---|
 | Balanced | 1 protein + 1 grain + 1 sweet | +1 Health, +1 Spirits |
 | Partial | 1-3 items, incomplete triad | None |
-| Starving | 0 items | Hungry condition |
+| Starving | 0 items | No recovery bonus |
 
 ### Food Sources
 
 - **Market**: all settlements stock all 3 food types
 - **Foraging**: automatic nightly bushcraft check yields 0-3 items
-
-### Hungry
-
-- Stacking condition (max 3 stacks)
-- Gained when food shortage exceeds current stacks
-- Cured 1 stack per full meal (3 food items eaten)
-- Has health and spirits drain like other conditions
 
 ## Condition Recovery
 

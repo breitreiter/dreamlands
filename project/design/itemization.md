@@ -346,8 +346,8 @@ resistance or other utility.
 - Biome: any
 - Cost: Small
 
-### Insect Netting
-- Effect: swamp_fever resist (M)
+### Lattice Ward
+- Effect: lattice_sickness resist (Huge)
 - Biome: Swamp
 - Cost: Small
 
@@ -357,7 +357,7 @@ resistance or other utility.
 - Cost: Small
 
 ### Breathing Apparatus
-- Effect: irradiated (M), gut_worms (M)
+- Effect: irradiated (M)
 - Biome: Plains
 - Cost: Large
 

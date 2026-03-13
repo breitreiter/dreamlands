@@ -24,9 +24,4 @@ https://game-icons.net/tags/blood.html
 - freezing
 - poisoned
 - irradiated
-- Swamp Fever
-- Gut Worms
-
-Red Mire Fever	Standing water	Camp hygiene
-Ashlung	Dust / ruins / spores	Air protection
-Gut Worms	Foraged food	Self-sufficiency risk
+- Lattice Sickness

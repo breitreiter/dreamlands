@@ -449,10 +449,10 @@ public sealed class ItemDef
             Cures = new HashSet<string> { "injured" },
             Cost = Magnitude.Trivial,
         },
-        ["lattice_draught"] = new()
+        ["siphon_glass"] = new()
         {
-            Id = "lattice_draught", Name = "Lattice Draught", Type = ItemType.Consumable,
-            Description = "A thick, iridescent liquid distilled from deep-swamp roots. It tastes of copper and static, and fights the lattice's hold on the blood.",
+            Id = "siphon_glass", Name = "Siphon Glass", Type = ItemType.Consumable,
+            Description = "Strange crystalline fragments. It's said they draw out and capture unnatural colors.",
             Cures = new HashSet<string> { "lattice_sickness" },
             Biome = "swamp", ShopTier = 3, Cost = Magnitude.Medium,
         },

@@ -54,7 +54,7 @@ Conditions are the primary mechanism for ongoing stat changes. Rather than direc
 
 Each condition has the following properties:
 
-1. **Name**: The condition identifier (e.g., "Injured", "Hungry", "Sick")
+1. **Name**: The condition identifier (e.g., "Injured", "Poisoned", "Freezing")
 
 2. **Trigger**: The event or circumstance that applies the condition
    - *Implementation note*: May be stored in the trigger source (encounter text, tile type, etc.) rather than in the condition definition itself
@@ -80,11 +80,15 @@ Each condition has the following properties:
 
 Initial list of conditions (not exhaustive):
 
-- **Injured**: Physical trauma from combat or accidents
-- **Hungry**: Prolonged lack of food (from failed foraging or resource exhaustion)
-- **Sick**: Disease or infection
-- **Freezing**: Cold exposure without proper camping gear
-- **Exhausted**: Fatigue from overexertion or lack of rest
+- **Injured**: Physical trauma from combat or accidents (severe)
+- **Poisoned**: Toxins from encounters (severe)
+- **Irradiated**: Plains T3 environmental hazard (severe)
+- **Lattice Sickness**: Swamp T3 supernatural hazard (severe)
+- **Freezing**: Cold exposure in mountains (minor)
+- **Thirsty**: Dehydration in scrub (minor)
+- **Exhausted**: Fatigue from overexertion (minor)
+- **Lost**: Disorientation, clears on settlement entry (minor)
+- **Disheartened**: Low spirits threshold (minor)
 
 ---
 

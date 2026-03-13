@@ -126,10 +126,6 @@ No supplies are consumed in the Chapterhouse.
 
 ### Report Condition Changes
 
-If the PC consumed a full meal (3 of any food) treat that as curing medicine for hunger. Do not show a "You consumed food for your Hungry" message, just do this silently. If the PC consumed anything other than a full meal, show the Ongoing message as normal for an untreated condition.
-
-project/design/conditions_list.md
-
 For each condition the PC started end-of-day with:
 - If no curing medicine was consumed, show the Ongoing message. 
 - If curing medicine was consumed
@@ -139,7 +135,7 @@ For each condition the PC started end-of-day with:
         - If stacks remains, show the HealProgress message
 
 Then, for each condition the PC was at-risk of acquiring and does not currently have:
-- If the player resists the condition, show the Resist message. Do not show a resist message for Hungry, Lost, or Exhausted.
+- If the player resists the condition, show the Resist message. Do not show a resist message for Lost or Exhausted.
 - If the player succumbs to the condition, show the Succumb message. Apply condition stacks. Show mechanical penalty for condition.
 
 Finally, resolve Disheartened with the PC's final updated Spirits.

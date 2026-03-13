@@ -104,7 +104,7 @@ checks. The skill check system picks the best 2 tools in the Pack for each skill
 Designed as +3 and +2 pairs per skill type.
 
 **Utility tools** provide `ResistModifiers` for conditions (exhausted, thirsty,
-freezing, swamp_fever, irradiated, gut_worms). The resist system picks the best
+freezing, lattice_sickness, irradiated). The resist system picks the best
 1 or 2 tools depending on the condition.
 
 11 tools defined. Some serve both roles (writing_kit gives Mercantile +2 and
@@ -264,8 +264,7 @@ Each check type has a fixed formula for which gear contributes:
 | Exhausted | Boots | Best 1 tool | — | +1 |
 | Freezing | — | Best 2 tools | — | +1 |
 | Thirsty | — | Best 2 tools | — | +1 |
-| Swamp fever | — | Best 1 tool | Best 1 consumable | +1 |
-| Gut worms | — | Best 1 tool | Best 1 consumable | +1 |
+| Lattice sickness | — | Best 1 tool | Best 1 consumable | +1 |
 | Irradiated | — | Best 1 tool | Best 1 consumable | +1 |
 
 `Magnitude` values on `ResistModifiers` convert to numeric bonuses via

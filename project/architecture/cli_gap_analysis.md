@@ -130,7 +130,7 @@ encounter.md references `add_random_item` (singular) but `ActionVocabulary` defi
 
 **Rubric**: if it answers "what are the rules?" it goes in Rules. If it answers "what happened?" it goes in Game. Rules is the dictionary; Game uses the dictionary to play. Game depends on Rules, never the reverse.
 
-**Balance YAML** lives in Rules because it's still declarative data — "a small magnitude equals 2," "bandages cure injured," "swamp fever has a 40% overnight chance." Game reads these values and acts on them.
+**Balance YAML** lives in Rules because it's still declarative data — "a small magnitude equals 2," "bandages cure injured," "lattice sickness is a severe condition." Game reads these values and acts on them.
 
 ## What Belongs in /lib vs What's Truly UI
 

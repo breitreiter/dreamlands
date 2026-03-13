@@ -11,17 +11,12 @@ Items that go in the haversack
 
 # Medicines
 
-//swamp fever
+//lattice sickness
 
-## Jorgo Root
-- Mountains 2
-- +Resist Swamp Fever small
-- Pungent root found in the mountains. Chewing jorgo root acts as a natural insect repellent, keeping mosquitoes at bay
-
-## Gravedigger's Ear
-- Swamp 2
-- +Cure Swamp Fever small
-- A pale shelf fungus with a rubbery texture. Boiled in broth, it is believed to speed recovery from fever by inducing heavy sweat
+## Siphon Glass
+- Swamp 3
+- +Cure Lattice Sickness small
+- Strange crystalline fragments. It's said they draw out and capture unnatural colors.
 
 //injured
 
@@ -39,18 +34,6 @@ Items that go in the haversack
 - Plains 3
 - +Cure Injury large
 - Sharp-smelling amber paste that significantly speeds wound healing
-
-//gut worms
-
-## Creeping Baldric
-- Forest 2
-- +Cure Gut Worms small
-- A knotted root that smells faintly of sulfur. Eating a small amount raw settles a fevered stomach and stops vomiting
-
-## Dustseed 
-- Plains 2
-- +Resist Gut Worms small
-- Tiny grey seeds shaken from a dry-country grass. Sprinkled into food and water, they purify and cleanse
 
 //exhausted
 

@@ -2,7 +2,7 @@ Amenities:
 - Market - buy/sell anything, random prices, stock per biome/tier
 - Guild banker - store stuff
 - Outfitter - buy/sell gear
-- Inn/tavern - rest and recover. cures exhaustion, freezing, hungry
+- Inn/tavern - rest and recover. cures exhaustion, freezing
 - Temple - cures haunted
 - Healer - cures injured, diseases. takes time.
 

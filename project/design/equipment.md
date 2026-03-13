@@ -168,11 +168,11 @@ Weapons, armor, boots, and tools all take up one pack slot each.
 - Cost small
 - A stout canteen with a wooden stopper
 
-## Insect Netting
-- +Resist Swamp Fever medium
+## Lattice Ward
+- +Resist Lattice Sickness huge
 - Swamp any
 - Cost small
-- Fine netting to keep out flying pests
+- A filament of spun glass that hums faintly in the presence of unnatural light
 
 ## Intricate Breathing Apparatus
 - +Resist Radiation medium

@@ -6,15 +6,13 @@ Definitive icon mapping
 
 - **Freezing** — `mountains.svg` 
 - **Thirsty** — `water-drop.svg` 
-- **Swamp Fever** — `foamy-disc.svg` 
-- **Gut Worms** — `foamy-disc.svg` 
+- **Lattice Sickness** — `foamy-disc.svg`
 - **Irradiated** — `foamy-disc.svg` 
 - **Poisoned** — `foamy-disc.svg` 
 - **Injured** — `bloody-stash.svg` 
 
 ## Mental Conditions
 
-- **Hungry** — `pouch-with-beads.svg` 
 - **Exhausted** — `tread.svg` 
 - **Lost** — `compass.svg` 
 

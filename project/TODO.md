@@ -184,6 +184,9 @@ GameServer running with save persistence.
 - [x] Town — Inn / Chapterhouse
 - [x] Review UX for exiting inventory and market screens — normalized exit UX across all exitable screens
 - [ ] shadcn/tailwind based design system
+- [ ] Settlement encounters should use the settlement vignette image, not the biome overworld
+      vignette. Currently the encounter screen picks vignette by terrain — needs to detect
+      when the player is at a settlement (e.g. via node.poi.kind) and use the settlement variant.
 
 ## Rules / Game Mechanics
 
@@ -237,6 +240,18 @@ These must be resolved before end-of-day can be implemented.
 
 ### Non-Blocking
 - [x] Implement foraging action — `ResolveForaging` in `EndOfDay.cs`, design in `project/design/foraging.md`
+- [ ] Foraging rework — foraged food should always be unbalanced (single category per night).
+      Bushcraft keeps you alive (+1 recovery) but never yields a balanced meal (+2 recovery).
+      Only purchased food can be balanced. Preserves the SERE fantasy while keeping market
+      food valuable. See `project/design/condition_rework.md` for context.
+- [x] Condition rework — two-tier severity split. Minor conditions (exhausted, freezing,
+      thirsty) become spirit-only with toast UI. Severe conditions (injured, poisoned,
+      irradiated, lattice sickness) drain 5 hp/night with full crisis screen.
+      Design in `project/design/condition_rework.md`.
+- [ ] Market stocking — all outposts must stock bandages. All T3 biome settlements must
+      stock the relevant specialist medicine for their biome's severe condition.
+- [ ] Inn upgrade system — convert frontier outpost to chapterhouse for exorbitant cost.
+      Endgame prep for final T3 push. Design TBD.
 
 ### Gear Gaps
 Analysis in `project/design/gear_gap_analysis.md`. Not blocking gameplay loop but needed for
@@ -279,7 +294,7 @@ See `project/design/gaps.md` for the full list. Resolved items noted inline.
 - [x] Combat model — single skill check, same as any other check
 - [x] Skill advancement — no use-based advancement, gear only
 - [x] Character creation — flat start, initial backgrounder encounter sets skills based on character background
-- [ ] Wire up player creation encounter chain — replace random skill spread in NewGame() with actual intro encounter. Should advise player to buy food before setting out.
+- [x] Wire up player creation encounter chain — intro encounter sets skills based on character background.
 - [x] Encounter frequency — baked into mapgen as placeholders. First visit pulls from bespoke .enc
       pool. Subsequent visits have ~10% chance to trigger a recurring encounter.
 

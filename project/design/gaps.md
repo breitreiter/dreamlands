@@ -40,7 +40,7 @@ Structural or definitional gaps — the shape of the system is unclear, not just
 - [x] Effect mechanics — **DECIDED**: deterministic daily loss (e.g., -2 health/day)
 - [x] Severity tiers — **DECIDED**: no condition levels, severity tracked via stat depletion
 - [x] Spirits restoration — **DECIDED**: settlement entertainment/relaxation, scripted event rewards
-- [ ] Complete list of all status conditions (partial list: Injured, Hungry, Sick, Freezing, Exhausted)
+- [x] Complete list of all status conditions — finalized in `conditions_list.md` and `ConditionDef.All`
 - [ ] Condition stacking rules — do multiple conditions apply independently? (Injured + Sick = both drain health?)
 - [ ] Condition lifecycle — persist until cured, or can they expire naturally?
 - [ ] Spirits roll penalty formula — linear? stepped thresholds? applies to all rolls or subset?

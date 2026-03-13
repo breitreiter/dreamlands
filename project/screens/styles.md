@@ -76,16 +76,15 @@ Pattern: `<img src="/world/assets/icons/<name>.svg" className="w-5 h-5" />`
 
 | Condition    | Icon                  |
 |--------------|-----------------------|
-| Freezing     | `mountains.svg`       |
-| Hungry       | `pouch-with-beads.svg`|
-| Thirsty      | `water-drop.svg`      |
-| Poisoned     | `foamy-disc.svg`      |
-| Swamp Fever  | `foamy-disc.svg`      |
-| Gut Worms    | `foamy-disc.svg`      |
-| Irradiated   | `foamy-disc.svg`      |
-| Exhausted    | `tread.svg`           |
-| Lost         | `treasure-map.svg`    |
-| Injured      | `bloody-stash.svg`    |
+| Freezing          | `mountains.svg`       |
+| Thirsty           | `water-drop.svg`      |
+| Poisoned          | `foamy-disc.svg`      |
+| Lattice Sickness  | `foamy-disc.svg`      |
+| Irradiated        | `foamy-disc.svg`      |
+| Exhausted         | `tread.svg`           |
+| Lost              | `treasure-map.svg`    |
+| Injured           | `bloody-stash.svg`    |
+| Disheartened      | `sensuousness.svg`    |
 
 ### Item Type Icons
 

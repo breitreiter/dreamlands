@@ -17,8 +17,8 @@ MAGNITUDE                       TIME PERIODS
   huge
 
 CONDITIONS
-  freezing  hungry  thirsty  swamp_fever  gut_worms
-  irradiated  exhausted  lost  injured  poisoned  disheartened
+  freezing  thirsty  irradiated  lattice_sickness
+  exhausted  lost  injured  poisoned  disheartened
 
 
 ACTION VERBS
@@ -28,14 +28,17 @@ Flow control        @if check <skill> <difficulty> { ... } @else { ... }
                     @if meets <skill> <target> { ... } @else { ... }
                     @if has <item_id> { ... } @elif check <skill> <difficulty> { ... } @else { ... }
                     @if tag <tag_id> { ... } @else { ... }
+                    @if quality <quality_id> <threshold> { ... } @else { ... }
 
 Choice gating       * Option text [requires has <item_id>]
                     * Option text [requires tag <tag_id>]
+                    * Option text [requires quality <quality_id> <threshold>]
 
 Navigation          +open <encounter_id>
 
 World state         +add_tag <tag_id>
                     +remove_tag <tag_id>
+                    +quality <quality_id> <amount>       (signed int, e.g. +quality guild 1, +quality clans -1)
 
 Items               +add_item <item_id>
                     +add_random_items <count> <category>
@@ -61,3 +64,45 @@ Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
 
 Dungeon             +finish_dungeon
                     +flee_dungeon
+
+# Factions
+## Continental
+- faction.empire
+- faction.tradeguild
+## Plains
+- faction.legion
+- faction.scavengers
+## Scrub
+-  faction.clans
+-  faction.kesharat
+## Forest
+-  faction.exiles
+## Mountain
+-  faction.miners
+-  faction.company
+-  faction.scholars
+-  faction.renegadescholars
+## Swamp
+-  faction.revathi
+-  faction.revivalists
+-  faction.collectors
+
+# Arcs
+## Scrub
+- arc.tomak
+## Plains
+- arc.torben 
+## Mountain
+- arc.regula
+## Forest
+- arc.briarcommons
+
+role:
+seed
+hint
+complication
+choice
+reveal
+resolution
+aftermath
+ambient

@@ -196,7 +196,7 @@
 - **Condition properties**: Name, trigger, preventative, cure, effect
 - **Effect model**: Deterministic daily loss of health, spirits, or both (e.g., -2 health/day)
 - **No severity levels**: Conditions don't escalate. Severity tracked indirectly via stat depletion.
-- **Known conditions**: Injured, Hungry, Sick, Freezing, Exhausted (+ more)
+- **Known conditions**: Injured, Poisoned, Irradiated, Lattice Sickness, Freezing, Thirsty, Exhausted, Lost, Disheartened
 - **Treatment**: Requires medical supplies or town healer
 - **Stacking rules**: Multiple different conditions stack freely (Injured + Sick = both drain health)
 - **Lifecycle**: Conditions persist until cured (no natural expiration)
@@ -368,8 +368,7 @@
 - Medical supply consumption rate (1 per treatment? More granular?)
 
 ### Status Conditions
-- Complete list of all status conditions (partial list established: Injured, Hungry, Sick, Freezing, Exhausted)
-  - Note: See `conditions.md` for detailed condition inventory including Tier 2/3 variants
+- ~~Complete list of all status conditions~~ — finalized. See `conditions_list.md` and `ConditionDef.All`.
 
 ### Spirits Mechanics
 - Starting spirits value and expected range
