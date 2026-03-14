@@ -65,7 +65,7 @@ public sealed partial class HaulDef
             OriginBiome = "scrub",
             DestBiome = "plains",
             OriginFlavor = @"The clockwork came out of a decommissioned signal tower on the old imperial rail line. A Kesharat maintenance clerk sold it as surplus after logging the tower's formal closure.",
-            DeliveryFlavor = @"You arrive at the garrison outpost to find a dozen scavengers already crowded around the engineer's table, arguing about whether the mechanism still holds imperial certification marks. The engineer takes the core from you and turns it over twice, checking the maker's stamp. ""Pre-occupation manufacture. Good."" She counts out your payment while two scavengers immediately start negotiating to buy it from her.",
+            DeliveryFlavor = @"You arrive at the garrison outpost to find a dozen scavengers already crowded around the engineer's table, organizing a dozen or so mechanical oddities. The engineer takes the core from you and turns it over twice, checking the maker's stamp. ""Pre-occupation manufacture. Good."" She counts out your payment while two scavengers immediately start negotiating to buy it from her.",
         },
         new()
         {
