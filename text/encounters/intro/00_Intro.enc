@@ -1,48 +1,16 @@
-Who Are You?
+Aldgate
+[vignette intro/city_gates]
 
 The caravan has crawled across weeks of bitter miles, wheels grinding in ruts of dust and stone. Countless cold nights, thin meals, and the dry stink of pack beasts and old leather.
 
 At long last, you stand before the gates of Aldgate, among weathered crates and trade cloth and dusty barrels. The caravan master is arguing with clerks in flat imperial livery. He looks to you for help, but you don't meet his gaze. You'll have trouble enough on your own in the city; this man can sort his own affairs.
 
-The delay stretches on, and the caravan idles in the road like a beast made to kneel. Nothing moves but the wind worrying the banners above the gate and the restless shifting of pack mules. Your hand strays to your finger, still not quite used to the weight that rides there. The band sits heavy and unfamiliar against the bone. You ease it free and turn it slowly in the light, studying the seal as though it might explain itself.
+The delay stretches on, and the caravan idles in the road like a beast made to kneel. Nothing moves but the wind worrying the banners above the gate and the restless shifting of pack mules.
 
-A signet ring, gold, weathered from years of use. The ring has stamped contracts, treaties, death sentences. It opens doors for the bearer, loosens tongues, carries the grim authority of the Trade Guild.
-
-How did you come by this ring?
+There is an unfamiliar weight on you hand.
 
 choices:
 
-* Murder = I took it by force
-  The fat bastard bled more than you'd expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but the borderlands are a lawless place. A land of blood and gold and shadow, and you were born for all three.
-  +set_skill combat 4
-  +set_skill bushcraft 2
-  +set_skill cunning 2
-  +open 01_Gameplay_Intro
+* Investigate = Of course, the signet ring
+  +open The_Ring
 
-* Birthright = My mother once wore this, but it is now mine
-  This was your mother's ring, and she wielded it like a hammer. Grim, dangerous men bent knee before her. You remember the smell of dust and sea-salt in her hair, her litle rituals like turning the signet once before pressing wax to a contract. She said the ring would secure the family's future, and you mean to see that through.
-  +set_skill negotiation 4
-  +set_skill luck 2
-  +set_skill cunning 2
-  +open 01_Gameplay_Intro
-
-* Gambling = I won it in a game
-  You still remember the trader's face when you called his bluff; the way his confidence shattered as you laid down your cards. The whole den had gone silent, unsure of what this meant. The man had thought a Guild signet would cow a room of dockside rabble, but you've always had the devil's luck. Now his ruin buys your passage to Aldgate, where your luck will surely unlock even greater fortunes.
-  +set_skill negotiation 2
-  +set_skill cunning 2
-  +set_skill luck 4
-  +open 01_Gameplay_Intro
-
-* A Gift = It was given to me
-  The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father's finest hunters gave up the search after the first week, but not you. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with smoke and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You've come here to make your own story, where your name will be remembered.
-  +set_skill cunning 2
-  +set_skill bushcraft 4
-  +set_skill combat 2
-  +open 01_Gameplay_Intro
-
-* A Commission = The Guild sent me
-  The ring is yours. Not stolen, not inherited, not won; earned. Twelve years in the Guild's cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You've bled for every league of parchment, fought off things in uncharted places that don't appear on any map because you decided they shouldn't. When the Guild needed someone to survey a rough land they chose you. The commission came with the signet, the authority to requisition supplies and act in the Guild's name. You intend to draw the definitive map of this place. If you happen to turn a profit along the way, well. You are Guild, after all.
-  +set_skill combat 4
-  +set_skill bushcraft 2
-  +set_skill cunning 2
-  +open 01_Gameplay_Intro
