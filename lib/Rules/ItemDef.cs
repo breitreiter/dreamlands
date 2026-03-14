@@ -486,6 +486,34 @@ public sealed class ItemDef
             Description = "A delicate comb carved from yellowed bone, cold to the touch. Faint scratches on the spine might be letters in a language you don't recognize.",
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
         },
+
+        // ── Tokens (capstone arc keys) ──
+
+        ["hunters_journal"] = new()
+        {
+            Id = "hunters_journal", Name = "Hunter's Journal", Type = ItemType.Token,
+            Description = "A small leather-bound book of field observations — animal tracks, edible plants, trail markings in a hand that is meticulous and warm.",
+        },
+        ["petitioners_writ"] = new()
+        {
+            Id = "petitioners_writ", Name = "Petitioner's Writ", Type = ItemType.Token,
+            Description = "A sealed court document stamped with the Stift's crest. Grants the bearer passage through the upper gates.",
+        },
+        ["grid_cipher"] = new()
+        {
+            Id = "grid_cipher", Name = "Grid Cipher", Type = ItemType.Token,
+            Description = "A corroded imperial device fitted with rotating discs of etched glass. When held to Grid markings, the symbols resolve into legible warnings.",
+        },
+        ["color_lens"] = new()
+        {
+            Id = "color_lens", Name = "Color Lens", Type = ItemType.Token,
+            Description = "A disc of treated glass in a brass frame. Looking through it, the Lattice's Colors separate into distinct bands the eye can tolerate.",
+        },
+        ["revathi_tile"] = new()
+        {
+            Id = "revathi_tile", Name = "Revathi Tile", Type = ItemType.Token,
+            Description = "A fragment of ancient tilework, faintly warm. The geometric pattern on its face shifts when you look away.",
+        },
         ["brass_lantern"] = new()
         {
             Id = "brass_lantern", Name = "Old Brass Lantern", Type = ItemType.Tool,
