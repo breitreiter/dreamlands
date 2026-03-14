@@ -27,11 +27,11 @@ SKILLS                          DIFFICULTY        DC
 
 MAGNITUDE                       TIME PERIODS
   trivial                         morning
-  small                           afternoon
-  medium                          evening
-  large                           night
-  huge
-
+  small                           midday
+  medium                          afternoon
+  large                           evening
+  huge                            night
+  
 CONDITIONS
   freezing  thirsty  irradiated  lattice_sickness
   exhausted  lost  injured  poisoned  disheartened

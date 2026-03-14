@@ -486,6 +486,12 @@ public sealed class ItemDef
             Description = "A delicate comb carved from yellowed bone, cold to the touch. Faint scratches on the spine might be letters in a language you don't recognize.",
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
         },
+        ["brass_lantern"] = new()
+        {
+            Id = "brass_lantern", Name = "Old Brass Lantern", Type = ItemType.Tool,
+            Description = "A dented lantern of tarnished brass. The glass is cracked but it still holds a flame. Provides light in dark places.",
+            Biome = "plains", ShopTier = 1, Cost = Magnitude.Small,
+        },
 
         // ── Haul (generic def — per-haul identity comes from HaulDefId on ItemInstance) ──
 
