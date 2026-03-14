@@ -91,9 +91,9 @@ public sealed class ItemDef
             ForagingBonus = 4,
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
-        ["kopis"] = new()
+        ["the_old_tooth"] = new()
         {
-            Id = "kopis", Name = "Kopis", Type = ItemType.Weapon,
+            Id = "the_old_tooth", Name = "The Old Tooth", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
             ForagingBonus = 5,
@@ -141,9 +141,9 @@ public sealed class ItemDef
             ForagingBonus = 1,
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
-        ["labrys"] = new()
+        ["revathi_labrys"] = new()
         {
-            Id = "labrys", Name = "Labrys", Type = ItemType.Weapon,
+            Id = "revathi_labrys", Name = "Revathi Labrys", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
             ForagingBonus = 3,
@@ -186,9 +186,9 @@ public sealed class ItemDef
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
             Biome = "plains", ShopTier = 2, Cost = 80,
         },
-        ["zweihander"] = new()
+        ["shimmering_blade"] = new()
         {
-            Id = "zweihander", Name = "Zweihänder", Type = ItemType.Weapon,
+            Id = "shimmering_blade", Name = "Shimmering Blade", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
         },
@@ -232,9 +232,9 @@ public sealed class ItemDef
             ResistModifiers = new Dictionary<string, int> { ["freezing"] = 2 },
             Biome = "scrub", ShopTier = 2, Cost = 80,
         },
-        ["nightveil"] = new()
+        ["magisterial_robe"] = new()
         {
-            Id = "nightveil", Name = "Nightveil", Type = ItemType.Armor,
+            Id = "magisterial_robe", Name = "Magisterial Robe", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 5 },
             ResistModifiers = new Dictionary<string, int> { ["freezing"] = 3 },
@@ -274,9 +274,9 @@ public sealed class ItemDef
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
-        ["frostward"] = new()
+        ["mountain_regiment_armor"] = new()
         {
-            Id = "frostward", Name = "Frostward Harness", Type = ItemType.Armor,
+            Id = "mountain_regiment_armor", Name = "17th Mountain Regiment Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 3, ["freezing"] = 5 },
@@ -312,9 +312,9 @@ public sealed class ItemDef
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 4, ["freezing"] = 1 },
             Biome = "plains", ShopTier = 2, Cost = 80,
         },
-        ["wardens_plate"] = new()
+        ["golem_armor"] = new()
         {
-            Id = "wardens_plate", Name = "Warden's Plate", Type = ItemType.Armor,
+            Id = "golem_armor", Name = "Golem Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 5, ["freezing"] = 2 },
         },
@@ -409,9 +409,9 @@ public sealed class ItemDef
             Id = "lattice_ward", Name = "Lattice Ward", Type = ItemType.Tool,
             ResistModifiers = new Dictionary<string, int> { ["lattice_sickness"] = 5 },
         },
-        ["lead_lined_case"] = new()
+        ["sakharov_mask"] = new()
         {
-            Id = "lead_lined_case", Name = "Lead-Lined Case", Type = ItemType.Tool,
+            Id = "sakharov_mask", Name = "Sakharov's Mask", Type = ItemType.Tool,
             ResistModifiers = new Dictionary<string, int> { ["irradiated"] = 5 },
         },
         ["antivenom_kit"] = new()
@@ -478,13 +478,32 @@ public sealed class ItemDef
             Biome = "swamp", ShopTier = 2, Cost = 15,
         },
 
-        // ── Tokens (dungeon rewards) ──
-
         ["ivory_comb"] = new()
         {
             Id = "ivory_comb", Name = "Ivory Comb", Type = ItemType.Token,
             Description = "A delicate comb carved from yellowed bone, cold to the touch. Faint scratches on the spine might be letters in a language you don't recognize.",
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
+        },
+
+        ["lucky_buckle"] = new()
+        {
+            Id = "lucky_buckle", Name = "Lucky Buckle", Type = ItemType.Token,
+            Description = "A legionaire's brass buckle. Not so lucky for the previous owner, but you feel a strange attachment to it.",
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+        },
+
+        ["knotwork_seed"] = new()
+        {
+            Id = "knotwork_seed", Name = "Knotwork Seed", Type = ItemType.Token,
+            Description = "An intricately braided seed gifted by the Revënakh. It glows faintly in the dark.",
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Bushcraft] = 1 },
+        },
+
+        ["tarnished_key"] = new()
+        {
+            Id = "tarnished_key", Name = "Tarnished Key", Type = ItemType.Token,
+            Description = "A worn key to a door in the Halfway House. A reminder of the importance of discretion.",
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
         },
 
         // ── Tokens (capstone arc keys) ──
@@ -493,11 +512,6 @@ public sealed class ItemDef
         {
             Id = "hunters_journal", Name = "Hunter's Journal", Type = ItemType.Token,
             Description = "A small leather-bound book of field observations — animal tracks, edible plants, trail markings in a hand that is meticulous and warm.",
-        },
-        ["petitioners_writ"] = new()
-        {
-            Id = "petitioners_writ", Name = "Petitioner's Writ", Type = ItemType.Token,
-            Description = "A sealed court document stamped with the Stift's crest. Grants the bearer passage through the upper gates.",
         },
         ["grid_cipher"] = new()
         {
