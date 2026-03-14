@@ -344,7 +344,7 @@ export default function MarketScreen({
           <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
-              <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => switchBuyTab("hauls")}>Hauls</TabButton>
+              <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => switchBuyTab("hauls")}>Contracts</TabButton>
               <TabButton id="foods" active={buyTab === "foods"} onClick={() => switchBuyTab("foods")}>Foods</TabButton>
               <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => switchBuyTab("equipment")}>Equipment</TabButton>
             </div>
@@ -354,7 +354,7 @@ export default function MarketScreen({
               <div className="p-4 text-muted">Loading stock...</div>
             ) : buyTab === "hauls" ? (
               hauls.length === 0 ? (
-                <div className="p-4 text-muted">No hauls available</div>
+                <div className="p-4 text-muted">No contracts available</div>
               ) : (
                 hauls.map((haul) => (
                   <div key={haul.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
