@@ -106,6 +106,7 @@ public class ConditionInfo
     public string Name { get; init; } = "";
     public int Stacks { get; init; }
     public string Description { get; init; } = "";
+    public string Effect { get; init; } = "";
 }
 
 public class SkillInfoDto

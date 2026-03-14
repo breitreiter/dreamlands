@@ -124,16 +124,19 @@ function CharacterPanel({
       {conditions.length > 0 && (
         <div className="mt-6 space-y-2">
           {conditions.map((c) => (
-            <div key={c.id} className="flex items-center gap-2">
+            <div key={c.id} className="flex items-start gap-2">
               <img
                 src={iconUrl(CONDITION_ICONS[c.id] || "sun.svg")}
                 alt=""
-                className="w-5 h-5 flex-shrink-0"
+                className="w-5 h-5 flex-shrink-0 mt-0.5"
               />
-              <span className="text-negative">
-                {c.name}
-                {c.stacks > 1 && <span className="text-muted ml-1">x{c.stacks}</span>}
-              </span>
+              <div>
+                <span className="text-negative">
+                  {c.name}
+                  {c.stacks > 1 && <span className="text-muted ml-1">x{c.stacks}</span>}
+                </span>
+                {c.effect && <div className="text-dim leading-snug">{c.effect}</div>}
+              </div>
             </div>
           ))}
         </div>

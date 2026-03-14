@@ -134,6 +134,7 @@ StatusInfo BuildStatus(PlayerState p) => new()
             Name = def?.Name ?? kv.Key,
             Stacks = kv.Value,
             Description = flavor?.Ongoing ?? "",
+            Effect = BuildConditionEffect(def),
         };
     }).ToList(),
     Skills = Skills.All.Select(si =>
@@ -1413,6 +1414,23 @@ app.MapGet("/api/game/{id}/discoveries", async (string id) =>
 
     return Results.Ok(discoveries);
 });
+
+string BuildConditionEffect(ConditionDef? def)
+{
+    if (def is null) return "";
+    var parts = new List<string>();
+    if (def.HealthDrain is { } hd)
+        parts.Add($"Drains health each night");
+    if (def.SpiritsDrain is { } sd)
+        parts.Add($"Drains spirits each night");
+    if (def.SpecialEffect is { } se)
+        parts.Add(se);
+    if (def.ClearedOnSettlement)
+        parts.Add("Cleared at settlements");
+    if (def.SpecialCure is { } sc)
+        parts.Add($"Cure: {sc}");
+    return string.Join(". ", parts) + (parts.Count > 0 ? "." : "");
+}
 
 string FormatSkillLevel(int level) => level >= 0 ? $"+{level}" : $"{level}";
 

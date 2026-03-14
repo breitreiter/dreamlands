@@ -17,6 +17,7 @@ export interface ConditionInfo {
   name: string;
   stacks: number;
   description: string;
+  effect: string;
 }
 
 export interface SkillInfoDto {
