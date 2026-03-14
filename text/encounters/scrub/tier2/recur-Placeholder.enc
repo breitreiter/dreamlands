@@ -1,6 +1,6 @@
 Placeholder Recurring Encounter
 
-Something happens!
+Something happens! In the further scrub.
 
 choices:
 
@@ -13,7 +13,6 @@ choices:
       You fail!
       +rem_gold small
       +damage_spirits small
-      +add_condition injured
     }
 
 * Fight = Do the ultimate punchies
@@ -25,7 +24,6 @@ choices:
         You lose!
         +damage_health small
         +damage_spirits small
-        +add_condition injured
     }
 
 * Sneak = Use big sneaky skills
@@ -37,5 +35,4 @@ choices:
         You lose!
         +damage_health small
         +damage_spirits small
-        +add_condition injured
     }

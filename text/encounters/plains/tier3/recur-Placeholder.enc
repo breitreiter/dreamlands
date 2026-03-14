@@ -1,6 +1,6 @@
 Placeholder Recurring Encounter
 
-Something happens!
+Something happens! In the scary plains.
 
 choices:
 
@@ -13,8 +13,6 @@ choices:
       You fail!
       +rem_gold medium
       +damage_spirits medium
-      +add_condition injured
-      +add_condition irradiated
     }
 
 * Fight = Do the ultimate punchies
@@ -26,8 +24,6 @@ choices:
         You lose!
         +damage_health medium
         +damage_spirits medium
-        +add_condition injured
-        +add_condition irradiated
     }
 
 * Sneak = Use big sneaky skills
@@ -39,6 +35,4 @@ choices:
         You lose!
         +damage_health medium
         +damage_spirits medium
-        +add_condition injured
-        +add_condition irradiated
     }

@@ -1,6 +1,6 @@
 Placeholder Recurring Encounter
 
-Something happens!
+Something happens! In the swamp monster land.
 
 choices:
 
@@ -13,7 +13,6 @@ choices:
       You fail!
       +rem_gold medium
       +damage_spirits medium
-      +add_condition injured
     }
 
 * Fight = Do the ultimate punchies
@@ -25,7 +24,6 @@ choices:
         You lose!
         +damage_health medium
         +damage_spirits medium
-        +add_condition injured
     }
 
 * Sneak = Use big sneaky skills
@@ -37,5 +35,4 @@ choices:
         You lose!
         +damage_health medium
         +damage_spirits medium
-        +add_condition injured
     }
