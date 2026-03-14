@@ -99,7 +99,7 @@ export default function Camp({ state }: { state: GameResponse }) {
   if (!resolved || didToast.current) return null;
 
   return (
-    <div className="h-full flex bg-page text-primary">
+    <div className="absolute inset-0 z-[1100] flex bg-page text-primary">
       {/* Left panel — vignette over parchment */}
       <div
         className="hidden md:block w-[45%] shrink-0"
