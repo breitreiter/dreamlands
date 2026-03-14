@@ -1,0 +1,54 @@
+The Pilgrim
+
+You hear the shouting before you round the switchback, a raw, hoarse voice calling for help. A miner sits wedged between two massive stones where a recent rockfall has shifted the scree. His legs vanish into the gap. The rocks lean against each other like drunk companions, holding him in place without crushing him. Yet. Above, more loose stone perches on the slope, ready to follow the first slide down.
+
+The miner's head has a bloody gash from the rockslide, but he is alive and glad to see you.
+
+A man in clean travelling clothes is pacing nearby, flipping frantically through a small leather-bound book. He is muttering to himself. "Chapter four, chapter four — trials of the road — no, that's about blisters —" He looks up at you with enormous relief. "Thank goodness! This man needs help. I would help him myself, but I am in the sixth step of purification and I cannot touch blood or the unclean. It's all in here." He holds up the book. The cover reads ENLIGHTENMENT — A Seven Step Guide, by Jorgo the Wise.
+
+The rocks trapping the miner are daunting. With the pilgrim's help, you could pull the man free, but on your own you'd likely doom both the miner and yourself.
+
+The pilgrim returns to the book, thumbing pages with shaking hands. The rocks creak as the scree settles another finger's width.
+
+choices:
+
+* Convince the pilgrim to help = Jorgo can wait
+  @if check negotiation medium {
+    You cross to the pilgrim and put your hand over the open page. "Close the book."
+
+    He clutches it to his chest. "You don't understand. I've come all the way from Aldgate. I left my position at the customs office. I sold my writing desk. If I break the sixth step now, I have to start over from the beginning. Jorgo is very clear about this."
+
+    "What does Jorgo say about letting a man die ten feet from you?"
+
+    The pilgrim opens his mouth, then closes it. He looks down at the book, then at the miner, then at his own clean hands. You can see him searching for the chapter, the verse, the passage that reconciles the strictures of spiritual purity with the man bleeding in the rocks. He will not find it because Jorgo the Wise did not write his seven steps in a place where people get crushed to death.
+
+    "Put the book down," you say again, quietly.
+
+    He sets it on a stone, spine up, pages fluttering in the wind. Together you grasp the miner beneath his arms. Your boots scrape against loose stone as you pull. The pilgrim's knuckles whiten, his jaw clenched, and you feel the man's weight shift inch by agonizing inch. The rocks groan. With a final heave you wrench the miner free, dragging him clear as a cascade of smaller stones rattles down to fill the space where he lay trapped. The three of you collapse in the dust, gasping.
+
+    The pilgrim stares at his hands. They are filthy with blood and grit. He picks up the book and holds it without opening it. You hope you have not ruined this man's pilgrimage. You hope you have.
+    +heal_spirits small
+  } @else {
+    You stride to the pilgrim and seize his shoulder. "Put the book down and help me pull him free!"
+
+    He flinches away, still gripping the book like a talisman. "I can't. You don't understand. I'm in the sixth step. If I touch blood, I become unclean and I have to start over. I left everything in Aldgate for this. My position. My desk. Everything." His voice is high and tight. He has probably never watched a man die before.
+
+    You turn from him without another word. You kneel beside the trapped miner and draw your hand across the gash on his brow, collecting the warm blood on your palm. The miner watches with feverish eyes as you rise and cross back to the pilgrim. Before he can retreat, you press your bloodied palm against his face, drawing a dark streak from temple to jaw.
+
+    "There," you say. "You're unclean. Now help me."
+
+    The pilgrim touches the stain with trembling fingers. He lifts his hand before his eyes, turns it in the mountain light, sees the red gleaming there. The book falls from his other hand and lands open in the scree. The sound that comes out of him is not a word. It is the sound of a man watching six months of sacrifice and conviction come apart in a single handprint. He drops to his knees, still making that sound, both hands pressed to his face as if he could push the blood back out through his skin.
+
+    You return to the miner and brace your feet against the lower stone. You pull. The rocks do not yield. You shift your grip, plant yourself anew, haul with every fiber of strength you possess. Behind you the pilgrim's keening scrapes against your skull. The miner gasps shallow breaths, his face gone the color of tallow. Above, a grinding sound: stone dragging across stone. A pebble skitters down the slope, then another. You pull again. Nothing moves.
+
+    The scree settles with a deep, final crunch. The miner's eyes roll back. His chest stills. You release your grip and step away. The pilgrim is sitting in the dirt, the book open in his lap, smoothing the bent pages with bloodied fingers.
+    +damage_spirits medium
+  }
+
+* Try to dig him out on your own = Try to excavate around the trapped legs instead of moving the stones
+  You drop to your knees beside the gap and begin scooping scree away from where his legs disappear between the rocks. The loose stone comes away easily at first. Then you hit compressed earth, then bedrock. The miner watches you work with something that might be gratitude. Behind you, the pilgrim reads aloud from chapter three in a voice that shakes. You dig until your hands are raw and the hole is twice as deep, but the stones extend further than you can reach. The gap that holds him runs all the way down to the mountain's bones. The miner knows it before you do. You see understanding settle across his face like dust. His voice comes out steady despite everything. "Enough," he says. "You tried." When you round the switchback, you can still hear the pilgrim reading.
+  +damage_spirits medium
+
+* Walk on = This isn't your problem and the mountain takes who it takes
+  You meet the trapped miner's eyes for a moment. He doesn't curse or plead. Perhaps he's already spent his voice shouting before you arrived. Perhaps he simply recognizes the shape of your decision in your posture. You continue up the switchback and the voices fade behind you. The trail climbs another half mile before leveling onto a ridge where you can see the whole valley spread below. From here the rockfall is invisible, just another fold in the mountainside. A hawk circles on a thermal, hunting. The wind carries the faint sound of metal on stone from a mine shaft somewhere higher up. Everything continues as it always has. You drink from your own flask and taste snowmelt, cold and clean. The water is good in the Near Ranges.
+  +heal_spirits trivial
