@@ -20,6 +20,7 @@ public abstract record MechanicResult
     public record Navigation(string EncounterId) : MechanicResult;
     public record ItemEquipped(string DefId, string DisplayName, string Slot) : MechanicResult;
     public record ItemUnequipped(string DefId, string DisplayName, string Slot) : MechanicResult;
+    public record PackUpgraded(int Delta, int NewCapacity) : MechanicResult;
     public record DungeonFinished : MechanicResult;
     public record DungeonFled : MechanicResult;
 }

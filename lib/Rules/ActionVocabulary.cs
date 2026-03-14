@@ -128,6 +128,12 @@ public sealed class ActionVerb
         VerbUsage.Mechanic, "Discard an item from inventory",
         new ArgDef("item_id", ArgType.Id));
 
+    // ── Pack ──────────────────────────────────────────────────────
+
+    public static readonly ActionVerb UpgradePack = new("upgrade_pack",
+        VerbUsage.Mechanic, "Permanently increase pack capacity",
+        new ArgDef("amount", ArgType.Int));
+
     // ── Gold ────────────────────────────────────────────────────
 
     public static readonly ActionVerb GiveGold = new("give_gold",
@@ -199,7 +205,7 @@ public sealed class ActionVerb
         Open,
         AddTag, RemoveTag, SetQuality,
         AddItem, AddRandomItems, LoseRandomItem,
-        Equip, Unequip, Discard,
+        Equip, Unequip, Discard, UpgradePack,
         GiveGold, RemGold,
         DamageSpirits, HealSpirits,
         IncreaseSkill, DecreaseSkill, SetSkill,

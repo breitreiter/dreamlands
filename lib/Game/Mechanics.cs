@@ -44,6 +44,7 @@ public static class Mechanics
             "equip" => ApplyEquip(args, state, balance),
             "unequip" => ApplyUnequip(args, state, balance),
             "discard" => ApplyDiscard(args, state),
+            "upgrade_pack" => ApplyUpgradePack(args, state),
             "add_tag" => ApplyAddTag(args, state),
             "remove_tag" => ApplyRemoveTag(args, state),
             "quality" => ApplyQuality(args, state),
@@ -282,6 +283,13 @@ public static class Mechanics
         }
 
         return null;
+    }
+
+    static MechanicResult ApplyUpgradePack(List<string> args, PlayerState state)
+    {
+        var amount = ParseAmount(args);
+        state.PackCapacity += amount;
+        return new MechanicResult.PackUpgraded(amount, state.PackCapacity);
     }
 
     /// <summary>Route an item to Pack (equippable gear) or Haversack (tools, consumables).</summary>

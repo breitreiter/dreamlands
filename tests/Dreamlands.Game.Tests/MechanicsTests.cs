@@ -307,6 +307,19 @@ public class MechanicsTests
     }
 
     [Fact]
+    public void UpgradePack_IncreasesCapacity()
+    {
+        var state = Fresh();
+        var initial = state.PackCapacity;
+        var results = Mechanics.Apply(["upgrade_pack 1"], state, Balance, Rng);
+
+        var r = Assert.IsType<MechanicResult.PackUpgraded>(results[0]);
+        Assert.Equal(1, r.Delta);
+        Assert.Equal(initial + 1, r.NewCapacity);
+        Assert.Equal(initial + 1, state.PackCapacity);
+    }
+
+    [Fact]
     public void Quality_Accumulates_AcrossMultipleCalls()
     {
         var state = Fresh();
