@@ -149,6 +149,12 @@ static class CheckCommand
         ('\u2019', "right single quote/apostrophe", "'"),
     ];
 
+    private static readonly string[] BannedPhrases =
+    [
+        "trader's guild",
+        "merchant guild",
+    ];
+
     private static List<string> CheckForMarkers(string text)
     {
         var warnings = new List<string>();
@@ -165,6 +171,12 @@ static class CheckCommand
             {
                 if (lines[i].Contains(ch))
                     warnings.Add($"Line {i + 1}: {name} ({ch}) — use {replacement} instead");
+            }
+
+            foreach (var phrase in BannedPhrases)
+            {
+                if (lines[i].Contains(phrase, StringComparison.OrdinalIgnoreCase))
+                    warnings.Add($"Line {i + 1}: banned phrase \"{phrase}\"");
             }
         }
         return warnings;
