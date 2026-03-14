@@ -1,29 +1,27 @@
-The Old Man's Story
+Listen to the old man's story
 [trigger settlement]
 [tier 1]
 
-The market square is winding down for the evening when you hear it -- a knot of children sitting cross-legged on the cobbles around an old man on a barrel. He's telling a story in the low, measured voice of someone who knows how to hold an audience. You catch the tail end of a sentence: "...and she was the third one that year."
+A knot of children are sitting cross-legged on the cobbles around an old man on a barrel. He's telling a story in the low, measured voice of someone who knows how to hold an audience. You catch the tail end of a sentence: "...and she was the third one that year."
 
 The children are rapt. A few of the older ones look skeptical in the way that children do when they suspect they're being managed, but they don't leave.
-
-The old man's name is Harlan. He has the thick hands of someone who worked stone or timber for most of his life, and one ear that doesn't sit right -- crushed flat and healed badly. He's telling them about the Bride's Cave.
 
 "My Elspeth went in on a midsummer night," he says. "I told her it was foolishness. Old wives' talk. She said I didn't understand, and she was right about that much." He pauses. The children wait. "She didn't come out. I waited three days. On the fourth I went in after her with a rope and a lantern and a bellyful of stupid courage."
 
 He holds up his hands. The knuckles are scarred, the nails thick and ridged. "I found the writing on the walls. Names. Prayers. Tally marks scratched so deep you could fit your finger in the grooves. I called her name until my voice gave out." He taps his ruined ear. "Low passage. Didn't see the overhang. Cracked my head open on the stone. Woke up in the dark with no lantern and blood in my eyes."
 
-A child asks if he found her. Harlan shakes his head.
+A child asks if he found her. The old man shakes his head.
 
 "I found the way out. That's what I found. Took me two days, crawling by feel, following water downhill. When I came out, the village men were already talking about sealing it. I was the one who drove the first nail into the boards." He looks at his hands again. "Should've burned the whole hillside down to the bedrock. But you can't burn limestone."
 
-The children are quiet now. Harlan reaches into his coat and produces a stick of dried honey-candy, breaks it into pieces, and passes them around. "That's enough for tonight," he says. "Off with you."
+The children are quiet now. The old man reaches into his coat and produces a stick of dried honey-candy, breaks it into pieces, and passes them around. "That's enough for now," he says. "Off with you."
 
 choices:
 
-* Ask Harlan about the cave = He's still sitting on the barrel after the children leave
-  The children scatter with their candy. Harlan watches them go, then looks at you with the flat appraisal of someone who knows what a traveler's question sounds like.
+* Ask about the cave = He's still sitting on the barrel after the children leave
+  The children scatter with their candy. The man watches them go, then looks at you with the flat appraisal of someone who knows what a traveler's question sounds like.
 
-  "Still boarded up, last I heard," he says. "South and east, in the limestone country. You'll know it by the planks across the mouth. We used good iron nails." He rubs his knuckles. "The writing's still in there. The marks. All of it. We just put boards over the problem and called it done."
+  "Still boarded up, last I heard," he says. "Bride's Cave folks call it. They say it's haunted, and maybe so." 
 
   He climbs down from the barrel, joints cracking. "If you're thinking of going in, I won't talk you out of it. Tried that once already and it didn't take." He taps his bad ear. "But bring rope. Plenty of rope. And don't trust your sense of direction past the first turning."
   +add_tag brides_cave_heard_harlan
