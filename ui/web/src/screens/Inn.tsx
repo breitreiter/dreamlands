@@ -247,14 +247,21 @@ export default function Inn({
                 {!quote.canFullRecover &&
                   quote.disqualifyingConditions.length > 0 && (
                     <div className="space-y-1 border-t border-edge pt-3">
-                      {quote.disqualifyingConditions.map((c) => (
-                        <div key={c} className="text-negative">
-                          You don't have enough medicine to treat your {c}.
+                      {quote.disqualifyingConditions.length === 1 ? (
+                        <div className="text-negative">
+                          You don't have the medical supplies to treat your{" "}
+                          {quote.disqualifyingConditions[0]}.
                         </div>
-                      ))}
+                      ) : (
+                        <div className="text-negative">
+                          You don't have the medical supplies to treat your
+                          conditions:{" "}
+                          {quote.disqualifyingConditions.join(", ")}.
+                        </div>
+                      )}
                       <div className="text-dim">
                         You'll only get worse if you stay here. You need to
-                        find treatment instead.
+                        buy medical supplies in the market.
                       </div>
                     </div>
                   )}
