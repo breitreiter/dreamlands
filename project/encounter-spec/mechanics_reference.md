@@ -1,6 +1,22 @@
 ENCOUNTER MECHANICS QUICK REFERENCE
 ====================================
 
+FRONT-MATTER
+------------------------------------
+Optional metadata lines between title and body. Order doesn't matter.
+
+[trigger road|settlement]       Where this encounter fires (default: road)
+[tier 1|2|3]                    Which tier this encounter belongs to (default: any)
+[vignette <path>]               Override vignette image (path relative to assets/vignettes/, no .png)
+[requires <condition>]          Gate the entire encounter (multiple lines AND together)
+
+Conditions in [requires] use the same syntax as @if and choice-level [requires]:
+  [requires has <item_id>]
+  [requires tag <tag_id>]
+  [requires quality <quality_id> <threshold>]
+  [requires check <skill> <difficulty>]
+
+
 SKILLS                          DIFFICULTY        DC
   combat       fighting            trivial         5
   negotiation  persuasion/social   easy           10
