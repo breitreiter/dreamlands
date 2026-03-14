@@ -20,6 +20,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
   const [segments, setSegments] = useState<Segment[]>([]);
   const [baseTitle, setBaseTitle] = useState("");
   const [baseBody, setBaseBody] = useState("");
+  const [baseVignette, setBaseVignette] = useState<string | undefined>(undefined);
   const processedOutcome = useRef<OutcomeInfo | undefined>(undefined);
 
   // Detect fresh encounter vs continuation vs terminal outcome
@@ -29,17 +30,22 @@ export default function Encounter({ state }: { state: GameResponse }) {
       setSegments([]);
       setBaseTitle(encounter.title);
       setBaseBody(encounter.body);
+      setBaseVignette(encounter.vignette);
       setVignetteError(false);
       processedOutcome.current = undefined;
     } else if (outcome && processedOutcome.current !== outcome) {
-      if (encounter && encounter.title !== baseTitle && baseTitle !== "") {
-        // Continuation: scene transition — append outcome + new body
+      const isNavigation = state.mode === "encounter" && encounter && baseTitle !== "";
+      if (isNavigation) {
+        // Scene transition — append outcome from previous choice + new encounter's body
         processedOutcome.current = outcome;
         setSegments(prev => [
           ...prev,
           { kind: "outcome", data: outcome },
           ...(encounter.body ? [{ kind: "body" as const, text: encounter.body }] : []),
         ]);
+        setBaseTitle(encounter.title);
+        setBaseBody(encounter.body);
+        setBaseVignette(encounter.vignette);
       } else {
         // Terminal outcome (same encounter or standalone outcome mode)
         processedOutcome.current = outcome;
@@ -51,7 +57,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
       setBaseBody(encounter.body);
       processedOutcome.current = undefined;
     }
-  }, [encounter, outcome]);
+  }, [encounter, outcome, state.mode]);
 
   // Index of the last "chosen" segment — scroll target
   const scrollTargetIndex = useRef(-1);
@@ -80,8 +86,9 @@ export default function Encounter({ state }: { state: GameResponse }) {
   if (!encounter && !outcome) return null;
 
   const isSettlement = node?.poi?.kind === "settlement";
-  const vignetteSrc = encounter?.vignette
-    ? `/world/assets/vignettes/${encounter.vignette}.png`
+  const vignette = encounter?.vignette ?? baseVignette;
+  const vignetteSrc = vignette
+    ? `/world/assets/vignettes/${vignette}.png`
     : isSettlement
       ? `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_settlement.png`
       : node?.terrain && node.regionTier != null && node.regionTier > 0
@@ -90,7 +97,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
   const hasVignette = !vignetteError && vignetteSrc != null;
 
   // Is this a terminal outcome (no more choices to show)?
-  const isTerminalOutcome = outcome && (!encounter || encounter.title === baseTitle) && segments.some(s => s.kind === "outcome");
+  const isTerminalOutcome = state.mode === "outcome" && segments.some(s => s.kind === "outcome");
   const terminalOutcome = isTerminalOutcome ? segments[segments.length - 1] : null;
 
   return (
