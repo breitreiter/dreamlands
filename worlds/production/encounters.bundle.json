@@ -1,227 +1,235 @@
 {
   "index": {
     "byId": {
-      "Along the Way": {
-        "category": "arcs/forest/briar_commons",
-        "encounterIndex": 0
-      },
-      "Dara\u0027s Plan": {
-        "category": "arcs/forest/briar_commons",
-        "encounterIndex": 1
-      },
-      "Maren\u0027s Plan": {
-        "category": "arcs/forest/briar_commons",
-        "encounterIndex": 2
-      },
-      "Oskar\u0027s Plan": {
-        "category": "arcs/forest/briar_commons",
-        "encounterIndex": 3
-      },
       "Start": {
-        "category": "arcs/plains/brides_cave",
-        "encounterIndex": 7
-      },
-      "The Commons": {
-        "category": "arcs/forest/briar_commons",
-        "encounterIndex": 5
+        "category": "arcs/swamp/tile_house",
+        "encounterIndex": 22
       },
       "A Record in Stone": {
         "category": "arcs/plains/brides_cave",
-        "encounterIndex": 6
+        "encounterIndex": 7
       },
       "The Ghosts": {
         "category": "arcs/plains/brides_cave",
-        "encounterIndex": 8
+        "encounterIndex": 9
       },
       "The Old Man\u0027s Story": {
         "category": "arcs/plains/brides_cave",
-        "encounterIndex": 9
+        "encounterIndex": 10
       },
       "Placeholder": {
         "category": "swamp/tier3",
-        "encounterIndex": 52
+        "encounterIndex": 65
       },
       "00_Intro": {
         "category": "intro",
-        "encounterIndex": 13
+        "encounterIndex": 26
       },
       "Gameplay_Intro": {
         "category": "intro",
-        "encounterIndex": 14
+        "encounterIndex": 27
       },
       "The_Ring": {
         "category": "intro",
-        "encounterIndex": 15
+        "encounterIndex": 28
       },
       "Blockade at Copper Gap": {
         "category": "mountains/tier1",
-        "encounterIndex": 16
+        "encounterIndex": 29
       },
       "The Festival Gate": {
         "category": "mountains/tier1",
-        "encounterIndex": 17
+        "encounterIndex": 30
       },
       "The Old Assay Station": {
         "category": "mountains/tier1",
-        "encounterIndex": 18
-      },
-      "The Priests Vow": {
-        "category": "mountains/tier1",
-        "encounterIndex": 19
+        "encounterIndex": 31
       },
       "The Trailside Verdict": {
         "category": "mountains/tier1",
-        "encounterIndex": 20
+        "encounterIndex": 32
+      },
+      "The Pilgrim": {
+        "category": "mountains/tier2",
+        "encounterIndex": 34
       },
       "A Debt Owed": {
         "category": "plains/tier1",
-        "encounterIndex": 23
+        "encounterIndex": 36
       },
       "A Gift for the Harvest": {
         "category": "plains/tier1",
-        "encounterIndex": 24
+        "encounterIndex": 37
       },
       "Celebration": {
         "category": "plains/tier1",
-        "encounterIndex": 25
+        "encounterIndex": 38
       },
       "The Burning Field": {
         "category": "plains/tier1",
-        "encounterIndex": 27
+        "encounterIndex": 40
       },
       "The Grain Cart": {
         "category": "plains/tier1",
-        "encounterIndex": 28
+        "encounterIndex": 41
       },
       "Dust Storm": {
         "category": "scrub/tier1",
-        "encounterIndex": 31
+        "encounterIndex": 44
       },
       "The Courier": {
         "category": "scrub/tier1",
-        "encounterIndex": 33
+        "encounterIndex": 46
       },
       "Unusual Cargo": {
         "category": "scrub/tier1",
-        "encounterIndex": 34
+        "encounterIndex": 47
       },
       "Signal Tower at Red Crown": {
         "category": "scrub/tier2",
-        "encounterIndex": 36
+        "encounterIndex": 49
       },
       "The Administrator\u0027s Favor": {
         "category": "scrub/tier2",
-        "encounterIndex": 37
+        "encounterIndex": 50
       },
       "The Cistern Gate": {
         "category": "scrub/tier2",
-        "encounterIndex": 38
+        "encounterIndex": 51
       },
       "The Lattice Preacher": {
         "category": "scrub/tier2",
-        "encounterIndex": 39
+        "encounterIndex": 52
       },
       "The Magistrate\u0027s Seal": {
         "category": "scrub/tier2",
-        "encounterIndex": 40
+        "encounterIndex": 53
       },
       "The Old Depot at Crow Jaw": {
         "category": "scrub/tier2",
-        "encounterIndex": 41
+        "encounterIndex": 54
       },
       "Countryman": {
         "category": "scrub/tier3",
-        "encounterIndex": 42
+        "encounterIndex": 55
       },
       "A Sons Responsibility": {
         "category": "swamp/tier1",
-        "encounterIndex": 44
+        "encounterIndex": 57
       },
       "An Unpaid Debt": {
         "category": "swamp/tier1",
-        "encounterIndex": 45
+        "encounterIndex": 58
       },
       "The Cartographers Kit": {
         "category": "swamp/tier1",
-        "encounterIndex": 47
+        "encounterIndex": 60
       },
       "The Gatekeeper": {
         "category": "swamp/tier1",
-        "encounterIndex": 48
+        "encounterIndex": 61
       },
       "The Hunted Woman": {
         "category": "swamp/tier1",
-        "encounterIndex": 49
+        "encounterIndex": 62
       },
       "The Hermit of Sallow Fen": {
         "category": "swamp/tier2",
-        "encounterIndex": 51
+        "encounterIndex": 64
       }
     },
     "byCategory": {
-      "arcs/forest/briar_commons": [
-        0,
-        1,
-        2,
-        3,
-        4,
+      "arcs/forest/foresters_post": [
+        0
+      ],
+      "arcs/forest/the_lodge": [
+        1
+      ],
+      "arcs/forest/warrant_oak": [
+        2
+      ],
+      "arcs/mountains/halfway_house": [
+        3
+      ],
+      "arcs/mountains/ledgerhaus": [
+        4
+      ],
+      "arcs/mountains/the_stift": [
         5
       ],
+      "arcs/mountains/zahlenhaus": [
+        6
+      ],
       "arcs/plains/brides_cave": [
-        6,
         7,
         8,
-        9
-      ],
-      "forest/tier1": [
+        9,
         10
       ],
-      "forest/tier2": [
+      "arcs/plains/grainway_station": [
         11
       ],
-      "forest/tier3": [
+      "arcs/plains/harrow_line": [
         12
       ],
-      "intro": [
-        13,
-        14,
+      "arcs/plains/metal_beast": [
+        13
+      ],
+      "arcs/plains/the_city": [
+        14
+      ],
+      "arcs/scrub/census_house": [
         15
       ],
-      "mountains/tier1": [
-        16,
-        17,
-        18,
-        19,
+      "arcs/scrub/foundry": [
+        16
+      ],
+      "arcs/scrub/relay_post": [
+        17
+      ],
+      "arcs/scrub/wellhead_station": [
+        18
+      ],
+      "arcs/swamp/drowning_post": [
+        19
+      ],
+      "arcs/swamp/listening_blind": [
         20
       ],
-      "mountains/tier2": [
+      "arcs/swamp/the_revenakh": [
         21
       ],
-      "mountains/tier3": [
+      "arcs/swamp/tile_house": [
         22
       ],
-      "plains/tier1": [
-        23,
-        24,
-        25,
+      "forest/tier1": [
+        23
+      ],
+      "forest/tier2": [
+        24
+      ],
+      "forest/tier3": [
+        25
+      ],
+      "intro": [
         26,
         27,
         28
       ],
-      "plains/tier2": [
-        29
-      ],
-      "plains/tier3": [
-        30
-      ],
-      "scrub/tier1": [
+      "mountains/tier1": [
+        29,
+        30,
         31,
-        32,
+        32
+      ],
+      "mountains/tier2": [
         33,
         34
       ],
-      "scrub/tier2": [
-        35,
+      "mountains/tier3": [
+        35
+      ],
+      "plains/tier1": [
         36,
         37,
         38,
@@ -229,282 +237,500 @@
         40,
         41
       ],
-      "scrub/tier3": [
-        42,
+      "plains/tier2": [
+        42
+      ],
+      "plains/tier3": [
         43
       ],
-      "swamp/tier1": [
+      "scrub/tier1": [
         44,
         45,
         46,
-        47,
+        47
+      ],
+      "scrub/tier2": [
         48,
-        49
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "scrub/tier3": [
+        55,
+        56
+      ],
+      "swamp/tier1": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
       ],
       "swamp/tier2": [
-        50,
-        51
+        63,
+        64
       ],
       "swamp/tier3": [
-        52
+        65
       ]
     }
   },
   "encounters": [
     {
-      "id": "Along the Way",
-      "category": "arcs/forest/briar_commons",
+      "id": "Start",
+      "category": "arcs/forest/foresters_post",
       "recurring": false,
       "trigger": null,
       "tier": null,
       "vignette": null,
-      "title": "Along the Way",
-      "body": "\nDara talks as you walk. She doesn\u0027t boast; she inventories. Oskar built the storehouse frame, mortise-and-tenon joints, no nails. Maren figured out the clay lining for the rain cistern so the water doesn\u0027t taste of wood. Fen keeps the watch rotation fair, three shifts, nobody pulls doubles unless they volunteer.\n\nShe mentions the other camps in the forest. Code names. Dead drops. People who\u0027ve lived within shouting distance for years and never learned each other\u0027s faces. She doesn\u0027t judge them for it. She understands the logic. Out here, anyone who knows your name can sell it. Anyone who knows where you sleep can lead someone to you. Trust is currency, and most exiles are broke.\n\n\u0022We decided to be poor together,\u0022 she says. \u0022That was the whole idea. Stop hoarding secrets and start building something.\u0022 She shifts the grain sacks on her shoulders. The chicken has fallen asleep. \u0022It worked. I know it sounds like it shouldn\u0027t, but it worked.\u0022\n\nThe trail dips through a stand of birch and the light goes gold and then green. Dara is already talking about the new seedlings, what to plant where, which beds get morning sun.\n",
+      "title": "Placeholder: The Forester\u0027s Post",
+      "body": "\nA placeholder encounter for the Forester\u0027s Post arc.\n",
       "requires": [],
       "choices": [
         {
-          "optionText": "Continue to the Commons",
-          "optionLink": null,
-          "optionPreview": null,
+          "optionText": "Explore = Search the post",
+          "optionLink": "Explore",
+          "optionPreview": "Search the post",
           "requires": null,
-          "single": {
-            "text": "The trail opens ahead. Dara quickens her pace.",
-            "mechanics": [
-              "open \u0022The Commons\u0022"
-            ]
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item hunters_journal",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
           }
-        }
-      ]
-    },
-    {
-      "id": "Dara\u0027s Plan",
-      "category": "arcs/forest/briar_commons",
-      "recurring": false,
-      "trigger": null,
-      "tier": null,
-      "vignette": null,
-      "title": "Dara\u0027s Plan",
-      "body": "\nDara is at the communal table, laying out her purchases as if nothing has changed. Seed stock in neat rows. Iron nails sorted by size. The chicken cage on the bench beside her, the bird watching through the slats.\n\nOskar walks over from the storehouse. Maren comes from the cistern, clay dust on her hands. They stand on opposite sides of the table and wait.\n\nDara looks at them both. \u0022This happened before,\u0022 she says. \u0022The first time I tried this. Two families left in the night and the rest panicked. We lost everything: the garden, the well, the shelter we\u0027d spent all autumn building. I started over. I found new people. I built it again.\u0022 She taps the nails on the table. \u0022I can build it again.\u0022\n\nOskar says nothing. Maren says nothing. The people at the cold fire pit are watching.\n\n\u0022New agreements,\u0022 Dara says. \u0022A probation period. Rules about departure: you tell the group first, you go to a designated settlement, not into the wild. We make it safe to leave so people don\u0027t have to sneak.\u0022\n\nOskar shifts his weight. Maren folds her arms.\n",
-      "requires": [],
-      "choices": [
+        },
         {
-          "optionText": "Back Oskar = The community needs laws, and laws need teeth",
-          "optionLink": "Back Oskar",
-          "optionPreview": "The community needs laws, and laws need teeth",
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
           "requires": null,
           "conditional": {
             "preamble": "",
             "branches": [
               {
                 "condition": "check negotiation medium",
-                "text": "You tell Dara that Oskar is right about one thing: a community without consequences for betrayal isn\u0027t a community. It\u0027s a campsite. Dara\u0027s face hardens, but she listens. She argues, fiercely and precisely, with the particular stubbornness of someone who has rebuilt before and knows the cost. But the logic is against her. You watch the moment she stops arguing and starts calculating.\n\nShe turns to Oskar. \u0022If we do this your way, there are rules. You don\u0027t hunt anyone alone. You bring them back. I decide what happens.\u0022 Oskar nods. Maren looks at the table and says nothing. Her hands are still. She doesn\u0027t reach for her handcart.\n\nYou leave the Commons as the sun drops below the canopy. Behind you, Dara is writing a list of rules on the back of a seed packet. The buildings are still standing. The fire pit is still cold. Somewhere in the forest, Fen is walking, and behind him, the place he left is becoming something with walls and consequences and no easy way out.",
+                "text": "You find something valuable.",
                 "mechanics": [
+                  "add_item hunters_journal",
                   "finish_dungeon"
                 ]
               }
             ],
             "fallback": {
-              "text": "You make the case, but Dara isn\u0027t buying it. She\u0027s heard this argument before, from the empire, from every petty authority who ever told exiles that freedom needs a leash. She turns to Oskar. \u0022You want to hunt people, do it somewhere else. Not from my table.\u0022\n\nOskar stands very still for a long moment. Then he picks up his axe, steps off the storehouse porch, and walks east without looking back. Three men follow him. Maren watches them go, then turns to Dara. \u0022I\u0027m still leaving.\u0022 Dara nods. She doesn\u0027t try to stop her.\n\nYou leave the Commons in the blue hour before dark. Dara is sitting at the table alone, the seed stock untouched, the nails still sorted by size. The chicken is quiet. The clearing is emptier than when you arrived.",
+              "text": "It doesn\u0027t go well.",
               "mechanics": [
+                "add_condition injured",
                 "finish_dungeon"
               ]
             }
-          }
-        },
-        {
-          "optionText": "Back Maren = It\u0027s over. Help people leave safely.",
-          "optionLink": "Back Maren",
-          "optionPreview": "It\u0027s over. Help people leave safely.",
-          "requires": null,
-          "single": {
-            "text": "You tell Dara what she already knows but won\u0027t say: the Commons are compromised. Everyone here knows too much about everyone else, and staying together means either building a prison or waiting for the next person to leave and take their secrets with them. The kind thing is to let people go.\n\nOskar swears under his breath but his group is already moving, pulling packs from the storehouse, dividing provisions with the efficiency of people who\u0027ve done this before. Maren returns to the cistern and finishes dismantling it in silence. Her group loads the handcart.\n\nDara stands at the table for a long time. She picks up a packet of seeds, turns it over, puts it down. \u0022Was I a poor leader,\u0022 she says, not quite to you, \u0022or is this just what the forest does to people?\u0022\n\nShe divides the remaining supplies with the same quiet competence she used to describe the commune. Oskar\u0027s group heads east. Maren\u0027s group heads south with the handcart. Dara packs the nails; she paid for them, and she\u0027ll find a use. She asks you which direction you\u0027re headed, so she can go a different way.",
-            "mechanics": [
-              "finish_dungeon"
-            ]
-          }
-        },
-        {
-          "optionText": "Back Dara = The idea is sound. She just needs a better place to try it.",
-          "optionLink": "Back Dara",
-          "optionPreview": "The idea is sound. She just needs a better place to try it.",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check bushcraft medium",
-                "text": "You tell Dara about a clearing you passed a few miles back. Off the main trails, good soil, a stream within earshot. Defensible without being a fortress. It won\u0027t be easy, clearing ground never is, but if the people here want to try again, the land is there.\n\nDara\u0027s eyes sharpen. She\u0027s already redesigning. New layout, garden plots along the southern exposure, the storehouse closer to the water. New rules: a departure covenant, agreed to by everyone, written down. She talks fast and her hands move over the table as if she\u0027s drawing plans in the wood grain.\n\nOskar listens with his arms crossed. Maren listens from the cistern, one hand still on a tile. Neither agrees. Neither walks away. That\u0027s enough for Dara. She\u0027s already talking about what to pack first.\n\nYou leave the Commons as the first real conversation in days breaks out behind you. Whether it\u0027s the start of something or just the last burst of energy before the end, you can\u0027t say. But the buildings are standing, and people are talking, and Dara is drawing plans on the back of a seed packet.",
-                "mechanics": [
-                  "finish_dungeon"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "You tell Dara you think the idea can work. She seizes on it: new plans, new rules, a covenant this time, written and signed. She stands on the communal bench and addresses the clearing. Her voice carries. She talks about what they\u0027ve built, what it means, why it\u0027s worth saving.\n\nA few people look up. Oskar leans against the storehouse and watches. Maren pulls another tile from the cistern.\n\nDara keeps talking. The plans grow more elaborate: probation periods, departure protocols, a council. The words are good. The silence that follows them is worse. One by one, people drift back to what they were doing. Packing. Sorting. Preparing to leave.\n\nDara steps down from the bench. She folds the seed packets into her bag. She doesn\u0027t cry and she doesn\u0027t argue. She asks you which direction you\u0027re going, and when you tell her, she nods and goes the other way.",
-              "mechanics": [
-                "finish_dungeon"
-              ]
-            }
-          }
-        },
-        {
-          "optionText": "Walk away = This isn\u0027t your commune and these aren\u0027t your people.",
-          "optionLink": "Walk away",
-          "optionPreview": "This isn\u0027t your commune and these aren\u0027t your people.",
-          "requires": null,
-          "single": {
-            "text": "You set down the crate you carried and step back from the table. Dara looks at you. Oskar looks at you. Maren doesn\u0027t look up from the cistern.\n\n\u0022Fair enough,\u0022 Dara says. There\u0027s no reproach in it. You\u0027re a stranger who helped carry supplies. You owe them nothing more.\n\nYou walk out of the clearing as the argument starts behind you: Oskar\u0027s low voice, Maren\u0027s sharp one, Dara\u0027s steady and insistent. The sounds fade as the forest closes in. The trail back is clear. The chicken is still squawking.",
-            "mechanics": [
-              "flee_dungeon"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "Maren\u0027s Plan",
-      "category": "arcs/forest/briar_commons",
-      "recurring": false,
-      "trigger": null,
-      "tier": null,
-      "vignette": null,
-      "title": "Maren\u0027s Plan",
-      "body": "\nMaren is pulling clay tiles from the cistern lining and stacking them in a handcart with the care of someone handling their own work. She built this. The joinery is precise, the clay lining fitted in overlapping courses that shed water cleanly. It took her weeks. She is taking it apart in hours.\n\n\u0022These are mine,\u0022 she says, before you ask. \u0022I made them. I carried the clay from the riverbed. If the Commons are done, I\u0027m not leaving my work behind for someone else to use.\u0022\n\nShe doesn\u0027t look at you while she talks. Her hands keep moving. She\u0027s encouraging the others to form smaller groups and leave, two or three people, no more. She knows a place further south. Good water, decent cover. She\u0027s vague on the details, and you realize this is deliberate. She\u0027s already rationing trust again.\n\nShe thinks Oskar is out of his mind. Hunting Fen won\u0027t undo what Fen knows, and it tells everyone else what happens if you try to leave. \u0022He wants to turn this place into something with walls and rules and punishment,\u0022 she says. \u0022We already had that. It was called the empire.\u0022\n\nShe pulls another tile free and sets it on the stack. \u0022I used to run with a crew before I met Dara. Bandits, if you want to be honest about it. Dara was the first person out here who made me think you could do something different. Build instead of take.\u0022 She wipes her hands on her trousers. \u0022Turns out you can\u0027t. Not here. Not with people who have every reason to run.\u0022\n",
-      "requires": [],
-      "choices": [
-        {
-          "optionText": "Talk to Oskar = The man on the storehouse steps has a different assessment.",
-          "optionLink": "Talk to Oskar",
-          "optionPreview": "The man on the storehouse steps has a different assessment.",
-          "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "open \u0022Oskar\u0027s Plan\u0022"
-            ]
-          }
-        },
-        {
-          "optionText": "Talk to Dara = She\u0027s been quiet since the news. She\u0027s unpacking the seed stock at the communal table.",
-          "optionLink": "Talk to Dara",
-          "optionPreview": "She\u0027s been quiet since the news. She\u0027s unpacking the seed stock at the communal table.",
-          "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "open \u0022Dara\u0027s Plan\u0022"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "Oskar\u0027s Plan",
-      "category": "arcs/forest/briar_commons",
-      "recurring": false,
-      "trigger": null,
-      "tier": null,
-      "vignette": null,
-      "title": "Oskar\u0027s Plan",
-      "body": "\nOskar doesn\u0027t get up. He rests his hands on the axe head and talks to you like he\u0027s been rehearsing this, which he probably has.\n\nHe\u0027s putting a group together to find Fen. Four men, all from his old camp. They leave at dawn. He doesn\u0027t say \u0022kill\u0022; he says \u0022deal with.\u0022 But the axe is across his knees and his meaning is legible.\n\nHe lays it out without heat. Fen knows everything. Where they sleep, how many are on watch, where the food is stored. Fen didn\u0027t leave because he was unhappy. He left because he could, and now he\u0027s out there with the keys to every lock. If he sells what he knows to the wrong people, or if he simply talks in the wrong settlement, the Commons is finished. Everyone here is dead or scattered.\n\n\u0022It\u0027s not revenge,\u0022 Oskar says. \u0022It\u0027s the cost of what we built. You want real names and real trust, then leaving has to mean something. Otherwise the next person who gets restless walks out and does the same thing.\u0022\n\nHe glances toward the cistern where Maren is working. \u0022She\u0027s telling people to pack. If they leave before we deal with Fen, we\u0027ve got five, six, ten people out there who all know everything about each other and none of them trust the rest.\u0022 He shakes his head. \u0022Dara\u0027s a good woman. Good organizer. But she thinks you can fix this with a conversation.\u0022\n",
-      "requires": [],
-      "choices": [
-        {
-          "optionText": "Talk to Maren = The woman at the cistern has her own ideas about what happens next.",
-          "optionLink": "Talk to Maren",
-          "optionPreview": "The woman at the cistern has her own ideas about what happens next.",
-          "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "open \u0022Maren\u0027s Plan\u0022"
-            ]
-          }
-        },
-        {
-          "optionText": "Talk to Dara = She\u0027s been quiet since the news. She\u0027s unpacking the seed stock at the communal table.",
-          "optionLink": "Talk to Dara",
-          "optionPreview": "She\u0027s been quiet since the news. She\u0027s unpacking the seed stock at the communal table.",
-          "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "open \u0022Dara\u0027s Plan\u0022"
-            ]
           }
         }
       ]
     },
     {
       "id": "Start",
-      "category": "arcs/forest/briar_commons",
+      "category": "arcs/forest/the_lodge",
       "recurring": false,
       "trigger": null,
       "tier": null,
       "vignette": null,
-      "title": "A Chance Meeting",
-      "body": "\nYou hear her before you see her: the clatter of loose ironwork against wooden slats, the indignant squawk of a caged bird, and a woman\u0027s voice telling it to shut up in a tone that suggests this is an old argument.\n\nShe rounds the bend in the trail carrying more than any one person should. Sacks of seed grain slung across both shoulders, a bundle of iron nails wrapped in oilcloth under one arm, a crate of young plants balanced on the other. A chicken in a wicker cage hangs from a strap across her chest, pecking at the latch. She is solidly built, sun-darkened, and moving with the grim momentum of someone who knows that stopping means not starting again.\n\n\u0022Cart broke,\u0022 she says, not slowing. \u0022Axle snapped about a mile back. I\u0027ve been hauling since noon.\u0022 She looks you over. Your pack, your boots, your hands. \u0022You help me carry the rest of this, I\u0027ll see you\u0027ve got a hot meal and a dry bed tonight. My place isn\u0027t far.\u0022\n",
+      "title": "Placeholder: The Lodge",
+      "body": "\nA placeholder encounter for The Lodge arc.\n",
       "requires": [],
       "choices": [
         {
-          "optionText": "Help carry her supplies = Walk with her and ask about where she\u0027s headed",
-          "optionLink": "Help carry her supplies",
-          "optionPreview": "Walk with her and ask about where she\u0027s headed",
+          "optionText": "Explore = Search the lodge",
+          "optionLink": "Explore",
+          "optionPreview": "Search the lodge",
           "requires": null,
-          "single": {
-            "text": "You take the crate of seedlings and the nails. She shifts the grain sacks and the chicken settles, mollified by the change in gait. Her name is Dara. She\u0027s been to one of the forest settlements to trade, and she\u0027s been gone two weeks.\n\nShe talks about home the way a farmer talks about a good field, with quiet satisfaction and practical detail. Three camps that decided to stop hiding from each other. Shared gardens. A storehouse. A communal kitchen. \u0022We use real names,\u0022 she says, and the pride in her voice is unmistakable. \u0022No code names, no dead drops. We know each other.\u0022",
-            "mechanics": [
-              "open \u0022Along the Way\u0022"
-            ]
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item kopis",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
           }
         },
         {
-          "optionText": "Carry in silence = Take what you can and walk",
-          "optionLink": "Carry in silence",
-          "optionPreview": "Take what you can and walk",
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
           "requires": null,
-          "single": {
-            "text": "You shoulder the crate and the nails without a word. Dara seems grateful not to have to sell you on it. You walk together through the late afternoon light, the forest closing in overhead, the trail narrowing to a track.",
-            "mechanics": [
-              "open \u0022The Commons\u0022"
-            ]
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item kopis",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
           }
         }
       ]
     },
     {
-      "id": "The Commons",
-      "category": "arcs/forest/briar_commons",
+      "id": "Start",
+      "category": "arcs/forest/warrant_oak",
       "recurring": false,
       "trigger": null,
       "tier": null,
       "vignette": null,
-      "title": "The Commons",
-      "body": "\nThe clearing is real and the buildings are real. Rough timber frames, a half-shingled roof on the communal hall, garden plots marked with string and stakes. A storehouse with a proper door. A rain cistern. It\u0027s the most organized settlement you\u0027ve seen in the deep forest.\n\nIt\u0027s also nearly empty. A few people sit around a cold fire pit, not talking. They look up when Dara arrives. Nobody greets her. Nobody moves to help with her pack.\n\nOskar is sitting on the storehouse steps with an axe across his knees. He nods at Dara. He doesn\u0027t stand.\n\nDara sets down the grain sacks. She looks at the cold fire, the empty benches, the people who won\u0027t meet her eyes. She starts asking questions. The answers come reluctantly, in fragments, from people who keep glancing at each other before they speak.\n\nWhile she was gone, Fen left. Not dramatically. He packed his things one night and walked into the forest. The problem was what happened next. The remaining residents realized that Fen knew the location of the Commons. The layout of every building. The sleeping arrangements of every person. He knew where the food was stored and how many people were on watch at any given hour.\n\nThis was always true. But nobody thought about it until Fen left.\n\nNow one of them is out there, carrying everything.\n",
+      "title": "Placeholder: The Warrant Oak",
+      "body": "\nA placeholder encounter for the Warrant Oak arc.\n",
       "requires": [],
       "choices": [
         {
-          "optionText": "Talk to Oskar = He\u0027s been sitting on those steps like he\u0027s guarding the storehouse. Maybe he is.",
-          "optionLink": "Talk to Oskar",
-          "optionPreview": "He\u0027s been sitting on those steps like he\u0027s guarding the storehouse. Maybe he is.",
+          "optionText": "Explore = Search the hideout",
+          "optionLink": "Explore",
+          "optionPreview": "Search the hideout",
           "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "open \u0022Oskar\u0027s Plan\u0022"
-            ]
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item nightveil",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
           }
         },
         {
-          "optionText": "Talk to Maren = A woman is dismantling a rain cistern, piece by piece, stacking the components in a handcart.",
-          "optionLink": "Talk to Maren",
-          "optionPreview": "A woman is dismantling a rain cistern, piece by piece, stacking the components in a handcart.",
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
           "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "open \u0022Maren\u0027s Plan\u0022"
-            ]
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item nightveil",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/mountains/halfway_house",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Halfway House",
+      "body": "\nA placeholder encounter for the Halfway House arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the house",
+          "optionLink": "Explore",
+          "optionPreview": "Search the house",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/mountains/ledgerhaus",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Ledgerhaus",
+      "body": "\nA placeholder encounter for the Ledgerhaus arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the archives",
+          "optionLink": "Explore",
+          "optionPreview": "Search the archives",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item petitioners_writ",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item petitioners_writ",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/mountains/the_stift",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Stift",
+      "body": "\nA placeholder encounter for The Stift arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the court",
+          "optionLink": "Explore",
+          "optionPreview": "Search the court",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item frostward",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item frostward",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/mountains/zahlenhaus",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Zahlenhaus",
+      "body": "\nA placeholder encounter for the Zahlenhaus arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the counting house",
+          "optionLink": "Explore",
+          "optionPreview": "Search the counting house",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
           }
         }
       ]
@@ -590,7 +816,7 @@
               "text": "You stumble in the dark, trying to make your way by feel. You crack you head on a low overhang and curse. Slowly and with great care, you feel your way back to the entrance, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.",
               "mechanics": [
                 "skip_time morning no_meal no_sleep no_biome",
-                "damage_health 1",
+                "add_condition injured",
                 "flee_dungeon"
               ]
             }
@@ -711,6 +937,786 @@
       ]
     },
     {
+      "id": "Start",
+      "category": "arcs/plains/grainway_station",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Grainway Station",
+      "body": "\nA placeholder encounter for the Grainway Station arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the depot",
+          "optionLink": "Explore",
+          "optionPreview": "Search the depot",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item zweihander",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item zweihander",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/plains/harrow_line",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Harrow Line",
+      "body": "\nA placeholder encounter for the Harrow Line arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the battlefield",
+          "optionLink": "Explore",
+          "optionPreview": "Search the battlefield",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item wardens_plate",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item wardens_plate",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/plains/metal_beast",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Metal Beast",
+      "body": "\nA placeholder encounter for the Metal Beast arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the wreckage",
+          "optionLink": "Explore",
+          "optionPreview": "Search the wreckage",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item grid_cipher",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item grid_cipher",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/plains/the_city",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The City",
+      "body": "\nA placeholder encounter for The City arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the ruins",
+          "optionLink": "Explore",
+          "optionPreview": "Search the ruins",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item lead_lined_case",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item lead_lined_case",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/scrub/census_house",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Census House",
+      "body": "\nA placeholder encounter for the Census House arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the records",
+          "optionLink": "Explore",
+          "optionPreview": "Search the records",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/scrub/foundry",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Foundry",
+      "body": "\nA placeholder encounter for The Foundry arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the foundry",
+          "optionLink": "Explore",
+          "optionPreview": "Search the foundry",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item lattice_ward",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item lattice_ward",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/scrub/relay_post",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Relay Post",
+      "body": "\nA placeholder encounter for the Relay Post arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the station",
+          "optionLink": "Explore",
+          "optionPreview": "Search the station",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item color_lens",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item color_lens",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/scrub/wellhead_station",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Wellhead Station",
+      "body": "\nA placeholder encounter for the Wellhead Station arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the wellhead",
+          "optionLink": "Explore",
+          "optionPreview": "Search the wellhead",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "upgrade_pack 1",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/swamp/drowning_post",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Drowning Post",
+      "body": "\nA placeholder encounter for the Drowning Post arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the post",
+          "optionLink": "Explore",
+          "optionPreview": "Search the post",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item labrys",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item labrys",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/swamp/listening_blind",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Listening Blind",
+      "body": "\nA placeholder encounter for the Listening Blind arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the blind",
+          "optionLink": "Explore",
+          "optionPreview": "Search the blind",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item windstriders",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item windstriders",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/swamp/the_revenakh",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Revenakh",
+      "body": "\nA placeholder encounter for The Revenakh arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the depths",
+          "optionLink": "Explore",
+          "optionPreview": "Search the depths",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item antivenom_kit",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item antivenom_kit",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "Start",
+      "category": "arcs/swamp/tile_house",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "Placeholder: The Tile House",
+      "body": "\nA placeholder encounter for the Tile House arc.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Explore = Search the tile house",
+          "optionLink": "Explore",
+          "optionPreview": "Search the tile house",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check combat medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item revathi_tile",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Negotiate = Talk your way through",
+          "optionLink": "Negotiate",
+          "optionPreview": "Talk your way through",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You find something valuable.",
+                "mechanics": [
+                  "add_item revathi_tile",
+                  "finish_dungeon"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "It doesn\u0027t go well.",
+              "mechanics": [
+                "add_condition injured",
+                "finish_dungeon"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "Placeholder",
       "category": "forest/tier1",
       "recurring": true,
@@ -764,7 +1770,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -789,7 +1795,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -855,7 +1861,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
                 "damage_spirits 2",
                 "add_condition injured"
               ]
@@ -882,7 +1887,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
                 "damage_spirits 2",
                 "add_condition injured"
               ]
@@ -949,7 +1953,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
                 "damage_spirits 3",
                 "add_condition injured"
               ]
@@ -976,7 +1979,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
                 "damage_spirits 3",
                 "add_condition injured"
               ]
@@ -1202,7 +2204,7 @@
               "text": "The slope beside the barricade looks climbable until you\u0027re halfway up it. The stone here has been fractured by a thousand freeze-thaw cycles, and it crumbles like stale bread beneath your weight. You commit too much to a handhold that breaks free. The slide starts small but grows, rock cascading loose in a gray avalanche that carries you sideways and down in a chaos of impacts.\n\nYou crash into the roadbed below the blockade hard enough to empty your lungs. Miners rush forward, pull you clear of the still-sliding debris. Your ribs scream. Blood runs from a gash across your forearm, and your knee has already begun to swell. The bearded man crouches beside you, his expression caught between concern and vindication. They carry you to the side of the road, bind your wounds with cloth that smells of rock dust and sweat. You will not be climbing today, nor tomorrow. The blockade remains, and you sit among the trapped travelers nursing injuries earned by impatience. The cold settles into your bones while the miners return to their vigil.",
               "mechanics": [
                 "skip_time morning",
-                "damage_health 2"
+                "add_condition injured"
               ]
             }
           }
@@ -1227,7 +2229,7 @@
               "text": "You move among the travelers, making your case. The merchant listens, nods, but won\u0027t commit. The muleteer won\u0027t risk her animals. A courier flat refuses to be part of breaking a strike, mutters something about his own father working a mine once. One by one they turn away from your arguments. You have only a handful of supporters when you walk to the barricade. And by the time you get there, you\u0027re down to two.\n\nYou demand to be let through, or you\u0027ll force the matter. The bearded man gestures, and a half-dozen miners climb down from the barricade. They do not seriously injure you, but they give you a good beating as a message to the other travelers.\n\nThe strike resolves itself by morning, but your bruises are still raw.",
               "mechanics": [
                 "skip_time morning",
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -1353,69 +2355,8 @@
           "single": {
             "text": "You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you\u0027ve gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.\n\nThe ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.\n\nYou reach the valley floor two hours after full dark, shaking so hard you can barely strike a spark for fire. The cold has settled into your bones in a way that will ache for days. But you are through, and the trail behind you is passable again, and you did not spend a night in a place where three different travelers felt compelled to carve warnings in stone. Whether that makes you wise or merely lucky is a question the mountain does not answer. The fire builds slowly, and you feed it through the long hours until dawn, grateful for the pain that means you can still feel your fingers.",
             "mechanics": [
-              "damage_health 1",
+              "add_condition injured",
               "damage_spirits 3"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "The Priests Vow",
-      "category": "mountains/tier1",
-      "recurring": false,
-      "trigger": null,
-      "tier": null,
-      "vignette": null,
-      "title": "The Priest\u0027s Vow",
-      "body": "\nYou hear the shouting before you round the switchback, a raw, hoarse voice calling for help. A miner sits wedged between two massive stones where a recent rockfall has shifted the scree. His legs vanish into the gap. The rocks lean against each other like drunk companions, holding him in place without crushing him. Yet. Above, more loose stone perches on the slope, ready to follow the first slide down.\n\nThe miner\u0027s head has a bloodly gash from the rockslide, but he is alive and glad to see you.\n\nA priest is here, furiously praying for the miner\u0027s safety. \u0022Oh, thank goodness you came! I am on pilgrimage, and cannot touch the impure. But you can. And you must! I will bless you, and you will pull him free.\u0022\n\nThe rocks trapping the miner are daunting. With the priest\u0027s help, you could pull the man free, but on your own you\u0027d likely doom both the miner and yourself.\n\nThe rocks creak as the scree settles another finger\u0027s width.\n",
-      "requires": [],
-      "choices": [
-        {
-          "optionText": "Convince the priest to help = Superstition be damned",
-          "optionLink": "Convince the priest to help",
-          "optionPreview": "Superstition be damned",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check negotiation medium",
-                "text": "You stride to the priest\u0027s side, your voice cutting through his rising prayers. \u0022Get over here and help me!\u0022\n\nHe recoils as if struck. \u0022I cannot, brother. You must understand. I am on holy pilgrimage. If I touch him, my hands will be unclean. I will be cursed.\u0022\n\nYou measure the man before you. His eyes burn with conviction, not cowardice. \u0022Ignore your hands, brother.\u0022 you say, \u0022What of your heart? If you let this man die, will not your heart be unclean? Will you not be cursed as a murderer is cursed?\u0022\n\nThe priest goes still. His gaze drops to his open palms, and he stares at them as if reading scripture written in his own flesh. The miner\u0027s ragged breathing fills the silence. Somewhere above, a pebble skitters down the slope.\n\n\u0022You are right,\u0022 the priest says at last. \u0022I will help you.\u0022\n\nTogether you grasp the miner beneath his arms. Your boots scrape against loose stone as you pull. The priest\u0027s knuckles whiten, his jaw clenched, and you feel the man\u0027s weight shift inch by agonizing inch. The rocks groan. With a final heave you wrench the miner free, dragging him clear as a cascade of smaller stones rattles down to fill the space where he lay trapped. The three of you collapse in the dust, gasping.\n\nYou glance at the priest. His hands tremble before him, no longer clean by the laws he honors. You hope you have not damned this man.",
-                "mechanics": [
-                  "heal_spirits 2"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "You stride to the priest and seize his shoulder. \u0022Get over here and help me pull him free!\u0022\n\nThe holy man recoils. \u0022I cannot, brother. You must understand I walk the high pilgrimage. If I touch his blood, my hands become unclean. The curse will follow me.\u0022 His voice trembles with genuine terror.\n\nYou turn from him without another word. You kneel beside the trapped miner and draw your hand across the gash on his brow, collecting the warm blood on your palm. The miner watches with feverish eyes as you rise and cross back to the priest. Before he can retreat, you press your bloodied palm against his face, drawing a dark streak from temple to jaw.\n\n\u0022There,\u0022 you say, \u0022you\u0027re unclean. Now help me.\u0022\n\nThe priest touches the stain with trembling fingers. He lifts his hand before his eyes, turns it in the mountain light, sees the red gleaming there. His mouth opens. The shriek that tears from his throat is not words but pure animal anguish. It does not stop. He drops to his knees, still howling, rocking forward and back with both hands clutching at his defiled face.\n\nYou return to the miner and brace your feet against the lower stone. You pull. The rocks do not yield. You shift your grip, plant yourself anew, haul with every fiber of strength you possess. Behind you the priest\u0027s wailing scrapes against your skull. The miner gasps shallow breaths, his face gone the color of tallow. Above, a grinding sound: stone dragging across stone. A pebble skitters down the slope, then another. You pull again. Nothing moves.\n\nThe scree settles with a deep, final crunch. The miner\u0027s eyes roll back. His chest stills. You release your grip and step away, the priest\u0027s shrieks still echoing from the mountainside.",
-              "mechanics": [
-                "damage_spirits 3"
-              ]
-            }
-          }
-        },
-        {
-          "optionText": "Try to dig him out on you rown = Try to excavate around the trapped legs instead of moving the stones",
-          "optionLink": "Try to dig him out on you rown",
-          "optionPreview": "Try to excavate around the trapped legs instead of moving the stones",
-          "requires": null,
-          "single": {
-            "text": "You drop to your knees beside the gap and begin scooping scree away from where his legs disappear between the rocks. The loose stone comes away easily at first. Then you hit compressed earth, then bedrock. The miner watches you work with something that might be gratitude. The priest prayers eacho. You dig until your hands are raw and the hole is twice as deep, but the stones extend further than you can reach. The gap that holds him runs all the way down to the mountain\u0027s bones. The miner knows it before you do. You see understanding settle across his face like dust. His voice comes out steady despite everything. \u0022Enough,\u0022 he says. \u0022You tried.\u0022 When you round the switchback, you can still hear the priest\u0027s fruitless prayers.",
-            "mechanics": [
-              "damage_spirits 3"
-            ]
-          }
-        },
-        {
-          "optionText": "Walk on = This isn\u0027t your problem and the mountain takes who it takes",
-          "optionLink": "Walk on",
-          "optionPreview": "This isn\u0027t your problem and the mountain takes who it takes",
-          "requires": null,
-          "single": {
-            "text": "You meet the trapped miner\u0027s eyes for a moment. He doesn\u0027t curse or plead. Perhaps he\u0027s already spent his voice shouting before you arrived. Perhaps he simply recognizes the shape of your decision in your posture. You continue up the switchback and the voices fade behind you. The trail climbs another half mile before leveling onto a ridge where you can see the whole valley spread below. From here the rockfall is invisible, just another fold in the mountainside. A hawk circles on a thermal, hunting. The wind carries the faint sound of metal on stone from a mine shaft somewhere higher up. Everything continues as it always has. You drink from your own flask and taste snowmelt, cold and clean. The water is good in the Near Ranges.",
-            "mechanics": [
-              "heal_spirits 1"
             ]
           }
         }
@@ -1538,7 +2479,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
                 "damage_spirits 2",
                 "add_condition injured"
               ]
@@ -1565,11 +2505,71 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
                 "damage_spirits 2",
                 "add_condition injured"
               ]
             }
+          }
+        }
+      ]
+    },
+    {
+      "id": "The Pilgrim",
+      "category": "mountains/tier2",
+      "recurring": false,
+      "trigger": null,
+      "tier": null,
+      "vignette": null,
+      "title": "The Pilgrim",
+      "body": "\nYou hear the shouting before you round the switchback, a raw, hoarse voice calling for help. A miner sits wedged between two massive stones where a recent rockfall has shifted the scree. His legs vanish into the gap. The rocks lean against each other like drunk companions, holding him in place without crushing him. Yet. Above, more loose stone perches on the slope, ready to follow the first slide down.\n\nThe miner\u0027s head has a bloody gash from the rockslide, but he is alive and glad to see you.\n\nA man in clean travelling clothes is pacing nearby, flipping frantically through a small leather-bound book. He is muttering to himself. \u0022Ah. Chapter four, chapter four - trials of the road... No, that\u0027s about blisters...\u0022 He looks up at you with enormous relief. \u0022Thank goodness! This man needs help. I would help him myself, but I am in the sixth step of purification and I cannot touch blood or the unclean. It\u0027s all in here.\u0022 He holds up the book. The cover reads ENLIGHTENMENT: A Seven Step Guide, by Jorgo the Wise.\n\nThe rocks trapping the miner are daunting. With the pilgrim\u0027s help, you could pull the man free, but on your own you\u0027d likely doom both the miner and yourself.\n\nThe pilgrim returns to the book, thumbing pages with shaking hands. The rocks creak as the scree settles another finger\u0027s width.\n",
+      "requires": [],
+      "choices": [
+        {
+          "optionText": "Convince the pilgrim to help = Jorgo can wait",
+          "optionLink": "Convince the pilgrim to help",
+          "optionPreview": "Jorgo can wait",
+          "requires": null,
+          "conditional": {
+            "preamble": "",
+            "branches": [
+              {
+                "condition": "check negotiation medium",
+                "text": "You cross to the pilgrim and put your hand over the open page. \u0022Close the book.\u0022\n\nHe clutches it to his chest. \u0022You don\u0027t understand. I\u0027ve come all the way from Aldgate. I left my position at the customs office. I sold my writing desk. If I break the sixth step now, I have to start over from the beginning. Jorgo is very clear about this.\u0022\n\n\u0022What does Jorgo say about letting a man die ten feet from you?\u0022\n\nThe pilgrim opens his mouth, then closes it. He looks down at the book, then at the miner, then at his own clean hands. You can see him searching for the chapter, the verse, the passage that reconciles the strictures of spiritual purity with the man bleeding in the rocks. He will not find it because Jorgo the Wise did not write his seven steps in a place where people get crushed to death.\n\n\u0022Put the book down,\u0022 you say again, quietly.\n\nHe sets it on a stone, spine up, pages fluttering in the wind. Together you grasp the miner beneath his arms. Your boots scrape against loose stone as you pull. The pilgrim\u0027s knuckles whiten, his jaw clenched, and you feel the man\u0027s weight shift inch by agonizing inch. The rocks groan. With a final heave you wrench the miner free, dragging him clear as a cascade of smaller stones rattles down to fill the space where he lay trapped. The three of you collapse in the dust, gasping.\n\nThe pilgrim stares at his hands. They are filthy with blood and grit. He picks up the book and holds it without opening it. You hope you have not ruined this man\u0027s pilgrimage. You hope you have.",
+                "mechanics": [
+                  "heal_spirits 2"
+                ]
+              }
+            ],
+            "fallback": {
+              "text": "You stride to the pilgrim and seize his shoulder. \u0022Put the book down and help me pull him free!\u0022\n\nHe flinches away, still gripping the book like a talisman. \u0022I can\u0027t. You don\u0027t understand. I\u0027m in the sixth step. If I touch blood, I become unclean and I have to start over. I left everything in Aldgate for this. My position. My desk. Everything.\u0022 His voice is high and tight. He has probably never watched a man die before.\n\nYou turn from him without another word. You kneel beside the trapped miner and draw your hand across the gash on his brow, collecting the warm blood on your palm. The miner watches with feverish eyes as you rise and cross back to the pilgrim. Before he can retreat, you press your bloodied palm against his face, drawing a dark streak from temple to jaw.\n\n\u0022There,\u0022 you say. \u0022You\u0027re unclean. Now help me.\u0022\n\nThe pilgrim touches the stain with trembling fingers. He lifts his hand before his eyes, turns it in the mountain light, sees the red gleaming there. The book falls from his other hand and lands open in the scree. The sound that comes out of him is not a word. It is the sound of a man watching six months of sacrifice and conviction come apart in a single handprint. He drops to his knees, still making that sound, both hands pressed to his face as if he could push the blood back out through his skin.\n\nYou return to the miner and brace your feet against the lower stone. You pull. The rocks do not yield. You shift your grip, plant yourself anew, haul with every fiber of strength you possess. Behind you the pilgrim\u0027s keening scrapes against your skull. The miner gasps shallow breaths, his face gone the color of tallow. Above, a grinding sound: stone dragging across stone. A pebble skitters down the slope, then another. You pull again. Nothing moves.\n\nThe scree settles with a deep, final crunch. The miner\u0027s eyes roll back. His chest stills. You release your grip and step away. The pilgrim is sitting in the dirt, the book open in his lap, smoothing the bent pages with bloodied fingers.",
+              "mechanics": [
+                "damage_spirits 4"
+              ]
+            }
+          }
+        },
+        {
+          "optionText": "Try to dig him out on your own = Try to excavate around the trapped legs instead of moving the stones",
+          "optionLink": "Try to dig him out on your own",
+          "optionPreview": "Try to excavate around the trapped legs instead of moving the stones",
+          "requires": null,
+          "single": {
+            "text": "You drop to your knees beside the gap and begin scooping scree away from where his legs disappear between the rocks. The loose stone comes away easily at first. Then you hit compressed earth, then bedrock. The miner watches you work with something that might be gratitude. Behind you, the pilgrim reads aloud from chapter three in a voice that shakes. You dig until your hands are raw and the hole is twice as deep, but the stones extend further than you can reach. The gap that holds him runs all the way down to the mountain\u0027s bones. The miner knows it before you do. You see understanding settle across his face like dust. His voice comes out steady despite everything. \u0022Enough,\u0022 he says. \u0022You tried.\u0022 When you round the switchback, you can still hear the pilgrim reading.",
+            "mechanics": [
+              "damage_spirits 4"
+            ]
+          }
+        },
+        {
+          "optionText": "Walk on = This isn\u0027t your problem and the mountain takes who it takes",
+          "optionLink": "Walk on",
+          "optionPreview": "This isn\u0027t your problem and the mountain takes who it takes",
+          "requires": null,
+          "single": {
+            "text": "You meet the trapped miner\u0027s eyes for a moment. He doesn\u0027t curse or plead. Perhaps he\u0027s already spent his voice shouting before you arrived. Perhaps he simply recognizes the shape of your decision in your posture. You continue up the switchback and the voices fade behind you. The trail climbs another half mile before leveling onto a ridge where you can see the whole valley spread below. From here the rockfall is invisible, just another fold in the mountainside. A hawk circles on a thermal, hunting. The wind carries the faint sound of metal on stone from a mine shaft somewhere higher up. Everything continues as it always has. You drink from your own flask and taste snowmelt, cold and clean. The water is good in the Near Ranges.",
+            "mechanics": [
+              "heal_spirits 1"
+            ]
           }
         }
       ]
@@ -1632,7 +2632,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
                 "damage_spirits 3",
                 "add_condition injured"
               ]
@@ -1659,7 +2658,6 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
                 "damage_spirits 3",
                 "add_condition injured"
               ]
@@ -1735,7 +2733,7 @@
               "text": "You turn your back on them.\n\nThe first blow catches you between the shoulders, a hoe handle or staff you cannot see. You wheel, hand moving to defend yourself, but already two more are closing from the flanks. One strikes low; your knee buckles. Another seizes your arm, wrenching it back with the strength of a man accustomed to wrestling calves and plows.\n\nA single farmer would pose no threat. Five together are a different matter. You twist free, land a solid strike that sends one reeling into the dust, but the others press in like wolves on wounded prey. Fists and rough wood find your ribs, your jaw. The taste of copper floods your mouth. Your vision narrows to a confusion of grasping hands and sun-worn faces, the old man standing well back with his ledger tucked beneath one arm, watching with the same expression he might give a storm rolling across his wheat.\n\nThey drive you to the ground. Dust chokes your lungs. Hands tear at your belt, your pack, methodical and practiced. They take coin, weighed carefully in calloused palms, counted against whatever sum lives in that charcoal-marked ledger. When they are satisfied, they rise and step away, leaving you sprawled in the road with aching ribs and a wallet considerably lighter than before. The old man nods once, as if concluding a transaction at market, and turns back toward his fields.",
               "mechanics": [
                 "rem_gold 2",
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -1863,7 +2861,7 @@
               "text": "You walk with grim determination to the stone bowl. Your fingers close around the dagger\u0027s pitted hilt. You hold out your hand, palm upward, and draw the rusted edge across the flesh in one deliberate stroke. The blade bites deep; pain flares white and immediate. Blood wells thick and dark from the gash, spilling over your fingers in hot rivulets. You turn your hand and let the crimson flow pour into the bowl, where it mingles with whatever lies within.\n\nThe villagers stare, their smiles frozen. The clearing falls silent save for the drip of blood striking liquid. A small child tugs at her mother\u0027s skirt and asks, voice clear in the stillness, \u0022Why is that person bleeding in the soup?\u0022\n\nThe woman with flowers in her braids blinks. Another villager clears his throat. Someone mutters about foreign customs, ancient ways from distant lands. They nod to one another, uncertainty masked by forced courtesy. Two men lift the bowl with careful hands and carry it behind the table, tilting it to spill its contents into the wheat. The young woman retrieves the dagger from your slack grip, her expression carefully blank. You bind your hand in a strip torn from your cloak, the wound throbbing with each beat of your heart. At the first lull in their murmured conversation, you turn and walk back to the road, your departure unmarked by farewell.",
               "mechanics": [
                 "damage_spirits 2",
-                "damage_health 1"
+                "add_condition injured"
               ]
             }
           }
@@ -1924,7 +2922,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -1949,7 +2947,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -1988,7 +2986,7 @@
               "text": "You are too slow. The fire outraces you, jumps your pathetic break in a cascade of sparks, and suddenly you are surrounded. Flame on three sides and smoke so thick you cannot see the ground. You run blind, stumbling through the burning wheat, and when you finally break free at the field\u0027s edge your clothes are singed and your throat is raw as butchered meat. The woman drags the farmer back as the fire takes the road. It will burn itself out at the fallow ground beyond, but not before it consumes everything. The mule\u0027s screaming stops. You walk away before it ends, the taste of ash thick on your tongue, the smell of burned hair following you down the road.",
               "mechanics": [
                 "damage_spirits 1",
-                "damage_health 1"
+                "add_condition injured"
               ]
             }
           }
@@ -2084,7 +3082,7 @@
             "fallback": {
               "text": "You stride toward the youth with purpose. He does not cower. Instead, his shoulders tense, his feet shift to balance, and you glimpse in his stance some trace of training, or at least of many fights survived.\n\nHe moves before you close the distance. The sack of grain, still gripped in both hands, rises and swings toward you with surprising force. It catches you across the chest and shoulder, a dull, heavy impact that staggers you backward. The weight of it, the suddenness, sends you sprawling into the dirt.\n\nBefore you can rise, he is on you. He straddles your torso, pinning you against the ground with his knees, and his fists descend in rapid succession. The blows land across your jaw, your cheekbone, your brow. You taste copper. Your vision flashes white with each strike. He breathes hard through his teeth, his face taut with desperation, and you feel the weight of his intention: he means to end you here, to beat you senseless or worse.\n\nThen, abruptly, he stops. He springs off you and bolts, sprinting down the road toward the wheat fields. You roll to your side, gasping, the dust thick in your throat.\n\nHoofbeats and the creak of leather reach your ears. You push yourself to your knees, blinking blood from one eye, and see three figures approaching: a broad man in merchant\u0027s garb astride a mule, flanked by two guards with cudgels in hand. The merchant reins in near the cart, his gaze sweeping the scene. He sees you, bloodied and still half-prone in the dirt, and his expression hardens.\n\n\u0022Looks like the thieves turned on each other,\u0022 he says, voice flat and certain. \u0022One of them is still here.\u0022\n\nThe guards move to either side of you. You raise a hand, wipe at your mouth, and speak slowly, forcing steadiness into your voice. You tell him you came upon the boy stealing from his cart. You tell him you meant to protect his grain, to stop the theft before it worsened.\n\nThe merchant\u0027s eyes narrow. He glances at the cart, at the sacks still piled beneath their canvas, the lashings intact. He looks back to you, doubt plain in his face.\n\n\u0022Nothing\u0027s been taken,\u0022 he says after a long pause. \u0022So there\u0027s no claim for a crime.\u0022\n\nOne of the guards prods you with the end of his cudgel, a silent command to rise. You do, slowly, your ribs aching where the boy\u0027s knees pressed down. The merchant watches you stand, his jaw tight, his hand resting on the pommel of a short knife at his belt.\n\n\u0022You\u0027ll move along now,\u0022 he says. \u0022And keep to your own road.\u0022\n\nYou nod once, gather what dignity remains, and turn away from the cart. As you walk, you feel the merchant\u0027s gaze fixed on your back, heavy and mistrustful, until the crossroads and the broken cart are far behind you.",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -2149,7 +3147,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -2175,7 +3173,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -2240,7 +3238,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
+                "add_condition injured",
                 "damage_spirits 3"
               ]
             }
@@ -2266,7 +3264,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
+                "add_condition injured",
                 "damage_spirits 3"
               ]
             }
@@ -2365,7 +3363,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -2390,7 +3388,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -2581,7 +3579,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -2607,7 +3605,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -2847,7 +3845,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
+                "add_condition injured",
                 "damage_spirits 3"
               ]
             }
@@ -2873,7 +3871,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
+                "add_condition injured",
                 "damage_spirits 3"
               ]
             }
@@ -2947,7 +3945,7 @@
               "text": "You step down into the water beside her. The woman shifts to give you room, assuming help. You reach for the packed clay at the dike\u0027s base, where the structure is oldest, and dig your fingers in. The mud comes away easily once you know where to pry. You work a stone loose, then another, opening a channel beneath her fresh repairs. The water finds it immediately, eager, widening the gap from below.\n\nShe sees what you\u0027ve done. For a moment she only stares, hands still full of useless mud. Then she drops it and lunges. She\u0027s strong from years of this work and her fists find your chest, your jaw, blows without technique but full of weight. You go down into the water and she\u0027s on top of you, pressing your face into the silt, and you taste the fen, thick and old and furious. The dike gives with a sound like tearing cloth. The flood hits you both, a wall of brown water that sweeps her off and carries you ten feet before you find bottom.\n\nWhen you surface, coughing, she\u0027s already wading toward what remains of her home. The paddies are gone, merged into a single sheet of water reflecting white sky. You pull yourself onto the path and lie there, ribs aching, face throbbing, clothes heavy with silt",
               "mechanics": [
                 "damage_spirits 1",
-                "damage_health 2"
+                "add_condition injured"
               ]
             }
           }
@@ -3070,7 +4068,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -3095,7 +4093,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 1"
               ]
             }
@@ -3160,7 +4158,7 @@
               "text": "You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader\u0027s eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.\n\nYour hand drifts toward the bundle. The pole sweeps through the humid air with shocking swiftness, the waterlogged wood striking your shoulder and chest with the weight of a falling timber. The blow hurls you sideways from the raised path. You plunge into the muck below, the brackish water closing over your head, thick with decay and the writhing roots of reeds. You thrash upward, gasping, fingers clawing through the slime until you find purchase on something solid. When you drag yourself back toward the path, water streaming from your garments, the trader has already set his pole against the muddy bottom. The punt glides away through the reeds, smooth and certain. He calls back over his shoulder, voice carrying across the water: \u0022Stay dry, outlander.\u0022 The words hang in the wet air long after he vanishes beyond the curtain of rushes.",
               "mechanics": [
                 "damage_spirits 2",
-                "damage_health 1"
+                "add_condition injured"
               ]
             }
           }
@@ -3219,7 +4217,7 @@
             "fallback": {
               "text": "You step confidently toward the southern channel and the mud greets you like an old enemy. Your first step sinks past the ankle. Your second plunges you to the knee in cold water that smells of rot and clay. The silence you mistook for shallow ground is simply where the frogs have learned not to nest. The water here is deep and still, thick with silt that sucks at your legs like a living thing.\n\nBehind you, someone laughs. Not cruel, but not kind either. You haul yourself back toward the path, reeds slapping your face, boots squelching obscenely with each step. The old woman hasn\u0027t moved from her stool. When you finally drag yourself back onto solid ground, soaked to the waist and decorated with mud and waterweed, she taps her stick once. \u0022Most outsiders choose wrong,\u0022 she repeats, as though you\u0027ve simply confirmed old wisdom. You wait the full time after all, watching the water drain while your clothes refuse to dry in the thick air.",
               "mechanics": [
-                "damage_health 1",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -3357,7 +4355,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -3383,7 +4381,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "damage_spirits 2"
               ]
             }
@@ -3421,7 +4419,7 @@
             "fallback": {
               "text": "You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind. Only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun\u0027s pale climb you have lost the night, and perhaps something more.",
               "mechanics": [
-                "damage_health 2",
+                "add_condition injured",
                 "skip_time morning"
               ]
             }
@@ -3523,7 +4521,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
+                "add_condition injured",
                 "damage_spirits 3"
               ]
             }
@@ -3549,7 +4547,7 @@
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health 3",
+                "add_condition injured",
                 "damage_spirits 3"
               ]
             }

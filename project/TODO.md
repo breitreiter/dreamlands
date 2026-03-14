@@ -10,9 +10,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Frontend
 
-- [ ] Landing — connect to server, new game / load game
 - [ ] Redesign severe condition end-of-day screen
-- [ ] shadcn/tailwind based design system
 - [ ] UX design: Town — Guild Bank
 
 ### Map Generation
@@ -28,8 +26,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging
       players to try new branches and pick up fresh storylets.
-- [ ] Market stocking — all outposts must stock bandages. All T3 biome settlements must
-      stock the relevant specialist medicine for their biome's severe condition.
 
 ### Quality of Life
 
@@ -45,14 +41,6 @@ Everything else is a one-liner placeholder.
 
 - [ ] Improve settlement and region names — current names are mechanical (biome root + size
       suffix). Rework after lore bibles are finalized so names can draw on established lore.
-- [ ] Guild office descriptions
-- [ ] Market descriptions
-- [ ] Guild office rumors
-- [ ] Temple descriptions
-- [ ] Inn descriptions
-- [ ] Time of day descriptions
-- [ ] Weather descriptions
-- [ ] Condition warnings
 
 ### Nice to Have
 
