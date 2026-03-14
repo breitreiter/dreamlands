@@ -364,6 +364,7 @@ EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => n
 {
     Id = encounter.Id,
     Category = encounter.Category,
+    Vignette = encounter.Vignette,
     Title = encounter.Title,
     Body = encounter.Body,
     Choices = choices.Select((c, i) => new ChoiceInfo

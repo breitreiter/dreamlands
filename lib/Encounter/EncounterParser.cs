@@ -36,6 +36,7 @@ public static partial class EncounterParser
         var requires = new List<string>();
         string? trigger = null;
         int? tier = null;
+        string? vignette = null;
         int bodyStart = 1;
         for (int i = 1; i < lines.Length; i++)
         {
@@ -67,6 +68,12 @@ public static partial class EncounterParser
                         else
                             errors.Add(new ParseError { Line = i + 1, Message = $"Invalid tier '{value}'. Must be 1, 2, or 3." });
                         break;
+                    case "vignette":
+                        if (vignette != null)
+                            errors.Add(new ParseError { Line = i + 1, Message = "Duplicate [vignette]. Only one allowed per encounter." });
+                        else
+                            vignette = value;
+                        break;
                     default:
                         goto endFrontMatter;
                 }
@@ -91,7 +98,7 @@ public static partial class EncounterParser
         if (choicesLineIndex < 0)
         {
             errors.Add(new ParseError { Message = "Missing 'choices:' delimiter." });
-            return new ParseResult { Encounter = new Encounter { Title = title, Trigger = trigger, Tier = tier, Requires = requires, Body = JoinBody(lines, bodyStart, lines.Length) }, Errors = errors };
+            return new ParseResult { Encounter = new Encounter { Title = title, Trigger = trigger, Tier = tier, Vignette = vignette, Requires = requires, Body = JoinBody(lines, bodyStart, lines.Length) }, Errors = errors };
         }
 
         var body = JoinBody(lines, bodyStart, choicesLineIndex);
@@ -101,7 +108,7 @@ public static partial class EncounterParser
 
         return new ParseResult
         {
-            Encounter = new Encounter { Title = title, Trigger = trigger, Tier = tier, Requires = requires, Body = body, Choices = choices },
+            Encounter = new Encounter { Title = title, Trigger = trigger, Tier = tier, Vignette = vignette, Requires = requires, Body = body, Choices = choices },
             Errors = errors
         };
     }

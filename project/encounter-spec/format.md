@@ -13,7 +13,7 @@ Encounter files use a token-driven format. Four sigils identify the role of each
 | Part | Definition |
 |------|------------|
 | **Title** | First line of the file. |
-| **Front-matter** | Zero or more `[trigger ...]`, `[tier ...]`, and `[requires ...]` lines immediately after the title. |
+| **Front-matter** | Zero or more `[trigger ...]`, `[tier ...]`, `[vignette ...]`, and `[requires ...]` lines immediately after the title. |
 | **Body** | All lines after title/front-matter until `choices:`. Prose, blank lines, and inline markdown are valid. |
 | **Choices block** | From the line `choices:` to end of file. Parsed per section 3. |
 
@@ -27,11 +27,14 @@ Optional metadata lines between the title and the body. Order doesn't matter; bl
 
 **`[tier <value>]`** — Which tier this encounter belongs to: `1`, `2`, or `3`. At most one per encounter. No `[tier]` = any tier.
 
+**`[vignette <path>]`** — Override the vignette image shown during this encounter. The value is a path relative to `assets/vignettes/`, without the `.png` extension (e.g. `intro/00_Intro`, `dungeons/brides_cave`). At most one per encounter. No `[vignette]` = the UI falls back to the standard terrain/tier image for the current node.
+
 **`[requires <condition>]`** — Gate the entire encounter. The encounter selection system skips any encounter whose prerequisites are not met. Multiple `[requires]` lines are AND-ed. Same condition syntax as choice-level `[requires]` and `@if` (see section 5). No `[requires]` = no gating.
 
 ```
 The Old Man's Story
 [trigger settlement]
+[vignette dungeons/brides_cave]
 [tier 1]
 [requires tag brides_cave_known]
 

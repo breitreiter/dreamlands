@@ -160,6 +160,7 @@ static class BundleCommand
             recurring,
             trigger = enc.Trigger,
             tier = enc.Tier,
+            vignette = enc.Vignette,
             title = enc.Title,
             body = enc.Body,
             requires = enc.Requires,

@@ -10,6 +10,7 @@ public sealed class Encounter
     public bool Recurring { get; init; }
     public string? Trigger { get; init; }
     public int? Tier { get; init; }
+    public string? Vignette { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = Array.Empty<string>();
     public IReadOnlyList<Choice> Choices { get; init; } = Array.Empty<Choice>();
 }

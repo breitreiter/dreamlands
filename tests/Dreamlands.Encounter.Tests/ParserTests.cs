@@ -506,6 +506,82 @@ public class ParserTests
     }
 
     [Fact]
+    public void Vignette_Parsed()
+    {
+        var source = """
+            Test
+            [vignette intro/00_Intro]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Equal("intro/00_Intro", result.Encounter!.Vignette);
+    }
+
+    [Fact]
+    public void Vignette_DefaultsNull()
+    {
+        var source = """
+            Test
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Null(result.Encounter!.Vignette);
+    }
+
+    [Fact]
+    public void DuplicateVignette_Error()
+    {
+        var source = """
+            Test
+            [vignette intro/00_Intro]
+            [vignette dungeons/cave]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Duplicate [vignette]"));
+    }
+
+    [Fact]
+    public void Vignette_WithOtherFrontMatter_Parsed()
+    {
+        var source = """
+            Test
+            [trigger settlement]
+            [vignette dungeons/brides_cave]
+            [tier 2]
+            [requires tag some_flag]
+
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+
+        var enc = result.Encounter!;
+        Assert.Equal("settlement", enc.Trigger);
+        Assert.Equal("dungeons/brides_cave", enc.Vignette);
+        Assert.Equal(2, enc.Tier);
+        Assert.Single(enc.Requires);
+    }
+
+    [Fact]
     public void MultipleChoices_AllParsed()
     {
         var source = """
