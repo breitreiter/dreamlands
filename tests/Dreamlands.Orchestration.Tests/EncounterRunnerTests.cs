@@ -129,15 +129,4 @@ public class EncounterRunnerTests
         Assert.Null(session.CurrentEncounter);
     }
 
-    [Fact]
-    public void EndEncounter_SetsSkipEncounterTrigger()
-    {
-        var session = Helpers.MakeSession();
-        var enc = SimpleEncounter();
-        EncounterRunner.Begin(session, enc);
-
-        EncounterRunner.EndEncounter(session);
-
-        Assert.True(session.SkipEncounterTrigger);
-    }
 }

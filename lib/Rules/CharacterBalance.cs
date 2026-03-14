@@ -44,8 +44,9 @@ public sealed class CharacterBalance
     public int BalancedMealHealthBonus { get; init; } = 1;
     public int BalancedMealSpiritsBonus { get; init; } = 1;
 
-    // Overworld encounter trigger chance (0.0–1.0) per eligible tile (~3 moves/day × 0.10 ≈ 30%/day)
-    public double EncounterChance { get; init; } = 0.10;
+    // Overworld encounter cadence: next consideration scheduled this many moves after each check
+    public int EncounterCadenceMin { get; init; } = 7;
+    public int EncounterCadenceMax { get; init; } = 11;
 
     // Inn pricing: cost per night for multi-night stays (3x trivial food cost)
     public int InnNightlyCost { get; init; } = 9;

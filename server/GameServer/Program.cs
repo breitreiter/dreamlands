@@ -532,6 +532,11 @@ app.MapPost("/api/game/new", async () =>
     var session = BuildSession(player);
     session.MarkVisited();
 
+    // Set initial encounter cadence timer
+    player.NextEncounterMove = session.Rng.Next(
+        balance.Character.EncounterCadenceMin,
+        balance.Character.EncounterCadenceMax + 1);
+
     // Start with the intro encounter if available
     var introEnc = bundle.GetById("00_Intro");
     if (introEnc != null)
@@ -785,22 +790,31 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 player.PendingEndOfDay = true;
             }
 
-            // Check for encounter trigger at new location
-            // Only during mid-day periods (Midday/Afternoon/Evening) to avoid back-to-back with camp
+            // Encounter cadence: check every 7–11 moves
             var node = session.CurrentNode;
-            var midDay = player.Time is TimePeriod.Midday or TimePeriod.Afternoon or TimePeriod.Evening;
-            if (node.Poi?.Kind is not (PoiKind.Settlement or PoiKind.Dungeon) && midDay && !session.SkipEncounterTrigger && !noEncounters
-                && session.Rng.NextDouble() < balance.Character.EncounterChance)
+            player.MoveCount++;
+
+            if (player.MoveCount >= player.NextEncounterMove)
             {
-                var enc = EncounterSelection.PickOverworld(session, node);
-                if (enc != null)
+                // Reset timer regardless of whether encounter fires
+                player.NextEncounterMove = player.MoveCount
+                    + session.Rng.Next(balance.Character.EncounterCadenceMin,
+                                       balance.Character.EncounterCadenceMax + 1);
+
+                var eligible = player.Time is not TimePeriod.Morning
+                               && node.Poi is null;
+
+                if (eligible && !noEncounters)
                 {
-                    var step = EncounterRunner.Begin(session, enc);
-                    await store.Save(player);
-                    return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.VisibleChoices));
+                    var enc = EncounterSelection.PickOverworld(session, node);
+                    if (enc != null)
+                    {
+                        var step = EncounterRunner.Begin(session, enc);
+                        await store.Save(player);
+                        return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.VisibleChoices));
+                    }
                 }
             }
-            session.SkipEncounterTrigger = false;
 
             await store.Save(player);
             if (player.PendingEndOfDay && !noCamp)

@@ -68,6 +68,5 @@ public static class EncounterRunner
         session.Mode = SessionMode.Exploring;
         session.CurrentEncounter = null;
         session.Player.CurrentEncounterId = null;
-        session.SkipEncounterTrigger = true;
     }
 }

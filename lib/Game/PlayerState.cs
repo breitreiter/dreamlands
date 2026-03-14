@@ -30,7 +30,10 @@ public class PlayerState
 
     // Skills
     public Dictionary<Skill, int> Skills { get; set; } = new();
-    public bool SkipEncounterTrigger { get; set; }
+
+    // Encounter cadence
+    public int MoveCount { get; set; }
+    public int NextEncounterMove { get; set; }
 
     // Inventory
     public List<ItemInstance> Pack { get; set; } = new();
