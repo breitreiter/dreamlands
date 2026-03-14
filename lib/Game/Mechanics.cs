@@ -48,7 +48,7 @@ public static class Mechanics
             "add_tag" => ApplyAddTag(args, state),
             "remove_tag" => ApplyRemoveTag(args, state),
             "quality" => ApplyQuality(args, state),
-            "add_condition" => ApplyAddCondition(args, state, balance),
+            "add_condition" => ApplyAddCondition(args, state, balance, rng),
             "remove_condition" => ApplyRemoveCondition(args, state),
             "skip_time" => ApplySkipTime(args, state),
             "open" => ApplyOpen(args),
@@ -327,13 +327,20 @@ public static class Mechanics
         return new MechanicResult.TagRemoved(args[0]);
     }
 
-    static MechanicResult? ApplyAddCondition(List<string> args, PlayerState state, BalanceData balance)
+    static MechanicResult? ApplyAddCondition(List<string> args, PlayerState state, BalanceData balance, Random rng)
     {
         if (args.Count < 1) return null;
         var id = args[0];
         if (state.ActiveConditions.ContainsKey(id)) return null;
 
-        var stacks = balance.Conditions.TryGetValue(id, out var def) ? def.Stacks : 1;
+        balance.Conditions.TryGetValue(id, out var def);
+        var dc = def?.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
+        var check = SkillChecks.RollResist(id, dc, state, balance, rng);
+
+        if (check.Passed)
+            return new MechanicResult.ConditionResisted(id, check);
+
+        var stacks = def?.Stacks ?? 1;
         state.ActiveConditions[id] = stacks;
         return new MechanicResult.ConditionAdded(id, stacks);
     }

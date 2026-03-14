@@ -389,6 +389,7 @@ List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
             MechanicResult.TagAdded t => $"Tag: {t.TagId}",
             MechanicResult.TagRemoved t => $"Tag removed: {t.TagId}",
             MechanicResult.ConditionAdded c => c.Stacks > 1 ? $"Condition: {c.ConditionId} x{c.Stacks}" : $"Condition: {c.ConditionId}",
+            MechanicResult.ConditionResisted cr => $"Resisted: {cr.ConditionId} (rolled {cr.Check.Rolled} vs DC {cr.Check.Target})",
             MechanicResult.ConditionRemoved c => $"Condition removed: {c.ConditionId}",
             MechanicResult.TimeAdvanced ta => $"Time: {ta.NewPeriod}, Day {ta.NewDay}",
             MechanicResult.Navigation n => $"Navigate to: {n.EncounterId}",

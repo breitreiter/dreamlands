@@ -111,7 +111,8 @@ public class MechanicsTests
     public void AddCondition_AppearsInActiveConditions()
     {
         var state = Fresh();
-        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, Rng);
+        // Seed 1 rolls 5 on d20 → resist fails (5 < DC 12) → condition applied
+        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
 
         var r = Assert.IsType<MechanicResult.ConditionAdded>(results[0]);
         Assert.Equal("freezing", r.ConditionId);
@@ -122,10 +123,23 @@ public class MechanicsTests
     public void AddCondition_UsesStacksFromBalance()
     {
         var state = Fresh();
-        Mechanics.Apply(["add_condition freezing"], state, Balance, Rng);
+        Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
 
         var expectedStacks = Balance.Conditions["freezing"].Stacks;
         Assert.Equal(expectedStacks, state.ActiveConditions["freezing"]);
+    }
+
+    [Fact]
+    public void AddCondition_Resisted_WhenRollPasses()
+    {
+        var state = Fresh();
+        // Seed 0 rolls high on d20 → resist passes → condition not applied
+        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(0));
+
+        var r = Assert.IsType<MechanicResult.ConditionResisted>(results[0]);
+        Assert.Equal("freezing", r.ConditionId);
+        Assert.True(r.Check.Passed);
+        Assert.False(state.ActiveConditions.ContainsKey("freezing"));
     }
 
     [Fact]
