@@ -176,7 +176,7 @@ GameServer running with save persistence.
 - [x] Town — Inn / Chapterhouse
 - [x] Review UX for exiting inventory and market screens — normalized exit UX across all exitable screens
 - [ ] shadcn/tailwind based design system
-- [ ] Settlement encounters should use the settlement vignette image, not the biome overworld
+- [x] Settlement encounters should use the settlement vignette image, not the biome overworld
       vignette. Currently the encounter screen picks vignette by terrain — needs to detect
       when the player is at a settlement (e.g. via node.poi.kind) and use the settlement variant.
 
@@ -243,6 +243,10 @@ These must be resolved before end-of-day can be implemented.
       thirsty) become spirit-only with toast UI. Severe conditions (injured, poisoned,
       irradiated, lattice sickness) drain 5 hp/night with full crisis screen.
       Design in `project/design/condition_rework.md`.
+- [ ] Treated severe conditions skip penalty — if a severe condition (injured, poisoned,
+      irradiated, lattice sickness) is successfully treated that night, it should not
+      impose its 5 hp drain. Currently treatment cures stacks but the drain still fires
+      if the condition was present at the start of the night.
 - [ ] Market stocking — all outposts must stock bandages. All T3 biome settlements must
       stock the relevant specialist medicine for their biome's severe condition.
 - [ ] Protective gear in markets — pack-carried protective items (heavy_furs, canteen,

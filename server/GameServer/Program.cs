@@ -1447,5 +1447,26 @@ string FormatItemDescription(ItemDef item)
     return string.Join(", ", parts);
 }
 
+// ── Debug endpoints ──
+
+app.MapPost("/api/game/{id}/debug/add-condition", async (string id, DebugConditionRequest req) =>
+{
+    var player = await store.Load(id);
+    if (player == null) return Results.NotFound(new { error = "Game not found" });
+
+    var conditionId = req.Condition;
+    if (string.IsNullOrWhiteSpace(conditionId))
+        return Results.BadRequest(new { error = "Missing condition" });
+
+    if (player.ActiveConditions.ContainsKey(conditionId))
+        return Results.Ok(new { message = $"Already has {conditionId}" });
+
+    var stacks = balance.Conditions.TryGetValue(conditionId, out var def) ? def.Stacks : 1;
+    player.ActiveConditions[conditionId] = stacks;
+    await store.Save(player);
+
+    return Results.Ok(new { message = $"Added {conditionId} ({stacks} stacks)" });
+});
+
 app.Run();
 return 0;

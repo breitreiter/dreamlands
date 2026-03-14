@@ -38,6 +38,14 @@ class GameClient(string baseUrl)
         return await ReadResponse(resp);
     }
 
+    public async Task<string> DebugAddCondition(string gameId, string condition)
+    {
+        var json = $$"""{"condition":"{{condition}}"}""";
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var resp = await _http.PostAsync($"/api/game/{gameId}/debug/add-condition", content);
+        return await ReadResponse(resp);
+    }
+
     public async Task<bool> IsReachable()
     {
         try

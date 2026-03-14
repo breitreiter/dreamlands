@@ -285,6 +285,11 @@ public class ActionRequest
     public string? OfferId { get; set; }
 }
 
+public class DebugConditionRequest
+{
+    public string Condition { get; set; } = "";
+}
+
 public class MarketOrderRequest
 {
     public List<MarketBuyLine> Buys { get; set; } = [];

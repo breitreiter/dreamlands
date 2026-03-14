@@ -81,14 +81,17 @@ export default function Encounter({ state }: { state: GameResponse }) {
 
   const dungeonId = node?.poi?.dungeonId;
   const isIntro = encounter?.category === "intro";
+  const isSettlement = node?.poi?.kind === "settlement";
   const vignetteSrc = isIntro
     ? `/world/assets/vignettes/intro/${encounter?.id}.png`
     : dungeonId
       ? `/world/assets/vignettes/dungeons/${dungeonId}.png`
-      : `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_tier_${node!.regionTier}_1.png`;
+      : isSettlement
+        ? `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_settlement.png`
+        : `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_tier_${node!.regionTier}_1.png`;
   const hasVignette =
     !vignetteError &&
-    (isIntro || dungeonId || (node?.terrain && node.regionTier != null && node.regionTier > 0));
+    (isIntro || dungeonId || isSettlement || (node?.terrain && node.regionTier != null && node.regionTier > 0));
 
   // Is this a terminal outcome (no more choices to show)?
   const isTerminalOutcome = outcome && (!encounter || encounter.title === baseTitle) && segments.some(s => s.kind === "outcome");

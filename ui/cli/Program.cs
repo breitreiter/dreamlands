@@ -50,6 +50,7 @@ if (positional.Count == 0)
     Console.Error.WriteLine("  equip <item_id>      Equip item from pack");
     Console.Error.WriteLine("  unequip <slot>       Unequip slot (weapon|armor|boots)");
     Console.Error.WriteLine("  discard <item_id>    Discard item from inventory");
+    Console.Error.WriteLine("  inflict <condition>  Debug: add a condition to the player");
     return 1;
 }
 
@@ -268,6 +269,13 @@ try
         case "market":
             result = await client.GetMarket(ResolveGameId());
             break;
+
+        case "inflict":
+        {
+            if (positional.Count < 2) { Console.Error.WriteLine("Usage: inflict <condition>"); return 1; }
+            result = await client.DebugAddCondition(ResolveGameId(), positional[1]);
+            break;
+        }
 
         default:
             Console.Error.WriteLine($"Unknown command: {command}");
