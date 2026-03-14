@@ -16,7 +16,7 @@ export function itemTypeIcon(type: string): string {
 }
 
 const TAB_ICONS: Record<string, string> = {
-  foods: "pouch-with-beads.svg",
+  supplies: "pouch-with-beads.svg",
   equipment: "barbute.svg",
   hauls: "wooden-crate.svg",
   pack: "backpack.svg",

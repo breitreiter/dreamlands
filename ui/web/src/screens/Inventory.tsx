@@ -369,7 +369,7 @@ function HaversackTab({
   const emptySlots = capacity - items.length;
   return (
     <>
-      {items.map((item, i) => (
+      {[...items].sort((a, b) => a.name.localeCompare(b.name)).map((item, i) => (
         <ItemCard key={i} item={item} actions={
           <DiscardButton item={item} doAction={doAction} loading={loading} />
         } />

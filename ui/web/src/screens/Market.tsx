@@ -235,12 +235,21 @@ export default function MarketScreen({
     const result = await doAction({ action: "market_order", order });
     if (result) {
       const failures = result.marketResult?.results.filter((r) => !r.success) ?? [];
-      if (failures.length > 0) {
-        setError(failures.map((f) => f.message).join("; "));
-      }
       setPendingBuys(new Map());
       setPendingSells([]);
-      onBack();
+      if (failures.length > 0) {
+        setError(failures.map((f) => f.message).join("; "));
+        // Refresh stock to reflect partial order
+        if (gameId) {
+          api.getMarketStock(gameId).then((res) => {
+            setStock(res.stock);
+            setHauls(res.hauls ?? []);
+            setSellPrices(res.sellPrices ?? {});
+          });
+        }
+      } else {
+        onBack();
+      }
     }
   }
 
@@ -283,7 +292,7 @@ export default function MarketScreen({
         }
         break;
       case "haversack":
-        for (const item of inventory.haversack) {
+        for (const item of [...inventory.haversack].sort((a, b) => a.name.localeCompare(b.name))) {
           const sold = consumeSell(item.defId);
           items.push({ item, source: "haversack", sold });
         }
