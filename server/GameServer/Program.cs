@@ -1417,6 +1417,8 @@ string FormatItemDescription(ItemDef item)
         parts.Add($"{skill.GetInfo().DisplayName} {(mod >= 0 ? "+" : "")}{mod}");
     foreach (var (resist, mod) in item.ResistModifiers)
         parts.Add($"{resist} resist {(mod >= 0 ? "+" : "")}{mod}");
+    if (item.ForagingBonus != 0)
+        parts.Add($"Foraging {(item.ForagingBonus >= 0 ? "+" : "")}{item.ForagingBonus}");
     if (item.Cures.Count > 0)
         parts.Add($"Cures: {string.Join(", ", item.Cures)}");
     return string.Join(", ", parts);
