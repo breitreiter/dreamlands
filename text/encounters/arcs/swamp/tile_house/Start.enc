@@ -1,0 +1,27 @@
+Placeholder: The Tile House
+
+A placeholder encounter for the Tile House arc.
+
+choices:
+
+* Explore = Search the tile house
+    @if check combat medium {
+        You find something valuable.
+        +add_item revathi_tile
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item revathi_tile
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

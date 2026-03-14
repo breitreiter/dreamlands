@@ -1,0 +1,27 @@
+Placeholder: The Revenakh
+
+A placeholder encounter for The Revenakh arc.
+
+choices:
+
+* Explore = Search the depths
+    @if check combat medium {
+        You find something valuable.
+        +add_item antivenom_kit
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item antivenom_kit
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

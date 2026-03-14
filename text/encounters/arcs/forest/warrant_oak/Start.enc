@@ -1,0 +1,27 @@
+Placeholder: The Warrant Oak
+
+A placeholder encounter for the Warrant Oak arc.
+
+choices:
+
+* Explore = Search the hideout
+    @if check combat medium {
+        You find something valuable.
+        +add_item nightveil
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item nightveil
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

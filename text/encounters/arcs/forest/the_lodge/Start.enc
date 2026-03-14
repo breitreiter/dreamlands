@@ -1,0 +1,27 @@
+Placeholder: The Lodge
+
+A placeholder encounter for The Lodge arc.
+
+choices:
+
+* Explore = Search the lodge
+    @if check combat medium {
+        You find something valuable.
+        +add_item kopis
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item kopis
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

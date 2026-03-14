@@ -1,0 +1,27 @@
+Placeholder: The Metal Beast
+
+A placeholder encounter for the Metal Beast arc.
+
+choices:
+
+* Explore = Search the wreckage
+    @if check combat medium {
+        You find something valuable.
+        +add_item grid_cipher
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item grid_cipher
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

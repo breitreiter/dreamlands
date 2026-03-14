@@ -1,0 +1,27 @@
+Placeholder: The Harrow Line
+
+A placeholder encounter for the Harrow Line arc.
+
+choices:
+
+* Explore = Search the battlefield
+    @if check combat medium {
+        You find something valuable.
+        +add_item wardens_plate
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item wardens_plate
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

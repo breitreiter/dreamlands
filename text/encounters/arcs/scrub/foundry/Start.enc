@@ -1,0 +1,27 @@
+Placeholder: The Foundry
+
+A placeholder encounter for The Foundry arc.
+
+choices:
+
+* Explore = Search the foundry
+    @if check combat medium {
+        You find something valuable.
+        +add_item lattice_ward
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item lattice_ward
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

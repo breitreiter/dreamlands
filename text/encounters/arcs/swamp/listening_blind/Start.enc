@@ -1,0 +1,27 @@
+Placeholder: The Listening Blind
+
+A placeholder encounter for the Listening Blind arc.
+
+choices:
+
+* Explore = Search the blind
+    @if check combat medium {
+        You find something valuable.
+        +add_item windstriders
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item windstriders
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

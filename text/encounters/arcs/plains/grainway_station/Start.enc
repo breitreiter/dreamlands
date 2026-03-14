@@ -1,0 +1,27 @@
+Placeholder: The Grainway Station
+
+A placeholder encounter for the Grainway Station arc.
+
+choices:
+
+* Explore = Search the depot
+    @if check combat medium {
+        You find something valuable.
+        +add_item zweihander
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item zweihander
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

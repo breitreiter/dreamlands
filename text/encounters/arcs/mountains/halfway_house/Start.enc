@@ -1,0 +1,27 @@
+Placeholder: The Halfway House
+
+A placeholder encounter for the Halfway House arc.
+
+choices:
+
+* Explore = Search the house
+    @if check combat medium {
+        You find something valuable.
+        +upgrade_pack 1
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +upgrade_pack 1
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }

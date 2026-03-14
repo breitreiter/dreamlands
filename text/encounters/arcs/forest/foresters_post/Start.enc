@@ -1,0 +1,27 @@
+Placeholder: The Forester's Post
+
+A placeholder encounter for the Forester's Post arc.
+
+choices:
+
+* Explore = Search the post
+    @if check combat medium {
+        You find something valuable.
+        +add_item hunters_journal
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
+
+* Negotiate = Talk your way through
+    @if check negotiation medium {
+        You find something valuable.
+        +add_item hunters_journal
+        +finish_dungeon
+    } @else {
+        It doesn't go well.
+        +add_condition injured
+        +finish_dungeon
+    }
