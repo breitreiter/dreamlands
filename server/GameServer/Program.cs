@@ -345,7 +345,6 @@ string ModeString(SessionMode m) => m switch
     SessionMode.InEncounter => "encounter",
 
     SessionMode.Camp => "camp",
-    SessionMode.GameOver => "game_over",
     _ => m.ToString().ToLowerInvariant(),
 };
 
@@ -492,7 +491,6 @@ List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
             EndOfDayEvent.CureApplied c => c.Remaining > 0
                 ? $"{c.ItemDefId} reduced {c.ConditionId} by {c.StacksRemoved} ({c.Remaining} remaining)"
                 : $"{c.ItemDefId} cured {c.ConditionId}!",
-            EndOfDayEvent.CureNegated c => $"{c.ItemDefId} negated — {c.ConditionId} contracted tonight",
             EndOfDayEvent.ConditionAcquired a => a.Stacks > 1
                 ? $"Contracted {a.ConditionId} ({a.Stacks} stacks)"
                 : $"Contracted {a.ConditionId}",
@@ -556,14 +554,6 @@ app.MapGet("/api/game/{id}", async (string id) =>
     var session = BuildSession(player);
 
     // Reconstruct current mode
-    if (player.Health <= 0)
-        return Results.Ok(new GameResponse
-        {
-            Mode = "game_over",
-            Status = BuildStatus(player),
-            Reason = "You have perished in the Dreamlands.",
-        });
-
     if (player.PendingEndOfDay && !noCamp)
         return Results.Ok(BuildCampResponse(session, BuildCampThreats(session)));
 
@@ -586,58 +576,10 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
     var session = BuildSession(player);
 
-    if (player.Health <= 0)
-        return Results.Ok(new GameResponse
-        {
-            Mode = "game_over",
-            Status = BuildStatus(player),
-            Reason = "You have perished in the Dreamlands.",
-        });
-
     GameResponse response;
 
     switch (req.Action)
     {
-        case "rest_at_inn":
-        {
-            if (session.Mode != SessionMode.Exploring)
-                return Results.BadRequest(new { error = "Cannot rest while not exploring" });
-
-            var innNode = session.CurrentNode;
-            if (innNode.Poi?.Kind != PoiKind.Settlement)
-                return Results.BadRequest(new { error = "Not at a settlement" });
-
-            var innBiome = innNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-            var innTier = innNode.Region?.Tier ?? 1;
-            var innEvents = Inn.StayOneNight(player, innBiome, innTier, balance, session.Rng);
-
-            if (player.Health <= 0)
-            {
-                await store.Save(player);
-                return Results.Ok(new GameResponse
-                {
-                    Mode = "camp_resolved",
-                    Status = BuildStatus(player),
-                    Reason = "You have perished in the Dreamlands.",
-                    Camp = new CampInfo { Threats = [], Events = FormatCampEvents(innEvents) },
-                    Node = BuildNodeInfo(innNode, player),
-                });
-            }
-
-            session.Mode = SessionMode.Exploring;
-            await store.Save(player);
-            response = new GameResponse
-            {
-                Mode = "camp_resolved",
-                Status = BuildStatus(player),
-                Node = BuildNodeInfo(innNode, player),
-                Exits = BuildExits(session),
-                Camp = new CampInfo { Threats = [], Events = FormatCampEvents(innEvents) },
-                Inventory = BuildInventory(player),
-            };
-            break;
-        }
-
         case "inn_full_recovery":
         {
             if (session.Mode != SessionMode.Exploring)
@@ -655,7 +597,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (player.Gold < quote.GoldCost)
                 return Results.BadRequest(new { error = "Not enough gold" });
 
-            var innResult = Inn.StayFullRecovery(player, balance);
+            var innResult = Inn.StayAtInn(player, balance);
             await store.Save(player);
 
             response = new GameResponse
@@ -881,16 +823,25 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                             return Results.Ok(BuildOutcomeResponse(session, finished.Outcome!, "end_dungeon"));
 
                         case FinishReason.PlayerDied:
+                        {
+                            var sc = map.StartingCity;
+                            var encRescue = Rescue.Apply(player, sc?.X ?? 0, sc?.Y ?? 0, balance);
                             await store.Save(player);
                             return Results.Ok(new GameResponse
                             {
-                                Mode = "outcome",
+                                Mode = "rescued",
                                 Status = BuildStatus(player),
                                 Outcome = BuildOutcomeInfo(finished.Outcome!),
+                                Rescue = new RescueInfo
+                                {
+                                    LostItems = encRescue.LostItems,
+                                    GoldLost = encRescue.GoldLost,
+                                },
+                                Node = BuildNodeInfo(session.CurrentNode, player),
+                                Exits = BuildExits(session),
                                 Inventory = BuildInventory(player),
-                                Mechanics = BuildMechanics(player),
-                                Reason = "You have perished in the Dreamlands.",
                             });
+                        }
 
                         default: // Completed
                             EncounterRunner.EndEncounter(session);
@@ -1014,15 +965,19 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             var campTier = node.Region?.Tier ?? 1;
 
             var campTerrain = node.Region?.Terrain ?? Terrain.Plains;
+            var startCity = map.StartingCity;
             var campEvents = EndOfDay.Resolve(
                 player, campBiome, campTier,
                 balance, session.Rng,
+                startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0,
                 createFood: (type, rng) =>
                 {
                     var (name, desc) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
                     return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name)
                         { FoodType = type, Description = desc };
                 });
+
+            var rescued = campEvents.OfType<EndOfDayEvent.PlayerRescued>().FirstOrDefault();
 
             var hasSevere = player.ActiveConditions.Keys
                 .Any(id => balance.Conditions.TryGetValue(id, out var def)
@@ -1036,16 +991,23 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 Events = FormatCampEvents(campEvents),
             };
 
-            if (player.Health <= 0)
+            if (rescued != null)
             {
+                session.Mode = SessionMode.Exploring;
                 await store.Save(player);
                 return Results.Ok(new GameResponse
                 {
-                    Mode = "camp_resolved",
+                    Mode = "rescued",
                     Status = BuildStatus(player),
-                    Reason = "You have perished in the Dreamlands.",
                     Camp = campInfo,
-                    Node = BuildNodeInfo(node, player),
+                    Rescue = new RescueInfo
+                    {
+                        LostItems = rescued.LostItems,
+                        GoldLost = rescued.GoldLost,
+                    },
+                    Node = BuildNodeInfo(session.CurrentNode, player),
+                    Exits = BuildExits(session),
+                    Inventory = BuildInventory(player),
                 });
             }
 
@@ -1433,10 +1395,10 @@ string BuildConditionEffect(ConditionDef? def)
 {
     if (def is null) return "";
     var parts = new List<string>();
-    if (def.HealthDrain is { } hd)
-        parts.Add($"Drains health each night");
+    if (def.Severity == ConditionSeverity.Severe)
+        parts.Add("Drains health each night");
     if (def.SpiritsDrain is { } sd)
-        parts.Add($"Drains spirits each night");
+        parts.Add("Drains spirits each night");
     if (def.SpecialEffect is { } se)
         parts.Add(se);
     if (def.ClearedOnSettlement)

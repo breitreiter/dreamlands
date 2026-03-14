@@ -15,7 +15,7 @@ public class BalanceDataTests
     {
         var c = BalanceData.Default.Character;
         Assert.NotNull(c);
-        Assert.Equal(20, c.StartingHealth);
+        Assert.Equal(4, c.StartingHealth);
         Assert.Equal(20, c.StartingSpirits);
         Assert.Equal(50, c.StartingGold);
         Assert.Equal(4, c.MaxSkillLevel);
@@ -46,8 +46,6 @@ public class BalanceDataTests
     }
 
     [Theory]
-    [InlineData("damage_health")]
-    [InlineData("heal")]
     [InlineData("give_gold")]
     [InlineData("add_item")]
     [InlineData("add_tag")]
@@ -70,9 +68,9 @@ public class BalanceDataTests
     [Fact]
     public void ActionVerb_Tokenize_SplitsSimpleTokens()
     {
-        var tokens = ActionVerb.Tokenize("damage_health 2");
+        var tokens = ActionVerb.Tokenize("damage_spirits 2");
         Assert.Equal(2, tokens.Count);
-        Assert.Equal("damage_health", tokens[0]);
+        Assert.Equal("damage_spirits", tokens[0]);
         Assert.Equal("2", tokens[1]);
     }
 

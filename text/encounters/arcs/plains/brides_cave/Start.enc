@@ -1,27 +1,26 @@
 The Bride's Cave
+[vignette dungeons/brides_cave]
 
-Your torch casts a flickering glow on the limestone walls of the cavern. The walls have a peculiar hatched texture.
+Weathered boards cover the entrance, a faded warning painted in red: "SEALED BY ORDER - NO ENTRY." Through gaps you glimpse limestone chambers stretching into darkness. You carefully pry away the boards and squeeze inside.
 
-It's writing. It crawls across every surface.
+It is pitch black inside.
 
-Passageways wind away in all directions.
-
-The air is cold and silent.
+The air is cold, damp, and silent.
 
 choices:
 
 * Venture deeper into the cave = Pick a passage and see where it leads
-  @if check bushcraft medium {
+  @if has brass_lantern {
+    You light the old brass lantern, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. The walls have a peculiar hatched texture.
+
     You choose a passage at random and press forward, torchlight dancing across walls dense with carved script. The tunnel bends, splits, rejoins itself in ways that defy surface logic. Twice you find yourself before the same fork, recognizing a particular glyph worn smooth by water. The third time you stop, study the patterns scored into the stone, and begin to perceive the structure beneath the chaos: a spiral, not a maze, its arms folding inward like the shell of some primordial thing.
 
     You follow the logic now, marking your turns by the age of the carvings. Where the words are deep and crisp, you advance; where they blur to faint scratches, you retreat. The passages grow narrower, the ceiling presses lower, and the cold intensifies until each breath stings your throat. At last the corridor widens. You emerge into a chamber vast enough that your torchlight cannot find its far walls, only an expanse of darkness that swallows flame and sound alike.
-    +open "The Ghosts"
+    +open "A Record in Stone"
   } @else {
-    The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.
+    You stumble in the dark, trying to make your way by feel. You crack you head on a low overhang and curse. Slowly and with great care, you feel your way back to the entrance, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.
     +skip_time morning no_meal no_sleep no_biome
-    +open "The Ghosts"
+    +add_condition injured
+    +flee_dungeon
   }
-
-* Examine the writing = Perhaps it is a clue. Or perhaps knowledge better left unknown.
-  You bring your torch close to the wall. The flame gutters in the stillness, casting writhing shadows across the stone. The marks are deep, carved by something that pressed with inhuman strength.
-  +open "A Record in Stone"
+  

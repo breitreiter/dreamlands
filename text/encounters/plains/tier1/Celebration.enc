@@ -52,6 +52,6 @@ choices:
 
         The woman with flowers in her braids blinks. Another villager clears his throat. Someone mutters about foreign customs, ancient ways from distant lands. They nod to one another, uncertainty masked by forced courtesy. Two men lift the bowl with careful hands and carry it behind the table, tilting it to spill its contents into the wheat. The young woman retrieves the dagger from your slack grip, her expression carefully blank. You bind your hand in a strip torn from your cloak, the wound throbbing with each beat of your heart. At the first lull in their murmured conversation, you turn and walk back to the road, your departure unmarked by farewell.
         +damage_spirits 2
-        +damage_health 1
+        +add_condition injured
     }
 

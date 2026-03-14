@@ -26,7 +26,7 @@ choices:
     You step confidently toward the southern channel and the mud greets you like an old enemy. Your first step sinks past the ankle. Your second plunges you to the knee in cold water that smells of rot and clay. The silence you mistook for shallow ground is simply where the frogs have learned not to nest. The water here is deep and still, thick with silt that sucks at your legs like a living thing.
 
     Behind you, someone laughs. Not cruel, but not kind either. You haul yourself back toward the path, reeds slapping your face, boots squelching obscenely with each step. The old woman hasn't moved from her stool. When you finally drag yourself back onto solid ground, soaked to the waist and decorated with mud and waterweed, she taps her stick once. "Most outsiders choose wrong," she repeats, as though you've simply confirmed old wisdom. You wait the full time after all, watching the water drain while your clothes refuse to dry in the thick air.
-    +damage_health 1
+    +add_condition injured
     +damage_spirits 2
   }
 

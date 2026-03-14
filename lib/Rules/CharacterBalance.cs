@@ -5,7 +5,7 @@ public sealed class CharacterBalance
 {
     public static readonly CharacterBalance Default = new();
 
-    public int StartingHealth { get; init; } = 20;
+    public int StartingHealth { get; init; } = 4;
     public int StartingSpirits { get; init; } = 20;
     public int StartingGold { get; init; } = 50;
     public int StartingPackSlots { get; init; } = 3;
@@ -27,12 +27,10 @@ public sealed class CharacterBalance
     public int ForageDC2 { get; init; } = 18;
     public int ForageDC3 { get; init; } = 20;
 
-    // End-of-day rest recovery (before meal bonuses)
-    public int BaseRestHealth { get; init; } = 1;
+    // End-of-day rest recovery (spirits only — health only recovers at inn/chapterhouse)
     public int BaseRestSpirits { get; init; } = 1;
 
     // Balanced meal bonus (1 protein + 1 grain + 1 sweet)
-    public int BalancedMealHealthBonus { get; init; } = 1;
     public int BalancedMealSpiritsBonus { get; init; } = 1;
 
     // Overworld encounter cadence: next consideration scheduled this many moves after each check

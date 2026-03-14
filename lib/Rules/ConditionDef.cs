@@ -11,7 +11,6 @@ public sealed class ConditionDef
     public string Biome { get; init; } = "none";
     public string Tier { get; init; } = "none";
     public int Stacks { get; init; } = 1;
-    public int? HealthDrain { get; init; }
     public int? SpiritsDrain { get; init; }
     public string? SpecialCure { get; init; }
     public string? SpecialEffect { get; init; }
@@ -41,12 +40,12 @@ public sealed class ConditionDef
         ["irradiated"] = new()
         {
             Id = "irradiated", Name = "Irradiated", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
+            Stacks = 3, Severity = ConditionSeverity.Severe,
         },
         ["lattice_sickness"] = new()
         {
             Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
+            Stacks = 3, Severity = ConditionSeverity.Severe,
         },
         ["exhausted"] = new()
         {
@@ -57,7 +56,7 @@ public sealed class ConditionDef
         ["poisoned"] = new()
         {
             Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
+            Stacks = 3, Severity = ConditionSeverity.Severe,
         },
         ["lost"] = new()
         {
@@ -69,7 +68,7 @@ public sealed class ConditionDef
         ["injured"] = new()
         {
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
+            Stacks = 3, Severity = ConditionSeverity.Severe,
         },
         ["disheartened"] = new()
         {

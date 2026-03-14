@@ -54,7 +54,7 @@ public static class EncounterRunner
 
         if (session.Player.Health <= 0)
         {
-            session.Mode = SessionMode.GameOver;
+            session.Mode = SessionMode.Exploring;
             session.CurrentEncounter = null;
             session.Player.CurrentEncounterId = null;
             return new EncounterStep.Finished(FinishReason.PlayerDied, Outcome: outcome);

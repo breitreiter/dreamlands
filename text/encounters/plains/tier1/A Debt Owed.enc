@@ -55,6 +55,6 @@ choices:
 
     They drive you to the ground. Dust chokes your lungs. Hands tear at your belt, your pack, methodical and practiced. They take coin, weighed carefully in calloused palms, counted against whatever sum lives in that charcoal-marked ledger. When they are satisfied, they rise and step away, leaving you sprawled in the road with aching ribs and a wallet considerably lighter than before. The old man nods once, as if concluding a transaction at market, and turns back toward his fields.
     +rem_gold 2
-    +damage_health 1
+    +add_condition injured
     +damage_spirits 1
   }

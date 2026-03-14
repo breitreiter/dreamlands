@@ -23,7 +23,6 @@ choices:
         +give_gold 3
     } @else {
         You lose!
-        +damage_health 3
         +damage_spirits 3
         +add_condition injured
     }
@@ -35,7 +34,6 @@ choices:
         +give_gold 3
     } @else {
         You lose!
-        +damage_health 3
         +damage_spirits 3
         +add_condition injured
     }

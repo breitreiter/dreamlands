@@ -138,16 +138,6 @@ public sealed class ActionVerb
         VerbUsage.Mechanic, "Take player's gold",
         new ArgDef("amount", ArgType.Int));
 
-    // ── Health ──────────────────────────────────────────────────
-
-    public static readonly ActionVerb DamageHealth = new("damage_health",
-        VerbUsage.Mechanic, "Reduce player health",
-        new ArgDef("amount", ArgType.Int));
-
-    public static readonly ActionVerb Heal = new("heal",
-        VerbUsage.Mechanic, "Restore player health",
-        new ArgDef("amount", ArgType.Int));
-
     // ── Spirits ────────────────────────────────────────────────
 
     public static readonly ActionVerb DamageSpirits = new("damage_spirits",
@@ -211,7 +201,6 @@ public sealed class ActionVerb
         AddItem, AddRandomItems, LoseRandomItem,
         Equip, Unequip, Discard,
         GiveGold, RemGold,
-        DamageHealth, Heal,
         DamageSpirits, HealSpirits,
         IncreaseSkill, DecreaseSkill, SetSkill,
         AddCondition, RemoveCondition,

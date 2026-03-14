@@ -8,7 +8,6 @@ public abstract record EndOfDayEvent
     public record ResistPassed(string ConditionId, SkillCheckResult Check) : EndOfDayEvent;
     public record ResistFailed(string ConditionId, SkillCheckResult Check, int Stacks) : EndOfDayEvent;
     public record CureApplied(string ItemDefId, string ConditionId, int StacksRemoved, int Remaining) : EndOfDayEvent;
-    public record CureNegated(string ItemDefId, string ConditionId) : EndOfDayEvent;
     public record ConditionAcquired(string ConditionId, int Stacks) : EndOfDayEvent;
     public record ConditionCured(string ConditionId) : EndOfDayEvent;
     public record ConditionDrain(string ConditionId, int HealthLost, int SpiritsLost) : EndOfDayEvent;
@@ -18,4 +17,5 @@ public abstract record EndOfDayEvent
     public record DisheartendGained : EndOfDayEvent;
     public record DisheartendCleared : EndOfDayEvent;
     public record PlayerDied(string? ConditionId) : EndOfDayEvent;
+    public record PlayerRescued(List<string> LostItems, int GoldLost) : EndOfDayEvent;
 }

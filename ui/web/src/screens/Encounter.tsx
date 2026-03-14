@@ -12,7 +12,7 @@ type Segment =
   | { kind: "chosen"; label: string; preview?: string };
 
 export default function Encounter({ state }: { state: GameResponse }) {
-  const { doAction, refreshState, loading } = useGame();
+  const { doAction, loading } = useGame();
   const { encounter, outcome, node, status } = state;
   const [vignetteError, setVignetteError] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -229,37 +229,20 @@ export default function Encounter({ state }: { state: GameResponse }) {
 
           {/* Terminal outcome — show continue/return button */}
           {isTerminalOutcome && terminalOutcome?.kind === "outcome" && (
-            state.reason ? (
-              <button
-                onClick={() => refreshState()}
-                disabled={loading}
-                className="flex items-start gap-3 transition-colors group cursor-pointer"
-              >
-                <img
-                  src="/world/assets/icons/sun.svg"
-                  alt=""
-                  className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
-                />
-                <span className="font-bold text-negative group-hover:text-negative/80 transition-colors">
-                  Game Over
-                </span>
-              </button>
-            ) : (
-              <button
-                onClick={() => doAction({ action: terminalOutcome.data.nextAction || "end_encounter" })}
-                disabled={loading}
-                className="flex items-start gap-3 transition-colors group cursor-pointer"
-              >
-                <img
-                  src="/world/assets/icons/sun.svg"
-                  alt=""
-                  className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
-                />
-                <span className="font-bold text-action group-hover:text-action-hover transition-colors">
-                  {terminalOutcome.data.nextAction === "end_dungeon" ? "Return to your journey" : "Continue"}
-                </span>
-              </button>
-            )
+            <button
+              onClick={() => doAction({ action: terminalOutcome.data.nextAction || "end_encounter" })}
+              disabled={loading}
+              className="flex items-start gap-3 transition-colors group cursor-pointer"
+            >
+              <img
+                src="/world/assets/icons/sun.svg"
+                alt=""
+                className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
+              />
+              <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                {terminalOutcome.data.nextAction === "end_dungeon" ? "Return to your journey" : "Continue"}
+              </span>
+            </button>
           )}
         </div>
       </div>

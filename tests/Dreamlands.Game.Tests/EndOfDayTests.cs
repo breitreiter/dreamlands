@@ -27,7 +27,6 @@ public class EndOfDayTests
     [Fact]
     public void GetThreats_ExcludesEncounterOnly()
     {
-        // encounter-only conditions should never appear in ambient threats
         var threats = EndOfDay.GetThreats("plains", 3, Balance);
         Assert.DoesNotContain(threats, t => t.Id == "poisoned");
         Assert.DoesNotContain(threats, t => t.Id == "injured");
@@ -39,10 +38,7 @@ public class EndOfDayTests
     public void ResolveFood_NoFood_EmitsStarving()
     {
         var state = Fresh();
-        // No food in haversack
-
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
-
         Assert.Contains(events, e => e is EndOfDayEvent.Starving);
     }
 
@@ -64,7 +60,6 @@ public class EndOfDayTests
     public void ResolveFood_AutoSelectsBalancedMeal()
     {
         var state = Fresh();
-        // Add extra food — should still pick one of each type
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_protein", "More Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
@@ -75,15 +70,14 @@ public class EndOfDayTests
         var foodEvent = events.OfType<EndOfDayEvent.FoodConsumed>().Single();
         Assert.True(foodEvent.Balanced);
         Assert.Equal(3, foodEvent.FoodEaten.Count);
-        // Should have 1 protein left
         Assert.Single(state.Haversack, i => i.DefId == "food_protein");
     }
 
     [Fact]
-    public void Resolve_Rest_RecoverHealthAndSpirits()
+    public void Resolve_Rest_RecoverSpiritsOnly()
     {
         var state = Fresh();
-        state.Health = 10;
+        state.Health = 2;
         state.Spirits = 15;
         foreach (var skill in state.Skills.Keys.ToList())
             state.Skills[skill] = Balance.Character.MaxSkillLevel;
@@ -91,19 +85,19 @@ public class EndOfDayTests
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
+        var healthBefore = state.Health;
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
-        Assert.Contains(events, e => e is EndOfDayEvent.RestRecovery);
         var rest = events.OfType<EndOfDayEvent.RestRecovery>().Single();
-        Assert.True(rest.HealthGained > 0);
+        Assert.Equal(0, rest.HealthGained); // no health recovery at camp
         Assert.True(rest.SpiritsGained > 0);
+        Assert.Equal(healthBefore, state.Health); // health unchanged
     }
 
     [Fact]
-    public void Resolve_BalancedMeal_BonusRecovery()
+    public void Resolve_BalancedMeal_BonusSpiritRecovery()
     {
         var state = Fresh();
-        state.Health = 10;
         state.Spirits = 10;
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
@@ -112,12 +106,12 @@ public class EndOfDayTests
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
         var restEvent = events.OfType<EndOfDayEvent.RestRecovery>().Single();
-        Assert.Equal(Balance.Character.BaseRestHealth + Balance.Character.BalancedMealHealthBonus, restEvent.HealthGained);
+        Assert.Equal(0, restEvent.HealthGained);
         Assert.Equal(Balance.Character.BaseRestSpirits + Balance.Character.BalancedMealSpiritsBonus, restEvent.SpiritsGained);
     }
 
     [Fact]
-    public void Resolve_ConditionDrain_ReducesStats()
+    public void Resolve_SevereCondition_Loses1Health()
     {
         var state = Fresh();
         state.ActiveConditions["injured"] = 3;
@@ -125,12 +119,49 @@ public class EndOfDayTests
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
+        var healthBefore = state.Health;
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
+        // Should lose exactly 1 HP from untreated severe condition
+        Assert.Equal(healthBefore - 1, state.Health);
         var drain = events.OfType<EndOfDayEvent.ConditionDrain>()
-            .FirstOrDefault(d => d.ConditionId == "injured");
+            .FirstOrDefault(d => d.HealthLost > 0);
         Assert.NotNull(drain);
-        Assert.True(drain.HealthLost > 0);
+        Assert.Equal(1, drain.HealthLost);
+    }
+
+    [Fact]
+    public void Resolve_MultipleSevereConditions_StillLoses1Health()
+    {
+        var state = Fresh();
+        state.ActiveConditions["injured"] = 3;
+        state.ActiveConditions["poisoned"] = 2;
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var healthBefore = state.Health;
+        EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        // Still only 1 HP loss total, not per-condition
+        Assert.Equal(healthBefore - 1, state.Health);
+    }
+
+    [Fact]
+    public void Resolve_SevereConditionTreated_NoHealthLoss()
+    {
+        var state = Fresh();
+        state.ActiveConditions["injured"] = 1; // 1 stack
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // cures it
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var healthBefore = state.Health;
+        EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        // Medicine cured it before drain check, so no HP loss
+        Assert.Equal(healthBefore, state.Health);
     }
 
     [Fact]
@@ -170,37 +201,37 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_ConditionDrain_KillsPlayer()
+    public void Resolve_UntreatedSevereCondition_TriggersRescue()
     {
         var state = Fresh();
         state.Health = 1;
         state.PendingNoSleep = true;
-        state.ActiveConditions["injured"] = 3; // HealthDrain = Huge (5 HP)
+        state.ActiveConditions["injured"] = 3;
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
-        Assert.Equal(0, state.Health);
         Assert.Contains(events, e => e is EndOfDayEvent.PlayerDied);
+        Assert.Contains(events, e => e is EndOfDayEvent.PlayerRescued);
+        Assert.Equal(state.MaxHealth, state.Health); // rescue restores health
     }
 
     [Fact]
-    public void Resolve_ConditionDrain_KillsBeforeRestCanSave()
+    public void Resolve_ConditionDrain_RescuesBeforeRest()
     {
         var state = Fresh();
         state.Health = 1;
-        state.ActiveConditions["injured"] = 3; // HealthDrain = Huge (5 HP)
+        state.ActiveConditions["injured"] = 3;
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
-        Assert.Equal(0, state.Health);
         Assert.Contains(events, e => e is EndOfDayEvent.PlayerDied);
-        // Rest should NOT have fired — player is dead
+        Assert.Contains(events, e => e is EndOfDayEvent.PlayerRescued);
         Assert.DoesNotContain(events, e => e is EndOfDayEvent.RestRecovery);
     }
 
@@ -209,14 +240,13 @@ public class EndOfDayTests
     {
         var state = Fresh();
         state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // cures injured
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
-        // Bandages auto-consumed, injured 3 → 2
         Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
         Assert.Contains(events, e => e is EndOfDayEvent.CureApplied);
     }
@@ -224,8 +254,6 @@ public class EndOfDayTests
     [Fact]
     public void Resolve_NewCondition_AppliedAfterMedicine()
     {
-        // If a condition is newly acquired (failed resist, player didn't have it),
-        // it should be applied and fire ConditionAcquired
         var state = Fresh();
         state.Spirits = 0;
         foreach (var skill in state.Skills.Keys.ToList())
@@ -234,11 +262,9 @@ public class EndOfDayTests
         state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
         state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
 
-        // Run in mountains biome — may acquire freezing
         var rng = new Random(0);
         var events = EndOfDay.Resolve(state, "mountains", 1, Balance, rng);
 
-        // Each threat should either be acquired or resisted
         var acquired = events.OfType<EndOfDayEvent.ConditionAcquired>().ToList();
         var resisted = events.OfType<EndOfDayEvent.ResistPassed>().ToList();
         Assert.True(acquired.Count + resisted.Count > 0);
@@ -248,7 +274,6 @@ public class EndOfDayTests
     public void Resolve_NoSleep_SkipsRest()
     {
         var state = Fresh();
-        state.Health = 10;
         state.Spirits = 10;
         state.PendingNoSleep = true;
         state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
@@ -263,14 +288,6 @@ public class EndOfDayTests
     [Fact]
     public void ResolveForaging_HighModifier_FindsFood()
     {
-        var state = Fresh();
-        state.Skills[Skill.Bushcraft] = 4;
-        // Add food so the character survives the night
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-
-        // Try multiple seeds — with +4 modifier, should find food on many rolls
         bool foundAny = false;
         for (int seed = 0; seed < 20; seed++)
         {
@@ -288,42 +305,6 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void ResolveForaging_ZeroModifier_FindsLessFood()
-    {
-        // With 0 modifier, need natural 16+ to find anything (25% chance)
-        // Over many seeds, total yield should be low
-        int totalYield = 0;
-        for (int seed = 0; seed < 50; seed++)
-        {
-            var s = Fresh();
-            foreach (var skill in s.Skills.Keys.ToList()) s.Skills[skill] = 0;
-            s.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-            s.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-            s.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-
-            var events = EndOfDay.Resolve(s, "plains", 1, Balance, new Random(seed));
-            totalYield += events.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count;
-        }
-        // Average should be well under 1 per night with 0 modifier
-        Assert.True(totalYield < 50, $"Zero modifier should rarely find food, but found {totalYield} in 50 trials");
-    }
-
-    [Fact]
-    public void ResolveForaging_ForagedEventEmitted()
-    {
-        var state = Fresh();
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
-
-        var foraged = events.OfType<EndOfDayEvent.Foraged>().SingleOrDefault();
-        Assert.NotNull(foraged);
-        Assert.True(foraged.Rolled > 0);
-    }
-
-    [Fact]
     public void ResolveForaging_NoBiome_SkipsForaging()
     {
         var state = Fresh();
@@ -335,81 +316,5 @@ public class EndOfDayTests
         var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
 
         Assert.DoesNotContain(events, e => e is EndOfDayEvent.Foraged);
-    }
-
-    [Fact]
-    public void ResolveForaging_Disheartened_ImposesDisadvantage()
-    {
-        // With disheartened, the foraging roll should use disadvantage (min of 2 d20s)
-        // This means lower rolls on average, so less food found
-        int normalYield = 0, disheartenedYield = 0;
-        for (int seed = 0; seed < 100; seed++)
-        {
-            // Normal
-            var s1 = Fresh();
-            s1.Skills[Skill.Bushcraft] = 4;
-            s1.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-            s1.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-            s1.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-            var e1 = EndOfDay.Resolve(s1, "plains", 1, Balance, new Random(seed));
-            normalYield += e1.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count;
-
-            // Disheartened
-            var s2 = Fresh();
-            s2.Skills[Skill.Bushcraft] = 4;
-            s2.Spirits = 0;
-            s2.ActiveConditions["disheartened"] = 1;
-            s2.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-            s2.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-            s2.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-            var e2 = EndOfDay.Resolve(s2, "plains", 1, Balance, new Random(seed));
-            disheartenedYield += e2.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count;
-        }
-
-        Assert.True(disheartenedYield < normalYield,
-            $"Disheartened ({disheartenedYield}) should find less food than normal ({normalYield})");
-    }
-
-    [Fact]
-    public void ResolveForaging_CreateFoodDelegate_UsedWhenProvided()
-    {
-        var state = Fresh();
-        state.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
-
-        // Find a seed where foraging succeeds (need 16+ with modifier)
-        int? goodSeed = null;
-        for (int seed = 0; seed < 50; seed++)
-        {
-            var probe = Fresh();
-            probe.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
-            probe.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-            probe.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-            probe.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-            var probeEvents = EndOfDay.Resolve(probe, "plains", 1, Balance, new Random(seed));
-            if (probeEvents.OfType<EndOfDayEvent.Foraged>().Single().ItemsFound.Count > 0)
-            {
-                goodSeed = seed;
-                break;
-            }
-        }
-        Assert.NotNull(goodSeed);
-
-        state = Fresh();
-        state.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-
-        bool delegateCalled = false;
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(goodSeed.Value),
-            createFood: (type, rng) =>
-            {
-                delegateCalled = true;
-                return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", $"Foraged {type}");
-            });
-
-        Assert.True(delegateCalled);
-        var foraged = events.OfType<EndOfDayEvent.Foraged>().Single();
-        Assert.True(foraged.ItemsFound.All(n => n.StartsWith("Foraged")));
     }
 }

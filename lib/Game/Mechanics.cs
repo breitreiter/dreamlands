@@ -31,8 +31,6 @@ public static class Mechanics
 
         return verb switch
         {
-            "damage_health" => ApplyDamageHealth(args, state, balance),
-            "heal" => ApplyHeal(args, state, balance),
             "damage_spirits" => ApplyDamageSpirits(args, state, balance),
             "heal_spirits" => ApplyHealSpirits(args, state, balance),
             "give_gold" => ApplyGiveGold(args, state, balance),
@@ -57,20 +55,6 @@ public static class Mechanics
             "flee_dungeon" => new MechanicResult.DungeonFled(),
             _ => null,
         };
-    }
-
-    static MechanicResult ApplyDamageHealth(List<string> args, PlayerState state, BalanceData balance)
-    {
-        var amount = ParseAmount(args);
-        state.Health = Math.Max(0, state.Health - amount);
-        return new MechanicResult.HealthChanged(-amount, state.Health);
-    }
-
-    static MechanicResult ApplyHeal(List<string> args, PlayerState state, BalanceData balance)
-    {
-        var amount = ParseAmount(args);
-        state.Health = Math.Min(state.MaxHealth, state.Health + amount);
-        return new MechanicResult.HealthChanged(amount, state.Health);
     }
 
     static MechanicResult ApplyDamageSpirits(List<string> args, PlayerState state, BalanceData balance)

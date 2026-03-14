@@ -32,7 +32,7 @@ choices:
     +add_random_items 3 food
   } @else {
     You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind. Only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun's pale climb you have lost the night, and perhaps something more.
-    +damage_health 2
+    +add_condition injured
     +skip_time morning
   }
 

@@ -57,6 +57,6 @@ choices:
     "You'll move along now," he says. "And keep to your own road."
 
     You nod once, gather what dignity remains, and turn away from the cart. As you walk, you feel the merchant's gaze fixed on your back, heavy and mistrustful, until the crossroads and the broken cart are far behind you.
-    +damage_health 1
+    +add_condition injured
     +damage_spirits 1
   }

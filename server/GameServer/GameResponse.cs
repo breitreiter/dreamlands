@@ -21,8 +21,8 @@ public class GameResponse
     // Outcome
     public OutcomeInfo? Outcome { get; init; }
 
-    // Game over
-    public string? Reason { get; init; }
+    // Rescue (death → rescue at chapterhouse)
+    public RescueInfo? Rescue { get; init; }
 
     // Market order results
     public MarketOrderResultInfo? MarketResult { get; init; }
@@ -69,6 +69,12 @@ public class InnRecoveryInfo
     public int SpiritsRecovered { get; init; }
     public List<string> ConditionsCleared { get; init; } = [];
     public List<string> MedicinesConsumed { get; init; } = [];
+}
+
+public class RescueInfo
+{
+    public List<string> LostItems { get; init; } = [];
+    public int GoldLost { get; init; }
 }
 
 public class MarketOrderResultInfo

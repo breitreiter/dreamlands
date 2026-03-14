@@ -1,6 +1,9 @@
 A Record in Stone
+[vignette dungeons/brides_cave]
 
-You run your fingers along the etchings, the marks damp and ragged.
+The tunnel bends, splits, rejoins itself in ways that defy surface logic. You pause to take your bearings, and pull your lantern close to the etchings on the wall.
+
+You run your fingers along them, the marks damp and ragged.
 
 Love oaths. Prayers. Names unknown to you. The script shifts every few paces. Fine calligraphy, jagged scrawls, deep gouges hacked by frantic hands. A few catch your eye.
 
@@ -17,9 +20,9 @@ choices:
 * Flee this cursed place = Run before whatever wrote these oaths finds you
   You pull your hand from the stone. The damp clings to your fingertips. Behind you the wall stretches away into shadow, scored with its litany of grief and longing, but you have read enough.
 
-  Your boots find purchase on the uneven floor. You move quickly, not running, not yet, but with purpose. The echoes of your passage scatter into the dark. The weight of those inscriptions presses at your back, a hundred voices crying out in silence, but you do not turn to answer them. Whatever drove those hands to carve and scrape and plead may still linger in these depths. You have no wish to join their testimony.
+  Your boots find purchase on the uneven floor. You move quickly, not running, not yet, but with purpose. The echoes of your passage scatter into the dark. The weight of those inscriptions presses at your back, a hundred voices crying out in silence, but you do not turn to answer them. Whatever drove those hands to carve and scrape and plead may still linger in these depths.
 
-  The passage narrows ahead. You slip through, and the inscribed wall falls behind you. Your breath comes easier. The dark remains, but it is merely dark now, empty of names and numbers and the memory of desperate fingers working stone.
+  The passage narrows ahead. You slip through, and the inscribed wall falls behind you. Your breath comes easier. You leave the cave, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.
   +flee_dungeon
 
 * Venture deeper into the cave = Pick a passage and see where it leads

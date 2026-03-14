@@ -11,41 +11,6 @@ public class MechanicsTests
     static PlayerState Fresh() => PlayerState.NewGame("test", 99, Balance);
 
     [Fact]
-    public void DamageHealth_Small_ReducesHealth()
-    {
-        var state = Fresh();
-        var initial = state.Health;
-        var results = Mechanics.Apply(["damage_health 2"], state, Balance, Rng);
-
-        Assert.Single(results);
-        var r = Assert.IsType<MechanicResult.HealthChanged>(results[0]);
-        Assert.Equal(-2, r.Delta);
-        Assert.Equal(initial - 2, r.NewValue);
-        Assert.Equal(initial - 2, state.Health);
-    }
-
-    [Fact]
-    public void Heal_Small_IncreasesHealth_CappedAtMax()
-    {
-        var state = Fresh();
-        state.Health = 19;
-        var results = Mechanics.Apply(["heal 2"], state, Balance, Rng);
-
-        var r = Assert.IsType<MechanicResult.HealthChanged>(results[0]);
-        Assert.Equal(2, r.Delta);
-        Assert.Equal(state.MaxHealth, state.Health); // capped at 20
-    }
-
-    [Fact]
-    public void Heal_DoesNotExceedMaxHealth()
-    {
-        var state = Fresh();
-        // Health already at max
-        var results = Mechanics.Apply(["heal 5"], state, Balance, Rng);
-        Assert.Equal(state.MaxHealth, state.Health);
-    }
-
-    [Fact]
     public void DamageSpirits_ReducesSpirits()
     {
         var state = Fresh();

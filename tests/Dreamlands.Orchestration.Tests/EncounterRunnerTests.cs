@@ -102,21 +102,6 @@ public class EncounterRunnerTests
     }
 
     [Fact]
-    public void Choose_PlayerDied_SetsGameOverMode()
-    {
-        var session = Helpers.MakeSession();
-        session.Player.Health = 1;
-        var enc = SimpleEncounter(mechanics: new[] { "damage_health 2" });
-        var begin = EncounterRunner.Begin(session, enc);
-
-        var result = EncounterRunner.Choose(session, begin.VisibleChoices[0]);
-
-        var finished = Assert.IsType<EncounterStep.Finished>(result);
-        Assert.Equal(FinishReason.PlayerDied, finished.Reason);
-        Assert.Equal(SessionMode.GameOver, session.Mode);
-    }
-
-    [Fact]
     public void EndEncounter_ResetsMode()
     {
         var session = Helpers.MakeSession();

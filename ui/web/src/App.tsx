@@ -3,7 +3,7 @@ import Splash from "./screens/Splash";
 import Explore from "./screens/Explore";
 import Encounter from "./screens/Encounter";
 import DungeonHub from "./screens/DungeonHub";
-import GameOver from "./screens/GameOver";
+import Rescue from "./screens/Rescue";
 import Camp from "./screens/Camp";
 import NightToast from "./components/NightToast";
 
@@ -24,12 +24,12 @@ function GameRouter() {
         </div>
       )}
       {response.mode === "exploring" && response.dungeonHub && <DungeonHub hub={response.dungeonHub} />}
-      {/* Keep Explore mounted during camp so Leaflet map stays alive */}
-      {["exploring", "camp", "camp_resolved"].includes(response.mode) && !response.dungeonHub && (
+      {/* Keep Explore mounted during camp/rescue so Leaflet map stays alive */}
+      {["exploring", "camp", "camp_resolved", "rescued"].includes(response.mode) && !response.dungeonHub && (
         <Explore state={response} />
       )}
       {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
-      {response.mode === "game_over" && <GameOver state={response} />}
+      {response.mode === "rescued" && <Rescue state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
     </>
   );

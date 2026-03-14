@@ -19,7 +19,7 @@ choices:
         +heal_spirits 2
     } @else {
         You lose!
-        +damage_health 1
+        +add_condition injured
         +damage_spirits 1
     }
 
@@ -29,7 +29,7 @@ choices:
         +heal_spirits 2
     } @else {
         You lose!
-        +damage_health 1
+        +add_condition injured
         +damage_spirits 1
     }
 

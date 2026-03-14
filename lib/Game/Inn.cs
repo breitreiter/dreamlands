@@ -10,9 +10,9 @@ public record InnResult(int NightsStayed, int GoldSpent, int HealthRecovered, in
 public static class Inn
 {
     /// <summary>
-    /// Check whether the player can use the inn for a full recovery.
-    /// Blocked if any active condition has HealthDrain, is NOT ClearedOnSettlement,
-    /// and the player lacks enough matching Cures items to cover all stacks.
+    /// Check whether the player can use the inn for full recovery.
+    /// Blocked if any active severe condition has insufficient matching medicines
+    /// to cover all stacks.
     /// </summary>
     public static (bool Allowed, List<string> DisqualifyingConditions) CanUseInn(
         PlayerState state, BalanceData balance)
@@ -22,8 +22,7 @@ public static class Inn
         foreach (var (conditionId, stacks) in state.ActiveConditions)
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
-            if (def.HealthDrain == null) continue;
-            if (def.ClearedOnSettlement) continue;
+            if (def.Severity != ConditionSeverity.Severe) continue;
 
             // Count available cures in haversack for this condition
             int cureCount = 0;
@@ -42,126 +41,29 @@ public static class Inn
     }
 
     /// <summary>
-    /// Calculate the cost and duration of a full-recovery inn stay.
-    /// Accounts for condition drain during multi-night stays: each night the player
-    /// gets base rest recovery (+1/+1) but conditions drain health/spirits.
-    /// Medicines consumed 1/night as applicable.
+    /// Calculate the cost of a full-recovery inn stay.
+    /// Nights = max(maxHealth - health, ceil((maxSpirits - spirits) / 2)), minimum 1.
+    /// Cost = nights × InnNightlyCost.
     /// </summary>
     public static InnQuote GetQuote(PlayerState state, BalanceData balance)
     {
-        // Simulate nights to find how many it takes to reach full
-        var simHealth = state.Health;
-        var simSpirits = state.Spirits;
+        var healthDeficit = state.MaxHealth - state.Health;
+        var spiritsDeficit = state.MaxSpirits - state.Spirits;
+        var spiritsNights = (spiritsDeficit + 1) / 2; // ceiling division
 
-        // Build drain-per-night from active conditions
-        // Skip ClearedOnSettlement (cleared on arrival) and exhausted (cleared by inn stay)
-        int healthDrain = 0, spiritsDrain = 0;
-        var conditionStacks = new Dictionary<string, int>(state.ActiveConditions);
+        var nights = Math.Max(Math.Max(healthDeficit, spiritsNights), 1);
+        var goldCost = nights * balance.Character.InnNightlyCost;
 
-        foreach (var conditionId in conditionStacks.Keys.ToList())
-        {
-            if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
-            if (def.ClearedOnSettlement || conditionId == "exhausted")
-            {
-                conditionStacks.Remove(conditionId);
-                continue;
-            }
-            if (def.HealthDrain is { } hDrain)
-                healthDrain += hDrain;
-            if (def.SpiritsDrain is { } sDrain)
-                spiritsDrain += sDrain;
-        }
-
-        // Count available medicines per condition
-        var curesAvailable = new Dictionary<string, int>();
-        foreach (var item in state.Haversack)
-        {
-            if (!balance.Items.TryGetValue(item.DefId, out var itemDef)) continue;
-            foreach (var condId in itemDef.Cures)
-            {
-                if (conditionStacks.ContainsKey(condId))
-                    curesAvailable[condId] = curesAvailable.GetValueOrDefault(condId) + 1;
-            }
-        }
-
-        // Inn recovery: base rest + balanced meal bonus (9gp/night covers meals)
-        var baseHealthGain = balance.Character.BaseRestHealth + balance.Character.BalancedMealHealthBonus;
-        var baseSpiritsGain = balance.Character.BaseRestSpirits + balance.Character.BalancedMealSpiritsBonus;
-
-        int nights = 0;
-        const int maxNights = 100; // safety cap
-        while (nights < maxNights &&
-               (simHealth < state.MaxHealth || simSpirits < state.MaxSpirits))
-        {
-            nights++;
-
-            // Consume medicines this night (reduces drain for subsequent nights)
-            foreach (var condId in conditionStacks.Keys.ToList())
-            {
-                if (curesAvailable.GetValueOrDefault(condId) <= 0) continue;
-                curesAvailable[condId]--;
-                conditionStacks[condId]--;
-
-                if (conditionStacks[condId] <= 0)
-                {
-                    conditionStacks.Remove(condId);
-                    // Recalculate drain
-                    healthDrain = 0;
-                    spiritsDrain = 0;
-                    foreach (var (cid, _) in conditionStacks)
-                    {
-                        if (!balance.Conditions.TryGetValue(cid, out var d)) continue;
-                        if (d.HealthDrain is { } h)
-                            healthDrain += h;
-                        if (d.SpiritsDrain is { } s)
-                            spiritsDrain += s;
-                    }
-                }
-            }
-
-            // Apply drain then recovery
-            simHealth = Math.Max(0, simHealth - healthDrain);
-            simSpirits = Math.Max(0, simSpirits - spiritsDrain);
-            simHealth = Math.Min(state.MaxHealth, simHealth + baseHealthGain);
-            simSpirits = Math.Min(state.MaxSpirits, simSpirits + baseSpiritsGain);
-        }
-
-        nights = Math.Max(nights, 1);
-        var healthRecovered = state.MaxHealth - state.Health;
-        var spiritsRecovered = state.MaxSpirits - state.Spirits;
-
-        // First night free, remaining nights at InnNightlyCost each
-        var goldCost = Math.Max(0, nights - 1) * balance.Character.InnNightlyCost;
-
-        return new InnQuote(nights, goldCost, healthRecovered, spiritsRecovered);
+        return new InnQuote(nights, goldCost,
+            state.MaxHealth - state.Health,
+            state.MaxSpirits - state.Spirits);
     }
 
     /// <summary>
-    /// Stay one night at the inn. Triggers a normal end-of-day with PendingNoBiome
-    /// (inn shelters from ambient threats) and clears exhausted.
+    /// Full recovery inn stay. Deduct gold, consume all medicine for severe conditions,
+    /// clear all other conditions, restore to max, advance days per quote.
     /// </summary>
-    public static List<EndOfDayEvent> StayOneNight(
-        PlayerState state, string biome, int tier,
-        BalanceData balance, Random rng)
-    {
-        state.PendingNoBiome = true;
-        state.PendingEndOfDay = true;
-
-        // noBiome=true for inn stays, so foraging is skipped — no createFood needed
-        var events = EndOfDay.Resolve(state, biome, tier, balance, rng);
-
-        // Inn clears exhausted
-        if (state.ActiveConditions.Remove("exhausted"))
-            events.Add(new EndOfDayEvent.ConditionCured("exhausted"));
-
-        return events;
-    }
-
-    /// <summary>
-    /// Full recovery inn stay. Deduct gold, consume all medicine for treatable conditions,
-    /// clear ClearedOnSettlement conditions, restore to max, advance days per quote.
-    /// </summary>
-    public static InnResult StayFullRecovery(PlayerState state, BalanceData balance)
+    public static InnResult StayAtInn(PlayerState state, BalanceData balance)
     {
         var quote = GetQuote(state, balance);
 
@@ -179,7 +81,7 @@ public static class Inn
         if (state.ActiveConditions.Remove("disheartened"))
             conditionsCleared.Add("disheartened");
 
-        // Consume medicines for treatable conditions (1 per stack)
+        // Consume medicines for severe conditions (1 per stack)
         ConsumeMedicines(state, balance, conditionsCleared, medicinesConsumed);
 
         return new InnResult(quote.Nights, quote.GoldCost,
@@ -189,7 +91,7 @@ public static class Inn
 
     /// <summary>
     /// Full recovery chapterhouse stay. Clears ALL conditions, no gold cost,
-    /// no medicine consumed. Time cost still applies.
+    /// no medicine consumed.
     /// </summary>
     public static InnResult StayChapterhouse(PlayerState state, BalanceData balance)
     {

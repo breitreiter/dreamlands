@@ -68,5 +68,5 @@ choices:
   
     When you surface, coughing, she's already wading toward what remains of her home. The paddies are gone, merged into a single sheet of water reflecting white sky. You pull yourself onto the path and lie there, ribs aching, face throbbing, clothes heavy with silt
     +damage_spirits 1
-    +damage_health 2
+    +add_condition injured
   }

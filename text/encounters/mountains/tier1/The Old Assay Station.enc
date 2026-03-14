@@ -48,5 +48,5 @@ choices:
   The ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.
 
   You reach the valley floor two hours after full dark, shaking so hard you can barely strike a spark for fire. The cold has settled into your bones in a way that will ache for days. But you are through, and the trail behind you is passable again, and you did not spend a night in a place where three different travelers felt compelled to carve warnings in stone. Whether that makes you wise or merely lucky is a question the mountain does not answer. The fire builds slowly, and you feed it through the long hours until dawn, grateful for the pain that means you can still feel your fingers.
-  +damage_health 1
+  +add_condition injured
   +damage_spirits 3

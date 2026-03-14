@@ -33,12 +33,7 @@ export default function Inn({
 
   const title = isChapterhouse ? "The Chapterhouse" : "A Quiet Inn";
 
-  async function handleOneNight() {
-    await doAction({ action: "rest_at_inn" });
-    // rest_at_inn returns camp_resolved mode — App router will show Camp.tsx
-  }
-
-  async function handleFullRecovery() {
+  async function handleRecover() {
     const action = isChapterhouse ? "chapterhouse_recover" : "inn_full_recovery";
     const result = await doAction({ action });
     if (result?.innRecovery) {
@@ -192,7 +187,7 @@ export default function Inn({
 
               <div className="flex gap-3">
                 {quote.needsRecovery && (
-                  <Button variant="secondary" onClick={handleFullRecovery} disabled={loading}>
+                  <Button variant="secondary" onClick={handleRecover} disabled={loading}>
                     <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
                     Recover in the Chapterhouse
                   </Button>
@@ -207,17 +202,7 @@ export default function Inn({
 
           {quote && !isChapterhouse && (
             <>
-              <div className="text-primary/80 leading-loose">
-                You may stay one night at no charge, though you'll need to
-                buy your own food in the market.
-              </div>
-
               <div className="flex flex-col gap-3">
-                <Button variant="secondary" className="self-start" onClick={handleOneNight} disabled={loading}>
-                  <MaskedIcon icon="wood-cabin.svg" className="w-5 h-5" color="currentColor" />
-                  Spend One Night
-                </Button>
-
                 {quote.canFullRecover && quote.needsRecovery && (
                   <>
                     <div className="text-primary/80 leading-loose">
@@ -231,9 +216,9 @@ export default function Inn({
                         : ""}
                       .
                     </div>
-                    <Button variant="secondary" className="self-start" onClick={handleFullRecovery} disabled={loading || !quote.canAfford}>
+                    <Button variant="secondary" className="self-start" onClick={handleRecover} disabled={loading || !quote.canAfford}>
                       <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
-                      Fully Recover
+                      Recover
                       {quote.quote.goldCost > 0 && ` (${quote.quote.goldCost} gold)`}
                     </Button>
                     {!quote.canAfford && (
@@ -244,9 +229,15 @@ export default function Inn({
                   </>
                 )}
 
+                {quote.canFullRecover && !quote.needsRecovery && (
+                  <div className="text-primary/80 leading-loose">
+                    You're in good shape. No need to stay.
+                  </div>
+                )}
+
                 {!quote.canFullRecover &&
                   quote.disqualifyingConditions.length > 0 && (
-                    <div className="space-y-1 border-t border-edge pt-3">
+                    <div className="space-y-1">
                       {quote.disqualifyingConditions.length === 1 ? (
                         <div className="text-negative">
                           You don't have the medical supplies to treat your{" "}

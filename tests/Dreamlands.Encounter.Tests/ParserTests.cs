@@ -77,10 +77,10 @@ public class ParserTests
             * Fight the beast
             @if check combat hard {
             You strike true!
-            +damage_health 2
+            +damage_spirits 2
             } @else {
             The beast overpowers you.
-            +damage_health 3
+            +damage_spirits 3
             }
             """;
 
@@ -96,11 +96,11 @@ public class ParserTests
         Assert.Equal("check combat hard", cond.Branches[0].Condition);
         Assert.Contains("strike true", cond.Branches[0].Outcome.Text);
         Assert.Single(cond.Branches[0].Outcome.Mechanics);
-        Assert.Equal("damage_health 2", cond.Branches[0].Outcome.Mechanics[0]);
+        Assert.Equal("damage_spirits 2", cond.Branches[0].Outcome.Mechanics[0]);
 
         Assert.NotNull(cond.Fallback);
         Assert.Contains("overpowers", cond.Fallback!.Text);
-        Assert.Equal("damage_health 3", cond.Fallback.Mechanics[0]);
+        Assert.Equal("damage_spirits 3", cond.Fallback.Mechanics[0]);
     }
 
     [Fact]

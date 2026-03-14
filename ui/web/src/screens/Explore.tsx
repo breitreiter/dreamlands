@@ -114,7 +114,7 @@ function DirectionIndicator({
     iconAnchor: [16, 16],
   });
 
-  return <Marker position={pos} icon={icon} interactive={false} />;
+  return <Marker position={pos} icon={icon} interactive={false} zIndexOffset={1000} />;
 }
 
 const DIR_KEYS: Record<string, string> = {

@@ -18,14 +18,16 @@ public static class Market
         foreach (var foodId in new[] { "food_protein", "food_grain", "food_sweets" })
             catalog.Add(foodId);
 
-        // Medicines — always stocked if biome + tier match (or no biome = universal)
+        // Bandages — always stocked everywhere
+        catalog.Add("bandages");
+
+        // Specialty medicines — rare, rolled like equipment
         var medicines = balance.Items.Values
             .Where(i => i.Type == ItemType.Consumable && i.Cures.Count > 0
+                        && i.Id != "bandages"
                         && (i.Biome == null || i.Biome == biome)
                         && (i.ShopTier == null || i.ShopTier <= tier))
             .ToList();
-        foreach (var med in medicines)
-            catalog.Add(med.Id);
 
         var equipment = balance.Items.Values
             .Where(i => i.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots
@@ -45,16 +47,20 @@ public static class Market
             AddRandomItems(catalog, tools, 1, rng);
         }
 
-        // Town+: additional equipment + tool
+        // Town+: medicine + additional equipment + tool
         if (size >= SettlementSize.Town)
         {
+            AddRandomItems(catalog, medicines, 1, rng, catalog);
             AddRandomItems(catalog, equipment, 1, rng, catalog);
             AddRandomItems(catalog, tools, 1, rng, catalog);
         }
 
-        // City: additional equipment
+        // City: additional medicine + equipment
         if (size >= SettlementSize.City)
+        {
+            AddRandomItems(catalog, medicines, 1, rng, catalog);
             AddRandomItems(catalog, equipment, 1, rng, catalog);
+        }
 
         // Calculate prices
         foreach (var itemId in catalog)
@@ -75,7 +81,9 @@ public static class Market
                 { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
                 { Type: ItemType.Tool } => 1,
                 { FoodType: not null } => maxStock, // food always well-stocked
-                _ => tier == 1 ? maxStock : 1, // medicines
+                { Id: "bandages" } => maxStock, // bandages always plentiful
+                { Cures.Count: > 0 } => 1, // specialty medicines are scarce
+                _ => maxStock,
             };
         }
 

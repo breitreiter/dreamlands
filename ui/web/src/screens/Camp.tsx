@@ -54,13 +54,13 @@ export default function Camp({ state }: { state: GameResponse }) {
   // Small delay before refreshState so Explore can mount before the toast slides in,
   // avoiding the flash from simultaneous map remount + toast render.
   useEffect(() => {
-    if (resolved && camp && !camp.hasSevereCondition && !state.reason && !didToast.current) {
+    if (resolved && camp && !camp.hasSevereCondition && !didToast.current) {
       didToast.current = true;
       const lines = buildToastLines(camp.events);
       if (lines.length > 0) showToast({ lines });
       setTimeout(() => refreshState(), 50);
     }
-  }, [resolved, camp, state.reason, showToast, refreshState]);
+  }, [resolved, camp, showToast, refreshState]);
 
   const isSettlement = node?.poi?.kind === "settlement";
   const isChapterhouse = isSettlement && node?.poi?.services?.includes("chapterhouse");
@@ -173,12 +173,8 @@ export default function Camp({ state }: { state: GameResponse }) {
                 alt=""
                 className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
               />
-              <span className={`font-bold transition-colors ${
-                state.reason
-                  ? "text-negative group-hover:text-negative/80"
-                  : "text-action group-hover:text-action-hover"
-              }`}>
-                {state.reason ? "Game Over" : "Continue"}
+              <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                Continue
               </span>
             </button>
           )}

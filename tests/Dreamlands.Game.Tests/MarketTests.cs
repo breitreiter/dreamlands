@@ -23,13 +23,39 @@ public class MarketTests
     }
 
     [Fact]
-    public void InitializeSettlement_StocksMedicine_WhenBiomeTierMatch()
+    public void InitializeSettlement_AlwaysStocksBandages()
     {
         var state = Fresh();
-        // Bandages have no biome/tier restriction — should always be stocked
         var settlement = Market.InitializeSettlement("Camp", "forest", 2, SettlementSize.Camp, state, Balance, new Random(1));
 
         Assert.True(settlement.Stock.ContainsKey("bandages"));
+    }
+
+    [Fact]
+    public void InitializeSettlement_SpecialtyMedicines_NotAtCamp()
+    {
+        var state = Fresh();
+        var camp = Market.InitializeSettlement("Camp", "plains", 2, SettlementSize.Camp, state, Balance, new Random(1));
+
+        var specialtyMeds = camp.Stock.Keys
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages")
+            .ToList();
+
+        Assert.Empty(specialtyMeds);
+    }
+
+    [Fact]
+    public void InitializeSettlement_SpecialtyMedicines_CanAppearAtTown()
+    {
+        var state = Fresh();
+        // Try several seeds — at least one should stock a specialty medicine at a plains town tier 2
+        var found = Enumerable.Range(0, 20).Any(seed =>
+        {
+            var town = Market.InitializeSettlement("Town", "plains", 2, SettlementSize.Town, state, Balance, new Random(seed));
+            return town.Stock.Keys.Any(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages");
+        });
+
+        Assert.True(found, "Expected at least one seed to stock a specialty medicine at a town");
     }
 
     [Fact]

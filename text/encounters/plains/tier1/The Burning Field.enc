@@ -24,7 +24,7 @@ choices:
   } @else {
     You are too slow. The fire outraces you, jumps your pathetic break in a cascade of sparks, and suddenly you are surrounded. Flame on three sides and smoke so thick you cannot see the ground. You run blind, stumbling through the burning wheat, and when you finally break free at the field's edge your clothes are singed and your throat is raw as butchered meat. The woman drags the farmer back as the fire takes the road. It will burn itself out at the fallow ground beyond, but not before it consumes everything. The mule's screaming stops. You walk away before it ends, the taste of ash thick on your tongue, the smell of burned hair following you down the road.
     +damage_spirits 1
-    +damage_health 1
+    +add_condition injured
   }
 
 * Drive the mule out = Charge through smoke and flame, cut it loose, drive it to safety

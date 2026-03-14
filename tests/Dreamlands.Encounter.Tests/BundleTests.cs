@@ -132,7 +132,7 @@ public class BundleTests
                         "branches": [
                             { "condition": "check combat hard", "text": "Victory!", "mechanics": ["give_gold 4"] }
                         ],
-                        "fallback": { "text": "Defeat.", "mechanics": ["damage_health 2"] }
+                        "fallback": { "text": "Defeat.", "mechanics": ["damage_spirits 2"] }
                     },
                     "single": null
                 }]

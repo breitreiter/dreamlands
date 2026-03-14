@@ -188,14 +188,19 @@ export interface NoticesResponse {
   encounters: EncounterSummaryInfo[];
 }
 
+export interface RescueInfo {
+  lostItems: string[];
+  goldLost: number;
+}
+
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "game_over" | "camp" | "camp_resolved";
+  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
   encounter?: EncounterInfo;
   outcome?: OutcomeInfo;
-  reason?: string;
+  rescue?: RescueInfo;
   dungeonHub?: DungeonHubInfo;
   camp?: CampInfo;
   inventory?: InventoryInfo;

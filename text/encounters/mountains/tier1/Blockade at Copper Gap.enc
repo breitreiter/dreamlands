@@ -29,7 +29,7 @@ choices:
 
     You crash into the roadbed below the blockade hard enough to empty your lungs. Miners rush forward, pull you clear of the still-sliding debris. Your ribs scream. Blood runs from a gash across your forearm, and your knee has already begun to swell. The bearded man crouches beside you, his expression caught between concern and vindication. They carry you to the side of the road, bind your wounds with cloth that smells of rock dust and sweat. You will not be climbing today, nor tomorrow. The blockade remains, and you sit among the trapped travelers nursing injuries earned by impatience. The cold settles into your bones while the miners return to their vigil.
     +skip_time morning
-    +damage_health 2
+    +add_condition injured
   }
 
 * Persuade the other merchants to force through = Organize the backed-up merchants and couriers to break the barricade
@@ -47,7 +47,7 @@ choices:
 
     The strike resolves itself by morning, but your bruises are still raw.
     +skip_time morning
-    +damage_health 2
+    +add_condition injured
     +damage_spirits 2
   }
 

@@ -5,6 +5,7 @@ namespace Dreamlands.Game;
 /// <summary>
 /// End-of-day resolution engine. Auto-consumes food and medicine from haversack,
 /// resolves ambient conditions, condition drain, and rest recovery.
+/// Health never recovers at camp — only at inn/chapterhouse.
 /// </summary>
 public static class EndOfDay
 {
@@ -48,6 +49,7 @@ public static class EndOfDay
     public static List<EndOfDayEvent> Resolve(
         PlayerState state, string biome, int tier,
         BalanceData balance, Random rng,
+        int startX = 0, int startY = 0,
         Func<FoodType, Random, ItemInstance>? createFood = null)
     {
         var events = new List<EndOfDayEvent>();
@@ -76,22 +78,24 @@ public static class EndOfDay
             balanced = ResolveFood(state, balance, events);
 
         // 4. Auto-consume medicine (only cures pre-existing conditions)
-        ResolveMedicines(state, preExisting, resistResults, balance, events);
+        ResolveMedicines(state, preExisting, balance, events);
 
         // 5. Apply new conditions from failed resists (for conditions player didn't already have)
         ApplyNewConditions(state, resistResults, balance, events);
 
-        // 6. Condition drain
+        // 6. Condition drain — spirits from minor conditions, health from untreated severe
         string? worstDrainCondition = ResolveConditionDrain(state, balance, events);
 
-        // 7. Death check (before rest — drain to 0 is fatal)
+        // 7. Death check — rescue instead of permadeath
         if (state.Health <= 0)
         {
             events.Add(new EndOfDayEvent.PlayerDied(worstDrainCondition));
+            var rescue = Rescue.Apply(state, startX, startY, balance);
+            events.Add(new EndOfDayEvent.PlayerRescued(rescue.LostItems, rescue.GoldLost));
             return events;
         }
 
-        // 8. Rest recovery
+        // 8. Rest recovery (spirits only — health never recovers at camp)
         if (!noSleep)
             ResolveRest(state, balanced, balance, events);
 
@@ -246,10 +250,10 @@ public static class EndOfDay
 
     /// <summary>
     /// Auto-consume medicine from haversack for pre-existing active conditions.
-    /// CureNegated if that condition also failed resist AND player already had it.
+    /// One medicine per condition per night, reduces stacks by 1.
     /// </summary>
     static void ResolveMedicines(PlayerState state, HashSet<string> preExisting,
-        HashSet<string> failedResists, BalanceData balance, List<EndOfDayEvent> events)
+        BalanceData balance, List<EndOfDayEvent> events)
     {
         // Find all haversack items that cure an active pre-existing condition
         var consumed = new List<(int Index, string DefId, string ConditionId)>();
@@ -276,13 +280,6 @@ public static class EndOfDay
         foreach (var (idx, defId, conditionId) in consumed.OrderByDescending(c => c.Index))
         {
             state.Haversack.RemoveAt(idx);
-
-            // CureNegated: condition failed resist tonight AND player already had it
-            if (failedResists.Contains(conditionId) && preExisting.Contains(conditionId))
-            {
-                events.Add(new EndOfDayEvent.CureNegated(defId, conditionId));
-                continue;
-            }
 
             if (!state.ActiveConditions.TryGetValue(conditionId, out var stacks))
                 continue;
@@ -320,38 +317,44 @@ public static class EndOfDay
         }
     }
 
+    /// <summary>
+    /// Resolve condition effects at end of day.
+    /// Spirits drain: per-condition SpiritsDrain as before.
+    /// Health drain: if ANY severe condition is active (after medicine), lose 1 HP total.
+    /// </summary>
     static string? ResolveConditionDrain(PlayerState state, BalanceData balance,
         List<EndOfDayEvent> events)
     {
         string? worstCondition = null;
-        int worstDrain = 0;
+        bool hasUntreatedSevere = false;
 
         foreach (var (conditionId, _) in state.ActiveConditions)
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
 
-            int healthLost = 0, spiritsLost = 0;
-
-            if (def.HealthDrain is { } hDrain)
-                healthLost = hDrain;
+            // Spirits drain still applies per-condition
             if (def.SpiritsDrain is { } sDrain)
-                spiritsLost = sDrain;
-
-            if (healthLost > 0 || spiritsLost > 0)
             {
-                state.Health = Math.Max(0, state.Health - healthLost);
-                state.Spirits = Math.Max(0, state.Spirits - spiritsLost);
-                events.Add(new EndOfDayEvent.ConditionDrain(conditionId, healthLost, spiritsLost));
+                state.Spirits = Math.Max(0, state.Spirits - sDrain);
+                events.Add(new EndOfDayEvent.ConditionDrain(conditionId, 0, sDrain));
+            }
 
-                if (healthLost > worstDrain)
-                {
-                    worstDrain = healthLost;
-                    worstCondition = conditionId;
-                }
+            // Track whether any severe condition is active
+            if (def.Severity == ConditionSeverity.Severe)
+            {
+                hasUntreatedSevere = true;
+                worstCondition ??= conditionId;
             }
 
             if (def.SpecialEffect != null)
                 events.Add(new EndOfDayEvent.SpecialEffect(conditionId, def.SpecialEffect));
+        }
+
+        // Binary health drain: any untreated severe condition = lose 1 HP
+        if (hasUntreatedSevere)
+        {
+            state.Health = Math.Max(0, state.Health - 1);
+            events.Add(new EndOfDayEvent.ConditionDrain(worstCondition!, 1, 0));
         }
 
         return worstCondition;
@@ -377,18 +380,13 @@ public static class EndOfDay
     static void ResolveRest(PlayerState state, bool balanced,
         BalanceData balance, List<EndOfDayEvent> events)
     {
-        var healthGain = balance.Character.BaseRestHealth;
         var spiritsGain = balance.Character.BaseRestSpirits;
 
         if (balanced)
-        {
-            healthGain += balance.Character.BalancedMealHealthBonus;
             spiritsGain += balance.Character.BalancedMealSpiritsBonus;
-        }
 
-        state.Health = Math.Min(state.MaxHealth, state.Health + healthGain);
         state.Spirits = Math.Min(state.MaxSpirits, state.Spirits + spiritsGain);
 
-        events.Add(new EndOfDayEvent.RestRecovery(healthGain, spiritsGain));
+        events.Add(new EndOfDayEvent.RestRecovery(0, spiritsGain));
     }
 }
