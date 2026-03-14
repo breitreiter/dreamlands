@@ -434,6 +434,7 @@ OutcomeInfo BuildOutcomeInfo(EncounterStep.ShowOutcome outcome, string nextActio
         Rolled = ck.Rolled,
         Target = ck.Target,
         Modifier = ck.Modifier,
+        RollMode = ck.RollMode != Dreamlands.Game.RollMode.Normal ? ck.RollMode.ToString().ToLowerInvariant() : null,
     } : null,
     Mechanics = BuildMechanicResults(outcome.Results),
     NextAction = nextAction,

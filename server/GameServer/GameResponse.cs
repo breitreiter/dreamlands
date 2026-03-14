@@ -178,6 +178,7 @@ public class SkillCheckInfo
     public int Rolled { get; init; }
     public int Target { get; init; }
     public int Modifier { get; init; }
+    public string? RollMode { get; init; }
 }
 
 public class MechanicResultInfo

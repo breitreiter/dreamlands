@@ -232,6 +232,8 @@ These must be resolved before end-of-day can be implemented.
       `Roll()` with nat 1/20, advantage, luck rerolls.
 
 ### Non-Blocking
+- [ ] Investigate granting advantage on skill checks when spirits are at 20 (max) —
+      mirror of disheartened's disadvantage. Would reward keeping spirits high.
 - [x] Implement foraging action — `ResolveForaging` in `EndOfDay.cs`, design in `project/design/foraging.md`
 - [ ] Foraging rework — foraged food should always be unbalanced (single category per night).
       Bushcraft keeps you alive (+1 recovery) but never yields a balanced meal (+2 recovery).

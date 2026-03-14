@@ -4,6 +4,7 @@ import { formatDateTime } from "../calendar";
 import type { GameResponse, OutcomeInfo } from "../api/types";
 import parchment from "../assets/parchment.png";
 import { formatProse } from "../prose";
+import MaskedIcon from "../components/MaskedIcon";
 
 type Segment =
   | { kind: "outcome"; data: OutcomeInfo }
@@ -277,6 +278,13 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
               : "border-negative bg-negative/15"
           }`}
         >
+          <MaskedIcon
+            icon="dice-twenty-faces-twenty.svg"
+            className="w-5 h-5 inline-block align-text-bottom mr-1.5"
+            color={outcome.skillCheck.rollMode === "disadvantage" ? "#C45656"
+              : outcome.skillCheck.rollMode === "advantage" ? "#5B9F5B"
+              : "currentColor"}
+          />
           {outcome.skillCheck.kind === "meets" ? (
             <>
               <span className="capitalize">{outcome.skillCheck.skill}</span>
@@ -303,6 +311,14 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
               {" — "}
               <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
                 {outcome.skillCheck.passed ? "Success" : "Failure"}
+              </span>
+            </>
+          )}
+          {outcome.skillCheck.rollMode && (
+            <>
+              {" · "}
+              <span className={outcome.skillCheck.rollMode === "disadvantage" ? "text-negative" : "text-positive"}>
+                {outcome.skillCheck.rollMode === "disadvantage" ? "Disadvantage" : "Advantage"}
               </span>
             </>
           )}

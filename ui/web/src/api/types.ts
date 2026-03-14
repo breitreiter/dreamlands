@@ -81,6 +81,7 @@ export interface SkillCheckInfo {
   rolled: number;
   target: number;
   modifier: number;
+  rollMode?: "advantage" | "disadvantage";
 }
 
 export interface MechanicResultInfo {
