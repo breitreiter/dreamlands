@@ -4,28 +4,13 @@ Just a list of things that need doing, roughly grouped.
 
 --
 
-## MVP Blockers
-
-[x] Write out final conditions list → update ConditionDef.All
-      /home/joseph/repos/dreamlands/project/design/conditions_list.md
-[x] Finalize consumables/medicines → update ItemDef.All consumables
-      /home/joseph/repos/dreamlands/project/design/haversack.md
-[x] Define trade goods with flavor → flesh out TradeBalance (removed — replaced by haul system)
-      /home/joseph/repos/dreamlands/project/design/trade_goods.md
-[x] Reconcile settlement screen vs balance data mismatches
-
----
-
 ## Map Visual
 
 - [ ] Try different map seeds for production — current seed was the first one generated;
       explore a few alternatives and pick the most interesting layout
-- [x] Add a safe border to the map so the edge looks intentional against the background
 - [ ] Replace lake sprite
 - [ ] Hand-drawn river decals — 800x800 tiles chained lake-to-edge.
       Design in `project/design/river_decals.md`.
-- [x] Fix mountain coloring
-- [x] Finish mountain POI sprites
 - [ ] Improve settlement sprite variability — avoid placing identical decals near each other;
       may need more decals (recolored variants)
 - [ ] Fix dungeon sprite scaling (PoiPass shares a scale factor derived from settlement decals;
@@ -38,9 +23,6 @@ Just a list of things that need doing, roughly grouped.
       mega-T1 region from making an entire biome feel safe.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
-- [x] Tier-aware decal rendering — PlainsPass, SwampPass, TreePass now load from
-      tier-specific subdirectories under `assets/map/decals/{plains,swamp,forest}/`. T2/T3
-      directories exist but are empty until new art is added. Mountains and Scrub unchanged.
 - [ ] Remove old decal directories — the tier-aware passes now load from the new
       `assets/map/decals/{plains,swamp,forest}/` structure instead of the old flat dirs.
       After visually confirming the new paths work (`mapgen generate test`, inspect map.png
@@ -52,13 +34,6 @@ Just a list of things that need doing, roughly grouped.
       Verification: grep mapgen/Rendering/ for old directory names (`grass_tufts`, `farm_stuff`,
       `bogs`, `"trees"`) — should return zero hits. If any other code references the old paths
       (build scripts, asset pipeline), update those too before deleting.
-- [x] Pre-scale decal sprites to final size — all passes now draw at 1.0x scale.
-      MountainPass still uses dynamic height-based scaling (0.22x–0.45x), which is intentional.
-
-## Game UI Components
-
-- [x] Extract the parchment gold bar (Market top strip) into a reusable component —
-      normalize the pattern for use in other screens (Bank, Settlement, etc.)
 
 ## Game UI — Map
 
@@ -68,8 +43,6 @@ Just a list of things that need doing, roughly grouped.
 
 ## Game UI Assets
 
-- [x] Icons for all condition types
-- [x] Icons for all core inventory types
 - [ ] Vignettes for all encounter types
 - [ ] Vignettes for key encounters
 
@@ -86,7 +59,6 @@ Each tier is ~5 encounters (~30 min each). Each dungeon is ~1 hour.
 - [ ] Tier 2
 - [ ] Tier 3
 - [ ] Repeating
-- [x] Dungeon — Bride's Cave
 - [ ] Dungeon — Sodality of the Furrow
 
 ### Swamp
@@ -135,20 +107,12 @@ Each tier is ~5 encounters (~30 min each). Each dungeon is ~1 hour.
 ### Encounter Pipeline
 - [ ] Locale guides for remaining biome/tier combos
 - [ ] Batch-generate skeletons via `generate` command
-- [x] Gitignore `stock_characters_curated.md` and `neutral_archetypes.md` — derived
-      from Wikipedia (CC BY-SA), can't ship under MIT.
 
 ## UX Design
 
 Screen designs live in `project/screens/`. Some are well-specified, some are empty.
 
 - [ ] Landing
-- [x] Explore/Map/Status
-- [x] Inventory
-- [x] Encounter
-- [x] Daily rest
-- [x] Town — Shop
-- [x] Town — Market
 - [ ] Town — Guild Bank
 - [ ] shadcn/tailwind based design system
 - [ ] Clean up rest screen and improve legibility
@@ -158,91 +122,27 @@ Screen designs live in `project/screens/`. Some are well-specified, some are emp
 React + Vite scaffold in `ui/web/`. Screen shells exist for all major views.
 GameServer running with save persistence.
 
-- [x] Scaffold React app with Vite, API client, game context
-- [x] Screen shells — Splash, Explore, Encounter, Inventory, Market, Settlement, GameOver
 - [ ] Landing — connect to server, new game / load game
-- [x] Explore/Map/Status — Leaflet integration, movement
-- [x] Inventory — full-screen build with character, mechanics, and inventory panels
-- [x] Encounter — immersive two-panel layout, choice rendering, conditional branches
-- [x] Dungeon continuous scroll — scene transitions clear and redraw instead of accumulating.
-      Server sends combined outcome+encounter for NavigatedTo but the client resets segments
-      on each new encounter title. Need to track dungeon context so continuation detection works
-      across scene boundaries (Encounter.tsx).
 - [ ] Daily rest
-- [x] Town — Home
-- [x] Town — Temple
-- [x] Town — Market (rewrite UI for haul claiming + buy-only shop)
-- [x] Town — Guild storage
-- [x] Town — Inn / Chapterhouse
-- [x] Review UX for exiting inventory and market screens — normalized exit UX across all exitable screens
+- [ ] Camp screen death — make the camp screen more dramatic when the player dies
+      (condition drain kills you overnight). Currently shows the same layout as a normal rest.
 - [ ] shadcn/tailwind based design system
-- [x] Settlement encounters should use the settlement vignette image, not the biome overworld
-      vignette. Currently the encounter screen picks vignette by terrain — needs to detect
-      when the player is at a settlement (e.g. via node.poi.kind) and use the settlement variant.
 
 ## Rules / Game Mechanics
 
 ### Settlement Mechanics
-`SettlementRunner` in Orchestration handles entering settlements. Settlement presence is
-derived from player position (no separate mode). Inn/Chapterhouse logic and tests are done.
-Market buy/sell with auto-equip works. Remaining services need game logic.
-
-- [x] Town — Shop
-- [x] Town — Market (haul system: generation, claiming, auto-delivery, market buy-only)
-- [x] Town — Guild storage
-- [x] Town — Inn / Chapterhouse (game logic)
-- [x] Stock medicine in biome-appropriate markets
-- [x] Rework haul destination hints — replaced 3x3 sector grid with relative offset:
-      "A plains settlement 2 days east of Aldgate". Manhattan distance ÷ 5 tiles/day,
-      8-way cardinal/intercardinal direction via atan2.
-- [x] Haul respawn pacing — lazy restock on settlement entry. Hubs restock 1 slot per 4 days,
-      leaves per 8 days. Full clear-and-regenerate on tick (fresh destinations, no stale pointers).
-      Balance constants in `SettlementBalance.HaulRestockDaysHub/Leaf`.
-- [x] Dynamic haul generation — 11 generic haul defs with `IsGeneric` flag, fallback logic
-      in `HaulGeneration.Generate()`, generic delivery flavor pool. Tested.
-- [x] Haul stocking mix — at most 1 bespoke haul per settlement, remaining slots filled with
-      generic hauls. Enforced in `HaulGeneration.Generate()` via bespoke counter.
 - [ ] Haul direction balancing — tune destination selection to favor two sweet spots:
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging
       players to try new branches and pick up fresh storylets.
-- [x] Gathering action
-      /home/joseph/repos/dreamlands/project/design/foraging.md
-
-### Resource Systems
-- [x] Finalize food and medicine
-- [x] Finalize end-of-day — auto-consume food/medicine, ambient threats, condition drain,
-      rest recovery, disheartened threshold, death check. Full `EndOfDay.cs` implementation.
-- [x] Finalize equipment — full roster overhaul: 17 weapons (+1 to +5), 16 armor pieces
-      (light/medium/heavy), 5-tier boot ladder, 12 single-purpose tools.
-
-### End-of-Day Blockers
-These must be resolved before end-of-day can be implemented.
-
-- [x] **Food item definitions** — 3 food ItemDefs (food_protein, food_grain, food_sweets),
-      trivial cost, FoodType on ItemDef, biome-aware flavor names via FlavorText.FoodName().
-- [x] **Food in marketplace** — all settlements stock all 3 food types, always at max stock,
-      food restocks alongside trade goods. Buy creates ItemInstance with FoodType set;
-      callers can pass createFood delegate for flavor-named instances.
-- [x] **Condition acquisition & recovery mechanics** — resist is a standard skill check with
-      gear bonuses from `ResistModifiers` → `ResistBonusMagnitudes`. Cure is deterministic
-      (consume item → heal stacks), negated only by same-night failed resist.
-- [x] **Skill check formalization** — unified formula in `SkillChecks.cs`: encounter checks
-      via `GetItemBonus()`, resist checks via `GetResistBonus()`. Both use the same
-      `Roll()` with nat 1/20, advantage, luck rerolls.
 
 ### Non-Blocking
 - [ ] Investigate granting advantage on skill checks when spirits are at 20 (max) —
       mirror of disheartened's disadvantage. Would reward keeping spirits high.
-- [x] Implement foraging action — `ResolveForaging` in `EndOfDay.cs`, design in `project/design/foraging.md`
 - [ ] Foraging rework — foraged food should always be unbalanced (single category per night).
       Bushcraft keeps you alive (+1 recovery) but never yields a balanced meal (+2 recovery).
       Only purchased food can be balanced. Preserves the SERE fantasy while keeping market
       food valuable. See `project/design/condition_rework.md` for context.
-- [x] Condition rework — two-tier severity split. Minor conditions (exhausted, freezing,
-      thirsty) become spirit-only with toast UI. Severe conditions (injured, poisoned,
-      irradiated, lattice sickness) drain 5 hp/night with full crisis screen.
-      Design in `project/design/condition_rework.md`.
 - [ ] Treated severe conditions skip penalty — if a severe condition (injured, poisoned,
       irradiated, lattice sickness) is successfully treated that night, it should not
       impose its 5 hp drain. Currently treatment cures stacks but the drain still fires
@@ -262,43 +162,6 @@ balanced endgame progression.
 - [ ] **Condition resist bonus path** — `ResistModifiers` are `Magnitude` enums (Small/Medium/Large),
       not integers. No code converts them into numeric check bonuses. Either add Magnitude→int
       conversion or give items `SkillModifiers` for resist checks. Affects all 6 condition resist types.
-- [x] **+5 weapon** — zweihander (Combat +5).
-- [x] **Cunning armor** — light armor ladder: silks (+1) → nightveil (+5).
-- [x] **Negotiation tool** — letters_of_introduction (+2) pairs with peoples_borderlands (+3).
-- [x] **Bushcraft tool** — no Bushcraft-boosting tools exist yet. Need +2 and +3 items for +5 total.
-- [x] **Mercantile tool** — assayers_kit (+3) pairs with traders_ledger (+2).
-
-### Data Authoring
-These are design/content tasks that block codegen — the code scaffolding exists but the
-data is placeholder or missing.
-
-- [x] Write out final conditions list and effects — reconciled with `conditions_list.md`,
-      stacks system, dual-drain model, flavor text in `ConditionFlavor.cs`
-- [x] Finalize consumables/medicines — reconciled with `haversack.md`,
-      magnitude-based cure/resist, 11 new medicines
-- [x] Define trade goods — removed (replaced by 152-entry haul catalog in `HaulDef.*` files).
-      Old 71 TradeGood ItemDefs deleted from `ItemDef.BuildAll()`.
-- [x] Per-food flavor descriptions — `FoodNames.cs` has ~90 biome×category×source entries
-      with evocative per-name descriptions. `FlavorText.FoodName()` picks from static data.
-      Market purchases get flavor names + descriptions via `createFood` callback.
-
-### Condition Runtime
-All condition resolution (acquisition, cures, drain, stack decay, special effects) happens
-during end-of-day. See "Finalize end-of-day" above — condition runtime is part of that work.
-
-### Other Mechanics
-- [x] Save/load — GameServer with file-based GameStore, PlayerState persisted as JSON
-
-## Design Decisions Needed
-
-See `project/design/gaps.md` for the full list. Resolved items noted inline.
-
-- [x] Combat model — single skill check, same as any other check
-- [x] Skill advancement — no use-based advancement, gear only
-- [x] Character creation — flat start, initial backgrounder encounter sets skills based on character background
-- [x] Wire up player creation encounter chain — intro encounter sets skills based on character background.
-- [x] Encounter frequency — baked into mapgen as placeholders. First visit pulls from bespoke .enc
-      pool. Subsequent visits have ~10% chance to trigger a recurring encounter.
 
 ## Flavor Text
 
@@ -318,10 +181,6 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Infrastructure
 
-- [x] Test projects — xUnit tests: Rules (42), Game (158), Encounter (18), Map (17),
-      Orchestration (37) in `tests/`. All passing.
-- [x] GameServer — ASP.NET Minimal API with file-based save store in `server/GameServer/`.
-- [x] Web UI scaffold — React + Vite in `ui/web/`, screen shells for all major views.
 - [ ] Web UI — flesh out screens, connect to GameServer, real game loop.
 - [ ] Google OAuth login + session reconnect (very late — production only).
       Analysis in `project/architecture/google_oauth.md`.
@@ -346,15 +205,9 @@ Everything else is a one-liner placeholder. Generation logic needs to be built.
 
 ## Cleanup
 
-- [x] Remove `CombatBalance` — combat is just a skill check, no separate system needed.
-- [x] Remove `UsesPerLevel` from `CharacterBalance` — no use-based skill advancement, gear only.
-- [x] Remove `SkillUses` dict from `PlayerState` — never existed in code, vestigial TODO.
 - [ ] Stale reference docs — `project/reference/mapgen_design.md` references ocean/coast
       terrain that no longer exists. Several reference docs may have similar staleness.
 - [ ] `project/design/gaps.md` checkbox audit — many checked items may not reflect current code.
-- [x] Remove dead `FlavorNames` class and YAML files — deleted `FlavorNames.cs`,
-      `food_names.yaml`, `trade_names.yaml`, `equipment_names.yaml`. Removed YamlDotNet
-      from Flavor csproj. Food names now served by static `FoodNames.cs`.
 
 ## Deployment & Hosting
 
