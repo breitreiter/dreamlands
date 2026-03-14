@@ -10,13 +10,13 @@ import { Button } from "@/components/ui/button";
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
 
-type BuyTab = "hauls" | "foods" | "equipment";
+type BuyTab = "hauls" | "supplies" | "equipment";
 type SellTab = "pack" | "haversack" | "equipped";
 
 function matchesBuyTab(item: MarketItem, tab: BuyTab): boolean {
   switch (tab) {
     case "hauls": return false; // hauls are not MarketItems
-    case "foods": return item.type === "consumable";
+    case "supplies": return item.type === "consumable";
     case "equipment": return item.type === "weapon" || item.type === "armor" || item.type === "boots" || item.type === "tool";
   }
 }
@@ -45,7 +45,7 @@ export default function MarketScreen({
 
   function switchBuyTab(tab: BuyTab) {
     setBuyTab(tab);
-    const linked: Record<BuyTab, SellTab> = { hauls: "pack", foods: "haversack", equipment: "equipped" };
+    const linked: Record<BuyTab, SellTab> = { hauls: "pack", supplies: "haversack", equipment: "equipped" };
     setSellTab(linked[tab]);
   }
 
@@ -345,7 +345,7 @@ export default function MarketScreen({
             <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
             <div className="flex gap-1 mt-2">
               <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => switchBuyTab("hauls")}>Contracts</TabButton>
-              <TabButton id="foods" active={buyTab === "foods"} onClick={() => switchBuyTab("foods")}>Foods</TabButton>
+              <TabButton id="supplies" active={buyTab === "supplies"} onClick={() => switchBuyTab("supplies")}>Supplies</TabButton>
               <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => switchBuyTab("equipment")}>Equipment</TabButton>
             </div>
           </div>
