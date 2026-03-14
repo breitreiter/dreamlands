@@ -30,7 +30,14 @@ export default function Splash() {
       />
 
       <div className="text-center space-y-8 relative z-10">
-        <h1 className="font-header text-[72px] tracking-wider text-accent">
+        <h1
+          className="font-header text-[72px] tracking-wider text-accent"
+          style={{
+            WebkitTextStroke: "4px #000113",
+            paintOrder: "stroke fill",
+            textShadow: "0 0 8px #000113, 0 0 16px #000113",
+          }}
+        >
           The Merchant
         </h1>
         <div className="space-x-4">
