@@ -21,13 +21,13 @@ choices:
     You step off the path before the old woman can object, moving toward the silent channel with the confidence of someone who has read water before. She makes a sound between a grunt and a laugh. The mud here holds your weight where it looks like it shouldn't, and the water runs shallow over gravel beds that ring slightly under your boots. Reeds close behind you like a door shutting.
 
     The channel winds south then west, meandering but passable, and you read it by the silence; where frogs fall quiet, the ground rises enough to walk. Twice you pause at junctions, waiting for the sound to tell you which branch goes deep. It takes longer than the direct path would have, but you emerge on the western side of the paddies with only your calves wet, joining the raised path again well before the village. Behind you, the frogs resume their evening sermon.
-    +heal_spirits small
+    +heal_spirits 2
   } @else {
     You step confidently toward the southern channel and the mud greets you like an old enemy. Your first step sinks past the ankle. Your second plunges you to the knee in cold water that smells of rot and clay. The silence you mistook for shallow ground is simply where the frogs have learned not to nest. The water here is deep and still, thick with silt that sucks at your legs like a living thing.
 
     Behind you, someone laughs. Not cruel, but not kind either. You haul yourself back toward the path, reeds slapping your face, boots squelching obscenely with each step. The old woman hasn't moved from her stool. When you finally drag yourself back onto solid ground, soaked to the waist and decorated with mud and waterweed, she taps her stick once. "Most outsiders choose wrong," she repeats, as though you've simply confirmed old wisdom. You wait the full time after all, watching the water drain while your clothes refuse to dry in the thick air.
-    +damage_health trivial
-    +damage_spirits small
+    +damage_health 1
+    +damage_spirits 2
   }
 
 * Challenge her authority = Insist you need passage now and offer coin or pressure
@@ -36,12 +36,12 @@ choices:
   "Gate stays closed," she says, each word deliberate as a hammer stroke. "Water doesn't care about your coin. Dike doesn't care about your hurry. East paddies flood if I open now, and that's a season's rice drowned for someone else's schedule." She shifts on her stool, settling in. "You want to swim, swim. Want to wait, wait. Want to try moving me?" She glances at the worker beside her, then back to you. "My grandson here would enjoy the exercise."
 
   You move to try to traverse the swamp, but recognize the futility. You find a stump and fix the woman in your gaze, making certain she knows your annoyance. A few hours pass and the gate opens, just as promised.
-  +damage_spirits small
+  +damage_spirits 2
   +skip_time evening
 
 * Offer to help with the work = Join the workers to speed the draining and earn passage
   You wade into the paddy before asking permission, mud sucking at your boots, and take a place beside the workers shoring up the dike. For a moment no one speaks. Then the nearest one, a woman with strong hands and knowing eyes, shows you without words where to pack mud, how to angle it so the water's weight becomes the seal's strength. The work is harder than it looks. Your back complains. The mud is heavy and cold and smells of fish and old roots.
 
   But you feel the moment they accept you. Not as one of them, but as someone willing to stand in their water and do their work without complaint. The old woman doesn't praise you, but when the draining is complete and she works the gate mechanism, she nods toward the path. "Go on, then. You paid your way." One of the younger workers grins, gaps in his teeth, and claps your shoulder with a muddy hand. You reach the village as the lamps are being lit, soaked and tired but arriving with the dignity of someone who earned passage rather than purchased or demanded it. Your clothes will dry. The ache in your back is the cost of traveling honestly through country that doesn't owe you anything.
-  +heal_spirits small
+  +heal_spirits 2
   +skip_time evening

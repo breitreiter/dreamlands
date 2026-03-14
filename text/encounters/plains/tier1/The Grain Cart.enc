@@ -16,7 +16,7 @@ choices:
   You turn to find the cart's owner, two guards at his side. He sees the bag immediately. His eyes find your ring, and his face goes cold with calculation. "I had expected to travel three day with that grain, but here we have a buyer with ready coin. Just one sack then? Let me check my ledger."
 
   You curse your ill luck, but pay. The guards watch the coin change hands, bored witnesses to a transaction they've seen a dozen times. The merchant smiles, all teeth, and climbs back onto his repaired cart. The boy and his siblings are gone, vanished into the wheat. Your pack is lighter by coin and heavier by grain.
-  +rem_gold small
+  +rem_gold 2
 
 * Persuade the man to leave = Something feels amiss here
   @if check mercantile medium {
@@ -25,14 +25,14 @@ choices:
     You clear your throat and set about the tale of Old Man Yaniv and the grimlet. Carefully, properly, with the necessary scaffolding. The grimlet, you explain, is not merely a creature of shadow and riddles but a cautionary mechanism in furred form, and its threefold bargains must be understood in sequence if one is to appreciate their symmetry. There are digressions, brief but essential, on the curing of jorgo root, on the contractual ambiguity of sunset, on the moral hazard of speaking imprecisely to entities who delight in precision. Somewhere during your clarification of root preparation methods, the boy's attention begins to drift, and you, ever attentive to pedagogy, pivot smoothly to the more illustrative case of Yaniv and the Magic Fish.
 
     This second account you deliver with renewed vigor, outlining each wish and its unintended corollary, tracing the arc of folly with a steady finger as though diagramming it in the air. You conclude with a small, satisfied flourish, certain the lesson has landed squarely. When you turn to gauge the effect, however, there is only the cart, the mule, and the long shadows stretching across the road. The boy, presumably fortified with wisdom, has seen fit to depart before the final summary.
-    +heal_spirits trivial
+    +heal_spirits 1
     +skip_time evening
   }
 
 * Give this ruffian a thrashing = You'll not let theft go unpunished
   @if check combat trivial {
     The boy takes one look at your stance and drops the sack, grain spilling across the dirt as he scrambles backward. He turns and runs into the wheat, the stalks swallowing him whole, his panicked breathing fading into the cicada drone. You continue down the road, leaving the tilted cart and its intact cargo to bake in the afternoon sun.
-    +heal_spirits trivial
+    +heal_spirits 1
   } @else {
     You stride toward the youth with purpose. He does not cower. Instead, his shoulders tense, his feet shift to balance, and you glimpse in his stance some trace of training, or at least of many fights survived.
 
@@ -57,6 +57,6 @@ choices:
     "You'll move along now," he says. "And keep to your own road."
 
     You nod once, gather what dignity remains, and turn away from the cart. As you walk, you feel the merchant's gaze fixed on your back, heavy and mistrustful, until the crossroads and the broken cart are far behind you.
-    +damage_health trivial
-    +damage_spirits trivial
+    +damage_health 1
+    +damage_spirits 1
   }

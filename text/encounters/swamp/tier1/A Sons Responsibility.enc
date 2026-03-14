@@ -20,7 +20,7 @@ choices:
   You step off the path and the water takes you to mid-thigh, warm and thick with silt. The woman watches as you begin to gather materials. Clay from the solid bank, handfuls of reed stems still green enough to bend, the long-bladed sedge that holds knots. You work in silence, weaving fascia between driven stakes, packing the gaps with clay mixed thick with chopped stems. The woman stands aside. She doesn't help. She watches the way someone watches a meal being prepared for a guest they didn't invite.
 
   The breach holds. You pack the last of the clay smooth, reinforcing the weak points with twisted reed bundles that will swell as they soak. The seeping stops. The paddies remain flat and green, undisturbed. The woman looks at the repair for a long moment, then at the distance where the boat will eventually return. "You've bought him another season of thinking he can leave whenever he wants," she says. There's no gratitude in it. She turns and walks toward the hut, feet sure on the raised path, and doesn't look back. You stand alone by the dike, hands caked with drying mud.
-  +heal_spirits trivial
+  +heal_spirits 1
 
 * Offer to help = Try to understand what's going on here
   @if check negotiation medium {
@@ -38,7 +38,7 @@ choices:
 
     The two of you work together, mending the breach. It is filthy, exhausting work, but the dike holds.
     +skip_time evening
-    +heal_spirits small
+    +heal_spirits 2
   } @else {
     "Your boy will learn nothing from this," you say. "Only that he was smart to leave."
 
@@ -60,13 +60,13 @@ choices:
     The woman makes a small sound, wordless and raw. She staggers back from the failing wall, water sluicing past her knees, and her gaze fixes on the spreading flood. Something breaks in her expression, some final acceptance cracking like old pottery. Her hand drops to the earth and closes around a stone the size of a man's fist. She lifts it, trembling, and lurches toward you with the clumsy desperation of one who has never raised a hand in violence. The stone arcs through the air. You move. Your weapon finds her before she can complete the swing. She falls without ceremony into the muddy water, and the stone tumbles from her fingers.
 
     The dike continues its collapse behind you, water roaring through the widening breach. The paddy fields drink deep, rice stalks vanishing beneath the flood. Her son will return to find the house beneath dark water, the dike in ruins, and his mother cold among the drowned earth. Perhaps he will understand then what it means to abandon what must be tended. You turn from the wreckage and walk back along the raised path, leaving the water to claim what remains.
-    +damage_spirits trivial
+    +damage_spirits 1
   } @else {
     You step down into the water beside her. The woman shifts to give you room, assuming help. You reach for the packed clay at the dike's base, where the structure is oldest, and dig your fingers in. The mud comes away easily once you know where to pry. You work a stone loose, then another, opening a channel beneath her fresh repairs. The water finds it immediately, eager, widening the gap from below.
 
     She sees what you've done. For a moment she only stares, hands still full of useless mud. Then she drops it and lunges. She's strong from years of this work and her fists find your chest, your jaw, blows without technique but full of weight. You go down into the water and she's on top of you, pressing your face into the silt, and you taste the fen, thick and old and furious. The dike gives with a sound like tearing cloth. The flood hits you both, a wall of brown water that sweeps her off and carries you ten feet before you find bottom.
   
     When you surface, coughing, she's already wading toward what remains of her home. The paddies are gone, merged into a single sheet of water reflecting white sky. You pull yourself onto the path and lie there, ribs aching, face throbbing, clothes heavy with silt
-    +damage_spirits trivial
-    +damage_health small
+    +damage_spirits 1
+    +damage_health 2
   }

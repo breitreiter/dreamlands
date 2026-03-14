@@ -7,29 +7,29 @@ choices:
 * Negotiate = Try to convince them
     @if check negotiation easy {
       You convince them!
-      +heal_spirits small
+      +heal_spirits 2
     } @else {
       You fail!
-      +rem_gold small
+      +rem_gold 2
     }
   
 * Fight = Do the ultimate punchies
     @if check combat trivial {
         You win!
-        +heal_spirits small
+        +heal_spirits 2
     } @else {
         You lose!
-        +damage_health trivial
-        +damage_spirits trivial
+        +damage_health 1
+        +damage_spirits 1
     }
 
 * Sneak = Use big sneaky skills
     @if check cunning trivial {
         You win!
-        +heal_spirits small
+        +heal_spirits 2
     } @else {
         You lose!
-        +damage_health trivial
-        +damage_spirits trivial
+        +damage_health 1
+        +damage_spirits 1
     }
 

@@ -26,7 +26,7 @@ choices:
   "Thank you," she says quietly. Then she runs after her grandfather, disappearing into the amber light.
 
   You walk on as the first stars prick the sky. Your shoulders ache.
-  +heal_spirits trivial
+  +heal_spirits 1
   +add_random_items 3 food
   +skip_time night
 
@@ -47,7 +47,7 @@ choices:
     She picks up a stone. Not large, but her arm is cocked back, and her eyes are bright with tears and fury. "Turn around," she says. "Find another road."
 
     You do. The long way around adds an hour to your journey, skirting the edge of the fields through scrub and thistle. Once, you glance back. The girl is gone. The old man is still there, a lone figure against the golden expanse, cutting and cutting as the light fails.
-    +damage_spirits trivial
+    +damage_spirits 1
     +skip_time night
   }
 
@@ -63,4 +63,4 @@ choices:
   "Keep it," she says, voice shaking. "We'll manage. We always do. We don't need your pity." She steps aside, jerking her head toward the road. "Go on. Go back to your soft city friends and tell them how generous you were."
 
   You walk past her. She doesn't look at you. Behind you, you hear her scrabbling in the dirt, gathering the coins you dropped, her breath hitching with something between rage and shame. The old man is still cutting wheat, alone against the dying light. The coins you meant as kindness burn heavier in her hands than any blade.
-  +damage_spirits small
+  +damage_spirits 2

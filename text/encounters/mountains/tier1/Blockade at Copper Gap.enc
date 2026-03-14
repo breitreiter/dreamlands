@@ -23,13 +23,13 @@ choices:
     You leave the maintained track and commit to the slope. The rock here crumbles at the first test, sends pebbles chattering down into the gorge. You move slowly, testing each handhold, finding the stone that won't betray you. Your fingers go numb in the wind. Twice you freeze as loose scree slides beneath your boots, but you read the mountain's old bones beneath the treacherous surface and trust them. The miners below watch your progress in silence. One calls out a warning about an unstable section. You adjust, find another route.
 
     You pull yourself onto the trail beyond the blockade with scraped palms and dust in your throat. The path ahead lies empty, winding higher into the peaks. Behind you, travelers still crowd against the barrier. The bearded man raises one hand in acknowledgment. Respect, or perhaps just recognition that some people cannot be stopped by stones and carts. You've lost an hour and gained a lesson about what desperation looks like from above.
-    +heal_spirits small
+    +heal_spirits 2
   } @else {
     The slope beside the barricade looks climbable until you're halfway up it. The stone here has been fractured by a thousand freeze-thaw cycles, and it crumbles like stale bread beneath your weight. You commit too much to a handhold that breaks free. The slide starts small but grows, rock cascading loose in a gray avalanche that carries you sideways and down in a chaos of impacts.
 
     You crash into the roadbed below the blockade hard enough to empty your lungs. Miners rush forward, pull you clear of the still-sliding debris. Your ribs scream. Blood runs from a gash across your forearm, and your knee has already begun to swell. The bearded man crouches beside you, his expression caught between concern and vindication. They carry you to the side of the road, bind your wounds with cloth that smells of rock dust and sweat. You will not be climbing today, nor tomorrow. The blockade remains, and you sit among the trapped travelers nursing injuries earned by impatience. The cold settles into your bones while the miners return to their vigil.
     +skip_time morning
-    +damage_health small
+    +damage_health 2
   }
 
 * Persuade the other merchants to force through = Organize the backed-up merchants and couriers to break the barricade
@@ -39,7 +39,7 @@ choices:
     The miners see you coming. They raise their tools, form a line, but their hearts aren't in violence. These are men who split stone for wages, not soldiers. When your group reaches the carts and begins dismantling the barrier methodically, the resistance crumbles. The bearded man shouts threats that nobody heeds. A few miners step forward but stop when they see the determination in the travelers' faces. The barricade comes apart piece by piece. You all push through, ignoring the curses that follow you up the switchback.
 
     Behind you, the miners stand among the ruins of their blockade. Some are already drifting away, heading back to whatever grim terms the company will impose. The bearded man remains atop his cart, alone now, staring at the scattered stones. You've cleared the pass, but the cold wind carries the sound of something breaking that has nothing to do with wood or rock.
-    +heal_spirits small
+    +heal_spirits 2
   } @else {
     You move among the travelers, making your case. The merchant listens, nods, but won't commit. The muleteer won't risk her animals. A courier flat refuses to be part of breaking a strike, mutters something about his own father working a mine once. One by one they turn away from your arguments. You have only a handful of supporters when you walk to the barricade. And by the time you get there, you're down to two.
 
@@ -47,7 +47,7 @@ choices:
 
     The strike resolves itself by morning, but your bruises are still raw.
     +skip_time morning
-    +damage_health small
-    +damage_spirits small
+    +damage_health 2
+    +damage_spirits 2
   }
 

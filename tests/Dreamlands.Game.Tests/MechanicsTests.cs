@@ -15,7 +15,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         var initial = state.Health;
-        var results = Mechanics.Apply(["damage_health small"], state, Balance, Rng);
+        var results = Mechanics.Apply(["damage_health 2"], state, Balance, Rng);
 
         Assert.Single(results);
         var r = Assert.IsType<MechanicResult.HealthChanged>(results[0]);
@@ -29,7 +29,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         state.Health = 19;
-        var results = Mechanics.Apply(["heal small"], state, Balance, Rng);
+        var results = Mechanics.Apply(["heal 2"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.HealthChanged>(results[0]);
         Assert.Equal(2, r.Delta);
@@ -41,7 +41,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         // Health already at max
-        var results = Mechanics.Apply(["heal huge"], state, Balance, Rng);
+        var results = Mechanics.Apply(["heal 5"], state, Balance, Rng);
         Assert.Equal(state.MaxHealth, state.Health);
     }
 
@@ -50,7 +50,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         var initial = state.Spirits;
-        Mechanics.Apply(["damage_spirits medium"], state, Balance, Rng);
+        Mechanics.Apply(["damage_spirits 3"], state, Balance, Rng);
         Assert.Equal(initial - 3, state.Spirits);
     }
 
@@ -59,7 +59,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         state.Spirits = 19;
-        Mechanics.Apply(["heal_spirits small"], state, Balance, Rng);
+        Mechanics.Apply(["heal_spirits 2"], state, Balance, Rng);
         Assert.Equal(state.MaxSpirits, state.Spirits);
     }
 
@@ -68,7 +68,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         var initial = state.Gold;
-        var results = Mechanics.Apply(["give_gold large"], state, Balance, Rng);
+        var results = Mechanics.Apply(["give_gold 4"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.GoldChanged>(results[0]);
         Assert.Equal(4, r.Delta);
@@ -80,7 +80,7 @@ public class MechanicsTests
     {
         var state = Fresh();
         state.Gold = 1;
-        Mechanics.Apply(["rem_gold huge"], state, Balance, Rng);
+        Mechanics.Apply(["rem_gold 5"], state, Balance, Rng);
         Assert.Equal(0, state.Gold);
     }
 
@@ -272,7 +272,7 @@ public class MechanicsTests
     public void Apply_MultipleActions_AppliesAll()
     {
         var state = Fresh();
-        var results = Mechanics.Apply(["add_tag quest_started", "give_gold small"], state, Balance, Rng);
+        var results = Mechanics.Apply(["add_tag quest_started", "give_gold 2"], state, Balance, Rng);
         Assert.Equal(2, results.Count);
         Assert.Contains("quest_started", state.Tags);
         Assert.True(state.Gold > Balance.Character.StartingGold);

@@ -56,7 +56,7 @@ After `choices:`, every line's role is determined by its first non-whitespace ch
 | `* ` (asterisk + space) | **Choice boundary** | `* Accept her hospitality = Sit and eat...` |
 | `@keyword` | **Flow control** | `@if check negotiation medium {` |
 | `} ...` | **Block close / transition** | `}`, `} @else {`, `} @elif has torch {` |
-| `+verb` (+ immediately followed by a letter) | **Game command** | `+damage_health small` |
+| `+verb` (+ immediately followed by a letter) | **Game command** | `+damage_health 2` |
 | anything else | **Prose** | `You trade tales of the world...` |
 
 **Indent is cosmetic.** The parser uses sigils and matched braces to determine structure. Authors may indent for readability.
@@ -107,7 +107,7 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
     +add_random_items 3 food
   } @else {
     You wake retching in cold water...
-    +damage_health small
+    +damage_health 2
     +skip_time morning
   }
 ```
@@ -212,14 +212,14 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | `add_item <id>` | item id | Give player a specific item |
 | `add_random_items <count> <category>` | int, category | Give random items from a category |
 | `lose_random_item` | (none) | Player loses a random item |
-| `give_gold <magnitude>` | magnitude | Give player gold |
-| `rem_gold <magnitude>` | magnitude | Take player's gold |
-| `damage_health <magnitude>` | magnitude | Reduce player health |
-| `heal <magnitude>` | magnitude | Restore player health |
-| `damage_spirits <magnitude>` | magnitude | Reduce player spirits |
-| `heal_spirits <magnitude>` | magnitude | Restore player spirits |
-| `increase_skill <skill> <magnitude>` | skill, magnitude | Boost a skill |
-| `decrease_skill <skill> <magnitude>` | skill, magnitude | Reduce a skill |
+| `give_gold <amount>` | int | Give player gold |
+| `rem_gold <amount>` | int | Take player's gold |
+| `damage_health <amount>` | int | Reduce player health |
+| `heal <amount>` | int | Restore player health |
+| `damage_spirits <amount>` | int | Reduce player spirits |
+| `heal_spirits <amount>` | int | Restore player spirits |
+| `increase_skill <skill> <amount>` | skill, int | Boost a skill |
+| `decrease_skill <skill> <amount>` | skill, int | Reduce a skill |
 | `add_condition <id>` | condition id | Apply a status condition |
 | `skip_time <period> [flags...]` | time period + optional flags | Advance to a time of day |
 | `finish_dungeon` | (none) | Mark current dungeon as completed |
@@ -231,7 +231,6 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 |------|-------------|
 | **skill** | `combat`, `negotiation`, `bushcraft`, `cunning`, `luck`, `mercantile` |
 | **difficulty** | `trivial`, `easy`, `medium`, `hard`, `very_hard`, `heroic` |
-| **magnitude** | `trivial`, `small`, `medium`, `large`, `huge` |
 | **time period** | `morning`, `afternoon`, `evening`, `night` |
 | **id** | Free-form string (item, tag, encounter, or condition identifier) |
 | **int** | Positive integer |
@@ -239,7 +238,7 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 | **category** | Item category name (e.g. `food`) |
 | **skip_time flags** | `no_sleep`, `no_meal`, `no_biome` — suppress daily-rest accounting when time transit crosses a rest period |
 
-The canonical definitions for these types live in `lib/Rules/`: `Skill.cs`, `Difficulty.cs`, `Magnitude.cs`, `TimePeriod.cs`, `ActionVocabulary.cs`.
+The canonical definitions for these types live in `lib/Rules/`: `Skill.cs`, `Difficulty.cs`, `TimePeriod.cs`, `ActionVocabulary.cs`.
 
 ---
 

@@ -25,12 +25,12 @@ SKILLS                          DIFFICULTY        DC
   luck         fortune             heroic         30
   mercantile   trade/appraisal
 
-MAGNITUDE                       TIME PERIODS
-  trivial                         morning
-  small                           midday
-  medium                          afternoon
-  large                           evening
-  huge                            night
+TIME PERIODS
+  morning
+  midday
+  afternoon
+  evening
+  night
   
 CONDITIONS
   freezing  thirsty  irradiated  lattice_sickness
@@ -60,18 +60,18 @@ Items               +add_item <item_id>
                     +add_random_items <count> <category>
                     +lose_random_item
 
-Gold                +give_gold <magnitude>
-                    +rem_gold <magnitude>
+Gold                +give_gold <amount>
+                    +rem_gold <amount>
 
-Health              +damage_health <magnitude>
-                    +heal <magnitude>
+Health              +damage_health <amount>
+                    +heal <amount>
 
-Spirits             +damage_spirits <magnitude>
-                    +heal_spirits <magnitude>
+Spirits             +damage_spirits <amount>
+                    +heal_spirits <amount>
 
-Skills              +set_skill <skill> <level>
-                    +increase_skill <skill> <amount>
+Skills              +increase_skill <skill> <amount>
                     +decrease_skill <skill> <amount>
+                    +set_skill <skill> <level>
 
 Conditions          +add_condition <condition_id>
                     +remove_condition <condition_id>

@@ -5,7 +5,7 @@ namespace Dreamlands.Game;
 public static class Market
 {
     public static int GetBasePrice(ItemDef item, BalanceData balance) =>
-        item.Cost != null && balance.Character.CostMagnitudes.TryGetValue(item.Cost.Value, out var price) ? price : 0;
+        item.Cost ?? 0;
 
     public static SettlementState InitializeSettlement(
         string settlementId, string biome, int tier, SettlementSize size,

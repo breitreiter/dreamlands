@@ -66,10 +66,10 @@ public static class Inn
                 conditionStacks.Remove(conditionId);
                 continue;
             }
-            if (def.HealthDrain is { } hMag)
-                healthDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(hMag, 0);
-            if (def.SpiritsDrain is { } sMag)
-                spiritsDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(sMag, 0);
+            if (def.HealthDrain is { } hDrain)
+                healthDrain += hDrain;
+            if (def.SpiritsDrain is { } sDrain)
+                spiritsDrain += sDrain;
         }
 
         // Count available medicines per condition
@@ -112,9 +112,9 @@ public static class Inn
                     {
                         if (!balance.Conditions.TryGetValue(cid, out var d)) continue;
                         if (d.HealthDrain is { } h)
-                            healthDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(h, 0);
+                            healthDrain += h;
                         if (d.SpiritsDrain is { } s)
-                            spiritsDrain += balance.Character.DamageMagnitudes.GetValueOrDefault(s, 0);
+                            spiritsDrain += s;
                     }
                 }
             }

@@ -160,8 +160,7 @@ public static class SkillChecks
     }
 
     /// <summary>
-    /// Get resist bonus for a condition resist check. Converts ResistModifiers (Magnitude)
-    /// to numeric bonuses via ResistBonusMagnitudes. Gear sources per dice_mechanics.md:
+    /// Get resist bonus for a condition resist check. Gear sources per dice_mechanics.md:
     /// Injury = armor(big) + token, Poison = armor(big) + token,
     /// Exhausted = boots(big) + best equipment(small) + token,
     /// Freezing/Thirsty = two best small gear + token,
@@ -169,23 +168,21 @@ public static class SkillChecks
     /// </summary>
     public static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
     {
-        var magnitudes = balance.Character.ResistBonusMagnitudes;
-
         int bonus = conditionId switch
         {
-            "injured" => GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance),
-            "poison" => GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance),
-            "exhausted" => GetEquippedResist(state.Equipment.Boots, conditionId, magnitudes, balance)
-                         + GetBestPackResist(conditionId, magnitudes, state, balance, 1),
+            "injured" => GetEquippedResist(state.Equipment.Armor, conditionId, balance),
+            "poison" => GetEquippedResist(state.Equipment.Armor, conditionId, balance),
+            "exhausted" => GetEquippedResist(state.Equipment.Boots, conditionId, balance)
+                         + GetBestPackResist(conditionId, state, balance, 1),
             "freezing" or "thirsty" or "lost" =>
-                GetEquippedResist(state.Equipment.Armor, conditionId, magnitudes, balance)
-                + GetBestPackResist(conditionId, magnitudes, state, balance, 2),
+                GetEquippedResist(state.Equipment.Armor, conditionId, balance)
+                + GetBestPackResist(conditionId, state, balance, 2),
             "irradiated" or "lattice_sickness" =>
-                GetBestPackResist(conditionId, magnitudes, state, balance, 1),
+                GetBestPackResist(conditionId, state, balance, 1),
             _ => 0,
         };
 
-        return bonus + GetTokenResist(conditionId, magnitudes, state, balance);
+        return bonus + GetTokenResist(conditionId, state, balance);
     }
 
     static int GetEquippedMod(ItemInstance? slot, Skill skill, BalanceData balance)
@@ -197,13 +194,11 @@ public static class SkillChecks
         return 0;
     }
 
-    static int GetEquippedResist(ItemInstance? slot, string conditionId,
-        IReadOnlyDictionary<Magnitude, int> magnitudes, BalanceData balance)
+    static int GetEquippedResist(ItemInstance? slot, string conditionId, BalanceData balance)
     {
         if (slot == null) return 0;
         if (balance.Items.TryGetValue(slot.DefId, out var def)
-            && def.ResistModifiers.TryGetValue(conditionId, out var mag)
-            && magnitudes.TryGetValue(mag, out var bonus))
+            && def.ResistModifiers.TryGetValue(conditionId, out var bonus))
             return bonus;
         return 0;
     }
@@ -247,31 +242,27 @@ public static class SkillChecks
     }
 
     /// <summary>Token resist bonus: best +1 from haversack tokens with a ResistModifier for this condition.</summary>
-    static int GetTokenResist(string conditionId, IReadOnlyDictionary<Magnitude, int> magnitudes,
-        PlayerState state, BalanceData balance)
+    static int GetTokenResist(string conditionId, PlayerState state, BalanceData balance)
     {
         foreach (var item in state.Haversack)
         {
             if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
             if (def.Type != ItemType.Token) continue;
-            if (def.ResistModifiers.TryGetValue(conditionId, out var mag)
-                && magnitudes.TryGetValue(mag, out var bonus) && bonus > 0)
+            if (def.ResistModifiers.TryGetValue(conditionId, out var bonus) && bonus > 0)
                 return Math.Min(bonus, 1); // tokens cap at +1
         }
         return 0;
     }
 
     /// <summary>Best N pack-held equipment (tools) resist bonuses for a condition.</summary>
-    static int GetBestPackResist(string conditionId, IReadOnlyDictionary<Magnitude, int> magnitudes,
-        PlayerState state, BalanceData balance, int count)
+    static int GetBestPackResist(string conditionId, PlayerState state, BalanceData balance, int count)
     {
         var bonuses = new List<int>();
         foreach (var item in state.Pack)
         {
             if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
             if (def.Type != ItemType.Tool) continue;
-            if (def.ResistModifiers.TryGetValue(conditionId, out var mag)
-                && magnitudes.TryGetValue(mag, out var bonus) && bonus > 0)
+            if (def.ResistModifiers.TryGetValue(conditionId, out var bonus) && bonus > 0)
                 bonuses.Add(bonus);
         }
         bonuses.Sort((a, b) => b.CompareTo(a));

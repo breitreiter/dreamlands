@@ -11,8 +11,8 @@ public sealed class ConditionDef
     public string Biome { get; init; } = "none";
     public string Tier { get; init; } = "none";
     public int Stacks { get; init; } = 1;
-    public Magnitude? HealthDrain { get; init; }
-    public Magnitude? SpiritsDrain { get; init; }
+    public int? HealthDrain { get; init; }
+    public int? SpiritsDrain { get; init; }
     public string? SpecialCure { get; init; }
     public string? SpecialEffect { get; init; }
     /// <summary>If true, this condition is automatically cleared when entering a settlement.</summary>
@@ -27,37 +27,37 @@ public sealed class ConditionDef
         ["freezing"] = new()
         {
             Id = "freezing", Name = "Freezing", Biome = "mountains", Tier = "any",
-            Stacks = 1, SpiritsDrain = Magnitude.Medium,
+            Stacks = 1, SpiritsDrain = 3,
             ClearedOnSettlement = true,
             SpecialCure = "Leave the mountain biome or enter a settlement.",
         },
         ["thirsty"] = new()
         {
             Id = "thirsty", Name = "Thirsty", Biome = "scrub", Tier = "any",
-            Stacks = 1, SpiritsDrain = Magnitude.Medium,
+            Stacks = 1, SpiritsDrain = 3,
             ClearedOnSettlement = true,
             SpecialCure = "Enter a settlement.",
         },
         ["irradiated"] = new()
         {
             Id = "irradiated", Name = "Irradiated", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
+            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
         },
         ["lattice_sickness"] = new()
         {
             Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
+            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
         },
         ["exhausted"] = new()
         {
             Id = "exhausted", Name = "Exhausted", Biome = "none", Tier = "none",
-            Stacks = 1, SpiritsDrain = Magnitude.Medium,
+            Stacks = 1, SpiritsDrain = 3,
             SpecialCure = "Rest in an inn.",
         },
         ["poisoned"] = new()
         {
             Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
+            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
         },
         ["lost"] = new()
         {
@@ -69,7 +69,7 @@ public sealed class ConditionDef
         ["injured"] = new()
         {
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
-            Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
+            Stacks = 3, HealthDrain = 5, Severity = ConditionSeverity.Severe,
         },
         ["disheartened"] = new()
         {

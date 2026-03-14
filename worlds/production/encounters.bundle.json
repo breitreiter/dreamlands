@@ -39,7 +39,7 @@
       },
       "Placeholder": {
         "category": "swamp/tier3",
-        "encounterIndex": 54
+        "encounterIndex": 52
       },
       "00_Intro": {
         "category": "intro",
@@ -59,107 +59,103 @@
       },
       "The Festival Gate": {
         "category": "mountains/tier1",
-        "encounterIndex": 18
+        "encounterIndex": 17
       },
       "The Old Assay Station": {
         "category": "mountains/tier1",
-        "encounterIndex": 19
+        "encounterIndex": 18
       },
       "The Priests Vow": {
         "category": "mountains/tier1",
-        "encounterIndex": 20
+        "encounterIndex": 19
       },
       "The Trailside Verdict": {
         "category": "mountains/tier1",
-        "encounterIndex": 21
+        "encounterIndex": 20
       },
       "A Debt Owed": {
         "category": "plains/tier1",
-        "encounterIndex": 24
+        "encounterIndex": 23
       },
       "A Gift for the Harvest": {
         "category": "plains/tier1",
-        "encounterIndex": 25
+        "encounterIndex": 24
       },
       "Celebration": {
         "category": "plains/tier1",
-        "encounterIndex": 26
+        "encounterIndex": 25
       },
       "The Burning Field": {
         "category": "plains/tier1",
-        "encounterIndex": 28
+        "encounterIndex": 27
       },
       "The Grain Cart": {
         "category": "plains/tier1",
-        "encounterIndex": 29
-      },
-      "Bandits": {
-        "category": "scrub/tier1",
-        "encounterIndex": 32
+        "encounterIndex": 28
       },
       "Dust Storm": {
         "category": "scrub/tier1",
-        "encounterIndex": 33
+        "encounterIndex": 31
       },
       "The Courier": {
         "category": "scrub/tier1",
-        "encounterIndex": 35
+        "encounterIndex": 33
       },
       "Unusual Cargo": {
         "category": "scrub/tier1",
-        "encounterIndex": 36
+        "encounterIndex": 34
       },
       "Signal Tower at Red Crown": {
         "category": "scrub/tier2",
-        "encounterIndex": 38
+        "encounterIndex": 36
       },
       "The Administrator\u0027s Favor": {
         "category": "scrub/tier2",
-        "encounterIndex": 39
+        "encounterIndex": 37
       },
       "The Cistern Gate": {
         "category": "scrub/tier2",
-        "encounterIndex": 40
+        "encounterIndex": 38
       },
       "The Lattice Preacher": {
         "category": "scrub/tier2",
-        "encounterIndex": 41
+        "encounterIndex": 39
       },
       "The Magistrate\u0027s Seal": {
         "category": "scrub/tier2",
-        "encounterIndex": 42
+        "encounterIndex": 40
       },
       "The Old Depot at Crow Jaw": {
         "category": "scrub/tier2",
-        "encounterIndex": 43
+        "encounterIndex": 41
       },
       "Countryman": {
         "category": "scrub/tier3",
-        "encounterIndex": 44
+        "encounterIndex": 42
       },
       "A Sons Responsibility": {
         "category": "swamp/tier1",
-        "encounterIndex": 46
+        "encounterIndex": 44
       },
       "An Unpaid Debt": {
         "category": "swamp/tier1",
-        "encounterIndex": 47
+        "encounterIndex": 45
       },
       "The Cartographers Kit": {
         "category": "swamp/tier1",
-        "encounterIndex": 49
+        "encounterIndex": 47
       },
       "The Gatekeeper": {
         "category": "swamp/tier1",
-        "encounterIndex": 50
+        "encounterIndex": 48
       },
       "The Hunted Woman": {
         "category": "swamp/tier1",
-        "encounterIndex": 51
+        "encounterIndex": 49
       },
       "The Hermit of Sallow Fen": {
         "category": "swamp/tier2",
-        "encounterIndex": 53
+        "encounterIndex": 51
       }
     },
     "byCategory": {
@@ -196,63 +192,61 @@
         17,
         18,
         19,
-        20,
-        21
+        20
       ],
       "mountains/tier2": [
-        22
+        21
       ],
       "mountains/tier3": [
-        23
+        22
       ],
       "plains/tier1": [
+        23,
         24,
         25,
         26,
         27,
-        28,
-        29
+        28
       ],
       "plains/tier2": [
-        30
+        29
       ],
       "plains/tier3": [
-        31
+        30
       ],
       "scrub/tier1": [
+        31,
         32,
         33,
-        34,
-        35,
-        36
+        34
       ],
       "scrub/tier2": [
+        35,
+        36,
         37,
         38,
         39,
         40,
-        41,
+        41
+      ],
+      "scrub/tier3": [
         42,
         43
       ],
-      "scrub/tier3": [
-        44,
-        45
-      ],
       "swamp/tier1": [
+        44,
+        45,
         46,
         47,
         48,
-        49,
+        49
+      ],
+      "swamp/tier2": [
         50,
         51
       ],
-      "swamp/tier2": [
-        52,
-        53
-      ],
       "swamp/tier3": [
-        54
+        52
       ]
     }
   },
@@ -521,9 +515,9 @@
       "recurring": false,
       "trigger": null,
       "tier": null,
-      "vignette": null,
+      "vignette": "dungeons/brides_cave",
       "title": "A Record in Stone",
-      "body": "\nYou run your fingers along the etchings, the marks damp and ragged.\n\nLove oaths. Prayers. Names unknown to you. The script shifts every few paces. Fine calligraphy, jagged scrawls, deep gouges hacked by frantic hands. A few catch your eye.\n\nSome passages end mid-sentence, the final letter trailing off into nothing. Others overlap, newer words carved atop old, layer upon layer of desperate testimony.\n\n*Alain, you swore by the harvest moon. I kneel where the stone drinks tears and lay your name before the deep. If the spirits hear, let them turn you. If they do not, let them judge you as they judge me.*\n\n*Matthis, I have brought your token and my last candle. The flame gutters, yet I keep vigil. Let the dark teach you constancy. Let it scour from you the forgetfulness that has made this cavern my only witness.*\n\nYou find a name, inscribed a hundred times over. Messages to family. Regrets for things not said, mistakes, misdeeds. Tally marks stand ranked in columns. Five-bar gates repeat by the hundreds, scored hard into the stone.\n",
+      "body": "\nThe tunnel bends, splits, rejoins itself in ways that defy surface logic. You pause to take your bearings, and pull your lantern close to the etchings on the wall.\n\nYou run your fingers along them, the marks damp and ragged.\n\nLove oaths. Prayers. Names unknown to you. The script shifts every few paces. Fine calligraphy, jagged scrawls, deep gouges hacked by frantic hands. A few catch your eye.\n\nSome passages end mid-sentence, the final letter trailing off into nothing. Others overlap, newer words carved atop old, layer upon layer of desperate testimony.\n\n*Alain, you swore by the harvest moon. I kneel where the stone drinks tears and lay your name before the deep. If the spirits hear, let them turn you. If they do not, let them judge you as they judge me.*\n\n*Matthis, I have brought your token and my last candle. The flame gutters, yet I keep vigil. Let the dark teach you constancy. Let it scour from you the forgetfulness that has made this cavern my only witness.*\n\nYou find a name, inscribed a hundred times over. Messages to family. Regrets for things not said, mistakes, misdeeds. Tally marks stand ranked in columns. Five-bar gates repeat by the hundreds, scored hard into the stone.\n",
       "requires": [],
       "choices": [
         {
@@ -532,7 +526,7 @@
           "optionPreview": "Run before whatever wrote these oaths finds you",
           "requires": null,
           "single": {
-            "text": "You pull your hand from the stone. The damp clings to your fingertips. Behind you the wall stretches away into shadow, scored with its litany of grief and longing, but you have read enough.\n\nYour boots find purchase on the uneven floor. You move quickly, not running, not yet, but with purpose. The echoes of your passage scatter into the dark. The weight of those inscriptions presses at your back, a hundred voices crying out in silence, but you do not turn to answer them. Whatever drove those hands to carve and scrape and plead may still linger in these depths. You have no wish to join their testimony.\n\nThe passage narrows ahead. You slip through, and the inscribed wall falls behind you. Your breath comes easier. The dark remains, but it is merely dark now, empty of names and numbers and the memory of desperate fingers working stone.",
+            "text": "You pull your hand from the stone. The damp clings to your fingertips. Behind you the wall stretches away into shadow, scored with its litany of grief and longing, but you have read enough.\n\nYour boots find purchase on the uneven floor. You move quickly, not running, not yet, but with purpose. The echoes of your passage scatter into the dark. The weight of those inscriptions presses at your back, a hundred voices crying out in silence, but you do not turn to answer them. Whatever drove those hands to carve and scrape and plead may still linger in these depths.\n\nThe passage narrows ahead. You slip through, and the inscribed wall falls behind you. Your breath comes easier. You leave the cave, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -571,9 +565,9 @@
       "recurring": false,
       "trigger": null,
       "tier": null,
-      "vignette": null,
+      "vignette": "dungeons/brides_cave",
       "title": "The Bride\u0027s Cave",
-      "body": "\nYour torch casts a flickering glow on the limestone walls of the cavern. The walls have a peculiar hatched texture.\n\nIt\u0027s writing. It crawls across every surface.\n\nPassageways wind away in all directions.\n\nThe air is cold and silent.\n",
+      "body": "\nWeathered boards cover the entrance, a faded warning painted in red: \u0022SEALED BY ORDER - NO ENTRY.\u0022 Through gaps you glimpse limestone chambers stretching into darkness. You carefully pry away the boards and squeeze inside.\n\nIt is pitch black inside.\n\nThe air is cold, damp, and silent.\n",
       "requires": [],
       "choices": [
         {
@@ -585,32 +579,21 @@
             "preamble": "",
             "branches": [
               {
-                "condition": "check bushcraft medium",
-                "text": "You choose a passage at random and press forward, torchlight dancing across walls dense with carved script. The tunnel bends, splits, rejoins itself in ways that defy surface logic. Twice you find yourself before the same fork, recognizing a particular glyph worn smooth by water. The third time you stop, study the patterns scored into the stone, and begin to perceive the structure beneath the chaos: a spiral, not a maze, its arms folding inward like the shell of some primordial thing.\n\nYou follow the logic now, marking your turns by the age of the carvings. Where the words are deep and crisp, you advance; where they blur to faint scratches, you retreat. The passages grow narrower, the ceiling presses lower, and the cold intensifies until each breath stings your throat. At last the corridor widens. You emerge into a chamber vast enough that your torchlight cannot find its far walls, only an expanse of darkness that swallows flame and sound alike.",
+                "condition": "has brass_lantern",
+                "text": "You light the old brass lantern, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. The walls have a peculiar hatched texture.\n\nYou choose a passage at random and press forward, torchlight dancing across walls dense with carved script. The tunnel bends, splits, rejoins itself in ways that defy surface logic. Twice you find yourself before the same fork, recognizing a particular glyph worn smooth by water. The third time you stop, study the patterns scored into the stone, and begin to perceive the structure beneath the chaos: a spiral, not a maze, its arms folding inward like the shell of some primordial thing.\n\nYou follow the logic now, marking your turns by the age of the carvings. Where the words are deep and crisp, you advance; where they blur to faint scratches, you retreat. The passages grow narrower, the ceiling presses lower, and the cold intensifies until each breath stings your throat. At last the corridor widens. You emerge into a chamber vast enough that your torchlight cannot find its far walls, only an expanse of darkness that swallows flame and sound alike.",
                 "mechanics": [
-                  "open \u0022The Ghosts\u0022"
+                  "open \u0022A Record in Stone\u0022"
                 ]
               }
             ],
             "fallback": {
-              "text": "The passages twist. Your light catches familiar scratches on the wall - wait, did you pass this already? The chambers echo with your footsteps, then echo again, differently. You wander through the night, lost and exhausted, until all at once the passageway opens to a cave deep underground.",
+              "text": "You stumble in the dark, trying to make your way by feel. You crack you head on a low overhang and curse. Slowly and with great care, you feel your way back to the entrance, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.",
               "mechanics": [
                 "skip_time morning no_meal no_sleep no_biome",
-                "open \u0022The Ghosts\u0022"
+                "damage_health 1",
+                "flee_dungeon"
               ]
             }
-          }
-        },
-        {
-          "optionText": "Examine the writing = Perhaps it is a clue. Or perhaps knowledge better left unknown.",
-          "optionLink": "Examine the writing",
-          "optionPreview": "Perhaps it is a clue. Or perhaps knowledge better left unknown.",
-          "requires": null,
-          "single": {
-            "text": "You bring your torch close to the wall. The flame gutters in the stillness, casting writhing shadows across the stone. The marks are deep, carved by something that pressed with inhuman strength.",
-            "mechanics": [
-              "open \u0022A Record in Stone\u0022"
-            ]
           }
         }
       ]
@@ -621,7 +604,7 @@
       "recurring": false,
       "trigger": null,
       "tier": null,
-      "vignette": null,
+      "vignette": "dungeons/brides_cave",
       "title": "The Ghosts",
       "body": "\nThe passage opens into a vast chamber. Water drips somewhere in the darkness beyond your light.\n\nShe stands in a pool of white fabric - no, multiple figures, overlapping, their edges uncertain. Sometimes one, sometimes many. Tally marks cover every inch of stone around them. The scratches go up twelve feet high in places, as if clawed by someone climbing.\n\n\u0022You came,\u0022 she says. They say. The voices layer. \u0022Finally, you came back.\u0022\n\nYour hand finds your weapon. The temperature drops.\n\n\u0022We waited. We counted every dawn through the cracks. We wrote you poems. Why did it take so long?\u0022\n\nThe figures drift closer. You can smell limestone and old cloth and something else - desperation, maybe, or longing, faded and confused.\n",
       "requires": [],
@@ -638,7 +621,7 @@
                 "condition": "check combat hard",
                 "text": "You draw steel. The blade rings clear in the dark.\n\nYou feel a probing presence in your mind. You do not recoil, but let it in. You show it the blood you have spilled, the men you have cut down. The ghosts are hungry, but your appetites are darker still.\n\nThe figures recoil. The overlapping voices rise into a keening wail that echoes from every wall, multiplying, splitting into harmonics that scrape against your ears. The sound climbs higher, becomes thin, becomes nothing. The white shapes blur, their edges bleeding into shadow and stone. Then they are gone. Only silence remains, profound and absolute.\n\nThe chamber stands empty. The tally marks remain, but whatever hand carved them has released its hold. Whatever dwelt here, whatever waited and counted and remembered, has passed beyond reach. The cave is yours now. No one need fear this darkness again.",
                 "mechanics": [
-                  "heal_spirits medium",
+                  "heal_spirits 3",
                   "finish_dungeon"
                 ]
               }
@@ -647,7 +630,7 @@
               "text": "The cold descends like a predator\u0027s jaws. Your fingers tighten on the hilt; you draw steel, the rasp of metal loud in the dripping silence.\n\nThe figures do not recoil. They drift nearer, their white shapes bleeding into one another, edges dissolving like fog. The temperature plummets further, a cold that reaches past your skin and settles in your bones. Your breath comes in ragged clouds. The stone beneath your boots tilts, or perhaps you tilt, your sense of direction sliding away like water through cupped hands. The torch gutters. Your grip weakens. The weapon grows heavy, impossibly heavy, and slips from nerveless fingers to clatter on stone. Darkness closes in from the edges of your vision. The layered voices murmur something you cannot parse, soft as a lullaby, mournful as a dirge.\n\nWhen you wake, you lie sprawled on sun-warmed earth outside the cave mouth. The light is wrong, shifted hours forward, the shadows long and slanting. Your limbs feel hollow, your throat parched. The cave yawns behind you, silent and patient. You rise on unsteady legs and turn your back to it. You do not look behind. You do not return.",
               "mechanics": [
                 "skip_time morning no_sleep no_meal",
-                "damage_spirits small",
+                "damage_spirits 2",
                 "finish_dungeon"
               ]
             }
@@ -709,7 +692,7 @@
           "optionPreview": "He\u0027s still sitting on the barrel after the children leave",
           "requires": null,
           "single": {
-            "text": "The children scatter with their candy. The man watches them go, then looks at you with the flat appraisal of someone who knows what a traveler\u0027s question sounds like.\n\n\u0022Still boarded up, last I heard,\u0022 he says. \u0022Bride\u0027s Cave folks call it. They say it\u0027s haunted, and maybe so.\u0022 \n\nHe climbs down from the barrel, joints cracking. \u0022If you\u0027re thinking of going in, I won\u0027t talk you out of it. Tried that once already and it didn\u0027t take.\u0022 He taps his bad ear. \u0022But bring rope. Plenty of rope. And don\u0027t trust your sense of direction past the first turning.\u0022",
+            "text": "The children scatter with their candy. The man watches them go, then looks at you with the flat appraisal of someone who knows what a traveler\u0027s question sounds like.\n\n\u0022Still boarded up, last I heard,\u0022 he says. \u0022Bride\u0027s Cave folks call it. They say it\u0027s haunted, and maybe so.\u0022 \n\nHe climbs down from the barrel, joints cracking. \u0022If you\u0027re thinking of going in, I won\u0027t talk you out of it. Tried that once already and it didn\u0027t take.\u0022 He taps his bad ear. \u0022No lights in there, you\u0027ll want to buy a lantern before you go in.\u0022",
             "mechanics": [
               "add_tag brides_cave_heard_harlan"
             ]
@@ -750,14 +733,14 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small"
+                "rem_gold 2"
               ]
             }
           }
@@ -774,15 +757,15 @@
                 "condition": "check combat trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -799,15 +782,15 @@
                 "condition": "check cunning trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -837,16 +820,16 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small",
-                "damage_spirits small",
+                "rem_gold 2",
+                "damage_spirits 2",
                 "add_condition injured"
               ]
             }
@@ -864,16 +847,16 @@
                 "condition": "check combat easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small",
+                "damage_health 2",
+                "damage_spirits 2",
                 "add_condition injured"
               ]
             }
@@ -891,16 +874,16 @@
                 "condition": "check cunning easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small",
+                "damage_health 2",
+                "damage_spirits 2",
                 "add_condition injured"
               ]
             }
@@ -931,16 +914,16 @@
                 "condition": "check negotiation hard",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold medium",
-                "damage_spirits medium",
+                "rem_gold 3",
+                "damage_spirits 3",
                 "add_condition injured"
               ]
             }
@@ -958,16 +941,16 @@
                 "condition": "check combat medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium",
+                "damage_health 3",
+                "damage_spirits 3",
                 "add_condition injured"
               ]
             }
@@ -985,16 +968,16 @@
                 "condition": "check cunning medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium",
+                "damage_health 3",
+                "damage_spirits 3",
                 "add_condition injured"
               ]
             }
@@ -1034,7 +1017,7 @@
       "trigger": null,
       "tier": null,
       "vignette": "intro/city_square",
-      "title": "Aldgate",
+      "title": "A City Square",
       "body": "\nYou stand inside Aldgate\u0027s walls at last. It is sprawling, filthy, and beautiful.\n\nIn the **market**, you\u0027ll find dispatches, sealed goods, and trade cargo bound for settlements across the frontier. Your guild ring gives you the right to claim a contract, carry the goods to their destination, and collect payment once the cargo arrives.\n\nThe arrangement is simple, but the road is not. Aldgate sits at the edge of empire;  beyond its gates, the borderlands open up, and with them, long stretches of rough country between scattered settlements. There are bandits, to be sure, but few out here die by steel. It is thirst, hunger, and fever that ends most journeys. It is carelessness, hubris, and ignorance. \n\nClose to the city, the lands are tame enough. The roads see regular traffic, farmsteads break up the landscape, and imperial patrols pass often enough. Pack a few days food and keep a wary eye on your coinpurse.\n\nBut the farther into the borderlands a contract takes you, the thinner the settlements become. Strange folk out there, quiet roads, and things that move in the dark beyond your lantern\u0027s reach. The work pays well for those mad enough to take it.\n\nTaking stock, you have: your guild ring, your travelling cloths, a sturdy pack, a pouch of coins, and...\n",
       "requires": [],
       "choices": [
@@ -1096,7 +1079,7 @@
       "tier": null,
       "vignette": "intro/the_ring",
       "title": "Who Are You?",
-      "body": "\nYour hand strays to your finger, still not quite used to the weight that rides there. The band sits heavy and unfamiliar against the bone. You ease it free and turn it slowly in the light, studying the seal as though it might explain itself.\n\nA signet ring, gold, weathered from years of use. The ring has stamped contracts, treaties, death sentences. It opens doors for the bearer, loosens tongues, carries the grim authority of the Trade Guild.\n\nHow did you come by this ring?\n",
+      "body": "\nYour hand strays to your finger, still not quite used to the weight that rides there. The band sits heavy and unfamiliar against the bone. You ease it free and turn it slowly in the light, studying the seal as though it might explain itself.\n\nA signet ring, gold, weathered from years of use. The ring has stamped contracts, treaties, death sentences. It opens doors for the bearer, loosens tongues, carries the grim authority of the **Trade Guild**.\n\nHow did you come by this ring?\n",
       "requires": [],
       "choices": [
         {
@@ -1105,7 +1088,7 @@
           "optionPreview": "I took it by force",
           "requires": null,
           "single": {
-            "text": "The fat bastard bled more than you\u0027d expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but the borderlands are a lawless place. A land of blood and gold and shadow, and you were born for all three.",
+            "text": "The fat bastard bled more than you\u0027d expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but the borderlands are a lawless place. A land of blood, gold, and shadow, and you were born for all three.",
             "mechanics": [
               "set_skill combat 4",
               "set_skill bushcraft 2",
@@ -1135,7 +1118,7 @@
           "optionPreview": "I won it in a game",
           "requires": null,
           "single": {
-            "text": "You still remember the trader\u0027s face when you called his bluff; the way his confidence shattered as you laid down your cards. The whole den had gone silent, unsure of what this meant. The man had thought a Guild signet would cow a room of dockside rabble, but you\u0027ve always had the devil\u0027s luck. Now his ruin buys your passage to Aldgate, where your luck will surely unlock even greater fortunes.",
+            "text": "You still remember the trader\u0027s face when you called his bluff; the way his grin fell as you laid down your cards. The whole den had gone silent, eyes upon you and your impossible hand. The man had thought wagering a Guild signet would cow a room of dockside rabble, but you\u0027ve always had the devil\u0027s luck. Now his ruin buys you a new life, and fortune willing, even greater rewards.",
             "mechanics": [
               "set_skill negotiation 2",
               "set_skill cunning 2",
@@ -1165,7 +1148,7 @@
           "optionPreview": "The Guild sent me",
           "requires": null,
           "single": {
-            "text": "The ring is yours. Not stolen, not inherited, not won; earned. Twelve years in the Guild\u0027s cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You\u0027ve bled for every league of parchment, fought off things in uncharted places that don\u0027t appear on any map because you decided they shouldn\u0027t. When the Guild needed someone to survey a rough land they chose you. The commission came with the signet, the authority to requisition supplies and act in the Guild\u0027s name. You intend to draw the definitive map of this place. If you happen to turn a profit along the way, well. You are Guild, after all.",
+            "text": "Twelve years in the Guild\u0027s cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You\u0027ve bled for every league of parchment, fought off things in uncharted places that don\u0027t appear on any map because you decided they shouldn\u0027t. When the Guild needed someone to survey a rough land they chose you. The commission came with the signet, the authority to requisition supplies and act in the Guild\u0027s name. You intend to draw the definitive map of this place. If you happen to turn a profit along the way, well. You are Guild, after all.",
             "mechanics": [
               "set_skill combat 4",
               "set_skill bushcraft 2",
@@ -1211,7 +1194,7 @@
                 "condition": "check bushcraft medium",
                 "text": "You leave the maintained track and commit to the slope. The rock here crumbles at the first test, sends pebbles chattering down into the gorge. You move slowly, testing each handhold, finding the stone that won\u0027t betray you. Your fingers go numb in the wind. Twice you freeze as loose scree slides beneath your boots, but you read the mountain\u0027s old bones beneath the treacherous surface and trust them. The miners below watch your progress in silence. One calls out a warning about an unstable section. You adjust, find another route.\n\nYou pull yourself onto the trail beyond the blockade with scraped palms and dust in your throat. The path ahead lies empty, winding higher into the peaks. Behind you, travelers still crowd against the barrier. The bearded man raises one hand in acknowledgment. Respect, or perhaps just recognition that some people cannot be stopped by stones and carts. You\u0027ve lost an hour and gained a lesson about what desperation looks like from above.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
@@ -1219,7 +1202,7 @@
               "text": "The slope beside the barricade looks climbable until you\u0027re halfway up it. The stone here has been fractured by a thousand freeze-thaw cycles, and it crumbles like stale bread beneath your weight. You commit too much to a handhold that breaks free. The slide starts small but grows, rock cascading loose in a gray avalanche that carries you sideways and down in a chaos of impacts.\n\nYou crash into the roadbed below the blockade hard enough to empty your lungs. Miners rush forward, pull you clear of the still-sliding debris. Your ribs scream. Blood runs from a gash across your forearm, and your knee has already begun to swell. The bearded man crouches beside you, his expression caught between concern and vindication. They carry you to the side of the road, bind your wounds with cloth that smells of rock dust and sweat. You will not be climbing today, nor tomorrow. The blockade remains, and you sit among the trapped travelers nursing injuries earned by impatience. The cold settles into your bones while the miners return to their vigil.",
               "mechanics": [
                 "skip_time morning",
-                "damage_health small"
+                "damage_health 2"
               ]
             }
           }
@@ -1236,7 +1219,7 @@
                 "condition": "check negotiation medium",
                 "text": "You move among the travelers, speaking low. The merchant with spoiled goods needs no convincing. A courier carrying time-sensitive contracts joins immediately. A muleteer whose animals are growing anxious in the confined space adds her voice. Within minutes you\u0027ve assembled a core of twenty travelers whose livelihoods depend on passage. You approach the barricade together, not threatening but inexorable as weather.\n\nThe miners see you coming. They raise their tools, form a line, but their hearts aren\u0027t in violence. These are men who split stone for wages, not soldiers. When your group reaches the carts and begins dismantling the barrier methodically, the resistance crumbles. The bearded man shouts threats that nobody heeds. A few miners step forward but stop when they see the determination in the travelers\u0027 faces. The barricade comes apart piece by piece. You all push through, ignoring the curses that follow you up the switchback.\n\nBehind you, the miners stand among the ruins of their blockade. Some are already drifting away, heading back to whatever grim terms the company will impose. The bearded man remains atop his cart, alone now, staring at the scattered stones. You\u0027ve cleared the pass, but the cold wind carries the sound of something breaking that has nothing to do with wood or rock.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
@@ -1244,95 +1227,8 @@
               "text": "You move among the travelers, making your case. The merchant listens, nods, but won\u0027t commit. The muleteer won\u0027t risk her animals. A courier flat refuses to be part of breaking a strike, mutters something about his own father working a mine once. One by one they turn away from your arguments. You have only a handful of supporters when you walk to the barricade. And by the time you get there, you\u0027re down to two.\n\nYou demand to be let through, or you\u0027ll force the matter. The bearded man gestures, and a half-dozen miners climb down from the barricade. They do not seriously injure you, but they give you a good beating as a message to the other travelers.\n\nThe strike resolves itself by morning, but your bruises are still raw.",
               "mechanics": [
                 "skip_time morning",
-                "damage_health small",
-                "damage_spirits small"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "Placeholder",
-      "category": "mountains/tier1",
-      "recurring": true,
-      "trigger": null,
-      "tier": null,
-      "vignette": null,
-      "title": "Placeholder Recurring Encounter",
-      "body": "\nSomething happens!\n",
-      "requires": [],
-      "choices": [
-        {
-          "optionText": "Negotiate = Try to convince them",
-          "optionLink": "Negotiate",
-          "optionPreview": "Try to convince them",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check negotiation easy",
-                "text": "You convince them!",
-                "mechanics": [
-                  "heal_spirits small"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "You fail!",
-              "mechanics": [
-                "rem_gold small"
-              ]
-            }
-          }
-        },
-        {
-          "optionText": "Fight = Do the ultimate punchies",
-          "optionLink": "Fight",
-          "optionPreview": "Do the ultimate punchies",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check combat trivial",
-                "text": "You win!",
-                "mechanics": [
-                  "heal_spirits small"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "You lose!",
-              "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
-              ]
-            }
-          }
-        },
-        {
-          "optionText": "Sneak = Use big sneaky skills",
-          "optionLink": "Sneak",
-          "optionPreview": "Use big sneaky skills",
-          "requires": null,
-          "conditional": {
-            "preamble": "",
-            "branches": [
-              {
-                "condition": "check cunning trivial",
-                "text": "You win!",
-                "mechanics": [
-                  "heal_spirits small"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "You lose!",
-              "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -1362,15 +1258,15 @@
                 "condition": "check negotiation easy",
                 "text": "The grey-bearded miner rises before you finish speaking. He crosses to the gate with the measured pace of someone who\u0027s earned the right to interrupt. \u0022Festival tax.\u0022 He spits into the gravel. \u0022That\u0027s a new verse added to an old song.\u0022 He turns to the collector. \u0022Garrim, you remember what we agreed when we voted you this post? Standard rates. No creative additions just because your pockets are light.\u0022\n\nThe collector\u0027s jaw works, but the faces around him have set like cooling iron. One of his companions steps back, hands spreading in a gesture of disavowal. \u0022Triple rate was mentioned,\u0022 the collector says, but the words come out defensive now, argument instead of decree. The miner doesn\u0027t move his hand from the bar. A woman calls from the crowd: \u0022Let them through, Garrim. We\u0027re trying to celebrate, not watch you shame yourself.\u0022\n\nThe bar lifts. The collector waves you past with a motion that tries to reclaim dignity from the wreckage of his scheme. As you cross into the meadow, someone presses a cup into your hand. Festival beer, thin but cold. The miner nods once, his assessment apparently satisfied. Behind you, the collector\u0027s companions have already drifted back toward the celebration, and the crowd\u0027s attention dissolves like snow in sunlight. The camps and the cartographer wait beyond the far edge of the meadow, the maps as near now as your next breath.",
                 "mechanics": [
-                  "rem_gold trivial",
-                  "heal_spirits small"
+                  "rem_gold 1",
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "The grey-bearded miner studies you through your appeal, his expression carving itself into something harder with each word. When you finish, he shakes his head. \u0022You speak pretty enough, but you don\u0027t know what you\u0027re speaking about.\u0022 He turns to the crowd. \u0022Outsider comes in, tells us our business, thinks three days on the trail makes them mountain folk.\u0022 A few laughs ripple through the watchers, not cruel but dismissive, the sound of a community closing ranks.\n\nThe collector\u0027s smile widens. \u0022See? Even Torvin knows. This is how we do things up here.\u0022 His companions straighten, emboldened by the shift. The miner returns to his bench and his cup, the trial concluded and failed. You could force the issue, push past, make threats, but the watching faces have gone from curious to cold. The switchbacks down stretch behind you, and the cartographer\u0027s deadline burns like a brand. Sometimes the mountains reject you with rockfall and storm. Sometimes they just make you pay.",
               "mechanics": [
-                "rem_gold medium"
+                "rem_gold 3"
               ]
             }
           }
@@ -1383,7 +1279,7 @@
           "single": {
             "text": "You count out the coin onto the collector\u0027s palm, each piece a small defeat that clinks against the others. He weighs the stack with theatrical care, then sweeps it into his pouch with the satisfaction of a man proven right. The bar lifts. \u0022See? Easy when folk are reasonable.\u0022 His companions smirk, their posture loosening now that the confrontation has resolved in their favor.\n\nAs you pass into the meadow, the grey-bearded miner catches your eye. There\u0027s something in his look. Not quite pity, closer to disappointment. He raises his cup in a gesture that might be salute or farewell, then turns back to his companions. The celebration resumes its rhythm around you, the festival\u0027s noise swallowing the small drama at the gate. You are lighter by enough coin to matter, heavier by the knowledge of what that weight bought: passage, yes, but also the collector\u0027s continuing certainty that his innovations will be tolerated. \n\nBehind you, the collector has already returned to his stool, ready for the next traveler with opinions about fairness.",
             "mechanics": [
-              "rem_gold medium"
+              "rem_gold 3"
             ]
           }
         },
@@ -1395,7 +1291,7 @@
           "single": {
             "text": "You shake your head and step back from the gate. The collector\u0027s smile curdles. \u0022Long walk here for nothing, traveler.\u0022 He settles deeper onto his stool, already dismissing you. His companions relax, the moment passing without the confrontation they\u0027d braced for. The grey-bearded miner watches your retreat with an expression that might be respect or might be simple acknowledgment; hard to say with mountain folk.\n\nYou take the long way foward, and long it is. Your feet hurt and your back aches, but your coin still heavy in your purse. Sometimes the mountains defeat you with weather or stone. Today they defeat you with bureaucracy.",
             "mechanics": [
-              "damage_spirits small",
+              "damage_spirits 2",
               "skip_time evening"
             ]
           }
@@ -1425,14 +1321,14 @@
                 "condition": "check cunning medium",
                 "text": "Inside, you find the source of the digging sounds. A root cellar hatch beneath the worktable has warped with moisture, and when the wind gusts a certain way, it rattles against its frame with a rhythmic knock that could be mistaken for something deliberate. The scales swing slightly in the draft, their creaking almost conversational in the silence. You wedge a stone against the hatch to still it, and the station falls quiet except for the wind.\n\nThe hearth draws well when you test it with a scrap of kindling. The walls keep the wind at bay. You wait out the storm in practical shelter while sleet turns to snow outside, and when dawn comes clear and cold, you continue up the detour route with no more weight than you brought here.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You crouch at the threshold and let your eyes adjust to the gloom within. The skeletal remains draw your gaze first, but as the shadows resolve, you begin to notice other marks. Scratches in the plaster near the window frame, deliberate and deep. You step closer and make out letters gouged into the ancient coating: \u0022sleep not in this tomb.\u0022\n\nA second warning mars the wood above the collapsed shelving, this one carved with less care, the letters ragged as though cut in haste or terror: \u0022on the first night, they measure your gold, on the next night, they measure your soul.\u0022 The doorframe bears a third inscription, so deeply scored that the wood has split along the grain. You trace the edges with one finger and feel splinters catch at your skin.\n\nThe cold presses closer. You tell yourself you are no slave to superstition, that these are merely the scratchings of frightened men long dead. Yet your pulse quickens, and the stillness within the station feels less like shelter than like the held breath before a spring trap closes. You straighten, step back across the threshold, and turn your face to the darkening sky.\n\nThe descent is cruel. Sleet hardens to ice on the scree, and each footfall threatens to send you sliding down the slope in a tumble of loose stone. Your hands grow numb where you brace against the boulders. Water runs cold down the back of your neck. But no pale shapes rise from the rocks to bar your path, and no skeletal fingers reach from the shadows. By the time you reach the lower trail, your legs burn and your breath comes hard, but you are alone with the mountain and the gathering storm.",
               "mechanics": [
-                "damage_spirits small"
+                "damage_spirits 2"
               ]
             }
           }
@@ -1445,7 +1341,7 @@
           "single": {
             "text": "You kneel before the remains and speak what words you remember from graveside vigils, the formulae worn smooth by repetition in temple halls. The phrases come haltingly at first, then with greater confidence as you recall the cadences that once echoed from vaulted stone. You add prayers overheard in childhood, their meanings half-forgotten but their rhythms still potent, syllables that carried weight when intoned by voices robed in authority. Your breath clouds in the cold air with each invocation.\n\nThe corpses remain still. You do not touch them; the mineral bloom crusting their bones suggests transformations best left undisturbed. Instead you gather kindling from the splintered crates and coax a small fire to life in the hearth, feeding it carefully until warmth pushes back the station\u0027s chill. You spread your bedroll as far from the bodies as the cramped space permits and settle into it, wrapping yourself against the cold that seeps up through stone.\n\nSleep comes poorly. The fire casts restless shadows that animate the hollow sockets, lend false motion to the skeletal fingers. Each time you drift toward unconsciousness, dreams rise to meet you: visions of stone pressing down, of scales that measure guilt in ounces, of cold hands reaching from darkness. You wake gasping more than once, find the fire still burning, force yourself back toward rest. The cycle repeats until exhaustion drags you under despite your fear.\n\nWhen you wake at last, true darkness fills the station. The fire has died to ash and ember, its light surrendered. You fumble for your flint in the blackness, strike sparks until a flame catches. In the wavering glow you turn toward the far wall. The space where the corpses lay slumped is empty now, marked only by the stains their bones left on rotted wood. The scales stand silent on their bench. Of the dead themselves, no trace remains. You are alone in the station, alone with the memory of their watching, alone with the certainty that something has changed in the night.",
             "mechanics": [
-              "damage_spirits medium"
+              "damage_spirits 3"
             ]
           }
         },
@@ -1457,8 +1353,8 @@
           "single": {
             "text": "You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you\u0027ve gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.\n\nThe ridge crest is a knife edge of wind-scoured rock. You cross it bent nearly double, one hand trailing the stone for balance while the storm tries to shove you sideways into nothing. Your face goes numb. Ice forms in your hair and collar. The descent on the far side is worse because you cannot feel your feet properly anymore, and the loose scree shifts under every step like ball bearings on tile.\n\nYou reach the valley floor two hours after full dark, shaking so hard you can barely strike a spark for fire. The cold has settled into your bones in a way that will ache for days. But you are through, and the trail behind you is passable again, and you did not spend a night in a place where three different travelers felt compelled to carve warnings in stone. Whether that makes you wise or merely lucky is a question the mountain does not answer. The fire builds slowly, and you feed it through the long hours until dawn, grateful for the pain that means you can still feel your fingers.",
             "mechanics": [
-              "damage_health trivial",
-              "damage_spirits medium"
+              "damage_health 1",
+              "damage_spirits 3"
             ]
           }
         }
@@ -1487,14 +1383,14 @@
                 "condition": "check negotiation medium",
                 "text": "You stride to the priest\u0027s side, your voice cutting through his rising prayers. \u0022Get over here and help me!\u0022\n\nHe recoils as if struck. \u0022I cannot, brother. You must understand. I am on holy pilgrimage. If I touch him, my hands will be unclean. I will be cursed.\u0022\n\nYou measure the man before you. His eyes burn with conviction, not cowardice. \u0022Ignore your hands, brother.\u0022 you say, \u0022What of your heart? If you let this man die, will not your heart be unclean? Will you not be cursed as a murderer is cursed?\u0022\n\nThe priest goes still. His gaze drops to his open palms, and he stares at them as if reading scripture written in his own flesh. The miner\u0027s ragged breathing fills the silence. Somewhere above, a pebble skitters down the slope.\n\n\u0022You are right,\u0022 the priest says at last. \u0022I will help you.\u0022\n\nTogether you grasp the miner beneath his arms. Your boots scrape against loose stone as you pull. The priest\u0027s knuckles whiten, his jaw clenched, and you feel the man\u0027s weight shift inch by agonizing inch. The rocks groan. With a final heave you wrench the miner free, dragging him clear as a cascade of smaller stones rattles down to fill the space where he lay trapped. The three of you collapse in the dust, gasping.\n\nYou glance at the priest. His hands tremble before him, no longer clean by the laws he honors. You hope you have not damned this man.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You stride to the priest and seize his shoulder. \u0022Get over here and help me pull him free!\u0022\n\nThe holy man recoils. \u0022I cannot, brother. You must understand I walk the high pilgrimage. If I touch his blood, my hands become unclean. The curse will follow me.\u0022 His voice trembles with genuine terror.\n\nYou turn from him without another word. You kneel beside the trapped miner and draw your hand across the gash on his brow, collecting the warm blood on your palm. The miner watches with feverish eyes as you rise and cross back to the priest. Before he can retreat, you press your bloodied palm against his face, drawing a dark streak from temple to jaw.\n\n\u0022There,\u0022 you say, \u0022you\u0027re unclean. Now help me.\u0022\n\nThe priest touches the stain with trembling fingers. He lifts his hand before his eyes, turns it in the mountain light, sees the red gleaming there. His mouth opens. The shriek that tears from his throat is not words but pure animal anguish. It does not stop. He drops to his knees, still howling, rocking forward and back with both hands clutching at his defiled face.\n\nYou return to the miner and brace your feet against the lower stone. You pull. The rocks do not yield. You shift your grip, plant yourself anew, haul with every fiber of strength you possess. Behind you the priest\u0027s wailing scrapes against your skull. The miner gasps shallow breaths, his face gone the color of tallow. Above, a grinding sound: stone dragging across stone. A pebble skitters down the slope, then another. You pull again. Nothing moves.\n\nThe scree settles with a deep, final crunch. The miner\u0027s eyes roll back. His chest stills. You release your grip and step away, the priest\u0027s shrieks still echoing from the mountainside.",
               "mechanics": [
-                "damage_spirits medium"
+                "damage_spirits 3"
               ]
             }
           }
@@ -1507,7 +1403,7 @@
           "single": {
             "text": "You drop to your knees beside the gap and begin scooping scree away from where his legs disappear between the rocks. The loose stone comes away easily at first. Then you hit compressed earth, then bedrock. The miner watches you work with something that might be gratitude. The priest prayers eacho. You dig until your hands are raw and the hole is twice as deep, but the stones extend further than you can reach. The gap that holds him runs all the way down to the mountain\u0027s bones. The miner knows it before you do. You see understanding settle across his face like dust. His voice comes out steady despite everything. \u0022Enough,\u0022 he says. \u0022You tried.\u0022 When you round the switchback, you can still hear the priest\u0027s fruitless prayers.",
             "mechanics": [
-              "damage_spirits medium"
+              "damage_spirits 3"
             ]
           }
         },
@@ -1519,7 +1415,7 @@
           "single": {
             "text": "You meet the trapped miner\u0027s eyes for a moment. He doesn\u0027t curse or plead. Perhaps he\u0027s already spent his voice shouting before you arrived. Perhaps he simply recognizes the shape of your decision in your posture. You continue up the switchback and the voices fade behind you. The trail climbs another half mile before leveling onto a ridge where you can see the whole valley spread below. From here the rockfall is invisible, just another fold in the mountainside. A hawk circles on a thermal, hunting. The wind carries the faint sound of metal on stone from a mine shaft somewhere higher up. Everything continues as it always has. You drink from your own flask and taste snowmelt, cold and clean. The water is good in the Near Ranges.",
             "mechanics": [
-              "heal_spirits trivial"
+              "heal_spirits 1"
             ]
           }
         }
@@ -1548,14 +1444,14 @@
                 "condition": "check negotiation medium",
                 "text": "The toll collector\u0027s eyes narrow as you speak, tracing the line of the trail upward with his gaze as if measuring your claim against the gradient itself. You describe the upper switchback, the eastern face where morning light strikes first, a figure bent to the rock with tools in hand. The muleteer seizes the thread, nodding, adding details that match or nearly match. One of the miners shifts his weight, uncertain now. The other two exchange glances.\n\nThe toll collector closes his ledger with a sound like a verdict deferred. \u0022Witness testimony complicates things,\u0022 he says, voice flat with the weariness of a man who knows how easily truth bends in thin air. He waves the muleteer up, tells him to move on, but the look he gives you carries weight. The miners watch you pass with eyes that remember faces. The muleteer doesn\u0027t thank you, just gathers his pack and walks quickly down the trail, and you\u0027re left with the knowledge that your word is now written in the invisible ledger this mountain keeps. Whether true or false, it\u0027s been spent.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You step forward and declare that you saw the man laboring at a claim, just as he swore. Your voice carries across the switchback with what you hope sounds like certainty.\n\nThe muleteer seizes upon your words with desperate gratitude. \u0022Yes, yes, the northern face, just past the second marker stone, where the quartz runs deep through the granite.\u0022 He nods vigorously, hands gesturing toward the heights. But you spoke of the eastern slope, near the stand of twisted pines. The contradiction hangs in the air like smoke. You open your mouth to amend your account, to weave the threads together, but the toll collector\u0027s expression has already hardened into something colder than the mountain wind. The miners behind him exchange glances, their hands settling more firmly upon their tools.\n\nThe toll collector\u0027s gaze drops to your hand, fixing upon the ring that encircles your finger. \u0022Lying to a toll collector.\u0022 His voice carries no anger, only a terrible weariness. \u0022You should know better than most. I remember when that ring meant something.\u0022 He closes his ledger with a sound like a splitting stone. A gesture sends two miners forward to grip the muleteer\u0027s arms, hauling him upright from the gravel. \u0022Take him away. He\u0027ll work his debt in the mines.\u0022 The muleteer does not resist, does not even look at you as they lead him toward the upper trail. The toll collector turns his attention back to you, and his words fall with the weight of judgment. \u0022You\u0027d best be passing through. Not much law up in these mountains, so we rely on honesty, a trait you seem to lack.\u0022 He moves to the side of the trail, creating a narrow passage, his silence an invitation to depart that will not be repeated.",
               "mechanics": [
-                "damage_spirits small"
+                "damage_spirits 2"
               ]
             }
           }
@@ -1578,7 +1474,7 @@
           "single": {
             "text": "The toll collector\u0027s face hardens into something carved from the same granite as the peaks above. \u0022No use to me then,\u0022 he says, closing the ledger with a snap that echoes off the rock face. The miners mutter, dissatisfaction rolling through them like a rockslide\u0027s first rattle. One steps forward, jabbing a thick finger toward the muleteer. \u0022Guilty, then. Silence from a witness means he\u0027s got nothing good to say.\u0022\n\nThe muleteer surges upward, words tumbling out, appeals to fairness, to proper procedure, to waiting for someone who actually saw something. The toll collector raises a hand, considers, then shakes his head. \u0022Trail justice doesn\u0027t wait for perfect proof. You were coming down with claim-marked ore, no papers, no witness. Math\u0027s simple.\u0022 They take the muleteer by both arms. He doesn\u0027t fight, but his eyes find yours one last time, and there\u0027s nothing in them but the cold knowledge of abandonment.\n\nThey march him downtrail toward whatever verdict the mining council delivers. You\u0027re waved aside, irrelevant now, a passerby who confirmed nothing but their own absence.",
             "mechanics": [
-              "damage_spirits trivial"
+              "damage_spirits 1"
             ]
           }
         }
@@ -1607,16 +1503,16 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small",
-                "damage_spirits small",
+                "rem_gold 2",
+                "damage_spirits 2",
                 "add_condition injured"
               ]
             }
@@ -1634,16 +1530,16 @@
                 "condition": "check combat easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small",
+                "damage_health 2",
+                "damage_spirits 2",
                 "add_condition injured"
               ]
             }
@@ -1661,16 +1557,16 @@
                 "condition": "check cunning easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small",
+                "damage_health 2",
+                "damage_spirits 2",
                 "add_condition injured"
               ]
             }
@@ -1701,16 +1597,16 @@
                 "condition": "check negotiation hard",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold medium",
-                "damage_spirits medium",
+                "rem_gold 3",
+                "damage_spirits 3",
                 "add_condition injured"
               ]
             }
@@ -1728,16 +1624,16 @@
                 "condition": "check combat medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium",
+                "damage_health 3",
+                "damage_spirits 3",
                 "add_condition injured"
               ]
             }
@@ -1755,16 +1651,16 @@
                 "condition": "check cunning medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium",
+                "damage_health 3",
+                "damage_spirits 3",
                 "add_condition injured"
               ]
             }
@@ -1791,7 +1687,7 @@
           "single": {
             "text": "You reach for your purse. The motion itself is answer enough. The merchant wets his thumb and marks something in the ledger, the charcoal leaving a dark smudge across the page. The farmers shuffle closer, watching as you count out the coin into his palm. His hand is steady when he takes it, but he doesn\u0027t meet your eyes.\n\nHe divides the sum there in the road, parceling it out to three of the farmers by some calculus you\u0027ll never know. They take it without joy, folding the coin into their belts. The grandmother nods once and turns back to her door.\n\nThe merchant closes his ledger with a snap. He doesn\u0027t thank you. The crowd disperses like smoke. You stand alone in the dusty road with lighter pockets.",
             "mechanics": [
-              "rem_gold small"
+              "rem_gold 2"
             ]
           }
         },
@@ -1807,14 +1703,14 @@
                 "condition": "check negotiation easy",
                 "text": "You choose your words with care, measuring each syllable as you might weigh coin. Your smile comes easily, broad and guileless, though your hand rests near your belt in a manner that speaks its own language. You explain the impossibility of their claim, how you have never walked these fields before, how your records would show any such transaction. As you speak, you let slip mention of the guild, of your standing, of how misunderstandings between merchants and farmers have, in the past, drawn unwelcome attention from those who adjudicate such matters.\n\nA younger farmer, jaw set and fists clenched at his sides, cuts through your words. He does not care, he says, which member of your order made the deal or failed to honor it. The ring marks you all the same. Let the guild sort its own house; they want what is owed.\n\nThe older man turns his head, and the look he gives the younger one carries the weight of years and authority. The young farmer\u0027s mouth closes. Silence settles over the road, broken only by the whisper of wind through dry stalks. The old man faces you again, his weathered features unreadable as stone. \u0022You are right,\u0022 he says at last, each word deliberate. \u0022We have mistaken you for someone else. Go on your way, merchant.\u0022 He does not open the ledger again. The others step aside, clearing the road, though their eyes follow you still.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You speak but the words land wrong, too careful or too quick. The old man shakes his head before you finish, tapping his ledger with the pencil stub. He knew you\u0027d deny it, he says. They always do. A farmer you hadn\u0027t noticed before, younger with hands scarred from scythe work, asks why you won\u0027t just make it right if you\u0027re honest folk.\n\nYou pivot to threats. You are a member of a powerful guild, who will not take lightly to being accused of theft. But the guild is far away. Right now it is just you, surrounded by irate farmers.\n\nThe old man taps the ledger. It is clear you\u0027ll need to part with some coin to avoid trouble.",
               "mechanics": [
-                "rem_gold small"
+                "rem_gold 2"
               ]
             }
           }
@@ -1831,16 +1727,16 @@
                 "condition": "check combat trivial",
                 "text": "You move before the old man can close the distance. Your blow catches the nearest farmer across the jaw; he crumples into the dust without a sound. The ledger falls from weathered hands as the elder reaches forward, too slow, his cry dying in his throat.\n\nThe remaining men lower their tools with deliberate care. Hoes and rakes settle into the furrows. Calloused palms rise, empty, into the golden air. Their eyes follow you as you turn your back on them, on the man sprawled motionless in the road.\n\nBehind you, a single voice breaks. It rises sharp and terrible, then cuts away as if severed. The wind resumes its passage through the wheat, dry stalks whispering their endless secret. Your shadow lengthens before you on the dust-pale road.",
                 "mechanics": [
-                  "damage_spirits trivial"
+                  "damage_spirits 1"
                 ]
               }
             ],
             "fallback": {
               "text": "You turn your back on them.\n\nThe first blow catches you between the shoulders, a hoe handle or staff you cannot see. You wheel, hand moving to defend yourself, but already two more are closing from the flanks. One strikes low; your knee buckles. Another seizes your arm, wrenching it back with the strength of a man accustomed to wrestling calves and plows.\n\nA single farmer would pose no threat. Five together are a different matter. You twist free, land a solid strike that sends one reeling into the dust, but the others press in like wolves on wounded prey. Fists and rough wood find your ribs, your jaw. The taste of copper floods your mouth. Your vision narrows to a confusion of grasping hands and sun-worn faces, the old man standing well back with his ledger tucked beneath one arm, watching with the same expression he might give a storm rolling across his wheat.\n\nThey drive you to the ground. Dust chokes your lungs. Hands tear at your belt, your pack, methodical and practiced. They take coin, weighed carefully in calloused palms, counted against whatever sum lives in that charcoal-marked ledger. When they are satisfied, they rise and step away, leaving you sprawled in the road with aching ribs and a wallet considerably lighter than before. The old man nods once, as if concluding a transaction at market, and turns back toward his fields.",
               "mechanics": [
-                "rem_gold small",
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "rem_gold 2",
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -1866,7 +1762,7 @@
           "single": {
             "text": "You nod once. The girl\u0027s face floods with relief so sudden and total it nearly breaks her composure.\n\nThe work is brutal. The sickle is dull and the wheat is thick-stalked, tough as wire. Chaff gets in your eyes, your throat, works its way under your collar and into your boots. Your back screams within the first hour. The old man says nothing, but he watches you with something like gratitude, and the two of you fall into a rhythm: cut, gather, bind. The sun crawls toward the horizon. Your hands blister. The field shrinks, row by row, until at last the final sheaf is tied and stacked with the others.\n\nThe girl brings the meal as promised. You eat sitting on the fence while the old man clasps your shoulder once, wordless, then limps toward the distant farmhouse. The girl lingers, watching you with an expression caught between shame and pride.\n\n\u0022Thank you,\u0022 she says quietly. Then she runs after her grandfather, disappearing into the amber light.\n\nYou walk on as the first stars prick the sky. Your shoulders ache.",
             "mechanics": [
-              "heal_spirits trivial",
+              "heal_spirits 1",
               "add_random_items 3 food",
               "skip_time night"
             ]
@@ -1889,7 +1785,7 @@
             "fallback": {
               "text": "You try. You speak of duty, of fairness, of the many paths that might solve her problem. But the words fall flat in the dust between you. She shakes her head, backing up to block the road more fully.\n\n\u0022Talk,\u0022 she says bitterly. \u0022That\u0027s all guild folk do. Talk and count coin while the rest of us break our backs.\u0022 Her voice rises. \u0022You think words will cut that wheat? You think words will keep us fed?\u0022\n\nShe picks up a stone. Not large, but her arm is cocked back, and her eyes are bright with tears and fury. \u0022Turn around,\u0022 she says. \u0022Find another road.\u0022\n\nYou do. The long way around adds an hour to your journey, skirting the edge of the fields through scrub and thistle. Once, you glance back. The girl is gone. The old man is still there, a lone figure against the golden expanse, cutting and cutting as the light fails.",
               "mechanics": [
-                "damage_spirits trivial",
+                "damage_spirits 1",
                 "skip_time night"
               ]
             }
@@ -1903,7 +1799,7 @@
           "single": {
             "text": "You reach into your pack and draw out coin. Enough to hire three strong backs for a day, maybe two. You hold it out to the girl.\n\nHer face goes very still. She stares at the coins in your palm, then up at your face, then back down. For a moment you think she\u0027ll take it. Then her expression hardens into something ugly.\n\n\u0022Charity,\u0022 she spits. The word is acid. \u0022That\u0027s what we are to you, isn\u0027t it? Poor farmers with our hands out, begging from the guild.\u0022\n\nShe slaps your hand. The coins scatter in the dust. One rolls away into the wheat stubble, glinting.\n\n\u0022Keep it,\u0022 she says, voice shaking. \u0022We\u0027ll manage. We always do. We don\u0027t need your pity.\u0022 She steps aside, jerking her head toward the road. \u0022Go on. Go back to your soft city friends and tell them how generous you were.\u0022\n\nYou walk past her. She doesn\u0027t look at you. Behind you, you hear her scrabbling in the dirt, gathering the coins you dropped, her breath hitching with something between rage and shame. The old man is still cutting wheat, alone against the dying light. The coins you meant as kindness burn heavier in her hands than any blade.",
             "mechanics": [
-              "damage_spirits small"
+              "damage_spirits 2"
             ]
           }
         }
@@ -1933,14 +1829,14 @@
                 "text": "You raise both hands in a warding gesture, palms outward. The barley wreath shifts on your head. You thank them for the honor, your voice steady, and explain that your own gods would look unkindly upon your taking part in their rites. The young woman\u0027s smile falters. The dagger remains suspended between you, rust flaking from its edge.\n\nTo fill the silence you speak of Shemned, god of the autumn harvest in the hills where you were born. You tell what fragments you recall: how the grain must be cut before the moon wanes, how the last sheaf stands in the field until frost claims it. Your words come haltingly, cobbled from childhood memory. The villagers listen, their circle loosening, and soon a gray haired man interrupts with questions. Does Shemned sleep beneath the roots? Does he rise at planting? The debate sprawls, voices overlapping, until the woman with flowers in her braids claps her hands once, sharply.\n\n\u0022You worship the Worm Below,\u0022 she announces, satisfied. \u0022Only by another name.\u0022 The others nod. You feel the weight of their conclusion settle over you like the barley crown itself, but you nod in return, eager to be gone. Let them believe what they will. The young woman lowers the dagger. Another villager presses a cloth sack into your arms, heavier than the first. They step aside. The road opens before you. You walk through their ring, and no one follows.",
                 "mechanics": [
                   "add_random_items 3 food",
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You let the dagger remain in the young woman\u0027s outstretched hands. Your voice cuts across the clearing, sharp with disgust. Whatever ritual they mean to enact here, you will have no part of it. You speak of Shemned, your own harvest god, whose priests pour wine rather than darker things, who demands no blade be lifted save to cut grain from the stalk.\n\nThe smiles do not fade. They simply empty of warmth.\n\nHands close around your arms before you can pivot toward the road. You are hauled backward, your heels dragging furrows through the dust. The circle parts and reforms behind you. They march you to the edge of the clearing where the wheat begins, and there they release you with a shove that sends you stumbling into the stalks. One of them, the woman with the braided flowers, reaches out and plucks the barley wreath from your head. She turns away without a word.\n\nBehind you, the villagers drift back toward their table. The cider is poured. Bread is broken. They do not look in your direction again.",
               "mechanics": [
-                "damage_spirits small"
+                "damage_spirits 2"
               ]
             }
           }
@@ -1958,7 +1854,7 @@
                 "text": "You have seen this ritual done, though never from the center of the circle. You begin to walk, letting memory guide your steps. The first stop comes at the eastern edge of the clearing, where morning light falls. You raise the rusted blade toward the wheat, point trembling slightly in your grip, and call a blessing on the harvest. You don\u0027t know the words, but you say what feels right.\n\nThe villagers answer, their words echo yours. You move to the southern point, then west, then north. At each compass mark you halt, extend the dagger toward the fields, and speak. The blade catches sunlight at odd angles, its pitted surface scattering fragments of brightness. Each time you call, the villagers respond, their voices rising and falling in unison, shaping the blessing into something larger than your words alone could carry.\n\nWhen the circle closes, you return to the young woman. She waits with her hands open. You lay the dagger across her palms. She bows, pressing her forehead to the hilt for a long breath, then lifts her gaze to meet yours. \u0022It is a good blessing from an outsider,\u0022 she says. \u0022The words were new but familiar.\u0022\n\nThe evening unfolds in shared bread and story. You sit among them as the light fades, their voices weaving tales of seasons past while cider passes hand to hand. The barley wreath remains on your head, and no one moves to take it back.",
                 "mechanics": [
                   "add_random_items 3 food",
-                  "heal_spirits medium",
+                  "heal_spirits 3",
                   "skip_time morning"
                 ]
               }
@@ -1966,8 +1862,8 @@
             "fallback": {
               "text": "You walk with grim determination to the stone bowl. Your fingers close around the dagger\u0027s pitted hilt. You hold out your hand, palm upward, and draw the rusted edge across the flesh in one deliberate stroke. The blade bites deep; pain flares white and immediate. Blood wells thick and dark from the gash, spilling over your fingers in hot rivulets. You turn your hand and let the crimson flow pour into the bowl, where it mingles with whatever lies within.\n\nThe villagers stare, their smiles frozen. The clearing falls silent save for the drip of blood striking liquid. A small child tugs at her mother\u0027s skirt and asks, voice clear in the stillness, \u0022Why is that person bleeding in the soup?\u0022\n\nThe woman with flowers in her braids blinks. Another villager clears his throat. Someone mutters about foreign customs, ancient ways from distant lands. They nod to one another, uncertainty masked by forced courtesy. Two men lift the bowl with careful hands and carry it behind the table, tilting it to spill its contents into the wheat. The young woman retrieves the dagger from your slack grip, her expression carefully blank. You bind your hand in a strip torn from your cloak, the wound throbbing with each beat of your heart. At the first lull in their murmured conversation, you turn and walk back to the road, your departure unmarked by farewell.",
               "mechanics": [
-                "damage_spirits small",
-                "damage_health trivial"
+                "damage_spirits 2",
+                "damage_health 1"
               ]
             }
           }
@@ -1997,14 +1893,14 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small"
+                "rem_gold 2"
               ]
             }
           }
@@ -2021,15 +1917,15 @@
                 "condition": "check combat trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -2046,15 +1942,15 @@
                 "condition": "check cunning trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -2084,15 +1980,15 @@
                 "condition": "check bushcraft medium",
                 "text": "Chaff fills your lungs. Your hands bleed from a hundred cuts. But the fire reaches your break and finds nothing to feed it, hesitates, turns back on itself and begins to gutter. The farmer and the woman beat out the last smoldering patches while you collapse at the field\u0027s edge, coughing smoke. The mule is lost. A quarter of the field is ash. But the rest stands golden and untouched, rolling in the wind like nothing happened. The woman brings you water in a clay jug. She does not thank you. She does not need to. The farmer is already walking the firebreak, running his hand through the torn grain, weeping soundlessly. You leave him there, counting what remains.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You are too slow. The fire outraces you, jumps your pathetic break in a cascade of sparks, and suddenly you are surrounded. Flame on three sides and smoke so thick you cannot see the ground. You run blind, stumbling through the burning wheat, and when you finally break free at the field\u0027s edge your clothes are singed and your throat is raw as butchered meat. The woman drags the farmer back as the fire takes the road. It will burn itself out at the fallow ground beyond, but not before it consumes everything. The mule\u0027s screaming stops. You walk away before it ends, the taste of ash thick on your tongue, the smell of burned hair following you down the road.",
               "mechanics": [
-                "damage_spirits trivial",
-                "damage_health trivial"
+                "damage_spirits 1",
+                "damage_health 1"
               ]
             }
           }
@@ -2105,7 +2001,7 @@
           "single": {
             "text": "You do not wait for permission. You wrap cloth across your mouth and run into the smoke. The heat is immediate and savage. The world narrows to the sound of the mule\u0027s braying, a beacon in the grey. You find it tangled in a collapsed cart, harness twisted around the axle. Your hands work blind, fumbling with knots and buckles while the flames crawl closer. The mule kicks, wild with fear, and catches you in the ribs. You taste blood. But the last strap comes free and you seize its halter, dragging it forward into the smoke, praying you remember which direction is out.\n\nYou do. Barely. You emerge gasping, the mule bolting past you toward open ground. The fire has taken half the field. The woman and the farmer beat at the edges with their sacks, trying to contain it, but the wind is relentless. By the time it burns itself out against the road, the damage is done. The farmer does not speak. He catches the mule, strokes its neck, and stares at the blackened ruin of his harvest. You leave him there. The children watch you go, silent as stones.",
             "mechanics": [
-              "heal_spirits small"
+              "heal_spirits 2"
             ]
           }
         },
@@ -2117,7 +2013,7 @@
           "single": {
             "text": "You meet the woman\u0027s eyes and say nothing. Her expression does not change. She expected this, perhaps. She turns away, back to the field, and begins beating at the flames with her sack. Alone. The farmer remains frozen. His children cry.\n\nYou walk. Behind you the smoke rises higher, a grey pillar against the sky. The mule\u0027s screaming follows you for a time, then stops. You do not look back. By the time you reach the next village, the column is visible for miles, a marker of ruin that every farmer and merchant will see and remember. In Aldgate, bread prices will rise. Tempers will fray. Someone will pay for this. But it will not be you. You are already gone, a stranger passing through, and the ring on your hand catches the light like a promise no one asked you to keep.",
             "mechanics": [
-              "damage_spirits medium"
+              "damage_spirits 3"
             ]
           }
         }
@@ -2142,7 +2038,7 @@
           "single": {
             "text": "Your hands work quickly, lifting a sack onto your shoulder. The weight unbalances you, but you\u0027ll manage to the next settlement.\n\nYou turn to find the cart\u0027s owner, two guards at his side. He sees the bag immediately. His eyes find your ring, and his face goes cold with calculation. \u0022I had expected to travel three day with that grain, but here we have a buyer with ready coin. Just one sack then? Let me check my ledger.\u0022\n\nYou curse your ill luck, but pay. The guards watch the coin change hands, bored witnesses to a transaction they\u0027ve seen a dozen times. The merchant smiles, all teeth, and climbs back onto his repaired cart. The boy and his siblings are gone, vanished into the wheat. Your pack is lighter by coin and heavier by grain.",
             "mechanics": [
-              "rem_gold small"
+              "rem_gold 2"
             ]
           }
         },
@@ -2163,7 +2059,7 @@
             "fallback": {
               "text": "You clear your throat and set about the tale of Old Man Yaniv and the grimlet. Carefully, properly, with the necessary scaffolding. The grimlet, you explain, is not merely a creature of shadow and riddles but a cautionary mechanism in furred form, and its threefold bargains must be understood in sequence if one is to appreciate their symmetry. There are digressions, brief but essential, on the curing of jorgo root, on the contractual ambiguity of sunset, on the moral hazard of speaking imprecisely to entities who delight in precision. Somewhere during your clarification of root preparation methods, the boy\u0027s attention begins to drift, and you, ever attentive to pedagogy, pivot smoothly to the more illustrative case of Yaniv and the Magic Fish.\n\nThis second account you deliver with renewed vigor, outlining each wish and its unintended corollary, tracing the arc of folly with a steady finger as though diagramming it in the air. You conclude with a small, satisfied flourish, certain the lesson has landed squarely. When you turn to gauge the effect, however, there is only the cart, the mule, and the long shadows stretching across the road. The boy, presumably fortified with wisdom, has seen fit to depart before the final summary.",
               "mechanics": [
-                "heal_spirits trivial",
+                "heal_spirits 1",
                 "skip_time evening"
               ]
             }
@@ -2181,15 +2077,15 @@
                 "condition": "check combat trivial",
                 "text": "The boy takes one look at your stance and drops the sack, grain spilling across the dirt as he scrambles backward. He turns and runs into the wheat, the stalks swallowing him whole, his panicked breathing fading into the cicada drone. You continue down the road, leaving the tilted cart and its intact cargo to bake in the afternoon sun.",
                 "mechanics": [
-                  "heal_spirits trivial"
+                  "heal_spirits 1"
                 ]
               }
             ],
             "fallback": {
               "text": "You stride toward the youth with purpose. He does not cower. Instead, his shoulders tense, his feet shift to balance, and you glimpse in his stance some trace of training, or at least of many fights survived.\n\nHe moves before you close the distance. The sack of grain, still gripped in both hands, rises and swings toward you with surprising force. It catches you across the chest and shoulder, a dull, heavy impact that staggers you backward. The weight of it, the suddenness, sends you sprawling into the dirt.\n\nBefore you can rise, he is on you. He straddles your torso, pinning you against the ground with his knees, and his fists descend in rapid succession. The blows land across your jaw, your cheekbone, your brow. You taste copper. Your vision flashes white with each strike. He breathes hard through his teeth, his face taut with desperation, and you feel the weight of his intention: he means to end you here, to beat you senseless or worse.\n\nThen, abruptly, he stops. He springs off you and bolts, sprinting down the road toward the wheat fields. You roll to your side, gasping, the dust thick in your throat.\n\nHoofbeats and the creak of leather reach your ears. You push yourself to your knees, blinking blood from one eye, and see three figures approaching: a broad man in merchant\u0027s garb astride a mule, flanked by two guards with cudgels in hand. The merchant reins in near the cart, his gaze sweeping the scene. He sees you, bloodied and still half-prone in the dirt, and his expression hardens.\n\n\u0022Looks like the thieves turned on each other,\u0022 he says, voice flat and certain. \u0022One of them is still here.\u0022\n\nThe guards move to either side of you. You raise a hand, wipe at your mouth, and speak slowly, forcing steadiness into your voice. You tell him you came upon the boy stealing from his cart. You tell him you meant to protect his grain, to stop the theft before it worsened.\n\nThe merchant\u0027s eyes narrow. He glances at the cart, at the sacks still piled beneath their canvas, the lashings intact. He looks back to you, doubt plain in his face.\n\n\u0022Nothing\u0027s been taken,\u0022 he says after a long pause. \u0022So there\u0027s no claim for a crime.\u0022\n\nOne of the guards prods you with the end of his cudgel, a silent command to rise. You do, slowly, your ribs aching where the boy\u0027s knees pressed down. The merchant watches you stand, his jaw tight, his hand resting on the pommel of a short knife at his belt.\n\n\u0022You\u0027ll move along now,\u0022 he says. \u0022And keep to your own road.\u0022\n\nYou nod once, gather what dignity remains, and turn away from the cart. As you walk, you feel the merchant\u0027s gaze fixed on your back, heavy and mistrustful, until the crossroads and the broken cart are far behind you.",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -2219,16 +2115,16 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small",
-                "damage_spirits small"
+                "rem_gold 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -2245,16 +2141,16 @@
                 "condition": "check combat easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -2271,16 +2167,16 @@
                 "condition": "check cunning easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -2310,16 +2206,16 @@
                 "condition": "check negotiation hard",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold medium",
-                "damage_spirits medium"
+                "rem_gold 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -2336,16 +2232,16 @@
                 "condition": "check combat medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium"
+                "damage_health 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -2362,55 +2258,18 @@
                 "condition": "check cunning medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium"
+                "damage_health 3",
+                "damage_spirits 3"
               ]
             }
-          }
-        }
-      ]
-    },
-    {
-      "id": "Bandits",
-      "category": "scrub/tier1",
-      "recurring": true,
-      "trigger": null,
-      "tier": null,
-      "vignette": null,
-      "title": "Bandits",
-      "body": "\nThere are bandits on the road. You can either fight them or run.\n",
-      "requires": [],
-      "choices": [
-        {
-          "optionText": "Fight them = You fight them.",
-          "optionLink": "Fight them",
-          "optionPreview": "You fight them.",
-          "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "skip_time morning"
-            ]
-          }
-        },
-        {
-          "optionText": "Run = You run.",
-          "optionLink": "Run",
-          "optionPreview": "You run.",
-          "requires": null,
-          "single": {
-            "text": "",
-            "mechanics": [
-              "skip_time evening"
-            ]
           }
         }
       ]
@@ -2475,14 +2334,14 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small"
+                "rem_gold 2"
               ]
             }
           }
@@ -2499,15 +2358,15 @@
                 "condition": "check combat trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -2524,15 +2383,15 @@
                 "condition": "check cunning trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -2688,16 +2547,16 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small",
-                "damage_spirits small"
+                "rem_gold 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -2714,16 +2573,16 @@
                 "condition": "check combat easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -2740,16 +2599,16 @@
                 "condition": "check cunning easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -2954,16 +2813,16 @@
                 "condition": "check negotiation hard",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold medium",
-                "damage_spirits medium"
+                "rem_gold 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -2980,16 +2839,16 @@
                 "condition": "check combat medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium"
+                "damage_health 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -3006,16 +2865,16 @@
                 "condition": "check cunning medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium"
+                "damage_health 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -3041,7 +2900,7 @@
           "single": {
             "text": "You step off the path and the water takes you to mid-thigh, warm and thick with silt. The woman watches as you begin to gather materials. Clay from the solid bank, handfuls of reed stems still green enough to bend, the long-bladed sedge that holds knots. You work in silence, weaving fascia between driven stakes, packing the gaps with clay mixed thick with chopped stems. The woman stands aside. She doesn\u0027t help. She watches the way someone watches a meal being prepared for a guest they didn\u0027t invite.\n\nThe breach holds. You pack the last of the clay smooth, reinforcing the weak points with twisted reed bundles that will swell as they soak. The seeping stops. The paddies remain flat and green, undisturbed. The woman looks at the repair for a long moment, then at the distance where the boat will eventually return. \u0022You\u0027ve bought him another season of thinking he can leave whenever he wants,\u0022 she says. There\u0027s no gratitude in it. She turns and walks toward the hut, feet sure on the raised path, and doesn\u0027t look back. You stand alone by the dike, hands caked with drying mud.",
             "mechanics": [
-              "heal_spirits trivial"
+              "heal_spirits 1"
             ]
           }
         },
@@ -3058,7 +2917,7 @@
                 "text": "You step off the path and the water takes you to mid-thigh, warm and thick with silt. The woman watches as you begin to gather materials. \u0022What\u0027s your name?\u0022 you ask. \u0022Netta.\u0022 \u0022And your boy?\u0022 She sighs. \u0022Wren.\u0022 You grab two handfuls of clay from the solid bank. \u0022What\u0027s Wren gotten himself into this time?\u0022\n\nNetta steps back from the breach. Not far, just enough that her hands are no longer sealing it. She watches the water claim its ground, jaw set hard enough to hurt. \u0022He thinks I\u0027m trying to keep him small,\u0022 she says. \u0022Keep him stuck on this farm.\u0022 The words come rougher now. \u0022But this is what I know. This is what keeps us fed. If he leaves it, I don\u0027t know how to follow.\u0022\n\nAnother shudder runs through the dike. Clay sloughs away in a slow collapse, and the first paddy begins to fill in earnest. You plant a stake anyway, driving it down with the flat of your palm. \n\n\u0022Flooding this won\u0027t bring him back,\u0022 you say. Netta\u0027s eyes flick to the spreading water, to the rice bowing under it. For a long moment she says nothing. Then, almost to herself: \u0022I wanted him to see what it costs.\u0022 \n\n\u0022And what if he\u0027s willing to pay that to be free?\u0022\n\nNetta inhales, sharp and shaky. She steps forward and sinks her hands back into the breach beside yours. \u0022Then I suppose I\u0027d be a fool to flood my own farm.\u0022\n\nThe two of you work together, mending the breach. It is filthy, exhausting work, but the dike holds.",
                 "mechanics": [
                   "skip_time evening",
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
@@ -3080,15 +2939,15 @@
                 "condition": "check combat trivial",
                 "text": "You seize a double handful of the sodden clay and wrench it free. The dike groans, a deep sound felt more than heard, as the gap widens. You hurl the mass into the flooding paddy. It strikes the water with a thick slap. Again you tear at the packed earth, fingers sinking deep into the yielding wall. Another chunk comes loose. You laugh as you cast it aside, and the sound carries across the fields like the cry of some carrion bird. Water surges through in a brown torrent that foams and churns, spreading between the rice stalks in dark fingers.\n\nThe woman makes a small sound, wordless and raw. She staggers back from the failing wall, water sluicing past her knees, and her gaze fixes on the spreading flood. Something breaks in her expression, some final acceptance cracking like old pottery. Her hand drops to the earth and closes around a stone the size of a man\u0027s fist. She lifts it, trembling, and lurches toward you with the clumsy desperation of one who has never raised a hand in violence. The stone arcs through the air. You move. Your weapon finds her before she can complete the swing. She falls without ceremony into the muddy water, and the stone tumbles from her fingers.\n\nThe dike continues its collapse behind you, water roaring through the widening breach. The paddy fields drink deep, rice stalks vanishing beneath the flood. Her son will return to find the house beneath dark water, the dike in ruins, and his mother cold among the drowned earth. Perhaps he will understand then what it means to abandon what must be tended. You turn from the wreckage and walk back along the raised path, leaving the water to claim what remains.",
                 "mechanics": [
-                  "damage_spirits trivial"
+                  "damage_spirits 1"
                 ]
               }
             ],
             "fallback": {
               "text": "You step down into the water beside her. The woman shifts to give you room, assuming help. You reach for the packed clay at the dike\u0027s base, where the structure is oldest, and dig your fingers in. The mud comes away easily once you know where to pry. You work a stone loose, then another, opening a channel beneath her fresh repairs. The water finds it immediately, eager, widening the gap from below.\n\nShe sees what you\u0027ve done. For a moment she only stares, hands still full of useless mud. Then she drops it and lunges. She\u0027s strong from years of this work and her fists find your chest, your jaw, blows without technique but full of weight. You go down into the water and she\u0027s on top of you, pressing your face into the silt, and you taste the fen, thick and old and furious. The dike gives with a sound like tearing cloth. The flood hits you both, a wall of brown water that sweeps her off and carries you ten feet before you find bottom.\n\nWhen you surface, coughing, she\u0027s already wading toward what remains of her home. The paddies are gone, merged into a single sheet of water reflecting white sky. You pull yourself onto the path and lie there, ribs aching, face throbbing, clothes heavy with silt",
               "mechanics": [
-                "damage_spirits trivial",
-                "damage_health small"
+                "damage_spirits 1",
+                "damage_health 2"
               ]
             }
           }
@@ -3114,7 +2973,7 @@
           "single": {
             "text": "You step forward and loosen your purse. The merchant watches, amused, as you count the coin onto the reed mat. His amusement curdles into something harder when the stack rises to match the sum written in his ledger. He blinks, mouth slack, the careful lines of his face collapsing into something unguarded and raw.\n\nThe expression lasts only a moment. It smooths away, replaced by a smile that sits crooked and knowing on his lips. \u0022I was like you once,\u0022 he says, gathering your coin with gloved fingers. The metal clinks softly as he stacks it into a neat column. \u0022I wanted to be the hero, saving these wretched peasants. A year out here in the borderlands will cure you of that.\u0022 He regards the pile, then pushes it back across the mat toward you with deliberate care. \u0022Keep your coin, friend. You will need it. Hard times to come.\u0022\n\nHe draws a long breath, gaze sliding past you to the villagers beyond. \u0022I will see these folks through, just this once.\u0022 He pauses, \u0022not a favor to you, but to the man I once was.\u0022 The contract rustles as he rolls it tight and tucks it into his satchel. He waves a hand, dismissive, the gesture final. \u0022Now get out of here before I make another bad decision.\u0022",
             "mechanics": [
-              "heal_spirits small"
+              "heal_spirits 2"
             ]
           }
         },
@@ -3126,8 +2985,8 @@
           "single": {
             "text": "You take the parchment from beneath its stones and trace the clauses with a careful eye. The ink has blurred in places, true, but the structure remains sound: three seals of the Merchant Guild pressed into wax, each impression crisp and deliberate; the terms of advance and repayment rendered in the formulaic language of commercial law; the interest schedule ascending in neat columns; the waiver of force majeure signed in the elder\u0027s own hand. You read the exclusivity provision twice. It is comprehensive. It is binding.\n\nYou set the contract down and meet the elder\u0027s gaze. The silence stretches. Around the pavilion the villagers shift, leather creaking, breath held. You speak plainly: the agreement is sound, the debt is owed, and the Guild\u0027s claim is just. That the western channels failed is misfortune, but misfortune does not void obligation. The merchant extended coin in good faith; the village accepted it with open hands. Now the terms must be honored, or the consequences will follow with the same inevitability as spring floods.\n\nThe elder\u0027s face hardens, not with surprise but with the confirmation of something already suspected. The merchant permits himself a small, measured nod. He reopens his ledger and begins to record the disposition of the matter, quill scratching soft and methodical against vellum. The villagers do not shout. They turn away, shoulders bent, already calculating what can be sold, what can be pledged, what small and bitter surrenders the season ahead will demand.\n\nThe merchant nods graciously, extending you the customary consulting fee.",
             "mechanics": [
-              "heal_spirits trivial",
-              "give_gold small"
+              "heal_spirits 1",
+              "give_gold 2"
             ]
           }
         },
@@ -3143,14 +3002,14 @@
                 "condition": "check mercantile medium",
                 "text": "You lift the contract from its bed of river stones. The parchment is stiff beneath your fingers, edges water-stained and curling. The script runs dense and tight, clause nested within clause like fish traps sunk one inside another. Each sentence coils back upon itself, laden with conditions and exceptions that seem to multiply as you read. The merchant\u0027s guild employs no fools to draft such instruments.\n\nYou trace the lines again, slower. Your eyes ache from following the serpentine text. The terms shift and qualify, hedging every obligation, foreclosing every exit. You are nearly ready to set the thing down, to admit defeat, when a peculiar phrasing snags your attention. There, in the third subsection of the yield clause: payment calculated as a *residual proportion* of catch taken from designated channels. If the western channels yielded nothing, the residual collapses to near nothing. A handful of coppers, perhaps. Barely sufficient to pay the merchant\u0027s passage to this place, let alone the sum he now demands.\n\nYou speak the clause aloud, voice cutting through the pavilion\u0027s tense quiet. The merchant\u0027s hand darts out. He tears the parchment from your grasp, holds it close to his face. His lips move soundlessly. His brow furrows deep, color rising at his collar. You brace yourself for his fury, for whatever retribution the guild visits upon those who obstruct its commerce. Instead, he exhales slowly. His shoulders settle. He rolls the contract with deliberate care and meets your gaze with something almost like respect. \u0022Well played,\u0022 he says. \u0022The error is mine. I will face the consequences.\u0022 He pauses, weighing you with cool appraisal. \u0022You have a sharp eye. You will go far.\u0022",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You take up the contract, fingers tracing the cramped columns of script while the merchant observes with folded hands. The parchment is thick, expensive; the sort of document that carries weight beyond its words. You think you have found it in the third clause, the one concerning seasonal variance, but before you can voice the thought the merchant inclines his head and points to the margin notation, explaining in measured tones how the subsidiary provision negates your interpretation. His voice carries the patience of a tutor addressing a slow pupil.\n\nYou try again, seizing upon the language of \u0022navigable channels.\u0022 Surely the western reaches, choked with silt and weed, cannot qualify. The merchant does not sigh, but something in his stillness suggests he has heard this before. He gestures to an addendum, its seal pressed so deep the wax has split the fiber, and reads aloud the definition inscribed there. Each word lands with the certainty of a hammer stroke. You scan the remaining paragraphs, fingers growing clumsy, seeking some crack in the edifice of language. There must be something. The elder watches you, and you feel the weight of her expectation like a stone upon your back. But the contract yields nothing; every avenue closes, every hope collapses into qualifications and exceptions nested like traps within traps.\n\nAt last you set the parchment down, your hands uncertain where to rest. The merchant permits himself a small, tight smile. \u0022Well,\u0022 he says, his voice carrying across the pavilion, \u0022if this august merchant can find nothing amiss, surely the contract is ironclad.\u0022 He spreads his hands, a gesture of patient magnanimity. \u0022If we are done with this diversion, let us return to the matter of payment.\u0022 The villagers\u0027 muttering has ceased. They watch you depart from beneath the pavilion, and you cannot meet the elder\u0027s gaze as you go.",
               "mechanics": [
-                "damage_spirits medium"
+                "damage_spirits 3"
               ]
             }
           }
@@ -3180,14 +3039,14 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small"
+                "rem_gold 2"
               ]
             }
           }
@@ -3204,15 +3063,15 @@
                 "condition": "check combat trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -3229,15 +3088,15 @@
                 "condition": "check cunning trivial",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits trivial"
+                "damage_health 1",
+                "damage_spirits 1"
               ]
             }
           }
@@ -3268,14 +3127,14 @@
                 "text": "You rest your hand upon the canvas satchel, not grasping, not yet, but with enough weight that the trader\u0027s eyes fix upon it. The hand bears your Merchant Guild seal, turned now to catch what light filters through the reed haze.\n\n\u0022You have come by some guild property, my friend.\u0022 Your voice carries no heat, only the flat certainty of stone. \u0022You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do.\u0022 You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. \u0022Consider this a finder\u0027s fee. I will see that the kit is returned to the guild hall in Aldgate.\u0022\n\nThe trader\u0027s face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer\u0027s kit rests in your hands now, its leather still warm from where he clutched it.",
                 "mechanics": [
                   "add_item cartographers_kit",
-                  "rem_gold small"
+                  "rem_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "He listens to your reasoning with the expression of a man who has heard it all before. When you finish, he wraps the hide back into his bundle with slow, deliberate movements. Says the price stands or he keeps it. Says there are buyers upriver who understand what the thing is worth, who don\u0027t waste his time. He could leave right now.\n\nYou try once more, softer, meeting him somewhere closer to his number. He doesn\u0027t even respond. Just settles into the punt and lifts his pole, pushing away from the path with a grunt of effort. The current takes him quickly, and he doesn\u0027t look back. Within moments he\u0027s around the bend, gone into the reed-maze with your last chance at the kit.",
               "mechanics": [
-                "damage_spirits trivial"
+                "damage_spirits 1"
               ]
             }
           }
@@ -3300,8 +3159,8 @@
             "fallback": {
               "text": "You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader\u0027s eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.\n\nYour hand drifts toward the bundle. The pole sweeps through the humid air with shocking swiftness, the waterlogged wood striking your shoulder and chest with the weight of a falling timber. The blow hurls you sideways from the raised path. You plunge into the muck below, the brackish water closing over your head, thick with decay and the writhing roots of reeds. You thrash upward, gasping, fingers clawing through the slime until you find purchase on something solid. When you drag yourself back toward the path, water streaming from your garments, the trader has already set his pole against the muddy bottom. The punt glides away through the reeds, smooth and certain. He calls back over his shoulder, voice carrying across the water: \u0022Stay dry, outlander.\u0022 The words hang in the wet air long after he vanishes beyond the curtain of rushes.",
               "mechanics": [
-                "damage_spirits small",
-                "damage_health trivial"
+                "damage_spirits 2",
+                "damage_health 1"
               ]
             }
           }
@@ -3353,15 +3212,15 @@
                 "condition": "check bushcraft medium",
                 "text": "You step off the path before the old woman can object, moving toward the silent channel with the confidence of someone who has read water before. She makes a sound between a grunt and a laugh. The mud here holds your weight where it looks like it shouldn\u0027t, and the water runs shallow over gravel beds that ring slightly under your boots. Reeds close behind you like a door shutting.\n\nThe channel winds south then west, meandering but passable, and you read it by the silence; where frogs fall quiet, the ground rises enough to walk. Twice you pause at junctions, waiting for the sound to tell you which branch goes deep. It takes longer than the direct path would have, but you emerge on the western side of the paddies with only your calves wet, joining the raised path again well before the village. Behind you, the frogs resume their evening sermon.",
                 "mechanics": [
-                  "heal_spirits small"
+                  "heal_spirits 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You step confidently toward the southern channel and the mud greets you like an old enemy. Your first step sinks past the ankle. Your second plunges you to the knee in cold water that smells of rot and clay. The silence you mistook for shallow ground is simply where the frogs have learned not to nest. The water here is deep and still, thick with silt that sucks at your legs like a living thing.\n\nBehind you, someone laughs. Not cruel, but not kind either. You haul yourself back toward the path, reeds slapping your face, boots squelching obscenely with each step. The old woman hasn\u0027t moved from her stool. When you finally drag yourself back onto solid ground, soaked to the waist and decorated with mud and waterweed, she taps her stick once. \u0022Most outsiders choose wrong,\u0022 she repeats, as though you\u0027ve simply confirmed old wisdom. You wait the full time after all, watching the water drain while your clothes refuse to dry in the thick air.",
               "mechanics": [
-                "damage_health trivial",
-                "damage_spirits small"
+                "damage_health 1",
+                "damage_spirits 2"
               ]
             }
           }
@@ -3374,7 +3233,7 @@
           "single": {
             "text": "The old woman\u0027s expression doesn\u0027t change when you make your case. Coin offered, schedule explained, importance implied. She listens the way stone listens to rain. When you finish, she taps her stick twice. The workers behind her stop moving. One of them, a broad-shouldered man with gray in his beard, wades out of the paddy and stands near his elder, saying nothing but present in the way that changes mathematics.\n\n\u0022Gate stays closed,\u0022 she says, each word deliberate as a hammer stroke. \u0022Water doesn\u0027t care about your coin. Dike doesn\u0027t care about your hurry. East paddies flood if I open now, and that\u0027s a season\u0027s rice drowned for someone else\u0027s schedule.\u0022 She shifts on her stool, settling in. \u0022You want to swim, swim. Want to wait, wait. Want to try moving me?\u0022 She glances at the worker beside her, then back to you. \u0022My grandson here would enjoy the exercise.\u0022\n\nYou move to try to traverse the swamp, but recognize the futility. You find a stump and fix the woman in your gaze, making certain she knows your annoyance. A few hours pass and the gate opens, just as promised.",
             "mechanics": [
-              "damage_spirits small",
+              "damage_spirits 2",
               "skip_time evening"
             ]
           }
@@ -3387,7 +3246,7 @@
           "single": {
             "text": "You wade into the paddy before asking permission, mud sucking at your boots, and take a place beside the workers shoring up the dike. For a moment no one speaks. Then the nearest one, a woman with strong hands and knowing eyes, shows you without words where to pack mud, how to angle it so the water\u0027s weight becomes the seal\u0027s strength. The work is harder than it looks. Your back complains. The mud is heavy and cold and smells of fish and old roots.\n\nBut you feel the moment they accept you. Not as one of them, but as someone willing to stand in their water and do their work without complaint. The old woman doesn\u0027t praise you, but when the draining is complete and she works the gate mechanism, she nods toward the path. \u0022Go on, then. You paid your way.\u0022 One of the younger workers grins, gaps in his teeth, and claps your shoulder with a muddy hand. You reach the village as the lamps are being lit, soaked and tired but arriving with the dignity of someone who earned passage rather than purchased or demanded it. Your clothes will dry. The ache in your back is the cost of traveling honestly through country that doesn\u0027t owe you anything.",
             "mechanics": [
-              "heal_spirits small",
+              "heal_spirits 2",
               "skip_time evening"
             ]
           }
@@ -3413,7 +3272,7 @@
           "single": {
             "text": "You step into the center of the channel and raise your hand in greeting. Your voice carries across the water, casual, asking about the fishing or the depth ahead or anything that sounds like an outsider\u0027s question. The two figures slow their poling. One of them answers, wary but polite, the way locals do when they\u0027re deciding whether you\u0027re trouble. You keep talking, gesturing back the way you came, describing a bird you saw or a marker you\u0027re looking for. Anything to hold their eyes on you.\n\nThe woman is gone. You catch the faintest rustle of reeds closing behind her, then nothing. The pursuers pole closer, their faces clearer now. They\u0027re young, maybe brothers, with the hard hands of fish-trap builders. One of them asks if you\u0027ve seen anyone else in the channels. You tell them no, and the lie sits easy in your mouth because you don\u0027t know what she took or why they want it back. They exchange a look, then push past you without another word, poling hard toward the eastern channels where the water opens up. They think she went that way. By the time they realize their mistake, she\u0027ll be deep in the reeds where the paths only animals know.\n\nThe frogs start up again, slow at first, then building to their usual roar.",
             "mechanics": [
-              "heal_spirits trivial"
+              "heal_spirits 1"
             ]
           }
         },
@@ -3425,7 +3284,7 @@
           "single": {
             "text": "You pole to the side of the channel, making room. The woman\u0027s face hardens into something beyond fear. She presses the bundle tighter to her chest and shifts her weight, ready to run or fight or both. The two figures round the bend and see her immediately. They don\u0027t call out, don\u0027t threaten. They just spread apart, blocking both ends of the channel with the practiced ease of men who\u0027ve herded livestock through water.\n\nOne of them speaks her name. Aya. It sounds like a condemnation. She shakes her head, backing against the stilt-post, the gutting knife finally clearing its sheath. But she\u0027s waist-deep in water and they\u0027re in boats, and the arithmetic of that is written in her expression. The other man reaches into his punt and draws out a weighted net, the kind used for stubborn fish. They\u0027re not going to hurt her. They\u0027re going to take what she\u0027s holding and bring her back, and whatever punishment waits will be a village matter, handled in front of everyone who matters.\n\nOne of the men poles close enough to pry the oiled cloth from her grip. He unwraps it carefully, reverently, and you see what she took: a carved marker post, old wood dark as mud, wrapped in cords that might have been red once. He nods to his companion and they haul her into their punt like a stubborn catch.\n\nThey pole past you without acknowledgment. You wonder if you should have done something, but it\u0027s too late now.",
             "mechanics": [
-              "damage_spirits trivial"
+              "damage_spirits 1"
             ]
           }
         },
@@ -3464,16 +3323,16 @@
                 "condition": "check negotiation easy",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold small",
-                "damage_spirits small"
+                "rem_gold 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -3490,16 +3349,16 @@
                 "condition": "check combat easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -3516,16 +3375,16 @@
                 "condition": "check cunning easy",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits small",
-                  "give_gold small"
+                  "heal_spirits 2",
+                  "give_gold 2"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health small",
-                "damage_spirits small"
+                "damage_health 2",
+                "damage_spirits 2"
               ]
             }
           }
@@ -3562,7 +3421,7 @@
             "fallback": {
               "text": "You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind. Only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun\u0027s pale climb you have lost the night, and perhaps something more.",
               "mechanics": [
-                "damage_health small",
+                "damage_health 2",
                 "skip_time morning"
               ]
             }
@@ -3580,7 +3439,7 @@
                 "condition": "check combat hard",
                 "text": "The sailcloth tears away. Something fills the doorway; too tall, joints wrong. Pale skin stretched tight. Fingers tipped with yellowed bone hooks. A mouth that opens too wide, teeth jagged and uneven. It drops into the shallows. The water barely reaches its knees.\nIt lunges. You slip aside. The hooks slice past your throat, close enough that you smell old blood and swamp rot. It is quick but clumsy. You ready your weapon. When it overreaches, you strike. You hit the monster hard with your weapon.\nA thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.\nThe crack echoes. It falters. You retrieve your weapon and cut its throat in a single stroke. It collapses into the black water, which closes and stills.\nThe hermit is gone. Only the low cookfire and a steaming pot remain. You take what supplies you can and leave the shack behind, bones clicking faintly in the wind as the fen swallows you.",
                 "mechanics": [
-                  "give_gold medium"
+                  "give_gold 3"
                 ]
               }
             ],
@@ -3630,16 +3489,16 @@
                 "condition": "check negotiation hard",
                 "text": "You convince them!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You fail!",
               "mechanics": [
-                "rem_gold medium",
-                "damage_spirits medium"
+                "rem_gold 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -3656,16 +3515,16 @@
                 "condition": "check combat medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium"
+                "damage_health 3",
+                "damage_spirits 3"
               ]
             }
           }
@@ -3682,16 +3541,16 @@
                 "condition": "check cunning medium",
                 "text": "You win!",
                 "mechanics": [
-                  "heal_spirits medium",
-                  "give_gold medium"
+                  "heal_spirits 3",
+                  "give_gold 3"
                 ]
               }
             ],
             "fallback": {
               "text": "You lose!",
               "mechanics": [
-                "damage_health medium",
-                "damage_spirits medium"
+                "damage_health 3",
+                "damage_spirits 3"
               ]
             }
           }

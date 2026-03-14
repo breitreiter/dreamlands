@@ -22,7 +22,7 @@ choices:
 
         "You worship the Worm Below," she announces, satisfied. "Only by another name." The others nod. You feel the weight of their conclusion settle over you like the barley crown itself, but you nod in return, eager to be gone. Let them believe what they will. The young woman lowers the dagger. Another villager presses a cloth sack into your arms, heavier than the first. They step aside. The road opens before you. You walk through their ring, and no one follows.
         +add_random_items 3 food
-        +heal_spirits small
+        +heal_spirits 2
     } @else {
         You let the dagger remain in the young woman's outstretched hands. Your voice cuts across the clearing, sharp with disgust. Whatever ritual they mean to enact here, you will have no part of it. You speak of Shemned, your own harvest god, whose priests pour wine rather than darker things, who demands no blade be lifted save to cut grain from the stalk.
 
@@ -31,7 +31,7 @@ choices:
         Hands close around your arms before you can pivot toward the road. You are hauled backward, your heels dragging furrows through the dust. The circle parts and reforms behind you. They march you to the edge of the clearing where the wheat begins, and there they release you with a shove that sends you stumbling into the stalks. One of them, the woman with the braided flowers, reaches out and plucks the barley wreath from your head. She turns away without a word.
 
         Behind you, the villagers drift back toward their table. The cider is poured. Bread is broken. They do not look in your direction again.
-        +damage_spirits small
+        +damage_spirits 2
     }
 * Accept the dagger = Take part in the ritual
     @if check bushcraft medium {
@@ -43,7 +43,7 @@ choices:
 
         The evening unfolds in shared bread and story. You sit among them as the light fades, their voices weaving tales of seasons past while cider passes hand to hand. The barley wreath remains on your head, and no one moves to take it back.
         +add_random_items 3 food
-        +heal_spirits medium
+        +heal_spirits 3
         +skip_time morning
     } @else {
         You walk with grim determination to the stone bowl. Your fingers close around the dagger's pitted hilt. You hold out your hand, palm upward, and draw the rusted edge across the flesh in one deliberate stroke. The blade bites deep; pain flares white and immediate. Blood wells thick and dark from the gash, spilling over your fingers in hot rivulets. You turn your hand and let the crimson flow pour into the bowl, where it mingles with whatever lies within.
@@ -51,7 +51,7 @@ choices:
         The villagers stare, their smiles frozen. The clearing falls silent save for the drip of blood striking liquid. A small child tugs at her mother's skirt and asks, voice clear in the stillness, "Why is that person bleeding in the soup?"
 
         The woman with flowers in her braids blinks. Another villager clears his throat. Someone mutters about foreign customs, ancient ways from distant lands. They nod to one another, uncertainty masked by forced courtesy. Two men lift the bowl with careful hands and carry it behind the table, tilting it to spill its contents into the wheat. The young woman retrieves the dagger from your slack grip, her expression carefully blank. You bind your hand in a strip torn from your cloak, the wound throbbing with each beat of your heart. At the first lull in their murmured conversation, you turn and walk back to the road, your departure unmarked by farewell.
-        +damage_spirits small
-        +damage_health trivial
+        +damage_spirits 2
+        +damage_health 1
     }
 

@@ -77,10 +77,10 @@ public class ParserTests
             * Fight the beast
             @if check combat hard {
             You strike true!
-            +damage_health small
+            +damage_health 2
             } @else {
             The beast overpowers you.
-            +damage_health medium
+            +damage_health 3
             }
             """;
 
@@ -96,11 +96,11 @@ public class ParserTests
         Assert.Equal("check combat hard", cond.Branches[0].Condition);
         Assert.Contains("strike true", cond.Branches[0].Outcome.Text);
         Assert.Single(cond.Branches[0].Outcome.Mechanics);
-        Assert.Equal("damage_health small", cond.Branches[0].Outcome.Mechanics[0]);
+        Assert.Equal("damage_health 2", cond.Branches[0].Outcome.Mechanics[0]);
 
         Assert.NotNull(cond.Fallback);
         Assert.Contains("overpowers", cond.Fallback!.Text);
-        Assert.Equal("damage_health medium", cond.Fallback.Mechanics[0]);
+        Assert.Equal("damage_health 3", cond.Fallback.Mechanics[0]);
     }
 
     [Fact]
@@ -142,7 +142,7 @@ public class ParserTests
             choices:
             * Take the treasure
             You grab the gold.
-            +give_gold large
+            +give_gold 4
             +add_tag found_treasure
             """;
 
@@ -151,7 +151,7 @@ public class ParserTests
 
         var mechanics = result.Encounter!.Choices[0].Single!.Part.Mechanics;
         Assert.Equal(2, mechanics.Count);
-        Assert.Equal("give_gold large", mechanics[0]);
+        Assert.Equal("give_gold 4", mechanics[0]);
         Assert.Equal("add_tag found_treasure", mechanics[1]);
     }
 

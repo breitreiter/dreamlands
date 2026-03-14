@@ -20,12 +20,12 @@ choices:
 
     The trader's face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer's kit rests in your hands now, its leather still warm from where he clutched it.
     +add_item cartographers_kit
-    +rem_gold small
+    +rem_gold 2
   } @else {
     He listens to your reasoning with the expression of a man who has heard it all before. When you finish, he wraps the hide back into his bundle with slow, deliberate movements. Says the price stands or he keeps it. Says there are buyers upriver who understand what the thing is worth, who don't waste his time. He could leave right now.
 
     You try once more, softer, meeting him somewhere closer to his number. He doesn't even respond. Just settles into the punt and lifts his pole, pushing away from the path with a grunt of effort. The current takes him quickly, and he doesn't look back. Within moments he's around the bend, gone into the reed-maze with your last chance at the kit.
-    +damage_spirits trivial
+    +damage_spirits 1
   }
 
 * Steal it = Wait until he's distracted, then take the kit and run
@@ -39,8 +39,8 @@ choices:
     You gesture toward the lamp oil, voice casual, asking after its quality and whether it burns clean in the marsh air. The trader's eyes remain fixed upon you, unmoving, while his hand settles upon the punt pole at his side. His body shifts, weight sinking into his haunches, and you recognize the posture of a man who has spent years watching for thieves along these waterways.
 
     Your hand drifts toward the bundle. The pole sweeps through the humid air with shocking swiftness, the waterlogged wood striking your shoulder and chest with the weight of a falling timber. The blow hurls you sideways from the raised path. You plunge into the muck below, the brackish water closing over your head, thick with decay and the writhing roots of reeds. You thrash upward, gasping, fingers clawing through the slime until you find purchase on something solid. When you drag yourself back toward the path, water streaming from your garments, the trader has already set his pole against the muddy bottom. The punt glides away through the reeds, smooth and certain. He calls back over his shoulder, voice carrying across the water: "Stay dry, outlander." The words hang in the wet air long after he vanishes beyond the curtain of rushes.
-    +damage_spirits small
-    +damage_health trivial
+    +damage_spirits 2
+    +damage_health 1
   }
 
 * Let him leave = Step aside and watch him pole away

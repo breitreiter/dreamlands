@@ -219,11 +219,9 @@ ItemInfo BuildItemInfo(ItemInstance i, int playerX = 0, int playerY = 0)
         Name = i.DisplayName,
         Description = i.Description ?? (def != null ? FormatItemDescription(def) : null),
         Type = def?.Type.ToString().ToLowerInvariant() ?? "",
-        Cost = def?.Cost != null ? balance.Character.CostMagnitudes.GetValueOrDefault(def.Cost.Value) : null,
+        Cost = def?.Cost,
         SkillModifiers = def?.SkillModifiers.ToDictionary(kv => kv.Key.ScriptName(), kv => kv.Value) ?? [],
-        ResistModifiers = def?.ResistModifiers.ToDictionary(
-            kv => kv.Key,
-            kv => balance.Character.ResistBonusMagnitudes.GetValueOrDefault(kv.Value)) ?? [],
+        ResistModifiers = def?.ResistModifiers.ToDictionary(kv => kv.Key, kv => kv.Value) ?? [],
         ForagingBonus = def?.ForagingBonus ?? 0,
         Cures = def?.Cures.ToList() ?? [],
         IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,

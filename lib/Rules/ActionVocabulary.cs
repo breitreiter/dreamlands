@@ -16,8 +16,6 @@ public enum ArgType
     Skill,
     /// <summary>Must be a valid <see cref="Difficulty"/> script name.</summary>
     Difficulty,
-    /// <summary>Must be a valid <see cref="Magnitude"/> script name.</summary>
-    Magnitude,
     /// <summary>Must be a valid <see cref="TimePeriod"/> script name.</summary>
     TimePeriod,
     /// <summary>A free-form identifier (item, tag, encounter, or condition id).</summary>
@@ -134,31 +132,31 @@ public sealed class ActionVerb
 
     public static readonly ActionVerb GiveGold = new("give_gold",
         VerbUsage.Mechanic, "Give player gold",
-        new ArgDef("amount", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     public static readonly ActionVerb RemGold = new("rem_gold",
         VerbUsage.Mechanic, "Take player's gold",
-        new ArgDef("amount", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     // ── Health ──────────────────────────────────────────────────
 
     public static readonly ActionVerb DamageHealth = new("damage_health",
         VerbUsage.Mechanic, "Reduce player health",
-        new ArgDef("magnitude", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     public static readonly ActionVerb Heal = new("heal",
         VerbUsage.Mechanic, "Restore player health",
-        new ArgDef("magnitude", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     // ── Spirits ────────────────────────────────────────────────
 
     public static readonly ActionVerb DamageSpirits = new("damage_spirits",
         VerbUsage.Mechanic, "Reduce player spirits",
-        new ArgDef("magnitude", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     public static readonly ActionVerb HealSpirits = new("heal_spirits",
         VerbUsage.Mechanic, "Restore player spirits",
-        new ArgDef("magnitude", ArgType.Magnitude));
+        new ArgDef("amount", ArgType.Int));
 
     // ── Skills ──────────────────────────────────────────────────
 
@@ -338,8 +336,6 @@ public sealed class ActionVerb
                 ? null : $"'{value}' is not a valid skill. Expected one of: {string.Join(", ", Skills.All.Select(s => s.ScriptName))}.",
             ArgType.Difficulty => Difficulties.IsValidScriptName(value)
                 ? null : $"'{value}' is not a valid difficulty. Expected one of: {string.Join(", ", Difficulties.All.Select(d => d.ScriptName))}.",
-            ArgType.Magnitude => Magnitudes.IsValidScriptName(value)
-                ? null : $"'{value}' is not a valid magnitude. Expected one of: {string.Join(", ", Magnitudes.All.Select(m => m.ScriptName))}.",
             ArgType.TimePeriod => TimePeriods.IsValidScriptName(value)
                 ? null : $"'{value}' is not a valid time period. Expected one of: {string.Join(", ", TimePeriods.All.Select(t => t.ScriptName))}.",
             ArgType.Id => string.IsNullOrWhiteSpace(value)

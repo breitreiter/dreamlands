@@ -16,7 +16,7 @@ choices:
   The woman is gone. You catch the faintest rustle of reeds closing behind her, then nothing. The pursuers pole closer, their faces clearer now. They're young, maybe brothers, with the hard hands of fish-trap builders. One of them asks if you've seen anyone else in the channels. You tell them no, and the lie sits easy in your mouth because you don't know what she took or why they want it back. They exchange a look, then push past you without another word, poling hard toward the eastern channels where the water opens up. They think she went that way. By the time they realize their mistake, she'll be deep in the reeds where the paths only animals know.
 
   The frogs start up again, slow at first, then building to their usual roar.
-  +heal_spirits trivial
+  +heal_spirits 1
 
 * Let them pass = Allow the pursuers to find what they're hunting
   You pole to the side of the channel, making room. The woman's face hardens into something beyond fear. She presses the bundle tighter to her chest and shifts her weight, ready to run or fight or both. The two figures round the bend and see her immediately. They don't call out, don't threaten. They just spread apart, blocking both ends of the channel with the practiced ease of men who've herded livestock through water.
@@ -26,7 +26,7 @@ choices:
   One of the men poles close enough to pry the oiled cloth from her grip. He unwraps it carefully, reverently, and you see what she took: a carved marker post, old wood dark as mud, wrapped in cords that might have been red once. He nods to his companion and they haul her into their punt like a stubborn catch.
 
   They pole past you without acknowledgment. You wonder if you should have done something, but it's too late now.
-  +damage_spirits trivial
+  +damage_spirits 1
 
 * Demand to know what she's taken = Confront the woman and insist on an explanation before you choose
   She stares at you like you've lost your mind. The punt pole taps closer behind you, steady and inevitable. She shakes her head, not in refusal but in disbelief that you'd waste the seconds she has left asking questions. 

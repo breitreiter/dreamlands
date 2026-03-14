@@ -61,42 +61,42 @@ public static class Mechanics
 
     static MechanicResult ApplyDamageHealth(List<string> args, PlayerState state, BalanceData balance)
     {
-        var amount = ResolveMagnitude(args, balance.Character.DamageMagnitudes);
+        var amount = ParseAmount(args);
         state.Health = Math.Max(0, state.Health - amount);
         return new MechanicResult.HealthChanged(-amount, state.Health);
     }
 
     static MechanicResult ApplyHeal(List<string> args, PlayerState state, BalanceData balance)
     {
-        var amount = ResolveMagnitude(args, balance.Character.DamageMagnitudes);
+        var amount = ParseAmount(args);
         state.Health = Math.Min(state.MaxHealth, state.Health + amount);
         return new MechanicResult.HealthChanged(amount, state.Health);
     }
 
     static MechanicResult ApplyDamageSpirits(List<string> args, PlayerState state, BalanceData balance)
     {
-        var amount = ResolveMagnitude(args, balance.Character.DamageMagnitudes);
+        var amount = ParseAmount(args);
         state.Spirits = Math.Max(0, state.Spirits - amount);
         return new MechanicResult.SpiritsChanged(-amount, state.Spirits);
     }
 
     static MechanicResult ApplyHealSpirits(List<string> args, PlayerState state, BalanceData balance)
     {
-        var amount = ResolveMagnitude(args, balance.Character.DamageMagnitudes);
+        var amount = ParseAmount(args);
         state.Spirits = Math.Min(state.MaxSpirits, state.Spirits + amount);
         return new MechanicResult.SpiritsChanged(amount, state.Spirits);
     }
 
     static MechanicResult ApplyGiveGold(List<string> args, PlayerState state, BalanceData balance)
     {
-        var amount = ResolveMagnitude(args, balance.Character.DamageMagnitudes);
+        var amount = ParseAmount(args);
         state.Gold += amount;
         return new MechanicResult.GoldChanged(amount, state.Gold);
     }
 
     static MechanicResult ApplyRemGold(List<string> args, PlayerState state, BalanceData balance)
     {
-        var amount = ResolveMagnitude(args, balance.Character.DamageMagnitudes);
+        var amount = ParseAmount(args);
         state.Gold = Math.Max(0, state.Gold - amount);
         return new MechanicResult.GoldChanged(-amount, state.Gold);
     }
@@ -391,12 +391,9 @@ public static class Mechanics
         return new MechanicResult.DungeonFinished();
     }
 
-    /// <summary>Resolve a magnitude argument to an integer value from a lookup table.</summary>
-    static int ResolveMagnitude(List<string> args, IReadOnlyDictionary<Magnitude, int> table)
+    static int ParseAmount(List<string> args)
     {
         if (args.Count < 1) return 1;
-        var mag = Magnitudes.FromScriptName(args[0]);
-        if (mag == null) return 1;
-        return table.GetValueOrDefault(mag.Value, 1);
+        return int.TryParse(args[0], out var n) && n > 0 ? n : 1;
     }
 }

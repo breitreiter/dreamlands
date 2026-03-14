@@ -130,9 +130,9 @@ public class BundleTests
                     "conditional": {
                         "preamble": "You draw your sword.",
                         "branches": [
-                            { "condition": "check combat hard", "text": "Victory!", "mechanics": ["give_gold large"] }
+                            { "condition": "check combat hard", "text": "Victory!", "mechanics": ["give_gold 4"] }
                         ],
-                        "fallback": { "text": "Defeat.", "mechanics": ["damage_health small"] }
+                        "fallback": { "text": "Defeat.", "mechanics": ["damage_health 2"] }
                     },
                     "single": null
                 }]

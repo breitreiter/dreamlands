@@ -92,7 +92,7 @@ public class ChoicesTests
                 Part = new OutcomePart
                 {
                     Text = "You rest by the fire.",
-                    Mechanics = ["heal small"]
+                    Mechanics = ["heal 2"]
                 }
             }
         };
@@ -104,7 +104,7 @@ public class ChoicesTests
         Assert.Null(resolved.CheckResult);
         Assert.Equal("You rest by the fire.", resolved.Text);
         Assert.Single(resolved.Mechanics);
-        Assert.Equal("heal small", resolved.Mechanics[0]);
+        Assert.Equal("heal 2", resolved.Mechanics[0]);
     }
 
     [Fact]

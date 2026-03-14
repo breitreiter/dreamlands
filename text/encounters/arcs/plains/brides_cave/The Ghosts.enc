@@ -1,4 +1,5 @@
 The Ghosts
+[vignette dungeons/brides_cave]
 
 The passage opens into a vast chamber. Water drips somewhere in the darkness beyond your light.
 
@@ -23,7 +24,7 @@ choices:
     The figures recoil. The overlapping voices rise into a keening wail that echoes from every wall, multiplying, splitting into harmonics that scrape against your ears. The sound climbs higher, becomes thin, becomes nothing. The white shapes blur, their edges bleeding into shadow and stone. Then they are gone. Only silence remains, profound and absolute.
 
     The chamber stands empty. The tally marks remain, but whatever hand carved them has released its hold. Whatever dwelt here, whatever waited and counted and remembered, has passed beyond reach. The cave is yours now. No one need fear this darkness again.
-    +heal_spirits medium
+    +heal_spirits 3
     +finish_dungeon
   } @else {
     The cold descends like a predator's jaws. Your fingers tighten on the hilt; you draw steel, the rasp of metal loud in the dripping silence.
@@ -32,7 +33,7 @@ choices:
 
     When you wake, you lie sprawled on sun-warmed earth outside the cave mouth. The light is wrong, shifted hours forward, the shadows long and slanting. Your limbs feel hollow, your throat parched. The cave yawns behind you, silent and patient. You rise on unsteady legs and turn your back to it. You do not look behind. You do not return.
     +skip_time morning no_sleep no_meal
-    +damage_spirits small
+    +damage_spirits 2
     +finish_dungeon
   }
 

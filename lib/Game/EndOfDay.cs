@@ -332,10 +332,10 @@ public static class EndOfDay
 
             int healthLost = 0, spiritsLost = 0;
 
-            if (def.HealthDrain is { } hMag)
-                healthLost = balance.Character.DamageMagnitudes.GetValueOrDefault(hMag, 0);
-            if (def.SpiritsDrain is { } sMag)
-                spiritsLost = balance.Character.DamageMagnitudes.GetValueOrDefault(sMag, 0);
+            if (def.HealthDrain is { } hDrain)
+                healthLost = hDrain;
+            if (def.SpiritsDrain is { } sDrain)
+                spiritsLost = sDrain;
 
             if (healthLost > 0 || spiritsLost > 0)
             {

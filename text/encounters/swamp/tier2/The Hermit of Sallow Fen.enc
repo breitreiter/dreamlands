@@ -32,7 +32,7 @@ choices:
     +add_random_items 3 food
   } @else {
     You wake retching in cold water beneath an empty sky, the taste of bitter herbs still coating your tongue and your limbs heavy as waterlogged wood. The clearing is bare. No stilts, no shack, no bones clicking in the wind. Only disturbed mud and the half-remembered shape of something vast and wrong that moved through your fever dreams. By the sun's pale climb you have lost the night, and perhaps something more.
-    +damage_health small
+    +damage_health 2
     +skip_time morning
   }
 
@@ -44,7 +44,7 @@ choices:
     A thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.
     The crack echoes. It falters. You retrieve your weapon and cut its throat in a single stroke. It collapses into the black water, which closes and stills.
     The hermit is gone. Only the low cookfire and a steaming pot remain. You take what supplies you can and leave the shack behind, bones clicking faintly in the wind as the fen swallows you.
-    +give_gold medium
+    +give_gold 3
   } @else {
     The sailcloth tears away. A horrid shape fills the door; wrong-jointed, bone-hooked, ghastly mouth splitting wide. It drops into the shallows and lunges.
     You swing your weapon on instinct. The attack skates off its hide. No blood. No pause. A hooked hand snags your shoulder and wrenches you sideways. Another tears through your pack, spilling its contents into the black water.

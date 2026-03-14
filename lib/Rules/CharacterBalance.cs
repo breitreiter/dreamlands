@@ -1,18 +1,9 @@
 namespace Dreamlands.Rules;
 
-/// <summary>Magnitude-to-integer tables and starting stats.</summary>
+/// <summary>Starting stats and balance constants.</summary>
 public sealed class CharacterBalance
 {
     public static readonly CharacterBalance Default = new();
-
-    public IReadOnlyDictionary<Magnitude, int> DamageMagnitudes { get; init; } = new Dictionary<Magnitude, int>
-    {
-        [Magnitude.Trivial] = 1,
-        [Magnitude.Small] = 2,
-        [Magnitude.Medium] = 3,
-        [Magnitude.Large] = 4,
-        [Magnitude.Huge] = 5,
-    };
 
     public int StartingHealth { get; init; } = 20;
     public int StartingSpirits { get; init; } = 20;
@@ -50,26 +41,4 @@ public sealed class CharacterBalance
 
     // Inn pricing: cost per night for multi-night stays (3x trivial food cost)
     public int InnNightlyCost { get; init; } = 9;
-
-    /// <summary>
-    /// Condition resist bonus from gear ResistModifiers. Code enforces per-slot caps:
-    /// big gear (weapon/armor/boots/consumable) up to +5, small gear (tools) up to +3.
-    /// </summary>
-    public IReadOnlyDictionary<Magnitude, int> ResistBonusMagnitudes { get; init; } = new Dictionary<Magnitude, int>
-    {
-        [Magnitude.Trivial] = 1,
-        [Magnitude.Small] = 2,
-        [Magnitude.Medium] = 3,
-        [Magnitude.Large] = 4,
-        [Magnitude.Huge] = 5,
-    };
-
-    public IReadOnlyDictionary<Magnitude, int> CostMagnitudes { get; init; } = new Dictionary<Magnitude, int>
-    {
-        [Magnitude.Trivial] = 3,
-        [Magnitude.Small] = 15,
-        [Magnitude.Medium] = 40,
-        [Magnitude.Large] = 80,
-        [Magnitude.Huge] = 200,
-    };
 }

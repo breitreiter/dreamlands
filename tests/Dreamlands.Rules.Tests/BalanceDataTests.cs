@@ -70,10 +70,10 @@ public class BalanceDataTests
     [Fact]
     public void ActionVerb_Tokenize_SplitsSimpleTokens()
     {
-        var tokens = ActionVerb.Tokenize("damage_health small");
+        var tokens = ActionVerb.Tokenize("damage_health 2");
         Assert.Equal(2, tokens.Count);
         Assert.Equal("damage_health", tokens[0]);
-        Assert.Equal("small", tokens[1]);
+        Assert.Equal("2", tokens[1]);
     }
 
     [Fact]
@@ -128,14 +128,4 @@ public class BalanceDataTests
         Assert.Null(Difficulties.FromScriptName("impossible"));
     }
 
-    [Fact]
-    public void DamageMagnitudes_HasExpectedValues()
-    {
-        var mags = BalanceData.Default.Character.DamageMagnitudes;
-        Assert.Equal(1, mags[Magnitude.Trivial]);
-        Assert.Equal(2, mags[Magnitude.Small]);
-        Assert.Equal(3, mags[Magnitude.Medium]);
-        Assert.Equal(4, mags[Magnitude.Large]);
-        Assert.Equal(5, mags[Magnitude.Huge]);
-    }
 }
