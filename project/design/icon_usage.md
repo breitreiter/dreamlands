@@ -68,7 +68,7 @@ Definitive icon mapping
 - trinket - `ring.svg`
 - hauls - `wooden-crate.svg`
 - food - `pouch-with-beads.svg` 
-- equipment - `camping-tent.svg`
+- tool - `swap-bag.svg`
 - medicine/bandages - `caduceus.svg`
 
 ## Encounters

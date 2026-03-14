@@ -6,7 +6,7 @@ const ITEM_TYPE_ICONS: Record<string, string> = {
   weapon: "sword-brandish.svg",
   armor: "chain-mail.svg",
   boots: "boots.svg",
-  tool: "knapsack.svg",
+  tool: "swap-bag.svg",
   consumable: "pouch-with-beads.svg",
   haul: "wooden-crate.svg",
 };
