@@ -291,7 +291,7 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
               <span className="capitalize">{outcome.skillCheck.skill}</span>
               {" check: "}
               <span className="font-medium">
-                {outcome.skillCheck.rolled}
+                {outcome.skillCheck.rolled - outcome.skillCheck.modifier}
                 {outcome.skillCheck.modifier !== 0 &&
                   ` ${outcome.skillCheck.modifier >= 0 ? "+" : ""}${outcome.skillCheck.modifier}`}
               </span>
