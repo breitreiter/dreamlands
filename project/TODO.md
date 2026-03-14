@@ -11,28 +11,16 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 ### Frontend
 
 - [ ] Landing — connect to server, new game / load game
-- [ ] Daily rest screen
-- [ ] Camp screen death — make the camp screen more dramatic when the player dies
-      (condition drain kills you overnight). Currently shows the same layout as a normal rest.
-- [ ] POI name markers on map — show name plaques for visited settlements/dungeons on the
-      Leaflet map. Needed for trade trip planning. Server sends `visitedPois` in GameResponse,
-      client renders as Leaflet markers. Plan in `project/architecture/poi_markers.md`.
-- [ ] Web UI — flesh out remaining screens, connect to GameServer, real game loop.
+- [ ] Redesign severe condition end-of-day screen
 - [ ] shadcn/tailwind based design system
-- [ ] Clean up rest screen and improve legibility
-- [ ] UX design: Landing screen, Town — Guild Bank
+- [ ] UX design: Town — Guild Bank
 
 ### Map Generation
 
-- [ ] More aggressive mountain settlement placement — aim for at least one per mountain biome
-- [ ] Investigate tier 1 swamp placement — currently lands far from start. May need tier
-      assignment tweaks or biome-aware nudging so early-tier regions stay near the cradle.
 - [ ] Bisect oversized T1 regions — same technique as T3 bisect (TierAssigner splits by
       distance from city), but inner nodes stay T1 and outer nodes become T2. Prevents a
       mega-T1 region from making an entire biome feel safe.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
-- [ ] Fix dungeon sprite scaling (PoiPass shares a scale factor derived from settlement decals;
-      MountainPass uses a hardcoded `PoiScale = 0.32f` — both may be wrong for dungeon art)
 
 ### Rules & Balancing
 
@@ -42,20 +30,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       players to try new branches and pick up fresh storylets.
 - [ ] Market stocking — all outposts must stock bandages. All T3 biome settlements must
       stock the relevant specialist medicine for their biome's severe condition.
-- [ ] Protective gear in markets — pack-carried protective items (heavy_furs, canteen,
-      lattice_ward, etc.) are not stocked anywhere. Players can only get them from
-      encounters. Need market availability so players can prepare for biome hazards.
-- [ ] Treated severe conditions skip penalty — if a severe condition (injured, poisoned,
-      irradiated, lattice sickness) is successfully treated that night, it should not
-      impose its 5 hp drain. Currently treatment cures stacks but the drain still fires
-      if the condition was present at the start of the night.
-- [ ] **Condition resist bonus path** — `ResistModifiers` are `Magnitude` enums (Small/Medium/Large),
-      not integers. No code converts them into numeric check bonuses. Either add Magnitude→int
-      conversion or give items `SkillModifiers` for resist checks. Affects all 6 condition resist types.
-      Analysis in `project/design/gear_gap_analysis.md`.
-- [ ] Foraging rework — foraged food should always be unbalanced (single category per night).
-      Bushcraft keeps you alive (+1 recovery) but never yields a balanced meal (+2 recovery).
-      Only purchased food can be balanced. See `project/design/condition_rework.md` for context.
 
 ### Quality of Life
 
@@ -84,8 +58,6 @@ Everything else is a one-liner placeholder.
 
 - [ ] Investigate granting advantage on skill checks when spirits are at 20 (max) —
       mirror of disheartened's disadvantage. Would reward keeping spirits high.
-- [ ] Inn upgrade system — convert frontier outpost to chapterhouse for exorbitant cost.
-      Endgame prep for final T3 push. Design TBD.
 
 ## 2. Deployment, Testing & Hardening
 

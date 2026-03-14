@@ -9,7 +9,7 @@
 
 dungeons:
   # ============================================================================
-  # FOREST (5 dungeons)
+  # FOREST (3 dungeons)
   # ============================================================================
 
   - id: warrant_oak
@@ -19,25 +19,11 @@ dungeons:
     folder: warrant_oak
     tier_range: [2, 2]
 
-  - id: briar_commons
-    name: Briar Commons
-    biome: forest
-    decal: briar_commons.png
-    folder: briar_commons
-    tier_range: [2, 2]
-
   - id: foresters_post
     name: The Forester's Post
     biome: forest
     decal: foresters_post.png
     folder: foresters_post
-    tier_range: [2, 2]
-
-  - id: inkwell_hollow
-    name: Inkwell Hollow
-    biome: forest
-    decal: inkwell_hollow.png
-    folder: inkwell_hollow
     tier_range: [2, 2]
 
   - id: the_lodge

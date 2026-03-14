@@ -84,7 +84,7 @@ If you catch the user creating a new .md file outside `project/`, `text/lore/`,
 - **Encounter format**: Custom .enc token format. See `project/encounter-spec/format.md`.
 - **World directories**: All game assets in `worlds/<name>/`. See `ui/web/CLAUDE.md` for details.
 - **3-tier system**: Regions assigned Tier 1/2/3 by distance from city. Encounters organized in `{biome}/tier{n}/` directories.
-- **22 dungeons**: Hand-crafted, roster-driven placement via `mapgen/content/dungeons_roster.yaml`.
+- **20 dungeons**: Hand-crafted, roster-driven placement via `mapgen/content/dungeons_roster.yaml`.
 
 ## Testing
 
