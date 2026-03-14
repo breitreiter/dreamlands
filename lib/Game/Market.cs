@@ -281,13 +281,15 @@ public static class Market
             results.Add(new MarketLineResult("sell", sell.ItemDefId, result.Success, result.Message));
         }
 
+        var buyFailed = false;
         foreach (var buy in order.Buys)
         {
+            if (buyFailed) break;
             for (int i = 0; i < buy.Quantity; i++)
             {
                 var result = Buy(player, buy.ItemId, settlement, balance, rng, createFood);
                 results.Add(new MarketLineResult("buy", buy.ItemId, result.Success, result.Message));
-                if (!result.Success) break;
+                if (!result.Success) { buyFailed = true; break; }
             }
         }
 
