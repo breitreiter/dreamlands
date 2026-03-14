@@ -40,12 +40,12 @@ public sealed class ConditionDef
         },
         ["irradiated"] = new()
         {
-            Id = "irradiated", Name = "Irradiated", Biome = "plains", Tier = "3",
+            Id = "irradiated", Name = "Irradiated", Biome = "none", Tier = "none",
             Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
         },
         ["lattice_sickness"] = new()
         {
-            Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "swamp", Tier = "3",
+            Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "none", Tier = "none",
             Stacks = 3, HealthDrain = Magnitude.Huge, Severity = ConditionSeverity.Severe,
         },
         ["exhausted"] = new()

@@ -454,7 +454,7 @@ public sealed class ItemDef
             Id = "siphon_glass", Name = "Siphon Glass", Type = ItemType.Consumable,
             Description = "Strange crystalline fragments. It's said they draw out and capture unnatural colors.",
             Cures = new HashSet<string> { "lattice_sickness" },
-            Biome = "swamp", ShopTier = 3, Cost = Magnitude.Medium,
+            Biome = "scrub", ShopTier = 3, Cost = Magnitude.Medium,
         },
         ["pale_knot_berry"] = new()
         {

@@ -12,7 +12,7 @@ public static class EndOfDay
     static readonly string[] UniversalAmbientIds = ["exhausted", "lost"];
 
     // Conditions that only come from encounters, never from ambient resist checks
-    static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "disheartened"];
+    static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "disheartened", "irradiated", "lattice_sickness"];
 
     /// <summary>
     /// Returns ambient conditions that threaten the player tonight based on camping biome/tier.

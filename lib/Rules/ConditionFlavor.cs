@@ -38,7 +38,7 @@ public sealed class ConditionFlavor
         ["lattice_sickness"] = new()
         {
             Ongoing = "The colors bleed at the edges of your vision. Something in the lattice has taken root in you.",
-            Resist = "The swamp hums with a frequency that sets your teeth on edge, but your blood stays clean.",
+            Resist = "The scrubland shimmers with a frequency that sets your teeth on edge, but your blood stays clean.",
             Succumb = "The world splits along lines that shouldn't exist. Color drains from your left eye first, then the pain begins.",
             HealProgress = "The colors stabilize. The lattice's grip loosens, though it leaves marks you can feel but not see.",
             HealFailure = "The medicine burns through you and the lattice drinks it down. The sickness has learned your remedies.",

@@ -27,10 +27,12 @@ public class EndOfDayTests
     [Fact]
     public void GetThreats_ExcludesEncounterOnly()
     {
-        // poisoned and injured should never appear in ambient threats
+        // encounter-only conditions should never appear in ambient threats
         var threats = EndOfDay.GetThreats("plains", 3, Balance);
         Assert.DoesNotContain(threats, t => t.Id == "poisoned");
         Assert.DoesNotContain(threats, t => t.Id == "injured");
+        Assert.DoesNotContain(threats, t => t.Id == "irradiated");
+        Assert.DoesNotContain(threats, t => t.Id == "lattice_sickness");
     }
 
     [Fact]
