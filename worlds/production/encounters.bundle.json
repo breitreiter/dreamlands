@@ -160,94 +160,94 @@
     },
     "byCategory": {
       "arcs/forest/briar_commons": [
-        "Along the Way",
-        "Dara\u0027s Plan",
-        "Maren\u0027s Plan",
-        "Oskar\u0027s Plan",
-        "Start",
-        "The Commons"
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
       ],
       "arcs/plains/brides_cave": [
-        "A Record in Stone",
-        "Start",
-        "The Ghosts",
-        "The Old Man\u0027s Story"
+        6,
+        7,
+        8,
+        9
       ],
       "forest/tier1": [
-        "Placeholder"
+        10
       ],
       "forest/tier2": [
-        "Placeholder"
+        11
       ],
       "forest/tier3": [
-        "Placeholder"
+        12
       ],
       "intro": [
-        "00_Intro",
-        "01_Gameplay_Intro"
+        13,
+        14
       ],
       "mountains/tier1": [
-        "Blockade at Copper Gap",
-        "Placeholder",
-        "The Festival Gate",
-        "The Old Assay Station",
-        "The Priests Vow",
-        "The Trailside Verdict"
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
       ],
       "mountains/tier2": [
-        "Placeholder"
+        21
       ],
       "mountains/tier3": [
-        "Placeholder"
+        22
       ],
       "plains/tier1": [
-        "A Debt Owed",
-        "A Gift for the Harvest",
-        "Celebration",
-        "Placeholder",
-        "The Burning Field",
-        "The Grain Cart"
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
       ],
       "plains/tier2": [
-        "Placeholder"
+        29
       ],
       "plains/tier3": [
-        "Placeholder"
+        30
       ],
       "scrub/tier1": [
-        "Bandits",
-        "Dust Storm",
-        "Placeholder",
-        "The Courier",
-        "Unusual Cargo"
+        31,
+        32,
+        33,
+        34,
+        35
       ],
       "scrub/tier2": [
-        "Placeholder",
-        "Signal Tower at Red Crown",
-        "The Administrator\u0027s Favor",
-        "The Cistern Gate",
-        "The Lattice Preacher",
-        "The Magistrate\u0027s Seal",
-        "The Old Depot at Crow Jaw"
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
       ],
       "scrub/tier3": [
-        "Countryman",
-        "Placeholder"
+        43,
+        44
       ],
       "swamp/tier1": [
-        "A Sons Responsibility",
-        "An Unpaid Debt",
-        "Placeholder",
-        "The Cartographers Kit",
-        "The Gatekeeper",
-        "The Hunted Woman"
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
       ],
       "swamp/tier2": [
-        "Placeholder",
-        "The Hermit of Sallow Fen"
+        51,
+        52
       ],
       "swamp/tier3": [
-        "Placeholder"
+        53
       ]
     }
   },
@@ -829,7 +829,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -855,7 +856,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -881,7 +883,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -919,7 +922,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -945,7 +949,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -971,7 +976,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -1558,7 +1564,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -1584,7 +1591,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -1610,7 +1618,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -1648,7 +1657,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -1674,7 +1684,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -1700,7 +1711,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -2156,7 +2168,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -2182,7 +2195,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -2208,7 +2222,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -2246,7 +2261,9 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured",
+                "add_condition irradiated"
               ]
             }
           }
@@ -2272,7 +2289,9 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured",
+                "add_condition irradiated"
               ]
             }
           }
@@ -2298,7 +2317,9 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured",
+                "add_condition irradiated"
               ]
             }
           }
@@ -2618,7 +2639,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -2644,7 +2666,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -2670,7 +2693,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -2876,7 +2900,9 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured",
+                "add_condition lattice_sickness"
               ]
             }
           }
@@ -2902,7 +2928,9 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured",
+                "add_condition lattice_sickness"
               ]
             }
           }
@@ -2928,7 +2956,9 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured",
+                "add_condition lattice_sickness"
               ]
             }
           }
@@ -3379,7 +3409,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -3405,7 +3436,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -3431,7 +3463,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health small",
-                "damage_spirits small"
+                "damage_spirits small",
+                "add_condition injured"
               ]
             }
           }
@@ -3543,7 +3576,8 @@
               "text": "You fail!",
               "mechanics": [
                 "rem_gold medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -3569,7 +3603,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }
@@ -3595,7 +3630,8 @@
               "text": "You lose!",
               "mechanics": [
                 "damage_health medium",
-                "damage_spirits medium"
+                "damage_spirits medium",
+                "add_condition injured"
               ]
             }
           }

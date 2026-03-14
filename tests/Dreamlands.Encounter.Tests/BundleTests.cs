@@ -13,8 +13,8 @@ public class BundleTests
                 "peak_encounter": { "category": "mountain/tier2", "encounterIndex": 2 }
             },
             "byCategory": {
-                "forest/tier1": ["well_encounter", "cave_encounter"],
-                "mountain/tier2": ["peak_encounter"]
+                "forest/tier1": [0, 1],
+                "mountain/tier2": [2]
             }
         },
         "encounters": [
@@ -115,7 +115,7 @@ public class BundleTests
         {
             "index": {
                 "byId": { "test": { "category": "test", "encounterIndex": 0 } },
-                "byCategory": { "test": ["test"] }
+                "byCategory": { "test": [0] }
             },
             "encounters": [{
                 "id": "test",

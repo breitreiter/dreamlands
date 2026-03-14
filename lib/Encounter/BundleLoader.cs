@@ -6,10 +6,10 @@ public sealed class EncounterBundle
 {
     public IReadOnlyList<Encounter> Encounters { get; }
     readonly Dictionary<string, BundleIndex> _byId;
-    readonly Dictionary<string, IReadOnlyList<string>> _byCategory;
+    readonly Dictionary<string, IReadOnlyList<int>> _byCategory;
 
     EncounterBundle(List<Encounter> encounters, Dictionary<string, BundleIndex> byId,
-        Dictionary<string, IReadOnlyList<string>> byCategory)
+        Dictionary<string, IReadOnlyList<int>> byCategory)
     {
         Encounters = encounters;
         _byId = byId;
@@ -20,8 +20,8 @@ public sealed class EncounterBundle
         _byId.TryGetValue(id, out var idx) ? Encounters[idx.EncounterIndex] : null;
 
     public IReadOnlyList<Encounter> GetByCategory(string category) =>
-        _byCategory.TryGetValue(category, out var ids)
-            ? ids.Select(id => GetById(id)!).ToList()
+        _byCategory.TryGetValue(category, out var indices)
+            ? indices.Select(i => Encounters[i]).ToList()
             : [];
 
     public IReadOnlyList<string> GetCategories() => _byCategory.Keys.ToList();
@@ -112,11 +112,11 @@ public sealed class EncounterBundle
                 byId[id] = new BundleIndex(idx.Category, idx.EncounterIndex);
         }
 
-        var byCategory = new Dictionary<string, IReadOnlyList<string>>();
+        var byCategory = new Dictionary<string, IReadOnlyList<int>>();
         if (doc.Index.ByCategory != null)
         {
-            foreach (var (cat, ids) in doc.Index.ByCategory)
-                byCategory[cat] = ids;
+            foreach (var (cat, indices) in doc.Index.ByCategory)
+                byCategory[cat] = indices;
         }
 
         return new EncounterBundle(encounters, byId, byCategory);
@@ -129,7 +129,7 @@ public sealed class EncounterBundle
 
     // Private DTOs matching bundle JSON shape
     record BundleDto(IndexDto Index, List<EncounterDto> Encounters);
-    record IndexDto(Dictionary<string, IndexEntryDto>? ById, Dictionary<string, List<string>>? ByCategory);
+    record IndexDto(Dictionary<string, IndexEntryDto>? ById, Dictionary<string, List<int>>? ByCategory);
     record IndexEntryDto(string Category, int EncounterIndex);
     record EncounterDto(string Id, string Category, bool Recurring, string? Trigger, int? Tier, string Title, string Body, List<string>? Requires, List<ChoiceDto> Choices);
     record ChoiceDto(string OptionText, string? OptionLink, string? OptionPreview, string? Requires,

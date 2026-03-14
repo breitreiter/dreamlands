@@ -45,7 +45,7 @@ static class BundleCommand
 
         var encounters = new List<object>();
         var byId = new Dictionary<string, object>();
-        var byCategory = new Dictionary<string, List<string>>();
+        var byCategory = new Dictionary<string, List<int>>();
         var errors = 0;
 
         foreach (var file in files)
@@ -72,10 +72,10 @@ static class BundleCommand
             byId[id] = new { category, encounterIndex = encounters.Count - 1 };
             if (!byCategory.TryGetValue(category, out var list))
             {
-                list = new List<string>();
+                list = new List<int>();
                 byCategory[category] = list;
             }
-            list.Add(id);
+            list.Add(encounters.Count - 1);
         }
 
         if (errors > 0)

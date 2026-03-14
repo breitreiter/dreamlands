@@ -23,7 +23,7 @@ internal static class Helpers
     {
         var encounters = new List<object>();
         var byId = new Dictionary<string, object>();
-        var byCategory = new Dictionary<string, List<string>>();
+        var byCategory = new Dictionary<string, List<int>>();
 
         for (int i = 0; i < entries.Length; i++)
         {
@@ -46,8 +46,8 @@ internal static class Helpers
             });
             byId[e.Id] = new { category = e.Category, encounterIndex = i };
             if (!byCategory.ContainsKey(e.Category))
-                byCategory[e.Category] = new List<string>();
-            byCategory[e.Category].Add(e.Id);
+                byCategory[e.Category] = new List<int>();
+            byCategory[e.Category].Add(i);
         }
 
         var bundle = new { index = new { byId, byCategory }, encounters };
