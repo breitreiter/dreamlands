@@ -23,7 +23,7 @@ edit .enc files
     1. check (syntax validation)
     2. bundle (produce encounters.bundle.json)
     3. upload bundle to Azure file share
-    4. hit /api/admin/reload-bundle endpoint
+    4. hit /api/ops/reload-bundle endpoint
 ```
 
 ## Changes
@@ -56,7 +56,7 @@ A single new endpoint in `GameFunctions.cs`:
 ```csharp
 [Function("ReloadBundle")]
 public IActionResult ReloadBundle(
-    [HttpTrigger(AuthorizationLevel.Function, "post", Route = "admin/reload-bundle")] HttpRequest req)
+    [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ops/reload-bundle")] HttpRequest req)
 {
     _data.ReloadBundle();
     return new OkObjectResult(new { status = "reloaded" });
@@ -73,7 +73,7 @@ Steps:
 1. Run `check` on the encounter directory (fail-fast on syntax errors)
 2. Run `bundle` to produce `encounters.bundle.json` in the world directory
 3. Upload the bundle to the Azure Function App's file share via Azure CLI
-4. POST to `/api/admin/reload-bundle` with the function key to trigger reload
+4. POST to `/api/ops/reload-bundle` with the function key to trigger reload
 
 This belongs in encounter-cli, not a standalone script, because:
 - It reuses the existing check + bundle logic directly (same process, no shelling out)

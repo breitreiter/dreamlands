@@ -80,7 +80,7 @@ static class PushCommand
         using var http = new HttpClient();
         http.DefaultRequestHeaders.Add("x-functions-key", functionKey);
         var response = await http.PostAsync(
-            $"https://{appName}.azurewebsites.net/api/admin/reload-bundle", null);
+            $"https://{appName}.azurewebsites.net/api/ops/reload-bundle", null);
         if (!response.IsSuccessStatusCode)
         {
             Console.Error.WriteLine($"Reload failed: {response.StatusCode}");

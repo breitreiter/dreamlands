@@ -24,7 +24,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     [Function("ReloadBundle")]
     public IActionResult ReloadBundle(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "admin/reload-bundle")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ops/reload-bundle")] HttpRequest req)
     {
         data.ReloadBundle();
         return new OkObjectResult(new { status = "reloaded" });

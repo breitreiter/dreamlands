@@ -42,7 +42,7 @@ Game data (map, bundle) is baked into the deploy package under `data/`. The serv
 dotnet run --project text/encounter-tool/EncounterCli -- push text/encounters
 ```
 
-This does: check syntax → bundle → upload bundle via `az functionapp deploy --type static` → POST `/api/admin/reload-bundle` to hot-reload. Takes ~10s vs ~2min for a full API deploy.
+This does: check syntax → bundle → upload bundle via `az functionapp deploy --type static` → POST `/api/ops/reload-bundle` to hot-reload. Takes ~10s vs ~2min for a full API deploy.
 
 Requires env vars:
 - `DREAMLANDS_FUNCTION_APP` — the app name (e.g., `<app-name>`)
