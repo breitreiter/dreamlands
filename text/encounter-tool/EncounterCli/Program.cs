@@ -17,6 +17,7 @@ class Program
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "push" => PushCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "fix-quotes" => FixQuotesCommand.Run(rest),
             _ => PrintUsage()
         };
@@ -30,6 +31,7 @@ class Program
         Console.WriteLine("  encounter fixme <file.enc> [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
+        Console.WriteLine("  encounter push [<path>] [--world <name>]");
         Console.WriteLine("  encounter fix-quotes [<path>] [--ext .enc,.txt]");
         Console.WriteLine();
         Console.WriteLine("generate looks for locale_guide.txt in the current directory and archetype");
