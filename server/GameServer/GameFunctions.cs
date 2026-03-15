@@ -1169,7 +1169,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         foreach (var si in Skills.All)
         {
-            if (si.Skill == Skill.Luck) continue;
+            if (si.Skill is Skill.Luck or Skill.Mercantile) continue;
             var skillLevel = p.Skills.GetValueOrDefault(si.Skill);
             var itemBonus = SkillChecks.GetItemBonus(si.Skill, p, data.Balance);
             var total = skillLevel + itemBonus;
