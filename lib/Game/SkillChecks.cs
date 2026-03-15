@@ -142,7 +142,7 @@ public static class SkillChecks
     /// <summary>
     /// Get item bonus for an encounter skill check. Each skill draws from specific gear sources
     /// (per dice_mechanics.md): Combat = weapon + token, Cunning = armor + token,
-    /// Negotiation/Bushcraft/Mercantile = two best tools + token, Luck = none.
+    /// Negotiation/Bushcraft = two best tools + token, Luck/Mercantile = none (passive).
     /// </summary>
     public static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
     {
@@ -152,8 +152,7 @@ public static class SkillChecks
             Skill.Cunning => GetEquippedMod(state.Equipment.Armor, Skill.Cunning, balance),
             Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
             Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
-            Skill.Mercantile => GetBestToolBonuses(Skill.Mercantile, state, balance),
-            _ => 0, // Luck gets no gear bonus
+            _ => 0, // Luck and Mercantile get no gear bonus
         };
 
         return gearBonus + GetTokenBonus(skill, state, balance);

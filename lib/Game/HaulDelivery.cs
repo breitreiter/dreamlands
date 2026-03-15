@@ -10,8 +10,12 @@ public static class HaulDelivery
         PlayerState player,
         string settlementId,
         IReadOnlyDictionary<string, HaulDef> hauls,
-        Random rng)
+        Random rng,
+        BalanceData? balance = null)
     {
+        var mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
+        var bonusRate = balance?.Trade.MercantileHaulBonusPerPoint ?? 0.0;
+
         var results = new List<DeliveryResult>();
         for (int i = player.Pack.Count - 1; i >= 0; i--)
         {
@@ -19,7 +23,8 @@ public static class HaulDelivery
             if (item.HaulDefId != null && item.DestinationSettlementId == settlementId)
             {
                 player.Pack.RemoveAt(i);
-                var payout = item.Payout ?? 0;
+                var basePayout = item.Payout ?? 0;
+                var payout = (int)Math.Round(basePayout * (1 + mercantile * bonusRate));
                 player.Gold += payout;
 
                 string? deliveryFlavor = null;

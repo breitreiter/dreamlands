@@ -181,4 +181,46 @@ public class HaulDeliveryTests
         Assert.Null(results[0].DeliveryFlavor);
         Assert.Equal(5, results[0].Payout);
     }
+
+    [Fact]
+    public void Mercantile_bonus_increases_payout()
+    {
+        var balance = BalanceData.Default;
+        var player = MakePlayer();
+        player.Skills[Skill.Mercantile] = 3;
+        player.Gold = 0;
+        player.Pack.Add(new ItemInstance("h", "Haul")
+        {
+            HaulDefId = "test_haul",
+            DestinationSettlementId = "town_a",
+            Payout = 100,
+        });
+
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42), balance);
+
+        Assert.Single(results);
+        var expectedPayout = (int)Math.Round(100 * (1 + 3 * balance.Trade.MercantileHaulBonusPerPoint));
+        Assert.Equal(expectedPayout, results[0].Payout);
+        Assert.Equal(expectedPayout, player.Gold);
+    }
+
+    [Fact]
+    public void No_mercantile_no_bonus()
+    {
+        var balance = BalanceData.Default;
+        var player = MakePlayer();
+        player.Gold = 0;
+        player.Pack.Add(new ItemInstance("h", "Haul")
+        {
+            HaulDefId = "test_haul",
+            DestinationSettlementId = "town_a",
+            Payout = 100,
+        });
+
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42), balance);
+
+        Assert.Single(results);
+        Assert.Equal(100, results[0].Payout);
+        Assert.Equal(100, player.Gold);
+    }
 }

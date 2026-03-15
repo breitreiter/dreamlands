@@ -377,18 +377,6 @@ public sealed class ItemDef
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
-        ["traders_ledger"] = new()
-        {
-            Id = "traders_ledger", Name = "Trader's Ledger", Type = ItemType.Tool,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 2 },
-            Biome = "plains", ShopTier = 1, Cost = 40,
-        },
-        ["assayers_kit"] = new()
-        {
-            Id = "assayers_kit", Name = "Assayer's Kit", Type = ItemType.Tool,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Mercantile] = 3 },
-            Biome = "mountains", ShopTier = 2, Cost = 80,
-        },
         ["cartographers_kit"] = new()
         {
             Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,

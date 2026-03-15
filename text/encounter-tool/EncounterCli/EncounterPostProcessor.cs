@@ -22,7 +22,7 @@ static partial class EncounterPostProcessor
         ["SNEAK"]            = "cunning",
         ["STUDY"]            = "cunning",
         ["USE_BUSHCRAFT"]    = "bushcraft",
-        ["PAY"]              = "mercantile",
+        ["PAY"]              = "negotiation",
         ["USE_STRENGTH"]     = "combat",
         ["CREATE_DIVERSION"] = "cunning",
         ["TAKE_OBJECT"]      = "cunning",

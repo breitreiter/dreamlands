@@ -16,7 +16,7 @@ choices:
 
 * Persuade the toll-keeper to reconsider = Use your Guild authority to negotiate a resolution
   You step between them before the guards reach the crate. "The Guild recognizes passage tokens issued under legitimate clan authority," you say, loud enough for the waiting travelers to hear. "If your clan wishes to renegotiate terms, that conversation happens through formal channels. Not at a rope barrier in the afternoon heat." You turn the ring so the signet catches light. "Unless you want every caravan master from here to the plateaus hearing that clan word means nothing."
-  @if check mercantile medium {
+  @if check negotiation medium {
     The toll-keeper holds your gaze for a long moment, his jaw working as though chewing something bitter. His eyes narrow, measuring the weight of the ring you wear against whatever authority has placed him here at this stone throat. The guards halt mid-stride, their attention fixed on their captain.
 
     At last he grunts, a sound dragged up from some deep well of pragmatism. He waves one hand sharply, and the guards retreat to their stations without a word. "We will make an exception for the outlander," he says, each word dropping like a stone into still water, "who is unaccustomed to our ways." He moves to the nearest iron stake and begins working the rope free, his fingers quick despite their reluctance. The barrier sags, then falls away entirely. "Tomorrow you will not be so fortunate."

@@ -302,13 +302,13 @@ MechanicsInfo BuildMechanics(PlayerState p)
     }
 
     // Other: special computed bonuses
-    var mercantile = p.Skills.GetValueOrDefault(Skill.Mercantile)
-                   + SkillChecks.GetItemBonus(Skill.Mercantile, p, balance);
+    var mercantile = p.Skills.GetValueOrDefault(Skill.Mercantile);
+    var mercDiscount = (int)(mercantile * balance.Trade.MercantileDiscountPerPoint * 100);
     other.Add(new MechanicLine
     {
         Label = "Better prices",
-        Value = $"{mercantile}%",
-        Source = "Mercantile + gear",
+        Value = $"{mercDiscount}%",
+        Source = "Mercantile",
     });
 
     var luckLevel = p.Skills.GetValueOrDefault(Skill.Luck);
@@ -712,7 +712,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                                 h.DisplayName, h.DestinationSettlementId, h.DestinationName);
                     }
 
-                    var delivered = HaulDelivery.Deliver(player, arrivalId, balance.Hauls, session.Rng);
+                    var delivered = HaulDelivery.Deliver(player, arrivalId, balance.Hauls, session.Rng, balance);
                     if (delivered.Count > 0)
                     {
                         app.Logger.LogInformation("Delivered {Count} hauls:", delivered.Count);
@@ -1274,7 +1274,8 @@ app.MapGet("/api/game/{id}/market", async (string id) =>
         if (sellPrices.ContainsKey(item.DefId)) return;
         if (!balance.Items.TryGetValue(item.DefId, out var def)) return;
         if (def.Type == ItemType.Haul) return;
-        var price = Market.GetSellPrice(def, balance);
+        int merc = player.Skills.GetValueOrDefault(Skill.Mercantile);
+        var price = Market.GetSellPrice(def, balance, merc);
         if (price > 0) sellPrices[item.DefId] = price;
     }
     foreach (var item in player.Pack) AddSellPrice(item);

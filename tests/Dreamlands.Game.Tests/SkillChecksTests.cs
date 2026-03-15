@@ -180,12 +180,10 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetItemBonus_Mercantile_UsesTool()
+    public void GetItemBonus_Mercantile_AlwaysZero()
     {
         var state = Fresh();
-        state.Pack.Add(new ItemInstance("traders_ledger", "Trader's Ledger"));
-
-        Assert.Equal(2, SkillChecks.GetItemBonus(Skill.Mercantile, state, Balance));
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Mercantile, state, Balance));
     }
 
     [Fact]
@@ -194,7 +192,6 @@ public class SkillChecksTests
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword");
         state.Equipment.Armor = new ItemInstance("chainmail", "Chainmail");
-        state.Pack.Add(new ItemInstance("traders_ledger", "Trader's Ledger"));
 
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Luck, state, Balance));
     }
@@ -214,7 +211,7 @@ public class SkillChecksTests
         var state = Fresh();
         state.Equipment.Boots = new ItemInstance("heavy_work_boots", "Heavy Work Boots");
 
-        foreach (var skill in new[] { Skill.Combat, Skill.Cunning, Skill.Negotiation, Skill.Bushcraft, Skill.Mercantile, Skill.Luck })
+        foreach (var skill in new[] { Skill.Combat, Skill.Cunning, Skill.Negotiation, Skill.Bushcraft, Skill.Luck, Skill.Mercantile })
             Assert.Equal(0, SkillChecks.GetItemBonus(skill, state, Balance));
     }
 

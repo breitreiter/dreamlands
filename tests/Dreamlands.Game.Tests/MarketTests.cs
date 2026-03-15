@@ -284,4 +284,39 @@ public class MarketTests
 
         Assert.True(settlement.Stock["bandages"] > 0);
     }
+
+    [Fact]
+    public void GetSellPrice_NoMercantile_ReturnsBaseTimesRatio()
+    {
+        var def = Balance.Items["arming_sword"];
+        var price = Market.GetSellPrice(def, Balance, 0);
+        var expected = Math.Max(1, (int)Math.Round(def.Cost!.Value * Balance.Trade.SellRatio));
+        Assert.Equal(expected, price);
+    }
+
+    [Fact]
+    public void GetSellPrice_WithMercantile_AppliesBonus()
+    {
+        var def = Balance.Items["arming_sword"];
+        var basePrice = Market.GetSellPrice(def, Balance, 0);
+        var bonusPrice = Market.GetSellPrice(def, Balance, 3);
+        Assert.True(bonusPrice > basePrice);
+        var expected = Math.Max(1, (int)Math.Round(
+            def.Cost!.Value * Balance.Trade.SellRatio * (1 + 3 * Balance.Trade.MercantileSellBonusPerPoint)));
+        Assert.Equal(expected, bonusPrice);
+    }
+
+    [Fact]
+    public void Sell_AppliesMercantileBonus()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Mercantile] = 3;
+        state.Pack.Add(new ItemInstance("arming_sword", "Arming Sword"));
+        var result = Market.Sell(state, "arming_sword", Balance);
+
+        Assert.True(result.Success);
+        var def = Balance.Items["arming_sword"];
+        var expected = Market.GetSellPrice(def, Balance, 3);
+        Assert.Contains($"{expected} gold", result.Message);
+    }
 }

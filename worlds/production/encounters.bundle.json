@@ -295,7 +295,7 @@
           "optionText": "Explore = Search the post",
           "optionLink": "Explore",
           "optionPreview": "Search the post",
-          "requires": null,
+          "requires": "meets bushcraft 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -303,7 +303,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item hunters_journal",
+                  "add_item windstriders",
                   "finish_dungeon"
                 ]
               }
@@ -321,7 +321,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "meets bushcraft 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -329,7 +329,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item hunters_journal",
+                  "add_item windstriders",
                   "finish_dungeon"
                 ]
               }
@@ -341,6 +341,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -360,7 +372,7 @@
           "optionText": "Explore = Search the lodge",
           "optionLink": "Explore",
           "optionPreview": "Search the lodge",
-          "requires": null,
+          "requires": "has hunters_journal",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -368,7 +380,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item kopis",
+                  "add_item the_old_tooth",
                   "finish_dungeon"
                 ]
               }
@@ -386,7 +398,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "has hunters_journal",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -394,7 +406,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item kopis",
+                  "add_item the_old_tooth",
                   "finish_dungeon"
                 ]
               }
@@ -406,6 +418,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -425,7 +449,7 @@
           "optionText": "Explore = Search the hideout",
           "optionLink": "Explore",
           "optionPreview": "Search the hideout",
-          "requires": null,
+          "requires": "quality faction.exiles 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -433,7 +457,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item nightveil",
+                  "upgrade_pack 2",
                   "finish_dungeon"
                 ]
               }
@@ -451,7 +475,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.exiles 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -459,7 +483,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item nightveil",
+                  "upgrade_pack 2",
                   "finish_dungeon"
                 ]
               }
@@ -471,6 +495,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -490,7 +526,7 @@
           "optionText": "Explore = Search the house",
           "optionLink": "Explore",
           "optionPreview": "Search the house",
-          "requires": null,
+          "requires": "quality faction.miners 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -498,7 +534,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "add_item tarnished_key",
                   "finish_dungeon"
                 ]
               }
@@ -516,7 +552,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.miners 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -524,7 +560,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "add_item tarnished_key",
                   "finish_dungeon"
                 ]
               }
@@ -536,6 +572,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -555,7 +603,7 @@
           "optionText": "Explore = Search the archives",
           "optionLink": "Explore",
           "optionPreview": "Search the archives",
-          "requires": null,
+          "requires": "quality faction.renegadescholars 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -563,7 +611,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item petitioners_writ",
+                  "add_item hunters_journal",
                   "finish_dungeon"
                 ]
               }
@@ -581,7 +629,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.renegadescholars 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -589,7 +637,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item petitioners_writ",
+                  "add_item hunters_journal",
                   "finish_dungeon"
                 ]
               }
@@ -601,6 +649,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -620,7 +680,7 @@
           "optionText": "Explore = Search the court",
           "optionLink": "Explore",
           "optionPreview": "Search the court",
-          "requires": null,
+          "requires": "meets negotiation 6",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -628,7 +688,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item frostward",
+                  "add_item magisterial_robe",
                   "finish_dungeon"
                 ]
               }
@@ -646,7 +706,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "meets negotiation 6",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -654,7 +714,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item frostward",
+                  "add_item magisterial_robe",
                   "finish_dungeon"
                 ]
               }
@@ -666,6 +726,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -685,7 +757,7 @@
           "optionText": "Explore = Search the counting house",
           "optionLink": "Explore",
           "optionPreview": "Search the counting house",
-          "requires": null,
+          "requires": "quality faction.scholars 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -693,7 +765,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "add_item sakharov_mask",
                   "finish_dungeon"
                 ]
               }
@@ -711,7 +783,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.scholars 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -719,7 +791,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "add_item sakharov_mask",
                   "finish_dungeon"
                 ]
               }
@@ -731,6 +803,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -806,17 +890,15 @@
             "branches": [
               {
                 "condition": "has brass_lantern",
-                "text": "You light the old brass lantern, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. The walls have a peculiar hatched texture.\n\nYou choose a passage at random and press forward, torchlight dancing across walls dense with carved script. The tunnel bends, splits, rejoins itself in ways that defy surface logic. Twice you find yourself before the same fork, recognizing a particular glyph worn smooth by water. The third time you stop, study the patterns scored into the stone, and begin to perceive the structure beneath the chaos: a spiral, not a maze, its arms folding inward like the shell of some primordial thing.\n\nYou follow the logic now, marking your turns by the age of the carvings. Where the words are deep and crisp, you advance; where they blur to faint scratches, you retreat. The passages grow narrower, the ceiling presses lower, and the cold intensifies until each breath stings your throat. At last the corridor widens. You emerge into a chamber vast enough that your torchlight cannot find its far walls, only an expanse of darkness that swallows flame and sound alike.",
+                "text": "You light the old brass lantern, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. You notice immediately that the walls have a peculiar hatched texture.\n\nYou choose a passage at random and press forward.",
                 "mechanics": [
                   "open \u0022A Record in Stone\u0022"
                 ]
               }
             ],
             "fallback": {
-              "text": "You stumble in the dark, trying to make your way by feel. You crack you head on a low overhang and curse. Slowly and with great care, you feel your way back to the entrance, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.",
+              "text": "You stumble in the dark, trying to make your way by feel. You crack you head on a low overhang and curse. There\u0027s no way you can navigate this cave without a light. Slowly and with great care, you feel your way back to the entrance, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.",
               "mechanics": [
-                "skip_time morning no_meal no_sleep no_biome",
-                "add_condition injured",
                 "flee_dungeon"
               ]
             }
@@ -951,7 +1033,7 @@
           "optionText": "Explore = Search the depot",
           "optionLink": "Explore",
           "optionPreview": "Search the depot",
-          "requires": null,
+          "requires": "meets combat 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -959,7 +1041,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item zweihander",
+                  "add_item mountain_regiment_armor",
                   "finish_dungeon"
                 ]
               }
@@ -977,7 +1059,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "meets combat 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -985,7 +1067,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item zweihander",
+                  "add_item mountain_regiment_armor",
                   "finish_dungeon"
                 ]
               }
@@ -997,6 +1079,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1016,7 +1110,7 @@
           "optionText": "Explore = Search the battlefield",
           "optionLink": "Explore",
           "optionPreview": "Search the battlefield",
-          "requires": null,
+          "requires": "quality faction.scavengers 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1024,7 +1118,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item wardens_plate",
+                  "add_item lucky_buckle",
                   "finish_dungeon"
                 ]
               }
@@ -1042,7 +1136,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.scavengers 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1050,7 +1144,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item wardens_plate",
+                  "add_item lucky_buckle",
                   "finish_dungeon"
                 ]
               }
@@ -1062,6 +1156,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1081,7 +1187,7 @@
           "optionText": "Explore = Search the wreckage",
           "optionLink": "Explore",
           "optionPreview": "Search the wreckage",
-          "requires": null,
+          "requires": "quality faction.legion 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1107,7 +1213,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.legion 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1127,6 +1233,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1146,7 +1264,7 @@
           "optionText": "Explore = Search the ruins",
           "optionLink": "Explore",
           "optionPreview": "Search the ruins",
-          "requires": null,
+          "requires": "has grid_cipher",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1154,7 +1272,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item lead_lined_case",
+                  "add_item golem_armor",
                   "finish_dungeon"
                 ]
               }
@@ -1172,7 +1290,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "has grid_cipher",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1180,7 +1298,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item lead_lined_case",
+                  "add_item golem_armor",
                   "finish_dungeon"
                 ]
               }
@@ -1192,6 +1310,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1211,7 +1341,7 @@
           "optionText": "Explore = Search the records",
           "optionLink": "Explore",
           "optionPreview": "Search the records",
-          "requires": null,
+          "requires": "meets negotiation 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1219,7 +1349,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "add_item lattice_ward",
                   "finish_dungeon"
                 ]
               }
@@ -1237,7 +1367,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "meets negotiation 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1245,7 +1375,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "add_item lattice_ward",
                   "finish_dungeon"
                 ]
               }
@@ -1257,6 +1387,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1276,7 +1418,7 @@
           "optionText": "Explore = Search the foundry",
           "optionLink": "Explore",
           "optionPreview": "Search the foundry",
-          "requires": null,
+          "requires": "has color_lens",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1284,7 +1426,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item lattice_ward",
+                  "add_item shimmering_blade",
                   "finish_dungeon"
                 ]
               }
@@ -1302,7 +1444,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "has color_lens",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1310,7 +1452,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item lattice_ward",
+                  "add_item shimmering_blade",
                   "finish_dungeon"
                 ]
               }
@@ -1322,6 +1464,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1341,7 +1495,7 @@
           "optionText": "Explore = Search the station",
           "optionLink": "Explore",
           "optionPreview": "Search the station",
-          "requires": null,
+          "requires": "quality faction.kesharat 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1367,7 +1521,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.kesharat 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1387,6 +1541,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1406,7 +1572,7 @@
           "optionText": "Explore = Search the wellhead",
           "optionLink": "Explore",
           "optionPreview": "Search the wellhead",
-          "requires": null,
+          "requires": "quality faction.clans 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1414,7 +1580,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "upgrade_pack 2",
                   "finish_dungeon"
                 ]
               }
@@ -1432,7 +1598,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.clans 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1440,7 +1606,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "upgrade_pack 1",
+                  "upgrade_pack 2",
                   "finish_dungeon"
                 ]
               }
@@ -1452,6 +1618,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1471,7 +1649,7 @@
           "optionText": "Explore = Search the post",
           "optionLink": "Explore",
           "optionPreview": "Search the post",
-          "requires": null,
+          "requires": "meets cunning 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1479,7 +1657,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item labrys",
+                  "add_item knotwork_seed",
                   "finish_dungeon"
                 ]
               }
@@ -1497,7 +1675,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "meets cunning 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1505,7 +1683,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item labrys",
+                  "add_item knotwork_seed",
                   "finish_dungeon"
                 ]
               }
@@ -1517,6 +1695,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1536,7 +1726,7 @@
           "optionText": "Explore = Search the blind",
           "optionLink": "Explore",
           "optionPreview": "Search the blind",
-          "requires": null,
+          "requires": "quality faction.revivalists 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1544,7 +1734,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item windstriders",
+                  "add_item antivenom_kit",
                   "finish_dungeon"
                 ]
               }
@@ -1562,7 +1752,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.revivalists 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1570,7 +1760,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item windstriders",
+                  "add_item antivenom_kit",
                   "finish_dungeon"
                 ]
               }
@@ -1582,6 +1772,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1601,7 +1803,7 @@
           "optionText": "Explore = Search the depths",
           "optionLink": "Explore",
           "optionPreview": "Search the depths",
-          "requires": null,
+          "requires": "has revathi_tile",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1609,7 +1811,7 @@
                 "condition": "check combat medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item antivenom_kit",
+                  "add_item revathi_labrys",
                   "finish_dungeon"
                 ]
               }
@@ -1627,7 +1829,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "has revathi_tile",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1635,7 +1837,7 @@
                 "condition": "check negotiation medium",
                 "text": "You find something valuable.",
                 "mechanics": [
-                  "add_item antivenom_kit",
+                  "add_item revathi_labrys",
                   "finish_dungeon"
                 ]
               }
@@ -1647,6 +1849,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -1666,7 +1880,7 @@
           "optionText": "Explore = Search the tile house",
           "optionLink": "Explore",
           "optionPreview": "Search the tile house",
-          "requires": null,
+          "requires": "quality faction.revathi 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1692,7 +1906,7 @@
           "optionText": "Negotiate = Talk your way through",
           "optionLink": "Negotiate",
           "optionPreview": "Talk your way through",
-          "requires": null,
+          "requires": "quality faction.revathi 5",
           "conditional": {
             "preamble": "",
             "branches": [
@@ -1712,6 +1926,18 @@
                 "finish_dungeon"
               ]
             }
+          }
+        },
+        {
+          "optionText": "Depart = Leave this place behind",
+          "optionLink": "Depart",
+          "optionPreview": "Leave this place behind",
+          "requires": null,
+          "single": {
+            "text": "You decide this is not the time. You turn and walk away.",
+            "mechanics": [
+              "flee_dungeon"
+            ]
           }
         }
       ]
@@ -2775,7 +3001,7 @@
             "preamble": "",
             "branches": [
               {
-                "condition": "check mercantile medium",
+                "condition": "check negotiation medium",
                 "text": "You crouch down, meeting her eyes, and speak quietly. You tell her the truth: you cannot swing a sickle for hours and still make the next town by dark. But you can do something better. You tell her where the dock merchants gather in Aldgate, which alleys the day laborers drink in, how to shame the hired hands into honoring their word. You sketch it out, step by step, until understanding sparks in her face.\n\nShe listens, chewing her lip. Then she nods, slowly. \u0022I can do that,\u0022 she says. \u0022I can get them back here.\u0022\n\nShe steps aside. As you pass, she catches your sleeve. \u0022If this doesn\u0027t work,\u0022 she says, \u0022I\u0027ll remember your face.\u0022\n\nYou walk on. Behind you, you hear her footsteps pounding back toward the road, quick and purposeful. Whether she\u0027ll succeed, you\u0027ll never know. The wheat sways golden in the wind. The old man is a distant figure, still bent, still cutting.",
                 "mechanics": []
               }
@@ -3049,7 +3275,7 @@
             "preamble": "",
             "branches": [
               {
-                "condition": "check mercantile medium",
+                "condition": "check negotiation medium",
                 "text": "You\u0027ve seen this trap in three towns before. The owner and his men are hiding nearby, keen to extort silver from anyone foolish enough to steal from the cart. The boy\u0027s eyes widen as you explain the game, then he drops the sack and melts into the wheat without a word. Sure enough, as you continue down the road, you catch the glint of steel behind the stone wall where the merchant and his hired muscle wait for easier marks.",
                 "mechanics": []
               }
@@ -3404,57 +3630,73 @@
       "tier": null,
       "vignette": null,
       "title": "The Courier",
-      "body": "\nThe Kesharat courier stands in full sun, sweat darkening the collar of his rumpled official coat. The leather document case lies in the dust between his boots and the clan trader\u0027s sandals. The trader picked it up when the courier dropped it. Fumbled it, really, after the man made some crack about plateau illiteracy loud enough for the whole watering station to hear. Now the trader holds it at arm\u0027s length, recounting the insult word for word to the gathering crowd. Laughter ripples through them. The courier\u0027s face has gone red, though whether from heat or humiliation is hard to say.\n\nYou catch the shift in the crowd\u0027s mood before the courier does. The laughter has an edge now. Someone mutters about arrogant lowlanders. A woman spits in the dust. The trader is still talking, working them like a merchant working a sale, and the courier keeps demanding his property back in that clipped administrative accent that makes everything sound like a reprimand. The signet ring on your hand catches light, the Merchant Guild mark that means you walk between worlds, neither clan nor Kesharat but trusted by both when coin is involved. The courier sees it. His eyes fix on you like a drowning man spotting driftwood.\n\nThe trader wants an apology. The courier would sooner eat glass. And the crowd is restless; wind carries their voices across the exposed stone, a low buzz of old resentments given sudden shape. If they lay hands on him, the Kesharat will answer it. Not here, not now. But somewhere a clan will wake to soldiers at their gates, and a debt will be collected that has nothing to do with justice and everything to do with the appearance of authority. The elder under the awning hasn\u0027t moved, but his eyes are open. Watching.\n\nThe trader holds the case higher. The crowd presses closer. The courier\u0027s hand drifts toward his belt where no weapon hangs.\n\n",
+      "body": "\nThe Kesharat courier stands in full sun, sweat darkening the collar of his rumpled official coat. The leather document case lies in the dust between his boots and the clan trader\u0027s sandals. The trader picked it up when the courier dropped it. Fumbled it, really, after the man made some crack about plateau illiteracy loud enough for the whole watering station to hear. Now the trader holds it at arm\u0027s length, recounting the insult word for word to the gathering crowd. Laughter ripples through them. The courier\u0027s face has gone red, though whether from heat or humiliation is hard to say.\n\nYou catch the shift in the crowd\u0027s mood before the courier does. The laughter has an edge now. Someone mutters about arrogant lowlanders. A woman spits in the dust. The merchant is still talking, working them like he would work a sale, and the courier keeps demanding his property back in that clipped administrative accent that makes everything sound like a reprimand. The courier\u0027s eyes fix on you like a drowning man spotting driftwood.\n\nThe trader wants an apology. The courier would sooner eat glass. And the crowd is restless; wind carries their voices across the exposed stone, a low buzz of old resentments given sudden shape. If they lay hands on him, the Kesharat will answer it. Not here, not now. But somewhere a clan will wake to soldiers at their gates, and a debt will be collected that has nothing to do with justice and everything to do with the appearance of authority.\n",
       "requires": [],
       "choices": [
         {
-          "optionText": "PERSUADE the trader = Appeal to the trader\u0027s sense of self-preservation and clan honor",
-          "optionLink": "PERSUADE the trader",
-          "optionPreview": "Appeal to the trader\u0027s sense of self-preservation and clan honor",
+          "optionText": "Ask the merchant to yield = Appeal to the merchant\u0027s sense of self-preservation",
+          "optionLink": "Ask the merchant to yield",
+          "optionPreview": "Appeal to the merchant\u0027s sense of self-preservation",
           "requires": null,
           "conditional": {
-            "preamble": "You step into the gap between them. The words come measured, pitched for the crowd as much as the trader. The Kesharat remembers insults like the plateau remembers water. Not here, not today, but someone will pay. A cousin\u0027s caravan stopped at a checkpoint. A clan\u0027s grazing rights questioned by men with ledgers and swords. The trader\u0027s eyes narrow, but you see the calculation there. You turn the signet ring so the mark catches light. The Merchant Guild has carried messages between these worlds for three generations. You know what retribution looks like when it crosses borders.",
+            "preamble": "You step into the gap between them. The words come measured, pitched for the crowd as much as the merchant. The Kesharat remembers insults like the plateau remembers water. Not here, not today, but someone will pay. A cousin\u0027s caravan stopped at a checkpoint. A clan\u0027s grazing rights questioned by men with ledgers and swords. The trader\u0027s eyes narrow, but you see the calculation there. You turn the signet ring so the mark catches light.",
             "branches": [
               {
-                "condition": "check luck medium",
-                "text": "The trader lowers the case. Not a surrender, but a repositioning. He addresses the crowd, not the courier. Says he found property that wasn\u0027t his and returned it as clan law demands, insult or no insult. The case lands in the dust at the courier\u0027s feet. The courier snatches it up, clutching it like a child with a stolen cake. He nods once to you, stiff and graceless, and retreats toward his mount. The crowd disperses with the slow reluctance of a disappointed audience. The trader meets your eyes. No gratitude there, but recognition. You\u0027ve given him the story he can tell tonight, the one where he\u0027s generous and the lowlander is a fool.",
-                "mechanics": []
+                "condition": "check negotiation medium",
+                "text": "The merchant lowers the case. Not a surrender, but a repositioning. He addresses the crowd, not the courier. Says he found property that wasn\u0027t his and returned it as clan law demands, insult or no insult. The case lands in the dust at the courier\u0027s feet. The courier snatches it up, clutching it like a child with a stolen cake. He nods once to you, stiff and graceless, and retreats toward his mount. The crowd disperses with the slow reluctance of a disappointed audience. The trader meets your eyes. No gratitude there, but recognition. You\u0027ve given him the story he can tell tonight, the one where he\u0027s generous and the lowlander is a fool.",
+                "mechanics": [
+                  "heal_spirits 1",
+                  "quality faction.clans \u002B1"
+                ]
               }
             ],
             "fallback": {
-              "text": "The trader\u0027s face hardens. He asks the crowd if they\u0027re dogs who roll over when the Kesharat snap their fingers. Someone shouts agreement. You see the moment slip like sand through spread fingers. The trader opens the case, breaks the wax seal with his thumb. Papers spill into the wind. The courier lunges. Three men catch him, pin his arms, not gently. No blows fall, but the message is written in grip and stance. The courier is released after long minutes, stumbling, papers scattered across twenty paces of plateau stone. He gathers what he can with shaking hands. Doesn\u0027t look at you. The crowd watches him leave, and their laughter follows him like carrion birds.",
-              "mechanics": []
+              "text": "The merchant\u0027s face hardens. He asks the crowd if they\u0027re dogs who roll over when the Kesharat snap their fingers. Someone shouts agreement. You see the moment slip like sand through spread fingers. The trader opens the case, breaks the wax seal with his thumb. Papers spill into the wind. The courier lunges. Three men catch him, pin his arms, not gently. No blows fall, but the message is written in grip and stance. The courier is released after long minutes, stumbling, papers scattered across twenty paces of plateau stone. He gathers what he can with shaking hands. Doesn\u0027t look at you. The crowd watches him leave, and their laughter follows him like carrion birds.",
+              "mechanics": [
+                "damage_spirits 1",
+                "quality faction.clans -1"
+              ]
             }
           }
         },
         {
-          "optionText": "INTIMIDATE the trader = Use the weight of the Merchant Guild to make the trader yield",
-          "optionLink": "INTIMIDATE the trader",
-          "optionPreview": "Use the weight of the Merchant Guild to make the trader yield",
+          "optionText": "Threaten the merchant = Use the weight of the Guild to make the man yield",
+          "optionLink": "Threaten the merchant",
+          "optionPreview": "Use the weight of the Guild to make the man yield",
           "requires": null,
           "conditional": {
-            "preamble": "You don\u0027t raise your voice. Volume is for people without leverage. You show the signet ring, let the sun catch the mark that means every trading post between here and the coast. Ask the trader which clans he sells to. Ask if he\u0027s considered how many of them hold Merchant Guild letters of credit. The words land like stones in still water. The crowd shifts, uncertain now. Guild membership isn\u0027t just about coin. It\u0027s about roads that stay open and goods that cross borders without entanglement. You let the silence stretch.",
+            "preamble": "You don\u0027t raise your voice. Volume is for people without leverage. You show the signet ring, let the sun catch the mark that means every trading post between here and the coast. Ask the merchant which clans he sells to. Ask if he\u0027s considered how many of them hold Traders Guild letters of credit. The words land like stones in still water. The crowd shifts, uncertain now.",
             "branches": [
               {
-                "condition": "check luck medium",
-                "text": "The trader\u0027s jaw works. He spits in the dust, but his hand opens. The case drops. He tells the courier to take his trash and his manners back where they came from. The courier grabs the case, cradles it against his chest. Mumbles something that might be thanks to you, might be a curse. The trader turns his back, loud conversation about anyone who needs outsiders to fight their battles. But the crowd is already losing interest, drifting back to their own transactions. The elder under the awning nods once. You\u0027ve made your point without making an enemy. The currency of it will spend for a while yet.",
-                "mechanics": []
+                "condition": "check cunning medium",
+                "text": "The merchant\u0027s jaw works. He spits in the dust, but his hand opens. The case drops. He tells the courier to take his trash and his manners back where they came from. The courier grabs the case, cradles it against his chest. Mumbles something that might be thanks to you, might be a curse. The trader turns his back, loud conversation about anyone who needs outsiders to fight their battles. But the crowd is already losing interest, drifting back to their own transactions.",
+                "mechanics": [
+                  "heal_spirits 1",
+                  "quality faction.kesharat \u002B1",
+                  "quality faction.clans -1"
+                ]
               }
             ],
             "fallback": {
-              "text": "The trader laughs. Asks if you\u0027re threatening a man for picking up what another dropped. The crowd murmurs, and the sound isn\u0027t friendly. Someone mentions a cousin who got squeezed by Guild rates last summer. Another voice adds a grievance about weighted scales. The trader is smiling now, playing to his audience. Your ring suddenly feels heavier, more visible. The courier looks at you with something between hope and panic. The trader tosses the case in the air, catches it. Asks if you\u0027d like to buy it back, maybe. The price is an apology. Not from him. From you. The elder under the awning is watching with the particular attention of someone who will remember what happens next.",
-              "mechanics": []
+              "text": "The merchant laughs. Asks if you\u0027re threatening a man for picking up what another dropped. The crowd murmurs, and the sound isn\u0027t friendly. Someone mentions a cousin who got squeezed by Guild rates last summer. Another voice adds a grievance about weighted scales. The merchant is smiling now, playing to his audience. Your ring suddenly feels heavier, more visible. The courier looks at you with something between hope and panic. The merchant tosses the case in the air, catches it. Asks if you\u0027d like to buy it back, maybe. The price is an apology. Not from him. From you.",
+              "mechanics": [
+                "damage_spirits 1",
+                "quality faction.clans -1"
+              ]
             }
           }
         },
         {
-          "optionText": "PAY the trader = Offer coin to resolve the situation",
-          "optionLink": "PAY the trader",
+          "optionText": "Pay the trader = Offer coin to resolve the situation",
+          "optionLink": "Pay the trader",
           "optionPreview": "Offer coin to resolve the situation",
           "requires": null,
           "single": {
-            "text": "You pull the purse from your belt, pour coins into your palm. Silver catches light like water in drought country. Don\u0027t address the insult, don\u0027t adjudicate who owes what to whom. Just ask what the finder\u0027s fee is for lost property. Frame it as custom, as proper form. The trader\u0027s eyes fix on your hand. The crowd quiets. Money makes things simple in ways that honor never does.\n\nThe trader names a price. Not outrageous, but not generous either. The courier starts to object, but you silence him with a look. You count out the coins into the trader\u0027s palm. The exchange happens with the small ceremony that all plateau transactions demand. The trader hands over the case, bows with theatrical courtesy. Tells the courier that civilized people settle matters with trade, not tantrum. The courier takes the case, face burning. Looks at you with naked relief and something more complicated underneath. You\u0027ve saved him, but you\u0027ve also made him small in front of witnesses. The crowd disperses. The elder under the awning returns to his tea. Debt paid, story finished, everyone walks away with something to tell.",
-            "mechanics": []
+            "text": "You pull the purse from your belt, pour coins into your palm. Silver catches light like water in drought country. Don\u0027t address the insult, don\u0027t adjudicate who owes what to whom. Just ask what the finder\u0027s fee is for lost property. Frame it as custom, as proper form. The trader\u0027s eyes fix on your hand. The crowd quiets. Money makes things simple in ways that honor never does.\n\nThe trader names a price. Not outrageous, but not generous either. The courier starts to object, but you silence him with a look. You count out the coins into the trader\u0027s palm. The exchange happens with the small ceremony that all plateau transactions demand. The trader hands over the case, bows with theatrical courtesy. Tells the courier that civilized people settle matters with trade, not tantrum. The courier takes the case, face burning. Looks at you with naked relief and something more complicated underneath. You\u0027ve saved him, but you\u0027ve also made him small in front of witnesses. The crowd disperses. Debt paid, story finished, everyone walks away with something to tell.",
+            "mechanics": [
+              "rem_gold 5",
+              "quality faction.kesharat \u002B1"
+            ]
           }
         },
         {
@@ -3463,8 +3705,10 @@
           "optionPreview": "Walk past without involvement",
           "requires": null,
           "single": {
-            "text": "You adjust your pack and turn toward the road. The courier calls after you, voice cracking with desperation. You keep walking. Behind you the voices rise, the trader\u0027s performance reaching its crescendo. The crowd\u0027s laughter has teeth in it now. Your boots find the packed earth of the caravan track. Dust plumes with each step. The sounds fade slower than you\u0027d like.\n\nA half mile on, you hear hoofbeats. The courier passes at a gallop, hunched low, no document case visible. His mount\u0027s flanks are lathered. He doesn\u0027t look at you. Further still, you pass a woman leading a pack goat. She mentions that some Kesharat fool got himself rolled at the watering station. Lost his papers, lost his dignity, rode off like demons were chasing him. She seems to find it funny. You ask if anyone was hurt. She shrugs. Says the clans know better than to leave marks the Kesharat can see. You walk on. The wind carries dust and distance. Whatever accounting follows will happen far from here, in offices and checkpoints where your ring holds no weight.",
-            "mechanics": []
+            "text": "You adjust your pack and turn toward the road. The courier calls after you, voice cracking with desperation. You keep walking. Behind you the voices rise, the trader\u0027s performance reaching its crescendo. The crowd\u0027s laughter has teeth in it now. Your boots find the packed earth of the caravan track. Dust plumes with each step. \n\nThe sounds fade slower than you\u0027d like.",
+            "mechanics": [
+              "quality faction.kesharat -1"
+            ]
           }
         }
       ]
@@ -3489,7 +3733,7 @@
             "preamble": "You step between them before the guards reach the crate. \u0022The Guild recognizes passage tokens issued under legitimate clan authority,\u0022 you say, loud enough for the waiting travelers to hear. \u0022If your clan wishes to renegotiate terms, that conversation happens through formal channels. Not at a rope barrier in the afternoon heat.\u0022 You turn the ring so the signet catches light. \u0022Unless you want every caravan master from here to the plateaus hearing that clan word means nothing.\u0022",
             "branches": [
               {
-                "condition": "check mercantile medium",
+                "condition": "check negotiation medium",
                 "text": "The toll-keeper holds your gaze for a long moment, his jaw working as though chewing something bitter. His eyes narrow, measuring the weight of the ring you wear against whatever authority has placed him here at this stone throat. The guards halt mid-stride, their attention fixed on their captain.\n\nAt last he grunts, a sound dragged up from some deep well of pragmatism. He waves one hand sharply, and the guards retreat to their stations without a word. \u0022We will make an exception for the outlander,\u0022 he says, each word dropping like a stone into still water, \u0022who is unaccustomed to our ways.\u0022 He moves to the nearest iron stake and begins working the rope free, his fingers quick despite their reluctance. The barrier sags, then falls away entirely. \u0022Tomorrow you will not be so fortunate.\u0022\n\nThe lead merchant exhales audibly. He says nothing, perhaps knowing better than to claim victory aloud, and climbs onto his cart. The wheels groan as the mules lean into their harnesses. You watch the sealed crate pass through the gap, its wax stamps catching the brutal sun, still intact.",
                 "mechanics": []
               }
@@ -3713,7 +3957,7 @@
       "tier": null,
       "vignette": null,
       "title": "The Magistrate\u0027s Seal",
-      "body": "\nThe toll collector at the rail depot spreads a map across his makeshift desk, a plank balanced on two stone cairns, and traces a route with one ink-stained finger. He\u0027s explaining the new administrative boundaries to a merchant whose cart waits behind you, laden with bales of spice. \u0022This section is Kesharat jurisdiction now. Fifty talents for passage, and I\u0027ll need your cargo manifest verified.\u0022 He adjusts his brass spectacles and offers a practiced smile. The merchant produces papers stamped with the Magistrate\u0027s seal, a mark that guarantees reduced tariffs, exemption from most tolls.\n\nYou recognize the seal. You forged it yourself three years ago for a silk merchant in the eastern provinces. The impression is distinctive: a flaw in the lower left corner where the original die cracked. This one has the same flaw. Either this merchant bought your forgery, or he commissioned another from someone who copied your work with impressive fidelity.\n\nThe toll collector examines the papers with professional skepticism. He holds one up to the light, checking the watermark. \u0022These look legitimate,\u0022 he says, though his tone suggests he isn\u0027t certain. He glances at your signet ring, catches the Guild mark. \u0022You\u0027re Merchant Guild, yes? Have you worked the eastern routes? I\u0027d value your opinion on these seals before I clear him through.\u0022\n\nThe merchant meets your eyes. His expression is carefully neutral, but his hand rests too casually on the cart\u0027s side panel. The afternoon sun beats down on all three of you, and somewhere across the mesa, a signal tower bell begins its slow count of the hour.\n",
+      "body": "\nThe toll collector at the rail depot spreads a map across his makeshift desk, a plank balanced on two stone cairns, and traces a route with one ink-stained finger. He\u0027s explaining the new administrative boundaries to a merchant whose cart waits behind you, laden with bales of spice. \u0022This section is Kesharat jurisdiction now. Fifty talents for passage, and I\u0027ll need your cargo manifest verified.\u0022 He adjusts his brass spectacles and offers a practiced smile. The merchant produces papers stamped with the Magistrate\u0027s seal, a mark that guarantees reduced tariffs, exemption from most tolls.\n\nYou recognize the seal. You forged it yourself three years ago for a silk merchant in the eastern provinces. The impression is distinctive: a flaw in the lower left corner where the original die cracked. This one has the same flaw. Either this merchant bought your forgery, or he commissioned another from someone who copied your work with impressive fidelity.\n\nThe toll collector examines the papers with professional skepticism. He holds one up to the light, checking the watermark. \u0022These look legitimate,\u0022 he says, though his tone suggests he isn\u0027t certain. He glances at your signet ring, catches the Guild mark. \u0022You\u0027re Traders Guild, yes? Have you worked the eastern routes? I\u0027d value your opinion on these seals before I clear him through.\u0022\n\nThe merchant meets your eyes. His expression is carefully neutral, but his hand rests too casually on the cart\u0027s side panel. The afternoon sun beats down on all three of you, and somewhere across the mesa, a signal tower bell begins its slow count of the hour.\n",
       "requires": [],
       "choices": [
         {
@@ -3960,7 +4204,7 @@
       "tier": null,
       "vignette": null,
       "title": "An Unpaid Debt",
-      "body": "\nThe elder sits beneath the meeting pavilion, reed mat spread before her, contract weighted at the corners with smooth river stones. The ink has run a little in the damp, but the seal is clear enough: the Merchant Guild\u0027s device, pressed deep and smug. Around the platform the villagers mutter, not wild with anger but steady with it, the sound of people who know when they\u0027ve been handled.\n\nThe guild merchant stands aloof, dry, immaculate, and composed. He taps the parchment with a gloved finger and explains, patiently, that the exclusivity clause extends to \u0022all navigable channels, known or later discovered,\u0022 that the yield guarantee binds the village irrespective of seasonal variance, and that the penalty for breach accrues at a rate any child could calculate. \n\nHe signs deeply, adopting a patronizing tone. \u0022You promised fish,\u0022 he says. \u0022If the western channels failed, you should have found others. The contract does not concern itself with disappointment.\u0022\n\nThe elder\u0027s mouth tightens. The advance coin paid for seed after a blight year. For timber when the flood took three homes. The villagers understood a bad season to be a shared misfortune, not an opportunity for interest to breed like midges. They have no fish in the quantities demanded. They do not have the coin the merchant now claims is owed.\n\nThe merchant closes his ledger with a soft, satisfied sound. He will accept payment in fish, in silver, or in pledged labor at guild rates. Failing that, he will mark the village delinquent and let the Guild pursue remedies less conversational. The elder turns to you, eyes sharp and measuring.\n",
+      "body": "\nThe elder sits beneath the meeting pavilion, reed mat spread before her, contract weighted at the corners with smooth river stones. The ink has run a little in the damp, but the seal is clear enough: the Traders Guild\u0027s device, pressed deep and smug. Around the platform the villagers mutter, not wild with anger but steady with it, the sound of people who know when they\u0027ve been handled.\n\nThe guild merchant stands aloof, dry, immaculate, and composed. He taps the parchment with a gloved finger and explains, patiently, that the exclusivity clause extends to \u0022all navigable channels, known or later discovered,\u0022 that the yield guarantee binds the village irrespective of seasonal variance, and that the penalty for breach accrues at a rate any child could calculate. \n\nHe signs deeply, adopting a patronizing tone. \u0022You promised fish,\u0022 he says. \u0022If the western channels failed, you should have found others. The contract does not concern itself with disappointment.\u0022\n\nThe elder\u0027s mouth tightens. The advance coin paid for seed after a blight year. For timber when the flood took three homes. The villagers understood a bad season to be a shared misfortune, not an opportunity for interest to breed like midges. They have no fish in the quantities demanded. They do not have the coin the merchant now claims is owed.\n\nThe merchant closes his ledger with a soft, satisfied sound. He will accept payment in fish, in silver, or in pledged labor at guild rates. Failing that, he will mark the village delinquent and let the Guild pursue remedies less conversational. The elder turns to you, eyes sharp and measuring.\n",
       "requires": [],
       "choices": [
         {
@@ -3981,7 +4225,7 @@
           "optionPreview": "Insist that the contract is just and valid",
           "requires": null,
           "single": {
-            "text": "You take the parchment from beneath its stones and trace the clauses with a careful eye. The ink has blurred in places, true, but the structure remains sound: three seals of the Merchant Guild pressed into wax, each impression crisp and deliberate; the terms of advance and repayment rendered in the formulaic language of commercial law; the interest schedule ascending in neat columns; the waiver of force majeure signed in the elder\u0027s own hand. You read the exclusivity provision twice. It is comprehensive. It is binding.\n\nYou set the contract down and meet the elder\u0027s gaze. The silence stretches. Around the pavilion the villagers shift, leather creaking, breath held. You speak plainly: the agreement is sound, the debt is owed, and the Guild\u0027s claim is just. That the western channels failed is misfortune, but misfortune does not void obligation. The merchant extended coin in good faith; the village accepted it with open hands. Now the terms must be honored, or the consequences will follow with the same inevitability as spring floods.\n\nThe elder\u0027s face hardens, not with surprise but with the confirmation of something already suspected. The merchant permits himself a small, measured nod. He reopens his ledger and begins to record the disposition of the matter, quill scratching soft and methodical against vellum. The villagers do not shout. They turn away, shoulders bent, already calculating what can be sold, what can be pledged, what small and bitter surrenders the season ahead will demand.\n\nThe merchant nods graciously, extending you the customary consulting fee.",
+            "text": "You take the parchment from beneath its stones and trace the clauses with a careful eye. The ink has blurred in places, true, but the structure remains sound: three seals of the Traders Guild pressed into wax, each impression crisp and deliberate; the terms of advance and repayment rendered in the formulaic language of commercial law; the interest schedule ascending in neat columns; the waiver of force majeure signed in the elder\u0027s own hand. You read the exclusivity provision twice. It is comprehensive. It is binding.\n\nYou set the contract down and meet the elder\u0027s gaze. The silence stretches. Around the pavilion the villagers shift, leather creaking, breath held. You speak plainly: the agreement is sound, the debt is owed, and the Guild\u0027s claim is just. That the western channels failed is misfortune, but misfortune does not void obligation. The merchant extended coin in good faith; the village accepted it with open hands. Now the terms must be honored, or the consequences will follow with the same inevitability as spring floods.\n\nThe elder\u0027s face hardens, not with surprise but with the confirmation of something already suspected. The merchant permits himself a small, measured nod. He reopens his ledger and begins to record the disposition of the matter, quill scratching soft and methodical against vellum. The villagers do not shout. They turn away, shoulders bent, already calculating what can be sold, what can be pledged, what small and bitter surrenders the season ahead will demand.\n\nThe merchant nods graciously, extending you the customary consulting fee.",
             "mechanics": [
               "heal_spirits 1",
               "give_gold 2"
@@ -3997,7 +4241,7 @@
             "preamble": "",
             "branches": [
               {
-                "condition": "check mercantile medium",
+                "condition": "check negotiation medium",
                 "text": "You lift the contract from its bed of river stones. The parchment is stiff beneath your fingers, edges water-stained and curling. The script runs dense and tight, clause nested within clause like fish traps sunk one inside another. Each sentence coils back upon itself, laden with conditions and exceptions that seem to multiply as you read. The merchant\u0027s guild employs no fools to draft such instruments.\n\nYou trace the lines again, slower. Your eyes ache from following the serpentine text. The terms shift and qualify, hedging every obligation, foreclosing every exit. You are nearly ready to set the thing down, to admit defeat, when a peculiar phrasing snags your attention. There, in the third subsection of the yield clause: payment calculated as a *residual proportion* of catch taken from designated channels. If the western channels yielded nothing, the residual collapses to near nothing. A handful of coppers, perhaps. Barely sufficient to pay the merchant\u0027s passage to this place, let alone the sum he now demands.\n\nYou speak the clause aloud, voice cutting through the pavilion\u0027s tense quiet. The merchant\u0027s hand darts out. He tears the parchment from your grasp, holds it close to his face. His lips move soundlessly. His brow furrows deep, color rising at his collar. You brace yourself for his fury, for whatever retribution the guild visits upon those who obstruct its commerce. Instead, he exhales slowly. His shoulders settle. He rolls the contract with deliberate care and meets your gaze with something almost like respect. \u0022Well played,\u0022 he says. \u0022The error is mine. I will face the consequences.\u0022 He pauses, weighing you with cool appraisal. \u0022You have a sharp eye. You will go far.\u0022",
                 "mechanics": [
                   "heal_spirits 2"
@@ -4109,7 +4353,7 @@
       "tier": null,
       "vignette": null,
       "title": "The Cartographer\u0027s Kit",
-      "body": "\nThe trader squats on the raised path through the reeds, his punt already loaded, his shoulders hunched against the humidity like a man who hasn\u0027t been dry in days. He\u0027s sorting through a canvas wrap of goods, mostly common stuff, fish hooks and lamp oil. But tucked among them you catch the edge of something different. A leather bag, a Merchant\u0027s Guild seal stamped into the leather. A guild cartographer\u0027s kit.\n\nHe moves to cover it when he sees you looking, but not quickly enough.\n\nHe names a price that would empty most purses. Says he\u0027s leaving within the hour, heading upriver to drier markets where people pay what things are worth. The kit is in good order, he says, all the pieces intact.\n\nWhat he doesn\u0027t say is how he came by such a treasure. The kit is the mark of a guild cartographer, each custom made for the terrain and conditions of the area they\u0027re assigned to. No one would part with such a thing at any price. The leather bag has a history, and you\u0027ve every reason to imagine it\u0027s a dark one.\n\nThe trader is already wrapping his goods. The punt rocks gently beneath him. In another moment he\u0027ll push off, and the kit goes with him.\n",
+      "body": "\nThe trader squats on the raised path through the reeds, his punt already loaded, his shoulders hunched against the humidity like a man who hasn\u0027t been dry in days. He\u0027s sorting through a canvas wrap of goods, mostly common stuff, fish hooks and lamp oil. But tucked among them you catch the edge of something different. A leather bag, a Traders Guild seal stamped into the leather. A guild cartographer\u0027s kit.\n\nHe moves to cover it when he sees you looking, but not quickly enough.\n\nHe names a price that would empty most purses. Says he\u0027s leaving within the hour, heading upriver to drier markets where people pay what things are worth. The kit is in good order, he says, all the pieces intact.\n\nWhat he doesn\u0027t say is how he came by such a treasure. The kit is the mark of a guild cartographer, each custom made for the terrain and conditions of the area they\u0027re assigned to. No one would part with such a thing at any price. The leather bag has a history, and you\u0027ve every reason to imagine it\u0027s a dark one.\n\nThe trader is already wrapping his goods. The punt rocks gently beneath him. In another moment he\u0027ll push off, and the kit goes with him.\n",
       "requires": [],
       "choices": [
         {
@@ -4121,11 +4365,11 @@
             "preamble": "",
             "branches": [
               {
-                "condition": "check mercantile medium",
-                "text": "You rest your hand upon the canvas satchel, not grasping, not yet, but with enough weight that the trader\u0027s eyes fix upon it. The hand bears your Merchant Guild seal, turned now to catch what light filters through the reed haze.\n\n\u0022You have come by some guild property, my friend.\u0022 Your voice carries no heat, only the flat certainty of stone. \u0022You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do.\u0022 You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. \u0022Consider this a finder\u0027s fee. I will see that the kit is returned to the guild hall in Aldgate.\u0022\n\nThe trader\u0027s face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer\u0027s kit rests in your hands now, its leather still warm from where he clutched it.",
+                "condition": "check negotiation medium",
+                "text": "You rest your hand upon the canvas satchel, not grasping, not yet, but with enough weight that the trader\u0027s eyes fix upon it. The hand bears your Traders Guild seal, turned now to catch what light filters through the reed haze.\n\n\u0022You have come by some guild property, my friend.\u0022 Your voice carries no heat, only the flat certainty of stone. \u0022You are fortunate to have found me when you did. Had you sold such a thing to another, who can say what the guild would do.\u0022 You draw a few coins from your purse, copper and silver mixed, their dull chime like a question hanging in the wet air. \u0022Consider this a finder\u0027s fee. I will see that the kit is returned to the guild hall in Aldgate.\u0022\n\nThe trader\u0027s face drains to the color of old tallow. His mouth works soundlessly for a breath, then another. His fingers, roughened from rope and weather, hover above the coins you have laid before him. He snatches them up with the quickness of a man who fears the offer might evaporate, then releases the leather bag as though its touch burns him. The punt rocks beneath his weight as he pushes off, pole biting into the muck, and within moments the reeds have swallowed him. You hear the splash of his passage growing distant. The cartographer\u0027s kit rests in your hands now, its leather still warm from where he clutched it.",
                 "mechanics": [
                   "add_item cartographers_kit",
-                  "rem_gold 2"
+                  "rem_gold 10"
                 ]
               }
             ],

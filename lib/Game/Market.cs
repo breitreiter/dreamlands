@@ -210,10 +210,12 @@ public static class Market
         return new MarketResult(true, $"Claimed {haul.DisplayName} — deliver to {haul.DestinationHint}");
     }
 
-    public static int GetSellPrice(ItemDef item, BalanceData balance)
+    public static int GetSellPrice(ItemDef item, BalanceData balance, int mercantileSkill = 0)
     {
         var basePrice = GetBasePrice(item, balance);
-        return basePrice > 0 ? Math.Max(1, (int)(basePrice * balance.Trade.SellRatio)) : 0;
+        if (basePrice <= 0) return 0;
+        var sellPrice = basePrice * balance.Trade.SellRatio * (1 + mercantileSkill * balance.Trade.MercantileSellBonusPerPoint);
+        return Math.Max(1, (int)Math.Round(sellPrice));
     }
 
     public static MarketResult Sell(PlayerState player, string itemDefId, BalanceData balance)
@@ -224,7 +226,8 @@ public static class Market
         if (def.Type == ItemType.Haul)
             return new MarketResult(false, "Cannot sell hauls");
 
-        var price = GetSellPrice(def, balance);
+        int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
+        var price = GetSellPrice(def, balance, mercantile);
         if (price <= 0)
             return new MarketResult(false, "Item has no sell value");
 
