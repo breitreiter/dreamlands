@@ -31,7 +31,7 @@ choices:
   +open Gameplay_Intro
 
 * A Gift = It was given to me
-  The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father's finest hunters gave up the search after the first week, but not you. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with smoke and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You've come here to make your own story, where your name will be remembered.
+  The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father's finest hunters gave up the search after the first week, but not you. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with song and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You've come here to make your own story, where your name will be remembered.
   +set_skill cunning 2
   +set_skill bushcraft 4
   +set_skill combat 2
