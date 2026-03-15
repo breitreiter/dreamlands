@@ -82,6 +82,50 @@ public class ChoicesTests
     }
 
     [Fact]
+    public void GetAllWithLockState_UnlockedAndLocked()
+    {
+        var open = new Choice
+        {
+            OptionText = "Go forward",
+            Single = new SingleOutcome { Part = new OutcomePart { Text = "Ok." } }
+        };
+        var locked = new Choice
+        {
+            OptionText = "Secret path",
+            Requires = "quality guild 3",
+            Single = new SingleOutcome { Part = new OutcomePart { Text = "Hidden." } }
+        };
+        var encounter = MakeEncounter(open, locked);
+        var state = Fresh();
+
+        var all = Choices.GetAllWithLockState(encounter, state, Balance);
+
+        Assert.Equal(2, all.Count);
+        Assert.False(all[0].Locked);
+        Assert.Equal(0, all[0].OriginalIndex);
+        Assert.True(all[1].Locked);
+        Assert.Equal(1, all[1].OriginalIndex);
+    }
+
+    [Fact]
+    public void GetAllWithLockState_QualityMet_NotLocked()
+    {
+        var choice = new Choice
+        {
+            OptionText = "Guild door",
+            Requires = "quality guild 3",
+            Single = new SingleOutcome { Part = new OutcomePart { Text = "Enter." } }
+        };
+        var encounter = MakeEncounter(choice);
+        var state = Fresh();
+        state.Qualities["guild"] = 5;
+
+        var all = Choices.GetAllWithLockState(encounter, state, Balance);
+        Assert.Single(all);
+        Assert.False(all[0].Locked);
+    }
+
+    [Fact]
     public void Resolve_SingleOutcome_ReturnsTextAndMechanics()
     {
         var choice = new Choice

@@ -51,14 +51,36 @@ public class EncounterRunnerTests
     }
 
     [Fact]
-    public void Begin_ReturnsVisibleChoices()
+    public void Begin_ReturnsGatedChoices()
     {
         var session = Helpers.MakeSession();
         var enc = SimpleEncounter();
         var step = EncounterRunner.Begin(session, enc);
 
-        Assert.Single(step.VisibleChoices);
-        Assert.Equal("Continue", step.VisibleChoices[0].OptionText);
+        Assert.Single(step.GatedChoices);
+        Assert.Equal("Continue", step.GatedChoices[0].Choice.OptionText);
+        Assert.False(step.GatedChoices[0].Locked);
+    }
+
+    [Fact]
+    public void Begin_LockedChoice_MarkedAsLocked()
+    {
+        var session = Helpers.MakeSession();
+        var enc = new Encounter.Encounter
+        {
+            Id = "test", Category = "test", Title = "Test", Body = "Test body.",
+            Choices = new List<Choice>
+            {
+                new() { OptionText = "Open", Single = new SingleOutcome { Part = new OutcomePart { Text = "Ok." } } },
+                new() { OptionText = "Secret", Requires = "tag knows_secret", Single = new SingleOutcome { Part = new OutcomePart { Text = "Hidden." } } },
+            }
+        };
+        var step = EncounterRunner.Begin(session, enc);
+
+        Assert.Equal(2, step.GatedChoices.Count);
+        Assert.False(step.GatedChoices[0].Locked);
+        Assert.True(step.GatedChoices[1].Locked);
+        Assert.Equal(1, step.GatedChoices[1].OriginalIndex);
     }
 
     [Fact]
@@ -68,7 +90,7 @@ public class EncounterRunnerTests
         var enc = SimpleEncounter();
         var begin = EncounterRunner.Begin(session, enc);
 
-        var result = EncounterRunner.Choose(session, begin.VisibleChoices[0]);
+        var result = EncounterRunner.Choose(session, begin.GatedChoices[0].Choice);
 
         Assert.IsType<EncounterStep.ShowOutcome>(result);
     }
@@ -80,7 +102,7 @@ public class EncounterRunnerTests
         var enc = SimpleEncounter(mechanics: new[] { "open next_room" });
         var begin = EncounterRunner.Begin(session, enc);
 
-        var result = EncounterRunner.Choose(session, begin.VisibleChoices[0]);
+        var result = EncounterRunner.Choose(session, begin.GatedChoices[0].Choice);
 
         var finished = Assert.IsType<EncounterStep.Finished>(result);
         Assert.Equal(FinishReason.NavigatedTo, finished.Reason);
@@ -94,7 +116,7 @@ public class EncounterRunnerTests
         var enc = SimpleEncounter(mechanics: new[] { "finish_dungeon" });
         var begin = EncounterRunner.Begin(session, enc);
 
-        var result = EncounterRunner.Choose(session, begin.VisibleChoices[0]);
+        var result = EncounterRunner.Choose(session, begin.GatedChoices[0].Choice);
 
         var finished = Assert.IsType<EncounterStep.Finished>(result);
         Assert.Equal(FinishReason.DungeonFinished, finished.Reason);

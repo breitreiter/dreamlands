@@ -4,7 +4,7 @@ namespace Dreamlands.Orchestration;
 
 public abstract record EncounterStep
 {
-    public record ShowEncounter(Encounter.Encounter Encounter, List<Encounter.Choice> VisibleChoices) : EncounterStep;
+    public record ShowEncounter(Encounter.Encounter Encounter, List<GatedChoice> GatedChoices) : EncounterStep;
     public record ShowOutcome(ResolvedChoice Resolved, List<MechanicResult> Results) : EncounterStep;
     public record Finished(FinishReason Reason, string? NavigateToId = null, ShowOutcome? Outcome = null) : EncounterStep;
 }
@@ -20,8 +20,8 @@ public static class EncounterRunner
         session.Player.CurrentEncounterId = encounter.Id;
         if (!encounter.Recurring)
             session.Player.UsedEncounterIds.Add(encounter.Id);
-        var visible = Choices.GetVisible(encounter, session.Player, session.Balance);
-        return new EncounterStep.ShowEncounter(encounter, visible);
+        var gated = Choices.GetAllWithLockState(encounter, session.Player, session.Balance);
+        return new EncounterStep.ShowEncounter(encounter, gated);
     }
 
     public static EncounterStep Choose(GameSession session, Encounter.Choice choice)

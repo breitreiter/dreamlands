@@ -65,6 +65,8 @@ export interface ChoiceInfo {
   index: number;
   label: string;
   preview: string | null;
+  locked: boolean;
+  requires: string | null;
 }
 
 export interface OutcomeInfo {

@@ -181,25 +181,39 @@ export default function Encounter({ state }: { state: GameResponse }) {
               {encounter.choices.map((choice) => (
                 <button
                   key={choice.index}
-                  onClick={() => {
+                  onClick={choice.locked ? undefined : () => {
                     setSegments(prev => [...prev, { kind: "chosen", label: choice.label, preview: choice.preview ?? undefined }]);
                     doAction({ action: "choose", choiceIndex: choice.index });
                   }}
-                  disabled={loading}
-                  className="w-full text-left flex items-start gap-3
-                             disabled:text-muted transition-colors group cursor-pointer"
+                  disabled={loading || choice.locked}
+                  className={`w-full text-left flex items-start gap-3 transition-colors ${
+                    choice.locked
+                      ? "opacity-40 cursor-default"
+                      : "group cursor-pointer"
+                  }`}
                 >
                   <img
                     src="/world/assets/icons/sun.svg"
                     alt=""
-                    className="w-4 h-4 mt-1 shrink-0 opacity-70 group-hover:opacity-100
-                               transition-opacity"
+                    className={`w-4 h-4 mt-1 shrink-0 ${
+                      choice.locked
+                        ? "opacity-30"
+                        : "opacity-70 group-hover:opacity-100 transition-opacity"
+                    }`}
                   />
                   <span>
-                    <span className="font-bold text-action group-hover:text-action-hover transition-colors">
+                    <span className={choice.locked
+                      ? "font-bold text-muted"
+                      : "font-bold text-action group-hover:text-action-hover transition-colors"
+                    }>
                       {choice.label}
                     </span>
-                    {choice.preview && (
+                    {choice.locked && choice.requires && (
+                      <span className="block text-dim mt-0.5">
+                        (requires {choice.requires})
+                      </span>
+                    )}
+                    {!choice.locked && choice.preview && (
                       <span className="block text-sm text-action-dim mt-0.5">
                         {choice.preview}
                       </span>

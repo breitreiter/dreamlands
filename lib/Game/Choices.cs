@@ -5,6 +5,9 @@ namespace Dreamlands.Game;
 /// <summary>Result of resolving a choice's outcome branch.</summary>
 public record ResolvedChoice(string? Preamble, string Text, IReadOnlyList<string> Mechanics, SkillCheckResult? CheckResult);
 
+/// <summary>A choice with its original index and lock state for display.</summary>
+public record GatedChoice(Encounter.Choice Choice, int OriginalIndex, bool Locked);
+
 /// <summary>Choice filtering (requires-gating) and branch resolution.</summary>
 public static class Choices
 {
@@ -20,6 +23,21 @@ public static class Choices
                 visible.Add(choice);
         }
         return visible;
+    }
+
+    /// <summary>
+    /// Return all choices with their original index and whether they are locked by an unmet Requires gate.
+    /// </summary>
+    public static List<GatedChoice> GetAllWithLockState(Encounter.Encounter encounter, PlayerState state, BalanceData balance)
+    {
+        var result = new List<GatedChoice>();
+        for (var i = 0; i < encounter.Choices.Count; i++)
+        {
+            var choice = encounter.Choices[i];
+            var locked = choice.Requires != null && !Conditions.Evaluate(choice.Requires, state, balance, Random.Shared);
+            result.Add(new GatedChoice(choice, i, locked));
+        }
+        return result;
     }
 
     /// <summary>

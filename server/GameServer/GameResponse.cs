@@ -166,6 +166,8 @@ public class ChoiceInfo
     public int Index { get; init; }
     public string Label { get; init; } = "";
     public string? Preview { get; init; }
+    public bool Locked { get; init; }
+    public string? Requires { get; init; }
 }
 
 public class OutcomeInfo

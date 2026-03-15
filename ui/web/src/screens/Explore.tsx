@@ -424,6 +424,7 @@ export default function Explore({ state }: { state: GameResponse }) {
         maxZoom={MAX_ZOOM}
         style={{ height: "100%", width: "100%" }}
         zoomSnap={1}
+        attributionControl={false}
       >
         <TileLayer
           url="/world/tiles/{z}/{x}/{y}.png"

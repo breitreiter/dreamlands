@@ -43,7 +43,8 @@ string? ParseArg(string[] a, string flag)
 }
 
 var repoRoot = FindRepoRoot();
-var apiVersion = File.ReadAllText(Path.Combine(repoRoot, "api-version")).Trim();
+var apiVersion = Environment.GetEnvironmentVariable("DREAMLANDS_API_VERSION")
+    ?? File.ReadAllText(Path.Combine(repoRoot, "api-version")).Trim();
 var mapPath = ParseArg(args, "--map")
     ?? Environment.GetEnvironmentVariable("DREAMLANDS_MAP")
     ?? Path.Combine(repoRoot, "worlds/production/map.json");
@@ -73,13 +74,24 @@ catch (Exception ex)
 }
 
 var balance = BalanceData.Default;
-var store = new LocalFileStore(Path.Combine(repoRoot, "saves"));
+var savesPath = Environment.GetEnvironmentVariable("DREAMLANDS_SAVES")
+    ?? Path.Combine(repoRoot, "saves");
+var store = new LocalFileStore(savesPath);
 
-// ── CORS for local dev ──
-app.UseCors(policy => policy
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+// ── CORS ──
+var corsOrigins = Environment.GetEnvironmentVariable("DREAMLANDS_CORS_ORIGINS");
+app.UseCors(policy =>
+{
+    if (corsOrigins != null)
+    {
+        var origins = corsOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        policy.WithOrigins(origins).AllowAnyMethod().AllowAnyHeader();
+    }
+    else
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    }
+});
 
 // ── Helper: reconstruct session from persisted state ──
 
@@ -358,20 +370,39 @@ GameResponse BuildInventoryResponse(GameSession s, PlayerState p) => new()
     Mechanics = BuildMechanics(p),
 };
 
-EncounterInfo BuildEncounterInfo(Encounter encounter, List<Choice> choices) => new()
+EncounterInfo BuildEncounterInfo(Encounter encounter, List<GatedChoice> gated) => new()
 {
     Id = encounter.Id,
     Category = encounter.Category,
     Vignette = encounter.Vignette,
     Title = encounter.Title,
     Body = encounter.Body,
-    Choices = choices.Select((c, i) => new ChoiceInfo
+    Choices = gated.Select(g => new ChoiceInfo
     {
-        Index = i,
-        Label = c.OptionLink ?? c.OptionText,
-        Preview = c.OptionPreview,
+        Index = g.OriginalIndex,
+        Label = g.Choice.OptionLink ?? g.Choice.OptionText,
+        Preview = g.Choice.OptionPreview,
+        Locked = g.Locked,
+        Requires = g.Locked ? FormatRequires(g.Choice.Requires) : null,
     }).ToList(),
 };
+
+static string? FormatRequires(string? requires)
+{
+    if (requires == null) return null;
+    var parts = ActionVerb.Tokenize(requires);
+    return parts[0] switch
+    {
+        "quality" when parts.Count >= 3 && int.TryParse(parts[2], out var t) && t < 0
+            => $"{parts[1]} \u2264 {parts[2]}",
+        "quality" when parts.Count >= 3
+            => $"{parts[1]} \u2265 {parts[2]}",
+        "tag" when parts.Count >= 2 => parts[1],
+        "has" when parts.Count >= 2 => parts[1],
+        "meets" when parts.Count >= 3 => $"{parts[1]} \u2265 {parts[2]}",
+        _ => requires,
+    };
+}
 
 List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
     results.Where(r => r is not MechanicResult.Navigation).Select(r => new MechanicResultInfo
@@ -436,12 +467,12 @@ GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? del
     DungeonHub = BuildDungeonHubInfo(session, session.CurrentNode),
 };
 
-GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<Choice> choices) => new()
+GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<GatedChoice> gated) => new()
 {
     Mode = "encounter",
     Status = BuildStatus(session.Player),
     Node = BuildNodeInfo(session.CurrentNode, session.Player),
-    Encounter = BuildEncounterInfo(encounter, choices),
+    Encounter = BuildEncounterInfo(encounter, gated),
     Inventory = BuildInventory(session.Player),
     Mechanics = BuildMechanics(session.Player),
 };
@@ -631,7 +662,7 @@ app.MapPost("/api/game/new", async () =>
     {
         var step = EncounterRunner.Begin(session, introEnc);
         await store.Save(player);
-        return Results.Ok(new { gameId, state = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices) });
+        return Results.Ok(new { gameId, state = BuildEncounterResponse(session, step.Encounter, step.GatedChoices) });
     }
 
     await store.Save(player);
@@ -654,8 +685,8 @@ app.MapGet("/api/game/{id}", async (string id) =>
 
     if (session.CurrentEncounter is { } enc)
     {
-        var choices = Choices.GetVisible(enc, player, balance);
-        return Results.Ok(BuildEncounterResponse(session, enc, choices));
+        var gated = Choices.GetAllWithLockState(enc, player, balance);
+        return Results.Ok(BuildEncounterResponse(session, enc, gated));
     }
 
     return Results.Ok(BuildExploringResponse(session));
@@ -843,7 +874,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                     {
                         var step = EncounterRunner.Begin(session, enc);
                         await store.Save(player);
-                        return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.VisibleChoices));
+                        return Results.Ok(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
                     }
                 }
             }
@@ -867,12 +898,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
             if (session.CurrentEncounter == null)
                 return Results.BadRequest(new { error = "No active encounter" });
 
-            var choices = Choices.GetVisible(session.CurrentEncounter, player, balance);
+            var allChoices = session.CurrentEncounter.Choices;
             var idx = req.ChoiceIndex ?? -1;
-            if (idx < 0 || idx >= choices.Count)
+            if (idx < 0 || idx >= allChoices.Count)
                 return Results.BadRequest(new { error = $"Invalid choice index: {idx}" });
 
-            var chosen = choices[idx];
+            var chosen = allChoices[idx];
+            if (chosen.Requires != null && !Conditions.Evaluate(chosen.Requires, player, balance, Random.Shared))
+                return Results.BadRequest(new { error = "Choice is locked" });
             var result = EncounterRunner.Choose(session, chosen);
 
             switch (result)
@@ -894,7 +927,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                                 {
                                     Mode = "encounter",
                                     Status = BuildStatus(player),
-                                    Encounter = BuildEncounterInfo(step.Encounter, step.VisibleChoices),
+                                    Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
                                     Outcome = finished.Outcome is { } o ? BuildOutcomeInfo(o) : null,
                                     Inventory = BuildInventory(player),
                                 });
@@ -976,7 +1009,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             var step = EncounterRunner.Begin(session, start);
             await store.Save(player);
-            response = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices);
+            response = BuildEncounterResponse(session, step.Encounter, step.GatedChoices);
             break;
         }
 
@@ -1013,7 +1046,7 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             var step = EncounterRunner.Begin(session, target);
             await store.Save(player);
-            response = BuildEncounterResponse(session, step.Encounter, step.VisibleChoices);
+            response = BuildEncounterResponse(session, step.Encounter, step.GatedChoices);
             break;
         }
 
