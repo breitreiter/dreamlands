@@ -125,10 +125,18 @@ public static class SettlementRunner
         GameSession session, SettlementInfo info,
         Terrain biome, bool isLeaf, SettlementState state, int? maxSlots = null)
     {
-        // Try 2 hops, fallback to 1, then 3
-        var candidates = session.Graph!.GetSettlementsAtHop(info.Id, 2);
-        if (candidates.Count == 0) candidates = session.Graph.GetSettlementsAtHop(info.Id, 1);
-        if (candidates.Count == 0) candidates = session.Graph.GetSettlementsAtHop(info.Id, 3);
+        // Weighted hop distance: 25% 1-hop, 60% 2-hop, 15% 3-hop, with fallback
+        var roll = session.Rng.NextDouble();
+        var preferredHop = roll < 0.25 ? 1 : roll < 0.85 ? 2 : 3;
+        var candidates = session.Graph!.GetSettlementsAtHop(info.Id, preferredHop);
+        if (candidates.Count == 0)
+        {
+            foreach (var fallback in new[] { 1, 2, 3 }.Where(h => h != preferredHop))
+            {
+                candidates = session.Graph.GetSettlementsAtHop(info.Id, fallback);
+                if (candidates.Count > 0) break;
+            }
+        }
         if (candidates.Count == 0) return;
 
         var visited = session.Player.VisitedNodes;
