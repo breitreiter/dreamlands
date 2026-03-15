@@ -6,6 +6,7 @@ assets/
 .claude/
 *.DotSettings.user
 appsettings.json
+local.settings.json
 map_*.png
 map_*.json
 *.kate-swp
@@ -16,6 +17,8 @@ mapgen/sizing.md
 !worlds/*/build.sh
 !worlds/*/use.sh
 !worlds/*/rebuild.sh
+!deploy.sh
+.deploy/
 mapgen/reference/
 generated_*.enc
 encounter_*.enc
@@ -24,6 +27,8 @@ worlds/*/tiles/
 worlds/*/map.png
 worlds/*/assets/
 worlds/*/encounters/
+worlds/*/encounters.bundle.json
+.wrangler/
 saves/
 .session.json
 stock_characters_curated.md
