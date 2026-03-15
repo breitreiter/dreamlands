@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet.marker.slideto";
 import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
 import MarketScreen from "./Market";
@@ -41,12 +42,26 @@ const playerIcon = new Icon({
   iconAnchor: [15, 58],
 });
 
-function MapFollower({ position }: { position: LatLngExpression }) {
+const SLIDE_DURATION = 300;
+
+function PlayerMarker({ position }: { position: LatLngExpression }) {
+  const markerRef = useRef<L.Marker>(null);
   const map = useMap();
+  const initialized = useRef(false);
+
   useEffect(() => {
-    map.setView(position, map.getZoom(), { animate: true });
-  }, [map, position]);
-  return null;
+    const marker = markerRef.current;
+    if (!marker) return;
+    if (!initialized.current) {
+      // First render — snap to position without animation
+      map.setView(position, map.getZoom(), { animate: false });
+      initialized.current = true;
+      return;
+    }
+    marker.slideTo(position, { duration: SLIDE_DURATION, keepAtCenter: true });
+  }, [position, map]);
+
+  return <Marker ref={markerRef} position={position} icon={playerIcon} />;
 }
 
 const DIR_VECTORS: Record<string, { dx: number; dy: number; rotation: number }> = {
@@ -359,7 +374,24 @@ export default function Explore({ state }: { state: GameResponse }) {
     getDiscoveries(gameId).then(setDiscoveries).catch(() => {});
   }, [gameId]);
 
+  // Optimistic position — tracks where the marker visually is (may be ahead of server state)
+  const [optimistic, setOptimistic] = useState<{ x: number; y: number } | null>(null);
+  const slidingUntil = useRef(0);
+
   const move = useCallback(async (dir: string) => {
+    // Block movement while a slide is in progress
+    if (performance.now() < slidingUntil.current) return;
+
+    const vec = DIR_VECTORS[dir];
+    if (!vec || !state.node) return;
+
+    // Optimistic: immediately move the marker to the target tile
+    const targetX = (optimistic?.x ?? state.node.x) + vec.dx;
+    const targetY = (optimistic?.y ?? state.node.y) + vec.dy;
+    setOptimistic({ x: targetX, y: targetY });
+    slidingUntil.current = performance.now() + SLIDE_DURATION;
+
+    // Fire the API call — don't block the visual update
     const result = await doAction({ action: "move", direction: dir });
     if (result?.deliveries?.length) {
       setPendingDeliveries(result.deliveries);
@@ -370,16 +402,20 @@ export default function Explore({ state }: { state: GameResponse }) {
         return [...prev, { x: result.node!.x, y: result.node!.y, kind: result.node!.poi!.kind, name: result.node!.poi!.name ?? result.node!.poi!.kind }];
       });
     }
-  }, [doAction]);
+    // Sync optimistic position to server truth
+    if (result?.node) {
+      setOptimistic({ x: result.node.x, y: result.node.y });
+    }
+  }, [doAction, state.node, optimistic]);
 
-  const position = useMemo(
-    () => (state.node ? gridToLatLng(state.node.x, state.node.y) : [0, 0] as LatLngExpression),
-    [state.node]
-  );
+  // Clear optimistic offset when server state catches up
+  const displayX = optimistic?.x ?? state.node?.x ?? 0;
+  const displayY = optimistic?.y ?? state.node?.y ?? 0;
+  const position = useMemo(() => gridToLatLng(displayX, displayY), [displayX, displayY]);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (loading || activeService != null || pendingDeliveries.length > 0) return;
+      if (activeService != null || pendingDeliveries.length > 0) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
@@ -397,11 +433,11 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [move, loading, activeService, pendingDeliveries.length]);
+  }, [move, activeService, pendingDeliveries.length]);
 
   if (!state.node || !state.exits) return null;
 
-  const { node, exits } = state;
+  const { exits } = state;
   const isLost = state.status.conditions.some((c) => c.id === "lost");
 
   if (activeService === "market") return <MarketScreen state={state} onBack={() => setActiveService(null)} />;
@@ -434,10 +470,10 @@ export default function Explore({ state }: { state: GameResponse }) {
           minZoom={0}
           maxZoom={MAX_ZOOM}
         />
-        {!isLost && <Marker position={position} icon={playerIcon} />}
+        {!isLost && <PlayerMarker position={position} />}
         <DirectionIndicator
-          playerX={node.x}
-          playerY={node.y}
+          playerX={displayX}
+          playerY={displayY}
           exits={exits.map((e) => e.direction)}
           loading={loading}
           hidden={isLost}
@@ -448,7 +484,6 @@ export default function Explore({ state }: { state: GameResponse }) {
             <Tooltip direction="top" offset={[0, -12]}>{d.name}</Tooltip>
           </Marker>
         ))}
-        <MapFollower position={position} />
       </MapContainer>
 
       {/* Instrument cluster — bottom center overlay */}
