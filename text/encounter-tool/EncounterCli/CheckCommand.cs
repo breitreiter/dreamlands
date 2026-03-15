@@ -52,6 +52,7 @@ static class CheckCommand
             if (result.Encounter != null)
             {
                 vocabErrors = ValidateVocabulary(result.Encounter);
+                ValidateAccessibility(result.Encounter, vocabErrors);
                 if (registry != null)
                     idWarnings = ValidateKnownIds(result.Encounter, registry);
             }
@@ -89,6 +90,12 @@ static class CheckCommand
         else
             Console.WriteLine($"{failed} of {files.Length} file(s) had errors{(warned > 0 ? $", {warned} with warnings" : "")}.");
         return failed > 0 ? 1 : 0;
+    }
+
+    private static void ValidateAccessibility(Encounter encounter, List<string> errors)
+    {
+        if (encounter.Choices.Count > 0 && encounter.Choices.All(c => c.Requires != null))
+            errors.Add("All choices are gated with [requires] — at least one must be unconditional");
     }
 
     private static readonly HashSet<string> ItemIdVerbs = new()
