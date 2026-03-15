@@ -6,6 +6,17 @@ import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import HaulItem from "../components/HaulItem";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
@@ -509,6 +520,31 @@ export default function MarketScreen({
                           Sell
                           <span className="text-positive">+{price}g</span>
                         </Button>
+                      )}
+                      {item.type === "haul" && item.haulOfferId && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="secondary" size="icon" disabled={loading} title="Abandon" className="flex-shrink-0">
+                              <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent size="sm">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Abandon {item.name}?</AlertDialogTitle>
+                              <AlertDialogDescription>This contract will be lost. It will not be returned to the market.</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>
+                                <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
+                                Keep
+                              </AlertDialogCancel>
+                              <AlertDialogAction variant="destructive" onClick={() => doAction({ action: "abandon_haul", offerId: item.haulOfferId!})}>
+                                <MaskedIcon icon="trash-can.svg" className="w-4 h-4" color="currentColor" />
+                                Abandon
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       )}
                     </div>
                   );

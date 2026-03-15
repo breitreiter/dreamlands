@@ -230,6 +230,7 @@ ItemInfo BuildItemInfo(ItemInstance i, int playerX = 0, int playerY = 0)
             ? HaulGeneration.BuildRelativeHint(playerX, playerY, i.DestinationX.Value, i.DestinationY.Value)
             : i.DestinationHint,
         Payout = i.Payout,
+        HaulOfferId = i.HaulOfferId,
     };
 }
 
@@ -1140,6 +1141,21 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                     }],
                 },
             };
+            break;
+        }
+
+        case "abandon_haul":
+        {
+            if (string.IsNullOrEmpty(req.OfferId))
+                return Results.BadRequest(new { error = "offerId required" });
+
+            var haulIdx = player.Pack.FindIndex(i => i.HaulOfferId == req.OfferId);
+            if (haulIdx < 0)
+                return Results.BadRequest(new { error = "Haul not found in pack" });
+
+            player.Pack.RemoveAt(haulIdx);
+            await store.Save(player);
+            response = BuildInventoryResponse(session, player);
             break;
         }
 

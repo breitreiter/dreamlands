@@ -115,6 +115,7 @@ export interface ItemInfo {
   destinationName: string | null;
   destinationHint: string | null;
   payout: number | null;
+  haulOfferId: string | null;
 }
 
 export interface EquipmentInfo {

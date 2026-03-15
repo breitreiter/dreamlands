@@ -230,6 +230,7 @@ public class ItemInfo
     public string? DestinationName { get; init; }
     public string? DestinationHint { get; init; }
     public int? Payout { get; init; }
+    public string? HaulOfferId { get; init; }
 }
 
 public class MechanicsInfo
