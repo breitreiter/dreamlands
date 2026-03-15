@@ -8,3 +8,23 @@ brides_cave_heard_harlan
 
 # ── Qualities (numeric, soft range -5 to +5) ───────────────────
 
+## Continental
+faction.empire
+faction.tradeguild
+## Plains
+faction.legion
+faction.scavengers
+## Scrub
+faction.clans
+faction.kesharat
+## Forest
+faction.exiles
+## Mountain
+faction.miners
+faction.company
+faction.scholars
+faction.renegadescholars
+## Swamp
+faction.revathi
+faction.revivalists
+faction.collectors

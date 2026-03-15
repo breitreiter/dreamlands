@@ -59,22 +59,23 @@ public static class EncounterSelection
         if (category == null) return null;
 
         var pool = session.Bundle.GetByCategory(category);
-        return pool.FirstOrDefault(e => e.Id.Equals("Start", StringComparison.OrdinalIgnoreCase))
+        return pool.FirstOrDefault(e => e.ShortId.Equals("Start", StringComparison.OrdinalIgnoreCase))
             ?? pool.FirstOrDefault();
     }
 
     public static Encounter.Encounter? ResolveNavigation(GameSession session, string encounterId, Dreamlands.Map.Node node)
     {
-        if (session.Player.CurrentDungeonId != null)
+        // Try resolving as a short name relative to the current encounter's category
+        var category = session.CurrentEncounter?.Category
+            ?? (session.Player.CurrentDungeonId != null ? GetPoiCategory(node) : null);
+        if (category != null)
         {
-            var category = GetPoiCategory(node);
-            if (category != null)
-            {
-                var pool = session.Bundle.GetByCategory(category);
-                var match = pool.FirstOrDefault(e => e.Id.Equals(encounterId, StringComparison.OrdinalIgnoreCase));
-                if (match != null) return match;
-            }
+            var pool = session.Bundle.GetByCategory(category);
+            var match = pool.FirstOrDefault(e => e.ShortId.Equals(encounterId, StringComparison.OrdinalIgnoreCase));
+            if (match != null) return match;
         }
+
+        // Fall back to direct qualified lookup
         return session.Bundle.GetById(encounterId);
     }
 

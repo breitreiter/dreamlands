@@ -63,7 +63,7 @@ public sealed class ConditionDef
             Id = "lost", Name = "Lost", Biome = "none", Tier = "none",
             Stacks = 1, ResistDifficulty = Difficulty.Easy,
             ClearedOnSettlement = true,
-            SpecialEffect = "Erase a random number of previously-discovered map tile routes.",
+            SpecialEffect = "Your location on the map is hidden.",
         },
         ["injured"] = new()
         {

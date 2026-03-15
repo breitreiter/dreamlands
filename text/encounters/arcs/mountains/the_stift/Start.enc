@@ -27,5 +27,5 @@ choices:
     }
 
 * Depart = Leave this place behind
-    You decide this is not the time. You turn and walk away.
+    You depart The Stift.
     +flee_dungeon

@@ -28,9 +28,10 @@ internal static class Helpers
         for (int i = 0; i < entries.Length; i++)
         {
             var e = entries[i];
+            var qualifiedId = string.IsNullOrEmpty(e.Category) ? e.Id : $"{e.Category}/{e.Id}";
             encounters.Add(new
             {
-                id = e.Id,
+                id = qualifiedId,
                 category = e.Category,
                 title = e.Title ?? e.Id,
                 body = "Test body.",
@@ -44,7 +45,7 @@ internal static class Helpers
                     }
                 }
             });
-            byId[e.Id] = new { category = e.Category, encounterIndex = i };
+            byId[qualifiedId] = new { category = e.Category, encounterIndex = i };
             if (!byCategory.ContainsKey(e.Category))
                 byCategory[e.Category] = new List<int>();
             byCategory[e.Category].Add(i);

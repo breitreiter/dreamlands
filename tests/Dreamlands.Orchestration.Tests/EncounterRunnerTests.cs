@@ -6,11 +6,11 @@ namespace Dreamlands.Orchestration.Tests;
 
 public class EncounterRunnerTests
 {
-    static Encounter.Encounter SimpleEncounter(string id = "test_enc", string[]? mechanics = null) =>
+    static Encounter.Encounter SimpleEncounter(string id = "test_enc", string category = "plains/tier1", string[]? mechanics = null) =>
         new()
         {
-            Id = id,
-            Category = "plains/tier1",
+            Id = $"{category}/{id}",
+            Category = category,
             Title = "Test",
             Body = "Test body.",
             Choices = new List<Choice>
@@ -47,7 +47,7 @@ public class EncounterRunnerTests
         var enc = SimpleEncounter("unique_enc");
         EncounterRunner.Begin(session, enc);
 
-        Assert.Contains("unique_enc", session.Player.UsedEncounterIds);
+        Assert.Contains("plains/tier1/unique_enc", session.Player.UsedEncounterIds);
     }
 
     [Fact]

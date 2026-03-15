@@ -1,141 +1,269 @@
 {
   "index": {
     "byId": {
-      "Start": {
-        "category": "arcs/swamp/tile_house",
-        "encounterIndex": 22
+      "arcs/forest/foresters_post/Start": {
+        "category": "arcs/forest/foresters_post",
+        "encounterIndex": 0
       },
-      "A Record in Stone": {
+      "arcs/forest/the_lodge/Start": {
+        "category": "arcs/forest/the_lodge",
+        "encounterIndex": 1
+      },
+      "arcs/forest/warrant_oak/Start": {
+        "category": "arcs/forest/warrant_oak",
+        "encounterIndex": 2
+      },
+      "arcs/mountains/halfway_house/Start": {
+        "category": "arcs/mountains/halfway_house",
+        "encounterIndex": 3
+      },
+      "arcs/mountains/ledgerhaus/Start": {
+        "category": "arcs/mountains/ledgerhaus",
+        "encounterIndex": 4
+      },
+      "arcs/mountains/the_stift/Start": {
+        "category": "arcs/mountains/the_stift",
+        "encounterIndex": 5
+      },
+      "arcs/mountains/zahlenhaus/Start": {
+        "category": "arcs/mountains/zahlenhaus",
+        "encounterIndex": 6
+      },
+      "arcs/plains/brides_cave/A Record in Stone": {
         "category": "arcs/plains/brides_cave",
         "encounterIndex": 7
       },
-      "The Ghosts": {
+      "arcs/plains/brides_cave/Start": {
+        "category": "arcs/plains/brides_cave",
+        "encounterIndex": 8
+      },
+      "arcs/plains/brides_cave/The Ghosts": {
         "category": "arcs/plains/brides_cave",
         "encounterIndex": 9
       },
-      "The Old Man\u0027s Story": {
+      "arcs/plains/brides_cave/The Old Man\u0027s Story": {
         "category": "arcs/plains/brides_cave",
         "encounterIndex": 10
       },
-      "Placeholder": {
-        "category": "swamp/tier3",
-        "encounterIndex": 65
+      "arcs/plains/grainway_station/Start": {
+        "category": "arcs/plains/grainway_station",
+        "encounterIndex": 11
       },
-      "00_Intro": {
+      "arcs/plains/harrow_line/Start": {
+        "category": "arcs/plains/harrow_line",
+        "encounterIndex": 12
+      },
+      "arcs/plains/metal_beast/Start": {
+        "category": "arcs/plains/metal_beast",
+        "encounterIndex": 13
+      },
+      "arcs/plains/the_city/Start": {
+        "category": "arcs/plains/the_city",
+        "encounterIndex": 14
+      },
+      "arcs/scrub/census_house/Start": {
+        "category": "arcs/scrub/census_house",
+        "encounterIndex": 15
+      },
+      "arcs/scrub/foundry/Start": {
+        "category": "arcs/scrub/foundry",
+        "encounterIndex": 16
+      },
+      "arcs/scrub/relay_post/Start": {
+        "category": "arcs/scrub/relay_post",
+        "encounterIndex": 17
+      },
+      "arcs/scrub/wellhead_station/Start": {
+        "category": "arcs/scrub/wellhead_station",
+        "encounterIndex": 18
+      },
+      "arcs/swamp/drowning_post/Start": {
+        "category": "arcs/swamp/drowning_post",
+        "encounterIndex": 19
+      },
+      "arcs/swamp/listening_blind/Start": {
+        "category": "arcs/swamp/listening_blind",
+        "encounterIndex": 20
+      },
+      "arcs/swamp/the_revenakh/Start": {
+        "category": "arcs/swamp/the_revenakh",
+        "encounterIndex": 21
+      },
+      "arcs/swamp/tile_house/Start": {
+        "category": "arcs/swamp/tile_house",
+        "encounterIndex": 22
+      },
+      "forest/tier1/Placeholder": {
+        "category": "forest/tier1",
+        "encounterIndex": 23
+      },
+      "forest/tier2/Placeholder": {
+        "category": "forest/tier2",
+        "encounterIndex": 24
+      },
+      "forest/tier3/Placeholder": {
+        "category": "forest/tier3",
+        "encounterIndex": 25
+      },
+      "intro/00_Intro": {
         "category": "intro",
         "encounterIndex": 26
       },
-      "Gameplay_Intro": {
+      "intro/Gameplay_Intro": {
         "category": "intro",
         "encounterIndex": 27
       },
-      "The_Ring": {
+      "intro/The_Ring": {
         "category": "intro",
         "encounterIndex": 28
       },
-      "Blockade at Copper Gap": {
+      "mountains/tier1/Blockade at Copper Gap": {
         "category": "mountains/tier1",
         "encounterIndex": 29
       },
-      "The Festival Gate": {
+      "mountains/tier1/The Festival Gate": {
         "category": "mountains/tier1",
         "encounterIndex": 30
       },
-      "The Old Assay Station": {
+      "mountains/tier1/The Old Assay Station": {
         "category": "mountains/tier1",
         "encounterIndex": 31
       },
-      "The Trailside Verdict": {
+      "mountains/tier1/The Trailside Verdict": {
         "category": "mountains/tier1",
         "encounterIndex": 32
       },
-      "The Pilgrim": {
+      "mountains/tier2/Placeholder": {
+        "category": "mountains/tier2",
+        "encounterIndex": 33
+      },
+      "mountains/tier2/The Pilgrim": {
         "category": "mountains/tier2",
         "encounterIndex": 34
       },
-      "A Debt Owed": {
+      "mountains/tier3/Placeholder": {
+        "category": "mountains/tier3",
+        "encounterIndex": 35
+      },
+      "plains/tier1/A Debt Owed": {
         "category": "plains/tier1",
         "encounterIndex": 36
       },
-      "A Gift for the Harvest": {
+      "plains/tier1/A Gift for the Harvest": {
         "category": "plains/tier1",
         "encounterIndex": 37
       },
-      "Celebration": {
+      "plains/tier1/Celebration": {
         "category": "plains/tier1",
         "encounterIndex": 38
       },
-      "The Burning Field": {
+      "plains/tier1/Placeholder": {
+        "category": "plains/tier1",
+        "encounterIndex": 39
+      },
+      "plains/tier1/The Burning Field": {
         "category": "plains/tier1",
         "encounterIndex": 40
       },
-      "The Grain Cart": {
+      "plains/tier1/The Grain Cart": {
         "category": "plains/tier1",
         "encounterIndex": 41
       },
-      "Dust Storm": {
+      "plains/tier2/Placeholder": {
+        "category": "plains/tier2",
+        "encounterIndex": 42
+      },
+      "plains/tier3/Placeholder": {
+        "category": "plains/tier3",
+        "encounterIndex": 43
+      },
+      "scrub/tier1/Dust Storm": {
         "category": "scrub/tier1",
         "encounterIndex": 44
       },
-      "The Courier": {
+      "scrub/tier1/Placeholder": {
+        "category": "scrub/tier1",
+        "encounterIndex": 45
+      },
+      "scrub/tier1/The Courier": {
         "category": "scrub/tier1",
         "encounterIndex": 46
       },
-      "Unusual Cargo": {
+      "scrub/tier1/Unusual Cargo": {
         "category": "scrub/tier1",
         "encounterIndex": 47
       },
-      "Signal Tower at Red Crown": {
+      "scrub/tier2/Placeholder": {
+        "category": "scrub/tier2",
+        "encounterIndex": 48
+      },
+      "scrub/tier2/Signal Tower at Red Crown": {
         "category": "scrub/tier2",
         "encounterIndex": 49
       },
-      "The Administrator\u0027s Favor": {
+      "scrub/tier2/The Administrator\u0027s Favor": {
         "category": "scrub/tier2",
         "encounterIndex": 50
       },
-      "The Cistern Gate": {
+      "scrub/tier2/The Cistern Gate": {
         "category": "scrub/tier2",
         "encounterIndex": 51
       },
-      "The Lattice Preacher": {
+      "scrub/tier2/The Lattice Preacher": {
         "category": "scrub/tier2",
         "encounterIndex": 52
       },
-      "The Magistrate\u0027s Seal": {
+      "scrub/tier2/The Magistrate\u0027s Seal": {
         "category": "scrub/tier2",
         "encounterIndex": 53
       },
-      "The Old Depot at Crow Jaw": {
+      "scrub/tier2/The Old Depot at Crow Jaw": {
         "category": "scrub/tier2",
         "encounterIndex": 54
       },
-      "Countryman": {
+      "scrub/tier3/Countryman": {
         "category": "scrub/tier3",
         "encounterIndex": 55
       },
-      "A Sons Responsibility": {
+      "scrub/tier3/Placeholder": {
+        "category": "scrub/tier3",
+        "encounterIndex": 56
+      },
+      "swamp/tier1/A Sons Responsibility": {
         "category": "swamp/tier1",
         "encounterIndex": 57
       },
-      "An Unpaid Debt": {
+      "swamp/tier1/An Unpaid Debt": {
         "category": "swamp/tier1",
         "encounterIndex": 58
       },
-      "The Cartographers Kit": {
+      "swamp/tier1/Placeholder": {
+        "category": "swamp/tier1",
+        "encounterIndex": 59
+      },
+      "swamp/tier1/The Cartographers Kit": {
         "category": "swamp/tier1",
         "encounterIndex": 60
       },
-      "The Gatekeeper": {
+      "swamp/tier1/The Gatekeeper": {
         "category": "swamp/tier1",
         "encounterIndex": 61
       },
-      "The Hunted Woman": {
+      "swamp/tier1/The Hunted Woman": {
         "category": "swamp/tier1",
         "encounterIndex": 62
       },
-      "The Hermit of Sallow Fen": {
+      "swamp/tier2/Placeholder": {
+        "category": "swamp/tier2",
+        "encounterIndex": 63
+      },
+      "swamp/tier2/The Hermit of Sallow Fen": {
         "category": "swamp/tier2",
         "encounterIndex": 64
+      },
+      "swamp/tier3/Placeholder": {
+        "category": "swamp/tier3",
+        "encounterIndex": 65
       }
     },
     "byCategory": {
@@ -281,7 +409,7 @@
   },
   "encounters": [
     {
-      "id": "Start",
+      "id": "arcs/forest/foresters_post/Start",
       "category": "arcs/forest/foresters_post",
       "recurring": false,
       "trigger": null,
@@ -349,7 +477,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Foresters Post.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -358,7 +486,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/forest/the_lodge/Start",
       "category": "arcs/forest/the_lodge",
       "recurring": false,
       "trigger": null,
@@ -426,7 +554,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart The Lodge.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -435,7 +563,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/forest/warrant_oak/Start",
       "category": "arcs/forest/warrant_oak",
       "recurring": false,
       "trigger": null,
@@ -503,7 +631,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Warrant Oak.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -512,7 +640,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/mountains/halfway_house/Start",
       "category": "arcs/mountains/halfway_house",
       "recurring": false,
       "trigger": null,
@@ -580,7 +708,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Halfway House.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -589,7 +717,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/mountains/ledgerhaus/Start",
       "category": "arcs/mountains/ledgerhaus",
       "recurring": false,
       "trigger": null,
@@ -657,7 +785,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Ledgerhaus.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -666,7 +794,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/mountains/the_stift/Start",
       "category": "arcs/mountains/the_stift",
       "recurring": false,
       "trigger": null,
@@ -734,7 +862,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart The Stift.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -743,7 +871,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/mountains/zahlenhaus/Start",
       "category": "arcs/mountains/zahlenhaus",
       "recurring": false,
       "trigger": null,
@@ -811,7 +939,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Zahlenhaus.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -820,7 +948,7 @@
       ]
     },
     {
-      "id": "A Record in Stone",
+      "id": "arcs/plains/brides_cave/A Record in Stone",
       "category": "arcs/plains/brides_cave",
       "recurring": false,
       "trigger": null,
@@ -870,7 +998,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/plains/brides_cave/Start",
       "category": "arcs/plains/brides_cave",
       "recurring": false,
       "trigger": null,
@@ -907,7 +1035,7 @@
       ]
     },
     {
-      "id": "The Ghosts",
+      "id": "arcs/plains/brides_cave/The Ghosts",
       "category": "arcs/plains/brides_cave",
       "recurring": false,
       "trigger": null,
@@ -984,7 +1112,7 @@
       ]
     },
     {
-      "id": "The Old Man\u0027s Story",
+      "id": "arcs/plains/brides_cave/The Old Man\u0027s Story",
       "category": "arcs/plains/brides_cave",
       "recurring": false,
       "trigger": "settlement",
@@ -1019,7 +1147,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/plains/grainway_station/Start",
       "category": "arcs/plains/grainway_station",
       "recurring": false,
       "trigger": null,
@@ -1087,7 +1215,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Grainway Station.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1096,7 +1224,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/plains/harrow_line/Start",
       "category": "arcs/plains/harrow_line",
       "recurring": false,
       "trigger": null,
@@ -1164,7 +1292,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Harrow Line.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1173,7 +1301,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/plains/metal_beast/Start",
       "category": "arcs/plains/metal_beast",
       "recurring": false,
       "trigger": null,
@@ -1241,7 +1369,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Metal Beast.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1250,7 +1378,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/plains/the_city/Start",
       "category": "arcs/plains/the_city",
       "recurring": false,
       "trigger": null,
@@ -1318,7 +1446,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart The City.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1327,7 +1455,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/scrub/census_house/Start",
       "category": "arcs/scrub/census_house",
       "recurring": false,
       "trigger": null,
@@ -1395,7 +1523,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Census House.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1404,7 +1532,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/scrub/foundry/Start",
       "category": "arcs/scrub/foundry",
       "recurring": false,
       "trigger": null,
@@ -1472,7 +1600,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Foundry.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1481,7 +1609,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/scrub/relay_post/Start",
       "category": "arcs/scrub/relay_post",
       "recurring": false,
       "trigger": null,
@@ -1549,7 +1677,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Relay Post.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1558,7 +1686,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/scrub/wellhead_station/Start",
       "category": "arcs/scrub/wellhead_station",
       "recurring": false,
       "trigger": null,
@@ -1626,7 +1754,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Wellhead Station.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1635,7 +1763,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/swamp/drowning_post/Start",
       "category": "arcs/swamp/drowning_post",
       "recurring": false,
       "trigger": null,
@@ -1703,7 +1831,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Drowning Post.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1712,7 +1840,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/swamp/listening_blind/Start",
       "category": "arcs/swamp/listening_blind",
       "recurring": false,
       "trigger": null,
@@ -1780,7 +1908,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Listening Blind.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1789,7 +1917,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/swamp/the_revenakh/Start",
       "category": "arcs/swamp/the_revenakh",
       "recurring": false,
       "trigger": null,
@@ -1857,7 +1985,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart The Revenakh.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1866,7 +1994,7 @@
       ]
     },
     {
-      "id": "Start",
+      "id": "arcs/swamp/tile_house/Start",
       "category": "arcs/swamp/tile_house",
       "recurring": false,
       "trigger": null,
@@ -1934,7 +2062,7 @@
           "optionPreview": "Leave this place behind",
           "requires": null,
           "single": {
-            "text": "You decide this is not the time. You turn and walk away.",
+            "text": "You depart Tile House.",
             "mechanics": [
               "flee_dungeon"
             ]
@@ -1943,7 +2071,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "forest/tier1/Placeholder",
       "category": "forest/tier1",
       "recurring": true,
       "trigger": null,
@@ -2030,7 +2158,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "forest/tier2/Placeholder",
       "category": "forest/tier2",
       "recurring": true,
       "trigger": null,
@@ -2122,7 +2250,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "forest/tier3/Placeholder",
       "category": "forest/tier3",
       "recurring": true,
       "trigger": null,
@@ -2214,7 +2342,7 @@
       ]
     },
     {
-      "id": "00_Intro",
+      "id": "intro/00_Intro",
       "category": "intro",
       "recurring": false,
       "trigger": null,
@@ -2239,7 +2367,7 @@
       ]
     },
     {
-      "id": "Gameplay_Intro",
+      "id": "intro/Gameplay_Intro",
       "category": "intro",
       "recurring": false,
       "trigger": null,
@@ -2300,7 +2428,7 @@
       ]
     },
     {
-      "id": "The_Ring",
+      "id": "intro/The_Ring",
       "category": "intro",
       "recurring": false,
       "trigger": null,
@@ -2388,7 +2516,7 @@
       ]
     },
     {
-      "id": "Blockade at Copper Gap",
+      "id": "mountains/tier1/Blockade at Copper Gap",
       "category": "mountains/tier1",
       "recurring": false,
       "trigger": null,
@@ -2464,7 +2592,7 @@
       ]
     },
     {
-      "id": "The Festival Gate",
+      "id": "mountains/tier1/The Festival Gate",
       "category": "mountains/tier1",
       "recurring": false,
       "trigger": null,
@@ -2527,7 +2655,7 @@
       ]
     },
     {
-      "id": "The Old Assay Station",
+      "id": "mountains/tier1/The Old Assay Station",
       "category": "mountains/tier1",
       "recurring": false,
       "trigger": null,
@@ -2589,7 +2717,7 @@
       ]
     },
     {
-      "id": "The Trailside Verdict",
+      "id": "mountains/tier1/The Trailside Verdict",
       "category": "mountains/tier1",
       "recurring": false,
       "trigger": null,
@@ -2648,7 +2776,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "mountains/tier2/Placeholder",
       "category": "mountains/tier2",
       "recurring": true,
       "trigger": null,
@@ -2740,7 +2868,7 @@
       ]
     },
     {
-      "id": "The Pilgrim",
+      "id": "mountains/tier2/The Pilgrim",
       "category": "mountains/tier2",
       "recurring": false,
       "trigger": null,
@@ -2801,7 +2929,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "mountains/tier3/Placeholder",
       "category": "mountains/tier3",
       "recurring": true,
       "trigger": null,
@@ -2893,7 +3021,7 @@
       ]
     },
     {
-      "id": "A Debt Owed",
+      "id": "plains/tier1/A Debt Owed",
       "category": "plains/tier1",
       "recurring": false,
       "trigger": null,
@@ -2968,7 +3096,7 @@
       ]
     },
     {
-      "id": "A Gift for the Harvest",
+      "id": "plains/tier1/A Gift for the Harvest",
       "category": "plains/tier1",
       "recurring": false,
       "trigger": null,
@@ -3030,7 +3158,7 @@
       ]
     },
     {
-      "id": "Celebration",
+      "id": "plains/tier1/Celebration",
       "category": "plains/tier1",
       "recurring": false,
       "trigger": null,
@@ -3095,7 +3223,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "plains/tier1/Placeholder",
       "category": "plains/tier1",
       "recurring": true,
       "trigger": null,
@@ -3182,7 +3310,7 @@
       ]
     },
     {
-      "id": "The Burning Field",
+      "id": "plains/tier1/The Burning Field",
       "category": "plains/tier1",
       "recurring": false,
       "trigger": null,
@@ -3244,7 +3372,7 @@
       ]
     },
     {
-      "id": "The Grain Cart",
+      "id": "plains/tier1/The Grain Cart",
       "category": "plains/tier1",
       "recurring": false,
       "trigger": null,
@@ -3317,7 +3445,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "plains/tier2/Placeholder",
       "category": "plains/tier2",
       "recurring": true,
       "trigger": null,
@@ -3408,7 +3536,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "plains/tier3/Placeholder",
       "category": "plains/tier3",
       "recurring": true,
       "trigger": null,
@@ -3499,7 +3627,7 @@
       ]
     },
     {
-      "id": "Dust Storm",
+      "id": "scrub/tier1/Dust Storm",
       "category": "scrub/tier1",
       "recurring": true,
       "trigger": null,
@@ -3536,7 +3664,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "scrub/tier1/Placeholder",
       "category": "scrub/tier1",
       "recurring": true,
       "trigger": null,
@@ -3623,7 +3751,7 @@
       ]
     },
     {
-      "id": "The Courier",
+      "id": "scrub/tier1/The Courier",
       "category": "scrub/tier1",
       "recurring": false,
       "trigger": null,
@@ -3714,7 +3842,7 @@
       ]
     },
     {
-      "id": "Unusual Cargo",
+      "id": "scrub/tier1/Unusual Cargo",
       "category": "scrub/tier1",
       "recurring": false,
       "trigger": null,
@@ -3767,7 +3895,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "scrub/tier2/Placeholder",
       "category": "scrub/tier2",
       "recurring": true,
       "trigger": null,
@@ -3858,7 +3986,7 @@
       ]
     },
     {
-      "id": "Signal Tower at Red Crown",
+      "id": "scrub/tier2/Signal Tower at Red Crown",
       "category": "scrub/tier2",
       "recurring": false,
       "trigger": null,
@@ -3881,7 +4009,7 @@
       ]
     },
     {
-      "id": "The Administrator\u0027s Favor",
+      "id": "scrub/tier2/The Administrator\u0027s Favor",
       "category": "scrub/tier2",
       "recurring": false,
       "trigger": null,
@@ -3904,7 +4032,7 @@
       ]
     },
     {
-      "id": "The Cistern Gate",
+      "id": "scrub/tier2/The Cistern Gate",
       "category": "scrub/tier2",
       "recurring": false,
       "trigger": null,
@@ -3927,7 +4055,7 @@
       ]
     },
     {
-      "id": "The Lattice Preacher",
+      "id": "scrub/tier2/The Lattice Preacher",
       "category": "scrub/tier2",
       "recurring": false,
       "trigger": null,
@@ -3950,7 +4078,7 @@
       ]
     },
     {
-      "id": "The Magistrate\u0027s Seal",
+      "id": "scrub/tier2/The Magistrate\u0027s Seal",
       "category": "scrub/tier2",
       "recurring": false,
       "trigger": null,
@@ -3973,7 +4101,7 @@
       ]
     },
     {
-      "id": "The Old Depot at Crow Jaw",
+      "id": "scrub/tier2/The Old Depot at Crow Jaw",
       "category": "scrub/tier2",
       "recurring": false,
       "trigger": null,
@@ -3996,7 +4124,7 @@
       ]
     },
     {
-      "id": "Countryman",
+      "id": "scrub/tier3/Countryman",
       "category": "scrub/tier3",
       "recurring": false,
       "trigger": null,
@@ -4033,7 +4161,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "scrub/tier3/Placeholder",
       "category": "scrub/tier3",
       "recurring": true,
       "trigger": null,
@@ -4124,7 +4252,7 @@
       ]
     },
     {
-      "id": "A Sons Responsibility",
+      "id": "swamp/tier1/A Sons Responsibility",
       "category": "swamp/tier1",
       "recurring": false,
       "trigger": null,
@@ -4197,7 +4325,7 @@
       ]
     },
     {
-      "id": "An Unpaid Debt",
+      "id": "swamp/tier1/An Unpaid Debt",
       "category": "swamp/tier1",
       "recurring": false,
       "trigger": null,
@@ -4259,7 +4387,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "swamp/tier1/Placeholder",
       "category": "swamp/tier1",
       "recurring": true,
       "trigger": null,
@@ -4346,7 +4474,7 @@
       ]
     },
     {
-      "id": "The Cartographers Kit",
+      "id": "swamp/tier1/The Cartographers Kit",
       "category": "swamp/tier1",
       "recurring": false,
       "trigger": null,
@@ -4420,7 +4548,7 @@
       ]
     },
     {
-      "id": "The Gatekeeper",
+      "id": "swamp/tier1/The Gatekeeper",
       "category": "swamp/tier1",
       "recurring": false,
       "trigger": null,
@@ -4496,7 +4624,7 @@
       ]
     },
     {
-      "id": "The Hunted Woman",
+      "id": "swamp/tier1/The Hunted Woman",
       "category": "swamp/tier1",
       "recurring": false,
       "trigger": null,
@@ -4543,7 +4671,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "swamp/tier2/Placeholder",
       "category": "swamp/tier2",
       "recurring": true,
       "trigger": null,
@@ -4634,7 +4762,7 @@
       ]
     },
     {
-      "id": "The Hermit of Sallow Fen",
+      "id": "swamp/tier2/The Hermit of Sallow Fen",
       "category": "swamp/tier2",
       "recurring": false,
       "trigger": null,
@@ -4709,7 +4837,7 @@
       ]
     },
     {
-      "id": "Placeholder",
+      "id": "swamp/tier3/Placeholder",
       "category": "swamp/tier3",
       "recurring": true,
       "trigger": null,

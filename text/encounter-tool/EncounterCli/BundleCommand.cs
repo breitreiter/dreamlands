@@ -52,9 +52,10 @@ static class BundleCommand
         {
             var rel = Path.GetRelativePath(path, file);
             var category = Path.GetDirectoryName(rel) ?? "";
-            var id = Path.GetFileNameWithoutExtension(file);
-            var recurring = id.StartsWith("recur-", StringComparison.OrdinalIgnoreCase);
-            if (recurring) id = id["recur-".Length..];
+            var shortId = Path.GetFileNameWithoutExtension(file);
+            var recurring = shortId.StartsWith("recur-", StringComparison.OrdinalIgnoreCase);
+            if (recurring) shortId = shortId["recur-".Length..];
+            var id = string.IsNullOrEmpty(category) ? shortId : $"{category}/{shortId}";
             var text = File.ReadAllText(file);
             var result = EncounterParser.Parse(text);
             if (!result.IsSuccess)

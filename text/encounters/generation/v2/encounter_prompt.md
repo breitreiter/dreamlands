@@ -10,7 +10,7 @@
 
 ## About the PC
 - The player is a wanderer who travels alone.
-- The player wears a signet ring identifying them as a high-ranking member of the Merchant Guild.
+- The player wears a signet ring identifying them as a high-ranking member of the Traders Guild.
 - Do NOT name the player character.
 
 ## Task

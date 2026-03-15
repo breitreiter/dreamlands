@@ -74,12 +74,12 @@ public class EncounterSelectionTests
         map[1, 1].Region = region;
 
         var session = Helpers.MakeSession(map: map, bundle: bundle);
-        session.Player.UsedEncounterIds.Add("enc1");
+        session.Player.UsedEncounterIds.Add("plains/tier1/enc1");
 
         var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
 
         Assert.NotNull(picked);
-        Assert.Equal("enc2", picked.Id);
+        Assert.Equal("plains/tier1/enc2", picked.Id);
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public class EncounterSelectionTests
         map[1, 1].Region = region;
 
         var session = Helpers.MakeSession(map: map, bundle: bundle);
-        session.Player.UsedEncounterIds.Add("enc1");
+        session.Player.UsedEncounterIds.Add("plains/tier1/enc1");
 
         Assert.Null(EncounterSelection.PickOverworld(session, session.CurrentNode));
     }
@@ -123,7 +123,7 @@ public class EncounterSelectionTests
         var enc = EncounterSelection.GetDungeonStart(session, session.CurrentNode);
 
         Assert.NotNull(enc);
-        Assert.Equal("Start", enc.Id);
+        Assert.Equal("arcs/plains/crypt/Start", enc.Id);
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class EncounterSelectionTests
         var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
 
         Assert.NotNull(picked);
-        Assert.Equal("open", picked.Id);
+        Assert.Equal("plains/tier1/open", picked.Id);
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class EncounterSelectionTests
         var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
 
         Assert.NotNull(picked);
-        Assert.Equal("gated", picked.Id);
+        Assert.Equal("plains/tier1/gated", picked.Id);
     }
 
     [Fact]
@@ -196,13 +196,13 @@ public class EncounterSelectionTests
         map[1, 1].Poi = new Poi(PoiKind.Dungeon, "Dungeon") { DungeonId = "crypt" };
 
         var session = Helpers.MakeSession(map: map, bundle: bundle);
-        session.Player.UsedEncounterIds.Add("Start");
+        session.Player.UsedEncounterIds.Add("arcs/plains/crypt/Start");
 
         var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
 
         // Start is used, Room2 requires tag — only Room1 remains
         Assert.Single(available);
-        Assert.Equal("Room1", available[0].Id);
+        Assert.Equal("arcs/plains/crypt/Room1", available[0].Id);
     }
 
     [Fact]

@@ -4,6 +4,7 @@ namespace Dreamlands.Encounter;
 public sealed class Encounter
 {
     public string Id { get; init; } = "";
+    public string ShortId => Id.Contains('/') ? Id[(Id.LastIndexOf('/') + 1)..] : Id;
     public string Category { get; init; } = "";
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";

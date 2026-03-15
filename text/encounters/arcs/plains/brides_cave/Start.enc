@@ -11,7 +11,7 @@ choices:
 
 * Venture deeper into the cave = Pick a passage and see where it leads
   @if has brass_lantern {
-    You light the old brass lantern, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. You notice immediately that the walls have a peculiar hatched texture.
+    You light the old **brass lantern**, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. You notice immediately that the walls have a peculiar hatched texture.
 
     You choose a passage at random and press forward.
     +open "A Record in Stone"

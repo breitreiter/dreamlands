@@ -8,9 +8,9 @@ public class BundleTests
     {
         "index": {
             "byId": {
-                "well_encounter": { "category": "forest/tier1", "encounterIndex": 0 },
-                "cave_encounter": { "category": "forest/tier1", "encounterIndex": 1 },
-                "peak_encounter": { "category": "mountain/tier2", "encounterIndex": 2 }
+                "forest/tier1/well_encounter": { "category": "forest/tier1", "encounterIndex": 0 },
+                "forest/tier1/cave_encounter": { "category": "forest/tier1", "encounterIndex": 1 },
+                "mountain/tier2/peak_encounter": { "category": "mountain/tier2", "encounterIndex": 2 }
             },
             "byCategory": {
                 "forest/tier1": [0, 1],
@@ -19,7 +19,7 @@ public class BundleTests
         },
         "encounters": [
             {
-                "id": "well_encounter",
+                "id": "forest/tier1/well_encounter",
                 "category": "forest/tier1",
                 "title": "The Old Well",
                 "body": "A crumbling well.",
@@ -35,14 +35,14 @@ public class BundleTests
                 ]
             },
             {
-                "id": "cave_encounter",
+                "id": "forest/tier1/cave_encounter",
                 "category": "forest/tier1",
                 "title": "Hidden Cave",
                 "body": "A dark cave entrance.",
                 "choices": []
             },
             {
-                "id": "peak_encounter",
+                "id": "mountain/tier2/peak_encounter",
                 "category": "mountain/tier2",
                 "title": "The Summit",
                 "body": "Wind howls.",
@@ -63,7 +63,7 @@ public class BundleTests
     public void GetById_ReturnsCorrectEncounter()
     {
         var bundle = EncounterBundle.FromJson(TestBundleJson);
-        var enc = bundle.GetById("well_encounter");
+        var enc = bundle.GetById("forest/tier1/well_encounter");
 
         Assert.NotNull(enc);
         Assert.Equal("The Old Well", enc!.Title);
@@ -85,8 +85,8 @@ public class BundleTests
         var forest = bundle.GetByCategory("forest/tier1");
 
         Assert.Equal(2, forest.Count);
-        Assert.Contains(forest, e => e.Id == "well_encounter");
-        Assert.Contains(forest, e => e.Id == "cave_encounter");
+        Assert.Contains(forest, e => e.ShortId == "well_encounter");
+        Assert.Contains(forest, e => e.ShortId == "cave_encounter");
     }
 
     [Fact]
@@ -114,11 +114,11 @@ public class BundleTests
         var json = """
         {
             "index": {
-                "byId": { "test": { "category": "test", "encounterIndex": 0 } },
+                "byId": { "test/test": { "category": "test", "encounterIndex": 0 } },
                 "byCategory": { "test": [0] }
             },
             "encounters": [{
-                "id": "test",
+                "id": "test/test",
                 "category": "test",
                 "title": "Test",
                 "body": "Body.",
@@ -141,7 +141,7 @@ public class BundleTests
         """;
 
         var bundle = EncounterBundle.FromJson(json);
-        var choice = bundle.GetById("test")!.Choices[0];
+        var choice = bundle.GetById("test/test")!.Choices[0];
 
         Assert.NotNull(choice.Conditional);
         Assert.Equal("You draw your sword.", choice.Conditional!.Preamble);
