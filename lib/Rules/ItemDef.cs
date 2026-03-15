@@ -373,9 +373,21 @@ public sealed class ItemDef
         },
         ["peoples_borderlands"] = new()
         {
-            Id = "peoples_borderlands", Name = "Peoples of the Borderlands", Type = ItemType.Tool,
+            Id = "peoples_borderlands", Name = "A Guide to the Borderlands", Type = ItemType.Tool,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
+        },
+        ["flora_monograph"] = new()
+        {
+            Id = "flora_monograph", Name = "Monograph on Borderlands Flora", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Bushcraft] = 2 },
+            Biome = "mountain", ShopTier = 1, Cost = 40,
+        },
+        ["ornate_spyglass"] = new()
+        {
+            Id = "ornate_spyglass", Name = "Ornate Spyglass", Type = ItemType.Tool,
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Bushcraft] = 3 },
+            Biome = "scrub", ShopTier = 2, Cost = 80,
         },
         ["cartographers_kit"] = new()
         {
