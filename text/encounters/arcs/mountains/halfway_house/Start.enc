@@ -4,10 +4,10 @@ A placeholder encounter for the Halfway House arc.
 
 choices:
 
-* Explore = Search the house
+* Explore = Search the house [requires quality faction.miners 5]
     @if check combat medium {
         You find something valuable.
-        +upgrade_pack 1
+        +add_item tarnished_key
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -15,13 +15,17 @@ choices:
         +finish_dungeon
     }
 
-* Negotiate = Talk your way through
+* Negotiate = Talk your way through [requires quality faction.miners 5]
     @if check negotiation medium {
         You find something valuable.
-        +upgrade_pack 1
+        +add_item tarnished_key
         +finish_dungeon
     } @else {
         It doesn't go well.
         +add_condition injured
         +finish_dungeon
     }
+
+* Depart = Leave this place behind
+    You decide this is not the time. You turn and walk away.
+    +flee_dungeon

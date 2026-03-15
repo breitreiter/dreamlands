@@ -17,7 +17,6 @@ choices:
     +open "A Record in Stone"
   } @else {
     You stumble in the dark, trying to make your way by feel. You crack you head on a low overhang and curse. There's no way you can navigate this cave without a light. Slowly and with great care, you feel your way back to the entrance, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.
-    +damage_health 1
     +flee_dungeon
   }
   

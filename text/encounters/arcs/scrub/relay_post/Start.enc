@@ -4,7 +4,7 @@ A placeholder encounter for the Relay Post arc.
 
 choices:
 
-* Explore = Search the station
+* Explore = Search the station [requires quality faction.kesharat 5]
     @if check combat medium {
         You find something valuable.
         +add_item color_lens
@@ -15,7 +15,7 @@ choices:
         +finish_dungeon
     }
 
-* Negotiate = Talk your way through
+* Negotiate = Talk your way through [requires quality faction.kesharat 5]
     @if check negotiation medium {
         You find something valuable.
         +add_item color_lens
@@ -25,3 +25,7 @@ choices:
         +add_condition injured
         +finish_dungeon
     }
+
+* Depart = Leave this place behind
+    You decide this is not the time. You turn and walk away.
+    +flee_dungeon
