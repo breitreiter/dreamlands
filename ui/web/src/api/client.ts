@@ -10,12 +10,18 @@ import type {
 } from "./types";
 
 declare const __API_VERSION__: string;
+declare const __API_BASE__: string;
 
-const BASE = "/api/game";
+const BASE = `${__API_BASE__}/api/game`;
+
+/** Fire-and-forget ping to wake the backend from cold start. */
+export function nudge(): void {
+  fetch(`${__API_BASE__}/api/health`).catch(() => {});
+}
 
 export async function checkVersion(): Promise<string | null> {
   try {
-    const res = await fetch("/api/health");
+    const res = await fetch(`${__API_BASE__}/api/health`);
     if (!res.ok) return "Server unreachable";
     const data = await res.json();
     if (data.apiVersion !== __API_VERSION__)

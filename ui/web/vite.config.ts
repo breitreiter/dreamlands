@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   define: {
     __API_VERSION__: JSON.stringify(apiVersion),
+    __API_BASE__: JSON.stringify(process.env.VITE_API_BASE || ""),
   },
   resolve: {
     alias: {
@@ -19,7 +20,7 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      "/api": "http://localhost:5064",
+      "/api": "http://localhost:7071",
     },
   },
 });

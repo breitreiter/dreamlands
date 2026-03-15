@@ -77,15 +77,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const savedGameId = localStorage.getItem(SAVE_KEY);
 
+  // Wake the backend from cold start while the user reads the splash screen
   useEffect(() => {
-    api.checkVersion().then((err) => {
-      if (err) setState((s) => ({ ...s, error: err }));
-    });
+    api.nudge();
   }, []);
 
   const startNewGame = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
+      const versionErr = await api.checkVersion();
+      if (versionErr) {
+        setState((s) => ({ ...s, loading: false, error: versionErr }));
+        return;
+      }
       const result = await api.newGame();
       localStorage.setItem(SAVE_KEY, result.gameId);
       setState({
@@ -108,6 +112,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (!savedGameId) return;
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
+      const versionErr = await api.checkVersion();
+      if (versionErr) {
+        setState((s) => ({ ...s, loading: false, error: versionErr }));
+        return;
+      }
       const result = await api.getGame(savedGameId);
       setState({ gameId: savedGameId, response: result, loading: false, error: null, toast: null });
     } catch {
