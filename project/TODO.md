@@ -10,8 +10,12 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Frontend
 
-- [ ] Redesign severe condition end-of-day screen
-- [ ] UX design: Town — Guild Bank
+- [x] Redesign severe condition end-of-day screen
+- [x] UX design: Town — Guild Bank
+- [ ] Fix mobile layout — desktop-first design breaks on phones and tablets:
+      fixed-width panels (420px inventory mechanics column), 3-column layouts with
+      no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
+      overlay not adapted for small screens, no touch-friendly target sizing
 
 ### Map Generation
 
