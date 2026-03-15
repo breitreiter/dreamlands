@@ -192,6 +192,18 @@ public class MechanicResultInfo
 {
     public string Type { get; init; } = "";
     public string Description { get; init; } = "";
+    public ResistCheckInfo? ResistCheck { get; init; }
+}
+
+public class ResistCheckInfo
+{
+    public string ConditionId { get; init; } = "";
+    public string ConditionName { get; init; } = "";
+    public bool Passed { get; init; }
+    public int Rolled { get; init; }
+    public int Target { get; init; }
+    public int Modifier { get; init; }
+    public string? RollMode { get; init; }
 }
 
 public class InventoryInfo

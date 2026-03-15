@@ -319,12 +319,52 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
       </div>
 
       {outcome.mechanics.length > 0 && (
-        <div className="space-y-1 border-t border-edge pt-3">
-          {outcome.mechanics.map((m, i) => (
-            <div key={i} className="text-xs text-dim">
-              {m.description}
-            </div>
-          ))}
+        <div className="space-y-2 border-t border-edge pt-3">
+          {outcome.mechanics.map((m, i) =>
+            m.resistCheck ? (
+              <div
+                key={i}
+                className={`p-3 border ${
+                  m.resistCheck.passed
+                    ? "border-positive bg-positive/15"
+                    : "border-negative bg-negative/15"
+                }`}
+              >
+                <MaskedIcon
+                  icon="dice-twenty-faces-twenty.svg"
+                  className="w-5 h-5 inline-block align-text-bottom mr-1.5"
+                  color={m.resistCheck.rollMode === "disadvantage" ? "#C45656"
+                    : m.resistCheck.rollMode === "advantage" ? "#5B9F5B"
+                    : "currentColor"}
+                />
+                <span className="capitalize">{m.resistCheck.conditionName}</span>
+                {" resist: "}
+                <span className="font-medium">
+                  {m.resistCheck.rolled - m.resistCheck.modifier}
+                  {m.resistCheck.modifier !== 0 &&
+                    ` ${m.resistCheck.modifier >= 0 ? "+" : ""}${m.resistCheck.modifier}`}
+                </span>
+                {" vs "}
+                <span className="font-medium">{m.resistCheck.target}</span>
+                {" — "}
+                <span className={m.resistCheck.passed ? "text-positive" : "text-negative"}>
+                  {m.resistCheck.passed ? "Resisted" : "Afflicted"}
+                </span>
+                {m.resistCheck.rollMode && (
+                  <>
+                    {" · "}
+                    <span className={m.resistCheck.rollMode === "disadvantage" ? "text-negative" : "text-positive"}>
+                      {m.resistCheck.rollMode === "disadvantage" ? "Disadvantage" : "Advantage"}
+                    </span>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div key={i} className="text-xs text-dim">
+                {m.description}
+              </div>
+            )
+          )}
         </div>
       )}
     </div>

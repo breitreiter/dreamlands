@@ -397,6 +397,16 @@ List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
             MechanicResult.DungeonFled => "Fled the dungeon!",
             _ => r.ToString() ?? "",
         },
+        ResistCheck = r is MechanicResult.ConditionResisted cr2 ? new ResistCheckInfo
+        {
+            ConditionId = cr2.ConditionId,
+            ConditionName = balance.Conditions.GetValueOrDefault(cr2.ConditionId)?.Name ?? cr2.ConditionId,
+            Passed = cr2.Check.Passed,
+            Rolled = cr2.Check.Rolled,
+            Target = cr2.Check.Target,
+            Modifier = cr2.Check.Modifier,
+            RollMode = cr2.Check.RollMode != Dreamlands.Game.RollMode.Normal ? cr2.Check.RollMode.ToString().ToLowerInvariant() : null,
+        } : null,
     }).ToList();
 
 GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? deliveries = null) => new()

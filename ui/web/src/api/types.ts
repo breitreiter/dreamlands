@@ -88,6 +88,17 @@ export interface SkillCheckInfo {
 export interface MechanicResultInfo {
   type: string;
   description: string;
+  resistCheck?: ResistCheckInfo;
+}
+
+export interface ResistCheckInfo {
+  conditionId: string;
+  conditionName: string;
+  passed: boolean;
+  rolled: number;
+  target: number;
+  modifier: number;
+  rollMode?: "advantage" | "disadvantage";
 }
 
 export interface ItemInfo {
