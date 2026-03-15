@@ -10,6 +10,10 @@ public class PlayerState
 {
     // Identity
     public string GameId { get; set; } = "";
+
+    /// <summary>Cosmos DB ETag for optimistic concurrency. Not serialized.</summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    public string? ConcurrencyToken { get; set; }
     public int Seed { get; set; }
     public string Name { get; set; } = "";
     public string Bio { get; set; } = "";
