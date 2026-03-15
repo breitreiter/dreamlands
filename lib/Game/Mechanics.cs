@@ -342,7 +342,7 @@ public static class Mechanics
 
         var stacks = def?.Stacks ?? 1;
         state.ActiveConditions[id] = stacks;
-        return new MechanicResult.ConditionAdded(id, stacks);
+        return new MechanicResult.ConditionAdded(id, stacks, check);
     }
 
     static MechanicResult? ApplyRemoveCondition(List<string> args, PlayerState state)

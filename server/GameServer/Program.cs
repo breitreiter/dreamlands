@@ -397,16 +397,30 @@ List<MechanicResultInfo> BuildMechanicResults(List<MechanicResult> results) =>
             MechanicResult.DungeonFled => "Fled the dungeon!",
             _ => r.ToString() ?? "",
         },
-        ResistCheck = r is MechanicResult.ConditionResisted cr2 ? new ResistCheckInfo
+        ResistCheck = r switch
         {
-            ConditionId = cr2.ConditionId,
-            ConditionName = balance.Conditions.GetValueOrDefault(cr2.ConditionId)?.Name ?? cr2.ConditionId,
-            Passed = cr2.Check.Passed,
-            Rolled = cr2.Check.Rolled,
-            Target = cr2.Check.Target,
-            Modifier = cr2.Check.Modifier,
-            RollMode = cr2.Check.RollMode != Dreamlands.Game.RollMode.Normal ? cr2.Check.RollMode.ToString().ToLowerInvariant() : null,
-        } : null,
+            MechanicResult.ConditionResisted cr2 => new ResistCheckInfo
+            {
+                ConditionId = cr2.ConditionId,
+                ConditionName = balance.Conditions.GetValueOrDefault(cr2.ConditionId)?.Name ?? cr2.ConditionId,
+                Passed = cr2.Check.Passed,
+                Rolled = cr2.Check.Rolled,
+                Target = cr2.Check.Target,
+                Modifier = cr2.Check.Modifier,
+                RollMode = cr2.Check.RollMode != Dreamlands.Game.RollMode.Normal ? cr2.Check.RollMode.ToString().ToLowerInvariant() : null,
+            },
+            MechanicResult.ConditionAdded { Check: { } ck } ca => new ResistCheckInfo
+            {
+                ConditionId = ca.ConditionId,
+                ConditionName = balance.Conditions.GetValueOrDefault(ca.ConditionId)?.Name ?? ca.ConditionId,
+                Passed = ck.Passed,
+                Rolled = ck.Rolled,
+                Target = ck.Target,
+                Modifier = ck.Modifier,
+                RollMode = ck.RollMode != Dreamlands.Game.RollMode.Normal ? ck.RollMode.ToString().ToLowerInvariant() : null,
+            },
+            _ => null,
+        },
     }).ToList();
 
 GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? deliveries = null) => new()
