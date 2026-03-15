@@ -502,6 +502,72 @@ CampInfo BuildCampThreats(GameSession session)
     };
 }
 
+List<ConditionRowInfo> BuildConditionRows(
+    Dictionary<string, int> conditionsBefore,
+    List<EndOfDayEvent> events,
+    BalanceData balance)
+{
+    var cures = new Dictionary<string, EndOfDayEvent.CureApplied>();
+    var drains = new Dictionary<string, (int Health, int Spirits)>();
+
+    foreach (var e in events)
+    {
+        if (e is EndOfDayEvent.CureApplied c)
+            cures[c.ConditionId] = c;
+        if (e is EndOfDayEvent.ConditionDrain d)
+        {
+            var prev = drains.GetValueOrDefault(d.ConditionId);
+            drains[d.ConditionId] = (prev.Health + d.HealthLost, prev.Spirits + d.SpiritsLost);
+        }
+    }
+
+    var rows = new List<ConditionRowInfo>();
+    foreach (var (conditionId, stacksBefore) in conditionsBefore)
+    {
+        if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
+
+        var cure = cures.GetValueOrDefault(conditionId);
+        var drain = drains.GetValueOrDefault(conditionId);
+
+        string? cureItem = null;
+        string? cureMessage = null;
+        int stacksAfter = stacksBefore;
+
+        if (cure != null)
+        {
+            var itemDef = balance.Items.GetValueOrDefault(cure.ItemDefId);
+            cureItem = itemDef?.Name ?? cure.ItemDefId;
+            stacksAfter = cure.Remaining;
+            cureMessage = cure.Remaining > 0
+                ? $"Used {cureItem}, removed {cure.StacksRemoved} stack"
+                : $"Used {cureItem}, cured!";
+        }
+        else
+        {
+            // Find which item would cure this condition
+            var cureItemDef = balance.Items.Values
+                .FirstOrDefault(i => i.Cures.Contains(conditionId));
+            cureMessage = cureItemDef != null
+                ? $"You have no {cureItemDef.Name.ToLowerInvariant()}"
+                : "No cure available";
+        }
+
+        rows.Add(new ConditionRowInfo
+        {
+            ConditionId = conditionId,
+            Name = def.Name,
+            Stacks = stacksBefore,
+            CureItem = cureItem,
+            CureMessage = cureMessage,
+            StacksAfter = stacksAfter,
+            HealthLost = drain.Health,
+            SpiritsLost = drain.Spirits,
+        });
+    }
+
+    return rows;
+}
+
 List<CampEventInfo> FormatCampEvents(List<EndOfDayEvent> events) =>
     events.Select(e => new CampEventInfo
     {
@@ -992,6 +1058,14 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
 
             var campTerrain = node.Region?.Terrain ?? Terrain.Plains;
             var startCity = map.StartingCity;
+
+            // Snapshot conditions + health before resolution
+            var healthBefore = player.Health;
+            var conditionsBefore = player.ActiveConditions
+                .Where(kv => balance.Conditions.TryGetValue(kv.Key, out var def)
+                             && def.Severity == ConditionSeverity.Severe)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
             var campEvents = EndOfDay.Resolve(
                 player, campBiome, campTier,
                 balance, session.Rng,
@@ -1009,10 +1083,15 @@ app.MapPost("/api/game/{id}/action", async (string id, ActionRequest req) =>
                 .Any(id => balance.Conditions.TryGetValue(id, out var def)
                            && def.Severity == ConditionSeverity.Severe);
 
+            var conditionRows = BuildConditionRows(conditionsBefore, campEvents, balance);
+
             var campInfo = BuildCampThreats(session);
             campInfo = new CampInfo
             {
                 HasSevereCondition = hasSevere,
+                HealthBefore = healthBefore,
+                HealthAfter = player.Health,
+                ConditionRows = conditionRows,
                 Threats = campInfo.Threats,
                 Events = FormatCampEvents(campEvents),
             };

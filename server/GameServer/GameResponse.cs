@@ -259,8 +259,23 @@ public class EquipmentInfo
 public class CampInfo
 {
     public bool HasSevereCondition { get; init; }
+    public int HealthBefore { get; init; }
+    public int HealthAfter { get; init; }
+    public List<ConditionRowInfo> ConditionRows { get; init; } = [];
     public List<CampThreatInfo> Threats { get; init; } = [];
     public List<CampEventInfo> Events { get; init; } = [];
+}
+
+public class ConditionRowInfo
+{
+    public string ConditionId { get; init; } = "";
+    public string Name { get; init; } = "";
+    public int Stacks { get; init; }
+    public string? CureItem { get; init; }
+    public string? CureMessage { get; init; }
+    public int StacksAfter { get; init; }
+    public int HealthLost { get; init; }
+    public int SpiritsLost { get; init; }
 }
 
 public class CampThreatInfo

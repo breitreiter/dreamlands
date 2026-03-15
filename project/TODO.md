@@ -22,6 +22,9 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Rules & Balancing
 
+- [ ] Playtest medicine vs. health drain in T3 areas — currently medicine reduces condition
+      stacks but you still lose 1 HP if any severe condition remains. Could be too punishing
+      in endgame where multi-stack injuries are common and one bandage per night isn't enough.
 - [ ] Haul direction balancing — tune destination selection to favor two sweet spots:
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging

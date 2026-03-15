@@ -143,8 +143,22 @@ export interface CampEventInfo {
   description: string;
 }
 
+export interface ConditionRowInfo {
+  conditionId: string;
+  name: string;
+  stacks: number;
+  cureItem: string | null;
+  cureMessage: string | null;
+  stacksAfter: number;
+  healthLost: number;
+  spiritsLost: number;
+}
+
 export interface CampInfo {
   hasSevereCondition: boolean;
+  healthBefore: number;
+  healthAfter: number;
+  conditionRows: ConditionRowInfo[];
   threats: CampThreatInfo[];
   events: CampEventInfo[];
 }
