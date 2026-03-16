@@ -32,12 +32,12 @@ public class MarketTests
     }
 
     [Fact]
-    public void InitializeSettlement_SpecialtyMedicines_NotAtCamp()
+    public void InitializeSettlement_SpecialtyMedicines_NotAtTown()
     {
         var state = Fresh();
-        var camp = Market.InitializeSettlement("Camp", "plains", 2, SettlementSize.Camp, state, Balance, new Random(1));
+        var town = Market.InitializeSettlement("Town", "plains", 2, SettlementSize.Town, state, Balance, new Random(1));
 
-        var specialtyMeds = camp.Stock.Keys
+        var specialtyMeds = town.Stock.Keys
             .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages")
             .ToList();
 
@@ -45,17 +45,17 @@ public class MarketTests
     }
 
     [Fact]
-    public void InitializeSettlement_SpecialtyMedicines_CanAppearAtTown()
+    public void InitializeSettlement_SpecialtyMedicines_CanAppearAtOutpost()
     {
         var state = Fresh();
-        // Try several seeds — at least one should stock a specialty medicine at a plains town tier 2
+        // Try several seeds — at least one should stock a specialty medicine at a plains outpost tier 2
         var found = Enumerable.Range(0, 20).Any(seed =>
         {
-            var town = Market.InitializeSettlement("Town", "plains", 2, SettlementSize.Town, state, Balance, new Random(seed));
-            return town.Stock.Keys.Any(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages");
+            var outpost = Market.InitializeSettlement("Outpost", "plains", 2, SettlementSize.Outpost, state, Balance, new Random(seed));
+            return outpost.Stock.Keys.Any(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages");
         });
 
-        Assert.True(found, "Expected at least one seed to stock a specialty medicine at a town");
+        Assert.True(found, "Expected at least one seed to stock a specialty medicine at an outpost");
     }
 
     [Fact]

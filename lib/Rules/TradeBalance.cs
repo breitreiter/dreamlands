@@ -11,11 +11,11 @@ public sealed class TradeBalance
 
     public IReadOnlyDictionary<SettlementSize, int> MaxStock { get; init; } = new Dictionary<SettlementSize, int>
     {
-        [SettlementSize.Camp] = 1,
-        [SettlementSize.Outpost] = 2,
-        [SettlementSize.Village] = 3,
-        [SettlementSize.Town] = 4,
-        [SettlementSize.City] = 5,
+        [SettlementSize.Camp] = 3,
+        [SettlementSize.Outpost] = 4,
+        [SettlementSize.Village] = 5,
+        [SettlementSize.Town] = 6,
+        [SettlementSize.City] = 8,
     };
 
     public IReadOnlyDictionary<SettlementSize, int> RestockPerDay { get; init; } = new Dictionary<SettlementSize, int>

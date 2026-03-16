@@ -47,18 +47,22 @@ public static class Market
             AddRandomItems(catalog, tools, 1, rng);
         }
 
-        // Town+: medicine + additional equipment + tool
-        if (size >= SettlementSize.Town)
+        // Outpost: specialty medicine (reward for trekking to remote leaf nodes)
+        if (size <= SettlementSize.Outpost)
         {
             AddRandomItems(catalog, medicines, 1, rng, catalog);
+        }
+
+        // Town+: additional equipment + tool
+        if (size >= SettlementSize.Town)
+        {
             AddRandomItems(catalog, equipment, 1, rng, catalog);
             AddRandomItems(catalog, tools, 1, rng, catalog);
         }
 
-        // City: additional medicine + equipment
+        // City: additional equipment
         if (size >= SettlementSize.City)
         {
-            AddRandomItems(catalog, medicines, 1, rng, catalog);
             AddRandomItems(catalog, equipment, 1, rng, catalog);
         }
 

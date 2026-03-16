@@ -454,7 +454,7 @@ public sealed class ItemDef
             Id = "siphon_glass", Name = "Siphon Glass", Type = ItemType.Consumable,
             Description = "Strange crystalline fragments. It's said they draw out and capture unnatural colors.",
             Cures = new HashSet<string> { "lattice_sickness" },
-            Biome = "scrub", ShopTier = 3, Cost = 40,
+            Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["pale_knot_berry"] = new()
         {
@@ -468,7 +468,7 @@ public sealed class ItemDef
             Id = "shustov_tonic", Name = "Shustov Tonic", Type = ItemType.Consumable,
             Description = "A smoky distillation of charcoal and salt-marsh herbs. Flushes radiation sickness over several nights.",
             Cures = new HashSet<string> { "irradiated" },
-            Biome = "plains", ShopTier = 3, Cost = 40,
+            Biome = "plains", ShopTier = 2, Cost = 40,
         },
         ["mudcap_fungus"] = new()
         {
