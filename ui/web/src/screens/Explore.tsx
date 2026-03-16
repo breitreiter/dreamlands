@@ -296,10 +296,9 @@ function InstrumentCluster({
           </div>
         </div>
 
-        {/* Services bar */}
-        {hasRightWing && (
-          <div className="bg-page rounded-tr-2xl py-3 pl-[96px] pr-5">
-          <div className="flex items-center gap-3">
+        {/* Services bar — always rendered for consistent height, contents hidden on the road */}
+        <div className={`rounded-tr-2xl py-3 pl-[96px] pr-5 ${hasRightWing ? "bg-page" : ""}`}>
+          <div className={`flex items-center gap-3 min-h-8 ${hasRightWing ? "" : "invisible"}`}>
             {isSettlement && (
               <>
                 <span className="text-accent font-bold whitespace-nowrap">
@@ -335,7 +334,6 @@ function InstrumentCluster({
             )}
           </div>
         </div>
-        )}
       </div>
 
       {/* Vignette + complication — centered, sits on top of the bar */}
