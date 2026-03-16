@@ -1018,7 +1018,7 @@
             "branches": [
               {
                 "condition": "has brass_lantern",
-                "text": "You light the old brass lantern, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. You notice immediately that the walls have a peculiar hatched texture.\n\nYou choose a passage at random and press forward.",
+                "text": "You light the old **brass lantern**, it gutters briefly before casting a flickering glow on the limestone walls of the cavern. You notice immediately that the walls have a peculiar hatched texture.\n\nYou choose a passage at random and press forward.",
                 "mechanics": [
                   "open \u0022A Record in Stone\u0022"
                 ]
@@ -1089,24 +1089,12 @@
           "optionLink": "Approach with open hands",
           "optionPreview": "Perhaps you can reason with these spirits",
           "requires": null,
-          "conditional": {
-            "preamble": "You lower your hands. \u0022I\u0027m listening,\u0022 you say.",
-            "branches": [
-              {
-                "condition": "meets negotiation 4",
-                "text": "The cold eases. The figures become clearer - still translucent, still overlapping, but more distinct. A young woman with dark hair. An older one with work-roughened features. A girl who couldn\u0027t have been more than sixteen.\n\n\u0022We came here to dream,\u0022 the dark-haired one says. \u0022That\u0027s what the old women told us. Spend one night in the Bride\u0027s Cave, and you\u0027ll dream true. Your beloved will return. Your husband will come back. The man who promised...\u0022\n\n\u0022Marta was first,\u0022 another voice. \u0022Sixty years ago, maybe more. We found her marks when we came. We thought - we thought they meant the ritual worked.\u0022\n\n\u0022I came in winter,\u0022 says the girl. Sixteen, you think. Maybe younger. \u0022The passages flooded. I could hear the water rising but I couldn\u0027t find the way back. I counted twenty-three days.\u0022\n\nThey speak over each other now, a dozen voices.\n\n*I was left at the altar. My father wouldn\u0027t take me back.*\n\n*He took my dowry and disappeared. I had nothing.*\n\n*The old women said it was ancient magic, older than the village itself.*\n\n*I wrote him poems, thinking he would feel them somehow.*\n\n*We counted the days. We thought someone would notice.*\n\nThe dark-haired woman, Marta perhaps, steps forward. \u0022The village finally sealed it. But by then we were already here. Already waiting. Already...\u0022\n\nShe gestures at the tally marks climbing the walls.\n\n\u0022We thought you were someone coming to find us. We always think that.\u0022 Her smile is unbearably sad. \u0022But you listened. That\u0027s... that\u0027s something.\u0022\n\nThe cold has become almost comfortable now. One of them presses something into your palm - you feel its weight, though her fingers pass through yours like mist.\n\n\u0022Remember us,\u0022 they say together, then disperse, like mist in daylight.",
-                "mechanics": [
-                  "add_item ivory_comb",
-                  "finish_dungeon"
-                ]
-              }
-            ],
-            "fallback": {
-              "text": "You spread your hands wide, showing empty palms to the drifting forms. The figures halt their advance, their edges rippling like cloth underwater. For a moment the chamber falls silent save for the eternal drip of water against stone.\n\nThen the voices return, no longer layered but speaking in turns, overlapping, cutting across one another. \u0022This is not the one.\u0022 A pause, a shifting of pale fabric. \u0022Someone different. Someone new.\u0022 The temperature plunges further. Your breath mists before your face. The tallest figure leans forward, and you glimpse where face should be only deeper shadow. \u0022Leave,\u0022 they intone, and the word carries the weight of stone grinding upon stone. \u0022Leave while you still have life in you.\u0022\n\nYou take a step backward. The figures do not follow. They stand motionless, watching, waiting. \u0022Come not back,\u0022 the voices whisper, \u0022lest you try our patience.\u0022 The words hang in the cold air long after you turn and make your way toward the passage. Behind you, the scratching begins again. Slow, deliberate, counting something only they can measure. You emerge into the corridor beyond, unharmed in body but carrying the chill of that place in your bones, uncertain what manner of grief or madness you have witnessed.",
-              "mechanics": [
-                "finish_dungeon"
-              ]
-            }
+          "single": {
+            "text": "You lower your hands. \u0022I\u0027m listening,\u0022 you say.\n\nThe cold eases. The figures become clearer - still translucent, still overlapping, but more distinct. A young woman with dark hair. An older one with work-roughened features. A girl who couldn\u0027t have been more than sixteen.\n\n\u0022We came here to dream,\u0022 the dark-haired one says. \u0022That\u0027s what the old women told us. Spend one night in the Bride\u0027s Cave, and you\u0027ll dream true. Your beloved will return. Your husband will come back. The man who promised...\u0022\n\n\u0022Marta was first,\u0022 another voice. \u0022Sixty years ago, maybe more. We found her marks when we came. We thought - we thought they meant the ritual worked.\u0022\n\n\u0022I came in winter,\u0022 says the girl. Sixteen, you think. Maybe younger. \u0022The passages flooded. I could hear the water rising but I couldn\u0027t find the way back. I counted twenty-three days.\u0022\n\nThey speak over each other now, a dozen voices.\n\n*I was left at the altar. My father wouldn\u0027t take me back.*\n\n*He took my dowry and disappeared. I had nothing.*\n\n*The old women said it was ancient magic, older than the village itself.*\n\n*I wrote him poems, thinking he would feel them somehow.*\n\n*We counted the days. We thought someone would notice.*\n\nThe dark-haired woman, Marta perhaps, steps forward. \u0022The village finally sealed it. But by then we were already here. Already waiting. Already...\u0022\n\nShe gestures at the tally marks climbing the walls.\n\n\u0022We thought you were someone coming to find us. We always think that.\u0022 Her smile is unbearably sad. \u0022But you listened. That\u0027s... that\u0027s something.\u0022\n\nThe cold has become almost comfortable now. One of them presses something into your palm - you feel its weight, though her fingers pass through yours like mist.\n\n\u0022Remember us,\u0022 they say together, then disperse, like mist in daylight.",
+            "mechanics": [
+              "add_item ivory_comb",
+              "finish_dungeon"
+            ]
           }
         }
       ]
@@ -2349,7 +2337,7 @@
       "tier": null,
       "vignette": "intro/city_gates",
       "title": "Aldgate",
-      "body": "\nThe caravan has crawled across weeks of bitter miles, wheels grinding in ruts of dust and stone. Countless cold nights, thin meals, and the dry stink of pack beasts and old leather.\n\nAt long last, you stand before the gates of Aldgate, among weathered crates and trade cloth and dusty barrels. The caravan master is arguing with clerks in flat imperial livery. He looks to you for help, but you don\u0027t meet his gaze. You\u0027ll have trouble enough on your own in the city; this man can sort his own affairs.\n\nThe delay stretches on, and the caravan idles in the road like a beast made to kneel. Nothing moves but the wind worrying the banners above the gate and the restless shifting of pack mules.\n\nThere is an unfamiliar weight on you hand.\n",
+      "body": "\nThe caravan has crawled across weeks of bitter miles, wheels grinding in ruts of dust and stone. You have endured countless cold nights, thin meals, and the dry stink of pack beasts and old leather.\n\nAt long last, you stand before the gates of Aldgate, among weathered crates and trade cloth and dusty barrels. The caravan master is arguing with clerks in flat imperial livery. He looks to you for help, but you don\u0027t meet his gaze. You\u0027ll have trouble enough on your own in the city; this man can sort his own affairs.\n\nThe delay stretches on, and the caravan idles in the road like a beast made to kneel. Nothing moves but the wind worrying the banners above the gate and the restless shifting of pack mules.\n\nThere is an unfamiliar weight on you hand.\n",
       "requires": [],
       "choices": [
         {
@@ -2374,7 +2362,7 @@
       "tier": null,
       "vignette": "intro/city_square",
       "title": "A City Square",
-      "body": "\nYou stand inside Aldgate\u0027s walls at last. It is sprawling, filthy, and beautiful.\n\nIn the **market**, you\u0027ll find dispatches, sealed goods, and trade cargo bound for settlements across the frontier. Your guild ring gives you the right to claim a contract, carry the goods to their destination, and collect payment once the cargo arrives.\n\nThe arrangement is simple, but the road is not. Aldgate sits at the edge of empire;  beyond its gates, the borderlands open up, and with them, long stretches of rough country between scattered settlements. There are bandits, to be sure, but few out here die by steel. It is thirst, hunger, and fever that ends most journeys. It is carelessness, hubris, and ignorance. \n\nClose to the city, the lands are tame enough. The roads see regular traffic, farmsteads break up the landscape, and imperial patrols pass often enough. Pack a few days food and keep a wary eye on your coinpurse.\n\nBut the farther into the borderlands a contract takes you, the thinner the settlements become. Strange folk out there, quiet roads, and things that move in the dark beyond your lantern\u0027s reach. The work pays well for those mad enough to take it.\n\nTaking stock, you have: your guild ring, your travelling cloths, a sturdy pack, a pouch of coins, and...\n",
+      "body": "\nYou stand inside Aldgate\u0027s walls at last. It is sprawling, filthy, and beautiful.\n\nIn the **market**, you\u0027ll find dispatches, sealed goods, and trade cargo bound for settlements across the frontier. Your guild ring gives you the right to claim a contract, carry the goods to their destination, and collect payment once the cargo arrives.\n\nThe arrangement is simple, but the road is not. Aldgate sits at the edge of empire;  beyond its gates, the borderlands open up, and with them, long stretches of rough country between scattered settlements. There are bandits, to be sure, but few out here die by steel. It is thirst, hunger, and fever that ends most journeys. It is carelessness, hubris, and ignorance. \n\nClose to the city, the lands are tame. The roads see regular traffic, farmsteads break up the landscape, and imperial patrols pass often enough. Pack a few days food and keep a wary eye on your coinpurse.\n\nBut the farther into the borderlands a contract takes you, the thinner the settlements become. Strange folk out there, quiet roads, and things that move in the dark beyond your lantern\u0027s reach. The work pays well for those mad enough to take it.\n\nTaking stock, you have: your guild ring, your travelling clothes, a sturdy pack, a pouch of coins, and...\n",
       "requires": [],
       "choices": [
         {
@@ -2461,9 +2449,8 @@
           "single": {
             "text": "This was your mother\u0027s ring, and she wielded it like a hammer. Grim, dangerous men bent knee before her. You remember the smell of dust and sea-salt in her hair, her litle rituals like turning the signet once before pressing wax to a contract. She said the ring would secure the family\u0027s future, and you mean to see that through.",
             "mechanics": [
+              "set_skill mercantile 4",
               "set_skill negotiation 4",
-              "set_skill luck 2",
-              "set_skill cunning 2",
               "open Gameplay_Intro"
             ]
           }
@@ -2489,7 +2476,7 @@
           "optionPreview": "It was given to me",
           "requires": null,
           "single": {
-            "text": "The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father\u0027s finest hunters gave up the search after the first week, but not you. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with smoke and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You\u0027ve come here to make your own story, where your name will be remembered.",
+            "text": "The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father\u0027s finest hunters gave up the search after the first week, but not you. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with song and gratitude, her father presented you with his ring. As folks tell the story, he is the noble and selfless father, and you are a nameless hunter. You\u0027ve come here to make your own story, where your name will be remembered.",
             "mechanics": [
               "set_skill cunning 2",
               "set_skill bushcraft 4",

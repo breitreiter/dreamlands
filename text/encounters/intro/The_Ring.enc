@@ -18,9 +18,8 @@ choices:
 
 * Birthright = My mother once wore this, but it is now mine
   This was your mother's ring, and she wielded it like a hammer. Grim, dangerous men bent knee before her. You remember the smell of dust and sea-salt in her hair, her litle rituals like turning the signet once before pressing wax to a contract. She said the ring would secure the family's future, and you mean to see that through.
+  +set_skill mercantile 4
   +set_skill negotiation 4
-  +set_skill luck 2
-  +set_skill cunning 2
   +open Gameplay_Intro
 
 * Gambling = I won it in a game
