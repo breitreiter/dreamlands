@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useGame, type ToastLine } from "../GameContext";
+import { useGame, type CampReportLine, type CampReport } from "../GameContext";
 import type { GameResponse, CampEventInfo, ConditionRowInfo } from "../api/types";
 import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
 import parchment from "../assets/parchment.png";
@@ -30,17 +30,22 @@ function crisisSubtitle(rows: ConditionRowInfo[]): string {
   return "You have a serious condition. You will lose health every night until the condition is treated.";
 }
 
-function buildToastLines(events: CampEventInfo[]): ToastLine[] {
-  const lines: ToastLine[] = [];
+function buildCampReport(events: CampEventInfo[]): CampReport {
+  const lines: CampReportLine[] = [];
+  let hasBad = false;
   for (const e of events) {
-    if (e.type === "FoodConsumed" || e.type === "Starving")
-      lines.push({ text: e.description, color: e.type === "Starving" ? "negative" : undefined });
-    else if (e.type === "ConditionDrain")
+    if (e.type === "FoodConsumed")
+      lines.push({ text: e.description });
+    else if (e.type === "Starving") {
       lines.push({ text: e.description, color: "negative" });
-    else if (e.type === "RestRecovery")
+      hasBad = true;
+    } else if (e.type === "ConditionDrain") {
+      lines.push({ text: e.description, color: "negative" });
+      hasBad = true;
+    } else if (e.type === "RestRecovery")
       lines.push({ text: e.description, color: "positive" });
   }
-  return lines;
+  return { lines, severity: hasBad ? "bad" : "ok" };
 }
 
 /** Minor events: food, foraging, rest recovery — not condition-related */
@@ -54,7 +59,7 @@ function getMinorEvents(events: CampEventInfo[]): CampEventInfo[] {
 }
 
 export default function Camp({ state }: { state: GameResponse }) {
-  const { doAction, refreshState, loading, showToast } = useGame();
+  const { doAction, refreshState, loading, setCampReport } = useGame();
   const camp = state.camp;
   const node = state.node;
   const resolved = state.mode === "camp_resolved";
@@ -71,15 +76,15 @@ export default function Camp({ state }: { state: GameResponse }) {
     }
   }, [resolved, doAction]);
 
-  // Toast path: minor conditions only — skip crisis screen.
+  // Minor path: stash camp report and return to explore immediately.
+  const isMinorPath = resolved && camp && !camp.hasSevereCondition;
   useEffect(() => {
-    if (resolved && camp && !camp.hasSevereCondition && !didToast.current) {
+    if (isMinorPath && !didToast.current) {
       didToast.current = true;
-      const lines = buildToastLines(camp.events);
-      if (lines.length > 0) showToast({ lines });
-      setTimeout(() => refreshState(), 50);
+      setCampReport(buildCampReport(camp!.events));
+      refreshState();
     }
-  }, [resolved, camp, showToast, refreshState]);
+  }, [isMinorPath, camp, setCampReport, refreshState]);
 
   const isSettlement = node?.poi?.kind === "settlement";
   const isChapterhouse = isSettlement && node?.poi?.services?.includes("chapterhouse");
@@ -96,14 +101,17 @@ export default function Camp({ state }: { state: GameResponse }) {
   useEffect(() => {
     if (!resolved) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Enter") refreshState();
+      if (e.key === "Enter") {
+        if (camp) setCampReport(buildCampReport(camp.events));
+        refreshState();
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [resolved, refreshState]);
+  }, [resolved, camp, setCampReport, refreshState]);
 
-  // Pre-resolve or toast path — Explore is visible underneath, render nothing
-  if (!resolved || didToast.current) return null;
+  // Pre-resolve or minor path — Explore is visible underneath, render nothing
+  if (!resolved || isMinorPath) return null;
 
   const conditionRows = camp?.conditionRows ?? [];
   const healthBefore = camp?.healthBefore ?? state.status.health;
@@ -232,7 +240,10 @@ export default function Camp({ state }: { state: GameResponse }) {
 
           {/* Continue button */}
           <button
-            onClick={() => refreshState()}
+            onClick={() => {
+              if (camp) setCampReport(buildCampReport(camp.events));
+              refreshState();
+            }}
             disabled={loading}
             className="flex items-start gap-3 transition-colors group cursor-pointer"
           >

@@ -1,16 +1,17 @@
-import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import type { GameResponse, MarketOrder } from "./api/types";
 import * as api from "./api/client";
 
 const SAVE_KEY = "dreamlands_gameId";
 
-export interface ToastLine {
+export interface CampReportLine {
   text: string;
   color?: "positive" | "negative";
 }
 
-export interface ToastData {
-  lines: ToastLine[];
+export interface CampReport {
+  lines: CampReportLine[];
+  severity: "ok" | "bad";
 }
 
 interface GameState {
@@ -18,7 +19,7 @@ interface GameState {
   response: GameResponse | null;
   loading: boolean;
   error: string | null;
-  toast: ToastData | null;
+  campReport: CampReport | null;
 }
 
 interface GameContextValue extends GameState {
@@ -41,8 +42,8 @@ interface GameContextValue extends GameState {
     encounterId?: string;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
-  showToast: (data: ToastData) => void;
-  clearToast: () => void;
+  setCampReport: (report: CampReport) => void;
+  clearCampReport: () => void;
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -72,7 +73,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     response: null,
     loading: false,
     error: null,
-    toast: null,
+    campReport: null,
   });
 
   const savedGameId = localStorage.getItem(SAVE_KEY);
@@ -97,7 +98,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         response: result.state,
         loading: false,
         error: null,
-        toast: null,
+        campReport: null,
       });
     } catch (e) {
       setState((s) => ({
@@ -118,7 +119,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         return;
       }
       const result = await api.getGame(savedGameId);
-      setState({ gameId: savedGameId, response: result, loading: false, error: null, toast: null });
+      setState({ gameId: savedGameId, response: result, loading: false, error: null, campReport: null });
     } catch {
       localStorage.removeItem(SAVE_KEY);
       setState((s) => ({ ...s, loading: false, error: null }));
@@ -182,25 +183,17 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, error: null }));
   }, []);
 
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const showToast = useCallback((data: ToastData) => {
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    setState((s) => ({ ...s, toast: data }));
-    toastTimer.current = setTimeout(() => {
-      setState((s) => ({ ...s, toast: null }));
-      toastTimer.current = null;
-    }, 4500);
+  const setCampReport = useCallback((report: CampReport) => {
+    setState((s) => ({ ...s, campReport: report }));
   }, []);
 
-  const clearToast = useCallback(() => {
-    if (toastTimer.current) { clearTimeout(toastTimer.current); toastTimer.current = null; }
-    setState((s) => ({ ...s, toast: null }));
+  const clearCampReport = useCallback(() => {
+    setState((s) => ({ ...s, campReport: null }));
   }, []);
 
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, clearError, showToast, clearToast }}
+      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, clearError, setCampReport, clearCampReport }}
     >
       {children}
     </GameContext.Provider>

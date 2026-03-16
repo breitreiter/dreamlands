@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { getDiscoveries, getNotices } from "../api/client";
 import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo } from "../api/types";
+import type { CampReport } from "../GameContext";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -159,18 +160,55 @@ const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   notices: { icon: "tied-scroll.svg", label: "Notices" },
 };
 
+function CampReportPopover({ report, onClose }: { report: CampReport; onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [onClose]);
+
+  return (
+    <div ref={ref} className="absolute bottom-full mb-2 right-0 bg-panel/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg space-y-1 whitespace-nowrap">
+      {report.lines.map((line, i) => (
+        <div
+          key={i}
+          className={
+            line.color === "negative" ? "text-negative" :
+            line.color === "positive" ? "text-positive" :
+            "text-primary"
+          }
+        >
+          {line.text}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function InstrumentCluster({
   state,
   loading,
+  campReport,
   onOpenInventory,
   onOpenService,
   onEnterDungeon,
+  onToggleCampReport,
+  showCampPopover,
+  onCloseCampPopover,
 }: {
   state: GameResponse;
   loading: boolean;
+  campReport: CampReport | null;
   onOpenInventory: () => void;
   onOpenService: (service: string) => void;
   onEnterDungeon: () => void;
+  onToggleCampReport: () => void;
+  showCampPopover: boolean;
+  onCloseCampPopover: () => void;
 }) {
   const { node, status } = state;
   if (!node) return null;
@@ -222,6 +260,19 @@ function InstrumentCluster({
             <Button variant="secondary" size="icon-sm" onClick={() => onOpenInventory()} disabled={loading} title="Inventory (I)">
               <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
             </Button>
+
+            {campReport && (
+              <div className="relative">
+                <Button variant="secondary" size="icon-sm" onClick={onToggleCampReport} title="Last night's camp">
+                  <MaskedIcon
+                    icon="camping-tent.svg"
+                    className="w-5 h-5"
+                    color={campReport.severity === "bad" ? "#ff6b6b" : "#6bffae"}
+                  />
+                </Button>
+                {showCampPopover && <CampReportPopover report={campReport} onClose={onCloseCampPopover} />}
+              </div>
+            )}
 
             <div className="flex items-center gap-1">
             <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />
@@ -348,11 +399,12 @@ function NoticesScreen({ gameId, onBack }: { gameId: string; onBack: () => void 
 }
 
 export default function Explore({ state }: { state: GameResponse }) {
-  const { doAction, loading, gameId } = useGame();
+  const { doAction, loading, gameId, campReport, clearCampReport } = useGame();
   const [showInventory, setShowInventory] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
   const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
+  const [showCampPopover, setShowCampPopover] = useState(false);
 
   useEffect(() => {
     if (!gameId) return;
@@ -360,6 +412,8 @@ export default function Explore({ state }: { state: GameResponse }) {
   }, [gameId]);
 
   const move = useCallback(async (dir: string) => {
+    clearCampReport();
+    setShowCampPopover(false);
     const result = await doAction({ action: "move", direction: dir });
     if (result?.deliveries?.length) {
       setPendingDeliveries(result.deliveries);
@@ -455,9 +509,13 @@ export default function Explore({ state }: { state: GameResponse }) {
       <InstrumentCluster
         state={state}
         loading={loading}
+        campReport={campReport}
         onOpenInventory={() => setShowInventory(true)}
         onOpenService={setActiveService}
         onEnterDungeon={() => doAction({ action: "enter_dungeon" })}
+        onToggleCampReport={() => setShowCampPopover(v => !v)}
+        showCampPopover={showCampPopover}
+        onCloseCampPopover={() => setShowCampPopover(false)}
       />
 
       {/* Haul delivery dialog */}

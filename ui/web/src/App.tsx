@@ -5,7 +5,6 @@ import Encounter from "./screens/Encounter";
 import DungeonHub from "./screens/DungeonHub";
 import Rescue from "./screens/Rescue";
 import Camp from "./screens/Camp";
-import NightToast from "./components/NightToast";
 
 function GameRouter() {
   const { response, error, clearError } = useGame();
@@ -14,7 +13,6 @@ function GameRouter() {
 
   return (
     <>
-      <NightToast />
       {error && (
         <div className="fixed top-0 left-0 right-0 z-[2000] bg-negative/90 text-contrast px-4 py-2 text-sm flex justify-between items-center">
           <span>{error}</span>
