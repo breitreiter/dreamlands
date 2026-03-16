@@ -136,12 +136,10 @@ public static class Market
         return entries.OrderBy(e => e.Item.Type).ThenBy(e => e.Price).ToList();
     }
 
-    public static int GetBuyFromSettlementPrice(string itemId, SettlementState settlement, BalanceData balance, int mercantileSkill)
+    public static int GetBuyFromSettlementPrice(string itemId, SettlementState settlement, BalanceData balance)
     {
         if (!balance.Items.TryGetValue(itemId, out var def)) return 0;
-        var price = settlement.Prices.GetValueOrDefault(itemId, GetBasePrice(def, balance));
-        var discount = 1.0 - mercantileSkill * balance.Trade.MercantileDiscountPerPoint;
-        return Math.Max(1, (int)Math.Round(price * discount));
+        return settlement.Prices.GetValueOrDefault(itemId, GetBasePrice(def, balance));
     }
 
     public static MarketResult Buy(PlayerState player, string itemId, SettlementState settlement,
@@ -154,8 +152,7 @@ public static class Market
         if (stock <= 0)
             return new MarketResult(false, "Out of stock");
 
-        int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
-        var price = GetBuyFromSettlementPrice(itemId, settlement, balance, mercantile);
+        var price = GetBuyFromSettlementPrice(itemId, settlement, balance);
         if (price <= 0)
             return new MarketResult(false, "Item not for sale");
 
@@ -210,12 +207,11 @@ public static class Market
         return new MarketResult(true, $"Claimed {haul.DisplayName} — deliver to {haul.DestinationHint}");
     }
 
-    public static int GetSellPrice(ItemDef item, BalanceData balance, int mercantileSkill = 0)
+    public static int GetSellPrice(ItemDef item, BalanceData balance)
     {
         var basePrice = GetBasePrice(item, balance);
         if (basePrice <= 0) return 0;
-        var sellPrice = basePrice * balance.Trade.SellRatio * (1 + mercantileSkill * balance.Trade.MercantileSellBonusPerPoint);
-        return Math.Max(1, (int)Math.Round(sellPrice));
+        return Math.Max(1, (int)Math.Round(basePrice * balance.Trade.SellRatio));
     }
 
     public static MarketResult Sell(PlayerState player, string itemDefId, BalanceData balance)
@@ -226,8 +222,7 @@ public static class Market
         if (def.Type == ItemType.Haul)
             return new MarketResult(false, "Cannot sell hauls");
 
-        int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
-        var price = GetSellPrice(def, balance, mercantile);
+        var price = GetSellPrice(def, balance);
         if (price <= 0)
             return new MarketResult(false, "Item has no sell value");
 

@@ -773,14 +773,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
             return new BadRequestObjectResult(new { error = "Settlement not initialized" });
 
-        int mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
-
         var stock = Market.GetStock(settlementState, data.Balance).Select(entry => new
         {
             id = entry.Item.Id,
             name = entry.Item.Name,
             type = entry.Item.Type.ToString().ToLowerInvariant(),
-            buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance, mercantile),
+            buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance),
             quantity = entry.Quantity,
             skillModifiers = entry.Item.SkillModifiers.ToDictionary(
                 kv => kv.Key.ScriptName(), kv => kv.Value),
@@ -807,8 +805,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             if (sellPrices.ContainsKey(item.DefId)) return;
             if (!data.Balance.Items.TryGetValue(item.DefId, out var def)) return;
             if (def.Type == ItemType.Haul) return;
-            int merc = player.Skills.GetValueOrDefault(Skill.Mercantile);
-            var price = Market.GetSellPrice(def, data.Balance, merc);
+            var price = Market.GetSellPrice(def, data.Balance);
             if (price > 0) sellPrices[item.DefId] = price;
         }
         foreach (var item in player.Pack) AddSellPrice(item);
@@ -1183,11 +1180,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }
 
         var mercantile = p.Skills.GetValueOrDefault(Skill.Mercantile);
-        var mercDiscount = (int)(mercantile * data.Balance.Trade.MercantileDiscountPerPoint * 100);
+        var haulBonus = (int)(mercantile * data.Balance.Trade.MercantileHaulBonusPerPoint * 100);
         other.Add(new MechanicLine
         {
-            Label = "Better prices",
-            Value = $"{mercDiscount}%",
+            Label = "Contract bonus",
+            Value = $"+{haulBonus}%",
             Source = "Mercantile",
         });
 
