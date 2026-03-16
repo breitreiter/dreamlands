@@ -17,7 +17,6 @@ mapgen/sizing.md
 !worlds/*/build.sh
 !worlds/*/use.sh
 !worlds/*/rebuild.sh
-!deploy.sh
 .deploy/
 mapgen/reference/
 generated_*.enc

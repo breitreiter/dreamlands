@@ -487,7 +487,7 @@ export default function Explore({ state }: { state: GameResponse }) {
         attributionControl={false}
       >
         <TileLayer
-          url="/world/tiles/{z}/{x}/{y}.png"
+          url="/world/tiles/{z}/{x}/{y}.webp"
           tileSize={256}
           noWrap
           maxNativeZoom={MAX_ZOOM}

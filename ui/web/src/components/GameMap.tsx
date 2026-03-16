@@ -21,7 +21,7 @@ export default function GameMap() {
       zoomSnap={1}
     >
       <TileLayer
-        url="/world/tiles/{z}/{x}/{y}.png"
+        url="/world/tiles/{z}/{x}/{y}.webp"
         tileSize={256}
         noWrap={true}
         maxNativeZoom={6}

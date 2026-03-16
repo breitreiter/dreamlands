@@ -52,9 +52,9 @@ public static class TileSlicer
                 // SKBitmap.ReadPixels is thread-safe; DrawBitmap reads pixels then draws
                 tileCanvas.DrawBitmap(scaledBitmap, srcRect, destRect);
 
-                var tilePath = Path.Combine(outputDir, z.ToString(), tile.x.ToString(), $"{tile.y}.png");
+                var tilePath = Path.Combine(outputDir, z.ToString(), tile.x.ToString(), $"{tile.y}.webp");
                 using var image = SKImage.FromBitmap(tileBitmap);
-                using var data = image.Encode(SKEncodedImageFormat.Png, 90);
+                using var data = image.Encode(SKEncodedImageFormat.Webp, 85);
                 using var stream = File.Create(tilePath);
                 data.SaveTo(stream);
             });
