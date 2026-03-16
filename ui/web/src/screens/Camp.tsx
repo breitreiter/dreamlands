@@ -92,10 +92,10 @@ export default function Camp({ state }: { state: GameResponse }) {
 
   const terrain = node?.terrain ?? "plains";
   const vignetteSrc = isChapterhouse
-    ? "/world/assets/vignettes/chapterhouse_camp.png"
+    ? "/world/assets/vignettes/chapterhouse_camp.webp"
     : isInn
-      ? "/world/assets/vignettes/inn_camp.png"
-      : `/world/assets/vignettes/${terrain}/${terrain}_camp.png`;
+      ? "/world/assets/vignettes/inn_camp.webp"
+      : `/world/assets/vignettes/${terrain}/${terrain}_camp.webp`;
 
   // Close with Enter key once resolved
   useEffect(() => {

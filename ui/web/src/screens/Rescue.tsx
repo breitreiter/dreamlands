@@ -29,7 +29,7 @@ export default function Rescue({ state }: { state: GameResponse }) {
         }}
       >
         <img
-          src="/world/assets/vignettes/chapterhouse_camp.png"
+          src="/world/assets/vignettes/chapterhouse_camp.webp"
           alt=""
           className="w-full h-full object-cover"
         />

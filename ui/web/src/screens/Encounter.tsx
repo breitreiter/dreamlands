@@ -88,11 +88,11 @@ export default function Encounter({ state }: { state: GameResponse }) {
   const isSettlement = node?.poi?.kind === "settlement";
   const vignette = encounter?.vignette ?? baseVignette;
   const vignetteSrc = vignette
-    ? `/world/assets/vignettes/${vignette}.png`
+    ? `/world/assets/vignettes/${vignette}.webp`
     : isSettlement
-      ? `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_settlement.png`
+      ? `/world/assets/vignettes/${node!.terrain}/${node!.terrain}_settlement.webp`
       : node?.terrain && node.regionTier != null && node.regionTier > 0
-        ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`
+        ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.webp`
         : null;
   const hasVignette = !vignetteError && vignetteSrc != null;
 

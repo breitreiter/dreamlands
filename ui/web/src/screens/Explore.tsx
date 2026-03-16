@@ -223,9 +223,9 @@ function InstrumentCluster({
 
   const vignetteSrc = node.terrain
     ? isSettlement
-      ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_settlement.png`
+      ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_settlement.webp`
       : node.regionTier != null && node.regionTier > 0
-        ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.png`
+        ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.webp`
         : null
     : null;
 
@@ -283,7 +283,7 @@ function InstrumentCluster({
           <div className="relative bg-panel rounded-2xl pl-[96px] pr-3 py-2 flex items-center leading-none">
             <button
               onClick={campReport ? onToggleCampReport : undefined}
-              className={campReport ? "cursor-pointer" : "cursor-default"}
+              className={`border-none bg-transparent p-0 ${campReport ? "cursor-pointer" : "cursor-default"}`}
               title="Last night's camp"
             >
               <MaskedIcon

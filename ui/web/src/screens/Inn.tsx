@@ -28,8 +28,8 @@ export default function Inn({
   }, [gameId]);
 
   const vignetteSrc = isChapterhouse
-    ? "/world/assets/vignettes/chapterhouse_camp.png"
-    : "/world/assets/vignettes/inn_camp.png";
+    ? "/world/assets/vignettes/chapterhouse_camp.webp"
+    : "/world/assets/vignettes/inn_camp.webp";
 
   const title = isChapterhouse ? "The Chapterhouse" : "A Quiet Inn";
 

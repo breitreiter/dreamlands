@@ -40,9 +40,21 @@ if [[ "$SKIP_ASSETS" == false ]]; then
             rm -rf "$dest"
             mkdir -p "$dest"
             if compgen -G "$src/*" >/dev/null 2>&1; then
-                cp -r "$src"/. "$dest"/
+                if [[ "$dir" == "vignettes" ]]; then
+                    # Convert vignettes from PNG to WebP for smaller file sizes
+                    find "$src" -type d | while read -r subdir; do
+                        mkdir -p "$dest/${subdir#$src/}"
+                    done
+                    find "$src" -type f -name "*.png" | while read -r f; do
+                        rel="${f#$src/}"
+                        convert "$f" -quality 85 "$dest/${rel%.png}.webp"
+                    done
+                    echo "    $dest_name/ converted to webp"
+                else
+                    cp -r "$src"/. "$dest"/
+                    echo "    $dest_name/ copied"
+                fi
             fi
-            echo "    $dest_name/ copied"
         else
             echo "    $dest_name/ not found in assets/, skipping"
         fi
