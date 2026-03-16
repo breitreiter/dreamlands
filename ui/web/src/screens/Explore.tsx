@@ -172,7 +172,7 @@ function CampReportPopover({ report, onClose }: { report: CampReport; onClose: (
   }, [onClose]);
 
   return (
-    <div ref={ref} className="absolute bottom-full mb-2 right-0 bg-panel/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg space-y-1 whitespace-nowrap">
+    <div ref={ref} className="absolute bottom-full mb-2 left-0 bg-panel/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg space-y-1 whitespace-nowrap">
       {report.lines.map((line, i) => (
         <div
           key={i}
@@ -261,19 +261,6 @@ function InstrumentCluster({
               <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
             </Button>
 
-            {campReport && (
-              <div className="relative">
-                <Button variant="secondary" size="icon-sm" onClick={onToggleCampReport} title="Last night's camp">
-                  <MaskedIcon
-                    icon="camping-tent.svg"
-                    className="w-5 h-5"
-                    color={campReport.severity === "bad" ? "#ff6b6b" : "#6bffae"}
-                  />
-                </Button>
-                {showCampPopover && <CampReportPopover report={campReport} onClose={onCloseCampPopover} />}
-              </div>
-            )}
-
             <div className="flex items-center gap-1">
             <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />
             <span className={`font-bold ${spiritsLow ? "text-negative" : "text-primary"}`}>{status.spirits}</span>
@@ -290,8 +277,28 @@ function InstrumentCluster({
       </div>
 
       {/* Right wing */}
-      {hasRightWing && (
-        <div className="absolute bottom-0 left-1/2 bg-page rounded-tr-2xl py-3 pl-[96px] pr-5 pointer-events-auto">
+      <div className="absolute bottom-0 left-1/2 pointer-events-auto">
+        {/* Camp report pill — mirrors conditions bar on left */}
+        <div className="flex justify-start mb-1">
+          <div className="relative bg-panel rounded-2xl pl-[96px] pr-3 py-2 flex items-center leading-none">
+            <button
+              onClick={campReport ? onToggleCampReport : undefined}
+              className={campReport ? "cursor-pointer" : "cursor-default"}
+              title="Last night's camp"
+            >
+              <MaskedIcon
+                icon="camping-tent.svg"
+                className="w-5 h-5"
+                color={campReport ? (campReport.severity === "bad" ? "#ff6b6b" : "#6bffae") : "#d4c9a8"}
+              />
+            </button>
+            {showCampPopover && campReport && <CampReportPopover report={campReport} onClose={onCloseCampPopover} />}
+          </div>
+        </div>
+
+        {/* Services bar */}
+        {hasRightWing && (
+          <div className="bg-page rounded-tr-2xl py-3 pl-[96px] pr-5">
           <div className="flex items-center gap-3">
             {isSettlement && (
               <>
@@ -328,7 +335,8 @@ function InstrumentCluster({
             )}
           </div>
         </div>
-      )}
+        )}
+      </div>
 
       {/* Vignette + complication — centered, sits on top of the bar */}
       <div className="relative z-10 pointer-events-auto">
