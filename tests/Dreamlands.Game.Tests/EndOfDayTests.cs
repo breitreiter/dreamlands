@@ -165,6 +165,44 @@ public class EndOfDayTests
     }
 
     [Fact]
+    public void Resolve_SevereConditionTreatedButNotCured_NoHealthLoss()
+    {
+        var state = Fresh();
+        state.ActiveConditions["injured"] = 3; // 3 stacks — bandages reduce to 2, still active
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var healthBefore = state.Health;
+        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        // Medicine was applied, so no health drain even though condition persists
+        Assert.Equal(healthBefore, state.Health);
+        Assert.Equal(2, state.ActiveConditions["injured"]);
+        Assert.Contains(events, e => e is EndOfDayEvent.CureApplied);
+        Assert.DoesNotContain(events, e => e is EndOfDayEvent.ConditionDrain d && d.HealthLost > 0);
+    }
+
+    [Fact]
+    public void Resolve_MixedSevereConditions_UntreatedStillDrains()
+    {
+        var state = Fresh();
+        state.ActiveConditions["injured"] = 2;  // has bandages
+        state.ActiveConditions["poisoned"] = 2; // no antidote
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
+        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
+        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+
+        var healthBefore = state.Health;
+        EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+
+        // Poisoned is untreated severe — still lose 1 HP
+        Assert.Equal(healthBefore - 1, state.Health);
+    }
+
+    [Fact]
     public void Resolve_FreezingDrainsSpiritsOnly()
     {
         var state = Fresh();

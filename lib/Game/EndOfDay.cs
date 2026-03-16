@@ -73,18 +73,18 @@ public static class EndOfDay
         ResolveForaging(state, noBiome, balance, rng, createFood, events);
 
         // 3. Auto-consume food
-        bool balanced = false;
+        bool ate = false, balanced = false;
         if (!noMeal)
-            balanced = ResolveFood(state, balance, events);
+            (ate, balanced) = ResolveFood(state, balance, events);
 
         // 4. Auto-consume medicine (only cures pre-existing conditions)
-        ResolveMedicines(state, preExisting, balance, events);
+        var treatedConditions = ResolveMedicines(state, preExisting, balance, events);
 
         // 5. Apply new conditions from failed resists (for conditions player didn't already have)
         ApplyNewConditions(state, resistResults, balance, events);
 
         // 6. Condition drain — spirits from minor conditions, health from untreated severe
-        string? worstDrainCondition = ResolveConditionDrain(state, balance, events);
+        string? worstDrainCondition = ResolveConditionDrain(state, treatedConditions, balance, events);
 
         // 7. Death check — rescue instead of permadeath
         if (state.Health <= 0)
@@ -96,7 +96,7 @@ public static class EndOfDay
         }
 
         // 8. Rest recovery (spirits only — health never recovers at camp)
-        if (!noSleep)
+        if (!noSleep && ate)
             ResolveRest(state, balanced, balance, events);
 
         // 9. Evaluate disheartened
@@ -181,7 +181,7 @@ public static class EndOfDay
     /// Auto-select and consume food from haversack. Tries for balanced meal first
     /// (1 protein + 1 grain + 1 sweets), then fills remaining slots with whatever is available.
     /// </summary>
-    static bool ResolveFood(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
+    static (bool Ate, bool Balanced) ResolveFood(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
     {
         var eaten = new List<string>();
         bool hasProtein = false, hasGrain = false, hasSweets = false;
@@ -245,14 +245,14 @@ public static class EndOfDay
         else
             events.Add(new EndOfDayEvent.Starving());
 
-        return balanced;
+        return (eaten.Count > 0, balanced);
     }
 
     /// <summary>
     /// Auto-consume medicine from haversack for pre-existing active conditions.
     /// One medicine per condition per night, reduces stacks by 1.
     /// </summary>
-    static void ResolveMedicines(PlayerState state, HashSet<string> preExisting,
+    static HashSet<string> ResolveMedicines(PlayerState state, HashSet<string> preExisting,
         BalanceData balance, List<EndOfDayEvent> events)
     {
         // Find all haversack items that cure an active pre-existing condition
@@ -276,10 +276,13 @@ public static class EndOfDay
             }
         }
 
+        var treated = new HashSet<string>();
+
         // Remove items in reverse index order, then apply effects
         foreach (var (idx, defId, conditionId) in consumed.OrderByDescending(c => c.Index))
         {
             state.Haversack.RemoveAt(idx);
+            treated.Add(conditionId);
 
             if (!state.ActiveConditions.TryGetValue(conditionId, out var stacks))
                 continue;
@@ -297,6 +300,8 @@ public static class EndOfDay
                 events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, 1, newStacks));
             }
         }
+
+        return treated;
     }
 
     /// <summary>
@@ -322,8 +327,8 @@ public static class EndOfDay
     /// Spirits drain: per-condition SpiritsDrain as before.
     /// Health drain: if ANY severe condition is active (after medicine), lose 1 HP total.
     /// </summary>
-    static string? ResolveConditionDrain(PlayerState state, BalanceData balance,
-        List<EndOfDayEvent> events)
+    static string? ResolveConditionDrain(PlayerState state, HashSet<string> treatedConditions,
+        BalanceData balance, List<EndOfDayEvent> events)
     {
         string? worstCondition = null;
         bool hasUntreatedSevere = false;
@@ -339,8 +344,8 @@ public static class EndOfDay
                 events.Add(new EndOfDayEvent.ConditionDrain(conditionId, 0, sDrain));
             }
 
-            // Track whether any severe condition is active
-            if (def.Severity == ConditionSeverity.Severe)
+            // Track whether any severe condition is active and untreated
+            if (def.Severity == ConditionSeverity.Severe && !treatedConditions.Contains(conditionId))
             {
                 hasUntreatedSevere = true;
                 worstCondition ??= conditionId;
@@ -350,7 +355,7 @@ public static class EndOfDay
                 events.Add(new EndOfDayEvent.SpecialEffect(conditionId, def.SpecialEffect));
         }
 
-        // Binary health drain: any untreated severe condition = lose 1 HP
+        // Binary health drain: only if a severe condition got NO medicine at all
         if (hasUntreatedSevere)
         {
             state.Health = Math.Max(0, state.Health - 1);
