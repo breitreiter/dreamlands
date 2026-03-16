@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { getDiscoveries, getNotices } from "../api/client";
 import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo } from "../api/types";
-import type { CampReport } from "../GameContext";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -160,55 +159,19 @@ const SERVICE_ICONS: Record<string, { icon: string; label: string }> = {
   notices: { icon: "tied-scroll.svg", label: "Notices" },
 };
 
-function CampReportPopover({ report, onClose }: { report: CampReport; onClose: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [onClose]);
-
-  return (
-    <div ref={ref} className="absolute bottom-full mb-2 left-0 bg-panel/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg space-y-1 whitespace-nowrap">
-      {report.lines.map((line, i) => (
-        <div
-          key={i}
-          className={
-            line.color === "negative" ? "text-negative" :
-            line.color === "positive" ? "text-positive" :
-            "text-primary"
-          }
-        >
-          {line.text}
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function InstrumentCluster({
   state,
   loading,
-  campReport,
   onOpenInventory,
   onOpenService,
   onEnterDungeon,
-  onToggleCampReport,
-  showCampPopover,
-  onCloseCampPopover,
 }: {
   state: GameResponse;
   loading: boolean;
-  campReport: CampReport | null;
   onOpenInventory: () => void;
   onOpenService: (service: string) => void;
   onEnterDungeon: () => void;
-  onToggleCampReport: () => void;
-  showCampPopover: boolean;
-  onCloseCampPopover: () => void;
 }) {
   const { node, status } = state;
   if (!node) return null;
@@ -220,6 +183,7 @@ function InstrumentCluster({
 
   const healthLow = status.health < status.maxHealth * 0.5;
   const spiritsLow = status.spirits < status.maxSpirits * 0.5;
+  const foodCount = (state.inventory?.haversack ?? []).filter(i => i.defId.startsWith("food_")).length;
 
   const vignetteSrc = node.terrain
     ? isSettlement
@@ -278,21 +242,15 @@ function InstrumentCluster({
 
       {/* Right wing */}
       <div className="absolute bottom-0 left-1/2 pointer-events-auto">
-        {/* Camp report pill — mirrors conditions bar on left */}
+        {/* Food count pill — mirrors conditions bar on left */}
         <div className="flex justify-start mb-1">
-          <div className="relative bg-panel rounded-2xl pl-[96px] pr-3 py-2 flex items-center leading-none">
-            <button
-              onClick={campReport ? onToggleCampReport : undefined}
-              className={`border-none bg-transparent p-0 ${campReport ? "cursor-pointer" : "cursor-default"}`}
-              title="Last night's camp"
-            >
-              <MaskedIcon
-                icon="camping-tent.svg"
-                className="w-5 h-5"
-                color={campReport ? (campReport.severity === "bad" ? "#ff6b6b" : "#6bffae") : "#d4c9a8"}
-              />
-            </button>
-            {showCampPopover && campReport && <CampReportPopover report={campReport} onClose={onCloseCampPopover} />}
+          <div className="relative bg-panel rounded-2xl pl-[96px] pr-3 py-2 flex items-center gap-1 leading-none">
+            <MaskedIcon
+              icon="pouch-with-beads.svg"
+              className="w-5 h-5"
+              color={foodCount > 0 ? "#d4c9a8" : "#ff6b6b"}
+            />
+            <span className={`font-bold ${foodCount > 0 ? "text-primary" : "text-negative"}`}>{foodCount}</span>
           </div>
         </div>
 
@@ -405,12 +363,11 @@ function NoticesScreen({ gameId, onBack }: { gameId: string; onBack: () => void 
 }
 
 export default function Explore({ state }: { state: GameResponse }) {
-  const { doAction, loading, gameId, campReport, clearCampReport } = useGame();
+  const { doAction, loading, gameId, clearCampReport } = useGame();
   const [showInventory, setShowInventory] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
   const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
-  const [showCampPopover, setShowCampPopover] = useState(false);
 
   useEffect(() => {
     if (!gameId) return;
@@ -419,7 +376,6 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   const move = useCallback(async (dir: string) => {
     clearCampReport();
-    setShowCampPopover(false);
     const result = await doAction({ action: "move", direction: dir });
     if (result?.deliveries?.length) {
       setPendingDeliveries(result.deliveries);
@@ -515,13 +471,9 @@ export default function Explore({ state }: { state: GameResponse }) {
       <InstrumentCluster
         state={state}
         loading={loading}
-        campReport={campReport}
         onOpenInventory={() => setShowInventory(true)}
         onOpenService={setActiveService}
         onEnterDungeon={() => doAction({ action: "enter_dungeon" })}
-        onToggleCampReport={() => setShowCampPopover(v => !v)}
-        showCampPopover={showCampPopover}
-        onCloseCampPopover={() => setShowCampPopover(false)}
       />
 
       {/* Haul delivery dialog */}
