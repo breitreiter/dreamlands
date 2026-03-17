@@ -39,6 +39,19 @@ static class CheckCommand
             return 0;
         }
 
+        // Build a lookup of directory -> set of short IDs (filename stems) for +open validation
+        var shortIdsByDir = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+        foreach (var file in files)
+        {
+            var dir = Path.GetDirectoryName(file) ?? "";
+            if (!shortIdsByDir.TryGetValue(dir, out var ids))
+            {
+                ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                shortIdsByDir[dir] = ids;
+            }
+            ids.Add(Path.GetFileNameWithoutExtension(file));
+        }
+
         var failed = 0;
         var warned = 0;
         foreach (var file in files)
@@ -55,6 +68,10 @@ static class CheckCommand
                 ValidateAccessibility(result.Encounter, vocabErrors);
                 if (registry != null)
                     idWarnings = ValidateKnownIds(result.Encounter, registry);
+
+                var dir = Path.GetDirectoryName(file) ?? "";
+                var navErrors = ValidateOpenTargets(result.Encounter, shortIdsByDir.GetValueOrDefault(dir));
+                vocabErrors.AddRange(navErrors);
             }
 
             var markerWarnings = CheckForMarkers(text);
@@ -197,6 +214,42 @@ static class CheckCommand
             if (err != null)
                 errors.Add($"+{mechanic}: {err}");
             ValidateItemId(mechanic, errors);
+        }
+    }
+
+    private static List<string> ValidateOpenTargets(Encounter encounter, HashSet<string>? siblingIds)
+    {
+        var errors = new List<string>();
+        var targets = new List<string>();
+
+        foreach (var choice in encounter.Choices)
+        {
+            if (choice.Conditional is { } conditional)
+            {
+                foreach (var branch in conditional.Branches)
+                    CollectOpenTargets(branch.Outcome.Mechanics, targets);
+                if (conditional.Fallback is { } fallback)
+                    CollectOpenTargets(fallback.Mechanics, targets);
+            }
+            if (choice.Single is { } single)
+                CollectOpenTargets(single.Part.Mechanics, targets);
+        }
+
+        foreach (var target in targets)
+        {
+            if (siblingIds == null || !siblingIds.Contains(target))
+                errors.Add($"+open {target}: no encounter file '{target}.enc' found in the same directory");
+        }
+        return errors;
+    }
+
+    private static void CollectOpenTargets(IReadOnlyList<string> mechanics, List<string> targets)
+    {
+        foreach (var mechanic in mechanics)
+        {
+            var tokens = ActionVerb.Tokenize(mechanic);
+            if (tokens.Count >= 2 && tokens[0] == "open")
+                targets.Add(tokens[1]);
         }
     }
 
