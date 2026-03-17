@@ -1,31 +1,43 @@
-Placeholder: The Grainway Station
+Grainway Station
 
-A placeholder encounter for the Grainway Station arc.
+The depot squats at the crossroads like a stone toad; low, brutal, and built to endure. Imperial work. Walls thick as a man is tall. An iron door stamped with a dead regiment's seal. It was meant to feed an army through a long campaign.
+
+No one ever opened it. The broken legions routed past the locked doors.
+
+Now carrion gathers.
+
+A ragged band of men and women huddle at the door, hard-eyed and hungry. They've thrown up crude barricades of carts and stone. They carry spears, clubs, scavenged blades,whatever will bite.
+
+A hundred yards off, the empire lingers.
+
+A tattered company camps in the dust. Shabby uniforms, mismatched armor. A faded standard lifts in the wind—some relic dragged from storage to pretend at glory. Their tents sag. Their cook pots simmer. They've come for a siege, not a charge.
 
 choices:
 
-* Explore = Search the depot [requires meets combat 5]
-    @if check combat medium {
-        You find something valuable.
-        +add_item mountain_regiment_armor
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
+* Approach the Imperial remnant = Talk to the soldiers
+    @if meets combat medium {
+        A figure breaks from the camp's edge, moving with the stiff gait of a man too long under arms. His breastplate is dented, straps frayed where they hold the scarred metal to his frame. He raises one hand as he nears, then halts, glances down at his palm as though seeing it for the first time. Dust and old blood have worked into the creases. He wipes the hand hard against his thigh, smearing the filth into the wool, then offers it again.
 
-* Negotiate = Talk your way through [requires meets combat 5]
-    @if check negotiation medium {
-        You find something valuable.
-        +add_item mountain_regiment_armor
-        +finish_dungeon
+        "Aldric. Captain, if rank matters to you." His grip is firm despite the dirt. "You have good timing. We could use another sword."
+
+        Two kinds of soldiers get stationed this far from Aldgate. Good men who have made powerful enemies, and bad men who still have powerful friends. You mark Aldric for the former. The hollowness in his eyes speaks not of vice or ambition, but of campaigns that broke upon circumstance and duty that outlived the regime it served.
+
+        He gestures toward the sagging standard, its fabric sun-bleached and frayed at the edges. "Seventeenth Mountain Regiment. At least that is what the banner says." His mouth twists, something between pride and bitterness. "When I arrived a year past, they gave me that rag and command of these men. We're charged with protecting what remains of the imperial stocks in this region." 
+        
+        He pauses, squinting at the depot's iron door across the dusty ground. "What a mountain regiment does in flat country is a question I've stopped asking. But we carry a duty, and I mean to see it done."
+        +add_tag grainway_assault_possible
+        +open "Captain Aldric"
     } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
+        You cross the dust toward the sagging tents. Two sentries peel away from the camp's edge and stride to meet you in the open ground between. Their boots raise pale clouds. One wears a cuirass hammered flat by some old blow; the other clutches a spear with a frayed cord binding the shaft. They halt at twenty paces, hands loose but ready.
+
+        "Hail, friend," the first calls. His voice carries the flat certainty of a man repeating the same words to every traveler. "We've got a situation here. A gang of looters have taken over an imperial depot." His gaze travels your length, weighing blade and bearing. "Dangerous business. Could turn into a fight at any minute." He shifts his weight. "You'll want to walk on, civilian."
+
+        The second sentry tilts his head toward the road beyond. "When you make it to the next settlement, we'd be obliged if you could put the word out about us. We could use a few more seasoned fighters on our side." The wind tugs at the frayed standard behind them. You nod once. The sentries step aside. You continue down the road, the depot's iron door dwindling at your back.
+        +flee_dungeon        
     }
 
 * Depart = Leave this place behind
-    You depart Grainway Station.
+    This situation is no concern of yours. The scavengers may starve. The soldiers may rot in their shabby camp. The depot may stand sealed until the stones themselves crumble. You turn from the scene and set your feet upon the road.
+
+    You walk. The depot dwindles at your back, that squat monument to imperial failure growing small against the horizon. Let others spill blood over locked doors and forgotten grain.
     +flee_dungeon

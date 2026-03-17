@@ -10,6 +10,18 @@ The central tension of the plains is the mismatch between human experience and s
 
 ---
 
+## Nomenclature
+
+**The Enemy:**
+- *"The Iron"* — soldier/enlisted slang for the hostile Grid constructs. What the troops on the ground actually call them.
+- *"The Wardens"* — official imperial terminology. Sanitized, administrative, deliberately neutral.
+
+**The Conflict:**
+- *"The Defense of Aldgate"* — patriotic imperial framing. Refers to the final desperate defense of the city. Valorizes the retreat as a heroic stand; used in speeches, memorials, and recruitment.
+- *"The Retrenchment"* — military term, both informal and formal. Refers to the contraction of imperial forces to the land nearest Aldgate. More honest than "Defense of Aldgate" but still euphemistic—it describes a withdrawal as a consolidation.
+
+---
+
 ## The Land
 
 **Terrain & Geography:**

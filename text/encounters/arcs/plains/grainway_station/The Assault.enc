@@ -1,0 +1,92 @@
+The Assault
+
+Aldric gathers what remains of his command.
+
+Twelve souls. That is the might of the empire here.
+
+They form up by habit more than hope; ragged coats, dented helms, straps patched and re-patched. Their weapons are a scavenger's tally: pitted short swords, ashwood spears, and brutal things hammered from scrap—planks studded with iron, chains wrapped about hafts. Not the bright legionaries of old tales.
+
+Aldric's gaze sweeps them, weighing each one as if they were still a cohort.
+
+“Matthis. Tom. You go with the trader.” His voice is iron, unchanged by the ruin around him. “The rest—on me. They'll be at their pots come dusk. We break them then. Fast and hard.”
+
+No one argues. No one needs to.
+
+Matthis lumbers forward, a broad-shouldered brute with arms like cart axles. He grips a makeshift maul, an rusty rings of iron bound to a small tree. Beside him, Tom slips into place, narrow and twitching, his eyes always moving. A long hunting knife rides low in his grip, worn bright from use.
+
+They stop before you.
+
+Matthis says nothing. Tom gives a thin, uncertain grin.
+
+Both of them wait to see what you'll do.
+
+choices:
+
+* We smash the barricades = Straight into the maw of the beast
+    @if check combat hard {
+    You nod toward the barricade. Matthis grunts and hefts his maul. Tom slides into the shadows without a word.
+
+    The scavenger sentry catches movement too late. His mouth opens, a shout tearing free, more shock than alarm, but loud enough to wake the camp beyond. He plants his feet and raises what might once have been a hatchet. You do not give him the chance to use it. You drop low, driving forward beneath his guard, and strike into the joint of hip and thigh with all your weight behind it. The pelvis shatters like clay. The sound is wet and wrong. His mouth gapes wide, working soundlessly, eyes bulging as his leg folds beneath him. He crumples sideways, breath wheezing through clenched teeth.
+
+    Matthis is already upon the barricade. The maul comes down once, twice, three times in rapid succession. Each blow sends splinters flying, nails shrieking free of rotted planks. The whole ramshackle wall shudders and groans. On the fourth strike, a section collapses inward with a crash that echoes through the ruins. Beyond it, firelight flickers. Voices rise in confusion, then anger. Tom is nowhere to be seen, swallowed by the dark between buildings, but you know he is moving.
+    
+    For a moment you fear Aldric has abandoned you as well, but then his cry splits the air: "For the Old Gate!" All at once it is melee. Figures rush from the shadows between broken walls, scavengers caught half-armed and bewildered. A woman among them is cut down before she can raise her cudgel. Two more men follow, their blood soaking into the dirt. One of the legionaries staggers past you, a slice across his forehead spilling red into his eyes. Steel rings on iron. Wood splinters. Someone screams. The air fills with the stink of sweat and copper.
+    
+    The rest of the scavengers break and run. They scatter like rats before a torch, clambering over their own wreckage, hurling aside pots and bundles in their haste. One stumbles, catches himself on a toppled crate, and bolts again without looking back. Another vaults a low wall and vanishes into the maze of ruins beyond.
+
+    Aldric's men do not give chase. They stand among the splintered barricades, breathing hard, blood flecking their cheeks and knuckles. The old captain plants his sword point-down in the dirt and surveys the ground, counting bodies and threats with the same methodical eye. Matthis lowers his maul, wood dust clinging to the iron rings. Tom reappears from some shadowed angle, wiping his blade on a scrap of cloth, his grin sharper now.
+
+    The battle is won.
+    +open "The Legions Reward"
+    }
+    @else {
+    You are spotted while still crossing the open ground. A scavenger on watch rises from his crouch, his mouth opening wide. The shout that follows is raw and jagged, more alarm than war cry, but it carries. Heads turn. Figures stir behind the barricades.
+
+    Matthis does not slow. He lowers his shoulder and surges forward, the maul swinging loose at his side, iron rings clanking with each stride. Tom hesitates, his weight shifting backward, the knife rising uncertain in his grip. His eyes dart between you and the roused camp ahead. There is no time for counsel. The moment has fractured. You push forward into the narrowing space, closing the distance before the scavengers can fully arm themselves.
+
+    The ground beneath your boots is uneven, scattered with stones and refuse. You feel the thud of your own heart, the tightness in your chest as breath comes harder. Behind you, bootfalls sound in ragged rhythm. Aldric's voice rises somewhere in the tumult, hoarse and commanding. The barricades loom closer. Wood groans as bodies press against it from within. There is no turning back now.
+    
+    Matthis heaves himself forward, the makeshift maul swinging in wide, devastating arcs. The barricade splinters under his assault; planks crack and tumble loose, iron nails shrieking as they tear free. The scavengers fall back before him, darting like wolves before a wounded bear. He plants himself in the breach, a wall of meat and fury, daring any to come within reach of that terrible club.
+
+    The first arrow takes him in the meat of his shoulder. He grunts, shifts his weight, and swings again. The second punches through his ribs with a wet sound. He sags but does not fall, still keeping that gap open. The third finds his throat. Blood sprays dark across the splintered wood. He drops to his knees, the maul slipping from nerveless fingers.
+
+    The scavengers see their chance. They surge forward, shrieking, blades raised. You throw yourself between them and the dying man, meeting their rush with steel and violence. For a moment you hold them, driving them back through sheer ferocity. Then something strikes you from behind, a brutal weight that sends light flashing across your vision. The world tilts sideways. You taste copper and dirt, and the sounds of battle grow distant and strange.
+
+    When you wake, the last of it is over. The camp reeks of blood and smoke. Aldric stands among the wreckage, his coat dark with spatter. Five men remain with him, three of those slumped against the broken barricades, clutching wounds that will not close cleanly. Matthis lies where he fell, his eyes open and empty. Tom crouches nearby, knife still in hand, his face pale and slack. The scavengers have been driven off, but the cost is terrible. What remains of the empire here is smaller still.
+    +add_condition injured
+    +damage_spirits 3
+    +open "The Legions Reward"
+    }
+
+* We hit them from the sides = Use the main attack as a distraction
+    @if check cunning medium {
+    Several times you are certain every soul in a mile's radius must hear the great clomping boots of Matthis. Yet somehow you circle the squat keep, moving from stone to ragged cluster of bushes, the earth soft enough to muffle what discipline cannot. Tom moves like smoke ahead of you, pausing at each corner, each gap in the rubble, his knife hand never still. The scavengers' firelight flickers beyond the walls, voices rising in argument or jest, you cannot tell which. The stink of their camp grows stronger: burned fat, spoiled grain, the sour reek of bodies pressed too close. You crouch low, motioning the others to hold, and Matthis drops to one knee behind a collapsed cistern, his breath coming slow and measured. The moment stretches. Then, from the far side of the keep, Aldric's voice splits the dusk: "For the Old Gate!" The scavengers erupt in confusion, shouts overlapping, feet scrambling toward the sound. You rise and move.
+    
+    By the time you reach the edge of their barricade, the scavengers are already locked in battle with Aldric's force. Shouts and the clash of iron carry through the dusk air. You move low along the ramshackle wall of scrap and timber, Matthis a lumbering shadow at your shoulder, Tom a ghost somewhere to your left.
+
+    The nearest scavenger has his back to you, crouched behind a section of splintered planking, his attention fixed on the melee beyond. He never hears your approach. You close the distance in three strides and strike hard, driving him forward against the barricade. The impact is wet and final. Blood spreads across the cracked ground beneath him, dark as old wine in the failing light. He does not rise.
+
+    Matthis is already moving past you, his maul swinging in a low arc that splinters wood and bone alike. Tom appears from nowhere, his knife flashing twice before a second scavenger collapses with a breathless wheeze. The element of surprise is yours, and the scavengers reel from this sudden assault at their flank, their line collapsing inward like a rotten beam.
+
+    The scavengers break. First one turns to flee, then two more, then all at once the camp dissolves into a rout. They scatter like rats from fire, stumbling over their own barricades, leaving weapons and wounded behind. Aldric's men press forward with grim satisfaction, but do not give chase. There is no need. The fight is ended, the ground yours, and the evening settles over the keep like ash.
+    +open "The Legions Reward"
+    }
+    @else {
+    The plan is sound, but Matthis walks like a loaded cart thrown down a hillside. You signal him to softer ground; he nods, shambling toward a patch of scrub, and the noise only worsens as branches snap beneath his weight.
+
+    Tom hisses something sharp and low. Matthis turns, jaw set, and the two begin a whispered argument, all venom and jabbing fingers. You raise a hand to silence them, but it is already too late. A cry rises from the scavenger line, high and urgent, cutting through the dusk. Heads turn. Hands reach for weapons. The camp stirs like a kicked nest, figures spilling from lean-tos and scattering toward the barricades.
+
+    The whole camp is up in arms. There will be no flanking now, only the clash of it, sudden and raw.
+    
+    Matthis surges forward before the plan can crumble further, a low roar building in his chest. The prospect of honest battle has ignited something in him. He crashes through the outer ring of debris, maul swinging in wide, terrible arcs. You follow, weapon raised, and Tom flickers at the periphery like a nervous shadow.
+
+    The scavengers are ready. Three come at you from the front, two more peel off to harry your flanks. Matthis takes a spear thrust to the shoulder but barely flinches; his counterstrike shatters the shaft and sends the wielder sprawling. You drive back the nearest attacker, feel the shock of impact sing up your arm, but already another is pressing in. Tom's blade flashes once, twice, then you hear him cry out. The sound is sharp and wet.
+
+    You plant yourself against a half-collapsed wall and weather the storm. Blows rain down. You turn one aside, take another on the shoulder. Pain flares hot and immediate. Your vision narrows to the press of bodies, the reek of sweat and blood, the scrape of metal on metal. 
+    
+    Somewhere beyond the chaos you hear Aldric's voice, his war cry cutting through the clamor. His men pour into the fray at last. The scavengers waver, then break. But Matthis is down on one knee, blood sheeting from a gash along his ribs. Tom lies crumpled where he fell, unmoving. Your own limbs feel leaden, each breath a labor.
+    
+    The scavengers are defeated, but the cost is grim.
+    +add_condition injured
+    +open "The Legions Reward"
+    }

@@ -1,0 +1,23 @@
+Captain Aldric
+
+Aldric stands as if the empire still watches.
+
+His coat is sun-bleached and threadbare, the brass dulled, the seams gone soft with wear. Stubble shadows his jaw where once a razor kept strict order. Dust has worked into every fold of him.
+
+He is a good officer, stranded at the end of a broken line.
+
+choices:
+
+* Ask about the station = Ask what the imperials are protecting
+    Aldric's gaze shifts from you to the station behind him. His shoulders settle with a breath drawn long and slow.
+    +open "Aldric on the Station"
+
+* Ask about the scavengers = Ask about the folks near the door
+    Aldric's mouth sets in a hard line. He draws breath slowly, as though gathering some reserve of patience worn thin by repetition.
+    +open "Aldric on the Scavengers"
+
+* Walk to the station = Talk to the scavengers directly
+    Aldric moves to block your path. His hand rises, perhaps to halt you, perhaps to warn. Then something in his shoulders gives; the hand falls. He steps aside.
+
+    "They're a rough bunch, trader." His voice carries the weariness of a man who has made this speech before, to deaf ears. "You'll find them more willing to slit your throat than negotiate, but best of luck to you."
+    +open "The Barricade"

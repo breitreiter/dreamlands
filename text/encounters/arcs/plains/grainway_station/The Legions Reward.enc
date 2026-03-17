@@ -1,0 +1,43 @@
+The Legions Reward
+
+The legionaries gather at the iron door.
+
+Aldric shrugs off his satchel and draws out a key—black iron, heavy and imposing. He turns it in his hand once, then slots it home.
+
+“Come on, boys,” he says, almost light. “Let's see what we've been bleeding for.”
+
+He turns the key.
+
+For a heartbeat, nothing.
+
+Then the door wakes.
+
+A grinding ratchet. A deep, hidden whir. Then a series of hard, final thocks as bolts the size of a man's arm slam back into the stone. The sound rolls through the depot like distant thunder.
+
+Aldric's mouth quirks. “Imperial engineering.”
+
+The door yields.
+
+Inside - ruin.
+
+Racks of weapons, orange with rust. Crates split and sagging, their rations long since turned to foul paste. Blankets piled high, stiff with damp and rot. Bundles of kindling, untouched. Gear for another war, in another land; ice axes, pitons, coils of rope gone brittle and black. Tools for mountains, abandoned here in the dead flat.
+
+The soldiers drift through it in silence, lifting, testing, discarding. A blade that might hold an edge. A length of cord not yet rotten through. Small salvations.
+
+Aldric disappears into the gloom, then returns.
+
+He carries a bundle, heavy and wrapped in waxed canvas. He sets it before you with care.
+
+“You fought like a wolf out there,” he says. No flourish now. Just truth. “Did the legion proud. Take it. You'll make better use of it than we will.”
+
+
+* Take the bundle = Open it and see what's inside
+    You nod, take it, set it on a nearby table. The canvas peels back with a dry crackle.
+
+    Steel gleams beneath.
+    
+    A suit of half-plate: hammered, fitted, built for war. A wolf's crest worked into the breast, the same sigil as Aldric's tattered banner. Heavy furs line the joints and collar, made for bitter wind and high passes.
+    
+    Armor from a different age.
+    +add_item mountain_regiment_armor
+    +finish_dungeon

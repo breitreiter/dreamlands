@@ -6,12 +6,17 @@
     { "include": "#choices-keyword" },
     { "include": "#fixme-marker" },
     { "include": "#review-marker" },
+    { "include": "#front-matter" },
     { "include": "#if-check-block" },
     { "include": "#if-has-block" },
     { "include": "#if-tag-block" },
+    { "include": "#if-quality-block" },
+    { "include": "#if-meets-block" },
     { "include": "#elif-check-block" },
     { "include": "#elif-has-block" },
     { "include": "#elif-tag-block" },
+    { "include": "#elif-quality-block" },
+    { "include": "#elif-meets-block" },
     { "include": "#else-block" },
     { "include": "#brace-close" },
     { "include": "#choice-line" },
@@ -22,6 +27,42 @@
     { "include": "#italic-text" }
   ],
   "repository": {
+    "front-matter": {
+      "patterns": [
+        {
+          "match": "^(\\[trigger)\\s+(road|settlement)(\\])",
+          "captures": {
+            "1": { "name": "keyword.other.frontmatter.enc" },
+            "2": { "name": "constant.language.trigger.enc" },
+            "3": { "name": "keyword.other.frontmatter.enc" }
+          }
+        },
+        {
+          "match": "^(\\[tier)\\s+(1|2|3)(\\])",
+          "captures": {
+            "1": { "name": "keyword.other.frontmatter.enc" },
+            "2": { "name": "constant.numeric.tier.enc" },
+            "3": { "name": "keyword.other.frontmatter.enc" }
+          }
+        },
+        {
+          "match": "^(\\[vignette)\\s+(\\S+)(\\])",
+          "captures": {
+            "1": { "name": "keyword.other.frontmatter.enc" },
+            "2": { "name": "string.unquoted.path.enc" },
+            "3": { "name": "keyword.other.frontmatter.enc" }
+          }
+        },
+        {
+          "match": "^(\\[requires)\\s+((?:check|has|tag|quality|meets)\\s+\\S+(?:\\s+\\S+)?)(\\])",
+          "captures": {
+            "1": { "name": "keyword.other.frontmatter.enc" },
+            "2": { "name": "constant.other.condition.enc" },
+            "3": { "name": "keyword.other.frontmatter.enc" }
+          }
+        }
+      ]
+    },
     "choices-keyword": {
       "match": "^choices:\\s*$",
       "name": "keyword.control.choices.enc"
@@ -68,6 +109,26 @@
         "4": { "name": "punctuation.definition.block.open.enc" }
       }
     },
+    "if-quality-block": {
+      "match": "(@if)\\s+(quality)\\s+(\\S+)\\s+(-?\\d+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.if.enc" },
+        "2": { "name": "keyword.other.condition.enc" },
+        "3": { "name": "string.unquoted.id.enc" },
+        "4": { "name": "constant.numeric.threshold.enc" },
+        "5": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "if-meets-block": {
+      "match": "(@if)\\s+(meets)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(\\d+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.if.enc" },
+        "2": { "name": "keyword.other.condition.enc" },
+        "3": { "name": "entity.name.type.skill.enc" },
+        "4": { "name": "constant.numeric.threshold.enc" },
+        "5": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
     "elif-check-block": {
       "match": "(\\})?\\s*(@elif)\\s+(check)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(trivial|easy|medium|hard|very_hard|heroic)\\s*(\\{)",
       "captures": {
@@ -99,6 +160,28 @@
         "5": { "name": "punctuation.definition.block.open.enc" }
       }
     },
+    "elif-quality-block": {
+      "match": "(\\})?\\s*(@elif)\\s+(quality)\\s+(\\S+)\\s+(-?\\d+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" },
+        "2": { "name": "keyword.control.elif.enc" },
+        "3": { "name": "keyword.other.condition.enc" },
+        "4": { "name": "string.unquoted.id.enc" },
+        "5": { "name": "constant.numeric.threshold.enc" },
+        "6": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
+    "elif-meets-block": {
+      "match": "(\\})?\\s*(@elif)\\s+(meets)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(\\d+)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "punctuation.definition.block.close.enc" },
+        "2": { "name": "keyword.control.elif.enc" },
+        "3": { "name": "keyword.other.condition.enc" },
+        "4": { "name": "entity.name.type.skill.enc" },
+        "5": { "name": "constant.numeric.threshold.enc" },
+        "6": { "name": "punctuation.definition.block.open.enc" }
+      }
+    },
     "else-block": {
       "match": "(\\})\\s*(@else)\\s*(\\{)",
       "captures": {
@@ -123,7 +206,7 @@
       }
     },
     "requires-tag": {
-      "match": "(\\[requires)\\s+((?:check|has|tag)\\s+\\S+(?:\\s+\\S+)?)(\\])",
+      "match": "(\\[requires)\\s+((?:check|has|tag|quality|meets)\\s+\\S+(?:\\s+\\S+)?)(\\])",
       "captures": {
         "1": { "name": "keyword.other.requires.enc" },
         "2": { "name": "constant.other.condition.enc" },
@@ -134,6 +217,8 @@
       "patterns": [
         { "include": "#verb-magnitude" },
         { "include": "#verb-skill-magnitude" },
+        { "include": "#verb-set-skill" },
+        { "include": "#verb-quality" },
         { "include": "#verb-time" },
         { "include": "#verb-gold" },
         { "include": "#verb-int-id" },
@@ -158,8 +243,26 @@
         "4": { "name": "constant.numeric.magnitude.enc" }
       }
     },
+    "verb-set-skill": {
+      "match": "(\\+)(set_skill)\\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\\s+(\\d+)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "entity.name.type.skill.enc" },
+        "4": { "name": "constant.numeric.level.enc" }
+      }
+    },
+    "verb-quality": {
+      "match": "(\\+)(quality)\\s+(\\S+)\\s+(-?\\d+)\\s*$",
+      "captures": {
+        "1": { "name": "punctuation.definition.verb.enc" },
+        "2": { "name": "support.function.verb.enc" },
+        "3": { "name": "string.unquoted.id.enc" },
+        "4": { "name": "constant.numeric.amount.enc" }
+      }
+    },
     "verb-time": {
-      "match": "(\\+)(skip_time)\\s+(morning|afternoon|evening|night)(?:\\s+((?:no_sleep|no_meal|no_biome)(?:\\s+(?:no_sleep|no_meal|no_biome))*))?\\s*$",
+      "match": "(\\+)(skip_time)\\s+(morning|midday|afternoon|evening|night)(?:\\s+((?:no_sleep|no_meal|no_biome)(?:\\s+(?:no_sleep|no_meal|no_biome))*))?\\s*$",
       "captures": {
         "1": { "name": "punctuation.definition.verb.enc" },
         "2": { "name": "support.function.verb.enc" },
@@ -185,7 +288,7 @@
       }
     },
     "verb-id": {
-      "match": "(\\+)(open|add_tag|remove_tag|add_item|add_condition)\\s+(\\S+)\\s*$",
+      "match": "(\\+)(open|add_tag|remove_tag|add_item|add_condition|remove_condition)\\s+(\\S+)\\s*$",
       "captures": {
         "1": { "name": "punctuation.definition.verb.enc" },
         "2": { "name": "support.function.verb.enc" },

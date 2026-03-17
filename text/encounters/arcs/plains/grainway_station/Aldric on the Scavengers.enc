@@ -1,0 +1,34 @@
+Aldric on the Scavengers
+
+"The scavengers set up barricades while we were on patrol. They say they'll split the contents even with us if I unlock it."
+
+"They're a couple local families. For the most part, we leave each other be. They pick scraps and keep their distance. We keep up appearances and do our job out here. What they do is a disrespect to the brave soldiers who died out here, but my men are not the sort of die to protect the honor of the legion."
+
+"They're here for coin, or as a punishment, or because they've nowhere else to go. But if the depot falls, we've no reason to be out here. We'll end up deserters or facing a court martial. Or worse, reassigned to somewhere deeper into the borderlands."
+
+"My men don't want a fight, but we're ready if it comes to it."
+
+choices:
+
+* Propose an assault = Hit the scavengers hard and fast [requires tag grainway_assault_possible]
+    @if check negotiation medium {
+    "They are rabble," you say, "Every hour you delay, you lose standing in your men's eyes. Strike them now, hard and fast, before they grow bold enough to believe themselves your equals."
+
+    You step closer, close enough that Aldric must either meet your gaze or retreat. He does not retreat. "When word spreads of this," you continue, "when scavengers in camps and hovels learn what befell those who raised barricades against the legion, they will think twice before such boldness finds them again. This is how authority endures in the borderlands, not through waiting and courtesy."
+
+    Aldric's gaze fixes upon you, hard and unblinking. His jaw works as though shaping some retort, yet no words emerge. 
+
+    "I'll gather the men," he says, each syllable clipped and cold. "Be ready on my signal, trader. I'll expect your blade to be with us."
+    +open "The Assault"
+    }
+    @else {
+    "Just kill them," you say. "Where are the brave legionnaires I've heard about all these years? Will you be humbled by this rabble?"
+
+    Aldric shakes his head, his jaw set beneath the salt and pepper stubble. "They've filled your head with fairy tales, trader. War is not grand or glorious. It's trying to hold your guts inside while you're lying in some dusty field, wondering if the crows will get to you before your breath runs out." He spits into the dirt at his feet, the spittle dark and viscous. "Go be a patriot if you like. We'll wait them out."
+    +remove_tag grainway_assault_possible
+    +open "Captain Aldric"
+    }
+
+* Ask about something else = Change the conversation topic
+    Aldric waits, his weathered face turned toward you.
+    +open "Captain Aldric"

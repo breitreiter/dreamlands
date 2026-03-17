@@ -1,6 +1,6 @@
 # Dreamlands
 
-An adventure RPG with procedural world generation, narrative encounters, and a stateless game engine. Explore a tiled world of biomes, dungeons, and settlements through a branching encounter system.
+An adventure RPG with procedural world generation, narrative encounters, and a stateless game engine. Explore a tiled world of biomes, arcs, and settlements through a branching encounter system.
 
 ## Project Structure
 
@@ -11,18 +11,19 @@ dreamlands/
 │   ├── Map/                 # World representation (nodes, regions, terrain, POIs)
 │   ├── Encounter/           # Parser + model for .enc encounter format
 │   ├── Rules/               # Items, conditions, skills, balance constants
-│   ├── Game/                # Stateless mechanic engine (22 action verbs)
+│   ├── Game/                # Stateless mechanic engine
 │   ├── Orchestration/       # Session bridge (movement, encounters, settlements, camp)
 │   └── Flavor/              # Biome-aware flavor text generation
 ├── mapgen/                  # World map generator + tile renderer
 ├── ui/
 │   ├── cli/                 # CLI client for integration testing
-│   └── web/                 # React + Leaflet map viewer (early stage)
+│   └── web/                 # React + Leaflet game client
 ├── text/
-│   ├── encounters/          # .enc encounter files by biome and tier
+│   ├── encounters/          # .enc encounter files by biome, tier, and arc
 │   ├── encounter-tool/      # CLI for check/bundle/generate commands
+│   ├── hauls/               # Haul (contract) catalog and generation tooling
 │   └── lore/                # Biome locale guides for LLM-assisted authoring
-├── tests/                   # Unit tests (Encounter, Game, Rules)
+├── tests/                   # Unit tests (Map, Encounter, Rules, Game, Orchestration)
 ├── worlds/                  # Generated world assets (maps, tiles, bundles)
 └── project/                 # Design docs, architecture, specs, reference
 ```
@@ -41,7 +42,7 @@ worlds/production/build.sh
 # Start the game server
 dotnet run --project server/GameServer
 
-# Play via the CLI client (auto-starts server if needed)
+# Play via the CLI client
 dotnet run --project ui/cli -- new
 dotnet run --project ui/cli -- status
 dotnet run --project ui/cli -- move north
@@ -52,13 +53,13 @@ dotnet run --project ui/cli -- choose 0
 
 The server exposes an HTTP API for all gameplay. State is persisted as JSON save files.
 
-**Gameplay loop:** explore the map, trigger encounters at POIs, visit settlements to trade and rest, manage equipment and conditions, delve into dungeons.
+**Gameplay loop:** explore the map, trigger encounters at POIs, visit settlements to trade and rest, manage equipment and conditions, take on haul contracts for gold, and follow narrative arcs across the world.
 
-Supported actions: movement (6 directions), encounter choices, dungeon entry/completion, settlement entry/exit, buying and selling at markets, equipping/unequipping/discarding items, and camping (food, medicine, rest).
+Supported actions: movement, encounter choices, settlement services (inn, market, bank), equipping/unequipping/discarding items, camping (food, medicine, rest), and haul contract management.
 
 ## Map Generation
 
-Generates navigable world maps as sparse graphs over a terrain grid. Features include noise-based terrain, river systems, settlement placement with trade economies, encounter slot placement, and roster-driven dungeon placement across 5 biomes and 3 difficulty tiers. Output includes a JSON map, a PNG render, and a Leaflet-compatible tile pyramid.
+Generates navigable world maps on a dense terrain grid. Features include noise-based terrain, river systems, settlement placement with trade economies, encounter slot placement, and roster-driven arc placement across 5 biomes and 3 difficulty tiers. Output includes a JSON map, a PNG render, and a Leaflet-compatible tile pyramid.
 
 ```bash
 dotnet run --project mapgen -- generate production
@@ -66,7 +67,7 @@ dotnet run --project mapgen -- generate production
 
 ## Encounter System
 
-Encounters are written in a custom indent-based format (`.enc`) with branching choices, skill checks, conditional logic, and game mechanic actions. Content is organized by biome and tier, with LLM-assisted authoring tooling.
+Encounters are written in a custom indent-based format (`.enc`) with branching choices, skill checks, conditional logic, and game mechanic actions. Content is organized by biome and tier, with longer narrative arcs spanning multiple encounters. LLM-assisted authoring tooling supports generation, validation, and bundling.
 
 ```bash
 # Validate encounter syntax
@@ -77,6 +78,10 @@ dotnet run --project text/encounter-tool/EncounterCli -- bundle text/encounters 
 ```
 
 See [encounter-tool/README.md](text/encounter-tool/README.md) for the full CLI reference.
+
+## Web UI
+
+The web client is built with React, Leaflet, and shadcn/ui. It provides a full gameplay interface including map exploration, encounter resolution, settlement services (inn, market, bank), inventory management, camping, and haul contract tracking.
 
 ## World Assets
 
@@ -92,4 +97,4 @@ worlds/production/build.sh --skip-map
 
 ## Status
 
-The game engine, server, and content pipeline are functional. Map generation produces complete worlds with settlements, dungeons, and encounter slots. The CLI client supports full gameplay loops. The web UI has screen scaffolding but is not yet integrated with gameplay.
+The game engine, server, content pipeline, and web client are functional. Map generation produces complete worlds with settlements, arcs, and encounter slots. The CLI client supports full gameplay loops. The web UI provides integrated gameplay screens for exploration, encounters, settlement services, inventory, and camping.

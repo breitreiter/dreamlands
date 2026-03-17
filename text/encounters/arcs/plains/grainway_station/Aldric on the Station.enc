@@ -1,0 +1,21 @@
+Aldric on the Station
+
+“Grainway Station. Near all the grain caravans passed through here, wagons heavy with wheat. This was rich land, before the Retrenchment burned it to ash. The station was raised to supply the legions, a hard point on the line while we hunted Revathi raiders through the borderlands.”
+
+He spits dust, then goes on.
+
+"That was before the retreat. Before the Iron. They hit fast and hard, left the depot roads useless, the granaries empty. Most of the network's been picked clean by now. This one…" he glances toward the sealed door, jaw tight, "This one we held."
+
+"Until now."
+
+choices:
+
+* Ask about the scavengers = Ask about the folks near the door
+    Aldric frowns and takes a deep breath.
+    +open "Aldric on the Scavengers"
+
+* Ask about something else = Change the conversation topic
+    The veteran's words hang in the dust-laden air. 
+    +open "Captain Aldric"
+
+

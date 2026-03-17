@@ -10,7 +10,7 @@
   "If Check Block": {
     "prefix": ["if check", "@if check"],
     "body": [
-      "@if check ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|medium,trivial,easy,hard,very_hard,heroic|} {",
+      "@if check ${1|combat,negotiation,bushcraft,cunning,luck,mercantile|} ${2|medium,trivial,easy,hard,very_hard,heroic|} {",
       "  ${3:Success outcome}",
       "} @else {",
       "  ${4:Failure outcome}",
@@ -40,10 +40,47 @@
     ],
     "description": "Branch on world-state tag"
   },
+  "If Quality Block": {
+    "prefix": ["if quality", "@if quality"],
+    "body": [
+      "@if quality ${1:quality_id} ${2:threshold} {",
+      "  ${3:Outcome when quality meets threshold}",
+      "} @else {",
+      "  ${4:Outcome otherwise}",
+      "}"
+    ],
+    "description": "Branch on quality value"
+  },
+  "If Meets Block": {
+    "prefix": ["if meets", "@if meets"],
+    "body": [
+      "@if meets ${1|combat,negotiation,bushcraft,cunning,luck,mercantile|} ${2:target} {",
+      "  ${3:Outcome when skill meets target}",
+      "} @else {",
+      "  ${4:Outcome otherwise}",
+      "}"
+    ],
+    "description": "Branch on skill level"
+  },
   "Requires": {
     "prefix": ["requires", "[requires"],
-    "body": "[requires ${1|has,tag,check|} ${2:id}]",
+    "body": "[requires ${1|has,tag,check,quality,meets|} ${2:id}]",
     "description": "Gate a choice on a condition"
+  },
+  "Front-matter: trigger": {
+    "prefix": ["trigger", "[trigger"],
+    "body": "[trigger ${1|road,settlement|}]",
+    "description": "Set encounter trigger location"
+  },
+  "Front-matter: tier": {
+    "prefix": ["tier", "[tier"],
+    "body": "[tier ${1|1,2,3|}]",
+    "description": "Set encounter tier"
+  },
+  "Front-matter: vignette": {
+    "prefix": ["vignette", "[vignette"],
+    "body": "[vignette ${1:path}]",
+    "description": "Override vignette image"
   },
   "Inscription Block": {
     "prefix": ["inscription", "\"\"\""],
@@ -77,17 +114,27 @@
   },
   "+increase_skill": {
     "prefix": ["+increase_skill", "increase_skill"],
-    "body": "+increase_skill ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|small,trivial,medium,large,huge|}",
+    "body": "+increase_skill ${1|combat,negotiation,bushcraft,cunning,luck,mercantile|} ${2|small,trivial,medium,large,huge|}",
     "description": "Increase a skill"
   },
   "+decrease_skill": {
     "prefix": ["+decrease_skill", "decrease_skill"],
-    "body": "+decrease_skill ${1|combat,negotiation,bushcraft,stealth,perception,luck,mercantile|} ${2|small,trivial,medium,large,huge|}",
+    "body": "+decrease_skill ${1|combat,negotiation,bushcraft,cunning,luck,mercantile|} ${2|small,trivial,medium,large,huge|}",
     "description": "Decrease a skill"
+  },
+  "+set_skill": {
+    "prefix": ["+set_skill", "set_skill"],
+    "body": "+set_skill ${1|combat,negotiation,bushcraft,cunning,luck,mercantile|} ${2:level}",
+    "description": "Set a skill to a specific level"
+  },
+  "+quality": {
+    "prefix": ["+quality", "quality"],
+    "body": "+quality ${1:quality_id} ${2:amount}",
+    "description": "Adjust a quality value (signed int)"
   },
   "+skip_time": {
     "prefix": ["+skip_time", "skip_time"],
-    "body": "+skip_time ${1|morning,afternoon,evening,night|}",
+    "body": "+skip_time ${1|morning,midday,afternoon,evening,night|}",
     "description": "Skip to time of day (optional flags: no_sleep, no_meal, no_biome)"
   },
 
@@ -130,6 +177,11 @@
     "prefix": ["+add_condition", "add_condition"],
     "body": "+add_condition ${1:condition_id}",
     "description": "Apply a condition to the player"
+  },
+  "+remove_condition": {
+    "prefix": ["+remove_condition", "remove_condition"],
+    "body": "+remove_condition ${1:condition_id}",
+    "description": "Remove a condition from the player"
   },
 
   "+lose_random_item": {
