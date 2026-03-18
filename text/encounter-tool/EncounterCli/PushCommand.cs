@@ -4,7 +4,7 @@ namespace EncounterCli;
 
 static class PushCommand
 {
-    public static int Run(string[] args)
+    public static async Task<int> Run(string[] args)
     {
         var encounterPath = "";
         var world = "production";
@@ -46,6 +46,22 @@ static class PushCommand
         {
             Console.Error.WriteLine("Bundle failed.");
             return 1;
+        }
+
+        // 3. Reload on local GameServer
+        Console.WriteLine("Reloading GameServer bundle...");
+        try
+        {
+            using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
+            var resp = await http.PostAsync("http://localhost:7071/api/ops/reload-bundle", null);
+            if (resp.IsSuccessStatusCode)
+                Console.WriteLine("GameServer reloaded.");
+            else
+                Console.WriteLine($"Reload returned {(int)resp.StatusCode} — is GameServer running?");
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Could not reach GameServer — reload skipped.");
         }
 
         Console.WriteLine($"Done in {sw.Elapsed.TotalSeconds:F1}s");

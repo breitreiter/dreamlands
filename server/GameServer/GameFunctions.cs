@@ -22,6 +22,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         return new OkObjectResult(new { status = "ok", apiVersion = data.ApiVersion });
     }
 
+    [Function("ReloadBundle")]
+    public IActionResult ReloadBundle(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ops/reload-bundle")] HttpRequest req)
+    {
+        if (!data.IsDev)
+            return new NotFoundResult();
+
+        data.ReloadBundle();
+        log.LogInformation("Encounter bundle reloaded");
+        return new OkObjectResult(new { status = "reloaded" });
+    }
+
     [Function("NewGame")]
     public async Task<IActionResult> NewGame(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/new")] HttpRequest req)

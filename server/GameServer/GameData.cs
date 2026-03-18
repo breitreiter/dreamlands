@@ -5,16 +5,21 @@ using Dreamlands.Rules;
 namespace GameServer;
 
 /// <summary>
-/// Read-only game data singletons. Loaded once at startup.
+/// Game data singletons. Loaded once at startup; bundle can be hot-reloaded in dev.
 /// </summary>
 public class GameData
 {
     public Map Map { get; }
-    public EncounterBundle Bundle { get; }
+    public EncounterBundle Bundle { get { lock (_bundleLock) return _bundle; } }
     public BalanceData Balance { get; } = BalanceData.Default;
     public string ApiVersion { get; }
     public bool NoEncounters { get; }
     public bool NoCamp { get; }
+    public bool IsDev { get; }
+
+    private readonly string _bundlePath;
+    private EncounterBundle _bundle;
+    private readonly object _bundleLock = new();
 
     public GameData()
     {
@@ -24,6 +29,7 @@ public class GameData
         // In dev: walk up from assembly location to find repo root
         if (mapPath == null || bundlePath == null)
         {
+            IsDev = true;
             var repoRoot = FindRepoRoot();
             mapPath ??= Path.Combine(repoRoot, "worlds/production/map.json");
             bundlePath ??= Path.Combine(repoRoot, "worlds/production/encounters.bundle.json");
@@ -50,8 +56,15 @@ public class GameData
         NoEncounters = Environment.GetEnvironmentVariable("DREAMLANDS_NO_ENCOUNTERS") == "1";
         NoCamp = Environment.GetEnvironmentVariable("DREAMLANDS_NO_CAMP") == "1";
 
+        _bundlePath = bundlePath;
         Map = MapSerializer.Load(mapPath);
-        Bundle = EncounterBundle.Load(bundlePath);
+        _bundle = EncounterBundle.Load(bundlePath);
+    }
+
+    public void ReloadBundle()
+    {
+        var fresh = EncounterBundle.Load(_bundlePath);
+        lock (_bundleLock) _bundle = fresh;
     }
 
     static string FindRepoRoot()
