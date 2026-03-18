@@ -1,0 +1,41 @@
+{
+  "scope": "source.enc",
+  "completions": [
+    { "trigger": "choice\t* link = preview", "contents": "* ${1:Link text} = ${2:Preview text}\n  ${0}" },
+
+    { "trigger": "if check\t@if check skill", "contents": "@if check ${1:combat} ${2:medium} {\n  ${3:Success outcome}\n} @else {\n  ${4:Failure outcome}\n}" },
+    { "trigger": "if has\t@if has item", "contents": "@if has ${1:item_id} {\n  ${2:Outcome when player has item}\n} @else {\n  ${3:Outcome otherwise}\n}" },
+    { "trigger": "if tag\t@if tag", "contents": "@if tag ${1:tag_id} {\n  ${2:Outcome when tag is set}\n} @else {\n  ${3:Outcome otherwise}\n}" },
+    { "trigger": "if quality\t@if quality", "contents": "@if quality ${1:quality_id} ${2:threshold} {\n  ${3:Outcome when quality meets threshold}\n} @else {\n  ${4:Outcome otherwise}\n}" },
+    { "trigger": "if meets\t@if meets skill", "contents": "@if meets ${1:combat} ${2:target} {\n  ${3:Outcome when skill meets target}\n} @else {\n  ${4:Outcome otherwise}\n}" },
+
+    { "trigger": "requires\t[requires condition]", "contents": "[requires ${1:has} ${2:id}]" },
+    { "trigger": "trigger\t[trigger location]", "contents": "[trigger ${1:road}]" },
+    { "trigger": "tier\t[tier n]", "contents": "[tier ${1:1}]" },
+    { "trigger": "vignette\t[vignette path]", "contents": "[vignette ${1:path}]" },
+    { "trigger": "inscription\t\"\"\" block", "contents": "\"\"\"\n${1:Inscription text}\n\"\"\"" },
+
+    { "trigger": "+damage_health\ttrivial..huge", "contents": "+damage_health ${1:small}" },
+    { "trigger": "+heal\ttrivial..huge", "contents": "+heal ${1:small}" },
+    { "trigger": "+damage_spirits\ttrivial..huge", "contents": "+damage_spirits ${1:small}" },
+    { "trigger": "+heal_spirits\ttrivial..huge", "contents": "+heal_spirits ${1:small}" },
+    { "trigger": "+increase_skill\tskill magnitude", "contents": "+increase_skill ${1:combat} ${2:small}" },
+    { "trigger": "+decrease_skill\tskill magnitude", "contents": "+decrease_skill ${1:combat} ${2:small}" },
+    { "trigger": "+set_skill\tskill level", "contents": "+set_skill ${1:combat} ${2:level}" },
+    { "trigger": "+quality\tid amount", "contents": "+quality ${1:quality_id} ${2:amount}" },
+    { "trigger": "+skip_time\ttime_of_day", "contents": "+skip_time ${1:morning}" },
+    { "trigger": "+give_gold\ttrivial..huge", "contents": "+give_gold ${1:small}" },
+    { "trigger": "+rem_gold\ttrivial..huge", "contents": "+rem_gold ${1:small}" },
+    { "trigger": "+open\tencounter_id", "contents": "+open ${1:encounter_id}" },
+    { "trigger": "+add_tag\ttag_id", "contents": "+add_tag ${1:tag_id}" },
+    { "trigger": "+remove_tag\ttag_id", "contents": "+remove_tag ${1:tag_id}" },
+    { "trigger": "+add_item\titem_id", "contents": "+add_item ${1:item_id}" },
+    { "trigger": "+add_random_items\tcount category", "contents": "+add_random_items ${1:count} ${2:category}" },
+    { "trigger": "+add_condition\tcondition_id", "contents": "+add_condition ${1:condition_id}" },
+    { "trigger": "+remove_condition\tcondition_id", "contents": "+remove_condition ${1:condition_id}" },
+    { "trigger": "+lose_random_item", "contents": "+lose_random_item" },
+    { "trigger": "+get_random_treasure", "contents": "+get_random_treasure" },
+    { "trigger": "+finish_dungeon", "contents": "+finish_dungeon" },
+    { "trigger": "+flee_dungeon", "contents": "+flee_dungeon" }
+  ]
+}
