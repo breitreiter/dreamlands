@@ -6,20 +6,15 @@ namespace GameServer;
 
 /// <summary>
 /// Read-only game data singletons. Loaded once at startup.
-/// Bundle can be hot-reloaded via ReloadBundle().
 /// </summary>
 public class GameData
 {
     public Map Map { get; }
+    public EncounterBundle Bundle { get; }
     public BalanceData Balance { get; } = BalanceData.Default;
     public string ApiVersion { get; }
     public bool NoEncounters { get; }
     public bool NoCamp { get; }
-
-    private readonly string _bundlePath;
-    private EncounterBundle _bundle;
-    private readonly object _bundleLock = new();
-    public EncounterBundle Bundle { get { lock (_bundleLock) return _bundle; } }
 
     public GameData()
     {
@@ -56,14 +51,7 @@ public class GameData
         NoCamp = Environment.GetEnvironmentVariable("DREAMLANDS_NO_CAMP") == "1";
 
         Map = MapSerializer.Load(mapPath);
-        _bundlePath = bundlePath;
-        _bundle = EncounterBundle.Load(_bundlePath);
-    }
-
-    public void ReloadBundle()
-    {
-        var fresh = EncounterBundle.Load(_bundlePath);
-        lock (_bundleLock) _bundle = fresh;
+        Bundle = EncounterBundle.Load(bundlePath);
     }
 
     static string FindRepoRoot()

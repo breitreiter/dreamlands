@@ -17,7 +17,7 @@ class Program
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
-            "push" => PushCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "push" => PushCommand.Run(rest),
             "fix-quotes" => FixQuotesCommand.Run(rest),
             _ => PrintUsage()
         };
