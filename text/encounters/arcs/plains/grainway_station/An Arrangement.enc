@@ -1,0 +1,99 @@
+An Arrangement
+[vignette grainway_station]
+
+The door yawns wide, and the work begins.
+
+Men and rovers move through the depot in wary silence, lifting, testing, sorting. Rust flakes under thumb. Blades are weighed, bent, judged. Anything with a whisper of life left in it is set aside. The rest goes to the heap.
+
+You keep the count. Call the splits. One for them, one for these. No arguments that don't die quickly under your eye.
+
+It goes smoother than it has any right to.
+
+Until it doesn't.
+
+The armor comes out of a back rack, wrapped in stiffened cloth. When it's shaken free, even the dust seems to hold its breath.
+
+Half-plate, hammered true. Wolf pelt at the joints, thick and dark. The crest still proud on the breast, same as that on Aldric's banner; a wolf's head, defiant. This is legion mountaineer gear, from when the high passes still belonged to them.
+
+Too fine for either side to give up.
+
+Aldric's men go still. Dalla's people shift.
+
+"That's legion kit. I'll not let your hands stain that," Aldric says. Flat. Certain.
+
+"We had a deal, Grey." Dalla answers. "It's spoils, no different from the rest."
+
+"It belongs to the empire."
+
+Dalla bares her teeth. "Then come take it."
+
+Hands tighten. Feet adjust. The depot is dark and quiet.
+
+You step in before it snaps.
+
+"No."
+
+Both turn on you.
+
+choices:
+
+* The armor stays with Aldric = It was made for the legion
+    You meet Aldric's gaze and hold it. "This is the legacy of your regiment. There is little enough left to you aside from this and that banner you carry." You pause, let the weight settle. "Let the armor replace your tattered gear."
+
+    You turn slightly, not enough to lose him, enough to bring Dalla and her people into your words. "In exchange, be a leader worthy of the old regimental gear. The depot is gone. These people are your charge now. Protect them instead of some abandoned fort."
+
+    The silence stretches. Dalla's folk watch, hands still near blades, breath shallow. Aldric's men wait on their captain's word. The dust hangs in the shafts of light.
+
+    Then Aldric moves. He steps forward, reaches down, lifts the armor with both hands. The pelt drapes heavy over his forearm. He does not speak, but his nod is slow, deliberate. The kind a man gives when he takes an oath.
+
+    Dalla's eyes narrow. Her people shift, still wary, still waiting for the turn. But no one reaches for steel. You return to your journey, hoping that what you built here will hold.
+    +quality faction.legion +4
+    +quality faction.scavengers +1
+    +finish_dungeon
+
+* The armor goes to Dalla = Her people need the coin
+    "The regiment is dead, Aldric. It is a banner and a dozen men who wish to finish their tour and return home. You will not campaign into the mountains again. The armor is an antique; let the rovers sell it to some fat collector from Aldgate."
+
+    Aldric's jaw tightens, color rising in his weathered face. "You will never understand, trader."
+
+    You cut him short. "I understand well enough, soldier, that this is an arrangement under sanction of the Traders Guild. This is my judgment. If it does not suit you, you are welcome to petition the Chapterhouse in Aldgate. I am certain they will write up and file your complaint." You turn toward the door, boots striking cold stone. "Now if we are finished here, I have deliveries."
+
+    Aldric seems to collapse inward. The years settle on him all at once, carving deeper lines into his face. His hand drops from his sword. Dalla's grin is wide and sharp, watching the man bend before her. She nods to her people, who move quickly to claim the armor, wrapping it again in cloth before Aldric can change his mind.
+
+    Each side gathers their portion. The legion men file out first, silent, their footfalls heavy. The rovers follow, their prizes bundled and strapped. The depot empties. You return to the road, the matter closed behind you.
+    +quality faction.scavengers +4
+    +quality faction.legion -2
+    +finish_dungeon
+
+* Claim the armor yourself = It's payment for your services
+    "I'll take the armor," you say. "Standard Traders Guild arbitration agreement. I'm sure you're both familiar with the terms."
+
+    Dalla and Aldric stare, shocked for the moment at the proposal.
+    @if check cunning medium {
+        Neither speaks, so you continue, voice level and unhurried. You cite the protocols established in the third year of the Regency, the exceptions carved out for military salvage in disputed territories, the Guild's standing contracts with the legion itself, dating back to when the high passes were still held. You remind them that the borderlands were never formally relinquished by the empire, that all residents therefore fall under certain obligations, certain protections. Each clause leads to the next, a careful architecture of precedent and law.
+
+        Aldric opens his mouth. You answer before the objection takes shape, pivoting smoothly to the matter of fair compensation for services rendered, the value of neutral mediation in preventing bloodshed, the cost such violence would exact from both parties. Dalla tries next, her voice sharp with suspicion. You meet her argument with equal care, acknowledging her people's claim while weaving it back into the same tangled web of agreements and exceptions.
+
+        The words flow without pause, respectful but unyielding, each point addressed with exactness, each challenge turned back into the framework you've laid. Minutes pass. The depot's shadows deepen. You see it first in Aldric's shoulders, the slow sag of exhaustion. Dalla's jaw tightens, but her hands unclench.
+
+        You take the armor. The half-plate is cold and heavy across your arms, the wolf pelt coarse against your palms. Neither moves to stop you. You nod once to each, then turn and stride through the doorway into the fading light, your prize secure.
+        +add_item mountain_regiment_armor
+        +finish_dungeon
+    } @else {
+        You cite official documents, trade standards, and the intricacies of imperial salvage laws. The words come smooth, perhaps too smooth. Neither Aldric nor Dalla shifts in stance. Their eyes narrow. The air grows colder.
+
+        Aldric moves first, reaching toward you.
+
+        "You'll not lay a hand on me, Aldric," you say, voice harder now. "Your commander would have you cleaning latrines for the rest of your enlistment if you raised a hand to a guild member." 
+        
+        You turn to Dalla, words sharp as drawn steel. "And as for you, rover, you'll see the full force of the Aldgate garrison if I come to harm. They'll harry your little band until you're dead or rotting in an imperial prison. If you value your lives and your freedom, you'll stand down, and I will take my fee."
+
+        The silence stretches. No one moves. Then Aldric spits on the floor, slow and deliberate. Dalla's hand drifts to her belt. You feel the weight of every eye in the depot, the heat of their contempt like a forge at your back. You take the armor. You walk. Behind you, the sound of boots and murmurs follows you into the cold.
+
+        You'll likely hear about this when you return to the Chapterhouse, but for now, you admire the new armor.
+        +add_item mountain_regiment_armor
+        +quality faction.legion -3
+        +quality faction.scavengers -3
+        +quality faction.tradeguild -1
+        +finish_dungeon
+    }

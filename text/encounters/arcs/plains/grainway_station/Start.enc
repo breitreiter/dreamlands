@@ -1,4 +1,5 @@
 Grainway Station
+[vignette grainway_station]
 
 The depot squats at the crossroads like a stone toad; low, brutal, and built to endure. Imperial work. Walls thick as a man is tall. An iron door stamped with a dead regiment's seal. It was meant to feed an army through a long campaign.
 
@@ -10,12 +11,12 @@ A ragged band of men and women huddle at the door, hard-eyed and hungry. They've
 
 A hundred yards off, the empire lingers.
 
-A tattered company camps in the dust. Shabby uniforms, mismatched armor. A faded standard lifts in the wind—some relic dragged from storage to pretend at glory. Their tents sag. Their cook pots simmer. They've come for a siege, not a charge.
+A tattered company camps in the dust. Shabby uniforms, mismatched armor. A faded standard lifts in the wind, some relic dragged from storage to pretend at glory. Their tents sag. Their cook pots simmer. They've come for a siege, not a charge.
 
 choices:
 
 * Approach the Imperial remnant = Talk to the soldiers
-    @if meets combat medium {
+    @if meets combat 5 {
         A figure breaks from the camp's edge, moving with the stiff gait of a man too long under arms. His breastplate is dented, straps frayed where they hold the scarred metal to his frame. He raises one hand as he nears, then halts, glances down at his palm as though seeing it for the first time. Dust and old blood have worked into the creases. He wipes the hand hard against his thigh, smearing the filth into the wool, then offers it again.
 
         "Aldric. Captain, if rank matters to you." His grip is firm despite the dirt. "You have good timing. We could use another sword."

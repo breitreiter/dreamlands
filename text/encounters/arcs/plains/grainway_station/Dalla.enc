@@ -1,22 +1,95 @@
 Dalla
+[vignette grainway_station]
 
-**Dalla** speaks for the scavenger families. She's not a leader in any
-formal sense — she's the one who talks because she's the one who's
-good at it. She's sharp, funny when she can afford to be, and
-completely clear-eyed about the situation.
+Dalla sits on her tarp, waiting for you to speak or be on your way. It looks like she means to pick the monstrous imperial lock on the heavy iron door.
 
-Dalla's claim is practical: the military remnants don't use the
-supplies and can't use them. They're a dozen soldiers with no orders,
-no chain of command, and no campaign. The scavenger families — four of
-them, maybe thirty people total — are the civilian population of this
-stretch of plain. The depot was built to supply an advance that was
-supposed to benefit them. The advance failed. The supplies are the
-only benefit left.
+choices:
 
-Her proposal: an even split by weight, everything included. She
-presents this as fairness. In practice, an even split by weight gives
-the scavengers the bulk of the food and provisions (heavy, perishable)
-and the remnants a pile of rusted equipment they already have versions
-of. The valuable items — intact weapons, tools, sealed medical
-supplies — would be divided by lot. Dalla knows she has more people
-to draw lots.
+* Ask her what she's doing here = This is clearly legion property
+    "We've got three families here, trader," she says, her voice flat and steady as iron. "This has been a rough year. The fields are nearly picked clean of gear and tools; what we turn up fetches little." She gestures toward the door without looking at it, her hand describing a small, dismissive arc. "The market for buttons and medals is slim. Not many travelers to Aldgate looking for souvenirs any more."
+
+    She shifts her weight, the tarp crinkling beneath her. "This depot has been abandoned for longer than any of us have been alive. The heroic Legion counter-attack is never coming." Her gaze fixes on yours now, direct and unblinking. "Whatever is inside rots each year, and no one will ever need it. Except us."
+
+    "I was trained as an engineer in the Kesharat academies. Locks are just machines. I thought we could slip in, take what we can carry, and steal away with none the wiser. Then the soldiers showed up. Then my people starting turning the old fence line into a barricade. And now here we all are."
+    +open Dalla
+
+* Help her crack the door = You're somewhat familiar with imperial lockwork
+    @if check cunning hard {
+        Some years back you read a book on imperial lock mechanisms in the city library. The diagrams had been clear, the principles sound: pin tumblers arranged in a cascade, each requiring pressure at a precise angle to disengage the bolt. You had found the topic mildly interesting at the time, though you never imagined you would have much use for it. How wrong you were.
+
+        You kneel beside Dalla before the heavy iron door. The lock is a brutal thing, its face pitted with rust but its core still solid. You extend your hand, and she passes you a thin steel pick without hesitation. The metal is cold against your fingers. You insert it carefully, feeling for the first pin. The mechanism resists, then yields with a faint click. You move to the second pin, applying pressure at the angle you recall from those diagrams. Another click. The third pin proves stubborn; you adjust your grip, increase the tension, and feel it slide into place. The fourth and final pin gives way with a sound like breaking ice.
+
+        The bolt withdraws into the door with a low groan. You rise, and Dalla nods once, then you enter the old station.
+        +open "The Scavengers Reward"
+    } @else {
+        You kneel beside Dalla upon the worn tarp. The lock looms before you both, its face pitted with rust yet still holding fast after decades of abandonment. She produces a tension wrench from her kit, the metal bright where countless previous locks have worn it smooth.
+
+        The work begins. Dalla applies steady pressure while your fingers probe the mechanism's depths. The plungers resist at first, grinding against corroded pins, but you find their rhythm. One yields, then another. The lock's internal complexity reveals itself not as obstacle but as puzzle, each component speaking its purpose through the vibrations in your fingertips. Dalla adjusts her grip; you follow the shifting tensions. The cooperation flows without words, each of you reading the lock's responses and answering in turn.
+
+        "Wait for it. Wait. And there, turn!" you say. 
+        
+        Dalla obeys and pulls the wrench. A scrape, a click, and then a gut-wrenching grinding within the lock, loud enough to be heard throughout the camp. "Failsafe," sighs Dalla. "Lock is ruined now. They'll need a sapper team out here to undermine the walls. But no one is getting inside today."
+
+        There's nothing to be done for it. The station is impenetrable now. The imperials will be annoyed, but nothing will change for them. They'll continue to guard the sealed fort. The scavengers will go on their way empty-handed.
+        Dalla starts to pack up her tools. She says nothing. You find your way back to the road.
+        +finish_dungeon
+    }
+
+* Propose a deal = Arrange a compromise with the soldiers
+    You know to open with a concrete deal, then work from there. "You each get half by weight. No need to pick the lock; the imperial captain has a key. He doesn't want a fight and he's probably keen to see what's inside this thing. No one has to get hurt, everyone can walk away a bit richer."
+
+    Dalla studies you for a long moment, then rises and gathers her tools. You walk together across the hardpan past the barricade, to a half-way point between the two camps. The soldiers watch your approach. Aldric crosses to meet you, his face weathered and cautious.
+
+    Beyond the barricade, the scavengers have gone silent, waiting.
+
+    "You bring me a rover," he says. "Bold."
+
+    Dalla folds her arms, easy as you please. "And you bring a dozen ghosts and call it a legion."
+
+    "This is imperial ground," he says. "You're squatting on it."
+
+    "Then you should've held it," Dalla replies. "Looks to me like we found it first."
+    Silence stretches. Hands hover near weapons.
+
+    You step between them, "There's no need for a fight."
+
+    Aldric's gaze cuts to you. "There's every need. But speak, trader," he says. "You've walked us out here for something."
+
+    You nod toward the depot.
+
+    "You want what's inside. Both of you. You can spill blood over it and lose half your people… or you can open the door and walk away richer."
+
+    Aldric bristles. "You'd have me hand over imperial property to thieves?"
+
+    "I'd have you take half," you say. "Clean. No losses. And keep the depot. Solid walls. Roof intact. Better than canvas and dust."
+
+    Dalla steps in, "And we get our half and walk. No tricks."
+
+    "No tricks," you echo.
+
+    Aldric looks between you both. His men are watching him.
+
+    "If I agree," he says slowly, "we divide it evenly. Under my supervision."
+
+    Dalla snorts. "Your supervision? What gives you.."
+
+    "My supervision," you interject. "Equal shares. This is a guild-sanctioned arrangement. We will have no violence."
+
+    Another stretch of silence. Wind tugs at the faded standard behind Aldric.
+
+    At last, he exhales. "Under terms of necessity," he says. "The depot is opened. Contents divided. No hostilities."
+
+    Dalla nods once. "We take our half and we're gone."
+    
+    Aldric gives a sharp jerk of his head. "See that you are."
+    +open "An Arrangement"
+
+* Return to Aldric = Head back to the captain
+    You take your leave of Dalla. She nods once, already turning her attention back to her tools and the iron door. You make your way back across the sun-scorched ground toward the captain's encampment.
+    +open "Captain Aldric"
+
+* Depart = Leave this place behind
+    This situation is no concern of yours. The scavengers may starve. The soldiers may rot in their shabby camp. The depot may stand sealed until the stones themselves crumble. You turn from the scene and set your feet upon the road.
+
+    You walk. The depot dwindles at your back, that squat monument to imperial failure growing small against the horizon. Let others spill blood over locked doors and forgotten grain.
+    +flee_dungeon

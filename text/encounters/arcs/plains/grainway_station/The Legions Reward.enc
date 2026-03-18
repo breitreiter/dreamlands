@@ -1,10 +1,11 @@
 The Legions Reward
+[vignette grainway_station]
 
 The legionaries gather at the iron door.
 
-Aldric shrugs off his satchel and draws out a key—black iron, heavy and imposing. He turns it in his hand once, then slots it home.
+Aldric shrugs off his satchel and draws out a key--black iron, heavy and imposing. He turns it in his hand once, then slots it home.
 
-“Come on, boys,” he says, almost light. “Let's see what we've been bleeding for.”
+"Come on, boys," he says, almost light. "Let's see what we've been bleeding for."
 
 He turns the key.
 
@@ -14,7 +15,7 @@ Then the door wakes.
 
 A grinding ratchet. A deep, hidden whir. Then a series of hard, final thocks as bolts the size of a man's arm slam back into the stone. The sound rolls through the depot like distant thunder.
 
-Aldric's mouth quirks. “Imperial engineering.”
+Aldric's mouth quirks. "Imperial engineering."
 
 The door yields.
 
@@ -28,8 +29,9 @@ Aldric disappears into the gloom, then returns.
 
 He carries a bundle, heavy and wrapped in waxed canvas. He sets it before you with care.
 
-“You fought like a wolf out there,” he says. No flourish now. Just truth. “Did the legion proud. Take it. You'll make better use of it than we will.”
+"You fought like a wolf out there," he says. No flourish now. Just truth. "Did the legion proud. Take it. You'll make better use of it than we will."
 
+choices:
 
 * Take the bundle = Open it and see what's inside
     You nod, take it, set it on a nearby table. The canvas peels back with a dry crackle.
@@ -40,4 +42,6 @@ He carries a bundle, heavy and wrapped in waxed canvas. He sets it before you wi
     
     Armor from a different age.
     +add_item mountain_regiment_armor
+    +quality faction.legion +4
+    +quality faction.scavengers -4
     +finish_dungeon

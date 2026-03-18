@@ -1,2 +1,29 @@
 The Scavengers Reward
+[vignette grainway_station]
 
+The inside of the station is ruined.
+
+Racks of weapons, orange with rust. Crates split and sagging, their rations long since turned to foul paste. Blankets piled high, stiff with damp and rot. Bundles of kindling, untouched. Gear for another war, in another land; ice axes, pitons, coils of rope gone brittle and black. Tools for mountains, abandoned here in the dead flat.
+
+The scavengers work through it with quiet efficiency, picking out blades and tools that may still yet be of some use. 
+
+Dalla nudges you. "Trader, for your troubles. It'll fetch a fair price at market."
+
+She presses a stained canvas bundle into your hands, then heads back into the depot. Already the scavengers are scattering, you imagine Aldric's troop must be aware of the break-in by now.
+
+choices:
+
+* Take the bundle = Open it and see what's inside
+    You nod, take it, set it on a nearby table. The canvas peels back with a dry crackle.
+
+    Steel gleams beneath.
+    
+    A suit of half-plate: hammered, fitted, built for war. A wolf's crest worked into the breast, the same sigil as Aldric's tattered banner. Heavy furs line the joints and collar, made for bitter wind and high passes.
+    
+    There is no honor in taking this. It is armor for a warrior, not a burglar. But it will sell, and once that coin mixes with the rest, the stink of dishonor will be washed away.
+
+    You heft the armor and flee with the rest of the scavengers.
+    +add_item mountain_regiment_armor
+    +quality faction.legion -4
+    +quality faction.scavengers +4
+    +finish_dungeon

@@ -1,2 +1,32 @@
 The Barricade
+[vignette grainway_station]
 
+The barricade looms: a tangle of carts, splintered beams, and broken stone. A sentry leans there, thin as a fencepost, picking idly at a scab on his forearm. His eyes flick to you, sharp despite the slouch.
+
+"We've no coin for your wares, trader," he says. "Nor goods worth the naming." He jerks his chin toward the imperial camp. "Greys are getting restless. Don't like us squatting their little fort. Smells like a fight brewing. You'd be safer back on the road."
+
+"I'd prefer to speak with your leader, if you don't mind," you say.
+
+The man barks a laugh--dry, humorless.
+
+"Leader? We're rovers, friend. No crowns here." He scratches at his arm again, then grins crookedly. "But I imagine you'd be keen to jaw with Dalla, she likes the fancy talk."
+
+He hooks a thumb toward the barricade's edge.
+
+"She's round the corner. Mind your manners, friend. Hands where we can see 'em." His eyes narrow, but there's no heat in it. "We've no quarrel with the Traders Guild."
+
+Not yet.
+
+choices:
+
+* Find Dalla = Find the woman the sentry mentioned
+    You round the corner of the squat fort and discover a woman seated upon a canvas tarp spread before the building's iron door. Her hair, grey as winter ash, falls loose past her shoulders. Tools lie scattered about her in deliberate disorder: pry bars notched with rust, coils of wire, a battered mallet resting against her boot. She hunches over a notebook thick with scrawled diagrams and cramped notation, her finger tracing some arcane calculation.
+
+    She lifts her gaze without haste. Her eyes travel from your boots to your pack, lingering at each buckle and strap. The silence stretches thin. You feel the weight of her scrutiny as though she were peeling back cloth to examine the grain beneath. When at last she speaks, her voice carries the rasp of sand through gears.
+
+    "Tell you've got an imperial gauge torque wrench in that massive pack of yours, trader. My kit is Kesharat make and I'm having a hell of a time here."
+    +open "Dalla"
+
+* Return to Aldric = Talk to the captain again
+    You leave the sentry and his barricade behind.
+    +open "Captain Aldric"

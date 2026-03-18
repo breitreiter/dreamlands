@@ -1,4 +1,5 @@
 Aldric on the Scavengers
+[vignette grainway_station]
 
 "The scavengers set up barricades while we were on patrol. They say they'll split the contents even with us if I unlock it."
 
@@ -18,7 +19,7 @@ choices:
 
     Aldric's gaze fixes upon you, hard and unblinking. His jaw works as though shaping some retort, yet no words emerge. 
 
-    "I'll gather the men," he says, each syllable clipped and cold. "Be ready on my signal, trader. I'll expect your blade to be with us."
+    "I'll gather the men," he says at last. "Be ready on my signal, trader. I'll expect your blade to be with us."
     +open "The Assault"
     }
     @else {
