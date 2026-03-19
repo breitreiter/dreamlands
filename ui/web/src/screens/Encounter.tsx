@@ -44,7 +44,6 @@ export default function Encounter({ state }: { state: GameResponse }) {
           ...(encounter.body ? [{ kind: "body" as const, text: encounter.body }] : []),
         ]);
         setBaseTitle(encounter.title);
-        setBaseBody(encounter.body);
         setBaseVignette(encounter.vignette);
       } else {
         // Terminal outcome (same encounter or standalone outcome mode)
