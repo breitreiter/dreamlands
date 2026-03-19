@@ -46,8 +46,8 @@ contexts:
   fixme-marker:
     - match: '(FIXME:)(.*)'
       captures:
-        1: markup.bold invalid.deprecated.fixme.enc
-        2: invalid.deprecated.fixme.enc
+        1: markup.bold markup.changed.fixme.enc
+        2: markup.changed.fixme.enc
 
   review-marker:
     - match: '(REVIEW:)(.*)'
