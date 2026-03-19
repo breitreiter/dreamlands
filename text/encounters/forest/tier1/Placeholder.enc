@@ -1,38 +1,41 @@
 Placeholder Recurring Encounter
 
-Something happens! In the deepest scrub.
+Something happens!
 
 choices:
 
 * Negotiate = Try to convince them
-    @if check negotiation hard {
+    @if check negotiation easy {
       You convince them!
-      +heal_spirits 3
-      +give_gold 3
+      +heal_spirits 2
+      +repool
     } @else {
       You fail!
-      +rem_gold 3
-      +damage_spirits 3
+      +rem_gold 2
+      +repool
     }
-
+  
 * Fight = Do the ultimate punchies
-    @if check combat medium {
+    @if check combat trivial {
         You win!
-        +heal_spirits 3
-        +give_gold 3
+        +heal_spirits 2
+        +repool
     } @else {
         You lose!
         +add_condition injured
-        +damage_spirits 3
+        +damage_spirits 1
+        +repool
     }
 
 * Sneak = Use big sneaky skills
-    @if check cunning medium {
+    @if check cunning trivial {
         You win!
-        +heal_spirits 3
-        +give_gold 3
+        +heal_spirits 2
+        +repool
     } @else {
         You lose!
         +add_condition injured
-        +damage_spirits 3
+        +damage_spirits 1
+        +repool
     }
+

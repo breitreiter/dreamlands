@@ -1,6 +1,6 @@
 Placeholder Recurring Encounter
 
-Something happens! In the swamp. It's a big place.
+Something happens!
 
 choices:
 
@@ -8,28 +8,38 @@ choices:
     @if check negotiation easy {
       You convince them!
       +heal_spirits 2
+      +give_gold 2
+      +repool
     } @else {
       You fail!
       +rem_gold 2
+      +damage_spirits 2
+      +add_condition injured
+      +repool
     }
-  
+
 * Fight = Do the ultimate punchies
-    @if check combat trivial {
+    @if check combat easy {
         You win!
         +heal_spirits 2
+        +give_gold 2
+        +repool
     } @else {
         You lose!
+        +damage_spirits 2
         +add_condition injured
-        +damage_spirits 1
+        +repool
     }
 
 * Sneak = Use big sneaky skills
-    @if check cunning trivial {
+    @if check cunning easy {
         You win!
         +heal_spirits 2
+        +give_gold 2
+        +repool
     } @else {
         You lose!
+        +damage_spirits 2
         +add_condition injured
-        +damage_spirits 1
+        +repool
     }
-

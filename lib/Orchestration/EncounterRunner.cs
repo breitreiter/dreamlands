@@ -18,8 +18,7 @@ public static class EncounterRunner
         session.Mode = SessionMode.InEncounter;
         session.CurrentEncounter = encounter;
         session.Player.CurrentEncounterId = encounter.Id;
-        if (!encounter.Recurring)
-            session.Player.UsedEncounterIds.Add(encounter.Id);
+        session.Player.UsedEncounterIds.Add(encounter.Id);
         var gated = Choices.GetAllWithLockState(encounter, session.Player, session.Balance);
         return new EncounterStep.ShowEncounter(encounter, gated);
     }
@@ -34,6 +33,8 @@ public static class EncounterRunner
         // Check for terminal results
         foreach (var r in results)
         {
+            if (r is MechanicResult.Repooled)
+                session.Player.UsedEncounterIds.Remove(session.CurrentEncounter!.Id);
             if (r is MechanicResult.Navigation nav)
                 return new EncounterStep.Finished(FinishReason.NavigatedTo, nav.EncounterId, Outcome: outcome);
             if (r is MechanicResult.DungeonFinished)

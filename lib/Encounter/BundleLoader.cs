@@ -95,7 +95,6 @@ public sealed class EncounterBundle
             {
                 Id = e.Id,
                 Category = e.Category,
-                Recurring = e.Recurring,
                 Trigger = e.Trigger,
                 Tier = e.Tier,
                 Vignette = e.Vignette,
@@ -132,7 +131,7 @@ public sealed class EncounterBundle
     record BundleDto(IndexDto Index, List<EncounterDto> Encounters);
     record IndexDto(Dictionary<string, IndexEntryDto>? ById, Dictionary<string, List<int>>? ByCategory);
     record IndexEntryDto(string Category, int EncounterIndex);
-    record EncounterDto(string Id, string Category, bool Recurring, string? Trigger, int? Tier, string? Vignette, string Title, string Body, List<string>? Requires, List<ChoiceDto> Choices);
+    record EncounterDto(string Id, string Category, string? Trigger, int? Tier, string? Vignette, string Title, string Body, List<string>? Requires, List<ChoiceDto> Choices);
     record ChoiceDto(string OptionText, string? OptionLink, string? OptionPreview, string? Requires,
         ConditionalDto? Conditional, SingleDto? Single);
     record ConditionalDto(string Preamble, List<BranchDto> Branches, OutcomePartDto? Fallback);

@@ -341,4 +341,13 @@ public class MechanicsTests
         Mechanics.Apply(["quality scholars 2"], state, Balance, Rng);
         Assert.Equal(3, state.Qualities["scholars"]);
     }
+
+    [Fact]
+    public void Repool_ReturnsRepooledResult()
+    {
+        var state = Fresh();
+        var results = Mechanics.Apply(["repool"], state, Balance, Rng);
+        Assert.Single(results);
+        Assert.IsType<MechanicResult.Repooled>(results[0]);
+    }
 }

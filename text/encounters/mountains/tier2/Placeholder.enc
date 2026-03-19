@@ -1,6 +1,6 @@
 Placeholder Recurring Encounter
 
-Something happens! In the further scrub.
+Something happens!
 
 choices:
 
@@ -9,10 +9,13 @@ choices:
       You convince them!
       +heal_spirits 2
       +give_gold 2
+      +repool
     } @else {
       You fail!
       +rem_gold 2
       +damage_spirits 2
+      +add_condition injured
+      +repool
     }
 
 * Fight = Do the ultimate punchies
@@ -20,10 +23,12 @@ choices:
         You win!
         +heal_spirits 2
         +give_gold 2
+        +repool
     } @else {
         You lose!
-        +add_condition injured
         +damage_spirits 2
+        +add_condition injured
+        +repool
     }
 
 * Sneak = Use big sneaky skills
@@ -31,8 +36,10 @@ choices:
         You win!
         +heal_spirits 2
         +give_gold 2
+        +repool
     } @else {
         You lose!
-        +add_condition injured
         +damage_spirits 2
+        +add_condition injured
+        +repool
     }

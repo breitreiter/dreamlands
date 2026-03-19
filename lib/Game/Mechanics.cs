@@ -52,6 +52,7 @@ public static class Mechanics
             "remove_condition" => ApplyRemoveCondition(args, state),
             "skip_time" => ApplySkipTime(args, state),
             "open" => ApplyOpen(args),
+            "repool" => new MechanicResult.Repooled(),
             "finish_dungeon" => ApplyFinishDungeon(state),
             "flee_dungeon" => new MechanicResult.DungeonFled(),
             _ => null,

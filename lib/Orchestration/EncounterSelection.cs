@@ -45,7 +45,7 @@ public static class EncounterSelection
 
         var pool = session.Bundle.GetByCategory(category);
         var available = pool
-            .Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id))
+            .Where(e => !session.Player.UsedEncounterIds.Contains(e.Id))
             .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
             .ToList();
         if (available.Count == 0) return null;
@@ -86,7 +86,7 @@ public static class EncounterSelection
 
         var pool = session.Bundle.GetByCategory(category);
         return pool
-            .Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id))
+            .Where(e => !session.Player.UsedEncounterIds.Contains(e.Id))
             .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
             .ToList();
     }
@@ -108,7 +108,7 @@ public static class EncounterSelection
 
         return pool
             .Where(e => !currentOffers.Contains(e.Id))
-            .Where(e => e.Recurring || !session.Player.UsedEncounterIds.Contains(e.Id))
+            .Where(e => !session.Player.UsedEncounterIds.Contains(e.Id))
             .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
             .ToList();
     }

@@ -9,10 +9,12 @@ choices:
       You convince them!
       +heal_spirits 3
       +give_gold 3
+      +repool
     } @else {
       You fail!
       +rem_gold 3
       +damage_spirits 3
+      +repool
     }
 
 * Fight = Do the ultimate punchies
@@ -20,10 +22,12 @@ choices:
         You win!
         +heal_spirits 3
         +give_gold 3
+        +repool
     } @else {
         You lose!
         +add_condition injured
         +damage_spirits 3
+        +repool
     }
 
 * Sneak = Use big sneaky skills
@@ -31,8 +35,10 @@ choices:
         You win!
         +heal_spirits 3
         +give_gold 3
+        +repool
     } @else {
         You lose!
         +add_condition injured
         +damage_spirits 3
+        +repool
     }

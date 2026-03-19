@@ -8,7 +8,6 @@ public sealed class Encounter
     public string Category { get; init; } = "";
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
-    public bool Recurring { get; init; }
     public string? Trigger { get; init; }
     public int? Tier { get; init; }
     public string? Vignette { get; init; }

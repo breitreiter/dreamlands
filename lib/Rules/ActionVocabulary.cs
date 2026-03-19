@@ -188,6 +188,11 @@ public sealed class ActionVerb
         new[] { new ArgDef("period", ArgType.TimePeriod) },
         new[] { "no_sleep", "no_meal", "no_biome" });
 
+    // ── Encounter ──────────────────────────────────────────────
+
+    public static readonly ActionVerb Repool = new("repool",
+        VerbUsage.Mechanic, "Return this encounter to the available pool");
+
     // ── Dungeon ─────────────────────────────────────────────────
 
     public static readonly ActionVerb FinishDungeon = new("finish_dungeon",
@@ -211,6 +216,7 @@ public sealed class ActionVerb
         IncreaseSkill, DecreaseSkill, SetSkill,
         AddCondition, RemoveCondition,
         SkipTime,
+        Repool,
         FinishDungeon, FleeDungeon,
     };
 

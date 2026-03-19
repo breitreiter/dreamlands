@@ -57,11 +57,11 @@ public static class SettlementRunner
         var max = session.Balance.Settlements.MaxStorylets;
         var restockDays = session.Balance.Settlements.StoryletRestockDays;
 
-        // Prune offers for encounters the player has since used (non-recurring only)
+        // Prune offers for encounters the player has since used
         state.StoryletOffers.RemoveAll(id =>
         {
             var enc = session.Bundle.GetById(id);
-            return enc != null && !enc.Recurring && session.Player.UsedEncounterIds.Contains(id);
+            return enc != null && session.Player.UsedEncounterIds.Contains(id);
         });
 
         // Determine how many slots are available

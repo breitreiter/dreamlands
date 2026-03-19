@@ -136,4 +136,18 @@ public class EncounterRunnerTests
         Assert.Null(session.CurrentEncounter);
     }
 
+    [Fact]
+    public void Choose_Repool_RemovesFromUsedEncounterIds()
+    {
+        var session = Helpers.MakeSession();
+        var enc = SimpleEncounter("repool_enc", mechanics: new[] { "repool" });
+        EncounterRunner.Begin(session, enc);
+
+        Assert.Contains("plains/tier1/repool_enc", session.Player.UsedEncounterIds);
+
+        EncounterRunner.Choose(session, enc.Choices[0]);
+
+        Assert.DoesNotContain("plains/tier1/repool_enc", session.Player.UsedEncounterIds);
+    }
+
 }
