@@ -10,7 +10,7 @@ choices:
 
     She shifts her weight, the tarp crinkling beneath her. "This depot has been abandoned for longer than any of us have been alive. The heroic Legion counter-attack is never coming." Her gaze fixes on yours now, direct and unblinking. "Whatever is inside rots each year, and no one will ever need it. Except us."
 
-    "I was trained as an engineer in the Kesharat academies. Locks are just machines. I thought we could slip in, take what we can carry, and steal away with none the wiser. Then the soldiers showed up. Then my people starting turning the old fence line into a barricade. And now here we all are."
+    "I was trained as an engineer in the Kesharat academies. Locks are just machines. I thought we could slip in, take what we can carry, and steal away with none the wiser. Then the soldiers showed up. My people set camp inside the old fenceline, figured it was as good a claim as any. And now here we all are."
     +open Dalla
 
 * Help her crack the door = You're somewhat familiar with imperial lockwork
@@ -38,9 +38,9 @@ choices:
 * Propose a deal = Arrange a compromise with the soldiers
     You know to open with a concrete deal, then work from there. "You each get half by weight. No need to pick the lock; the imperial captain has a key. He doesn't want a fight and he's probably keen to see what's inside this thing. No one has to get hurt, everyone can walk away a bit richer."
 
-    Dalla studies you for a long moment, then rises and gathers her tools. You walk together across the hardpan past the barricade, to a half-way point between the two camps. The soldiers watch your approach. Aldric crosses to meet you, his face weathered and cautious.
+    Dalla studies you for a long moment, then rises and gathers her tools. You walk together across the hardpan, past the fenceline gate, to a half-way point between the two camps. The soldiers watch your approach. Aldric crosses to meet you, his face weathered and cautious.
 
-    Beyond the barricade, the scavengers have gone silent, waiting.
+    Behind the fence, the scavengers have gone silent, waiting.
 
     "You bring me a rover," he says. "Bold."
 

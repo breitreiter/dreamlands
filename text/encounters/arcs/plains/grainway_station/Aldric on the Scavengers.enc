@@ -3,9 +3,9 @@ Aldric on the Scavengers
 
 "Scout found them here two days ago. We marched out to meet them."
 
-"They're a couple local families. For the most part, we leave each other be. They pick scraps and keep their distance. We keep up appearances and do our job out here. Stealing from the dead is a disrespect to the brave soldiers who died out here, but my men are not the sort of die to protect the honor of the legion."
+"They're a couple local families. For the most part, we leave each other be. They pick scraps and keep their distance. We keep up appearances and do our job out here. Stealing from the dead is a disrespect to the soldiers who died out here, but my men are not the sort of die to protect the honor of the legion."
 
-"But if the depot falls, we've no reason to be out here. We'll end up deserters or facing a court martial. Or worse, reassigned to somewhere deeper into the borderlands."
+"But surrendering the depot is too much. There will be hell to pay if word reaches the city that we've let it be taken."
 
 "My men don't want a fight, but we're ready if it comes to it."
 
@@ -15,7 +15,7 @@ choices:
     @if check negotiation medium {
     "They are rabble," you say, "Every hour you delay, you lose standing in your men's eyes. Strike them now, hard and fast, before they grow bold enough to believe themselves your equals."
 
-    You step closer, close enough that Aldric must either meet your gaze or retreat. He does not retreat. "When word spreads of this," you continue, "when scavengers in camps and hovels learn what befell those who raised barricades against the legion, they will think twice before such boldness finds them again. This is how authority endures in the borderlands, not through waiting and indecision."
+    You step closer, close enough that Aldric must either meet your gaze or retreat. He does not retreat. "When word spreads of this," you continue, "when scavengers in camps and hovels learn what befell those who stood against the legion, they will think twice before such boldness finds them again. This is how authority endures in the borderlands, not through waiting and indecision."
 
     Aldric's gaze fixes upon you, hard and unblinking. His jaw works as though shaping some retort, yet no words emerge. 
 

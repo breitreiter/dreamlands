@@ -1,7 +1,7 @@
-The Barricade
+The Fenceline
 [vignette dungeons/grainway_station]
 
-The barricade looms: a tangle of carts, splintered beams, and broken stone. A sentry leans there, thin as a fencepost, picking idly at a scab on his forearm. His eyes flick to you, sharp despite the slouch.
+The depot's old fenceline is nothing much: grey wood, waist-high, half the posts leaning. But the scavengers have claimed the ground inside it, and the man leaning against the gate treats it like a castle wall. He's thin, sharp-eyed, picking idly at a scab on his forearm. His gaze flicks to you.
 
 "We've no coin for your wares, trader," he says. "Nor goods worth the naming." He jerks his chin toward the imperial camp. "Greys are getting restless. Don't like us squatting their little fort. Smells like a fight brewing. You'd be safer back on the road."
 
@@ -11,7 +11,7 @@ The man barks a laugh--dry, humorless.
 
 "Leader? We're rovers, friend. No crowns here." He scratches at his arm again, then grins crookedly. "But I imagine you'd be keen to jaw with Dalla, she likes the fancy talk."
 
-He hooks a thumb toward the barricade's edge.
+He hooks a thumb past the fence.
 
 "She's round the corner. Mind your manners, friend. Hands where we can see 'em." His eyes narrow, but there's no heat in it. "We've no quarrel with the Traders Guild."
 
@@ -28,5 +28,5 @@ choices:
     +open "Dalla"
 
 * Return to Aldric = Talk to the captain again
-    You leave the sentry and his barricade behind.
+    You leave the sentry and his fenceline behind.
     +open "Captain Aldric"

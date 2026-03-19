@@ -46,7 +46,7 @@ choices:
 
     Then Aldric moves. He steps forward, reaches down, lifts the armor with both hands. The pelt drapes heavy over his forearm. He does not speak, but his nod is slow, deliberate. The kind a man gives when he takes an oath.
 
-    Dalla's eyes narrow. Her people shift, still wary, still waiting for the turn. But no one reaches for steel. You return to your journey, hoping that what you built here will hold.
+    Dalla's eyes narrow. Her people shift, still wary, still waiting for the turn. But no one reaches for steel. You depart, hoping that this tenuous arrangement will hold.
     +quality faction.legion +4
     +quality faction.scavengers +1
     +finish_dungeon
@@ -84,13 +84,13 @@ choices:
 
         Aldric moves first, reaching toward you.
 
-        "You'll not lay a hand on me, Aldric," you say, voice harder now. "Your commander would have you cleaning latrines for the rest of your enlistment if you raised a hand to a guild member." 
+        "You'll not touch me, Aldric," you say, voice harder now. "Your commander would have you cleaning latrines for the rest of your enlistment if you raised a hand to a guild member." 
         
         You turn to Dalla, words sharp as drawn steel. "And as for you, rover, you'll see the full force of the Aldgate garrison if I come to harm. They'll harry your little band until you're dead or rotting in an imperial prison. If you value your lives and your freedom, you'll stand down, and I will take my fee."
 
         The silence stretches. No one moves. Then Aldric spits on the floor, slow and deliberate. Dalla's hand drifts to her belt. You feel the weight of every eye in the depot, the heat of their contempt like a forge at your back. You take the armor. You walk. Behind you, the sound of boots and murmurs follows you into the cold.
 
-        You'll likely hear about this when you return to the Chapterhouse, but for now, you admire the new armor.
+        You'll likely hear about this when you return to the Chapterhouse.
         +add_item mountain_regiment_armor
         +quality faction.legion -3
         +quality faction.scavengers -3
