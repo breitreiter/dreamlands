@@ -21,6 +21,9 @@ import {
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
 
+const FOOD_IDS = ["food_protein", "food_grain", "food_sweets"];
+function isFoodItem(id: string) { return FOOD_IDS.includes(id); }
+
 type BuyTab = "hauls" | "supplies" | "equipment";
 type SellTab = "pack" | "haversack" | "equipped";
 
@@ -231,6 +234,75 @@ export default function MarketScreen({
     return true;
   }
 
+  // ── Food helpers ──
+  // Count food by type in the player's haversack (minus pending sells)
+  const foodCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const id of FOOD_IDS) counts[id] = 0;
+    if (!inventory) return counts;
+    const remainingSells = [...pendingSells];
+    for (const item of inventory.haversack) {
+      if (!isFoodItem(item.defId)) continue;
+      const sellIdx = remainingSells.indexOf(item.defId);
+      if (sellIdx >= 0) { remainingSells.splice(sellIdx, 1); continue; }
+      counts[item.defId] = (counts[item.defId] ?? 0) + 1;
+    }
+    return counts;
+  }, [inventory, pendingSells]);
+
+  // Remove one food buy — remove from the type with the most pending
+  function removeFoodBuy() {
+    setPendingBuys(prev => {
+      const next = new Map(prev);
+      let best = "";
+      let bestQty = 0;
+      for (const id of FOOD_IDS) {
+        const qty = next.get(id) ?? 0;
+        if (qty > bestQty) { bestQty = qty; best = id; }
+      }
+      if (!best) return prev;
+      if (bestQty <= 1) next.delete(best);
+      else next.set(best, bestQty - 1);
+      return next;
+    });
+  }
+
+  const pendingFoodTotal = FOOD_IDS.reduce((sum, id) => sum + (pendingBuys.get(id) ?? 0), 0);
+
+  const foodPrice = useMemo(() => {
+    const item = stock.find(s => isFoodItem(s.id));
+    return item?.buyPrice ?? 3;
+  }, [stock]);
+
+  function canBuyFood(): boolean {
+    if (projected.gold < foodPrice) return false;
+    if (projected.haversackCount >= projected.haversackCapacity) return false;
+    return true;
+  }
+
+  function addFoodBuy(count: number = 1) {
+    setPendingBuys(prev => {
+      const next = new Map(prev);
+      for (let i = 0; i < count; i++) {
+        // Recalculate best type each iteration
+        let best = FOOD_IDS[0];
+        let bestCount = Infinity;
+        for (const id of FOOD_IDS) {
+          const total = (foodCounts[id] ?? 0) + (next.get(id) ?? 0);
+          if (total < bestCount) { bestCount = total; best = id; }
+        }
+        next.set(best, (next.get(best) ?? 0) + 1);
+      }
+      return next;
+    });
+  }
+
+  function maxFoodBuyable(): number {
+    const slotsLeft = projected.haversackCapacity - projected.haversackCount;
+    const affordable = Math.floor(projected.gold / foodPrice);
+    return Math.max(0, Math.min(slotsLeft, affordable));
+  }
+
   const packFull = projected.packCount >= projected.packCapacity;
 
   const hasOrder = pendingBuys.size > 0 || pendingSells.length > 0;
@@ -277,8 +349,9 @@ export default function MarketScreen({
     }
   }
 
-  // Filtered stock for buy panel
-  const filteredStock = stock.filter((item) => matchesBuyTab(item, buyTab));
+  // Filtered stock for buy panel — exclude individual food items from supplies (merged into one row)
+  const filteredStock = stock.filter((item) => matchesBuyTab(item, buyTab) && !isFoodItem(item.id));
+  const hasFood = stock.some(s => isFoodItem(s.id));
 
   // Sell items for right panel — subtract items already staged for sell
   const sellItems = useMemo((): { item: ItemInfo; source: string }[] => {
@@ -397,41 +470,72 @@ export default function MarketScreen({
                   </div>
                 ))
               )
-            ) : filteredStock.length === 0 ? (
+            ) : filteredStock.length === 0 && !(buyTab === "supplies" && hasFood) ? (
               <div className="p-4 text-muted">Nothing available</div>
             ) : (
-              filteredStock.map((item) => {
-                const projQty = projected.projectedStock.get(item.id) ?? item.quantity;
-                const pendingQty = pendingBuys.get(item.id) ?? 0;
-                return (
-                  <div key={item.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
+              <>
+                {/* Merged food row on supplies tab */}
+                {buyTab === "supplies" && hasFood && (
+                  <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
                     <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                      <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                      <MaskedIcon icon={itemTypeIcon("consumable")} className="w-5 h-5" color="#D0BD62" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-primary">
-                        {item.name}
-                        <span className="text-muted ml-1">({projQty} available)</span>
-                      </div>
-                      {item.description && (
-                        <div className="text-muted mt-0.5 truncate">{item.description}</div>
-                      )}
+                      <div className="text-primary">Food</div>
+                      <div className="text-muted mt-0.5">Provisions for the road</div>
                     </div>
                     <div className="flex items-center gap-1 flex-shrink-0">
-                      {pendingQty > 0 && (
-                        <Button variant="secondary" size="sm" onClick={() => removeBuy(item.id)}>
-                          <span className="text-accent">{pendingQty}x</span>
+                      {pendingFoodTotal > 0 && (
+                        <Button variant="secondary" size="sm" onClick={removeFoodBuy}>
+                          <span className="text-accent">{pendingFoodTotal}x</span>
                           <MaskedIcon icon="cancel.svg" className="w-3 h-3" color="currentColor" />
                         </Button>
                       )}
-                      <Button variant="secondary" size="sm" onClick={() => addBuy(item.id)} disabled={!canBuy(item)}>
+                      {maxFoodBuyable() > 0 && (
+                        <Button variant="secondary" size="sm" onClick={() => addFoodBuy(maxFoodBuyable())}>
+                          Max
+                        </Button>
+                      )}
+                      <Button variant="secondary" size="sm" onClick={() => addFoodBuy()} disabled={!canBuyFood()}>
                         <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
-                        {item.buyPrice}g
+                        {foodPrice}g
                       </Button>
                     </div>
                   </div>
-                );
-              })
+                )}
+                {filteredStock.map((item) => {
+                  const projQty = projected.projectedStock.get(item.id) ?? item.quantity;
+                  const pendingQty = pendingBuys.get(item.id) ?? 0;
+                  return (
+                    <div key={item.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
+                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-primary">
+                          {item.name}
+                          <span className="text-muted ml-1">({projQty} available)</span>
+                        </div>
+                        {item.description && (
+                          <div className="text-muted mt-0.5 truncate">{item.description}</div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        {pendingQty > 0 && (
+                          <Button variant="secondary" size="sm" onClick={() => removeBuy(item.id)}>
+                            <span className="text-accent">{pendingQty}x</span>
+                            <MaskedIcon icon="cancel.svg" className="w-3 h-3" color="currentColor" />
+                          </Button>
+                        )}
+                        <Button variant="secondary" size="sm" onClick={() => addBuy(item.id)} disabled={!canBuy(item)}>
+                          <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
+                          {item.buyPrice}g
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
             )}
           </div>
         </div>
