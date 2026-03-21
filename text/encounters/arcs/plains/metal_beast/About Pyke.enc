@@ -1,0 +1,45 @@
+About Pyke
+
+"Sharp boy. Too sharp. Saw things in my notes that I had missed. Connections that were obvious in hindsight." A trace of pride flickers there, then hardens into something else. "I remember the day he solved the power lattice. Came to me near shaking with it. Thought he'd uncovered a miracle."
+
+A glance back to you.
+
+"Didn't have the backbone to see it through though. Once he understood what it meant to resurrect a monster like this, he lost his nerve. Said we needed to slow down. Make sure we could control the thing."
+
+choices:
+
+* Sell out Pyke = Explain what happened outside [requires tag metal_beast.accepted_sabotage]
+  Sev's face hardens as he hears the story. "You're a damn fool to be taken in by him. And a poor trader indeed to let someone tamper with a contract."
+
+  "Do you know what he did to the thing? Are you a master engineer as well as an idiot? No, I suppose not. The whole engine could have been set ablaze, killing us all. It might have gone berzerk, attacking the city."
+
+  "I don't suppose you or the boy thought much about that."
+
+  His jaw tightens, just slightly.
+
+  "Be on your way. You've done enough here."
+
+  You nod, and make the trek back though the interior of the monster, then down the twisting rope ladder. You retrieve your pack from the engineer waiting at the foot of the great beast. Someday, perhaps, the empire will wrest the secrets from this thing and create their own monsters. But you've given the world a little more time.
+  +quality faction.tradeguild -1
+  +finish_dungeon
+
+* Tell him about Pyke = Explain what happened outside [requires tag metal_beast.refused_sabotage]
+  Sev listens without interruption, his old hands folded behind his back, gaze fixed somewhere past you--on the great metal shape looming in the distance.
+
+  "Pyke," he repeats at last, the name worn thin from use. "And you're certain?"
+
+  You nod.
+
+  The old man closes his eyes for a brief moment. When he opens them again, something in him has settled.
+
+  "What's done is done."
+
+  "He would have undone everything. Ended a lifetime of work right when I was on the cusp of solving this."
+
+  "Still," Sev says, quieter now. "I wish it had ended better. For all his foolishness, he was one of ours."
+  +add_item grid_cipher
+  +finish_dungeon
+
+* Return to other matters = Ask Sev about something else
+  Silence hangs for a moment.
+  +open "Belly of the Beast"

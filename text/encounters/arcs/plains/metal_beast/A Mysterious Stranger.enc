@@ -1,0 +1,73 @@
+A Mysterious Stranger
+
+The man before you is a ruin of a man; ragged, hollow-eyed, his hair a matted snarl and his beard unkempt. The uniform clinging to him marks him as an imperial functionary, not soldier but civil hand, though it hangs loose and filthy, as if it has endured the same long strain as its wearer.
+
+He catches your gaze and straightens a little, as though remembering himself.
+
+"I must cut a sorry figure," he says, voice rough but steady. "Pyke. Engineer. I worked in beast behind me. Kept it running. Once." His eyes flick briefly toward the machine. "I left. I would not be part of what they've turned it into."
+
+He studies you, sharper now.
+
+"I know you have the control shaft. If you return it, they will wake the machine again. And when it wakes... who can say what it remembers? Perhaps it turns on the city. Perhaps they learn to guide it." His mouth tightens. "Either way, people die. Sev will see to that. He cares for nothing but his own glory."
+
+He steps closer, lowering his voice.
+
+"There is another path. We end the monster. Give me the shaft, and I'll rewire it. When they try to use it, the beast will fail. Permanently."
+
+A pause. Wind brushes past, stirring the edges of his coat.
+
+"You've heard what The Iron did to our legions. No one should wield that kind of power. Not even the Empire."
+
+He extends a grease-stained hand.
+
+"Hand it to me, and I'll see it done."
+
+choices:
+
+* Agree to Pyke's plan = Hand the control shaft over
+  You draw the control shaft from your pack. The metal is cold against your palm, heavier than it looks. Pyke's eyes fix upon it with a keen hunger, though his hand remains steady as you press the cylinder into his grasp.
+
+  He moves at once. His coat comes off, spread across the broken ground like a workman's tarp. He kneels beside it, tools already in hand, instruments you did not see him carry. The shaft splits under his ministrations, pried open with deft precision. Within, crystalline lattices catch the dim light, geometries too perfect to be natural. You watch as the thing comes apart in his hands, piece by delicate piece, until a dozen fragments lie scattered across the stained fabric. You are certain now that he has destroyed it beyond repair.
+
+  Then he selects a small hammer from his kit. One of the crystals glows faintly purple, pulsing like a slow heartbeat. He strikes it once, clean and decisive. The sound is sharp, brittle. The crystal whines, a high keening note that climbs and cracks, then hisses as though releasing trapped breath. Silence follows, thick and final.
+
+  "It's done," Pyke says. "Let me button it back up."
+
+  His hands move with the same swift assurance. The shaft closes, seams aligning, until it appears whole once more. He stows his tools, rises, and extends the cylinder toward you. "You seem sharp. Just do the delivery, collect your coin, and be on your way. The device will do the rest. You've done the right thing today."
+
+  You take it. The weight feels no different, though you know something vital has been hollowed out within.
+
+  The journey resumes. The great machine looms larger with each step, its iron limbs towering like the bones of some ancient colossus. At last you reach its base, where shadow pools thick and cold. The woman you glimpsed earlier stands there now, one boot braced against the monster's massive foot, her posture loose and unconcerned.
+
+  "Took you long enough, trader," she says.
+  +add_tag metal_beast.accepted_sabotage
+  +open "The Foot"
+
+* Refuse = You'll have no part in this
+  You turn from him, voice level. "I am a Trade Guilder, friend. It is not our way to sabotage contracts. I will deliver the thing. If you have some quarrel with these folk, that's your concern, not mine."
+
+  Two strides carry you past him. The scrape of boot on stone comes too fast. His hand clamps your shoulder, wrenching you about. Metal flashes in the weak light: a knife, his intent is murder.
+  @if check combat medium {
+      You wrench yourself free from his grasp and let the pack slide from your shoulder. It strikes the ground with a dull thud as your hand finds the hilt at your side.
+
+      Fear bleeds into Pyke's hollow eyes, white showing at their edges, but something within him will not break. He lunges forward, arms outstretched, fingers grasping. The movement is graceless, untrained. You turn on your heel, your body remembering what his never knew. Your weapon comes down hard against the base of his skull. A brief, animal grunt escapes him. Then nothing. He collapses forward, striking the earth with finality.
+
+      The body lies twisted in the dust. The sight sits heavy in your chest, but the contract remains. You shoulder your pack once more and continue toward the looming bulk of the great machine. 
+
+      At its foot, perched on one of the massive talons, the woman from before waits. She leans against the rusted metal as though it were garden statuary, arms crossed, head tilted. Her voice carries easily across the distance. "Took you long enough, trader."
+      +open "The Foot"
+  } @else {
+      The blade punches into your side with a wet scrape of parting flesh, and agony swells through you in a dark wave. Your knees buckle. You wrench yourself backward, tearing free of the steel, one hand clamped over the wound where hot blood wells between your fingers. The other finds your weapon, dragging it free.
+
+      Pyke stands frozen, blade trembling in his grip. His eyes fall to his own hands, to the crimson spreading across his palms. His mouth works soundlessly. He stares at what he has done as though waking from a fever dream.
+
+      You grant him no moment of conscience. You close the distance and drive your weapon into his throat. The impact shudders up your arm. He collapses, choking, and you follow him down with blow after blow, each strike landing with dull finality until the fury drains from your limbs and leaves only the cold weight of what remains. The engineer lies still, his eyes wide and empty beneath the iron sky.
+
+      You straighten, breath ragged, and assess yourself. The wound burns, deep but survivable. You tear cloth from his uniform and bind it tight against your ribs, cinching the makeshift bandage until the bleeding slows. The package remains secure. You have a job to do. You turn from the corpse and walk toward the great machine.
+
+      At its base, the woman waits. She leans against the massive foot of the beast, arms folded, her posture easy and unbothered. When she sees you approach, her mouth curves into a thin smile.
+
+      "Took you long enough, trader."
+      +add_condition injured
+      +open "The Foot"
+  }

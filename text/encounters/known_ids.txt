@@ -8,6 +8,7 @@ brides_cave_heard_harlan
 
 # ── Qualities (numeric, soft range -5 to +5) ───────────────────
 
+
 ## Continental
 faction.empire
 faction.tradeguild

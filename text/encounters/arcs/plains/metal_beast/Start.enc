@@ -1,31 +1,35 @@
-Placeholder: The Metal Beast
+The Metal Beast
 
-A placeholder encounter for the Metal Beast arc.
+In the distance towers a metal monster. One of The Iron, the fearsome creatures who decimated and routed the 7th and 12th imperial legions some sixty years back. This one is The Fallen Iron, even though it looks quite upright to you.
+
+You must have heard the story of how the imperial engineers felled the beast a hundred times. You once sat through a tedious recitation of a very patriotic ballad about the event. 
 
 choices:
 
-* Explore = Search the wreckage [requires quality faction.legion 5]
-    @if check combat medium {
-        You find something valuable.
-        +add_item grid_cipher
-        +finish_dungeon
+* Explore closer = Cross the distance to The Fallen Iron
+    @if has control_shaft {
+        As you cross to deliver the control shaft, a gaunt figure steps from behind a clutch of trees.
+        +open "A Mysterious Stranger"
     } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
+        Standing in the creature's shadow, you can scarcely imagine what it must have been like to be an legionaire holding the line against such a thing. Lumbering and clanking and shaking the ground with its massive feet.
+
+        Your quiet reverie is broken by a shout.
+
+        "Oi! You! Trader!"
+
+        You look around and, seeing no one, look up. The creature has a round porthole on its side, maybe eighty feet up. A woman leans out, waving to get your attention.
+
+        "Have you got our package? The control shaft. Did you bring it?"
+
+        "I've no package for you, I'm afraid," you reply.
+
+        "Well one of you lot have got it. If you see the trader who has it, tell them they're three days overdue."
+
+        She snaps shut the porthole with a loud clank. You marvel at the great beast a bit more, but daylight is wasting. You return to the road.
+        +add_tag metal_beast.looking_for_package
+        +flee_dungeon
     }
 
-* Negotiate = Talk your way through [requires quality faction.legion 5]
-    @if check negotiation medium {
-        You find something valuable.
-        +add_item grid_cipher
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
-
-* Depart = Leave this place behind
-    You depart Metal Beast.
+* Walk on = Best not to get to close to such a monster
+    Nothing good is happening there. You return to the road.
     +flee_dungeon

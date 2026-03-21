@@ -20,6 +20,41 @@ to explode.
 
 # Scene Sketch
 
+## Start
+Package delivery
+- Cross the plain to the beast
+	- if package = intercepted
+	- if no = metal_beast.looking_for_package, holdt request
+- Leave
+
+## The Harried Trader [metal_beast.looking_for_package]
+Package pickup
+- yes = get package, -metal_beast.looking_for_package
+- no = repool
+
+## A Mysterious Stranger
+- i'll sabotage it = The Antechamber + metal_beast.accepted_sabotage
+- refuse = combat + The Antechamber + metal_beast.refused_sabotage
+
+## The Antechamber
+Meet Holdt
+- ask about man = metal_beast.refused_sabotage check + explains about pyke + open The Antechamber
+- ask about mission = explains mission + open The Antechamber
+- take the part to Sev = Belly of the Beast
+
+## Belly of the Beast
+Meet Sev
+- ask about man = metal_beast.refused_sabotage check + explains about pyke + open Belly of the Beast
+- ask about mission = explains mission + open Belly of the Beast
+- give part [metal_beast.accepted_sabotage] = cunning check
+- give part [metal_beast.refused_sabotage] = coda + reward
+
+## Confrontation
+Sev caught ya
+- fight your way out
+- blame pyke
+- talk your way out
+
 ## Opening
 
 The thing is visible from a mile out. At first it looks like a hill — a

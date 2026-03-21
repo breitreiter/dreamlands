@@ -528,6 +528,11 @@ public sealed class ItemDef
             Id = "revathi_tile", Name = "Revathi Tile", Type = ItemType.Token,
             Description = "A fragment of ancient tilework, faintly warm. The geometric pattern on its face shifts when you look away.",
         },
+        ["control_shaft"] = new()
+        {
+            Id = "control_shaft", Name = "Control Shaft", Type = ItemType.Tool,
+            Description = "A metal rod wrapped in waxed linen and bound with cording. An imperial armory seal holds the bindings in place.",
+        },
         ["brass_lantern"] = new()
         {
             Id = "brass_lantern", Name = "Old Brass Lantern", Type = ItemType.Tool,

@@ -18,7 +18,7 @@ class Program
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "push" => PushCommand.Run(rest).GetAwaiter().GetResult(),
-            "fix-quotes" => FixQuotesCommand.Run(rest),
+            "walk" => WalkCommand.Run(rest),
             _ => PrintUsage()
         };
     }
@@ -32,7 +32,7 @@ class Program
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter push [<path>] [--world <name>]");
-        Console.WriteLine("  encounter fix-quotes [<path>] [--ext .enc,.txt]");
+        Console.WriteLine("  encounter walk <arc-dir> [--skill combat=5] [--tag foo] [--item torch] [--quality guild=3] [--gold 50]");
         Console.WriteLine();
         Console.WriteLine("generate looks for locale_guide.txt in the current directory and archetype");
         Console.WriteLine("pools in text/encounters/generation/v2/.");

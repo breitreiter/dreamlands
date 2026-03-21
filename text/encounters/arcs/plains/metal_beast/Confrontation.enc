@@ -1,0 +1,142 @@
+Confrontation
+
+A long silence.
+
+"This has been altered."
+
+The words land flat.
+
+"Not damaged. Not worn. Altered." He taps a precise point along the housing. "Clean work. Skilled hands. Someone who knew exactly what to damage."
+
+A long moment passes.
+
+"Do you take me for a fool?"
+
+His voice sharpens now.
+
+"This is sabotage. Deliberate. Subtle enough to pass a cursory check but catastrophic once engaged." His jaw sets. "Whoever did this meant to cripple the machine. Or kill the operator."
+
+His eyes lock on yours.
+
+"Pyke."
+
+The name is almost spat.
+
+"You brought this to me. So I will ask you once, plainly."
+
+A step forward.
+
+"Did you know?"
+
+choices:
+
+* Fight your way out = Two engineers are no match for you
+    @if check combat easy {
+        You answer the question with violence, sudden and without hesitation. Your blade finds him before the accusation can fully settle in the air. The old man staggers, one hand rising as if to ward off what has already come to pass. He collapses against the instrument panel, metal shrieking beneath his weight, and slides to the deck in a heap of limbs and stained cloth.
+
+        Only then does it occur to you: there will be no payment. You glance down at the sprawled figure, then at the console he died against. Among the gauges and switches, one ornament catches what meager light filters through the chamber. You seize it, fingers wrapping tight. It resists. You wrench harder, and with a sharp snap the housing gives way. The crystal comes free, warm in your palm.
+
+        You wind your way through the chamber's innards, past pipes and struts that creak with your passage, then lower yourself down the rope ladder. The rungs sway beneath your boots. At the base of the creature, the second engineer waits, hands on her hips, peering up into the shadows above.
+
+        "Everything okay up there?"
+
+        You tell her it is.
+
+        She laughs, a sound too bright for this place. "Sev must have knocked down one of his book stacks. I keep telling him to..."
+
+        The sentence dies unfinished. Your stroke is clean. She crumples to the ground, the laughter still half-formed on her lips.
+
+        Two bodies now. No one remains to carry word of what transpired here. You shoulder your pack and turn back toward the road.
+        +add_item grid_cipher
+        +finish_dungeon
+    } @else {
+        Your answer comes not in words but in motion. Steel finds flesh before the old man can draw breath to shout. He crumples against the instrument panel, hand clutching at nothing. The silence that follows is absolute.
+
+        Your gaze falls upon a dimly glowing crystal lodged in the console, its surface etched with intricate patterns. You wrench it free and pocket it; you'll see some payment for this work.
+
+        You move through the titan's interior corridors, hands finding purchase on rungs slick with oil. The rope ladder sways beneath your weight as you descend. At the base, the second engineer waits, her face turned upward. "Everything alright up there?" Her voice carries easy concern. You tell her it is. She laughs. "Sev must have knocked down one of his book stacks. I keep telling him to..."
+
+        The words die.
+
+        You close the distance between you, but something in your bearing betrays you. Her eyes widen. She pivots as you lunge, your limbs heavy from the long climb, your balance still adjusting to solid ground. The wrench in her hand sweeps a brutal arc and the weight of it catches you. Your vision fractures. She does not hesitate. The wrench falls again, and again, each blow a thunderclap of pain.
+
+        Darkness swallows you.
+
+        When awareness returns, the woman is gone. Your body is a map of bruises. You force yourself upright, groaning, and shoulder your pack. The road beckons, and you are eager to answer.
+        +add_condition injured
+        +add_item grid_cipher
+        +quality faction.empire -5
+        +quality faction.tradeguild -5
+        +finish_dungeon
+    }
+
+* Blame Pyke = Tell Sev that Pyke set you both up
+    @if check cunning medium {
+        You meet his gaze without flinching.
+
+        "It was Pyke," you begin.
+
+        The old man's eyes narrow, but you press forward. You spin the tale with careful strokes: the chance meeting on the road, the engineer's practiced concern over the supposedly damaged shaft, his offer to repair it for modest coin. You paint yourself ignorant, eager to please, taken in by a master's assured manner. You stress your alarm when Pyke insisted you keep silent, lest Sev discover the "repair" and lodge complaint with the guild. What did you know of such mechanisms?
+
+        When you finish, he exhales through his teeth.
+
+        "I wouldn't expect a lay person to understand the intricacies of this technology," he says at last, weariness creeping into his voice. "And I'm a fool to expect honest dealing from a guild member." He sets the housing aside with a gesture of disgust. "I'll not pay for damaged goods. Be on your way."
+
+        You nod once and turn. The narrow passages seem longer now, the walls pressing close as you wind your way back through the creature's interior. The rope ladder sways beneath your weight. At the base, the younger engineer hands you your pack without question. You shoulder it and walk, boots crunching on stone as you leave the towering colossus behind.
+
+        You have nothing to show for your labor. But behind you, the machine stands quiet, for now. Perhaps that is payment enough.
+        +finish_dungeon
+    } @else {
+        Sev pauses, and you seize the silence. The words come quickly: you met Pyke on the road, not far from here. He examined the shaft, claimed you had damaged it through careless handling. Offered to repair it for a handful of coin. Insisted you keep the matter quiet.
+
+        The old man listens, but his eyes narrow. He asks where precisely this meeting occurred. You gesture vaguely toward the western approach. He asks what tools Pyke carried. You describe a leather roll, worn and stained. He asks how long the repair took. You estimate an hour, perhaps less. His expression hardens with each answer. He circles back, probes the edges of your tale, demands you repeat the sequence of events. The details shift beneath you like loose stone. You cannot recall what you have already claimed, which lies you have stacked upon which truths.
+
+        "I would have expected a better liar from the guild," he says at last. "I'm not sure what game you're at, but this conversation serves no purpose. Get out of my sight."
+
+        You retreat through the narrow interior passageways, the metal groaning softly around you. The rope ladder sways beneath your weight as you descend. At the creature's foot, you retrieve your pack from the waiting engineer. She glances toward the hatch above, questions forming on her lips, but you are already moving. The road stretches ahead.
+        +quality faction.empire -2
+        +quality faction.tradeguild -1
+        +finish_dungeon
+    }
+
+* Talk your way out = Try to explain the danger of the monster
+    @if check negotiation hard {
+        "You think this is a conspiracy?" you ask, level. "That Pyke sabotaged you, and I carried it in, and we're all playing some game against you?"
+
+        Sev spits back, "What else would you call it?"
+
+        You hold up your hand, the guild ring catching the light.
+
+        "I move goods, engineer. I get paid to finish jobs clean and quiet. I don't take sides in disputes. Think. Think on the risk I'm taking here."
+
+        "And Pyke?" you continue. "He could have filed his report in Aldgate. Taken a better post. Clean hands, full career. He's thrown that away to stop you."
+
+        Sev draws in a breath, but you do not stop.
+
+        "You've seen what this thing can do. The men burned and broken. The land cracked and ruined. And you would unleash that on the people of the borderlands again. An inhuman monster painted up in imperial colors."
+
+        "This is not a betrayal, Sev. It is an opportunity. Pyke is still out there; start over."
+
+        "Start... over," the man says carefully. The years suddenly rest very heavy on him.
+
+        He retrieves a small wooden box from behind a stack of books. "Perhaps," he says, "perhaps we might. If you see Pyke, give him this. A peace offering."
+
+        You take the box and assure Sev you'll see the package to its intended recpient.
+
+        You wind your way through the narrow interior passageways, each turn crowded with brass fittings and bundled conduit. The air grows warmer as you descend, thick with the smell of coal dust and old oil. At last you reach the rope ladder. It sways beneath your hands as you lower yourself rung by rung, the fibers rough against your palms.
+
+        The engineer stationed at the creature's foot looks up from her work. She hands you your pack without a word. You sling it over your shoulder and turn toward the road, leaving the great hulk of the machine behind you.
+        +add_item grid_cipher
+        +finish_dungeon
+    } @else {
+        "You've seen what this thing can do," you say, your voice low. "The men burned and broken. The land cracked and ruined. And you would unleash that on the people of the borderlands again. An inhuman monster painted up in imperial colors."
+
+        The old man's face hardens. "I'll not be lectured by Pyke, nor by his lackey." He steps back, fingers curling into a fist. "We've had this debate a hundred times. In a better world, there are a hundred peaceful uses for the things we have learned here." His voice rises. "We do not live in that world. In this world, the empire is beset from every quarter."
+
+        "Yes, yes, war is terrible, we all know. You think being gutted by a sword is some noble death? More heroic?" He gestures sharply at the towering bulk surrounding you. "The is a weapon, and an empire needs weapons.
+
+        "I'll not have this conversation again, trader." He turns his back. "Your guild will hear about your meddling, and by god I hope you're made to pay for it."
+
+        You wind your way through the narrow interior passageways, brushing past stacks of yellowed parchment and cold metal walls. You descend the uncertain rope ladder, hand over hand, the fibers rough against your palms. At the base, you retrieve your pack from the engineer standing watch at the creature's foot. She glances up toward the skull chamber, questions forming on her lips, but you shoulder past her and stride toward the road. You've nothing to show for your labors, but perhaps you've stopped something terrible from happening here.
+        +finish_dungeon
+    }

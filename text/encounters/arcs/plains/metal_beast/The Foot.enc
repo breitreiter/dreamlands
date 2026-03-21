@@ -1,0 +1,74 @@
+The Foot
+
+The woman you saw on your first visit sits casually on the great metal foot of the monster. She's wearing utilitarian imperial functionary attire, a cleaner version of what Pyke was wearing. You recognize the insignia. Imperial engineer.
+
+"Sev will want to see the thing before he signs. You'd best head up." She points to a dubious rope ladder crawling up the monster's leg.
+
+choices:
+
+* Ask about Pyke = Inquire about the man you met outside
+    @if tag metal_beast.refused_sabotage {
+        "A ragged man tried to kill me. Just now. Said his name was Pyke," you explain. 
+        
+        "Pyke?" she repeats, the word catching. The color drains from her face. "Did he follow you?"
+
+        You shake your head. Tell it plain. There was a meeting, words turned, and then a brawl. It ended with him in the dirt.
+
+        For a moment she says nothing. The great machine groans somewhere behind her, low and restless. When she does speak, it is quieter.
+
+        "I see."
+
+        Her jaw tightens, then loosens again, as if she cannot quite decide what to feel.
+
+        "Pyke was the sharpest mind among us. Saw problems before the rest of us even knew where to look." A faint, bitter breath escapes her. "That was the trouble, in the end."
+
+        She glances toward the beast, then back to you.
+
+        "He and Sev quarreled, some months ago. Not shouting, worse than that. Cold. Final. Pyke said he'd take his complaints to Aldgate, lay everything bare before the superiors."
+
+        A pause.
+
+        "But I kept seeing him. Or thought I did. A shape near the outer works. Watching. I told myself it was nerves."
+
+        Her eyes settle on you again, searching.
+
+        "I am… glad he didn't reach us. If he had followed you here..." She lets the thought hang, unfinished. Then, more quietly: "But it's a grim end, all the same. He deserved better than a ditch and a stranger's blade."
+
+        The woman draws a slow breath, steadying herself.
+
+        "Whatever he meant to do, it's done now."
+        +open "The Foot"
+    } @else {
+        "I met a ragged man on the way here. Said he was called Pyke. Friend of yours?"
+
+        "Pyke?" The color fades from her cheeks. "Did he follow you?"
+
+        You shrug, "We crossed paths. Strange fellow."
+
+        "I knew it," she murmurs. "I told myself I was imagining things. A shape by the outer works. Footsteps where there shouldn't be any." Her eyes flick toward the great metal beast, then back to you. "He's been watching us."
+
+        She folds her arms, more to steady herself than for warmth.
+
+        "Pyke was the finest engineer among us. Saw the machine clearer than anyone." A faint tension creeps into her voice. "That's what put him at odds with Sev."
+
+        "They had a falling out months ago. Not loud, Sev doesn't shout. He's just quiet. Pyke said he'd had enough. That he'd go to Aldgate, bring the whole matter before our superiors."
+
+        "But if he's still here, lurking in the shadows... He's planning something."
+
+        "Not a matter for you to concern yourself with, trader."
+        +open "The Foot"
+    }
+
+* Ask what's going on here = How were you inside a metal monster?
+  "Monster?" The woman's laughter rings sharp against the metal hull. "My friend, this is no monster. It is an engine of war, a clockwork colossus. Think of the Kesharat steam engines, if you've heard tell of them, then multiply their intricacy tenfold. Well. Perhaps a hundred."
+
+  She gestures upward at the vast plated limb rising behind her. "Sev witnessed the imperial siege weapons bring this thing low. He's been camped here ever since, measuring, documenting, crawling through every chamber and joint. The man believes he can wake it again." A pause, then her voice takes on a kind of admiration. "Pyke and I were dispatched to join him two years past. What we've accomplished in that time..." She shakes her head slowly. "The progress is undeniable. Sev may well be right. I'd say even odds." Her gaze drifts across the great armored foot beneath her, tracing the seams with practiced eyes. "Hell of a thing if we can make it go, though."
+  +open "The Foot"
+
+* Head up to Sev = Finish the contract without further delay
+  You leave your pack at the foot of the great beast, trusting it to the engineer below. The control shaft fits poorly into your haversack; you shove and work it until the thing is secured, then grasp the first rung of the rope ladder. The ladder swings wide as you pull yourself up, twisting violently beneath your weight. Your boots slip once, twice. The metal hull of the creature looms beside you, vast and indifferent. You press on, grip tight, legs burning. At last you reach the hatch and haul yourself through.
+
+  The air inside strikes cold against your face. Metal corridors stretch in an oval passage before you, lit by unnatural lights that hum at the ceiling like trapped insects. The wind catches the monster's frame; metal groans and shifts around you. You move quickly through the narrow passages, eager to finish this business and quit these iron bowels. Each corridor resembles the last, featureless and strange, until you wonder if you circle back upon yourself. Then the passage opens into an egg-shaped chamber, deep in the belly of the thing.
+
+  Every surface crawls with diagrams and scrawled notes. A straw mattress lies wedged between stacks of books and loose papers, a living space carved from obsession. A man sits reading, grey and wizened, dressed in imperial trousers and a ragged linen shirt. He does not look up as you enter. His voice comes flat, without preamble. "We each only have so much time in this world, trader. You are wasting mine and yours. Hand over the control shaft so we can be rid of each other."
+  +open "Belly of the Beast"

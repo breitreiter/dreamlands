@@ -54,10 +54,18 @@ static class CheckCommand
 
         var failed = 0;
         var warned = 0;
+        var autoFixed = 0;
         foreach (var file in files)
         {
             var rel = Path.GetRelativePath(path, file);
             var text = File.ReadAllText(file);
+
+            if (AutoFixBadChars(file, text, rel))
+            {
+                autoFixed++;
+                text = File.ReadAllText(file);
+            }
+
             var result = EncounterParser.Parse(text);
             var vocabErrors = new List<string>();
             var idWarnings = new List<string>();
@@ -100,12 +108,13 @@ static class CheckCommand
         }
 
         Console.WriteLine();
+        var fixNote = autoFixed > 0 ? $" ({autoFixed} auto-fixed)" : "";
         if (failed == 0 && warned == 0)
-            Console.WriteLine($"All {files.Length} file(s) valid.");
+            Console.WriteLine($"All {files.Length} file(s) valid.{fixNote}");
         else if (failed == 0)
-            Console.WriteLine($"All {files.Length} file(s) valid ({warned} with warnings).");
+            Console.WriteLine($"All {files.Length} file(s) valid ({warned} with warnings).{fixNote}");
         else
-            Console.WriteLine($"{failed} of {files.Length} file(s) had errors{(warned > 0 ? $", {warned} with warnings" : "")}.");
+            Console.WriteLine($"{failed} of {files.Length} file(s) had errors{(warned > 0 ? $", {warned} with warnings" : "")}.{fixNote}");
         return failed > 0 ? 1 : 0;
     }
 
@@ -191,12 +200,6 @@ static class CheckCommand
             else if (trimmed.StartsWith("REVIEW:"))
                 warnings.Add($"Line {i + 1}: REVIEW marker (must be reviewed before publishing)");
 
-            foreach (var (ch, name, replacement) in BadChars)
-            {
-                if (lines[i].Contains(ch))
-                    warnings.Add($"Line {i + 1}: {name} ({ch}) — use {replacement} instead");
-            }
-
             foreach (var phrase in BannedPhrases)
             {
                 if (lines[i].Contains(phrase, StringComparison.OrdinalIgnoreCase))
@@ -204,6 +207,19 @@ static class CheckCommand
             }
         }
         return warnings;
+    }
+
+    private static bool AutoFixBadChars(string filePath, string text, string relPath)
+    {
+        var original = text;
+        foreach (var (ch, _, replacement) in BadChars)
+            text = text.Replace(ch.ToString(), replacement);
+
+        if (text == original) return false;
+
+        File.WriteAllText(filePath, text);
+        Console.WriteLine($"      auto-fixed bad characters");
+        return true;
     }
 
     private static void ValidateMechanics(IReadOnlyList<string> mechanics, List<string> errors)

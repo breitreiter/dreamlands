@@ -1,0 +1,28 @@
+The Harried Trader
+[requires tag metal_beast.looking_for_package]
+[tier 2]
+[trigger settlement]
+
+In the settlement's modest inn, you run into a fellow guild trader. She hobbles up to you on a bad leg.
+
+"Hail friend. Had a bit of a disagreement with some bandits over the correct ownership of my coinpurse. I came out ahead in the exchange, but it cost me."
+
+She grimaces, "bandaged myself up as best I could then made my way here. I've a contract that needs completing and I'm in no position to do the work myself. It's good coin, if you'd like to take the final delivery."
+
+She gestures to her table, where rests a cylinder of some sort, about the length of your arm, wrapped in waxed canvas, bound in cord, and bearing a half-dozen wax seals. Very important, whatever it is.
+
+choices:
+
+* Accept the Contract = Agree to transport the strange device
+  The woman sighs with relief. "I'll put a good word in for you next time I'm in the Chapterhouse."
+
+  You heft the cylinder from the table. Its weight surprises you, dragging at your grip like stone wrapped in cloth. The waxed canvas feels slick and cold beneath your fingers. You secure it to your pack with leather thongs, testing the knots twice before you are satisfied.
+
+  "You're taking it to the great metal monster," the trader says, "You can't miss it. Tell them I'm sorry for the delay."
+  +remove_tag metal_beast.looking_for_package
+
+* Refuse = Not right now
+  The woman frowns. She shifts her weight, and a wince crosses her face, brief and sharp.
+
+  "I don't suppose I'm going anywhere," she says. She jerks her chin toward the wrapped cylinder on the table, then back to you. "If you change your mind, I'll be here."
+  +repool

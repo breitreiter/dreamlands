@@ -36,6 +36,10 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Quality of Life
 
+- [ ] Hide locked choice requirements — currently we show the `requires` condition text to the
+      player as a UI hint. This breaks with arc encounters that offer the same choice multiple
+      times gated by different mutually-exclusive conditions (e.g. faction standing). Remove or
+      rethink the locked-choice display before launch.
 - [ ] Server "quick start" flag — start the player with basic gear and extra gold to skip the early trade loop
 - [ ] Biome intro encounters — one-time scripted encounter per biome/tier that fires on
       first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
@@ -60,6 +64,8 @@ Ship-readiness: hosting, testing, polish, cleanup.
 
 ### Deployment & Hosting
 
+- [ ] Set Cosmos DB TTL on `games` container — 30 days (2592000s) to auto-expire idle saves.
+      `az cosmosdb sql container update -a <account> -g <rg> -d dreamlands -n games --ttl 2592000`
 - [ ] Cloudflare R2 asset CDN — create bucket, attach custom domain, wire up push.sh,
       update web client to use CDN base URL in production. Existing push.sh skeleton works.
       Plan in `project/architecture/cdn_deployment.md`.
@@ -151,6 +157,10 @@ Each tier is ~5 encounters (~30 min each). Each arc is ~1 hour.
 
 - [ ] Locale guides for remaining biome/tier combos
 - [ ] Batch-generate skeletons via `generate` command
+- [ ] Arc reachability lint — `check` command should walk the encounter graph from Start,
+      enumerate all paths (branching on choices × check pass/fail), and warn on: unreachable
+      encounters, paths that never reach `+finish_dungeon`/`+flee_dungeon`, and cycles with
+      no exit. Treats arcs as directed graphs, not individual files.
 
 ### Plains
 - [ ] Tier 1
