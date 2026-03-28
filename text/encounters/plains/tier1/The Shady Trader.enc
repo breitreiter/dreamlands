@@ -16,7 +16,7 @@ choices:
   "Everything you need to live off the land and talk your way out of what the land throws at you." He fans the items across a crate like a card dealer. "Five hundred. Take it or leave it."
 
   You take it.
-  +rem_gold 500
+  +give_gold 500
   +add_item hunting_knife
   +add_item lamellar
   +add_item trail_boots
@@ -30,7 +30,7 @@ choices:
   "You'll cut through anything the plains throw at you, and the pack gear keeps you standing between fights." He stacks it all neatly. "Five hundred for the lot."
 
   You don't need to be asked twice.
-  +rem_gold 500
+  +give_gold 500
   +add_item arming_sword
   +add_item brigandine
   +add_item trail_boots
@@ -44,7 +44,7 @@ choices:
   He pulls out a Revathi labrys that hums faintly in the air. Then a suit of armor stamped with the crest of the 17th Mountain Regiment, which has been missing for forty years. Then a pair of windstrider boots that seem to weigh nothing at all. The field gear comes last, almost as an afterthought.
 
   "Don't tell anyone where you got these," he says. "Especially not the 17th Mountain Regiment."
-  +rem_gold 500
+  +give_gold 500
   +upgrade_pack 4
   +add_item revathi_labrys
   +add_item mountain_regiment_armor
