@@ -5,9 +5,14 @@ import Encounter from "./screens/Encounter";
 import DungeonHub from "./screens/DungeonHub";
 import Rescue from "./screens/Rescue";
 import Camp from "./screens/Camp";
+import TacticalEncounter from "./screens/TacticalEncounter";
+
+const isTacticalDev = new URLSearchParams(window.location.search).has("tactical");
 
 function GameRouter() {
   const { response, error, clearError } = useGame();
+
+  if (isTacticalDev) return <TacticalEncounter />;
 
   if (!response) return <Splash />;
 

@@ -299,3 +299,44 @@ export interface MarketOrderResult {
   success: boolean;
   results: { action: string; itemId: string; success: boolean; message: string }[];
 }
+
+// ── Tactical encounters ────────────────────────────────
+
+export interface TacticalEncounterData {
+  id: string;
+  title: string;
+  body: string;
+  variant: "combat" | "traverse";
+  intent?: string;
+  resistance: number;
+  momentum?: number;
+  queueDepth?: number;
+  timerDraw: number;
+  timers: TacticalTimerDef[];
+  openings: TacticalOpeningDef[];
+  approaches: TacticalApproachDef[];
+  failure: { text: string; mechanics: string[] };
+}
+
+export interface TacticalTimerDef {
+  name: string;
+  effect: "spirits" | "resistance";
+  amount: number;
+  countdown: number;
+}
+
+export interface TacticalOpeningDef {
+  name: string;
+  costKind: "free" | "momentum" | "spirits" | "tick";
+  costAmount: number;
+  effectKind: "damage" | "stop_timer" | "momentum";
+  effectAmount: number;
+  requires?: string;
+}
+
+export interface TacticalApproachDef {
+  kind: "scout" | "direct" | "wild";
+  momentum: number;
+  timerCount: number;
+  bonusOpenings: number;
+}
