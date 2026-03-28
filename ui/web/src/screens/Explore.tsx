@@ -41,10 +41,14 @@ const playerIcon = new Icon({
   iconAnchor: [15, 58],
 });
 
-function MapFollower({ position }: { position: LatLngExpression }) {
+const FLY_DURATION = 1.5; // seconds — synced with DayNightComplication transition
+
+function MapFollower({ position, onFlyEnd }: { position: LatLngExpression; onFlyEnd: () => void }) {
   const map = useMap();
   useEffect(() => {
-    map.setView(position, map.getZoom(), { animate: true });
+    map.once("moveend", onFlyEnd);
+    map.flyTo(position, map.getZoom(), { duration: FLY_DURATION });
+    return () => { map.off("moveend", onFlyEnd); };
   }, [map, position]);
   return null;
 }
@@ -368,6 +372,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   const [activeService, setActiveService] = useState<string | null>(null);
   const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
+  const [traveling, setTraveling] = useState(false);
 
   useEffect(() => {
     if (!gameId) return;
@@ -375,6 +380,8 @@ export default function Explore({ state }: { state: GameResponse }) {
   }, [gameId]);
 
   const move = useCallback(async (dir: string) => {
+    if (traveling) return;
+    setTraveling(true);
     clearCampReport();
     const result = await doAction({ action: "move", direction: dir });
     if (result?.deliveries?.length) {
@@ -386,7 +393,7 @@ export default function Explore({ state }: { state: GameResponse }) {
         return [...prev, { x: result.node!.x, y: result.node!.y, kind: result.node!.poi!.kind, name: result.node!.poi!.name ?? result.node!.poi!.kind }];
       });
     }
-  }, [doAction]);
+  }, [doAction, traveling]);
 
   const position = useMemo(
     () => (state.node ? gridToLatLng(state.node.x, state.node.y) : [0, 0] as LatLngExpression),
@@ -395,7 +402,7 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (loading || activeService != null || pendingDeliveries.length > 0) return;
+      if (loading || traveling || activeService != null || pendingDeliveries.length > 0) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
@@ -413,7 +420,7 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [move, loading, activeService, pendingDeliveries.length]);
+  }, [move, loading, traveling, activeService, pendingDeliveries.length]);
 
   if (!state.node || !state.exits) return null;
 
@@ -455,7 +462,7 @@ export default function Explore({ state }: { state: GameResponse }) {
           playerX={node.x}
           playerY={node.y}
           exits={exits.map((e) => e.direction)}
-          loading={loading}
+          loading={loading || traveling}
           hidden={isLost}
           onMove={move}
         />
@@ -464,7 +471,7 @@ export default function Explore({ state }: { state: GameResponse }) {
             <Tooltip direction="top" offset={[0, -12]}>{d.name}</Tooltip>
           </Marker>
         ))}
-        <MapFollower position={position} />
+        <MapFollower position={position} onFlyEnd={() => setTraveling(false)} />
       </MapContainer>
 
       {/* Instrument cluster — bottom center overlay */}

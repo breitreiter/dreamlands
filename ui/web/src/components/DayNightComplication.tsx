@@ -33,7 +33,7 @@ export default function DayNightComplication({ time }: { time: string }) {
           className="absolute inset-0 w-full h-full"
           style={{
             transform: `rotate(${cumulative}deg)`,
-            transition: "transform 3s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         />
       </div>
