@@ -10,6 +10,7 @@
     <ProjectReference Include="..\Game\Dreamlands.Game.csproj" />
     <ProjectReference Include="..\Map\Dreamlands.Map.csproj" />
     <ProjectReference Include="..\Encounter\Dreamlands.Encounter.csproj" />
+    <ProjectReference Include="..\Tactical\Dreamlands.Tactical.csproj" />
     <ProjectReference Include="..\Rules\Dreamlands.Rules.csproj" />
     <ProjectReference Include="..\Flavor\Dreamlands.Flavor.csproj" />
   </ItemGroup>
