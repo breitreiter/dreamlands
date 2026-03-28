@@ -566,13 +566,24 @@ public static partial class TacticalParser
 
     static string JoinProse(List<string> lines)
     {
-        // Strip leading/trailing blank lines, preserve internal structure
+        // Strip leading/trailing blank lines
         int first = 0, last = lines.Count - 1;
         while (first <= last && string.IsNullOrWhiteSpace(lines[first])) first++;
         while (last >= first && string.IsNullOrWhiteSpace(lines[last])) last--;
         if (first > last) return "";
 
+        // Find minimum leading whitespace (common indent)
+        int minIndent = int.MaxValue;
+        for (int i = first; i <= last; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+            int indent = 0;
+            while (indent < lines[i].Length && lines[i][indent] == ' ') indent++;
+            minIndent = Math.Min(minIndent, indent);
+        }
+        if (minIndent == int.MaxValue) minIndent = 0;
+
         return string.Join('\n', lines.Skip(first).Take(last - first + 1)
-            .Select(l => l.TrimEnd()));
+            .Select(l => string.IsNullOrWhiteSpace(l) ? "" : l[minIndent..].TrimEnd()));
     }
 }

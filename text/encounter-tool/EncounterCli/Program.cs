@@ -14,6 +14,8 @@ class Program
         {
             "check" => CheckCommand.Run(rest),
             "bundle" => BundleCommand.Run(rest),
+            "check-tactical" => TacticalCheckCommand.Run(rest),
+            "bundle-tactical" => TacticalBundleCommand.Run(rest),
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
@@ -28,6 +30,8 @@ class Program
         Console.WriteLine("Usage:");
         Console.WriteLine("  encounter check [<path>] [--ext .enc,.txt]");
         Console.WriteLine("  encounter bundle <path> [--out <dir>] [--ext .enc,.txt]");
+        Console.WriteLine("  encounter check-tactical [<path>]");
+        Console.WriteLine("  encounter bundle-tactical <path> [--out <dir>]");
         Console.WriteLine("  encounter fixme <file.enc> [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
