@@ -118,6 +118,7 @@ static class TacticalBundleCommand
         body = enc.Body,
         variant = enc.Variant.ToString().ToLowerInvariant(),
         intent = enc.Intent,
+        stat = enc.Stat,
         tier = enc.Tier,
         requires = enc.Requires,
         resistance = enc.Resistance,
@@ -127,11 +128,21 @@ static class TacticalBundleCommand
         timers = enc.Timers.Select(t => new
         {
             name = t.Name,
+            counterName = t.CounterName,
             effect = t.Effect.ToString().ToLowerInvariant(),
             amount = t.Amount,
             countdown = t.Countdown
         }),
         openings = enc.Openings.Select(o => new
+        {
+            name = o.Name,
+            costKind = ToSnake(o.Cost.Kind),
+            costAmount = o.Cost.Amount,
+            effectKind = ToSnake(o.Effect.Kind),
+            effectAmount = o.Effect.Amount,
+            requires = o.Requires
+        }),
+        path = enc.Path.Select(o => new
         {
             name = o.Name,
             costKind = ToSnake(o.Cost.Kind),

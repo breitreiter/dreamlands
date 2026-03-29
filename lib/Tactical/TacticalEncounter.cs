@@ -14,7 +14,7 @@ public enum ApproachKind { Scout, Direct, Wild }
 
 // ── Value types ────────────────────────────────────────────────────
 
-public sealed record TimerDef(string Name, TimerEffect Effect, int Amount, int Countdown);
+public sealed record TimerDef(string Name, TimerEffect Effect, int Amount, int Countdown, string? CounterName = null);
 
 public sealed record OpeningCost(CostKind Kind, int Amount = 0);
 
@@ -38,6 +38,7 @@ public sealed record TacticalEncounter
     public string Body { get; init; } = "";
     public Variant Variant { get; init; }
     public string? Intent { get; init; }
+    public string? Stat { get; init; }
     public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = [];
 
@@ -48,6 +49,7 @@ public sealed record TacticalEncounter
     public int TimerDraw { get; init; }
     public IReadOnlyList<TimerDef> Timers { get; init; } = [];
     public IReadOnlyList<OpeningDef> Openings { get; init; } = [];
+    public IReadOnlyList<OpeningDef> Path { get; init; } = [];
     public IReadOnlyList<ApproachDef> Approaches { get; init; } = [];
     public FailureOutcome? Failure { get; init; }
 }

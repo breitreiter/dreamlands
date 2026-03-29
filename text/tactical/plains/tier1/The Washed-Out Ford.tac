@@ -1,6 +1,7 @@
 The Washed-Out Ford
 [variant traverse]
 [intent exploration]
+[stat bushcraft]
 [tier 1]
 
 The ford marked on your map is gone -- three days of rain have turned
@@ -10,18 +11,27 @@ away, but the water looks waist-deep and fast.
 
 stats:
   resistance 6
-  queue_depth 5
+  queue_depth 4
 
 timers:
   draw 1
-  * Rising Water: resistance 1 every 4
-  * Debris: spirits 1 every 3
+  * Rising Water [counter Find high ground]: resistance 1 every 4
+  * Debris [counter Clear the path]: spirits 1 every 3
 
 openings:
   * Wade Carefully: free -> damage 1
   * Brace and Push: momentum 1 -> damage 2
-  * Rope Crossing: tick -> damage 3 [requires has climbing_rope]
   * Find Footing: free -> momentum 1
+  * Strong Stroke: spirits 1 -> damage 3
+
+path:
+  * Wade Carefully: free -> damage 1
+  * Brace and Push: momentum 1 -> damage 2
+  * Wade Carefully: free -> damage 1
+  * Strong Stroke: spirits 1 -> damage 3
+  * Find Footing: free -> momentum 1
+  * Brace and Push: momentum 1 -> damage 2
+  * Wade Carefully: free -> damage 1
   * Strong Stroke: spirits 1 -> damage 3
 
 failure:

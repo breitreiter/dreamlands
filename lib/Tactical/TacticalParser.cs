@@ -4,14 +4,17 @@ namespace Dreamlands.Tactical;
 
 public static partial class TacticalParser
 {
-    enum Section { None, Stats, Timers, Openings, Approaches, Failure, Branches }
+    enum Section { None, Stats, Timers, Openings, Path, Approaches, Failure, Branches }
 
     [GeneratedRegex(@"^\[(\w+)\s+(.+?)\]\s*$")]
     private static partial Regex FrontMatterPattern();
 
-    // * Timer Name: spirits 2 every 4
+    // * Timer Name [counter Stop text]: spirits 2 every 4
     [GeneratedRegex(@"^\*\s+(.+?):\s+(spirits|resistance)\s+(\d+)\s+every\s+(\d+)\s*$")]
     private static partial Regex TimerPattern();
+
+    [GeneratedRegex(@"\[counter\s+(.+?)\]")]
+    private static partial Regex CounterTag();
 
     // * Opening Name: cost_type [amount] -> effect_type [amount] [requires ...]
     [GeneratedRegex(@"^\*\s+(.+?):\s+(.+?)\s*->\s*(.+?)\s*$")]
@@ -56,6 +59,7 @@ public static partial class TacticalParser
         var requires = new List<string>();
         Variant? variant = null;
         string? intent = null;
+        string? stat = null;
         int? tier = null;
         int bodyStart = 1;
 
@@ -81,6 +85,9 @@ public static partial class TacticalParser
                     break;
                 case "intent":
                     intent = value;
+                    break;
+                case "stat":
+                    stat = value;
                     break;
                 case "tier":
                     if (!int.TryParse(value, out var t) || t < 1 || t > 3)
@@ -131,6 +138,7 @@ public static partial class TacticalParser
                     "stats" => Section.Stats,
                     "timers" => Section.Timers,
                     "openings" => Section.Openings,
+                    "path" => Section.Path,
                     "approaches" => Section.Approaches,
                     "failure" => Section.Failure,
                     "branches" => Section.Branches,
@@ -152,7 +160,7 @@ public static partial class TacticalParser
         // Detect encounter vs group
         bool isGroup = sections.ContainsKey(Section.Branches);
         bool isEncounter = sections.ContainsKey(Section.Stats) || sections.ContainsKey(Section.Openings)
-                        || sections.ContainsKey(Section.Timers) || sections.ContainsKey(Section.Approaches)
+                        || sections.ContainsKey(Section.Path) || sections.ContainsKey(Section.Timers) || sections.ContainsKey(Section.Approaches)
                         || sections.ContainsKey(Section.Failure);
 
         if (isGroup && isEncounter)
@@ -170,12 +178,12 @@ public static partial class TacticalParser
         if (isGroup)
             return ParseGroup(lines, title, body, intent, tier, requires, sections, errors);
 
-        return ParseEncounter(lines, title, body, variant, intent, tier, requires, sections, errors);
+        return ParseEncounter(lines, title, body, variant, intent, stat, tier, requires, sections, errors);
     }
 
     static TacticalParseResult ParseEncounter(
         string[] lines, string title, string body,
-        Variant? variant, string? intent, int? tier,
+        Variant? variant, string? intent, string? stat, int? tier,
         List<string> requires, Dictionary<Section, (int start, int end)> sections,
         List<ParseError> errors)
     {
@@ -239,6 +247,11 @@ public static partial class TacticalParser
         if (sections.TryGetValue(Section.Openings, out var openingRange))
             ParseOpenings(lines, openingRange.start, openingRange.end, openings, errors);
 
+        // Path (traverse authored path — same syntax as openings)
+        var path = new List<OpeningDef>();
+        if (sections.TryGetValue(Section.Path, out var pathRange))
+            ParseOpenings(lines, pathRange.start, pathRange.end, path, errors);
+
         // Approaches
         var approaches = new List<ApproachDef>();
         if (sections.TryGetValue(Section.Approaches, out var approachRange))
@@ -263,6 +276,7 @@ public static partial class TacticalParser
                 Body = body,
                 Variant = variant!.Value,
                 Intent = intent,
+                Stat = stat,
                 Tier = tier,
                 Requires = requires,
                 Resistance = resistance,
@@ -271,6 +285,7 @@ public static partial class TacticalParser
                 TimerDraw = timerDraw,
                 Timers = timers,
                 Openings = openings,
+                Path = path,
                 Approaches = approaches,
                 Failure = failure,
             }
@@ -339,11 +354,21 @@ public static partial class TacticalParser
             }
 
             var name = m.Groups[1].Value.Trim();
+
+            // Extract [counter ...] from name
+            string? counterName = null;
+            var counterMatch = CounterTag().Match(name);
+            if (counterMatch.Success)
+            {
+                counterName = counterMatch.Groups[1].Value.Trim();
+                name = name[..counterMatch.Index].Trim();
+            }
+
             var effect = m.Groups[2].Value == "spirits" ? TimerEffect.Spirits : TimerEffect.Resistance;
             var amount = int.Parse(m.Groups[3].Value);
             var countdown = int.Parse(m.Groups[4].Value);
 
-            timers.Add(new TimerDef(name, effect, amount, countdown));
+            timers.Add(new TimerDef(name, effect, amount, countdown, counterName));
         }
     }
 

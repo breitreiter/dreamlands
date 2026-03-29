@@ -60,6 +60,7 @@ public sealed class TacticalBundle
                 Body = e.Body,
                 Variant = Enum.Parse<Variant>(e.Variant, ignoreCase: true),
                 Intent = e.Intent,
+                Stat = e.Stat,
                 Tier = e.Tier,
                 Requires = e.Requires ?? [],
                 Resistance = e.Resistance,
@@ -70,12 +71,18 @@ public sealed class TacticalBundle
                     t.Name,
                     Enum.Parse<TimerEffect>(t.Effect, ignoreCase: true),
                     t.Amount,
-                    t.Countdown)).ToList(),
+                    t.Countdown,
+                    t.CounterName)).ToList(),
                 Openings = e.Openings.Select(o => new OpeningDef(
                     o.Name,
                     new OpeningCost(ParseSnakeEnum<CostKind>(o.CostKind), o.CostAmount),
                     new OpeningEffect(ParseSnakeEnum<EffectKind>(o.EffectKind), o.EffectAmount),
                     o.Requires)).ToList(),
+                Path = e.Path?.Select(o => new OpeningDef(
+                    o.Name,
+                    new OpeningCost(ParseSnakeEnum<CostKind>(o.CostKind), o.CostAmount),
+                    new OpeningEffect(ParseSnakeEnum<EffectKind>(o.EffectKind), o.EffectAmount),
+                    o.Requires)).ToList() ?? [],
                 Approaches = e.Approaches?.Select(a => new ApproachDef(
                     Enum.Parse<ApproachKind>(a.Kind, ignoreCase: true),
                     a.Momentum,
@@ -136,11 +143,11 @@ public sealed class TacticalBundle
         Dictionary<string, List<int>>? EncountersByCategory);
     record EncounterDto(
         string Id, string Category, string Title, string Body, string Variant,
-        string? Intent, int? Tier, List<string>? Requires,
+        string? Intent, string? Stat, int? Tier, List<string>? Requires,
         int Resistance, int? Momentum, int? QueueDepth,
         int TimerDraw, List<TimerDto> Timers, List<OpeningDto> Openings,
-        List<ApproachDto>? Approaches, FailureDto? Failure);
-    record TimerDto(string Name, string Effect, int Amount, int Countdown);
+        List<OpeningDto>? Path, List<ApproachDto>? Approaches, FailureDto? Failure);
+    record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown);
     record OpeningDto(string Name, string CostKind, int CostAmount, string EffectKind, int EffectAmount, string? Requires);
     record ApproachDto(string Kind, int Momentum, int TimerCount, int BonusOpenings);
     record FailureDto(string Text, List<string>? Mechanics);
