@@ -4,7 +4,16 @@ import type {
   TacticalApproachDef,
 } from "../api/types";
 import { formatProse } from "../prose";
+import MaskedIcon from "../components/MaskedIcon";
 import parchment from "../assets/parchment.png";
+
+const ICONS = {
+  momentum: "flamer.svg",
+  progress: "dodge.svg",
+  threat: "stopwatch.svg",
+  draw: "card-draw.svg",
+  spirits: "sensuousness.svg",
+} as const;
 
 // ── Local engine state ─────────────────────────────────
 
@@ -89,6 +98,34 @@ const SAMPLE: TacticalEncounterData = {
   },
 };
 
+const SAMPLE_TRAVERSE: TacticalEncounterData = {
+  id: "plains/tier1/The Washed-Out Ford",
+  title: "The Washed-Out Ford",
+  body: "The ford marked on your map is gone -- three days of rain have turned the creek into a surging brown torrent. Broken fence posts and uprooted shrubs tumble past in the current. The far bank is only twenty yards away, but the water looks waist-deep and fast.",
+  variant: "traverse",
+  intent: "exploration",
+  resistance: 6,
+  queueDepth: 5,
+  timerDraw: 1,
+  timers: [
+    { name: "Rising Water", counterName: "Find high ground", effect: "resistance", amount: 1, countdown: 4 },
+    { name: "Debris", counterName: "Clear the path", effect: "spirits", amount: 1, countdown: 3 },
+  ],
+  openings: [
+    { name: "Wade Carefully", costKind: "free", costAmount: 0, effectKind: "damage", effectAmount: 1 },
+    { name: "Brace and Push", costKind: "momentum", costAmount: 1, effectKind: "damage", effectAmount: 2 },
+    { name: "Find Footing", costKind: "free", costAmount: 0, effectKind: "momentum", effectAmount: 1 },
+    { name: "Strong Stroke", costKind: "spirits", costAmount: 1, effectKind: "damage", effectAmount: 3 },
+  ],
+  approaches: [],
+  failure: {
+    text: "The current takes your legs out. You wash up downstream, soaked and bruised, missing something from your pack.",
+    mechanics: ["damage_spirits 2", "lose_random_item", "add_condition exhausted"],
+  },
+};
+
+const SAMPLES = { combat: SAMPLE, traverse: SAMPLE_TRAVERSE };
+
 // ── Helpers ────────────────────────────────────────────
 
 function buildPool(enc: TacticalEncounterData, timers: ActiveTimer[]): Opening[] {
@@ -150,22 +187,55 @@ function generateOpenings(pool: Opening[], count: number, timers?: ActiveTimer[]
   return Array.from({ length: count }, () => randomFrom(available));
 }
 
-function formatCost(kind: string, amount: number): string {
-  if (kind === "free") return "Free";
-  if (kind === "tick") return "Tick timer";
-  return `${amount} ${kind}`;
+function IconChip({ icon, value, color = "#aca377" }: { icon: string; value: string; color?: string }) {
+  return (
+    <span className="inline-flex items-center gap-0.5">
+      <span className="text-dim">{value}</span>
+      <MaskedIcon icon={icon} className="w-4 h-4" color={color} />
+    </span>
+  );
 }
 
-function formatEffect(kind: string, amount: number, timerName?: string): string {
-  if (kind === "stop_timer") return timerName ? `Stop ${timerName}` : "Stop threat";
-  if (kind === "damage") return `+${amount} Progress`;
-  return `+${amount} ${kind}`;
+function costIcon(kind: string): string | null {
+  if (kind === "momentum") return ICONS.momentum;
+  if (kind === "spirits") return ICONS.spirits;
+  if (kind === "tick") return ICONS.threat;
+  return null;
+}
+
+function effectIcon(kind: string): string | null {
+  if (kind === "damage") return ICONS.progress;
+  if (kind === "momentum") return ICONS.momentum;
+  if (kind === "stop_timer") return ICONS.threat;
+  return null;
+}
+
+function CostEffect({ opening }: { opening: Opening }) {
+  const cIcon = costIcon(opening.costKind);
+  const eIcon = effectIcon(opening.effectKind);
+
+  return (
+    <span className="flex items-center gap-1.5 text-dim">
+      {opening.costKind !== "free" && cIcon && (
+        <>
+          <IconChip icon={cIcon} value={opening.costKind === "tick" ? "🠻" : `-${opening.costAmount}`} />
+          <span className="text-muted">➽</span>
+        </>
+      )}
+      {opening.effectKind === "stop_timer" && eIcon ? (
+        <IconChip icon={eIcon} value="×" />
+      ) : eIcon ? (
+        <IconChip icon={eIcon} value={`+${opening.effectAmount}`} />
+      ) : null}
+    </span>
+  );
 }
 
 // ── Component ──────────────────────────────────────────
 
 export default function TacticalEncounter() {
-  const enc = SAMPLE;
+  const [sampleKey, setSampleKey] = useState<"combat" | "traverse">("combat");
+  const [enc, setEnc] = useState<TacticalEncounterData>(SAMPLES.combat);
   const [phase, setPhase] = useState<Phase>({ kind: "approach" });
   const [engine, setEngine] = useState<EngineState | null>(null);
   const [log, setLog] = useState<LogEntry[]>([]);
@@ -177,7 +247,45 @@ export default function TacticalEncounter() {
     }
   }, [log.length]);
 
-  // ── Approach selection ─────────────────────────────
+  // ── Start encounter (traverse skips approach) ──────
+
+  const startEncounter = useCallback(
+    (encounter: TacticalEncounterData) => {
+      if (encounter.variant === "combat" && encounter.approaches.length > 0) {
+        setPhase({ kind: "approach" });
+        return;
+      }
+
+      // Traverse (or combat with no approaches): go straight to turn
+      const timers = drawTimers(encounter, encounter.timerDraw);
+      const pool = buildPool(encounter, timers);
+      const queueDepth = encounter.queueDepth ?? 5;
+      const queue = Array.from({ length: queueDepth }, () => randomFrom(
+        pool.filter((o) => o.stopsTimerIndex == null || !timers[o.stopsTimerIndex]?.stopped)
+      ));
+      const openings = [queue[0]];
+
+      const s: EngineState = {
+        resistance: encounter.resistance,
+        resistanceMax: encounter.resistance,
+        momentum: encounter.momentum ?? 0,
+        spirits: 20,
+        turn: 1,
+        timers,
+        pool,
+        openings,
+        queue,
+        bonusNextTurn: false,
+      };
+
+      setEngine(s);
+      setLog([{ turn: 0, text: `${encounter.variant === "traverse" ? "Traverse" : "Combat"} begins. ${timers.length} threat(s).`, type: "info" }]);
+      setPhase({ kind: "turn" });
+    },
+    []
+  );
+
+  // ── Approach selection (combat only) ───────────────
 
   const chooseApproach = useCallback(
     (approach: TacticalApproachDef) => {
@@ -190,7 +298,7 @@ export default function TacticalEncounter() {
         resistance: enc.resistance,
         resistanceMax: enc.resistance,
         momentum: approach.momentum,
-        spirits: 20, // simulated starting spirits
+        spirits: 20,
         turn: 1,
         timers,
         pool,
@@ -203,7 +311,7 @@ export default function TacticalEncounter() {
       setLog([
         {
           turn: 0,
-          text: `Approach: ${approach.kind}. Starting momentum ${approach.momentum}, ${timers.length} timer(s).`,
+          text: `Approach: ${approach.kind}. Starting momentum ${approach.momentum}, ${timers.length} threat(s).`,
           type: "info",
         },
       ]);
@@ -248,7 +356,23 @@ export default function TacticalEncounter() {
       // Generate openings
       const count = s.bonusNextTurn ? BONUS_COUNT : 1;
       s.bonusNextTurn = false;
-      s.openings = generateOpenings(s.pool, count, s.timers);
+
+      if (s.queue) {
+        // Traverse: front of queue is the opening
+        if (s.queue.length > 0) {
+          s.openings = [s.queue[0]];
+          // Bonus openings are ephemeral extras alongside the queue front
+          for (let i = 1; i < count; i++)
+            s.openings.push(randomFrom(
+              s.pool.filter((o) => o.stopsTimerIndex == null || !s.timers[o.stopsTimerIndex]?.stopped)
+            ));
+        } else {
+          s.openings = generateOpenings(s.pool, count, s.timers);
+        }
+      } else {
+        // Combat: random openings
+        s.openings = generateOpenings(s.pool, count, s.timers);
+      }
 
       return { state: s, finished: null, newLogs: logs };
     },
@@ -310,6 +434,17 @@ export default function TacticalEncounter() {
             type: "positive",
           });
           break;
+      }
+
+      // Traverse: advance the queue
+      if (s.queue && s.queue.length > 0) {
+        s.queue = [...s.queue.slice(1)];
+        // Replenish to target depth
+        const targetDepth = enc.queueDepth ?? 5;
+        const availablePool = s.pool.filter((o) => o.stopsTimerIndex == null || !s.timers[o.stopsTimerIndex]?.stopped);
+        while (s.queue.length < targetDepth && availablePool.length > 0) {
+          s.queue.push(randomFrom(availablePool));
+        }
       }
 
       // Check win conditions
@@ -394,8 +529,27 @@ export default function TacticalEncounter() {
           {/* Title */}
           <h2 className="font-header text-[32px] text-accent uppercase">{enc.title}</h2>
 
-          {/* Approach phase */}
-          {phase.kind === "approach" && (
+          {/* Encounter picker (dev only) */}
+          {phase.kind === "approach" && !engine && (
+            <div className="flex gap-2">
+              {(Object.keys(SAMPLES) as Array<keyof typeof SAMPLES>).map((key) => (
+                <button
+                  key={key}
+                  onClick={() => { setSampleKey(key); setEnc(SAMPLES[key]); }}
+                  className={`px-4 py-2 rounded-lg border transition-colors cursor-pointer ${
+                    sampleKey === key
+                      ? "bg-btn border-accent text-accent"
+                      : "bg-btn border-edge text-action-dim hover:text-action"
+                  }`}
+                >
+                  {key}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Approach phase (combat) */}
+          {phase.kind === "approach" && enc.variant === "combat" && enc.approaches.length > 0 && (
             <>
               <div className="text-primary/80 leading-loose whitespace-pre-wrap">
                 {formatProse(enc.body)}
@@ -429,6 +583,23 @@ export default function TacticalEncounter() {
             </>
           )}
 
+          {/* Approach phase (traverse — auto-start with intro) */}
+          {phase.kind === "approach" && (enc.variant === "traverse" || enc.approaches.length === 0) && (
+            <>
+              <div className="text-primary/80 leading-loose whitespace-pre-wrap">
+                {formatProse(enc.body)}
+              </div>
+              <button
+                onClick={() => startEncounter(enc)}
+                className="w-full text-left p-4 bg-btn hover:bg-btn-hover border border-edge rounded-lg transition-colors group cursor-pointer"
+              >
+                <span className="font-bold text-action group-hover:text-action-hover">
+                  Begin the crossing
+                </span>
+              </button>
+            </>
+          )}
+
           {/* Turn phase */}
           {phase.kind === "turn" && engine && (
             <>
@@ -436,18 +607,25 @@ export default function TacticalEncounter() {
               <div className="flex gap-6">
                 <div className="flex-1 text-center">
                   <div className="text-dim">Progress</div>
-                  <div className="font-bold text-accent text-[32px] leading-tight">
+                  <div className="font-bold text-primary text-[32px] leading-tight flex items-center justify-center gap-1.5">
+                    <MaskedIcon icon={ICONS.progress} className="w-7 h-7" color="#d0bd62" />
                     {engine.resistanceMax - engine.resistance}
                     <span className="text-dim font-normal"> of {engine.resistanceMax}</span>
                   </div>
                 </div>
                 <div className="flex-1 text-center">
                   <div className="text-dim">Momentum</div>
-                  <div className="font-bold text-primary text-[32px] leading-tight">{engine.momentum}</div>
+                  <div className="font-bold text-primary text-[32px] leading-tight flex items-center justify-center gap-1.5">
+                    <MaskedIcon icon={ICONS.momentum} className="w-7 h-7" color="#d0bd62" />
+                    {engine.momentum}
+                  </div>
                 </div>
                 <div className="flex-1 text-center">
                   <div className="text-dim">Spirits</div>
-                  <div className="font-bold text-primary text-[32px] leading-tight">{engine.spirits}</div>
+                  <div className="font-bold text-primary text-[32px] leading-tight flex items-center justify-center gap-1.5">
+                    <MaskedIcon icon={ICONS.spirits} className="w-7 h-7" color="#d0bd62" />
+                    {engine.spirits}
+                  </div>
                 </div>
               </div>
 
@@ -460,6 +638,7 @@ export default function TacticalEncounter() {
                       key={i}
                       className={`flex items-center gap-3 ${t.stopped ? "opacity-30 line-through" : ""}`}
                     >
+                      <MaskedIcon icon={ICONS.threat} className="w-4 h-4" color={t.stopped ? "#8b8b8b" : "#aca377"} />
                       <span className="flex-1">{t.name}</span>
                       <span className="text-dim">
                         {t.effect === "spirits" ? `Lose ${t.amount} Spirits` : `Lose ${t.amount} Progress`}
@@ -480,6 +659,24 @@ export default function TacticalEncounter() {
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {/* Queue (traverse only) */}
+              {engine.queue && engine.queue.length > 1 && (
+                <div className="space-y-2">
+                  <p className="text-dim font-bold">Ahead</p>
+                  <div className="flex gap-2 items-center overflow-x-auto">
+                    {engine.queue.slice(1).map((q, i) => (
+                      <div
+                        key={i}
+                        className="shrink-0 px-3 py-2 rounded-lg border border-edge/50 bg-btn/50 text-dim"
+                      >
+                        <div>{q.name}</div>
+                        <CostEffect opening={q} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -510,11 +707,7 @@ export default function TacticalEncounter() {
                       >
                         {o.name}
                       </span>
-                      <span className="text-dim">
-                        {o.costKind !== "free" && <>{formatCost(o.costKind, o.costAmount)} → </>}
-                        {formatEffect(o.effectKind, o.effectAmount,
-                          o.stopsTimerIndex != null ? engine.timers[o.stopsTimerIndex]?.name : undefined)}
-                      </span>
+                      <CostEffect opening={o} />
                     </button>
                   );
                 })}
@@ -530,7 +723,9 @@ export default function TacticalEncounter() {
                   <span className={`font-bold ${engine.momentum >= PRESS_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
                     Press the Advantage
                   </span>
-                  <span className="text-dim">{PRESS_COST} Momentum → 3 options next turn</span>
+                  <span className="flex items-center gap-1.5 text-dim">
+                    <IconChip icon={ICONS.momentum} value={`-${PRESS_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+3" />
+                  </span>
                 </button>
                 <button
                   onClick={forceOpening}
@@ -544,7 +739,9 @@ export default function TacticalEncounter() {
                   <span className={`font-bold ${engine.spirits >= FORCE_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
                     Force an Opening
                   </span>
-                  <span className="text-dim">{FORCE_COST} Spirits → 3 options next turn</span>
+                  <span className="flex items-center gap-1.5 text-dim">
+                    <IconChip icon={ICONS.spirits} value={`-${FORCE_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+3" />
+                  </span>
                 </button>
               </div>
 
@@ -625,7 +822,7 @@ export default function TacticalEncounter() {
                   setEngine(null);
                   setLog([]);
                 }}
-                className="p-3 bg-btn hover:bg-btn-hover border border-edge rounded-lg text-action font-bold cursor-pointer transition-colors"
+                className="w-full text-left p-4 bg-btn hover:bg-btn-hover border border-edge rounded-lg text-action font-bold cursor-pointer transition-colors"
               >
                 Play Again
               </button>

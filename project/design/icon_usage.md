@@ -74,6 +74,12 @@ Definitive icon mapping
 ## Encounters
 - Choice - `sun.svg`
 
+## Tactical Encounters
+- Momentum - `flamer.svg`
+- Progress - `dodge.svg`
+- Threat (timer) - `stopwatch.svg`
+- Draw options (press/force) - `card-draw.svg`
+
 ## Unassigned
 - `medieval-gate.svg`
 - `nested-hearts.svg`
