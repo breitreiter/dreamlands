@@ -29,8 +29,15 @@ public class LocalFileStore : IGameStore
     {
         var path = Path.Combine(_dir, $"{gameId}.json");
         if (!File.Exists(path)) return null;
-        var json = await File.ReadAllTextAsync(path);
-        return JsonSerializer.Deserialize<PlayerState>(json, JsonOpts);
+        try
+        {
+            var json = await File.ReadAllTextAsync(path);
+            return JsonSerializer.Deserialize<PlayerState>(json, JsonOpts);
+        }
+        catch (JsonException)
+        {
+            return null; // Incompatible save — treat as not found
+        }
     }
 
     public async Task Save(PlayerState state)

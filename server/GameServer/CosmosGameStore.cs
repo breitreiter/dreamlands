@@ -25,6 +25,10 @@ public class CosmosGameStore : IGameStore
         {
             return null;
         }
+        catch (JsonException)
+        {
+            return null; // Incompatible save — treat as not found
+        }
     }
 
     public async Task Save(PlayerState state)
