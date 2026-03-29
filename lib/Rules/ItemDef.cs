@@ -32,6 +32,9 @@ public sealed class ItemDef
     /// <summary>Bonus to foraging rolls when this weapon is equipped. Stacks with Bushcraft skill.</summary>
     public int ForagingBonus { get; init; }
 
+    /// <summary>Cards this item contributes to tactical encounter decks.</summary>
+    public IReadOnlyList<TacticalCard> TacticalCards { get; init; } = [];
+
     /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
     public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.Haul;
 
@@ -50,6 +53,7 @@ public sealed class ItemDef
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
             ForagingBonus = 1,
             Biome = "plains", ShopTier = 1, Cost = 15,
+            TacticalCards = [new("Poke", "free_progress_small")],
         },
         ["skinning_knife"] = new()
         {
@@ -108,6 +112,7 @@ public sealed class ItemDef
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
             ForagingBonus = 1,
             Biome = "forest", ShopTier = 1, Cost = 15,
+            TacticalCards = [new("Chop", "momentum_to_progress")],
         },
         ["tomahawk"] = new()
         {
@@ -157,6 +162,7 @@ public sealed class ItemDef
             WeaponClass = Rules.WeaponClass.Sword,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
             Biome = "plains", ShopTier = 1, Cost = 15,
+            TacticalCards = [new("Quick Cut", "free_progress_small"), new("Slash", "momentum_to_progress")],
         },
         ["short_sword"] = new()
         {
@@ -191,6 +197,14 @@ public sealed class ItemDef
             Id = "shimmering_blade", Name = "Shimmering Blade", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
+            TacticalCards =
+            [
+                new("Quick Cut", "free_progress_small"),
+                new("Radiant Strike", "momentum_to_progress"),
+                new("Disrupting Slash", "momentum_to_cancel"),
+                new("Searing Arc", "momentum_to_progress_huge"),
+                new("Banishing Edge", "free_cancel"),
+            ],
         },
 
         // ── Armor: Light (Cunning +0 to +5, Injury +0, Freezing +0 to +3) ──

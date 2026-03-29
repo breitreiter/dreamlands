@@ -12,4 +12,5 @@ public sealed class BalanceData
     public IReadOnlyDictionary<string, HaulDef> Hauls { get; init; } = HaulDef.All;
     public TradeBalance Trade { get; init; } = TradeBalance.Default;
     public SettlementBalance Settlements { get; init; } = SettlementBalance.Default;
+    public TacticalBalance Tactical { get; init; } = TacticalBalance.Default;
 }
