@@ -4,3 +4,4 @@ map.png
 tiles/
 encounters/
 assets/
+*.bundle.json

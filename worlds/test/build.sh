@@ -68,6 +68,9 @@ fi
 echo "==> Bundling encounters..."
 dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle "$REPO_ROOT/text/encounters" --out "$WORLD_DIR"
 
+echo "==> Bundling tactical encounters..."
+dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle-tactical "$REPO_ROOT/text/tactical" --out "$WORLD_DIR"
+
 # --- Summary ---
 
 echo ""
