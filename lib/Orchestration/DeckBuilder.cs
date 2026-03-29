@@ -182,5 +182,12 @@ public static class DeckBuilder
             yield return a;
         if (equipment.Boots?.DefId is { } bid && balance.Items.TryGetValue(bid, out var b))
             yield return b;
+
+        // Tokens and tools in Pack can also contribute cards
+        foreach (var item in player.Pack)
+        {
+            if (balance.Items.TryGetValue(item.DefId, out var def) && def.TacticalCards.Count > 0)
+                yield return def;
+        }
     }
 }

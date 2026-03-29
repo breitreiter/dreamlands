@@ -85,24 +85,24 @@ public sealed class TacticalBalance
         },
         [Skill.Negotiation] = new TacticalCard[]
         {
-            new("Opening Gambit", "momentum_to_progress"),
-            new("Change the Subject", "spirits_to_momentum"),
-            new("Undermine", "threat_to_progress"),
-            new("Rhetorical Trap", "momentum_to_progress_large"),
+            new("Push back on that", "momentum_to_progress"),
+            new("Change the subject", "free_momentum"),
+            new("Appeal to a higher authority", "threat_to_progress"),
+            new("Present the inevitable conclusion", "momentum_to_progress_huge"),
         },
         [Skill.Cunning] = new TacticalCard[]
         {
-            new("Exploit Blind Spot", "momentum_to_progress"),
-            new("Misdirect", "spirits_to_momentum"),
-            new("Wait Them Out", "threat_to_progress"),
-            new("Strike from Shadow", "momentum_to_progress_large"),
+            new("Steady yourself", "free_momentum"),
+            new("Exploit a distraction", "momentum_to_progress"),
+            new("Find the hidden path", "momentum_to_cancel"),
+            new("Dash directly through", "threat_to_progress_large"),
         },
         [Skill.Bushcraft] = new TacticalCard[]
         {
-            new("Read the Land", "momentum_to_progress"),
-            new("Dig Deep", "spirits_to_momentum"),
-            new("Use the Terrain", "threat_to_progress"),
-            new("Pathfinder's Instinct", "momentum_to_progress_large"),
+            new("Pick a path", "free_progress_small"),
+            new("Read the terrain", "free_momentum"),
+            new("Find your footing", "momentum_to_progress_large"),
+            new("Push through it", "momentum_to_progress_huge"),
         },
     };
 

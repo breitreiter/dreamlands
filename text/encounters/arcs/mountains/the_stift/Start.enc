@@ -7,7 +7,7 @@ choices:
 * Explore = Search the court [requires meets negotiation 6]
     @if check combat medium {
         You find something valuable.
-        +add_item magisterial_robe
+        +add_item robe_of_twilight
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -18,7 +18,7 @@ choices:
 * Negotiate = Talk your way through [requires meets negotiation 6]
     @if check negotiation medium {
         You find something valuable.
-        +add_item magisterial_robe
+        +add_item robe_of_twilight
         +finish_dungeon
     } @else {
         It doesn't go well.

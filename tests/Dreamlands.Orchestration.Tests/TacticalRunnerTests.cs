@@ -166,12 +166,12 @@ public class TacticalRunnerTests
     public void DeckContainsCollectionCards()
     {
         var (session, state) = MakeContext();
-        // Falchion contributes "Quick Cut" and "Slash"
+        // Falchion contributes collection cards
         var enc = MakeCombat(approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
-        Assert.Contains(state.Deck, c => c.Name == "Quick Cut");
-        Assert.Contains(state.Deck, c => c.Name == "Slash");
+        Assert.Contains(state.Deck, c => c.Name == "Hack at their defense");
+        Assert.Contains(state.Deck, c => c.Name == "Swing your blade in an arcing chop");
     }
 
     [Fact]
