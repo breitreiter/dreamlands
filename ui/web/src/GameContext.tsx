@@ -40,6 +40,9 @@ interface GameContextValue extends GameState {
     offerIndex?: number;
     offerId?: string;
     encounterId?: string;
+    approach?: string;
+    tacticalAction?: string;
+    openingIndex?: number;
   }) => Promise<GameResponse | null>;
   clearError: () => void;
   setCampReport: (report: CampReport) => void;
@@ -59,6 +62,11 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
   if (result.mode === "encounter") cleared.outcome = undefined;
   if (result.mode === "outcome") cleared.encounter = undefined;
   if (result.mode === "exploring") {
+    cleared.encounter = undefined;
+    cleared.outcome = undefined;
+    cleared.tactical = undefined;
+  }
+  if (result.mode === "tactical") {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
   }

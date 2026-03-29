@@ -222,7 +222,7 @@ export interface RescueInfo {
 }
 
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued";
+  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
@@ -236,6 +236,7 @@ export interface GameResponse {
   marketResult?: MarketOrderResult;
   innRecovery?: InnRecoveryInfo;
   deliveries?: DeliveryInfo[];
+  tactical?: TacticalInfo;
 }
 
 export interface MechanicsInfo {
@@ -302,42 +303,52 @@ export interface MarketOrderResult {
 
 // ── Tactical encounters ────────────────────────────────
 
-export interface TacticalEncounterData {
-  id: string;
+export interface TacticalInfo {
+  phase: "approach" | "turn" | "finished";
   title: string;
   body: string;
-  variant: "combat" | "traverse";
+  variant: string;
   intent?: string;
-  resistance: number;
-  momentum?: number;
-  queueDepth?: number;
-  timerDraw: number;
-  timers: TacticalTimerDef[];
-  openings: TacticalOpeningDef[];
-  approaches: TacticalApproachDef[];
-  failure: { text: string; mechanics: string[] };
+  approaches?: TacticalApproachInfo[];
+  turn?: TacticalTurnInfo;
+  finishReason?: string;
+  failureText?: string;
+  failureMechanics?: MechanicResultInfo[];
 }
 
-export interface TacticalTimerDef {
-  name: string;
-  counterName: string; // name of the opening that stops this timer
-  effect: "spirits" | "resistance";
-  amount: number;
-  countdown: number;
-}
-
-export interface TacticalOpeningDef {
-  name: string;
-  costKind: "free" | "momentum" | "spirits" | "tick";
-  costAmount: number;
-  effectKind: "damage" | "stop_timer" | "momentum";
-  effectAmount: number;
-  requires?: string;
-}
-
-export interface TacticalApproachDef {
-  kind: "scout" | "direct" | "wild";
+export interface TacticalApproachInfo {
+  kind: string;
   momentum: number;
   timerCount: number;
   bonusOpenings: number;
+}
+
+export interface TacticalTurnInfo {
+  turn: number;
+  resistance: number;
+  resistanceMax: number;
+  momentum: number;
+  spirits: number;
+  timers: TacticalTimerInfo[];
+  openings: TacticalOpeningInfo[];
+  queue?: TacticalOpeningInfo[];
+}
+
+export interface TacticalTimerInfo {
+  name: string;
+  counterName?: string;
+  effect: string;
+  amount: number;
+  countdown: number;
+  current: number;
+  stopped: boolean;
+}
+
+export interface TacticalOpeningInfo {
+  name: string;
+  costKind: string;
+  costAmount: number;
+  effectKind: string;
+  effectAmount: number;
+  stopsTimerIndex?: number;
 }
