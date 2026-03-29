@@ -10,6 +10,7 @@ import parchment from "../assets/parchment.png";
 
 interface ActiveTimer {
   name: string;
+  counterName: string; // name of the opening that stops this timer
   effect: "spirits" | "resistance";
   amount: number;
   countdown: number;
@@ -24,11 +25,12 @@ interface Opening {
   costAmount: number;
   effectKind: string;
   effectAmount: number;
+  stopsTimerIndex?: number; // if stop_timer, which specific timer
 }
 
 interface EngineState {
   resistance: number;
-  maxResistance: number;
+  resistanceMax: number;
   momentum: number;
   spirits: number;
   turn: number;
@@ -66,15 +68,14 @@ const SAMPLE: TacticalEncounterData = {
   momentum: 3,
   timerDraw: 2,
   timers: [
-    { name: "Flanking Maneuver", effect: "spirits", amount: 2, countdown: 4 },
-    { name: "Pack Howl", effect: "resistance", amount: 1, countdown: 5 },
-    { name: "Closing Circle", effect: "spirits", amount: 1, countdown: 3 },
+    { name: "Flanking Maneuver", counterName: "Block the flank", effect: "spirits", amount: 2, countdown: 4 },
+    { name: "Pack Howl", counterName: "Silence the alpha", effect: "resistance", amount: 1, countdown: 5 },
+    { name: "Closing Circle", counterName: "Break the circle", effect: "spirits", amount: 1, countdown: 3 },
   ],
   openings: [
     { name: "Lunge", costKind: "momentum", costAmount: 2, effectKind: "damage", effectAmount: 3 },
     { name: "Feint", costKind: "momentum", costAmount: 1, effectKind: "damage", effectAmount: 1 },
     { name: "Hold Ground", costKind: "free", costAmount: 0, effectKind: "momentum", effectAmount: 2 },
-    { name: "Break the Circle", costKind: "tick", costAmount: 0, effectKind: "stop_timer", effectAmount: 0 },
     { name: "Trap Line", costKind: "free", costAmount: 0, effectKind: "damage", effectAmount: 4, requires: "has bear_trap" },
   ],
   approaches: [
@@ -90,9 +91,9 @@ const SAMPLE: TacticalEncounterData = {
 
 // ── Helpers ────────────────────────────────────────────
 
-function buildPool(enc: TacticalEncounterData): Opening[] {
-  return enc.openings
-    .filter((o) => !o.requires) // skip gear-gated for prototype
+function buildPool(enc: TacticalEncounterData, timers: ActiveTimer[]): Opening[] {
+  const pool: Opening[] = enc.openings
+    .filter((o) => !o.requires && o.effectKind !== "stop_timer")
     .map((o, i) => ({
       poolIndex: i,
       name: o.name,
@@ -101,6 +102,21 @@ function buildPool(enc: TacticalEncounterData): Opening[] {
       effectKind: o.effectKind,
       effectAmount: o.effectAmount,
     }));
+
+  // Generate a counter opening for each active timer
+  timers.forEach((t, timerIdx) => {
+    pool.push({
+      poolIndex: 1000 + timerIdx,
+      name: t.counterName,
+      costKind: "tick",
+      costAmount: 0,
+      effectKind: "stop_timer",
+      effectAmount: 0,
+      stopsTimerIndex: timerIdx,
+    });
+  });
+
+  return pool;
 }
 
 function randomFrom<T>(arr: T[]): T {
@@ -115,6 +131,7 @@ function drawTimers(enc: TacticalEncounterData, count: number): ActiveTimer[] {
     const def = available.splice(idx, 1)[0];
     drawn.push({
       name: def.name,
+      counterName: def.counterName,
       effect: def.effect,
       amount: def.amount,
       countdown: def.countdown,
@@ -125,9 +142,12 @@ function drawTimers(enc: TacticalEncounterData, count: number): ActiveTimer[] {
   return drawn;
 }
 
-function generateOpenings(pool: Opening[], count: number): Opening[] {
-  if (pool.length === 0) return [];
-  return Array.from({ length: count }, () => randomFrom(pool));
+function generateOpenings(pool: Opening[], count: number, timers?: ActiveTimer[]): Opening[] {
+  const available = timers
+    ? pool.filter((o) => o.stopsTimerIndex == null || !timers[o.stopsTimerIndex].stopped)
+    : pool;
+  if (available.length === 0) return [];
+  return Array.from({ length: count }, () => randomFrom(available));
 }
 
 function formatCost(kind: string, amount: number): string {
@@ -136,9 +156,9 @@ function formatCost(kind: string, amount: number): string {
   return `${amount} ${kind}`;
 }
 
-function formatEffect(kind: string, amount: number): string {
-  if (kind === "stop_timer") return "Stop timer";
-  if (kind === "damage") return `${amount} damage`;
+function formatEffect(kind: string, amount: number, timerName?: string): string {
+  if (kind === "stop_timer") return timerName ? `Stop ${timerName}` : "Stop threat";
+  if (kind === "damage") return `+${amount} Progress`;
   return `+${amount} ${kind}`;
 }
 
@@ -161,14 +181,14 @@ export default function TacticalEncounter() {
 
   const chooseApproach = useCallback(
     (approach: TacticalApproachDef) => {
-      const pool = buildPool(enc);
       const timers = drawTimers(enc, approach.timerCount);
+      const pool = buildPool(enc, timers);
       const bonus = approach.bonusOpenings > 0;
-      const openings = generateOpenings(pool, bonus ? BONUS_COUNT : 1);
+      const openings = generateOpenings(pool, bonus ? BONUS_COUNT : 1, timers);
 
       const s: EngineState = {
         resistance: enc.resistance,
-        maxResistance: enc.resistance,
+        resistanceMax: enc.resistance,
         momentum: approach.momentum,
         spirits: 20, // simulated starting spirits
         turn: 1,
@@ -209,7 +229,7 @@ export default function TacticalEncounter() {
             logs.push({ turn: s.turn, text: `${t.name} fires: -${t.amount} Spirits`, type: "timer_fire" });
           } else {
             s.resistance += t.amount;
-            logs.push({ turn: s.turn, text: `${t.name} fires: +${t.amount} Resistance`, type: "timer_fire" });
+            logs.push({ turn: s.turn, text: `${t.name} fires: -${t.amount} Progress`, type: "timer_fire" });
           }
           t.current = t.countdown;
         }
@@ -228,7 +248,7 @@ export default function TacticalEncounter() {
       // Generate openings
       const count = s.bonusNextTurn ? BONUS_COUNT : 1;
       s.bonusNextTurn = false;
-      s.openings = generateOpenings(s.pool, count);
+      s.openings = generateOpenings(s.pool, count, s.timers);
 
       return { state: s, finished: null, newLogs: logs };
     },
@@ -269,15 +289,14 @@ export default function TacticalEncounter() {
           s.resistance = Math.max(0, s.resistance - opening.effectAmount);
           newLogs.push({
             turn: s.turn,
-            text: `${opening.name}: -${opening.effectAmount} Resistance (${s.resistance} remaining)`,
+            text: `${opening.name}: +${opening.effectAmount} Progress`,
             type: "positive",
           });
           break;
         case "stop_timer": {
-          const target = s.timers
-            .filter((t) => !t.stopped)
-            .sort((a, b) => a.current - b.current)[0];
-          if (target) {
+          const targetIdx = opening.stopsTimerIndex;
+          const target = targetIdx != null ? s.timers[targetIdx] : null;
+          if (target && !target.stopped) {
             target.stopped = true;
             newLogs.push({ turn: s.turn, text: `${opening.name}: Stopped ${target.name}`, type: "positive" });
           }
@@ -383,25 +402,29 @@ export default function TacticalEncounter() {
               </div>
 
               <div className="space-y-3 pt-2">
-                <p className="text-dim font-bold">Choose your approach:</p>
-                {enc.approaches.map((a) => (
-                  <button
-                    key={a.kind}
-                    onClick={() => chooseApproach(a)}
-                    className="w-full text-left p-4 bg-btn hover:bg-btn-hover border border-edge rounded-lg transition-colors group cursor-pointer"
-                  >
-                    <span className="font-bold text-action group-hover:text-action-hover capitalize">
-                      {a.kind}
-                    </span>
-                    <span className="block text-dim mt-1">
-                      {a.kind === "scout"
-                        ? `No momentum, but ${a.bonusOpenings} openings on turn 1. Study the situation.`
-                        : a.kind === "direct"
-                          ? `Start with ${a.momentum} momentum. Balanced and reliable.`
-                          : `Start with ${a.momentum} momentum, but ${a.timerCount} timers. High risk, high reward.`}
-                    </span>
-                  </button>
-                ))}
+                <p className="text-dim font-bold">It's a fight.</p>
+                {enc.approaches.map((a) => {
+                  const label =
+                    a.kind === "scout" ? "Let them come"
+                    : a.kind === "direct" ? "Make ready"
+                    : "Charge them";
+                  const desc =
+                    a.kind === "scout" ? "Watch for tells, learn their patterns"
+                    : a.kind === "direct" ? "Find a position of strength"
+                    : "Strike fast and hard";
+                  return (
+                    <button
+                      key={a.kind}
+                      onClick={() => chooseApproach(a)}
+                      className="w-full text-left p-4 bg-btn hover:bg-btn-hover border border-edge rounded-lg transition-colors group cursor-pointer"
+                    >
+                      <span className="font-bold text-action group-hover:text-action-hover">
+                        {label}
+                      </span>
+                      <span className="block text-dim mt-1">{desc}</span>
+                    </button>
+                  );
+                })}
               </div>
             </>
           )}
@@ -409,33 +432,29 @@ export default function TacticalEncounter() {
           {/* Turn phase */}
           {phase.kind === "turn" && engine && (
             <>
-              {/* Resource bars */}
-              <div className="space-y-3">
-                <ResourceBar
-                  label="Resistance"
-                  current={engine.resistance}
-                  max={engine.maxResistance}
-                  color="bg-accent"
-                />
-                <div className="flex gap-6">
-                  <div className="flex-1">
-                    <span className="text-dim">Momentum</span>
-                    <span className="ml-2 font-bold text-primary">{engine.momentum}</span>
+              {/* Resources */}
+              <div className="flex gap-6">
+                <div className="flex-1 text-center">
+                  <div className="text-dim">Progress</div>
+                  <div className="font-bold text-accent text-[32px] leading-tight">
+                    {engine.resistanceMax - engine.resistance}
+                    <span className="text-dim font-normal"> of {engine.resistanceMax}</span>
                   </div>
-                  <div className="flex-1">
-                    <span className="text-dim">Spirits</span>
-                    <span className="ml-2 font-bold text-primary">{engine.spirits}</span>
-                  </div>
-                  <div className="text-dim">
-                    Turn {engine.turn}
-                  </div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div className="text-dim">Momentum</div>
+                  <div className="font-bold text-primary text-[32px] leading-tight">{engine.momentum}</div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div className="text-dim">Spirits</div>
+                  <div className="font-bold text-primary text-[32px] leading-tight">{engine.spirits}</div>
                 </div>
               </div>
 
               {/* Timers */}
               {engine.timers.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-dim font-bold">Timers</p>
+                  <p className="text-dim font-bold">Threats</p>
                   {engine.timers.map((t, i) => (
                     <div
                       key={i}
@@ -443,7 +462,7 @@ export default function TacticalEncounter() {
                     >
                       <span className="flex-1">{t.name}</span>
                       <span className="text-dim">
-                        {t.effect === "spirits" ? `-${t.amount} Spr` : `+${t.amount} Res`}
+                        {t.effect === "spirits" ? `Lose ${t.amount} Spirits` : `Lose ${t.amount} Progress`}
                       </span>
                       <div className="flex gap-1">
                         {Array.from({ length: t.countdown }, (_, j) => (
@@ -467,7 +486,7 @@ export default function TacticalEncounter() {
               {/* Openings */}
               <div className="space-y-2">
                 <p className="text-dim font-bold">
-                  {engine.openings.length > 1 ? "Choose an opening:" : "Opening:"}
+                  {engine.openings.length > 1 ? "Choose a move:" : "Your move:"}
                 </p>
                 {engine.openings.map((o, i) => {
                   const affordable = canAfford(o);
@@ -476,7 +495,7 @@ export default function TacticalEncounter() {
                       key={i}
                       onClick={affordable ? () => takeOpening(i) : undefined}
                       disabled={!affordable}
-                      className={`w-full text-left p-4 border rounded-lg transition-colors ${
+                      className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
                         affordable
                           ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
                           : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
@@ -491,41 +510,41 @@ export default function TacticalEncounter() {
                       >
                         {o.name}
                       </span>
-                      <span className="block text-dim mt-1">
-                        {formatCost(o.costKind, o.costAmount)}
-                        {" → "}
-                        {formatEffect(o.effectKind, o.effectAmount)}
+                      <span className="text-dim">
+                        {o.costKind !== "free" && <>{formatCost(o.costKind, o.costAmount)} → </>}
+                        {formatEffect(o.effectKind, o.effectAmount,
+                          o.stopsTimerIndex != null ? engine.timers[o.stopsTimerIndex]?.name : undefined)}
                       </span>
                     </button>
                   );
                 })}
-              </div>
-
-              {/* Press / Force buttons */}
-              <div className="flex gap-3">
                 <button
                   onClick={pressAdvantage}
                   disabled={engine.momentum < PRESS_COST}
-                  className={`flex-1 p-3 rounded-lg border transition-colors ${
+                  className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
                     engine.momentum >= PRESS_COST
-                      ? "bg-btn hover:bg-btn-hover border-edge text-action cursor-pointer"
-                      : "bg-btn/50 border-edge/50 text-muted cursor-default"
+                      ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
+                      : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
                   }`}
                 >
-                  <span className="font-bold">Press the Advantage</span>
-                  <span className="block text-dim mt-1">-{PRESS_COST} Momentum, 3 openings next turn</span>
+                  <span className={`font-bold ${engine.momentum >= PRESS_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
+                    Press the Advantage
+                  </span>
+                  <span className="text-dim">{PRESS_COST} Momentum → 3 options next turn</span>
                 </button>
                 <button
                   onClick={forceOpening}
                   disabled={engine.spirits < FORCE_COST}
-                  className={`flex-1 p-3 rounded-lg border transition-colors ${
+                  className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
                     engine.spirits >= FORCE_COST
-                      ? "bg-btn hover:bg-btn-hover border-edge text-action cursor-pointer"
-                      : "bg-btn/50 border-edge/50 text-muted cursor-default"
+                      ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
+                      : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
                   }`}
                 >
-                  <span className="font-bold">Force an Opening</span>
-                  <span className="block text-dim mt-1">-{FORCE_COST} Spirits, 3 openings next turn</span>
+                  <span className={`font-bold ${engine.spirits >= FORCE_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
+                    Force an Opening
+                  </span>
+                  <span className="text-dim">{FORCE_COST} Spirits → 3 options next turn</span>
                 </button>
               </div>
 
@@ -568,7 +587,7 @@ export default function TacticalEncounter() {
               >
                 <p className="font-bold">
                   {phase.reason === "resistance_kill"
-                    ? "Victory — Resistance Broken"
+                    ? "Victory — Goal Reached"
                     : phase.reason === "control_kill"
                       ? "Victory — Total Control"
                       : "Defeated — Spirits Depleted"}
@@ -618,34 +637,3 @@ export default function TacticalEncounter() {
   );
 }
 
-// ── Sub-components ─────────────────────────────────────
-
-function ResourceBar({
-  label,
-  current,
-  max,
-  color,
-}: {
-  label: string;
-  current: number;
-  max: number;
-  color: string;
-}) {
-  const pct = max > 0 ? Math.max(0, Math.min(100, (current / max) * 100)) : 0;
-  return (
-    <div>
-      <div className="flex justify-between mb-1">
-        <span className="text-dim">{label}</span>
-        <span className="font-bold">
-          {current} / {max}
-        </span>
-      </div>
-      <div className="h-3 bg-edge/30 rounded-full overflow-hidden">
-        <div
-          className={`h-full ${color} rounded-full transition-all duration-300`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-    </div>
-  );
-}

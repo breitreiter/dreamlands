@@ -320,6 +320,7 @@ export interface TacticalEncounterData {
 
 export interface TacticalTimerDef {
   name: string;
+  counterName: string; // name of the opening that stops this timer
   effect: "spirits" | "resistance";
   amount: number;
   countdown: number;
