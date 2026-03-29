@@ -19,7 +19,7 @@ public class GameResponse
     public EncounterInfo? Encounter { get; init; }
 
     // Outcome
-    public OutcomeInfo? Outcome { get; init; }
+    public OutcomeInfo? Outcome { get; set; }
 
     // Rescue (death → rescue at chapterhouse)
     public RescueInfo? Rescue { get; init; }
@@ -41,6 +41,9 @@ public class GameResponse
 
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
+
+    // Tactical encounter
+    public TacticalInfo? Tactical { get; init; }
 
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
@@ -306,6 +309,69 @@ public class EncounterSummary
     public string Title { get; init; } = "";
 }
 
+// ── Tactical encounter DTOs ──────────────────────────────────
+
+public record TacticalInfo
+{
+    public string Phase { get; init; } = "";  // approach, turn, finished
+    public string Title { get; init; } = "";
+    public string Body { get; init; } = "";
+    public string Variant { get; init; } = "";
+    public string? Intent { get; init; }
+
+    // approach phase
+    public List<TacticalApproachInfo>? Approaches { get; init; }
+
+    // turn phase
+    public TacticalTurnInfo? Turn { get; init; }
+
+    // finished phase
+    public string? FinishReason { get; init; }
+    public string? FailureText { get; init; }
+    public List<MechanicResultInfo>? FailureMechanics { get; init; }
+}
+
+public class TacticalApproachInfo
+{
+    public string Kind { get; init; } = "";
+    public int Momentum { get; init; }
+    public int TimerCount { get; init; }
+    public int BonusOpenings { get; init; }
+}
+
+public class TacticalTurnInfo
+{
+    public int Turn { get; init; }
+    public int Resistance { get; init; }
+    public int ResistanceMax { get; init; }
+    public int Momentum { get; init; }
+    public int Spirits { get; init; }
+    public List<TacticalTimerInfo> Timers { get; init; } = [];
+    public List<TacticalOpeningInfo> Openings { get; init; } = [];
+    public List<TacticalOpeningInfo>? Queue { get; init; }
+}
+
+public class TacticalTimerInfo
+{
+    public string Name { get; init; } = "";
+    public string? CounterName { get; init; }
+    public string Effect { get; init; } = "";
+    public int Amount { get; init; }
+    public int Countdown { get; init; }
+    public int Current { get; init; }
+    public bool Stopped { get; init; }
+}
+
+public class TacticalOpeningInfo
+{
+    public string Name { get; init; } = "";
+    public string CostKind { get; init; } = "";
+    public int CostAmount { get; init; }
+    public string EffectKind { get; init; } = "";
+    public int EffectAmount { get; init; }
+    public int? StopsTimerIndex { get; init; }
+}
+
 public class ActionRequest
 {
     public string Action { get; set; } = "";
@@ -320,6 +386,9 @@ public class ActionRequest
     public int? BankIndex { get; set; }
     public int? OfferIndex { get; set; }
     public string? OfferId { get; set; }
+    public string? Approach { get; set; }
+    public string? TacticalAction { get; set; }
+    public int? OpeningIndex { get; set; }
 }
 
 public class DebugConditionRequest

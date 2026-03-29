@@ -1,6 +1,7 @@
 using Dreamlands.Encounter;
 using Dreamlands.Map;
 using Dreamlands.Rules;
+using Dreamlands.Tactical;
 
 namespace GameServer;
 
@@ -11,6 +12,7 @@ public class GameData
 {
     public Map Map { get; }
     public EncounterBundle Bundle { get { lock (_bundleLock) return _bundle; } }
+    public TacticalBundle? TacticalBundle { get; private set; }
     public BalanceData Balance { get; } = BalanceData.Default;
     public string ApiVersion { get; }
     public bool NoEncounters { get; }
@@ -59,6 +61,12 @@ public class GameData
         _bundlePath = bundlePath;
         Map = MapSerializer.Load(mapPath);
         _bundle = EncounterBundle.Load(bundlePath);
+
+        // Tactical bundle is optional — look alongside the encounter bundle
+        var tacticalPath = Environment.GetEnvironmentVariable("DREAMLANDS_TACTICAL_BUNDLE")
+            ?? Path.Combine(Path.GetDirectoryName(bundlePath)!, "tactical.bundle.json");
+        if (File.Exists(tacticalPath))
+            TacticalBundle = Dreamlands.Tactical.TacticalBundle.Load(tacticalPath);
     }
 
     public void ReloadBundle()

@@ -24,6 +24,8 @@ public class PlayerState
     public string? CurrentDungeonId { get; set; }
 
     public string? CurrentEncounterId { get; set; }
+    public string? CurrentTacticalId { get; set; }
+    public string? TacticalStateJson { get; set; }
 
     // Vitals
     public int Health { get; set; }
