@@ -332,7 +332,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                     {turn.queue.slice(1).map((q, i) => (
                       <div
                         key={i}
-                        className="shrink-0 px-3 py-2 rounded-lg border border-edge/50 bg-btn/50 text-dim"
+                        className="shrink-0 px-3 py-2 rounded-lg bg-btn/50 text-muted"
                       >
                         <div>{q.name}</div>
                         <CostEffect opening={q} />

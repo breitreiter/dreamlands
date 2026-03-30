@@ -162,6 +162,8 @@ Gated openings (with [requires]) are added first, then ungated. Example:
       * Find Footing: free -> momentum 1
       * Trap Line: free -> damage 4 [requires has bear_trap]
 
+With the default UI size, openings max out at around 60 characters.
+
 ### path: (traverse only)
 
 Authored sequence of cards the player must work through. Same syntax as
