@@ -13,7 +13,7 @@ public static class EndOfDay
     static readonly string[] UniversalAmbientIds = ["exhausted", "lost"];
 
     // Conditions that only come from encounters, never from ambient resist checks
-    static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "disheartened", "irradiated", "lattice_sickness"];
+    static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "irradiated", "lattice_sickness"];
 
     /// <summary>
     /// Returns ambient conditions that threaten the player tonight based on camping biome/tier.
@@ -99,9 +99,6 @@ public static class EndOfDay
         if (!noSleep && ate)
             ResolveRest(state, balanced, balance, events);
 
-        // 9. Evaluate disheartened
-        ResolveDisheartened(state, balance, events);
-
         return events;
     }
 
@@ -150,9 +147,7 @@ public static class EndOfDay
         var itemBonus = SkillChecks.GetForagingBonus(state, balance);
         var modifier = skillLevel + itemBonus;
 
-        var rollMode = state.ActiveConditions.ContainsKey("disheartened")
-            ? RollMode.Disadvantage : RollMode.Normal;
-        var natural = SkillChecks.RollD20(rollMode, rng);
+        var natural = SkillChecks.RollD20(RollMode.Normal, rng);
         var total = natural + modifier;
 
         var dc = balance.Character;
@@ -363,23 +358,6 @@ public static class EndOfDay
         }
 
         return worstCondition;
-    }
-
-    static void ResolveDisheartened(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
-    {
-        var threshold = balance.Character.SpiritDisadvantageThreshold;
-        var has = state.ActiveConditions.ContainsKey("disheartened");
-
-        if (state.Spirits < threshold && !has)
-        {
-            state.ActiveConditions["disheartened"] = 1;
-            events.Add(new EndOfDayEvent.DisheartendGained());
-        }
-        else if (state.Spirits >= threshold && has)
-        {
-            state.ActiveConditions.Remove("disheartened");
-            events.Add(new EndOfDayEvent.DisheartendCleared());
-        }
     }
 
     static void ResolveRest(PlayerState state, bool balanced,

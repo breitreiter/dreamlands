@@ -127,16 +127,7 @@ Skipped if `no_sleep` flag was set.
 
 **Event emitted**: `RestRecovery(healthGained, spiritsGained)`.
 
-### 10. Evaluate Disheartened
-
-- If Spirits < threshold (10) and not disheartened: gain disheartened
-- If Spirits >= threshold and disheartened: clear disheartened
-
-Disheartened imposes disadvantage on all skill checks (encounter, resist, and foraging).
-
-**Event emitted**: `DisheartendGained` or `DisheartendCleared`.
-
-### 11. Death Check
+### 10. Death Check
 
 If Health <= 0, the player is dead.
 

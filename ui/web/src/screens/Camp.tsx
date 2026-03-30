@@ -13,7 +13,6 @@ const CONDITION_ICONS: Record<string, string> = {
   exhausted: "tread.svg",
   lost: "compass.svg",
   injured: "bloody-stash.svg",
-  disheartened: "sensuousness.svg",
 };
 
 function crisisTitle(health: number): string {
@@ -53,7 +52,6 @@ function getMinorEvents(events: CampEventInfo[]): CampEventInfo[] {
   const minorTypes = new Set([
     "FoodConsumed", "Starving", "Foraged", "RestRecovery",
     "ResistPassed", "ResistFailed", "ConditionAcquired",
-    "DisheartendGained", "DisheartendCleared",
   ]);
   return events.filter(e => minorTypes.has(e.type));
 }

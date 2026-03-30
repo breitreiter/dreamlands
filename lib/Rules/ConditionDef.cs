@@ -70,12 +70,5 @@ public sealed class ConditionDef
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
             Stacks = 3, Severity = ConditionSeverity.Severe,
         },
-        ["disheartened"] = new()
-        {
-            Id = "disheartened", Name = "Disheartened", Biome = "none", Tier = "none",
-            Stacks = 1,
-            SpecialCure = "Raise spirits above 9.",
-            SpecialEffect = "Disadvantage on all rolls.",
-        },
     };
 }

@@ -30,17 +30,6 @@ public static class SkillChecks
         var itemBonus = GetItemBonus(skill, state, balance);
         var modifier = skillLevel + itemBonus;
 
-        // Disheartened condition imposes disadvantage
-        if (state.ActiveConditions.ContainsKey("disheartened"))
-        {
-            rollMode = rollMode switch
-            {
-                RollMode.Normal => RollMode.Disadvantage,
-                RollMode.Advantage => RollMode.Normal, // cancel out
-                _ => rollMode,
-            };
-        }
-
         var result = RollOnce(dc, modifier, skillLevel, skill, rollMode, rng);
 
         // Luck reroll on failure
@@ -117,13 +106,7 @@ public static class SkillChecks
         var modifier = skillLevel + resistBonus;
         var rollSkill = skill ?? Skill.Luck; // placeholder for result record
 
-        var rollMode = RollMode.Normal;
-        if (state.ActiveConditions.ContainsKey("disheartened"))
-        {
-            rollMode = RollMode.Disadvantage;
-        }
-
-        var result = RollOnce(dc, modifier, skillLevel, rollSkill, rollMode, rng);
+        var result = RollOnce(dc, modifier, skillLevel, rollSkill, RollMode.Normal, rng);
 
         // Luck reroll on failure
         if (!result.Passed)
@@ -131,7 +114,7 @@ public static class SkillChecks
             var luckLevel = state.Skills.GetValueOrDefault(Skill.Luck);
             if (TryLuckReroll(luckLevel, balance, rng))
             {
-                var reroll = RollOnce(dc, modifier, skillLevel, rollSkill, rollMode, rng);
+                var reroll = RollOnce(dc, modifier, skillLevel, rollSkill, RollMode.Normal, rng);
                 return reroll with { WasLuckyReroll = true };
             }
         }

@@ -26,7 +26,6 @@ const CONDITION_ICONS: Record<string, string> = {
   exhausted: "tread.svg",
   lost: "compass.svg",
   injured: "bloody-stash.svg",
-  disheartened: "sensuousness.svg",
 };
 
 

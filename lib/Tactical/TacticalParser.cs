@@ -393,7 +393,7 @@ public static partial class TacticalParser
     static readonly HashSet<string> KnownConditions =
     [
         "freezing", "thirsty", "irradiated", "lattice_sickness",
-        "exhausted", "poisoned", "lost", "injured", "disheartened",
+        "exhausted", "poisoned", "lost", "injured",
     ];
 
     /// <summary>Known archetype IDs for validation. Must match TacticalBalance.Archetypes keys.</summary>

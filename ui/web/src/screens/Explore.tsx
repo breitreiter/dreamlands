@@ -137,7 +137,6 @@ const CONDITION_ICONS: Record<string, string> = {
   injured: "bloody-stash.svg",
   exhausted: "tread.svg",
   lost: "compass.svg",
-  disheartened: "sensuousness.svg",
 };
 
 const poiPinIcon = new DivIcon({

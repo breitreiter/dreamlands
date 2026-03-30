@@ -199,20 +199,6 @@ public class InnTests
     }
 
     [Fact]
-    public void StayAtInn_ClearsDisheartened()
-    {
-        var state = Fresh();
-        state.Spirits = 5;
-        state.Gold = 100;
-        state.ActiveConditions["disheartened"] = 1;
-
-        var result = Inn.StayAtInn(state, Balance);
-
-        Assert.False(state.ActiveConditions.ContainsKey("disheartened"));
-        Assert.Contains("disheartened", result.ConditionsCleared);
-    }
-
-    [Fact]
     public void StayAtInn_ConsumesMedicine()
     {
         var state = Fresh();

@@ -1223,7 +1223,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         foreach (var (condId, condDef) in data.Balance.Conditions)
         {
-            if (condId is "disheartened") continue;
             var resistSkill = condId switch
             {
                 "freezing" or "thirsty" or "lost" or "poisoned" => (Skill?)Skill.Bushcraft,

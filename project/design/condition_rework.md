@@ -41,9 +41,9 @@ Recovery per night:
 
 A well-fed traveler with one minor condition breaks even (+2 from food, -2 from
 condition). Two minor conditions or missed meals and spirits start dropping, which
-leads to disheartened, which leads to failed checks, which leads to severe conditions.
-The death spiral is there — it just runs through spirits and decision-making, not
-direct health damage.
+leads to failed checks (via spirits as a tactical currency), which leads to severe
+conditions. The death spiral is there — it just runs through spirits and
+decision-making, not direct health damage.
 
 ### Changes from Current
 
@@ -127,8 +127,7 @@ exposure in a courthouse.
 ### Hungry
 
 The meal system already handles food scarcity. Missing meals = no spirit recovery =
-spirits spiral = disheartened = failed checks. Adding a hungry condition on top
-double-dips and makes the math confusing. Recovery tiers (balanced meal +2, unbalanced
+spirits spiral = failed checks. Adding a hungry condition on top double-dips and makes the math confusing. Recovery tiers (balanced meal +2, unbalanced
 +1, nothing +0) are sufficient punishment.
 
 ### Gut Worms

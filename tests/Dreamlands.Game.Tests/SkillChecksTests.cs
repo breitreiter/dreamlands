@@ -95,31 +95,6 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void Roll_Disheartened_ImposesDisadvantage()
-    {
-        var state = Fresh();
-        state.Skills[Skill.Combat] = 0;
-        state.ActiveConditions["disheartened"] = 1;
-
-        var rng = new Random(42);
-        var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng);
-        Assert.Equal(RollMode.Disadvantage, result.RollMode);
-    }
-
-    [Fact]
-    public void Roll_Advantage_CancelledByDisheartened()
-    {
-        var state = Fresh();
-        state.Skills[Skill.Combat] = 0;
-        state.ActiveConditions["disheartened"] = 1;
-
-        var rng = new Random(42);
-        var result = SkillChecks.Roll(Skill.Combat, Difficulty.Medium, state, Balance, rng,
-            rollMode: RollMode.Advantage);
-        Assert.Equal(RollMode.Normal, result.RollMode);
-    }
-
-    [Fact]
     public void Roll_RollModeDefaultsToNormal()
     {
         var state = Fresh();

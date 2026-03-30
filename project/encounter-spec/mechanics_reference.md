@@ -34,7 +34,7 @@ TIME PERIODS
   
 CONDITIONS
   freezing  thirsty  irradiated  lattice_sickness
-  exhausted  lost  injured  poisoned  disheartened
+  exhausted  lost  injured  poisoned
 
 
 ACTION VERBS
@@ -141,7 +141,7 @@ resist check. When the encounter ends (win or lose), all pending checks are
 rolled. Multiple firings of the same condition stack — 3 firings = 3 resist
 rolls. Any single failure applies the condition. Known condition IDs:
 freezing, thirsty, irradiated, lattice_sickness, exhausted, poisoned,
-lost, injured, disheartened.
+lost, injured.
 
 ### openings:
 
