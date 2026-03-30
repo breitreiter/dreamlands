@@ -1,0 +1,21 @@
+Road Toll
+[trigger road]
+[tier 1]
+
+A group of rough-looking men step out from behind a ruined cart, blocking the road. Their leader, a stocky fellow with a chipped sword and some sort of hand-sewn tabard, holds up a hand.
+
+"Well hello merchant. Have you heard about the new road toll? Twenty-five gold, by order of the local militia." He grins. The others fan out behind him. This is imperial territory, there are no local militas.
+
+The area is rolling hills, still high with grain. There is a farmhouse in the distance. A squat stone imperial mile marker stands about 20 paces from you.
+
+* Fight your way through
+  +open plains/tier1/Road Toll Fight
+
+* Make a run for it
+  +repool
+  +open plains/tier1/Road Toll Chase
+
+* Pay the toll and move on
+  You fish out the coins and hand them over. The leader counts them with practiced fingers, nods, and waves you through. "Fair travels, hope to meet again soon," he calls after you.
+  +rem_gold 25
+  +repool

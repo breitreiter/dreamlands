@@ -6,11 +6,11 @@ Dalla sits on her tarp, waiting for you to speak or be on your way. It looks lik
 choices:
 
 * Ask her what she's doing here = This is clearly legion property
-    "We've got three families here, trader," she says, her voice flat and steady as iron. "This has been a rough year. The fields are nearly picked clean of gear and tools; what we turn up fetches little." She gestures toward the door without looking at it, her hand describing a small, dismissive arc. "The market for buttons and medals is slim. Not many travelers to Aldgate looking for souvenirs any more."
+    "We've got three families here, trader," she says, her voice flat and steady as iron. "This has been a rough year. The fields are nearly picked clean of gear and tools; what we turn up fetches little coin." She gestures toward the door without looking at it, her hand describing a small, dismissive arc. "The market for buttons and medals is slim. Not many travelers to Aldgate looking for souvenirs any more."
 
     She shifts her weight, the tarp crinkling beneath her. "This depot has been abandoned for longer than any of us have been alive. The heroic Legion counter-attack is never coming." Her gaze fixes on yours now, direct and unblinking. "Whatever is inside rots each year, and no one will ever need it. Except us."
 
-    "I was trained as an engineer in the Kesharat academies. Locks are just machines. I thought we could slip in, take what we can carry, and steal away with none the wiser. Then the soldiers showed up. My people set camp inside the old fenceline, figured it was as good a claim as any. And now here we all are."
+    "I figured we could slip in, take what we can carry, and steal away with none the wiser. Then the soldiers showed up. My people set camp inside the old fenceline, like our own little fortress. And now here we all are."
     +open Dalla
 
 * Help her crack the door = You're somewhat familiar with imperial lockwork

@@ -11,10 +11,10 @@ echo "==> Bundling encounters..."
 dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle "$REPO_ROOT/text/encounters" --out "$WORLD_DIR"
 
 echo "==> Checking tactical encounter syntax..."
-dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- check-tactical "$REPO_ROOT/text/tactical"
+dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- check-tactical "$REPO_ROOT/text/encounters"
 
 echo "==> Bundling tactical encounters..."
-dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle-tactical "$REPO_ROOT/text/tactical" --out "$WORLD_DIR"
+dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle-tactical "$REPO_ROOT/text/encounters" --out "$WORLD_DIR"
 
 echo "==> Converting encounter vignettes to webp..."
 src="$REPO_ROOT/assets/vignettes"

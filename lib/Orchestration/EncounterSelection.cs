@@ -45,6 +45,7 @@ public static class EncounterSelection
 
         var pool = session.Bundle.GetByCategory(category);
         var available = pool
+            .Where(e => e.Trigger == null)
             .Where(e => !session.Player.UsedEncounterIds.Contains(e.Id))
             .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
             .ToList();

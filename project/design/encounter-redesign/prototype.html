@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encounter Prototype</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Alegreya', serif;
+    background: #1a1a1a;
+    color: #d4c5a9;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  #game { max-width: 660px; width: 100%; }
+
+  h1 { text-align: center; color: #D0925D; font-size: 28px; margin-bottom: 8px; }
+  .subtitle { text-align: center; color: #8a7a5a; font-style: italic; margin-bottom: 24px; }
+
+  /* Stats */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .stat {
+    background: #2a2520;
+    border: 1px solid #3a3530;
+    border-radius: 6px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8a7a5a;
+    margin-bottom: 4px;
+  }
+
+  .stat-value { font-size: 28px; font-weight: 700; }
+  .stat-momentum .stat-value { color: #e8a840; }
+  .stat-spirits .stat-value { color: #6a9fd8; }
+  .stat-resistance .stat-value { color: #c85a5a; }
+
+  /* Timers */
+  .timers-section { margin-bottom: 16px; }
+
+  .timer {
+    background: #2a2025;
+    border: 1px solid #5a3535;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .timer.stopped {
+    opacity: 0.3;
+    border-color: #3a3530;
+  }
+
+  .timer-left { flex: 1; }
+
+  .timer-name {
+    font-weight: 700;
+    color: #c85a5a;
+  }
+
+  .timer.stopped .timer-name {
+    color: #5a8a5a;
+    text-decoration: line-through;
+  }
+
+  .timer-effect {
+    font-size: 14px;
+    color: #8a6a5a;
+  }
+
+  .timer-countdown {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .timer-pip {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #c85a5a;
+    background: transparent;
+  }
+
+  .timer-pip.filled { background: #c85a5a; }
+  .timer.stopped .timer-pip { border-color: #5a8a5a; background: #5a8a5a; }
+
+  /* Openings */
+  .openings-section { margin-bottom: 16px; }
+
+  .opening-card {
+    background: #2a2820;
+    border: 1px solid #5a5030;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .opening-card.taken {
+    opacity: 0.25;
+    border-color: #3a3530;
+  }
+
+  .opening-info { flex: 1; }
+
+  .opening-name {
+    font-weight: 700;
+    color: #e8a840;
+  }
+
+  .opening-detail {
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    margin-top: 2px;
+  }
+
+  .opening-cost { color: #c85a5a; }
+  .opening-effect { color: #5aaa5a; }
+
+  .opening-card button {
+    flex: none;
+    width: auto;
+    padding: 6px 14px;
+    font-size: 14px;
+  }
+
+  /* Log */
+  .log {
+    background: #22201c;
+    border: 1px solid #3a3530;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+    min-height: 80px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+
+  .log-entry { margin-bottom: 6px; line-height: 1.5; }
+  .log-entry:last-child { margin-bottom: 0; }
+  .log-action { color: #D0925D; font-weight: 700; }
+  .log-success { color: #5aaa5a; }
+  .log-fail { color: #c85a5a; }
+  .log-info { color: #8a7a5a; font-style: italic; }
+  .log-timer { color: #c85a5a; font-weight: 700; }
+  .log-ending { color: #D0925D; font-size: 18px; font-weight: 700; }
+
+  /* Buttons */
+  .actions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .action-row { display: flex; gap: 8px; }
+
+  button {
+    font-family: 'Alegreya', serif;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: 1px solid #3a3530;
+    border-radius: 6px;
+    background: #2a2520;
+    color: #d4c5a9;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex: 1;
+  }
+
+  button:hover:not(:disabled) {
+    background: #3a3530;
+    border-color: #D0925D;
+    color: #D0925D;
+  }
+
+  button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  button.primary {
+    background: #D0925D;
+    color: #1a1a1a;
+    border-color: #D0925D;
+    font-weight: 700;
+  }
+
+  button.primary:hover:not(:disabled) {
+    background: #e0a26d;
+    color: #1a1a1a;
+  }
+
+  .section-label {
+    color: #8a7a5a;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .turn-counter {
+    text-align: center;
+    color: #5a5040;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .config-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  .config-row label {
+    color: #8a7a5a;
+    font-size: 14px;
+    min-width: 80px;
+  }
+
+  .config-row input {
+    font-family: 'Alegreya', serif;
+    font-size: 16px;
+    width: 60px;
+    padding: 4px 8px;
+    background: #2a2520;
+    border: 1px solid #3a3530;
+    border-radius: 4px;
+    color: #d4c5a9;
+    text-align: center;
+  }
+
+  .phase-label {
+    text-align: center;
+    color: #D0925D;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    padding: 6px;
+    border-top: 1px solid #3a3530;
+    border-bottom: 1px solid #3a3530;
+  }
+</style>
+</head>
+<body>
+<div id="game"></div>
+<script>
+// --- Data ---
+
+const TIMER_TEMPLATES = [
+  { name: "Flanking maneuver", effect: "spirits", amount: 2, countdown: 4 },
+  { name: "Rallying cry",      effect: "resistance", amount: 2, countdown: 5 },
+  { name: "Closing trap",      effect: "spirits", amount: 1, countdown: 3 },
+  { name: "Waning resolve",    effect: "spirits", amount: 1, countdown: 4 },
+  { name: "Regrouping",        effect: "resistance", amount: 1, countdown: 4 },
+  { name: "Encirclement",      effect: "spirits", amount: 2, countdown: 5 },
+  { name: "Rising flood",      effect: "spirits", amount: 2, countdown: 4 },
+  { name: "Crumbling path",    effect: "spirits", amount: 1, countdown: 3 },
+  { name: "Gathering storm",   effect: "spirits", amount: 1, countdown: 5 },
+  { name: "Dwindling light",   effect: "spirits", amount: 2, countdown: 6 },
+];
+
+const OPENING_NAMES = [
+  "Exposed flank", "Broken footing", "Overcommitted", "Moment of doubt",
+  "Narrow pass", "Dropped guard", "High ground", "Loose debris",
+  "Blinding light", "Tangled roots", "Eroded path", "Swift current",
+  "Cracked wall", "Shifting sand", "Dead angle", "Split attention",
+];
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function pickN(arr, n) {
+  const copy = [...arr];
+  const out = [];
+  for (let i = 0; i < n && copy.length; i++) {
+    const idx = Math.floor(Math.random() * copy.length);
+    out.push(copy.splice(idx, 1)[0]);
+  }
+  return out;
+}
+function roll(chance) { return Math.random() < chance; }
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+const $ = sel => document.querySelector(sel);
+const el = (tag, cls, html) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+};
+
+let state = null;
+
+// --- Opening generation ---
+
+function generateOpening() {
+  const name = pick(OPENING_NAMES);
+
+  // cost
+  const costRoll = Math.random();
+  let cost;
+  if (costRoll < 0.30)      cost = { type: "init", amount: pick([1, 2, 2, 3]) };
+  else if (costRoll < 0.55)  cost = { type: "spirits", amount: pick([1, 1, 2]) };
+  else if (costRoll < 0.80)  cost = { type: "tick", amount: 1 };
+  else                        cost = { type: "free", amount: 0 };
+
+  // effect — weighted by what's useful
+  const hasActiveTimers = state.timers.some(t => !t.stopped);
+  const effectRoll = Math.random();
+  let effect;
+  if (effectRoll < 0.30)
+    effect = { type: "momentum", amount: pick([2, 3]) };
+  else if (effectRoll < 0.60 && hasActiveTimers)
+    effect = { type: "stop_timer", amount: 1 };
+  else
+    effect = { type: "resistance", amount: pick([2, 2, 3]) };
+
+  return { name, cost, effect, taken: false };
+}
+
+function costLabel(cost) {
+  switch (cost.type) {
+    case "init": return `Costs ${cost.amount} Mom`;
+    case "spirits": return `Costs ${cost.amount} Spr`;
+    case "tick": return "Ticks a timer";
+    case "free": return "Free";
+  }
+}
+
+function effectLabel(effect) {
+  switch (effect.type) {
+    case "momentum": return `+${effect.amount} Momentum`;
+    case "stop_timer": return "Stop a timer";
+    case "resistance": return `-${effect.amount} Resistance`;
+  }
+}
+
+function canAfford(opening) {
+  const c = opening.cost;
+  if (c.type === "free") return true;
+  if (c.type === "init") return state.momentum >= c.amount;
+  if (c.type === "spirits") return state.spirits >= c.amount;
+  if (c.type === "tick") return state.timers.some(t => !t.stopped);
+  return false;
+}
+
+// --- Timer helpers ---
+
+function makeTimers(count) {
+  return pickN(TIMER_TEMPLATES, count).map(t => ({
+    ...t,
+    current: t.countdown,
+    stopped: false,
+  }));
+}
+
+function tickTimers() {
+  for (const t of state.timers) {
+    if (t.stopped) continue;
+    t.current--;
+    if (t.current <= 0) {
+      // fire effect
+      if (t.effect === "spirits") {
+        state.spirits = Math.max(0, state.spirits - t.amount);
+        log("timer", `${t.name} fires! -${t.amount} Spirits.`);
+      } else if (t.effect === "resistance") {
+        state.resistance += t.amount;
+        log("timer", `${t.name} fires! +${t.amount} Resistance.`);
+      }
+      t.current = t.countdown; // reset
+    }
+  }
+}
+
+function stopOneTimer() {
+  const active = state.timers.filter(t => !t.stopped);
+  if (!active.length) return;
+  // pick the most urgent (lowest current)
+  active.sort((a, b) => a.current - b.current);
+  const target = active[0];
+  target.stopped = true;
+  log("success", `Timer stopped: ${target.name}.`);
+}
+
+function tickOneTimer() {
+  const active = state.timers.filter(t => !t.stopped);
+  if (!active.length) return;
+  const target = pick(active);
+  target.current--;
+  log("fail", `Timer advanced: ${target.name} (${target.current} left).`);
+  if (target.current <= 0) {
+    if (target.effect === "spirits") {
+      state.spirits = Math.max(0, state.spirits - target.amount);
+      log("timer", `${target.name} fires! -${target.amount} Spirits.`);
+    } else if (target.effect === "resistance") {
+      state.resistance += target.amount;
+      log("timer", `${target.name} fires! +${target.amount} Resistance.`);
+    }
+    target.current = target.countdown;
+  }
+}
+
+// --- Game flow ---
+
+function newGame() {
+  state = { phase: "setup", log: [] };
+  render();
+}
+
+function startEncounter(type) {
+  state.type = type;
+  state.phase = "approach";
+  render();
+}
+
+function setApproach(approach) {
+  let timerCount;
+  switch (approach) {
+    case "scout":
+      state.momentum = 0;
+      timerCount = 3;
+      break;
+    case "direct":
+      state.momentum = 3;
+      timerCount = 3;
+      break;
+    case "wild":
+      state.momentum = 6;
+      timerCount = 4;
+      break;
+  }
+
+  state.spirits = 10;
+  state.resistance = 8;
+  state.turn = 0;
+  state.log = [];
+  state.openings = [];
+  state.scoutBonus = 0;
+  state.nextBonus = 0;
+  state.timers = makeTimers(timerCount);
+
+  log("info", `${capitalize(approach)} approach. ${state.timers.filter(t => !t.stopped).length} active threats.`);
+
+  // scout: start with 3 openings on turn 1 (studied the situation)
+  if (approach === "scout") {
+    state.scoutBonus = 3;
+    log("info", "You've studied the situation — several paths reveal themselves.");
+  }
+
+  beginTurn();
+}
+
+function beginTurn() {
+  state.phase = "play";
+  state.turn++;
+  state.momentum += 1;
+  state.openings = [];
+
+  if (state.turn > 1) {
+    log("info", `--- Turn ${state.turn} ---`);
+  }
+
+  // tick timers
+  tickTimers();
+  if (checkEndings()) return;
+
+  log("info", "+1 Momentum (momentum builds).");
+
+  // generate free openings (scout/convert/destabilize bonus, otherwise 1)
+  const openingCount = state.scoutBonus || state.nextBonus || 1;
+  state.scoutBonus = 0;
+  state.nextBonus = 0;
+  for (let i = 0; i < openingCount; i++) state.openings.push(generateOpening());
+
+  render();
+}
+
+function doPress() {
+  if (state.momentum < 2) return;
+  state.momentum -= 2;
+  state.nextBonus = 3;
+  log("action", `Press the Advantage — burn 2 Momentum. Next turn: 3 openings.`);
+  beginTurn();
+}
+
+function doForce() {
+  if (state.spirits < 2) return;
+  state.spirits -= 2;
+  state.nextBonus = 3;
+  log("action", `Force an Opening — burn 2 Spirits. Next turn: 3 openings.`);
+  beginTurn();
+}
+
+function takeOpening(idx) {
+  const o = state.openings[idx];
+  if (o.taken || !canAfford(o)) return;
+
+  // pay cost
+  switch (o.cost.type) {
+    case "init": state.momentum -= o.cost.amount; break;
+    case "spirits": state.spirits -= o.cost.amount; break;
+    case "tick": tickOneTimer(); break;
+  }
+
+  // apply effect
+  switch (o.effect.type) {
+    case "momentum":
+      state.momentum += o.effect.amount;
+      log("success", `${o.name}: +${o.effect.amount} Momentum.`);
+      break;
+    case "stop_timer":
+      log("action", `${o.name}: neutralize a threat.`);
+      stopOneTimer();
+      break;
+    case "resistance":
+      state.resistance = Math.max(0, state.resistance - o.effect.amount);
+      log("success", `${o.name}: -${o.effect.amount} Resistance.`);
+      break;
+  }
+
+  o.taken = true;
+
+  if (checkEndings()) return;
+  beginTurn();
+}
+
+function checkEndings() {
+  if (state.phase === "ended") return true;
+
+  if (state.spirits <= 0) {
+    state.phase = "ended";
+    state.ending = "spirits-loss";
+    log("ending", "Your spirit breaks. You are overcome.");
+    render();
+    return true;
+  }
+  if (state.resistance <= 0) {
+    state.phase = "ended";
+    state.ending = "resistance-kill";
+    log("ending", `Resistance crumbles on turn ${state.turn}. Victory.`);
+    render();
+    return true;
+  }
+  if (state.timers.length > 0 && state.timers.every(t => t.stopped)) {
+    state.phase = "ended";
+    state.ending = "control-kill";
+    log("ending", `All threats neutralized on turn ${state.turn}. Total dominance.`);
+    render();
+    return true;
+  }
+  return false;
+}
+
+// --- Helpers ---
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function log(type, text) { state.log.push({ type, text }); }
+
+// --- Render ---
+
+function render() {
+  const g = $("#game");
+  g.innerHTML = "";
+
+  g.appendChild(el("h1", null, "Encounter Prototype"));
+  g.appendChild(el("div", "subtitle", "Timers + openings action economy"));
+
+  if (state.phase === "setup") return renderSetup(g);
+  if (state.phase === "approach") return renderApproach(g);
+  renderPlay(g);
+}
+
+function renderSetup(g) {
+  const label = el("div", "section-label", "Choose encounter type");
+  g.appendChild(label);
+  const row = el("div", "action-row");
+  for (const type of ["Fight", "Traverse"]) {
+    const btn = el("button", "primary", type);
+    btn.onclick = () => startEncounter(type.toLowerCase());
+    row.appendChild(btn);
+  }
+  g.appendChild(row);
+}
+
+function renderApproach(g) {
+  const label = el("div", "section-label", "Choose your approach");
+  g.appendChild(label);
+  const approaches = [
+    { id: "scout",  label: "Scout",  desc: "Mom 0 / 3 timers / start with 3 openings" },
+    { id: "direct", label: "Direct", desc: "Mom 3 / 3 timers" },
+    { id: "wild",   label: "Wild",   desc: "Mom 6 / 4 timers" },
+  ];
+  const actions = el("div", "actions");
+  for (const a of approaches) {
+    const btn = el("button", null,
+      `<strong>${a.label}</strong><br><span style="font-size:14px;color:#8a7a5a">${a.desc}</span>`);
+    btn.onclick = () => setApproach(a.id);
+    actions.appendChild(btn);
+  }
+  g.appendChild(actions);
+}
+
+function renderPlay(g) {
+  const ended = state.phase === "ended";
+
+  // stats bar
+  const stats = el("div", "stats-bar");
+  const statDefs = [
+    { key: "momentum", label: "Momentum", cls: "stat-momentum" },
+    { key: "spirits",    label: "Spirits",    cls: "stat-spirits" },
+    { key: "resistance", label: "Resistance", cls: "stat-resistance" },
+  ];
+  for (const s of statDefs) {
+    const d = el("div", `stat ${s.cls}`);
+    d.innerHTML = `<div class="stat-label">${s.label}</div><div class="stat-value">${state[s.key]}</div>`;
+    stats.appendChild(d);
+  }
+  g.appendChild(stats);
+
+  g.appendChild(el("div", "turn-counter",
+    `Turn ${state.turn} — ${state.type === "traverse" ? "Traverse" : "Fight"}`));
+
+  // timers
+  const timersDiv = el("div", "timers-section");
+  timersDiv.appendChild(el("div", "section-label", "Threats"));
+  for (const t of state.timers) {
+    const td = el("div", `timer${t.stopped ? ' stopped' : ''}`);
+    const left = el("div", "timer-left");
+    left.innerHTML = `<div class="timer-name">${t.stopped ? '&#10005; ' : ''}${t.name}</div>` +
+      `<div class="timer-effect">${t.stopped ? 'Stopped' :
+        (t.effect === 'spirits' ? `-${t.amount} Spirits when it fires` : `+${t.amount} Resistance when it fires`)}</div>`;
+    td.appendChild(left);
+
+    if (!t.stopped) {
+      const cd = el("div", "timer-countdown");
+      for (let i = 0; i < t.countdown; i++) {
+        const pip = el("div", `timer-pip${i < t.current ? ' filled' : ''}`);
+        cd.appendChild(pip);
+      }
+      td.appendChild(cd);
+    }
+    timersDiv.appendChild(td);
+  }
+  g.appendChild(timersDiv);
+
+  // openings
+  if (state.openings.length > 0) {
+    const openDiv = el("div", "openings-section");
+    openDiv.appendChild(el("div", "section-label", "Openings"));
+    state.openings.forEach((o, i) => {
+      const card = el("div", `opening-card${o.taken ? ' taken' : ''}`);
+      const info = el("div", "opening-info");
+      info.innerHTML =
+        `<div class="opening-name">${o.name}</div>` +
+        `<div class="opening-detail">` +
+          `<span class="opening-cost">${costLabel(o.cost)}</span>` +
+          `<span class="opening-effect">${effectLabel(o.effect)}</span>` +
+        `</div>`;
+      card.appendChild(info);
+
+      if (!o.taken && !ended) {
+        const btn = el("button", "primary", "Take");
+        btn.disabled = !canAfford(o);
+        btn.onclick = () => takeOpening(i);
+        card.appendChild(btn);
+      }
+      openDiv.appendChild(card);
+    });
+    g.appendChild(openDiv);
+  }
+
+  // log
+  const logDiv = el("div", "log");
+  for (const entry of state.log) {
+    logDiv.appendChild(el("div", `log-entry log-${entry.type}`, entry.text));
+  }
+  g.appendChild(logDiv);
+  setTimeout(() => logDiv.scrollTop = logDiv.scrollHeight, 0);
+
+  // action buttons — convert/destabilize redraw your openings (no turn end button)
+  if (!ended) {
+    const actions = el("div", "actions");
+    const row1 = el("div", "action-row");
+
+    const convertBtn = el("button", null,
+      "Press the Advantage <span style='font-size:13px;color:#8a7a5a'>(-2 Mom &rarr; 3 openings next turn)</span>");
+    convertBtn.disabled = state.momentum < 2;
+    convertBtn.onclick = doPress;
+    row1.appendChild(convertBtn);
+
+    const destBtn = el("button", null,
+      "Force an Opening <span style='font-size:13px;color:#8a7a5a'>(-2 Spr &rarr; 3 openings next turn)</span>");
+    destBtn.disabled = state.spirits < 2;
+    destBtn.onclick = doForce;
+    row1.appendChild(destBtn);
+
+    actions.appendChild(row1);
+    g.appendChild(actions);
+  }
+
+  // ended
+  if (ended) {
+    const row = el("div", "action-row");
+    row.style.marginTop = "12px";
+    const btn = el("button", "primary", "New Encounter");
+    btn.onclick = newGame;
+    row.appendChild(btn);
+    g.appendChild(row);
+  }
+}
+
+newGame();
+</script>
+</body>
+</html>

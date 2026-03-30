@@ -1,0 +1,38 @@
+{
+  "scope": "source.tac",
+  "completions": [
+    { "trigger": "variant\t[variant type]", "contents": "[variant ${1:combat}]" },
+    { "trigger": "intent\t[intent tag]", "contents": "[intent ${1:violence}]" },
+    { "trigger": "stat\t[stat skill]", "contents": "[stat ${1:combat}]" },
+    { "trigger": "tier\t[tier n]", "contents": "[tier ${1:1}]" },
+    { "trigger": "requires\t[requires condition]", "contents": "[requires ${1:has} ${2:id}]" },
+
+    { "trigger": "stats\tstats section", "contents": "stats:\n  resistance ${1:8}\n  ${2:momentum ${3:3}}" },
+    { "trigger": "timers\ttimers section", "contents": "timers:\n  draw ${1:2}\n  * ${2:Timer Name} [counter ${3:Counter text}]: ${4:spirits} ${5:2} every ${6:4}" },
+    { "trigger": "openings\topenings section", "contents": "openings:\n  * ${1:Card Name}: ${2:free} -> ${3:damage 1}" },
+    { "trigger": "path\tpath section", "contents": "path:\n  * ${1:Card Name}: ${2:free} -> ${3:damage 1}" },
+    { "trigger": "approaches\tapproaches section", "contents": "approaches:\n  * scout: momentum ${1:0}, timers ${2:2}, openings ${3:3}\n  * direct: momentum ${4:3}, timers ${5:2}\n  * wild: momentum ${6:5}, timers ${7:3}" },
+    { "trigger": "failure\tfailure section", "contents": "failure:\n  ${1:Failure prose.}\n  +${2:damage_spirits} ${3:2}" },
+    { "trigger": "branches\tbranches section", "contents": "branches:\n  * ${1:Label} [intent ${2:violence}] -> ${3:path/to/Encounter}" },
+
+    { "trigger": "opening\t* name: cost -> effect", "contents": "* ${1:Card Name}: ${2:free} -> ${3:damage 1}" },
+    { "trigger": "timer\t* name: effect every N", "contents": "* ${1:Timer Name} [counter ${2:Counter text}]: ${3:spirits} ${4:2} every ${5:4}" },
+    { "trigger": "branch\t* label -> ref", "contents": "* ${1:Label} [intent ${2:violence}] -> ${3:path/to/Encounter}" },
+
+    { "trigger": "+damage_health\ttrivial..huge", "contents": "+damage_health ${1:small}" },
+    { "trigger": "+heal\ttrivial..huge", "contents": "+heal ${1:small}" },
+    { "trigger": "+damage_spirits\ttrivial..huge", "contents": "+damage_spirits ${1:small}" },
+    { "trigger": "+heal_spirits\ttrivial..huge", "contents": "+heal_spirits ${1:small}" },
+    { "trigger": "+quality\tid amount", "contents": "+quality ${1:quality_id} ${2:amount}" },
+    { "trigger": "+give_gold\ttrivial..huge", "contents": "+give_gold ${1:small}" },
+    { "trigger": "+rem_gold\ttrivial..huge", "contents": "+rem_gold ${1:small}" },
+    { "trigger": "+add_tag\ttag_id", "contents": "+add_tag ${1:tag_id}" },
+    { "trigger": "+remove_tag\ttag_id", "contents": "+remove_tag ${1:tag_id}" },
+    { "trigger": "+add_item\titem_id", "contents": "+add_item ${1:item_id}" },
+    { "trigger": "+add_condition\tcondition_id", "contents": "+add_condition ${1:condition_id}" },
+    { "trigger": "+remove_condition\tcondition_id", "contents": "+remove_condition ${1:condition_id}" },
+    { "trigger": "+lose_random_item", "contents": "+lose_random_item" },
+    { "trigger": "+finish_dungeon", "contents": "+finish_dungeon" },
+    { "trigger": "+flee_dungeon", "contents": "+flee_dungeon" }
+  ]
+}

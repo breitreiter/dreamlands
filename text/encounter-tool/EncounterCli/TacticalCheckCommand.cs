@@ -37,6 +37,9 @@ static class TacticalCheckCommand
 
             var warnings = CheckForMarkers(text);
 
+            if (result.IsSuccess && result.Encounter is { } enc)
+                warnings.AddRange(CheckOpeningCount(enc));
+
             if (result.IsSuccess && warnings.Count == 0)
             {
                 Console.WriteLine($"  OK  {rel}");
@@ -62,6 +65,20 @@ static class TacticalCheckCommand
         else
             Console.WriteLine($"{failed} of {files.Length} file(s) had errors{(warned > 0 ? $", {warned} with warnings" : "")}.");
         return failed > 0 ? 1 : 0;
+    }
+
+    const int MinDistinctOpenings = 14;
+
+    static List<string> CheckOpeningCount(TacticalEncounter enc)
+    {
+        var warnings = new List<string>();
+        var distinct = enc.Openings.Concat(enc.Path)
+            .Select(o => o.Name)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Count();
+        if (distinct < MinDistinctOpenings)
+            warnings.Add($"Only {distinct} distinct opening(s) across openings + path (minimum {MinDistinctOpenings})");
+        return warnings;
     }
 
     static List<string> CheckForMarkers(string text)

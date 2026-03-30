@@ -1,4 +1,4 @@
-The Harried Trader
+The Injured Trader
 [requires tag metal_beast.looking_for_package]
 [tier 2]
 [trigger settlement]
@@ -19,6 +19,7 @@ choices:
   You heft the cylinder from the table. Its weight surprises you, dragging at your grip like stone wrapped in cloth. The waxed canvas feels slick and cold beneath your fingers. You secure it to your pack with leather thongs, testing the knots twice before you are satisfied.
 
   "You're taking it to the great metal monster," the trader says, "You can't miss it. Tell them I'm sorry for the delay."
+  +add_item control_shaft
   +remove_tag metal_beast.looking_for_package
 
 * Refuse = Not right now

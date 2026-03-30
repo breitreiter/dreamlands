@@ -40,8 +40,11 @@ static class CheckCommand
         }
 
         // Build a lookup of directory -> set of short IDs (filename stems) for +open validation
+        // Include both .enc and .tac files so +open can resolve to tactical encounters
         var shortIdsByDir = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
-        foreach (var file in files)
+        var allOpenTargets = files
+            .Concat(Directory.GetFiles(path, "*.tac", SearchOption.AllDirectories));
+        foreach (var file in allOpenTargets)
         {
             var dir = Path.GetDirectoryName(file) ?? "";
             if (!shortIdsByDir.TryGetValue(dir, out var ids))
@@ -254,7 +257,7 @@ static class CheckCommand
         foreach (var target in targets)
         {
             if (siblingIds == null || !siblingIds.Contains(target))
-                errors.Add($"+open {target}: no encounter file '{target}.enc' found in the same directory");
+                errors.Add($"+open {target}: no encounter file '{target}' (.enc or .tac) found in the same directory");
         }
         return errors;
     }

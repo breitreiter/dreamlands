@@ -21,11 +21,11 @@ choices:
 
         "Aldric. Captain, if rank matters to you." His grip is firm despite the dirt. "You have good timing. We could use another sword."
 
-        Two kinds of soldiers get stationed this far from Aldgate. Good men who have made powerful enemies, and bad men who still have powerful friends. You mark Aldric for the former. The hollowness in his eyes speaks not of vice or ambition, but of campaigns that broke upon circumstance and duty that outlived the regime it served.
+        Two kinds of soldiers get stationed this far from Aldgate. Good men who have made powerful enemies, and bad men who still have powerful friends. You mark Aldric for the former. 
 
-        He gestures toward the sagging standard, its fabric sun-bleached and frayed at the edges. "Seventeenth Mountain Regiment. At least that is what the banner says." His mouth twists, something between pride and bitterness. "When I arrived a year past, they gave me that rag and command of these men. We're charged with protecting what remains of the imperial stocks in this region." 
+        He gestures toward the sagging standard, its fabric sun-bleached and frayed at the edges. "Seventeenth Mountain Regiment. At least that's what the banner says." He offers a wry smile. "When I arrived a year past, they gave me that rag and command of these men. We're charged with protecting what remains of the imperial stocks in this region." 
         
-        He pauses, squinting at the depot's iron door across the dusty ground. "What a mountain regiment does in flat country is a question I've stopped asking. But we carry a duty, and I mean to see it done."
+        He pauses, squinting at the depot's iron door across the dusty ground. "What a mountain regiment does in flat country is above my rank. We our orders, we see them done."
         +add_tag grainway_assault_possible
         +open "Captain Aldric"
     } @else {

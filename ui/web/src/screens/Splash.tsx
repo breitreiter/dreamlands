@@ -60,6 +60,16 @@ export default function Splash() {
           {showCredits && (
             <div className="mt-4 text-left mx-auto max-w-xs space-y-2">
               <p className="text-dim font-bold tracking-wide mb-3">
+                Assets
+              </p>
+              <div className="text-muted">
+                Icons by{" "}
+                <a href="https://game-icons.net/" target="_blank" rel="noopener noreferrer" className="text-action underline">
+                  game-icons.net
+                </a>
+                {" — "}CC BY 3.0
+              </div>
+              <p className="text-dim font-bold tracking-wide mb-3 mt-4">
                 Third-party libraries
               </p>
               {credits.map((c) => (

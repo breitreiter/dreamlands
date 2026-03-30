@@ -20,7 +20,9 @@ choices:
 * Walk to the station = Talk to the scavengers directly
     Aldric moves to block your path. His hand rises, perhaps to halt you, perhaps to warn. Then something in his shoulders gives; the hand falls. He steps aside.
 
-    "They're a rough bunch, trader." His voice carries the weariness of a man who has made this speech before, to deaf ears. "You'll find them more willing to slit your throat than negotiate, but best of luck to you."
+    "They're a rough bunch, trader. You'll find them more willing to slit your throat than negotiate, but best of luck to you."
+
+    You cross the empty space, heading toward a rough fellow near the fenceline.
     +open "The Fenceline"
 
 * Depart = Leave this place behind

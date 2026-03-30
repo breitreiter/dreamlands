@@ -117,13 +117,16 @@ public static class DeckBuilder
         List<OpeningSnapshot> deck, int deckSize,
         TacticalEncounter encounter, PlayerState player, BalanceData balance)
     {
+        var archetypes = balance.Tactical.Archetypes;
+
         // Gated filler first (requires matching player inventory)
         foreach (var o in encounter.Openings)
         {
             if (deck.Count >= deckSize) return;
             if (o.Requires != null && Conditions.Evaluate(o.Requires, player, balance, new Random(0)))
             {
-                deck.Add(SnapshotFromOpening(o));
+                if (archetypes.TryGetValue(o.Archetype, out var arch))
+                    deck.Add(SnapshotFromArchetype(arch, o.Name));
             }
         }
 
@@ -133,7 +136,8 @@ public static class DeckBuilder
             if (deck.Count >= deckSize) return;
             if (o.Requires == null)
             {
-                deck.Add(SnapshotFromOpening(o));
+                if (archetypes.TryGetValue(o.Archetype, out var arch))
+                    deck.Add(SnapshotFromArchetype(arch, o.Name));
             }
         }
     }
@@ -162,15 +166,6 @@ public static class DeckBuilder
         CostAmount = arch.CostAmount,
         EffectKind = Enum.Parse<EffectKind>(arch.EffectKind, ignoreCase: true),
         EffectAmount = arch.EffectAmount,
-    };
-
-    static OpeningSnapshot SnapshotFromOpening(OpeningDef o) => new()
-    {
-        Name = o.Name,
-        CostKind = o.Cost.Kind,
-        CostAmount = o.Cost.Amount,
-        EffectKind = o.Effect.Kind,
-        EffectAmount = o.Effect.Amount,
     };
 
     static IEnumerable<ItemDef> GetEquippedItems(PlayerState player, BalanceData balance)
