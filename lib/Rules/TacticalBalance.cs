@@ -9,9 +9,6 @@ public sealed record TacticalCard(string Name, string Archetype);
 /// <summary>Canonical archetype: defines cost and effect for a card template.</summary>
 public sealed record TacticalArchetype(string Id, string CostKind, int CostAmount, string EffectKind, int EffectAmount);
 
-/// <summary>Flavor name set for an archetype, keyed by encounter subtype.</summary>
-public sealed record ArchetypeFlavor(string Fight, string Debate, string Sneak, string Navigate);
-
 /// <summary>Balance data for the tactical encounter deckbuilding system.</summary>
 public sealed class TacticalBalance
 {
@@ -22,14 +19,8 @@ public sealed class TacticalBalance
     /// <summary>Archetype definitions: template ID → cost/effect.</summary>
     public IReadOnlyDictionary<string, TacticalArchetype> Archetypes { get; init; } = BuildArchetypes();
 
-    /// <summary>Flavor names per archetype per encounter subtype.</summary>
-    public IReadOnlyDictionary<string, ArchetypeFlavor> Flavors { get; init; } = BuildFlavors();
-
     /// <summary>Skill-intrinsic cards. Key = skill, value = cards in level order (index 0 = level 1).</summary>
     public IReadOnlyDictionary<Skill, IReadOnlyList<TacticalCard>> SkillCards { get; init; } = BuildSkillCards();
-
-    /// <summary>Global chaff archetypes used to pad decks.</summary>
-    public IReadOnlyList<string> Chaff { get; init; } = BuildChaff();
 
     static Dictionary<string, TacticalArchetype> BuildArchetypes() => new()
     {
@@ -55,33 +46,14 @@ public sealed class TacticalBalance
         ["free_cancel"] = new("free_cancel", "free", 0, "stop_timer", 0),
     };
 
-    static Dictionary<string, ArchetypeFlavor> BuildFlavors() => new()
-    {
-        ["free_progress_small"] = new("Jab", "Pointed Remark", "Inch Forward", "Careful Step"),
-        ["momentum_to_progress"] = new("Slash", "Sharp Rebuke", "Slip Past", "Scramble Across"),
-        ["momentum_to_progress_large"] = new("Cleave", "Damning Evidence", "Sprint Between Cover", "Power Through"),
-        ["momentum_to_progress_huge"] = new("Haymaker", "Closing Argument", "Ghost Through", "Leap of Faith"),
-        ["spirits_to_progress"] = new("Reckless Lunge", "Bold Claim", "Brazen Dash", "Force the Crossing"),
-        ["spirits_to_progress_large"] = new("Death Blow", "Bare Your Soul", "Now or Never", "Last Reserves"),
-        ["threat_to_progress"] = new("Press Attack", "Talk Past Them", "Ignore the Noise", "Ignore the Signs"),
-        ["threat_to_progress_large"] = new("All-Out Assault", "Inflammatory Accusation", "Run For It", "Charge Ahead"),
-        ["free_momentum_small"] = new("Test Guard", "Feel Them Out", "Watch the Pattern", "Read the Terrain"),
-        ["free_momentum"] = new("Feint", "Build Your Case", "Time Their Rounds", "Find Your Footing"),
-        ["threat_to_momentum"] = new("Overextend", "Give Them Rope", "Tune It Out", "Press On Regardless"),
-        ["spirits_to_momentum"] = new("Second Wind", "Swallow Your Pride", "Steady Your Nerves", "Grit Your Teeth"),
-        ["momentum_to_cancel"] = new("Parry", "Objection", "Evade", "Brace"),
-        ["spirits_to_cancel"] = new("Desperate Parry", "Concede the Point", "Desperate Dodge", "Dig In"),
-        ["free_cancel"] = new("Perfect Counter", "Checkmate", "Vanish", "Safe Ground"),
-    };
-
     static Dictionary<Skill, IReadOnlyList<TacticalCard>> BuildSkillCards() => new()
     {
         [Skill.Combat] = new TacticalCard[]
         {
-            new("Zornhau", "momentum_to_progress"),
-            new("Nachdrängen", "spirits_to_momentum"),
-            new("Überlaufen", "threat_to_progress"),
-            new("Scheitelhau", "momentum_to_progress_large"),
+            new("Zornhau - strike with iron wrath", "momentum_to_progress"),
+            new("Nachdrängen - seize the initiative", "spirits_to_momentum"),
+            new("Überlaufen - strike without fear or hesitation", "threat_to_progress"),
+            new("Scheitelhau - the inevitable end", "momentum_to_progress_large"),
         },
         [Skill.Negotiation] = new TacticalCard[]
         {
@@ -105,16 +77,4 @@ public sealed class TacticalBalance
             new("Push through it", "momentum_to_progress_huge"),
         },
     };
-
-    static IReadOnlyList<string> BuildChaff() =>
-    [
-        "free_progress_small",
-        "free_momentum_small",
-        "threat_to_momentum",
-        "momentum_to_progress",
-        "spirits_to_progress",
-        "free_momentum_small",
-        "free_progress_small",
-        "spirits_to_momentum",
-    ];
 }

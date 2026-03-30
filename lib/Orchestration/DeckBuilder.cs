@@ -37,11 +37,7 @@ public static class DeckBuilder
         if (deck.Count < deckSize)
             FillFromEncounter(deck, deckSize, encounter, player, balance);
 
-        // 4. Fill remaining with global chaff
-        if (deck.Count < deckSize)
-            FillWithChaff(deck, deckSize, balance, rng);
-
-        // 5. Shuffle
+        // 4. Shuffle
         Shuffle(deck, rng);
         return deck;
     }
@@ -139,23 +135,6 @@ public static class DeckBuilder
                 if (archetypes.TryGetValue(o.Archetype, out var arch))
                     deck.Add(SnapshotFromArchetype(arch, o.Name));
             }
-        }
-    }
-
-    static void FillWithChaff(List<OpeningSnapshot> deck, int deckSize, BalanceData balance, Random rng)
-    {
-        var tb = balance.Tactical;
-        var chaffArchetypes = tb.Chaff;
-        int i = 0;
-        while (deck.Count < deckSize && chaffArchetypes.Count > 0)
-        {
-            var archId = chaffArchetypes[i % chaffArchetypes.Count];
-            if (tb.Archetypes.TryGetValue(archId, out var arch))
-            {
-                // Use archetype ID as name — the UI will apply flavor names based on encounter subtype
-                deck.Add(SnapshotFromArchetype(arch, archId));
-            }
-            i++;
         }
     }
 

@@ -6,7 +6,7 @@ Road Toll Chase
 You bolt off the road and into the tall grass. Behind you, the thieves curse and give chase. They're road bandits, not trackers. If you can stay ahead through the fields and find cover, they'll give up soon enough.
 
 stats:
-  resistance 6
+  resistance 7
 
 timers:
   draw 2
@@ -28,7 +28,7 @@ openings:
 
 path:
   * Fence line (vault over): momentum_to_progress
-  * Low hill (scramble up): momentum_to_progress
+  * Low hill (scramble up): momentum_to_progress_large
   * Dense thicket (vanish into): momentum_to_progress
 
 failure:
