@@ -24,6 +24,17 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       mega-T1 region from making an entire biome feel safe.
 - [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 
+### Road Encounter System (Tableau)
+
+- [ ] Design aspect taxonomy — brainstorm 15-25 aspects starting from biome vocabularies
+      (affordance: flammable, heavy, loose, elevated, etc. + capability: fire, reach, sharp, etc.).
+      Factor from concrete "clever moment" sentences, not top-down. Spec in
+      `project/design/encounter-redesign/aspect-based.md`.
+- [ ] Design verbs as aspect-threshold slot machines — build on aspect list, define slot
+      requirements and output rules
+- [ ] Design biome card pools — curated aspect bundles per biome, weighted toward
+      characteristic vocabularies
+
 ### Rules & Balancing
 
 - [ ] Playtest medicine vs. health drain in T3 areas — currently medicine reduces condition

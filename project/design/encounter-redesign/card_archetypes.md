@@ -76,108 +76,245 @@ Things in the fiction which accellerate timers:
 
 These are the workhorses. Most decks are mostly progress cards.
 
-| Archetype | Cost | Effect | Role | Notes |
-|-----------|------|--------|------|-------|
-| **Poke** | free | +1 progress | Chaff | A glancing blow, a tentative step. Barely moves the needle. |
-| **Strike** | -1 momentum | +2 progress | Bread and butter | Efficient, always welcome. |
-| **Heavy Strike** | -2 momentum | +3 progress | Power card | Your best momentum-to-progress conversion. |
-| **Haymaker** | -3 momentum | +5 progress | Finisher | Expensive but closes games. Dead card early. |
-| **Gambit** | -1 spirits | +3 progress | High-risk progress | Spirits are precious. Worth it if you're racing. |
-| **Desperation** | -2 spirits | +5 progress | Emergency finisher | Only when you're sure this ends it. |
-| **Risky Advance** | 🠻 threat | +2 progress | Tempo play | Progress at the cost of timer pressure. |
-| **Reckless Push** | 🠻 threat | +3 progress | Aggressive tempo | Bigger payoff, bigger gamble. |
+### free_progress_small
+- Cost: free
+- Effect: +1 progress
+- Role: Chaff
+
+### momentum_to_progress
+- Cost: -1 momentum
+- Effect: +2 progress
+- Role: Bread and butter
+
+### momentum_to_progress_large
+- Cost: -2 momentum
+- Effect: +3 progress
+- Role: Power card
+
+### momentum_to_progress_huge
+- Cost: -3 momentum
+- Effect: +5 progress
+- Role: Finisher
+
+### spirits_to_progress
+- Cost: -1 spirits
+- Effect: +3 progress
+- Role: High-risk progress
+
+### spirits_to_progress_large
+- Cost: -2 spirits
+- Effect: +5 progress
+- Role: Emergency finisher
+
+### threat_to_progress
+- Cost: 🠻 threat
+- Effect: +2 progress
+- Role: Tempo play
+- Progress at the cost of timer pressure.
+
+### threat_to_progress_large
+- Cost: 🠻 threat
+- Effect: +3 progress
+- Role: Aggressive tempo
+- Bigger payoff, bigger gamble.
 
 ## Momentum cards (fuel generation)
 
 These set up future turns. The "ramp" cards.
 
-| Archetype | Cost | Effect | Role | Notes |
-|-----------|------|--------|------|-------|
-| **Probe** | free | +1 momentum | Chaff | Testing the opponent's guard, feeling out the terrain. Small setup. |
-| **Build Pressure** | free | +2 momentum | Solid utility | Good card in any deck. Enables Strike next turn. |
-| **Wind Up** | 🠻 threat | +2 momentum | Risky ramp | Trading timer pressure for future power. |
-| **Dig Deep** | -1 spirits | +3 momentum | Spirits-to-momentum conversion | Converts non-renewable to renewable. Painful but sometimes necessary. |
+### free_momentum_small
+- Cost: free
+- Effect: +1 momentum
+- Role: Chaff
+- Testing the opponent's guard, feeling out the terrain. Small setup.
+
+### free_momentum
+- Cost: free
+- Effect: +2 momentum
+- Role: Solid utility
+- Good card in any deck. Enables momentum_to_progress next turn.
+
+### threat_to_momentum
+- Cost: 🠻 threat
+- Effect: +2 momentum
+- Role: Risky ramp
+- Trading timer pressure for future power.
+
+### spirits_to_momentum
+- Cost: -1 spirits
+- Effect: +3 momentum
+- Role: Spirits-to-momentum conversion
+- Converts non-renewable to renewable. Painful but sometimes necessary.
 
 ## Stop-threat cards (counter timers)
 
 These are the control cards. Must be brought via collection — not free.
 
-| Archetype | Cost | Effect | Role | Notes |
-|-----------|------|--------|------|-------|
-| **Counter** | -2 momentum | ×threat | Core control | Neutralize a threat by spending your built-up advantage. Costs a full Strike's worth of momentum. |
-| **Desperate Counter** | -1 spirits | ×threat | Emergency control | When you can't afford the momentum. |
-| **Clean Counter** | free | ×threat | Premium control | Best card in the game. Very rare — only on top-tier gear. |
+### momentum_to_cancel
+- Cost: -2 momentum
+- Effect: ×threat
+- Role: Core control
+- Neutralize a threat by spending your built-up advantage. Costs a full momentum_to_progress's worth of momentum.
+
+### spirits_to_cancel
+- Cost: -1 spirits
+- Effect: ×threat
+- Role: Emergency control
+- When you can't afford the momentum.
+
+### free_cancel
+- Cost: free
+- Effect: ×threat
+- Role: Premium control
+- Best card in the game. Very rare — only on top-tier gear.
 
 ## Flavor names by encounter type
 
 Same 15 archetypes, reskinned per encounter type. Items and skills contribute archetype cards; the engine picks the flavor name matching the encounter type.
 
-| Archetype | Fight (Combat) | Debate (Negotiation) | Sneak (Cunning) | Navigate (Bushcraft) |
-|-----------|---------------|---------------------|-----------------|---------------------|
-| **Poke** | Jab | Pointed Remark | Inch Forward | Careful Step |
-| **Strike** | Slash | Sharp Rebuke | Slip Past | Scramble Across |
-| **Heavy Strike** | Cleave | Damning Evidence | Sprint Between Cover | Power Through |
-| **Haymaker** | Haymaker | Closing Argument | Ghost Through | Leap of Faith |
-| **Gambit** | Reckless Lunge | Bold Claim | Brazen Dash | Force the Crossing |
-| **Desperation** | Death Blow | Bare Your Soul | Now or Never | Last Reserves |
-| **Risky Advance** | Press Attack | Talk Past Them | Ignore the Noise | Ignore the Signs |
-| **Reckless Push** | All-Out Assault | Inflammatory Accusation | Run For It | Charge Ahead |
-| **Probe** | Test Guard | Feel Them Out | Watch the Pattern | Read the Terrain |
-| **Build Pressure** | Feint | Build Your Case | Time Their Rounds | Find Your Footing |
-| **Wind Up** | Overextend | Give Them Rope | Tune It Out | Press On Regardless |
-| **Dig Deep** | Second Wind | Swallow Your Pride | Steady Your Nerves | Grit Your Teeth |
+### free_progress_small
+- Fight: Jab
+- Debate: Pointed Remark
+- Sneak: Inch Forward
+- Navigate: Careful Step
+
+### momentum_to_progress
+- Fight: Slash
+- Debate: Sharp Rebuke
+- Sneak: Slip Past
+- Navigate: Scramble Across
+
+### momentum_to_progress_large
+- Fight: Cleave
+- Debate: Damning Evidence
+- Sneak: Sprint Between Cover
+- Navigate: Power Through
+
+### momentum_to_progress_huge
+- Fight: Haymaker
+- Debate: Closing Argument
+- Sneak: Ghost Through
+- Navigate: Leap of Faith
+
+### spirits_to_progress
+- Fight: Reckless Lunge
+- Debate: Bold Claim
+- Sneak: Brazen Dash
+- Navigate: Force the Crossing
+
+### spirits_to_progress_large
+- Fight: Death Blow
+- Debate: Bare Your Soul
+- Sneak: Now or Never
+- Navigate: Last Reserves
+
+### threat_to_progress
+- Fight: Press Attack
+- Debate: Talk Past Them
+- Sneak: Ignore the Noise
+- Navigate: Ignore the Signs
+
+### threat_to_progress_large
+- Fight: All-Out Assault
+- Debate: Inflammatory Accusation
+- Sneak: Run For It
+- Navigate: Charge Ahead
+
+### free_momentum_small
+- Fight: Test Guard
+- Debate: Feel Them Out
+- Sneak: Watch the Pattern
+- Navigate: Read the Terrain
+
+### free_momentum
+- Fight: Feint
+- Debate: Build Your Case
+- Sneak: Time Their Rounds
+- Navigate: Find Your Footing
+
+### threat_to_momentum
+- Fight: Overextend
+- Debate: Give Them Rope
+- Sneak: Tune It Out
+- Navigate: Press On Regardless
+
+### spirits_to_momentum
+- Fight: Second Wind
+- Debate: Swallow Your Pride
+- Sneak: Steady Your Nerves
+- Navigate: Grit Your Teeth
 
 ## Chaff pool (global, used to fill decks)
 
 These are the 6-8 generic cards the engine draws from when the deck needs padding. They're all playable but none are exciting.
 
-| Archetype | Cost | Effect | Fight | Debate | Sneak | Navigate |
-|-----------|------|--------|-------|--------|-------|----------|
-| Scramble (Poke) | free | +1 progress | Wild Swing | Stammer a Point | Duck and Shuffle | Stumble Forward |
-| Shift stance (Probe) | free | +1 momentum | Adjust Grip | Change Tack | Flatten Against the Wall | Check Your Bearings |
-| Reckless move (Wind Up) | 🠻 threat | +1 momentum | Drop Your Guard | Speak Out of Turn | Peek Too Long | Skip a Handhold |
-| Commit (Strike) | -1 momentum | +1 progress | Lash Out | Press the Point | Dart Across | Clamber Over |
-| Push through (Gambit) | -1 spirits | +2 progress | Grit and Swing | Lay It All Out | Sprint Blind | Muscle Through |
-| Find an opening (Probe) | free | +1 momentum | Study the Stance | Read the Room | Spot a Gap | Survey the Path |
-| Fall back | -1 progress | +1 spirits | Disengage | Walk It Back | Retreat to Cover | Backtrack |
-| Adrenaline surge (Dig Deep) | -1 spirits | +1 momentum | Battle Fury | Desperate Confidence | Panic Focus | Push Past the Pain |
+These need to be carefully skinned to the encounter so they feel natural in the fiction. We should avoid generic "lunging strike" type names, instead favoring "Lunge at the bandit" or "Cite imperial law" or "leap to the next stone."
 
-Note: duplicate archetypes in the chaff pool are intentional. You want multiple copies of Poke and Probe available for padding so the engine doesn't run out of chaff templates.
+## Card sources and deckbuilding
 
-## Example: mapping archetypes to items
+A character's collection comes from three additive sources. The deck is collection + chaff padding.
 
-| Item | Cards | Archetypes |
-|------|-------|------------|
-| Bodkin (cheap dagger) | "Jab" | Poke |
-| Arming sword | "Slash", "Parry" | Strike, Counter |
-| Broadaxe | "Cleave", "Mighty Swing" | Heavy Strike, Haymaker |
-| Hunting knife | "Quick Cut" | Strike |
-| Shimmering blade (endgame) | "Radiant Strike", "Disrupting Slash" | Heavy Strike, Clean Counter |
-| Leather armor | "Dodge" | Build Pressure |
-| Chainmail | "Absorb Blow" | Counter |
-| Heavy brigandine | "Iron Wall", "Shrug Off" | Counter, Build Pressure |
-| Trail boots | "Sure Step" | Poke (traverse-tagged) |
-| Windstriders (endgame boots) | "Swift Advance", "Leap" | Strike, Build Pressure (traverse-tagged) |
-| Climbing rope (tool) | "Rope Swing" | Heavy Strike (traverse gated filler) |
-| Ornate spyglass (tool) | "Read the Terrain" | Patient Counter (traverse gated filler) |
+Card sources:
+- Base skill: 0–4 cards (one per skill level)
+- Weapon / gear: 1–5 cards (depends on item quality)
+- Lucky charm: 0–1 card (rare findable)
 
-## Example: mapping archetypes to skill levels
+Maximum collection size: 10 cards (4 skill + 5 weapon + 1 charm). Deck is always 15; remainder is chaff.
 
-Using combat as an example. Each level adds one card to your collection (cumulative).
+### Combat skill (4 cards)
 
-| Level | Card | Archetype | Notes |
-|-------|------|-----------|-------|
-| 1 | "Trained Strike" | Strike | Basic competence |
-| 2 | "Battle Awareness" | Build Pressure | You can read the flow |
-| 3 | "Feint" | Risky Advance | Trading risk for progress |
-| 4 | "Press Attack" | Heavy Strike | Real power coming online |
-| 5 | "Defensive Stance" | Counter | Can now attempt control kills |
-| 6 | "Exploit Weakness" | Gambit | Spirits-for-progress option opens up |
-| 7 | "Riposte" | Strike and Shift | Efficient two-for-one |
-| 8 | "Decisive Blow" | Haymaker | Finisher |
-| 9 | "Combat Mastery" | Tactical Read | Premium utility at every turn |
-| 10 | "Perfect Strike" | All-In | The ultimate card |
+In general, core skills should offer a range of cards to fill utility slots and patch over gear-based weakness.
 
-At combat 10 with an arming sword, your collection is 10 skill cards + 2 sword cards = 12 cards. Deck is 12 collection + 3 filler. Almost no chaff. Every draw is good.
+Each point in Combat adds one card. Higher levels unlock stronger archetypes. Cumulative.
 
-At combat 3 with a hunting knife, your collection is 3 skill cards + 1 knife card = 4 cards. Deck is 4 collection + 11 filler. Mostly chaff, but winnable.
+- Combat 1: "Zornhau - wrathful strike" = momentum_to_progress
+- Combat 2: "Nachdrängen - take initiative" = spirits_to_momentum
+- Combat 3: "Überlaufen - fearless strike" = threat_to_progress
+- Combat 4: "Scheitelhau - inevitable end" = momentum_to_progress_large
+
+### Weapon: shimmering blade (5 cards)
+
+In general:
+- Axes should be big, inefficient blows. Slow to wind up but devastating
+- Daggers should be quick and efficient, but struggle to convert momentum into big payouts
+- Swords should balance, taking the best of both. They are the optimial martial weapon.
+- Starter weapons should just offer 1-2 predictable mechanics
+- Mid-tier weapons should have some distinctive character, mixing core utility with interesting options
+- End-game weapons should be generally useful but also expose powerful options
+- Cards should have muscular but legible names that communicate their function
+
+An endgame weapon. Each card represents a distinct technique the weapon enables.
+
+- "Quick Cut" = free_progress_small
+- "Radiant Strike" = momentum_to_progress
+- "Disrupting Slash" = momentum_to_cancel
+- "Searing Arc" = momentum_to_progress_huge
+- "Banishing Edge" = free_cancel
+
+### Lucky charm: rabbit's foot (1 card)
+
+In general, charms should be rare pulls that feel delightful but not overwhelming
+
+- "Lucky Break" = spirits_to_progress
+
+### Full collection (10 cards)
+
+Sorted by source:
+
+From Combat skill:
+- "Zornhau" = momentum_to_progress
+- "Nachdrängen" = spirits_to_momentum
+- "Überlaufen" = threat_to_progress
+- "Scheitelhau" = momentum_to_progress_huge
+
+From shimmering blade:
+- "Quick Cut" = free_progress_small
+- "Radiant Strike" = momentum_to_progress
+- "Disrupting Slash" = momentum_to_cancel
+- "Searing Arc" = momentum_to_progress_huge
+- "Banishing Edge" = free_cancel
+
+From rabbit's foot:
+- "Lucky Break" = spirits_to_progress
+
+Deck: 10 collection + 5 chaff. Strong draws most turns. Two momentum_to_progress copies, a huge finisher, and both cancel types available. Chaff is rare enough that a bad draw just means a slower turn, not a dead one.
