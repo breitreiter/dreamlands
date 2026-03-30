@@ -20,7 +20,6 @@ public class BundleTests
               "title": "Wolves",
               "body": "Three wolves.",
               "variant": "combat",
-              "intent": "violence",
               "tier": 1,
               "requires": [],
               "resistance": 8,
@@ -50,8 +49,8 @@ public class BundleTests
               "tier": 2,
               "requires": [],
               "branches": [
-                { "label": "Fight", "intent": "violence", "encounterRef": "wolves", "requires": null },
-                { "label": "Sneak", "intent": "stealth", "encounterRef": "bypass", "requires": "has light_armor" }
+                { "label": "Fight", "encounterRef": "wolves", "requires": null },
+                { "label": "Sneak", "encounterRef": "bypass", "requires": "has light_armor" }
               ]
             }
           ]
@@ -159,7 +158,6 @@ public class BundleTests
         Assert.Equal(2, grp.Tier);
         Assert.Equal(2, grp.Branches.Count);
         Assert.Equal("Fight", grp.Branches[0].Label);
-        Assert.Equal("violence", grp.Branches[0].Intent);
         Assert.Equal("wolves", grp.Branches[0].EncounterRef);
         Assert.Null(grp.Branches[0].Requires);
         Assert.Equal("has light_armor", grp.Branches[1].Requires);

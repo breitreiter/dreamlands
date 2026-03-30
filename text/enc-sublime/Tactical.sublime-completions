@@ -2,7 +2,6 @@
   "scope": "source.tac",
   "completions": [
     { "trigger": "variant\t[variant type]", "contents": "[variant ${1:combat}]" },
-    { "trigger": "intent\t[intent tag]", "contents": "[intent ${1:violence}]" },
     { "trigger": "stat\t[stat skill]", "contents": "[stat ${1:combat}]" },
     { "trigger": "tier\t[tier n]", "contents": "[tier ${1:1}]" },
     { "trigger": "requires\t[requires condition]", "contents": "[requires ${1:has} ${2:id}]" },
@@ -13,11 +12,11 @@
     { "trigger": "path\tpath section", "contents": "path:\n  * ${1:Card Name}: ${2:free} -> ${3:damage 1}" },
     { "trigger": "approaches\tapproaches section", "contents": "approaches:\n  * scout: momentum ${1:0}, timers ${2:2}, openings ${3:3}\n  * direct: momentum ${4:3}, timers ${5:2}\n  * wild: momentum ${6:5}, timers ${7:3}" },
     { "trigger": "failure\tfailure section", "contents": "failure:\n  ${1:Failure prose.}\n  +${2:damage_spirits} ${3:2}" },
-    { "trigger": "branches\tbranches section", "contents": "branches:\n  * ${1:Label} [intent ${2:violence}] -> ${3:path/to/Encounter}" },
+    { "trigger": "branches\tbranches section", "contents": "branches:\n  * ${1:Label} -> ${2:path/to/Encounter}" },
 
     { "trigger": "opening\t* name: cost -> effect", "contents": "* ${1:Card Name}: ${2:free} -> ${3:damage 1}" },
     { "trigger": "timer\t* name: effect every N", "contents": "* ${1:Timer Name} [counter ${2:Counter text}]: ${3:spirits} ${4:2} every ${5:4}" },
-    { "trigger": "branch\t* label -> ref", "contents": "* ${1:Label} [intent ${2:violence}] -> ${3:path/to/Encounter}" },
+    { "trigger": "branch\t* label -> ref", "contents": "* ${1:Label} -> ${2:path/to/Encounter}" },
 
     { "trigger": "+damage_health\ttrivial..huge", "contents": "+damage_health ${1:small}" },
     { "trigger": "+heal\ttrivial..huge", "contents": "+heal ${1:small}" },

@@ -1642,7 +1642,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Title = tacEnc.Title,
             Body = tacEnc.Body,
             Variant = tacEnc.Variant.ToString().ToLowerInvariant(),
-            Intent = tacEnc.Intent,
         };
 
         switch (step)

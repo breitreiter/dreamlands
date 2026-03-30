@@ -80,7 +80,6 @@ public sealed class TacticalBundle
                 Title = e.Title,
                 Body = e.Body,
                 Variant = Enum.Parse<Variant>(e.Variant, ignoreCase: true),
-                Intent = e.Intent,
                 Stat = e.Stat,
                 Tier = e.Tier,
                 Requires = e.Requires ?? [],
@@ -123,7 +122,7 @@ public sealed class TacticalBundle
                 Tier = g.Tier,
                 Requires = g.Requires ?? [],
                 Branches = g.Branches.Select(b => new BranchDef(
-                    b.Label, b.Intent, b.EncounterRef, b.Requires)).ToList(),
+                    b.Label, b.EncounterRef, b.Requires)).ToList(),
             });
         }
 
@@ -156,7 +155,7 @@ public sealed class TacticalBundle
         Dictionary<string, List<int>>? EncountersByCategory);
     record EncounterDto(
         string Id, string Category, string Title, string Body, string Variant,
-        string? Intent, string? Stat, int? Tier, List<string>? Requires,
+        string? Stat, int? Tier, List<string>? Requires,
         int Resistance,
         int TimerDraw, List<TimerDto> Timers, List<OpeningDto> Openings,
         List<OpeningDto>? Path, List<ApproachDto>? Approaches, FailureDto? Failure, SuccessDto? Success);
@@ -168,5 +167,5 @@ public sealed class TacticalBundle
     record GroupDto(
         string Id, string Category, string Title, string Body,
         int? Tier, List<string>? Requires, List<BranchDto> Branches);
-    record BranchDto(string Label, string? Intent, string EncounterRef, string? Requires);
+    record BranchDto(string Label, string EncounterRef, string? Requires);
 }

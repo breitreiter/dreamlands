@@ -28,13 +28,9 @@ public static partial class TacticalParser
     [GeneratedRegex(@"^\*\s+(scout|direct|wild):\s*(.+)$")]
     private static partial Regex ApproachPattern();
 
-    // * Label [intent tag] -> encounter_ref [requires condition]
+    // * Label -> encounter_ref [requires condition]
     [GeneratedRegex(@"^\*\s+(.+?)\s*->\s*(.+?)\s*$")]
     private static partial Regex BranchPattern();
-
-    // [intent tag] extractor
-    [GeneratedRegex(@"\[intent\s+(\w+)\]")]
-    private static partial Regex IntentTag();
 
     // [requires condition] extractor
     [GeneratedRegex(@"\[requires\s+(.+?)\]")]
@@ -62,7 +58,6 @@ public static partial class TacticalParser
         // Front-matter
         var requires = new List<string>();
         Variant? variant = null;
-        string? intent = null;
         string? stat = null;
         int? tier = null;
         int bodyStart = 1;
@@ -86,9 +81,6 @@ public static partial class TacticalParser
                         errors.Add(new ParseError(i + 1, $"Invalid variant '{value}'. Must be 'combat' or 'traverse'."));
                     else
                         variant = v;
-                    break;
-                case "intent":
-                    intent = value;
                     break;
                 case "stat":
                     stat = value;
@@ -181,14 +173,14 @@ public static partial class TacticalParser
         }
 
         if (isGroup)
-            return ParseGroup(lines, title, body, intent, tier, requires, sections, errors);
+            return ParseGroup(lines, title, body, tier, requires, sections, errors);
 
-        return ParseEncounter(lines, title, body, variant, intent, stat, tier, requires, sections, errors);
+        return ParseEncounter(lines, title, body, variant, stat, tier, requires, sections, errors);
     }
 
     static TacticalParseResult ParseEncounter(
         string[] lines, string title, string body,
-        Variant? variant, string? intent, string? stat, int? tier,
+        Variant? variant, string? stat, int? tier,
         List<string> requires, Dictionary<Section, (int start, int end)> sections,
         List<ParseError> errors)
     {
@@ -276,7 +268,6 @@ public static partial class TacticalParser
                 Title = title,
                 Body = body,
                 Variant = variant!.Value,
-                Intent = intent,
                 Stat = stat,
                 Tier = tier,
                 Requires = requires,
@@ -294,7 +285,7 @@ public static partial class TacticalParser
 
     static TacticalParseResult ParseGroup(
         string[] lines, string title, string body,
-        string? intent, int? tier, List<string> requires,
+        int? tier, List<string> requires,
         Dictionary<Section, (int start, int end)> sections,
         List<ParseError> errors)
     {
@@ -559,21 +550,12 @@ public static partial class TacticalParser
             var bm = BranchPattern().Match(trimmed);
             if (!bm.Success)
             {
-                errors.Add(new ParseError(i + 1, $"Invalid branch format. Expected '* Label [intent tag] -> encounter_ref'."));
+                errors.Add(new ParseError(i + 1, $"Invalid branch format. Expected '* Label -> encounter_ref'."));
                 continue;
             }
 
             var labelPart = bm.Groups[1].Value.Trim();
             var refPart = bm.Groups[2].Value.Trim();
-
-            // Extract [intent ...] from label
-            string? branchIntent = null;
-            var intentMatch = IntentTag().Match(labelPart);
-            if (intentMatch.Success)
-            {
-                branchIntent = intentMatch.Groups[1].Value;
-                labelPart = labelPart[..intentMatch.Index].Trim();
-            }
 
             // Extract [requires ...] from ref
             string? req = null;
@@ -584,7 +566,7 @@ public static partial class TacticalParser
                 refPart = refPart[..reqMatch.Index].Trim();
             }
 
-            branches.Add(new BranchDef(labelPart, branchIntent, refPart, req));
+            branches.Add(new BranchDef(labelPart, refPart, req));
         }
     }
 

@@ -8,7 +8,6 @@ public class ParserTests
     const string CombatEncounter = """
         Wolves of the Cairn Road
         [variant combat]
-        [intent violence]
         [tier 2]
 
         Three wolves materialize from the scrub grass on either side of the road.
@@ -44,7 +43,6 @@ public class ParserTests
     const string TraverseEncounter = """
         The Shattered Bridge
         [variant traverse]
-        [intent exploration]
         [tier 1]
 
         The bridge across the gorge has collapsed to a skeleton of stone pillars
@@ -78,9 +76,9 @@ public class ParserTests
         Something is wrong.
 
         branches:
-          * Fight through [intent violence] -> wolves_of_the_cairn_road
-          * Sneak past [intent stealth] -> cairn_road_bypass [requires has light_armor]
-          * Parley [intent negotiation] -> cairn_road_parley
+          * Fight through -> wolves_of_the_cairn_road
+          * Sneak past -> cairn_road_bypass [requires has light_armor]
+          * Parley -> cairn_road_parley
         """;
 
     // ── Combat encounter ───────────────────────────────────────────
@@ -106,7 +104,6 @@ public class ParserTests
     {
         var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
         Assert.Equal(Variant.Combat, enc.Variant);
-        Assert.Equal("violence", enc.Intent);
         Assert.Equal(2, enc.Tier);
     }
 
@@ -207,7 +204,6 @@ public class ParserTests
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
         var enc = result.Encounter!;
         Assert.Equal(Variant.Traverse, enc.Variant);
-        Assert.Equal("exploration", enc.Intent);
     }
 
     [Fact]
@@ -254,17 +250,14 @@ public class ParserTests
         Assert.Equal(3, grp.Branches.Count);
 
         Assert.Equal("Fight through", grp.Branches[0].Label);
-        Assert.Equal("violence", grp.Branches[0].Intent);
         Assert.Equal("wolves_of_the_cairn_road", grp.Branches[0].EncounterRef);
         Assert.Null(grp.Branches[0].Requires);
 
         Assert.Equal("Sneak past", grp.Branches[1].Label);
-        Assert.Equal("stealth", grp.Branches[1].Intent);
         Assert.Equal("cairn_road_bypass", grp.Branches[1].EncounterRef);
         Assert.Equal("has light_armor", grp.Branches[1].Requires);
 
         Assert.Equal("Parley", grp.Branches[2].Label);
-        Assert.Equal("negotiation", grp.Branches[2].Intent);
     }
 
     // ── Validation errors ──────────────────────────────────────────

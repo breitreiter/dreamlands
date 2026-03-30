@@ -26,11 +26,6 @@ contexts:
         1: keyword.other.frontmatter.tac
         2: constant.language.variant.tac
         3: keyword.other.frontmatter.tac
-    - match: '^(\[intent)\s+(\w+)(\])'
-      captures:
-        1: keyword.other.frontmatter.tac
-        2: constant.language.intent.tac
-        3: keyword.other.frontmatter.tac
     - match: '^(\[stat)\s+(combat|negotiation|bushcraft|cunning)(\])'
       captures:
         1: keyword.other.frontmatter.tac
@@ -137,18 +132,15 @@ contexts:
   # --- Branches ---
 
   branch-line:
-    - match: '^\s*(\*)\s+(.*?)(?:\s*(\[intent)\s+(\w+)(\]))?\s*(->)\s+(.*?)(?:\s*(\[requires)\s+(.*?)(\]))?\s*$'
+    - match: '^\s*(\*)\s+(.*?)\s*(->)\s+(.*?)(?:\s*(\[requires)\s+(.*?)(\]))?\s*$'
       captures:
         1: keyword.operator.bullet.tac
         2: entity.name.tag.branch-label.tac
-        3: keyword.other.intent.tac
-        4: constant.language.intent.tac
-        5: keyword.other.intent.tac
-        6: punctuation.separator.arrow.tac
-        7: string.unquoted.encounter-ref.tac
-        8: keyword.other.requires.tac
-        9: constant.other.condition.tac
-        10: keyword.other.requires.tac
+        3: punctuation.separator.arrow.tac
+        4: string.unquoted.encounter-ref.tac
+        5: keyword.other.requires.tac
+        6: constant.other.condition.tac
+        7: keyword.other.requires.tac
 
   # --- Mechanic verbs (failure section, same as .enc) ---
 

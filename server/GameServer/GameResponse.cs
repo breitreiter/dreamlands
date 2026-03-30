@@ -317,8 +317,6 @@ public record TacticalInfo
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
     public string Variant { get; init; } = "";
-    public string? Intent { get; init; }
-
     // approach phase
     public List<TacticalApproachInfo>? Approaches { get; init; }
 

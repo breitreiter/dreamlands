@@ -308,7 +308,6 @@ export interface TacticalInfo {
   title: string;
   body: string;
   variant: string;
-  intent?: string;
   approaches?: TacticalApproachInfo[];
   turn?: TacticalTurnInfo;
   finishReason?: string;

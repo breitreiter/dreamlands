@@ -117,7 +117,6 @@ static class TacticalBundleCommand
         title = enc.Title,
         body = enc.Body,
         variant = enc.Variant.ToString().ToLowerInvariant(),
-        intent = enc.Intent,
         stat = enc.Stat,
         tier = enc.Tier,
         requires = enc.Requires,
@@ -174,7 +173,6 @@ static class TacticalBundleCommand
         branches = grp.Branches.Select(b => new
         {
             label = b.Label,
-            intent = b.Intent,
             encounterRef = b.EncounterRef,
             requires = b.Requires
         })

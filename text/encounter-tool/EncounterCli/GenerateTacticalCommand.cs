@@ -2,8 +2,6 @@ namespace EncounterCli;
 
 static class GenerateTacticalCommand
 {
-    static readonly string[] ValidStats = ["combat", "cunning", "negotiation", "bushcraft", "mercantile", "luck"];
-
     // Archetype pools: (id, progress_value)
     static readonly (string Id, int Value)[] MomentumArchetypes =
     [
@@ -85,28 +83,23 @@ static class GenerateTacticalCommand
     public static int Run(string[] args)
     {
         string? variant = null;
-        string? stat = null;
         int? tier = null;
         string? outPath = null;
         int? seed = null;
-        string? intent = null;
-
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i] == "--out" && i + 1 < args.Length) { outPath = args[i + 1]; i++; }
             else if (args[i] == "--seed" && i + 1 < args.Length && int.TryParse(args[i + 1], out var s)) { seed = s; i++; }
-            else if (args[i] == "--intent" && i + 1 < args.Length) { intent = args[i + 1]; i++; }
             else if (!args[i].StartsWith('-'))
             {
                 if (variant == null) variant = args[i].ToLowerInvariant();
-                else if (stat == null) stat = args[i].ToLowerInvariant();
                 else if (tier == null && int.TryParse(args[i], out var t)) tier = t;
             }
         }
 
-        if (variant == null || stat == null || tier == null)
+        if (variant == null || tier == null)
         {
-            Console.Error.WriteLine("Usage: encounter generate-tactical <variant> <stat> <tier> [--out <file>] [--seed <n>] [--intent <name>]");
+            Console.Error.WriteLine("Usage: encounter generate-tactical <variant> <tier> [--out <file>] [--seed <n>]");
             return 1;
         }
 
@@ -116,19 +109,13 @@ static class GenerateTacticalCommand
             return 1;
         }
 
-        if (!ValidStats.Contains(stat))
-        {
-            Console.Error.WriteLine($"Unknown stat: {stat}. Must be one of: {string.Join(", ", ValidStats)}");
-            return 1;
-        }
-
         if (!Tiers.ContainsKey(tier.Value))
         {
             Console.Error.WriteLine($"Invalid tier: {tier}. Must be 1, 2, or 3.");
             return 1;
         }
 
-        var output = Generate(variant, stat, tier.Value, intent, seed);
+        var output = Generate(variant, tier.Value, seed);
 
         if (outPath != null)
         {
@@ -152,7 +139,7 @@ static class GenerateTacticalCommand
 
     // --- Generation ---
 
-    static string Generate(string variant, string stat, int tier, string? intent, int? seed)
+    static string Generate(string variant, int tier, int? seed)
     {
         var rng = seed.HasValue ? new Random(seed.Value) : new Random();
         var td = Tiers[tier];
@@ -165,9 +152,7 @@ static class GenerateTacticalCommand
         // Header
         lines.Add("FIXME: Title");
         lines.Add($"[variant {variant}]");
-        if (intent != null)
-            lines.Add($"[intent {intent}]");
-        lines.Add($"[stat {stat}]");
+        lines.Add($"[stat FIXME]");
         lines.Add($"[tier {tier}]");
         lines.Add("");
         lines.Add("FIXME: body text");

@@ -24,7 +24,7 @@ public sealed record FailureOutcome(string Text, IReadOnlyList<string> Mechanics
 
 public sealed record SuccessOutcome(string Text, IReadOnlyList<string> Mechanics);
 
-public sealed record BranchDef(string Label, string? Intent, string EncounterRef, string? Requires = null);
+public sealed record BranchDef(string Label, string EncounterRef, string? Requires = null);
 
 // ── Root types ─────────────────────────────────────────────────────
 
@@ -35,7 +35,6 @@ public sealed record TacticalEncounter
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
     public Variant Variant { get; init; }
-    public string? Intent { get; init; }
     public string? Stat { get; init; }
     public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = [];
