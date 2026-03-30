@@ -1717,12 +1717,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     static TacticalOpeningInfo BuildOpeningInfo(OpeningSnapshot o) => new()
     {
         Name = o.Name,
-        CostKind = o.CostKind.ToString().ToLowerInvariant(),
+        CostKind = ToSnakeCase(o.CostKind.ToString()),
         CostAmount = o.CostAmount,
-        EffectKind = o.EffectKind.ToString().ToLowerInvariant(),
+        EffectKind = ToSnakeCase(o.EffectKind.ToString()),
         EffectAmount = o.EffectAmount,
         StopsTimerIndex = o.StopsTimerIndex,
     };
+
+    static string ToSnakeCase(string pascalCase) =>
+        string.Concat(pascalCase.Select((c, i) =>
+            i > 0 && char.IsUpper(c) ? "_" + char.ToLowerInvariant(c) : char.ToLowerInvariant(c).ToString()));
 
     static void SerializeTacticalState(PlayerState player, TacticalState state) =>
         player.TacticalStateJson = JsonSerializer.Serialize(state, TacJsonOpts);
