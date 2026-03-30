@@ -16,7 +16,6 @@ public class ParserTests
 
         stats:
           resistance 12
-          momentum 4
 
         timers:
           draw 2
@@ -25,11 +24,11 @@ public class ParserTests
           * Cornered Prey: spirits 1 every 3
 
         openings:
-          * Throat Strike: momentum 2 -> damage 4
-          * Feint and Slash: momentum 1 -> damage 2
-          * Defensive Stance: free -> momentum 2
-          * Break Away: tick -> stop_timer
-          * Spring the Trap: free -> damage 6 [requires has bear_trap]
+          * Throat Strike: momentum_to_progress_large
+          * Feint and Slash: momentum_to_progress
+          * Defensive Stance: free_momentum
+          * Break Away: momentum_to_cancel
+          * Spring the Trap: spirits_to_progress_large [requires has bear_trap]
 
         approaches:
           * scout: momentum 0, timers 3, openings 3
@@ -53,7 +52,6 @@ public class ParserTests
 
         stats:
           resistance 8
-          queue_depth 4
 
         timers:
           draw 1
@@ -61,10 +59,10 @@ public class ParserTests
           * Wind Gust: spirits 1 every 2
 
         openings:
-          * Rope Swing: tick -> damage 3
-          * Careful Step: free -> damage 1
-          * Anchor Point: tick -> damage 4 [requires has climbing_rope]
-          * Rest and Assess: tick -> momentum 1
+          * Rope Swing: threat_to_progress_large
+          * Careful Step: free_progress_small
+          * Anchor Point: spirits_to_progress [requires has climbing_rope]
+          * Rest and Assess: free_momentum_small
 
         failure:
           You lose your grip halfway across.
@@ -125,8 +123,6 @@ public class ParserTests
     {
         var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
         Assert.Equal(12, enc.Resistance);
-        Assert.Equal(4, enc.Momentum);
-        Assert.Null(enc.QueueDepth);
     }
 
     [Fact]
@@ -155,24 +151,19 @@ public class ParserTests
 
         var throat = enc.Openings[0];
         Assert.Equal("Throat Strike", throat.Name);
-        Assert.Equal(CostKind.Momentum, throat.Cost.Kind);
-        Assert.Equal(2, throat.Cost.Amount);
-        Assert.Equal(EffectKind.Damage, throat.Effect.Kind);
-        Assert.Equal(4, throat.Effect.Amount);
+        Assert.Equal("momentum_to_progress_large", throat.Archetype);
         Assert.Null(throat.Requires);
 
         var stance = enc.Openings[2];
         Assert.Equal("Defensive Stance", stance.Name);
-        Assert.Equal(CostKind.Free, stance.Cost.Kind);
-        Assert.Equal(EffectKind.Momentum, stance.Effect.Kind);
-        Assert.Equal(2, stance.Effect.Amount);
+        Assert.Equal("free_momentum", stance.Archetype);
 
         var breakAway = enc.Openings[3];
-        Assert.Equal(CostKind.Tick, breakAway.Cost.Kind);
-        Assert.Equal(EffectKind.StopTimer, breakAway.Effect.Kind);
+        Assert.Equal("momentum_to_cancel", breakAway.Archetype);
 
         var trap = enc.Openings[4];
         Assert.Equal("Spring the Trap", trap.Name);
+        Assert.Equal("spirits_to_progress_large", trap.Archetype);
         Assert.Equal("has bear_trap", trap.Requires);
     }
 
@@ -224,8 +215,6 @@ public class ParserTests
     {
         var enc = TacticalParser.Parse(TraverseEncounter).Encounter!;
         Assert.Equal(8, enc.Resistance);
-        Assert.Null(enc.Momentum);
-        Assert.Equal(4, enc.QueueDepth);
     }
 
     [Fact]
@@ -234,6 +223,7 @@ public class ParserTests
         var enc = TacticalParser.Parse(TraverseEncounter).Encounter!;
         var anchor = enc.Openings[2];
         Assert.Equal("Anchor Point", anchor.Name);
+        Assert.Equal("spirits_to_progress", anchor.Archetype);
         Assert.Equal("has climbing_rope", anchor.Requires);
     }
 
@@ -296,10 +286,9 @@ public class ParserTests
 
             stats:
               resistance 8
-              momentum 3
 
             openings:
-              * Strike: momentum 2 -> damage 3
+              * Strike: momentum_to_progress_large
 
             failure:
               You fail.
@@ -307,52 +296,6 @@ public class ParserTests
         var result = TacticalParser.Parse(source);
         Assert.False(result.IsSuccess);
         Assert.Contains(result.Errors, e => e.Message.Contains("variant"));
-    }
-
-    [Fact]
-    public void CombatWithoutMomentumErrors()
-    {
-        var source = """
-            Test Encounter
-            [variant combat]
-
-            Body text.
-
-            stats:
-              resistance 8
-
-            openings:
-              * Strike: momentum 2 -> damage 3
-
-            failure:
-              You fail.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("momentum"));
-    }
-
-    [Fact]
-    public void TraverseWithoutQueueDepthErrors()
-    {
-        var source = """
-            Test Encounter
-            [variant traverse]
-
-            Body text.
-
-            stats:
-              resistance 8
-
-            openings:
-              * Step: free -> damage 1
-
-            failure:
-              You fail.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("queue_depth"));
     }
 
     [Fact]
@@ -366,14 +309,13 @@ public class ParserTests
 
             stats:
               resistance 8
-              momentum 3
 
             timers:
               draw 5
               * Timer A: spirits 1 every 3
 
             openings:
-              * Strike: momentum 2 -> damage 3
+              * Strike: momentum_to_progress_large
 
             failure:
               You fail.
@@ -394,7 +336,6 @@ public class ParserTests
 
             stats:
               resistance 8
-              momentum 3
 
             branches:
               * Fight -> some_encounter
@@ -405,7 +346,7 @@ public class ParserTests
     }
 
     [Fact]
-    public void InvalidCostErrors()
+    public void UnknownArchetypeErrors()
     {
         var source = """
             Test Encounter
@@ -415,41 +356,16 @@ public class ParserTests
 
             stats:
               resistance 8
-              momentum 3
 
             openings:
-              * Strike: mana 2 -> damage 3
+              * Strike: mana_blast_supreme
 
             failure:
               You fail.
             """;
         var result = TacticalParser.Parse(source);
         Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("cost") || e.Message.Contains("Invalid"));
-    }
-
-    [Fact]
-    public void InvalidEffectErrors()
-    {
-        var source = """
-            Test Encounter
-            [variant combat]
-
-            Body text.
-
-            stats:
-              resistance 8
-              momentum 3
-
-            openings:
-              * Strike: momentum 2 -> heal 3
-
-            failure:
-              You fail.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("effect") || e.Message.Contains("Invalid"));
+        Assert.Contains(result.Errors, e => e.Message.Contains("Unknown archetype"));
     }
 
     [Fact]
@@ -465,10 +381,9 @@ public class ParserTests
 
             stats:
               resistance 8
-              momentum 3
 
             openings:
-              * Strike: momentum 2 -> damage 3
+              * Strike: momentum_to_progress_large
 
             failure:
               You fail.
@@ -478,6 +393,133 @@ public class ParserTests
         Assert.Equal(2, result.Encounter!.Requires.Count);
         Assert.Equal("tag some_flag", result.Encounter.Requires[0]);
         Assert.Equal("has sword", result.Encounter.Requires[1]);
+    }
+
+    // ── Condition timers ───────────────────────────────────────────
+
+    [Fact]
+    public void ConditionTimerParses()
+    {
+        var source = """
+            Jagged Terrain
+            [variant combat]
+
+            Sharp rocks everywhere.
+
+            stats:
+              resistance 8
+
+            timers:
+              draw 1
+              * Falling Rocks: condition injured every 4
+
+            openings:
+              * Strike: momentum_to_progress_large
+
+            failure:
+              You stumble.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        var timer = result.Encounter!.Timers[0];
+        Assert.Equal("Falling Rocks", timer.Name);
+        Assert.Equal(TimerEffect.Condition, timer.Effect);
+        Assert.Equal("injured", timer.ConditionId);
+        Assert.Equal(0, timer.Amount);
+        Assert.Equal(4, timer.Countdown);
+    }
+
+    [Fact]
+    public void ConditionTimerWithCounterParses()
+    {
+        var source = """
+            Treacherous Path
+            [variant traverse]
+
+            The path is treacherous.
+
+            stats:
+              resistance 6
+
+            timers:
+              draw 1
+              * Exhausting Climb [counter Pace yourself]: condition exhausted every 3
+
+            openings:
+              * Step: free_progress_small
+
+            failure:
+              You collapse.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        var timer = result.Encounter!.Timers[0];
+        Assert.Equal("Exhausting Climb", timer.Name);
+        Assert.Equal("Pace yourself", timer.CounterName);
+        Assert.Equal(TimerEffect.Condition, timer.Effect);
+        Assert.Equal("exhausted", timer.ConditionId);
+        Assert.Equal(3, timer.Countdown);
+    }
+
+    [Fact]
+    public void MixedTimerTypesParse()
+    {
+        var source = """
+            Mixed Fight
+            [variant combat]
+
+            Danger everywhere.
+
+            stats:
+              resistance 10
+
+            timers:
+              draw 2
+              * Drain: spirits 2 every 4
+              * Wound Risk: condition injured every 3
+              * Regen: resistance 1 every 5
+
+            openings:
+              * Strike: momentum_to_progress_large
+
+            failure:
+              You lose.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+        Assert.Equal(3, result.Encounter!.Timers.Count);
+        Assert.Equal(TimerEffect.Spirits, result.Encounter.Timers[0].Effect);
+        Assert.Equal(TimerEffect.Condition, result.Encounter.Timers[1].Effect);
+        Assert.Equal(TimerEffect.Resistance, result.Encounter.Timers[2].Effect);
+    }
+
+    [Fact]
+    public void UnknownConditionErrors()
+    {
+        var source = """
+            Bad Timer
+            [variant combat]
+
+            Test.
+
+            stats:
+              resistance 8
+
+            timers:
+              draw 1
+              * Bad: condition cursed_by_the_moon every 3
+
+            openings:
+              * Strike: momentum_to_progress_large
+
+            failure:
+              You fail.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.False(result.IsSuccess);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Unknown condition"));
     }
 
     [Fact]
@@ -491,11 +533,10 @@ public class ParserTests
 
             stats:
               resistance 6
-              momentum 3
 
             openings:
-              * Strike: momentum 1 -> damage 2
-              * Guard: free -> momentum 1
+              * Strike: momentum_to_progress
+              * Guard: free_momentum_small
 
             approaches:
               * scout: momentum 0, timers 0, openings 3

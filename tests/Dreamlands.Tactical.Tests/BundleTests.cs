@@ -24,17 +24,15 @@ public class BundleTests
               "tier": 1,
               "requires": [],
               "resistance": 8,
-              "momentum": 3,
-              "queueDepth": null,
               "timerDraw": 1,
               "timers": [
                 { "name": "Flanking", "effect": "spirits", "amount": 2, "countdown": 4 }
               ],
               "openings": [
-                { "name": "Lunge", "costKind": "momentum", "costAmount": 2, "effectKind": "damage", "effectAmount": 3, "requires": null },
-                { "name": "Break", "costKind": "tick", "costAmount": 0, "effectKind": "stop_timer", "effectAmount": 0, "requires": null },
-                { "name": "Guard", "costKind": "free", "costAmount": 0, "effectKind": "momentum", "effectAmount": 2, "requires": null },
-                { "name": "Trap", "costKind": "spirits", "costAmount": 1, "effectKind": "damage", "effectAmount": 5, "requires": "has bear_trap" }
+                { "name": "Lunge", "archetype": "momentum_to_progress_large", "requires": null },
+                { "name": "Break", "archetype": "momentum_to_cancel", "requires": null },
+                { "name": "Guard", "archetype": "free_momentum", "requires": null },
+                { "name": "Trap", "archetype": "spirits_to_progress_large", "requires": "has bear_trap" }
               ],
               "approaches": [
                 { "kind": "scout", "momentum": 0, "timerCount": 1, "bonusOpenings": 3 },
@@ -70,7 +68,6 @@ public class BundleTests
         Assert.Equal("Wolves", enc.Title);
         Assert.Equal(Variant.Combat, enc.Variant);
         Assert.Equal(8, enc.Resistance);
-        Assert.Equal(3, enc.Momentum);
     }
 
     [Fact]
@@ -85,22 +82,49 @@ public class BundleTests
     }
 
     [Fact]
-    public void LoadsOpeningsWithAllCostKinds()
+    public void LoadsConditionTimer()
+    {
+        var json = """
+            {
+              "index": { "encountersById": { "t": 0 }, "groupsById": {}, "encountersByCategory": {} },
+              "encounters": [
+                {
+                  "id": "t", "category": "", "title": "T", "body": ".", "variant": "combat",
+                  "resistance": 8, "timerDraw": 1,
+                  "timers": [
+                    { "name": "Jagged", "effect": "condition", "amount": 0, "countdown": 4, "conditionId": "injured" }
+                  ],
+                  "openings": [{ "name": "Hit", "archetype": "momentum_to_progress", "requires": null }],
+                  "failure": { "text": "Fail.", "mechanics": [] }
+                }
+              ],
+              "groups": []
+            }
+            """;
+        var enc = TacticalBundle.FromJson(json).Encounters[0];
+        Assert.Single(enc.Timers);
+        Assert.Equal(TimerEffect.Condition, enc.Timers[0].Effect);
+        Assert.Equal("injured", enc.Timers[0].ConditionId);
+        Assert.Equal(4, enc.Timers[0].Countdown);
+    }
+
+    [Fact]
+    public void LoadsOpeningsWithArchetypes()
     {
         var enc = TacticalBundle.FromJson(BundleJson).Encounters[0];
         Assert.Equal(4, enc.Openings.Count);
 
-        Assert.Equal(CostKind.Momentum, enc.Openings[0].Cost.Kind);
-        Assert.Equal(2, enc.Openings[0].Cost.Amount);
-        Assert.Equal(EffectKind.Damage, enc.Openings[0].Effect.Kind);
+        Assert.Equal("Lunge", enc.Openings[0].Name);
+        Assert.Equal("momentum_to_progress_large", enc.Openings[0].Archetype);
 
-        Assert.Equal(CostKind.Tick, enc.Openings[1].Cost.Kind);
-        Assert.Equal(EffectKind.StopTimer, enc.Openings[1].Effect.Kind);
+        Assert.Equal("Break", enc.Openings[1].Name);
+        Assert.Equal("momentum_to_cancel", enc.Openings[1].Archetype);
 
-        Assert.Equal(CostKind.Free, enc.Openings[2].Cost.Kind);
-        Assert.Equal(EffectKind.Momentum, enc.Openings[2].Effect.Kind);
+        Assert.Equal("Guard", enc.Openings[2].Name);
+        Assert.Equal("free_momentum", enc.Openings[2].Archetype);
 
-        Assert.Equal(CostKind.Spirits, enc.Openings[3].Cost.Kind);
+        Assert.Equal("Trap", enc.Openings[3].Name);
+        Assert.Equal("spirits_to_progress_large", enc.Openings[3].Archetype);
         Assert.Equal("has bear_trap", enc.Openings[3].Requires);
     }
 

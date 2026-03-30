@@ -64,25 +64,18 @@ public sealed class TacticalBundle
                 Tier = e.Tier,
                 Requires = e.Requires ?? [],
                 Resistance = e.Resistance,
-                Momentum = e.Momentum,
-                QueueDepth = e.QueueDepth,
                 TimerDraw = e.TimerDraw,
                 Timers = e.Timers.Select(t => new TimerDef(
                     t.Name,
                     Enum.Parse<TimerEffect>(t.Effect, ignoreCase: true),
                     t.Amount,
                     t.Countdown,
-                    t.CounterName)).ToList(),
+                    t.CounterName,
+                    t.ConditionId)).ToList(),
                 Openings = e.Openings.Select(o => new OpeningDef(
-                    o.Name,
-                    new OpeningCost(ParseSnakeEnum<CostKind>(o.CostKind), o.CostAmount),
-                    new OpeningEffect(ParseSnakeEnum<EffectKind>(o.EffectKind), o.EffectAmount),
-                    o.Requires)).ToList(),
+                    o.Name, o.Archetype, o.Requires)).ToList(),
                 Path = e.Path?.Select(o => new OpeningDef(
-                    o.Name,
-                    new OpeningCost(ParseSnakeEnum<CostKind>(o.CostKind), o.CostAmount),
-                    new OpeningEffect(ParseSnakeEnum<EffectKind>(o.EffectKind), o.EffectAmount),
-                    o.Requires)).ToList() ?? [],
+                    o.Name, o.Archetype, o.Requires)).ToList() ?? [],
                 Approaches = e.Approaches?.Select(a => new ApproachDef(
                     Enum.Parse<ApproachKind>(a.Kind, ignoreCase: true),
                     a.Momentum,
@@ -129,10 +122,6 @@ public sealed class TacticalBundle
         return new TacticalBundle(encounters, groups, encountersById, groupsById, encountersByCategory);
     }
 
-    // "stop_timer" -> "StopTimer" etc.
-    static T ParseSnakeEnum<T>(string value) where T : struct, Enum =>
-        Enum.Parse<T>(value.Replace("_", ""), ignoreCase: true);
-
     static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
     // Private DTOs matching bundle JSON shape
@@ -144,11 +133,11 @@ public sealed class TacticalBundle
     record EncounterDto(
         string Id, string Category, string Title, string Body, string Variant,
         string? Intent, string? Stat, int? Tier, List<string>? Requires,
-        int Resistance, int? Momentum, int? QueueDepth,
+        int Resistance,
         int TimerDraw, List<TimerDto> Timers, List<OpeningDto> Openings,
         List<OpeningDto>? Path, List<ApproachDto>? Approaches, FailureDto? Failure);
-    record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown);
-    record OpeningDto(string Name, string CostKind, int CostAmount, string EffectKind, int EffectAmount, string? Requires);
+    record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown, string? ConditionId);
+    record OpeningDto(string Name, string Archetype, string? Requires);
     record ApproachDto(string Kind, int Momentum, int TimerCount, int BonusOpenings);
     record FailureDto(string Text, List<string>? Mechanics);
     record GroupDto(

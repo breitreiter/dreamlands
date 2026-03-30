@@ -122,8 +122,6 @@ static class TacticalBundleCommand
         tier = enc.Tier,
         requires = enc.Requires,
         resistance = enc.Resistance,
-        momentum = enc.Momentum,
-        queueDepth = enc.QueueDepth,
         timerDraw = enc.TimerDraw,
         timers = enc.Timers.Select(t => new
         {
@@ -131,24 +129,19 @@ static class TacticalBundleCommand
             counterName = t.CounterName,
             effect = t.Effect.ToString().ToLowerInvariant(),
             amount = t.Amount,
-            countdown = t.Countdown
+            countdown = t.Countdown,
+            conditionId = t.ConditionId
         }),
         openings = enc.Openings.Select(o => new
         {
             name = o.Name,
-            costKind = ToSnake(o.Cost.Kind),
-            costAmount = o.Cost.Amount,
-            effectKind = ToSnake(o.Effect.Kind),
-            effectAmount = o.Effect.Amount,
+            archetype = o.Archetype,
             requires = o.Requires
         }),
         path = enc.Path.Select(o => new
         {
             name = o.Name,
-            costKind = ToSnake(o.Cost.Kind),
-            costAmount = o.Cost.Amount,
-            effectKind = ToSnake(o.Effect.Kind),
-            effectAmount = o.Effect.Amount,
+            archetype = o.Archetype,
             requires = o.Requires
         }),
         approaches = enc.Approaches.Select(a => new
@@ -164,20 +157,6 @@ static class TacticalBundleCommand
             mechanics = f.Mechanics
         } : null
     };
-
-    // StopTimer -> stop_timer, etc.
-    static string ToSnake(Enum value)
-    {
-        var s = value.ToString();
-        var sb = new System.Text.StringBuilder(s.Length + 2);
-        for (int i = 0; i < s.Length; i++)
-        {
-            if (i > 0 && char.IsUpper(s[i]))
-                sb.Append('_');
-            sb.Append(char.ToLowerInvariant(s[i]));
-        }
-        return sb.ToString();
-    }
 
     static object GroupToJson(TacticalGroup grp, string id, string category) => new
     {

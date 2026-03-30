@@ -1,4 +1,5 @@
 using Dreamlands.Game;
+using Dreamlands.Rules;
 using Dreamlands.Tactical;
 
 namespace Dreamlands.Orchestration;
@@ -13,7 +14,7 @@ public abstract record TacticalStep
 
     public record ShowTurn(TacticalTurnData Data) : TacticalStep;
 
-    public record Finished(TacticalFinishReason Reason, List<MechanicResult>? FailureResults = null) : TacticalStep;
+    public record Finished(TacticalFinishReason Reason, List<MechanicResult>? FailureResults = null, List<MechanicResult>? ConditionResults = null) : TacticalStep;
 }
 
 public enum TacticalFinishReason { ResistanceKill, ControlKill, SpiritsLoss }
@@ -27,9 +28,10 @@ public record TacticalTurnData(
     IReadOnlyList<ActiveTimer> Timers,
     IReadOnlyList<OpeningSnapshot> Openings,
     IReadOnlyList<OpeningSnapshot>? Queue,
-    IReadOnlyList<TimerFired> TimersFired);
+    IReadOnlyList<TimerFired> TimersFired,
+    IReadOnlyList<string> PendingConditions);
 
-public record TimerFired(string Name, TimerEffect Effect, int Amount);
+public record TimerFired(string Name, TimerEffect Effect, int Amount, string? ConditionId = null);
 
 public enum TacticalAction { TakeOpening, PressAdvantage, ForceOpening }
 
@@ -53,8 +55,8 @@ public static class TacticalRunner
             if (encounter.Approaches.Count > 0)
                 return new TacticalStep.ChooseApproach(encounter, encounter.Approaches);
 
-            // No approaches — use defaults
-            state.Momentum = encounter.Momentum ?? 0;
+            // No approaches — start with 0 momentum
+            state.Momentum = 0;
             DrawTimers(state, encounter, encounter.TimerDraw, session.Rng);
             BuildDeck(state, session, encounter);
             return StartTurn(state, session, encounter);
@@ -68,8 +70,12 @@ public static class TacticalRunner
 
         // Populate queue from authored path
         state.Queue = [];
+        var archetypes = session.Balance.Tactical.Archetypes;
         for (int i = 0; i < encounter.Path.Count; i++)
-            state.Queue.Add(SnapshotFromOpening(encounter.Path[i]));
+        {
+            if (archetypes.TryGetValue(encounter.Path[i].Archetype, out var arch))
+                state.Queue.Add(SnapshotFromArchetype(arch, encounter.Path[i].Name));
+        }
 
         return StartTurn(state, session, encounter);
     }
@@ -165,9 +171,11 @@ public static class TacticalRunner
 
         // Check win conditions
         if (state.Resistance <= 0)
-            return new TacticalStep.Finished(TacticalFinishReason.ResistanceKill);
+            return new TacticalStep.Finished(TacticalFinishReason.ResistanceKill,
+                ConditionResults: ResolvePendingConditions(state, session));
         if (state.Timers.All(t => t.Stopped))
-            return new TacticalStep.Finished(TacticalFinishReason.ControlKill);
+            return new TacticalStep.Finished(TacticalFinishReason.ControlKill,
+                ConditionResults: ResolvePendingConditions(state, session));
 
         // Traverse: advance path
         if (encounter.Variant == Variant.Traverse && state.Queue != null && state.Queue.Count > 0)
@@ -184,6 +192,7 @@ public static class TacticalRunner
         state.Turn++;
 
         // Tick all active timers
+        var fired = new List<TimerFired>();
         foreach (var timer in state.Timers.Where(t => !t.Stopped))
         {
             timer.Current--;
@@ -193,14 +202,21 @@ public static class TacticalRunner
                 {
                     case TimerEffect.Spirits:
                         session.Player.Spirits = Math.Max(0, session.Player.Spirits - timer.Amount);
+                        fired.Add(new TimerFired(timer.Name, timer.Effect, timer.Amount));
                         break;
                     case TimerEffect.Resistance:
                         state.Resistance += timer.Amount;
+                        fired.Add(new TimerFired(timer.Name, timer.Effect, timer.Amount));
+                        break;
+                    case TimerEffect.Condition:
+                        state.PendingConditions.Add(timer.ConditionId!);
+                        fired.Add(new TimerFired(timer.Name, timer.Effect, 0, timer.ConditionId));
                         break;
                 }
                 timer.Current = timer.Countdown;
             }
         }
+        state.LastTimersFired = fired;
 
         // Spirits loss check
         if (session.Player.Spirits <= 0)
@@ -208,7 +224,8 @@ public static class TacticalRunner
             List<MechanicResult>? failureResults = null;
             if (encounter.Failure != null)
                 failureResults = Mechanics.Apply(encounter.Failure.Mechanics, session.Player, session.Balance, session.Rng);
-            return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss, failureResults);
+            var conditionResults = ResolvePendingConditions(state, session);
+            return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss, failureResults, conditionResults);
         }
 
         // Passive momentum gain
@@ -252,8 +269,9 @@ public static class TacticalRunner
             session.Player.Spirits,
             state.Timers,
             state.Openings,
-            state.Queue,
-            []));
+            VisibleQueue(state, session, encounter),
+            state.LastTimersFired,
+            state.PendingConditions));
     }
 
     static List<OpeningSnapshot> DrawOpenings(TacticalState state, int count, Random rng)
@@ -306,6 +324,7 @@ public static class TacticalRunner
                 Countdown = def.Countdown,
                 Current = def.Countdown,
                 Stopped = false,
+                ConditionId = def.ConditionId,
             });
         }
     }
@@ -329,12 +348,67 @@ public static class TacticalRunner
         }
     }
 
-    static OpeningSnapshot SnapshotFromOpening(OpeningDef o) => new()
+    static IReadOnlyList<OpeningSnapshot>? VisibleQueue(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
-        Name = o.Name,
-        CostKind = o.Cost.Kind,
-        CostAmount = o.Cost.Amount,
-        EffectKind = o.Effect.Kind,
-        EffectAmount = o.Effect.Amount,
+        if (state.Queue == null) return null;
+        var depth = GetGoverningSkillLevel(session, encounter);
+        return state.Queue.Take(depth).ToList();
+    }
+
+    static int GetGoverningSkillLevel(GameSession session, TacticalEncounter encounter)
+    {
+        var skill = encounter.Stat != null ? Skills.FromScriptName(encounter.Stat) : null;
+        if (skill == null) return 0;
+        return session.Player.Skills.TryGetValue(skill.Value, out var level) ? level : 0;
+    }
+
+    static List<MechanicResult> ResolvePendingConditions(TacticalState state, GameSession session)
+    {
+        var results = new List<MechanicResult>();
+        if (state.PendingConditions.Count == 0) return results;
+
+        var grouped = state.PendingConditions.GroupBy(id => id);
+        foreach (var group in grouped)
+        {
+            var conditionId = group.Key;
+            if (session.Player.ActiveConditions.ContainsKey(conditionId)) continue;
+
+            session.Balance.Conditions.TryGetValue(conditionId, out var def);
+            var dc = def?.ResistDifficulty ?? session.Balance.Character.AmbientResistDifficulty;
+
+            bool anyFailed = false;
+            SkillCheckResult? lastCheck = null;
+            foreach (var _ in group)
+            {
+                lastCheck = SkillChecks.RollResist(conditionId, dc, session.Player, session.Balance, session.Rng);
+                if (!lastCheck.Passed)
+                {
+                    anyFailed = true;
+                    break;
+                }
+            }
+
+            if (anyFailed)
+            {
+                var stacks = def?.Stacks ?? 1;
+                session.Player.ActiveConditions[conditionId] = stacks;
+                results.Add(new MechanicResult.ConditionAdded(conditionId, stacks, lastCheck));
+            }
+            else
+            {
+                results.Add(new MechanicResult.ConditionResisted(conditionId, lastCheck!));
+            }
+        }
+
+        return results;
+    }
+
+    static OpeningSnapshot SnapshotFromArchetype(TacticalArchetype arch, string name) => new()
+    {
+        Name = name,
+        CostKind = Enum.Parse<CostKind>(arch.CostKind, ignoreCase: true),
+        CostAmount = arch.CostAmount,
+        EffectKind = Enum.Parse<EffectKind>(arch.EffectKind, ignoreCase: true),
+        EffectAmount = arch.EffectAmount,
     };
 }

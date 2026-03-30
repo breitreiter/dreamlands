@@ -31,6 +31,12 @@ public class TacticalState
 
     /// <summary>Traverse only: current position along the authored path.</summary>
     public int PathIndex { get; set; }
+
+    /// <summary>Condition IDs accumulated from condition timers. Resolved on encounter completion.</summary>
+    public List<string> PendingConditions { get; set; } = [];
+
+    /// <summary>Timers that fired on the most recent turn advance. Used by TurnData for the UI.</summary>
+    public List<TimerFired> LastTimersFired { get; set; } = [];
 }
 
 public class ActiveTimer
@@ -42,6 +48,7 @@ public class ActiveTimer
     public int Countdown { get; set; }
     public int Current { get; set; }
     public bool Stopped { get; set; }
+    public string? ConditionId { get; set; }
 }
 
 /// <summary>Snapshot of an opening for the UI.</summary>

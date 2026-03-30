@@ -13,11 +13,15 @@ public static partial class TacticalParser
     [GeneratedRegex(@"^\*\s+(.+?):\s+(spirits|resistance)\s+(\d+)\s+every\s+(\d+)\s*$")]
     private static partial Regex TimerPattern();
 
+    // * Timer Name: condition injured every 4
+    [GeneratedRegex(@"^\*\s+(.+?):\s+condition\s+(\w+)\s+every\s+(\d+)\s*$")]
+    private static partial Regex ConditionTimerPattern();
+
     [GeneratedRegex(@"\[counter\s+(.+?)\]")]
     private static partial Regex CounterTag();
 
-    // * Opening Name: cost_type [amount] -> effect_type [amount] [requires ...]
-    [GeneratedRegex(@"^\*\s+(.+?):\s+(.+?)\s*->\s*(.+?)\s*$")]
+    // * Opening Name: archetype_id [requires ...]
+    [GeneratedRegex(@"^\*\s+(.+?):\s+(\w+)\s*(.*)$")]
     private static partial Regex OpeningPattern();
 
     // * kind: momentum N, timers N[, openings N]
@@ -199,8 +203,6 @@ public static partial class TacticalParser
 
         // Stats
         int resistance = 0;
-        int? momentum = null;
-        int? queueDepth = null;
 
         if (sections.TryGetValue(Section.Stats, out var statsRange))
         {
@@ -219,19 +221,12 @@ public static partial class TacticalParser
                 switch (parts[0])
                 {
                     case "resistance": resistance = val; break;
-                    case "momentum": momentum = val; break;
-                    case "queue_depth": queueDepth = val; break;
                     default:
                         errors.Add(new ParseError(i + 1, $"Unknown stat '{parts[0]}'."));
                         break;
                 }
             }
         }
-
-        if (variant == Variant.Combat && momentum == null)
-            errors.Add(new ParseError(null, "Combat encounters must specify 'momentum' in stats."));
-        if (variant == Variant.Traverse && queueDepth == null)
-            errors.Add(new ParseError(null, "Traverse encounters must specify 'queue_depth' in stats."));
 
         // Timers
         int timerDraw = 0;
@@ -280,8 +275,6 @@ public static partial class TacticalParser
                 Tier = tier,
                 Requires = requires,
                 Resistance = resistance,
-                Momentum = momentum,
-                QueueDepth = queueDepth,
                 TimerDraw = timerDraw,
                 Timers = timers,
                 Openings = openings,
@@ -346,10 +339,34 @@ public static partial class TacticalParser
                 continue;
             }
 
+            // Try condition timer pattern first: * Name: condition <id> every N
+            var cm = ConditionTimerPattern().Match(trimmed);
+            if (cm.Success)
+            {
+                var cName = cm.Groups[1].Value.Trim();
+                var counterMatch2 = CounterTag().Match(cName);
+                string? cCounter = null;
+                if (counterMatch2.Success)
+                {
+                    cCounter = counterMatch2.Groups[1].Value.Trim();
+                    cName = cName[..counterMatch2.Index].Trim();
+                }
+
+                var conditionId = cm.Groups[2].Value;
+                var cCountdown = int.Parse(cm.Groups[3].Value);
+
+                if (!KnownConditions.Contains(conditionId))
+                    errors.Add(new ParseError(i + 1, $"Unknown condition '{conditionId}'."));
+                else
+                    timers.Add(new TimerDef(cName, TimerEffect.Condition, 0, cCountdown, cCounter, conditionId));
+                continue;
+            }
+
+            // Standard timer: * Name: spirits|resistance N every N
             var m = TimerPattern().Match(trimmed);
             if (!m.Success)
             {
-                errors.Add(new ParseError(i + 1, $"Invalid timer format. Expected '* Name: spirits|resistance N every N'."));
+                errors.Add(new ParseError(i + 1, $"Invalid timer format. Expected '* Name: spirits|resistance N every N' or '* Name: condition <id> every N'."));
                 continue;
             }
 
@@ -372,13 +389,30 @@ public static partial class TacticalParser
         }
     }
 
+    /// <summary>Known condition IDs for validation. Must match ConditionDef.All keys.</summary>
+    static readonly HashSet<string> KnownConditions =
+    [
+        "freezing", "thirsty", "irradiated", "lattice_sickness",
+        "exhausted", "poisoned", "lost", "injured", "disheartened",
+    ];
+
+    /// <summary>Known archetype IDs for validation. Must match TacticalBalance.Archetypes keys.</summary>
+    static readonly HashSet<string> KnownArchetypes =
+    [
+        "free_progress_small", "momentum_to_progress", "momentum_to_progress_large",
+        "momentum_to_progress_huge", "spirits_to_progress", "spirits_to_progress_large",
+        "threat_to_progress", "threat_to_progress_large",
+        "free_momentum_small", "free_momentum", "threat_to_momentum", "spirits_to_momentum",
+        "momentum_to_cancel", "spirits_to_cancel", "free_cancel",
+    ];
+
     static void ParseOpenings(string[] lines, int start, int end,
         List<OpeningDef> openings, List<ParseError> errors)
     {
         for (int i = start; i < end; i++)
         {
             var trimmed = lines[i].Trim();
-            if (string.IsNullOrEmpty(trimmed)) continue;
+            if (string.IsNullOrEmpty(trimmed) || trimmed.StartsWith('#')) continue;
 
             if (!trimmed.StartsWith("* "))
             {
@@ -389,88 +423,29 @@ public static partial class TacticalParser
             var m = OpeningPattern().Match(trimmed);
             if (!m.Success)
             {
-                errors.Add(new ParseError(i + 1, $"Invalid opening format. Expected '* Name: cost -> effect'."));
+                errors.Add(new ParseError(i + 1, $"Invalid opening format. Expected '* Name: archetype_id'."));
                 continue;
             }
 
             var name = m.Groups[1].Value.Trim();
-            var costStr = m.Groups[2].Value.Trim();
-            var effectAndReqs = m.Groups[3].Value.Trim();
+            var archetype = m.Groups[2].Value.Trim();
+            var trailing = m.Groups[3].Value.Trim();
 
-            // Extract [requires ...] from the effect side
+            // Extract [requires ...] from trailing text
             string? req = null;
-            var reqMatch = RequiresTag().Match(effectAndReqs);
-            if (reqMatch.Success)
+            if (!string.IsNullOrEmpty(trailing))
             {
-                req = reqMatch.Groups[1].Value.Trim();
-                effectAndReqs = effectAndReqs[..reqMatch.Index].Trim();
-            }
-
-            // Also check name for [requires ...]
-            if (req == null)
-            {
-                reqMatch = RequiresTag().Match(name);
+                var reqMatch = RequiresTag().Match(trailing);
                 if (reqMatch.Success)
-                {
                     req = reqMatch.Groups[1].Value.Trim();
-                    name = name[..reqMatch.Index].Trim();
-                }
+                else
+                    errors.Add(new ParseError(i + 1, $"Unexpected text after archetype: '{trailing}'."));
             }
 
-            var cost = ParseCost(costStr, i + 1, errors);
-            var effect = ParseEffect(effectAndReqs, i + 1, errors);
-
-            if (cost != null && effect != null)
-                openings.Add(new OpeningDef(name, cost, effect, req));
-        }
-    }
-
-    static OpeningCost? ParseCost(string s, int line, List<ParseError> errors)
-    {
-        var parts = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length == 0)
-        {
-            errors.Add(new ParseError(line, "Empty cost."));
-            return null;
-        }
-
-        return parts[0] switch
-        {
-            "free" when parts.Length == 1 => new OpeningCost(CostKind.Free),
-            "tick" when parts.Length == 1 => new OpeningCost(CostKind.Tick),
-            "momentum" when parts.Length == 2 && int.TryParse(parts[1], out var m) => new OpeningCost(CostKind.Momentum, m),
-            "spirits" when parts.Length == 2 && int.TryParse(parts[1], out var sp) => new OpeningCost(CostKind.Spirits, sp),
-            _ => Error()
-        };
-
-        OpeningCost? Error()
-        {
-            errors.Add(new ParseError(line, $"Invalid cost '{s}'. Expected 'free', 'tick', 'momentum N', or 'spirits N'."));
-            return null;
-        }
-    }
-
-    static OpeningEffect? ParseEffect(string s, int line, List<ParseError> errors)
-    {
-        var parts = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length == 0)
-        {
-            errors.Add(new ParseError(line, "Empty effect."));
-            return null;
-        }
-
-        return parts[0] switch
-        {
-            "stop_timer" when parts.Length == 1 => new OpeningEffect(EffectKind.StopTimer),
-            "damage" when parts.Length == 2 && int.TryParse(parts[1], out var d) => new OpeningEffect(EffectKind.Damage, d),
-            "momentum" when parts.Length == 2 && int.TryParse(parts[1], out var m) => new OpeningEffect(EffectKind.Momentum, m),
-            _ => Error()
-        };
-
-        OpeningEffect? Error()
-        {
-            errors.Add(new ParseError(line, $"Invalid effect '{s}'. Expected 'damage N', 'stop_timer', or 'momentum N'."));
-            return null;
+            if (!KnownArchetypes.Contains(archetype))
+                errors.Add(new ParseError(i + 1, $"Unknown archetype '{archetype}'."));
+            else
+                openings.Add(new OpeningDef(name, archetype, req));
         }
     }
 

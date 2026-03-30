@@ -8,19 +8,15 @@ public enum CostKind { Free, Momentum, Spirits, Tick }
 
 public enum EffectKind { Damage, StopTimer, Momentum }
 
-public enum TimerEffect { Spirits, Resistance }
+public enum TimerEffect { Spirits, Resistance, Condition }
 
 public enum ApproachKind { Scout, Direct, Wild }
 
 // ── Value types ────────────────────────────────────────────────────
 
-public sealed record TimerDef(string Name, TimerEffect Effect, int Amount, int Countdown, string? CounterName = null);
+public sealed record TimerDef(string Name, TimerEffect Effect, int Amount, int Countdown, string? CounterName = null, string? ConditionId = null);
 
-public sealed record OpeningCost(CostKind Kind, int Amount = 0);
-
-public sealed record OpeningEffect(EffectKind Kind, int Amount = 0);
-
-public sealed record OpeningDef(string Name, OpeningCost Cost, OpeningEffect Effect, string? Requires = null);
+public sealed record OpeningDef(string Name, string Archetype, string? Requires = null);
 
 public sealed record ApproachDef(ApproachKind Kind, int Momentum, int TimerCount, int BonusOpenings = 0);
 
@@ -43,8 +39,6 @@ public sealed record TacticalEncounter
     public IReadOnlyList<string> Requires { get; init; } = [];
 
     public int Resistance { get; init; }
-    public int? Momentum { get; init; }
-    public int? QueueDepth { get; init; }
 
     public int TimerDraw { get; init; }
     public IReadOnlyList<TimerDef> Timers { get; init; } = [];

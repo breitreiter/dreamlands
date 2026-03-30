@@ -11,7 +11,7 @@ public class TacticalRunnerTests
     static readonly BalanceData Balance = BalanceData.Default;
 
     static TacticalEncounter MakeCombat(
-        int resistance = 8, int momentum = 3, int timerDraw = 1,
+        int resistance = 8, int timerDraw = 1,
         List<TimerDef>? timers = null, List<OpeningDef>? openings = null,
         List<ApproachDef>? approaches = null, FailureOutcome? failure = null)
     {
@@ -24,12 +24,11 @@ public class TacticalRunnerTests
             Variant = Variant.Combat,
             Stat = "combat",
             Resistance = resistance,
-            Momentum = momentum,
             TimerDraw = timerDraw,
             Timers = timers ?? [new TimerDef("Threat", TimerEffect.Spirits, 1, 4, "Stop Threat")],
             Openings = openings ?? [
-                new OpeningDef("Strike", new OpeningCost(CostKind.Momentum, 2), new OpeningEffect(EffectKind.Damage, 3)),
-                new OpeningDef("Guard", new OpeningCost(CostKind.Free), new OpeningEffect(EffectKind.Momentum, 2)),
+                new OpeningDef("Strike", "momentum_to_progress_large"),
+                new OpeningDef("Guard", "free_momentum"),
             ],
             Approaches = approaches ?? [
                 new ApproachDef(ApproachKind.Scout, 0, 1, 3),
@@ -52,18 +51,17 @@ public class TacticalRunnerTests
             Variant = Variant.Traverse,
             Stat = "bushcraft",
             Resistance = resistance,
-            QueueDepth = 4,
             TimerDraw = timerDraw,
             Timers = [new TimerDef("Hazard", TimerEffect.Spirits, 1, 3, "Avoid Hazard")],
             Openings = [
-                new OpeningDef("Step", new OpeningCost(CostKind.Free), new OpeningEffect(EffectKind.Damage, 1)),
-                new OpeningDef("Push", new OpeningCost(CostKind.Momentum, 1), new OpeningEffect(EffectKind.Damage, 2)),
+                new OpeningDef("Step", "free_progress_small"),
+                new OpeningDef("Push", "momentum_to_progress"),
             ],
             Path = [
-                new OpeningDef("Step", new OpeningCost(CostKind.Free), new OpeningEffect(EffectKind.Damage, 1)),
-                new OpeningDef("Push", new OpeningCost(CostKind.Momentum, 1), new OpeningEffect(EffectKind.Damage, 2)),
-                new OpeningDef("Step", new OpeningCost(CostKind.Free), new OpeningEffect(EffectKind.Damage, 1)),
-                new OpeningDef("Step", new OpeningCost(CostKind.Free), new OpeningEffect(EffectKind.Damage, 1)),
+                new OpeningDef("Step", "free_progress_small"),
+                new OpeningDef("Push", "momentum_to_progress"),
+                new OpeningDef("Step", "free_progress_small"),
+                new OpeningDef("Step", "free_progress_small"),
             ],
             Failure = new FailureOutcome("You fall.", ["damage_spirits 1"]),
         };
@@ -74,6 +72,8 @@ public class TacticalRunnerTests
         var session = Helpers.MakeSession();
         // Give the player a weapon so they have some collection cards
         session.Player.Equipment.Weapon = new ItemInstance("falchion", "Falchion");
+        // Set bushcraft so traverse queue visibility works (base stat drives visible depth)
+        session.Player.Skills[Skill.Bushcraft] = 3;
         var state = new TacticalState();
         return (session, state);
     }
@@ -332,6 +332,245 @@ public class TacticalRunnerTests
         var fin = (TacticalStep.Finished)step;
         Assert.Equal(TacticalFinishReason.SpiritsLoss, fin.Reason);
         Assert.NotNull(fin.FailureResults);
+    }
+
+    // ── Condition timers ──────────────────────────────────
+
+    [Fact]
+    public void ConditionTimerFireAddsToState()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timerDraw: 1,
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        // Timer fires every 1 turn. Take a no-op opening to advance.
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+        TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+
+        Assert.Single(state.PendingConditions);
+        Assert.Equal("injured", state.PendingConditions[0]);
+    }
+
+    [Fact]
+    public void ConditionTimerStacksMultipleFirings()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timerDraw: 1,
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        var stall = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+
+        // Three turns = three firings
+        for (int i = 0; i < 3; i++)
+        {
+            state.Openings[0] = stall;
+            TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        }
+
+        Assert.Equal(3, state.PendingConditions.Count);
+        Assert.All(state.PendingConditions, id => Assert.Equal("injured", id));
+    }
+
+    [Fact]
+    public void PendingConditionsResolvedOnResistanceKill()
+    {
+        // Seed 42 + default player: RollResist for "injured" should fail with enough stacks
+        var (session, state) = MakeContext();
+        var enc = MakeCombat(resistance: 1, timerDraw: 0, timers: [], approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        // Manually add pending conditions to simulate timer firings
+        state.PendingConditions.AddRange(["injured", "injured", "injured"]);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Kill Shot",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Damage,
+            EffectAmount = 10,
+        };
+
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var fin = Assert.IsType<TacticalStep.Finished>(step);
+        Assert.Equal(TacticalFinishReason.ResistanceKill, fin.Reason);
+        Assert.NotNull(fin.ConditionResults);
+        Assert.NotEmpty(fin.ConditionResults);
+    }
+
+    [Fact]
+    public void PendingConditionsResolvedOnControlKill()
+    {
+        var (session, state) = MakeContext();
+        var enc = MakeCombat(resistance: 100, timerDraw: 1,
+            timers: [new TimerDef("Threat", TimerEffect.Spirits, 1, 99, "Stop")],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        state.PendingConditions.Add("exhausted");
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Counter",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.StopTimer,
+            StopsTimerIndex = 0,
+        };
+
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var fin = Assert.IsType<TacticalStep.Finished>(step);
+        Assert.Equal(TacticalFinishReason.ControlKill, fin.Reason);
+        Assert.NotNull(fin.ConditionResults);
+        Assert.NotEmpty(fin.ConditionResults);
+    }
+
+    [Fact]
+    public void PendingConditionsResolvedOnSpiritsLoss()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 1;
+        var enc = MakeCombat(
+            timerDraw: 1,
+            timers: [new TimerDef("Lethal", TimerEffect.Spirits, 5, 1, "Stop")],
+            approaches: [],
+            failure: new FailureOutcome("Dead.", ["damage_spirits 1"]));
+        TacticalRunner.Begin(session, enc, state);
+
+        state.PendingConditions.Add("injured");
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var fin = Assert.IsType<TacticalStep.Finished>(step);
+        Assert.Equal(TacticalFinishReason.SpiritsLoss, fin.Reason);
+        Assert.NotNull(fin.ConditionResults);
+        Assert.NotEmpty(fin.ConditionResults);
+    }
+
+    [Fact]
+    public void NoPendingConditionsReturnsEmptyList()
+    {
+        var (session, state) = MakeContext();
+        var enc = MakeCombat(resistance: 1, timerDraw: 0, timers: [], approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Kill Shot",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Damage,
+            EffectAmount = 10,
+        };
+
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var fin = Assert.IsType<TacticalStep.Finished>(step);
+        Assert.NotNull(fin.ConditionResults);
+        Assert.Empty(fin.ConditionResults);
+    }
+
+    [Fact]
+    public void ConditionTimerAppearsInTimersFired()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timerDraw: 1,
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var turn = Assert.IsType<TacticalStep.ShowTurn>(step);
+
+        Assert.Single(turn.Data.TimersFired);
+        Assert.Equal("Rocks", turn.Data.TimersFired[0].Name);
+        Assert.Equal(TimerEffect.Condition, turn.Data.TimersFired[0].Effect);
+        Assert.Equal("injured", turn.Data.TimersFired[0].ConditionId);
+    }
+
+    [Fact]
+    public void PendingConditionsVisibleInTurnData()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timerDraw: 1,
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var turn = Assert.IsType<TacticalStep.ShowTurn>(step);
+
+        Assert.Single(turn.Data.PendingConditions);
+        Assert.Equal("injured", turn.Data.PendingConditions[0]);
+    }
+
+    [Fact]
+    public void SkipsConditionAlreadyActive()
+    {
+        var (session, state) = MakeContext();
+        session.Player.ActiveConditions["injured"] = 3;
+        var enc = MakeCombat(resistance: 1, timerDraw: 0, timers: [], approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        state.PendingConditions.AddRange(["injured", "injured"]);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Kill Shot",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Damage,
+            EffectAmount = 10,
+        };
+
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        var fin = Assert.IsType<TacticalStep.Finished>(step);
+        Assert.NotNull(fin.ConditionResults);
+        Assert.Empty(fin.ConditionResults);
     }
 
     // ── Traverse ───────────────────────────────────────
