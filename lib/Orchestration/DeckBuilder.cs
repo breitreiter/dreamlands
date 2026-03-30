@@ -100,8 +100,8 @@ public static class DeckBuilder
             }
         }
 
-        // Equipment cards (weapon, armor, boots — any equipped item with TacticalCards)
-        foreach (var item in GetEquippedItems(player, balance))
+        // Equipment cards — only from items relevant to the encounter's governing skill
+        foreach (var item in GetEquippedItems(player, balance, skill))
         {
             foreach (var card in item.TacticalCards)
             {
@@ -159,30 +159,41 @@ public static class DeckBuilder
         }
     }
 
+    static T ParseSnakeCase<T>(string value) where T : struct, Enum =>
+        Enum.Parse<T>(value.Replace("_", ""), ignoreCase: true);
+
     static OpeningSnapshot SnapshotFromArchetype(TacticalArchetype arch, string name) => new()
     {
         Name = name,
-        CostKind = Enum.Parse<CostKind>(arch.CostKind, ignoreCase: true),
+        CostKind = ParseSnakeCase<CostKind>(arch.CostKind),
         CostAmount = arch.CostAmount,
-        EffectKind = Enum.Parse<EffectKind>(arch.EffectKind, ignoreCase: true),
+        EffectKind = ParseSnakeCase<EffectKind>(arch.EffectKind),
         EffectAmount = arch.EffectAmount,
     };
 
-    static IEnumerable<ItemDef> GetEquippedItems(PlayerState player, BalanceData balance)
+    static IEnumerable<ItemDef> GetEquippedItems(PlayerState player, BalanceData balance, Skill? encounterSkill)
     {
         var equipment = player.Equipment;
-        if (equipment.Weapon?.DefId is { } wid && balance.Items.TryGetValue(wid, out var w))
+        if (equipment.Weapon?.DefId is { } wid && balance.Items.TryGetValue(wid, out var w) && IsRelevant(w, encounterSkill))
             yield return w;
-        if (equipment.Armor?.DefId is { } aid && balance.Items.TryGetValue(aid, out var a))
+        if (equipment.Armor?.DefId is { } aid && balance.Items.TryGetValue(aid, out var a) && IsRelevant(a, encounterSkill))
             yield return a;
-        if (equipment.Boots?.DefId is { } bid && balance.Items.TryGetValue(bid, out var b))
+        if (equipment.Boots?.DefId is { } bid && balance.Items.TryGetValue(bid, out var b) && IsRelevant(b, encounterSkill))
             yield return b;
 
         // Tokens and tools in Pack can also contribute cards
         foreach (var item in player.Pack)
         {
-            if (balance.Items.TryGetValue(item.DefId, out var def) && def.TacticalCards.Count > 0)
+            if (balance.Items.TryGetValue(item.DefId, out var def) && def.TacticalCards.Count > 0 && IsRelevant(def, encounterSkill))
                 yield return def;
         }
     }
+
+    /// <summary>
+    /// An item is relevant if it has no skill modifiers (generic gear) or
+    /// if it has a modifier for the encounter's governing skill.
+    /// </summary>
+    static bool IsRelevant(ItemDef item, Skill? encounterSkill) =>
+        item.SkillModifiers.Count == 0
+        || (encounterSkill.HasValue && item.SkillModifiers.ContainsKey(encounterSkill.Value));
 }
