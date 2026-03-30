@@ -12,7 +12,7 @@ timers:
   draw 2
   * The thieves surround you [counter Throw them into disarray]: spirits 1 every 4
   * The bandit leader rallies his men [counter Cut the leader down]: resistance 1 every 3
-  * You take another cudgel blow [counter Put you back to the mile marker]: add_condition injury every 5
+  * You take another cudgel blow [counter Put you back to the mile marker]: condition injured every 4
 
 openings:
   * Shove one aside: free_progress_small
@@ -35,8 +35,10 @@ approaches:
   * direct: momentum 2, timers 2
   * wild: momentum 4, timers 3
 
+success:
+  The last of them scatters into the tall grass. You catch your breath, standing over their abandoned toll post. A few coins glint in the road dust where they dropped them.
+
 failure:
   They beat you down and rifle through your pack, taking what they please.
-  +damage_health 3
   +damage_spirits 2
   +lose_random_item

@@ -8,12 +8,14 @@ A group of rough-looking men step out from behind a ruined cart, blocking the ro
 
 The area is rolling hills, still high with grain. There is a farmhouse in the distance. A squat stone imperial mile marker stands about 20 paces from you.
 
+choices:
+
 * Fight your way through
-  +open plains/tier1/Road Toll Fight
+  +open "Road Toll Fight"
 
 * Make a run for it
   +repool
-  +open plains/tier1/Road Toll Chase
+  +open "Road Toll Chase"
 
 * Pay the toll and move on
   You fish out the coins and hand them over. The leader counts them with practiced fingers, nods, and waves you through. "Fair travels, hope to meet again soon," he calls after you.
