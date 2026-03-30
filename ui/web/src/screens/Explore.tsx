@@ -41,7 +41,7 @@ const playerIcon = new Icon({
   iconAnchor: [15, 58],
 });
 
-const FLY_DURATION = 1.5; // seconds — synced with DayNightComplication transition
+const FLY_DURATION = 0.6; // seconds — synced with DayNightComplication transition
 
 function MapFollower({ position, onFlyEnd }: { position: LatLngExpression; onFlyEnd: () => void }) {
   const map = useMap();
