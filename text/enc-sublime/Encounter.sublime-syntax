@@ -183,19 +183,19 @@ contexts:
     - include: verb-noarg
 
   verb-magnitude:
-    - match: '(\+)(damage_health|heal|damage_spirits|heal_spirits)\s+(trivial|small|medium|large|huge)\s*$'
+    - match: '(\+)(damage_health|heal|damage_spirits|heal_spirits)\s+(\d+)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
-        3: constant.numeric.magnitude.enc
+        3: constant.numeric.amount.enc
 
   verb-skill-magnitude:
-    - match: '(\+)(increase_skill|decrease_skill)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(trivial|small|medium|large|huge)\s*$'
+    - match: '(\+)(increase_skill|decrease_skill)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(\d+)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
         3: entity.name.type.skill.enc
-        4: constant.numeric.magnitude.enc
+        4: constant.numeric.amount.enc
 
   verb-set-skill:
     - match: '(\+)(set_skill)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(\d+)\s*$'
@@ -222,11 +222,11 @@ contexts:
         4: constant.language.flag.enc
 
   verb-gold:
-    - match: '(\+)(give_gold|rem_gold)\s+(trivial|small|medium|large|huge)\s*$'
+    - match: '(\+)(give_gold|rem_gold)\s+(\d+)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
-        3: constant.numeric.magnitude.enc
+        3: constant.numeric.amount.enc
 
   verb-int-id:
     - match: '(\+)(add_random_items)\s+(\d+)\s+(\S+)\s*$'
@@ -244,7 +244,7 @@ contexts:
         3: string.unquoted.id.enc
 
   verb-noarg:
-    - match: '(\+)(lose_random_item|get_random_treasure|finish_dungeon|flee_dungeon)\s*$'
+    - match: '(\+)(lose_random_item|get_random_treasure|finish_dungeon|flee_dungeon|repool)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
