@@ -66,8 +66,8 @@ public class EncounterSelectionTests
     public void PickOverworld_FiltersUsedEncounters()
     {
         var bundle = Helpers.MakeBundle(
-            new Helpers.BundleEntry("enc1", "plains/tier1"),
-            new Helpers.BundleEntry("enc2", "plains/tier1"));
+            new Helpers.BundleEntry("enc1", "plains/tier1", Trigger: "road"),
+            new Helpers.BundleEntry("enc2", "plains/tier1", Trigger: "road"));
 
         var map = Helpers.MakeMap();
         var region = new Region(1, Terrain.Plains) { Tier = 1 };
@@ -86,7 +86,7 @@ public class EncounterSelectionTests
     public void PickOverworld_AllUsed_ReturnsNull()
     {
         var bundle = Helpers.MakeBundle(
-            new Helpers.BundleEntry("enc1", "plains/tier1"));
+            new Helpers.BundleEntry("enc1", "plains/tier1", Trigger: "road"));
 
         var map = Helpers.MakeMap();
         var region = new Region(1, Terrain.Plains) { Tier = 1 };
@@ -130,8 +130,8 @@ public class EncounterSelectionTests
     public void PickOverworld_FiltersOutWhenRequiresFails()
     {
         var bundle = Helpers.MakeBundle(
-            new Helpers.BundleEntry("gated", "plains/tier1", Requires: new[] { "tag special_flag" }),
-            new Helpers.BundleEntry("open", "plains/tier1"));
+            new Helpers.BundleEntry("gated", "plains/tier1", Trigger: "road", Requires: new[] { "tag special_flag" }),
+            new Helpers.BundleEntry("open", "plains/tier1", Trigger: "road"));
 
         var map = Helpers.MakeMap();
         var region = new Region(1, Terrain.Plains) { Tier = 1 };
@@ -150,7 +150,7 @@ public class EncounterSelectionTests
     public void PickOverworld_IncludesWhenRequiresPasses()
     {
         var bundle = Helpers.MakeBundle(
-            new Helpers.BundleEntry("gated", "plains/tier1", Requires: new[] { "tag special_flag" }));
+            new Helpers.BundleEntry("gated", "plains/tier1", Trigger: "road", Requires: new[] { "tag special_flag" }));
 
         var map = Helpers.MakeMap();
         var region = new Region(1, Terrain.Plains) { Tier = 1 };

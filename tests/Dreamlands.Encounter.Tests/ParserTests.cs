@@ -9,6 +9,7 @@ public class ParserTests
     {
         var source = """
             The Old Well
+            [trigger none]
             You peer into the darkness below.
             choices:
             * Look down
@@ -34,6 +35,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body text.
             choices:
             * Go left = explore the dark passage
@@ -53,6 +55,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Unlock the door [requires has rusted_key]
@@ -72,6 +75,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Fight the beast
@@ -108,6 +112,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Investigate
@@ -138,6 +143,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Take the treasure
@@ -160,6 +166,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Try the lock
@@ -228,6 +235,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Look around
@@ -251,6 +259,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Try it
@@ -277,6 +286,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Try it
@@ -303,6 +313,7 @@ public class ParserTests
     {
         var source = """
             The Return
+            [trigger none]
             [requires tag briar_backed_dara]
 
             You arrive at the commons.
@@ -326,6 +337,7 @@ public class ParserTests
     {
         var source = """
             The Return
+            [trigger none]
             [requires tag briar_backed_dara]
             [requires quality exiles 2]
 
@@ -351,6 +363,7 @@ public class ParserTests
     {
         var source = """
             The Old Well
+            [trigger none]
             You peer into the darkness below.
             choices:
             * Look down
@@ -384,6 +397,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger road]
             [tier 2]
             Body.
             choices:
@@ -423,7 +437,7 @@ public class ParserTests
     }
 
     [Fact]
-    public void NoTriggerOrTier_DefaultsNull()
+    public void MissingTrigger_Error()
     {
         var source = """
             Test
@@ -434,9 +448,24 @@ public class ParserTests
             """;
 
         var result = EncounterParser.Parse(source);
+        Assert.Contains(result.Errors, e => e.Message.Contains("Missing [trigger]"));
+    }
+
+    [Fact]
+    public void TriggerNone_ParsedAsNull()
+    {
+        var source = """
+            Test
+            [trigger none]
+            Body.
+            choices:
+            * Go
+            Done.
+            """;
+
+        var result = EncounterParser.Parse(source);
         Assert.True(result.IsSuccess);
         Assert.Null(result.Encounter!.Trigger);
-        Assert.Null(result.Encounter!.Tier);
     }
 
     [Fact]
@@ -510,6 +539,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             [vignette intro/00_Intro]
             Body.
             choices:
@@ -527,6 +557,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * Go
@@ -586,6 +617,7 @@ public class ParserTests
     {
         var source = """
             Test
+            [trigger none]
             Body.
             choices:
             * First option

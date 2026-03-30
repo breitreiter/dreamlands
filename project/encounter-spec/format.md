@@ -23,7 +23,7 @@ The `choices:` delimiter must appear at column 0, on its own line.
 
 Optional metadata lines between the title and the body. Order doesn't matter; blank lines between them are ignored. Supported fields:
 
-**`[trigger <value>]`** — Where this encounter fires: `road` or `settlement`. At most one per encounter. No `[trigger]` = road (default, backwards compatible).
+**`[trigger <value>]`** — Where this encounter fires: `road`, `settlement`, or `none`. Required. At most one per encounter. `road` = picked by overworld cadence system, `settlement` = stocked as a storylet at settlements, `none` = only reachable by explicit navigation (arc chains, intro sequence, etc.).
 
 **`[tier <value>]`** — Which tier this encounter belongs to: `1`, `2`, or `3`. At most one per encounter. No `[tier]` = any tier.
 

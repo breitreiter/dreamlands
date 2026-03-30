@@ -10,7 +10,7 @@
     { "trigger": "if meets\t@if meets skill", "contents": "@if meets ${1:combat} ${2:target} {\n  ${3:Outcome when skill meets target}\n} @else {\n  ${4:Outcome otherwise}\n}" },
 
     { "trigger": "requires\t[requires condition]", "contents": "[requires ${1:has} ${2:id}]" },
-    { "trigger": "trigger\t[trigger location]", "contents": "[trigger ${1:road}]" },
+    { "trigger": "trigger\t[trigger road|settlement|none]", "contents": "[trigger ${1:road}]" },
     { "trigger": "tier\t[tier n]", "contents": "[tier ${1:1}]" },
     { "trigger": "vignette\t[vignette path]", "contents": "[vignette ${1:path}]" },
     { "trigger": "inscription\t\"\"\" block", "contents": "\"\"\"\n${1:Inscription text}\n\"\"\"" },

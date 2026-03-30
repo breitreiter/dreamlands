@@ -20,7 +20,7 @@ contexts:
   # --- Front matter ---
 
   front-matter:
-    - match: '^(\[trigger)\s+(road|settlement)(\])'
+    - match: '^(\[trigger)\s+(road|settlement|none)(\])'
       captures:
         1: keyword.other.frontmatter.enc
         2: constant.language.trigger.enc

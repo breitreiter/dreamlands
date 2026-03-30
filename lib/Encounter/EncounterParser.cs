@@ -35,6 +35,7 @@ public static partial class EncounterParser
         // Front-matter: [requires ...], [trigger ...], [tier ...] after the title
         var requires = new List<string>();
         string? trigger = null;
+        bool hasTrigger = false;
         int? tier = null;
         string? vignette = null;
         int bodyStart = 1;
@@ -53,12 +54,15 @@ public static partial class EncounterParser
                         requires.Add(value);
                         break;
                     case "trigger":
-                        if (trigger != null)
+                        if (hasTrigger)
                             errors.Add(new ParseError { Line = i + 1, Message = "Duplicate [trigger]. Only one allowed per encounter." });
-                        else if (value is not ("road" or "settlement"))
-                            errors.Add(new ParseError { Line = i + 1, Message = $"Invalid trigger '{value}'. Must be 'road' or 'settlement'." });
+                        else if (value is not ("road" or "settlement" or "none"))
+                            errors.Add(new ParseError { Line = i + 1, Message = $"Invalid trigger '{value}'. Must be 'road', 'settlement', or 'none'." });
                         else
-                            trigger = value;
+                        {
+                            hasTrigger = true;
+                            trigger = value == "none" ? null : value;
+                        }
                         break;
                     case "tier":
                         if (tier != null)
@@ -83,6 +87,9 @@ public static partial class EncounterParser
                 break; // first non-blank, non-front-matter line starts the body
         }
         endFrontMatter:
+
+        if (!hasTrigger)
+            errors.Add(new ParseError { Line = 2, Message = "Missing [trigger]. Every encounter must declare [trigger road], [trigger settlement], or [trigger none]." });
 
         // Body: from bodyStart until a line that starts with "choices:" at column 0
         int choicesLineIndex = -1;

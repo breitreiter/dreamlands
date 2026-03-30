@@ -30,7 +30,7 @@
     "front-matter": {
       "patterns": [
         {
-          "match": "^(\\[trigger)\\s+(road|settlement)(\\])",
+          "match": "^(\\[trigger)\\s+(road|settlement|none)(\\])",
           "captures": {
             "1": { "name": "keyword.other.frontmatter.enc" },
             "2": { "name": "constant.language.trigger.enc" },

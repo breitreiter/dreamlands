@@ -33,6 +33,7 @@ internal static class Helpers
             {
                 id = qualifiedId,
                 category = e.Category,
+                trigger = e.Trigger,
                 title = e.Title ?? e.Id,
                 body = "Test body.",
                 requires = e.Requires ?? Array.Empty<string>(),
@@ -74,6 +75,7 @@ internal static class Helpers
         string Id,
         string Category,
         string? Title = null,
+        string? Trigger = null,
         string[]? Mechanics = null,
         object[]? Choices = null,
         string[]? Requires = null);

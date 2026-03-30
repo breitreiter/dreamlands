@@ -69,7 +69,7 @@
   },
   "Front-matter: trigger": {
     "prefix": ["trigger", "[trigger"],
-    "body": "[trigger ${1|road,settlement|}]",
+    "body": "[trigger ${1|road,settlement,none|}]",
     "description": "Set encounter trigger location"
   },
   "Front-matter: tier": {

@@ -3,9 +3,9 @@ ENCOUNTER MECHANICS QUICK REFERENCE
 
 FRONT-MATTER
 ------------------------------------
-Optional metadata lines between title and body. Order doesn't matter.
+Required metadata lines between title and body. Order doesn't matter.
 
-[trigger road|settlement]       Where this encounter fires (default: road)
+[trigger road|settlement|none]  Where this encounter fires (required)
 [tier 1|2|3]                    Which tier this encounter belongs to (default: any)
 [vignette <path>]               Override vignette image (path relative to assets/vignettes/, no .png)
 [requires <condition>]          Gate the entire encounter (multiple lines AND together)
