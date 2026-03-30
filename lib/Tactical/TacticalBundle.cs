@@ -28,6 +28,27 @@ public sealed class TacticalBundle
     public TacticalEncounter? GetEncounterById(string id) =>
         _encountersById.TryGetValue(id, out var idx) ? Encounters[idx] : null;
 
+    /// <summary>
+    /// Resolves a short name relative to a category, falling back to exact ID match.
+    /// Mirrors EncounterSelection.ResolveNavigation for the tactical bundle.
+    /// </summary>
+    public TacticalEncounter? ResolveNavigation(string name, string? category)
+    {
+        // Try exact qualified match first
+        if (_encountersById.TryGetValue(name, out var idx))
+            return Encounters[idx];
+
+        // Try category-relative: "Road Toll Chase" in category "plains/tier1" → "plains/tier1/Road Toll Chase"
+        if (category != null)
+        {
+            var qualified = $"{category}/{name}";
+            if (_encountersById.TryGetValue(qualified, out idx))
+                return Encounters[idx];
+        }
+
+        return null;
+    }
+
     public TacticalGroup? GetGroupById(string id) =>
         _groupsById.TryGetValue(id, out var idx) ? Groups[idx] : null;
 
@@ -84,6 +105,9 @@ public sealed class TacticalBundle
                 Failure = e.Failure is { } f
                     ? new FailureOutcome(f.Text, f.Mechanics ?? [])
                     : null,
+                Success = e.Success is { } s
+                    ? new SuccessOutcome(s.Text, s.Mechanics ?? [])
+                    : null,
             });
         }
 
@@ -135,11 +159,12 @@ public sealed class TacticalBundle
         string? Intent, string? Stat, int? Tier, List<string>? Requires,
         int Resistance,
         int TimerDraw, List<TimerDto> Timers, List<OpeningDto> Openings,
-        List<OpeningDto>? Path, List<ApproachDto>? Approaches, FailureDto? Failure);
+        List<OpeningDto>? Path, List<ApproachDto>? Approaches, FailureDto? Failure, SuccessDto? Success);
     record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown, string? ConditionId);
     record OpeningDto(string Name, string Archetype, string? Requires);
     record ApproachDto(string Kind, int Momentum, int TimerCount, int BonusOpenings);
     record FailureDto(string Text, List<string>? Mechanics);
+    record SuccessDto(string Text, List<string>? Mechanics);
     record GroupDto(
         string Id, string Category, string Title, string Body,
         int? Tier, List<string>? Requires, List<BranchDto> Branches);

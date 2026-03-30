@@ -28,7 +28,7 @@ function GameRouter() {
         <Explore state={response} />
       )}
       {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
-      {response.mode === "tactical" && response.tactical && <TacticalEncounter tactical={response.tactical} />}
+      {response.mode === "tactical" && response.tactical && <TacticalEncounter tactical={response.tactical} node={response.node} />}
       {response.mode === "rescued" && <Rescue state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
     </>

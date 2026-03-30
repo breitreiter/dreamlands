@@ -22,6 +22,8 @@ public sealed record ApproachDef(ApproachKind Kind, int Momentum, int TimerCount
 
 public sealed record FailureOutcome(string Text, IReadOnlyList<string> Mechanics);
 
+public sealed record SuccessOutcome(string Text, IReadOnlyList<string> Mechanics);
+
 public sealed record BranchDef(string Label, string? Intent, string EncounterRef, string? Requires = null);
 
 // ── Root types ─────────────────────────────────────────────────────
@@ -46,6 +48,7 @@ public sealed record TacticalEncounter
     public IReadOnlyList<OpeningDef> Path { get; init; } = [];
     public IReadOnlyList<ApproachDef> Approaches { get; init; } = [];
     public FailureOutcome? Failure { get; init; }
+    public SuccessOutcome? Success { get; init; }
 }
 
 public sealed record TacticalGroup

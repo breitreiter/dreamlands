@@ -86,6 +86,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         if (player.PendingEndOfDay && data.NoCamp)
             player.PendingEndOfDay = false;
 
+        if (session.Mode == SessionMode.InTactical && player.CurrentTacticalId is { } tacId)
+        {
+            var tacEnc = data.TacticalBundle?.GetEncounterById(tacId);
+            var tacState = tacEnc != null ? DeserializeTacticalState(player) : null;
+            if (tacEnc != null && tacState != null)
+            {
+                var step = TacticalRunner.Resume(session, tacEnc, tacState);
+                return new OkObjectResult(BuildTacticalResponse(session, tacEnc, step, tacState));
+            }
+        }
+
         if (session.CurrentEncounter is { } enc)
         {
             var gated = Choices.GetAllWithLockState(enc, player, data.Balance);
@@ -321,7 +332,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         {
                             case FinishReason.NavigatedTo:
                                 // Check tactical bundle first
-                                var tacTarget = data.TacticalBundle?.GetEncounterById(finished.NavigateToId!);
+                                var tacTarget = data.TacticalBundle?.ResolveNavigation(
+                                    finished.NavigateToId!, session.CurrentEncounter?.Category);
                                 if (tacTarget != null)
                                 {
                                     EncounterRunner.EndEncounter(session);
@@ -1669,6 +1681,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             Countdown = t.Countdown,
                             Current = t.Current,
                             Stopped = t.Stopped,
+                            ConditionId = t.ConditionId,
                         }).ToList(),
                         Openings = st.Data.Openings.Select(BuildOpeningInfo).ToList(),
                         Queue = st.Data.Queue?.Select(BuildOpeningInfo).ToList(),
@@ -1682,22 +1695,19 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Phase = "finished",
                     FinishReason = fin.Reason.ToString().ToLowerInvariant(),
                     FailureText = tacEnc.Failure?.Text,
+                    SuccessText = tacEnc.Success?.Text,
                     FailureMechanics = fin.FailureResults != null ? BuildMechanicResults(fin.FailureResults) : null,
+                    SuccessMechanics = fin.SuccessResults != null ? BuildMechanicResults(fin.SuccessResults) : null,
+                    ConditionResults = fin.ConditionResults != null ? BuildMechanicResults(fin.ConditionResults) : null,
                 };
                 break;
         }
 
         return new GameResponse
         {
-            Mode = step is TacticalStep.Finished ? "exploring" : "tactical",
+            Mode = "tactical",
             Status = BuildStatus(session.Player),
-            Tactical = step is TacticalStep.Finished ? null : info,
-            Outcome = step is TacticalStep.Finished ? new OutcomeInfo
-            {
-                Text = info.FinishReason == "spiritsloss" ? tacEnc.Failure?.Text ?? "Defeated." : "Victory.",
-                Mechanics = info.FailureMechanics ?? [],
-                NextAction = "end_tactical",
-            } : null,
+            Tactical = info,
             Node = BuildNodeInfo(session.CurrentNode, session.Player),
             Inventory = BuildInventory(session.Player),
             Mechanics = BuildMechanics(session.Player),

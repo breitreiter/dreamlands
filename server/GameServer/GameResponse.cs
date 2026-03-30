@@ -328,7 +328,10 @@ public record TacticalInfo
     // finished phase
     public string? FinishReason { get; init; }
     public string? FailureText { get; init; }
+    public string? SuccessText { get; init; }
     public List<MechanicResultInfo>? FailureMechanics { get; init; }
+    public List<MechanicResultInfo>? SuccessMechanics { get; init; }
+    public List<MechanicResultInfo>? ConditionResults { get; init; }
 }
 
 public class TacticalApproachInfo
@@ -360,6 +363,7 @@ public class TacticalTimerInfo
     public int Countdown { get; init; }
     public int Current { get; init; }
     public bool Stopped { get; init; }
+    public string? ConditionId { get; init; }
 }
 
 public class TacticalOpeningInfo

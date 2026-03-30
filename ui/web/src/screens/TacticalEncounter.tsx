@@ -1,4 +1,5 @@
-import type { TacticalInfo, TacticalOpeningInfo, TacticalApproachInfo } from "../api/types";
+import { useState } from "react";
+import type { TacticalInfo, TacticalOpeningInfo, TacticalApproachInfo, MechanicResultInfo, NodeInfo } from "../api/types";
 import { useGame } from "../GameContext";
 import { formatProse } from "../prose";
 import MaskedIcon from "../components/MaskedIcon";
@@ -59,8 +60,111 @@ function CostEffect({ opening }: { opening: TacticalOpeningInfo }) {
   );
 }
 
-export default function TacticalEncounter({ tactical }: { tactical: TacticalInfo }) {
+function MechanicLines({ results }: { results: MechanicResultInfo[] }) {
+  return (
+    <div className="space-y-2">
+      {results.map((m, i) =>
+        m.resistCheck ? (
+          <div
+            key={i}
+            className={`p-3 border rounded-lg ${
+              m.resistCheck.passed
+                ? "border-positive bg-positive/15"
+                : "border-negative bg-negative/15"
+            }`}
+          >
+            <MaskedIcon
+              icon="dice-twenty-faces-twenty.svg"
+              className="w-5 h-5 inline-block align-text-bottom mr-1.5"
+              color={m.resistCheck.rollMode === "disadvantage" ? "#C45656"
+                : m.resistCheck.rollMode === "advantage" ? "#5B9F5B"
+                : "currentColor"}
+            />
+            <span className="capitalize">{m.resistCheck.conditionName}</span>
+            {" resist: "}
+            <span className="font-medium">
+              {m.resistCheck.rolled - m.resistCheck.modifier}
+              {m.resistCheck.modifier !== 0 &&
+                ` ${m.resistCheck.modifier >= 0 ? "+" : ""}${m.resistCheck.modifier}`}
+            </span>
+            {" vs "}
+            <span className="font-medium">{m.resistCheck.target}</span>
+            {" — "}
+            <span className={m.resistCheck.passed ? "text-positive" : "text-negative"}>
+              {m.resistCheck.passed ? "Resisted" : "Afflicted"}
+            </span>
+            {m.resistCheck.rollMode && (
+              <>
+                {" · "}
+                <span className={m.resistCheck.rollMode === "disadvantage" ? "text-negative" : "text-positive"}>
+                  {m.resistCheck.rollMode === "disadvantage" ? "Disadvantage" : "Advantage"}
+                </span>
+              </>
+            )}
+          </div>
+        ) : (
+          <div key={i} className="text-dim">
+            {m.description}
+          </div>
+        )
+      )}
+    </div>
+  );
+}
+
+function FinishedSummary({ tactical, onContinue, loading }: { tactical: TacticalInfo; onContinue: () => void; loading: boolean }) {
+  const isVictory = tactical.finishReason !== "spiritsloss";
+  const epilogue = isVictory ? tactical.successText : tactical.failureText;
+  const mechanics = isVictory ? tactical.successMechanics : tactical.failureMechanics;
+  const conditions = tactical.conditionResults;
+  const hasEffects = (mechanics && mechanics.length > 0) || (conditions && conditions.length > 0);
+
+  return (
+    <div className="space-y-6">
+      {/* Victory/defeat banner */}
+      <div
+        className={`p-4 border rounded-lg ${
+          isVictory ? "border-positive bg-positive/15" : "border-negative bg-negative/15"
+        }`}
+      >
+        <p className="font-bold">
+          {tactical.finishReason === "resistancekill"
+            ? "Victory — Goal Reached"
+            : tactical.finishReason === "controlkill"
+              ? "Victory — Total Control"
+              : "Defeated — Spirits Depleted"}
+        </p>
+      </div>
+
+      {/* Epilogue prose */}
+      {epilogue && (
+        <div className="text-primary/80 leading-loose whitespace-pre-wrap">
+          {formatProse(epilogue)}
+        </div>
+      )}
+
+      {/* Effects: conditions and mechanics */}
+      {hasEffects && (
+        <div className="space-y-2 border-t border-edge pt-3">
+          {conditions && conditions.length > 0 && <MechanicLines results={conditions} />}
+          {mechanics && mechanics.length > 0 && <MechanicLines results={mechanics} />}
+        </div>
+      )}
+
+      <button
+        onClick={onContinue}
+        disabled={loading}
+        className="w-full text-left p-4 bg-btn hover:bg-btn-hover border border-edge rounded-lg text-action font-bold cursor-pointer transition-colors"
+      >
+        Continue
+      </button>
+    </div>
+  );
+}
+
+export default function TacticalEncounter({ tactical, node }: { tactical: TacticalInfo; node?: NodeInfo }) {
   const { doAction, loading } = useGame();
+  const [vignetteError, setVignetteError] = useState(false);
 
   const chooseApproach = (a: TacticalApproachInfo) => {
     doAction({ action: "tactical_approach", approach: a.kind });
@@ -94,14 +198,27 @@ export default function TacticalEncounter({ tactical }: { tactical: TacticalInfo
   return (
     <div className="h-full flex bg-page text-primary">
       {/* Left panel — vignette */}
-      <div
-        className="hidden md:flex w-[45%] shrink-0 items-center justify-center"
-        style={{ backgroundImage: `url(${parchment})`, backgroundSize: "cover", backgroundPosition: "center" }}
-      >
-        <div className="text-contrast/30 font-header text-[32px] uppercase tracking-wider">
-          {tactical.intent ?? tactical.variant}
-        </div>
-      </div>
+      {(() => {
+        const vignetteSrc = node?.terrain && node.regionTier != null && node.regionTier > 0
+          ? `/world/assets/vignettes/${node.terrain}/${node.terrain}_tier_${node.regionTier}_1.webp`
+          : null;
+        const hasVignette = !vignetteError && vignetteSrc != null;
+        return (
+          <div
+            className="hidden md:block w-[45%] shrink-0"
+            style={{ backgroundImage: `url(${parchment})`, backgroundSize: "cover", backgroundPosition: "center" }}
+          >
+            {hasVignette && (
+              <img
+                src={vignetteSrc}
+                alt=""
+                className="w-full h-full object-cover"
+                onError={() => setVignetteError(true)}
+              />
+            )}
+          </div>
+        );
+      })()}
 
       {/* Right panel */}
       <div className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
@@ -184,7 +301,9 @@ export default function TacticalEncounter({ tactical }: { tactical: TacticalInfo
                       <MaskedIcon icon={ICONS.threat} className="w-4 h-4" color={t.stopped ? "#8b8b8b" : "#aca377"} />
                       <span className="flex-1">{t.name}</span>
                       <span className="text-dim">
-                        {t.effect === "spirits" ? `Lose ${t.amount} Spirits` : `Lose ${t.amount} Progress`}
+                        {t.effect === "spirits" ? `Lose ${t.amount} Spirits`
+                          : t.effect === "condition" ? <span className="capitalize">{t.conditionId}</span>
+                          : `Lose ${t.amount} Progress`}
                       </span>
                       <div className="flex gap-1">
                         {Array.from({ length: t.countdown }, (_, j) => (
@@ -192,9 +311,9 @@ export default function TacticalEncounter({ tactical }: { tactical: TacticalInfo
                             key={j}
                             className={`w-2.5 h-2.5 rounded-full ${
                               j < t.current
-                                ? t.effect === "spirits"
-                                  ? "bg-negative"
-                                  : "bg-accent"
+                                ? t.effect === "resistance"
+                                  ? "bg-accent"
+                                  : "bg-negative"
                                 : "bg-edge"
                             }`}
                           />
@@ -292,36 +411,7 @@ export default function TacticalEncounter({ tactical }: { tactical: TacticalInfo
 
           {/* Finished phase */}
           {tactical.phase === "finished" && (
-            <div className="space-y-6">
-              <div
-                className={`p-4 border rounded-lg ${
-                  tactical.finishReason === "spiritsloss"
-                    ? "border-negative bg-negative/15"
-                    : "border-positive bg-positive/15"
-                }`}
-              >
-                <p className="font-bold">
-                  {tactical.finishReason === "resistancekill"
-                    ? "Victory — Goal Reached"
-                    : tactical.finishReason === "controlkill"
-                      ? "Victory — Total Control"
-                      : "Defeated — Spirits Depleted"}
-                </p>
-                {tactical.finishReason === "spiritsloss" && tactical.failureText && (
-                  <p className="mt-2 text-primary/80 leading-loose whitespace-pre-wrap">
-                    {formatProse(tactical.failureText)}
-                  </p>
-                )}
-              </div>
-
-              <button
-                onClick={endTactical}
-                disabled={loading}
-                className="w-full text-left p-4 bg-btn hover:bg-btn-hover border border-edge rounded-lg text-action font-bold cursor-pointer transition-colors"
-              >
-                Continue
-              </button>
-            </div>
+            <FinishedSummary tactical={tactical} onContinue={endTactical} loading={loading} />
           )}
         </div>
       </div>

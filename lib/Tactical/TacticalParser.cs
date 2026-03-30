@@ -4,7 +4,7 @@ namespace Dreamlands.Tactical;
 
 public static partial class TacticalParser
 {
-    enum Section { None, Stats, Timers, Openings, Path, Approaches, Failure, Branches }
+    enum Section { None, Stats, Timers, Openings, Path, Approaches, Failure, Success, Branches }
 
     [GeneratedRegex(@"^\[(\w+)\s+(.+?)\]\s*$")]
     private static partial Regex FrontMatterPattern();
@@ -145,6 +145,7 @@ public static partial class TacticalParser
                     "path" => Section.Path,
                     "approaches" => Section.Approaches,
                     "failure" => Section.Failure,
+                    "success" => Section.Success,
                     "branches" => Section.Branches,
                     _ => Section.None,
                 };
@@ -165,7 +166,7 @@ public static partial class TacticalParser
         bool isGroup = sections.ContainsKey(Section.Branches);
         bool isEncounter = sections.ContainsKey(Section.Stats) || sections.ContainsKey(Section.Openings)
                         || sections.ContainsKey(Section.Path) || sections.ContainsKey(Section.Timers) || sections.ContainsKey(Section.Approaches)
-                        || sections.ContainsKey(Section.Failure);
+                        || sections.ContainsKey(Section.Failure) || sections.ContainsKey(Section.Success);
 
         if (isGroup && isEncounter)
         {
@@ -260,6 +261,11 @@ public static partial class TacticalParser
         if (sections.TryGetValue(Section.Failure, out var failureRange))
             failure = ParseFailure(lines, failureRange.start, failureRange.end, errors);
 
+        // Success (optional epilogue + mechanics on victory)
+        SuccessOutcome? success = null;
+        if (sections.TryGetValue(Section.Success, out var successRange))
+            success = ParseSuccess(lines, successRange.start, successRange.end, errors);
+
         if (errors.Count > 0)
             return new TacticalParseResult { Errors = errors };
 
@@ -281,6 +287,7 @@ public static partial class TacticalParser
                 Path = path,
                 Approaches = approaches,
                 Failure = failure,
+                Success = success,
             }
         };
     }
@@ -516,6 +523,23 @@ public static partial class TacticalParser
         }
 
         return new FailureOutcome(JoinProse(proseLines), mechanics);
+    }
+
+    static SuccessOutcome ParseSuccess(string[] lines, int start, int end, List<ParseError> errors)
+    {
+        var proseLines = new List<string>();
+        var mechanics = new List<string>();
+
+        for (int i = start; i < end; i++)
+        {
+            var trimmed = lines[i].Trim();
+            if (trimmed.Length > 1 && trimmed[0] == '+' && char.IsLetter(trimmed[1]))
+                mechanics.Add(trimmed[1..]);
+            else
+                proseLines.Add(lines[i]);
+        }
+
+        return new SuccessOutcome(JoinProse(proseLines), mechanics);
     }
 
     static void ParseBranches(string[] lines, int start, int end,

@@ -313,7 +313,10 @@ export interface TacticalInfo {
   turn?: TacticalTurnInfo;
   finishReason?: string;
   failureText?: string;
+  successText?: string;
   failureMechanics?: MechanicResultInfo[];
+  successMechanics?: MechanicResultInfo[];
+  conditionResults?: MechanicResultInfo[];
 }
 
 export interface TacticalApproachInfo {
@@ -342,6 +345,7 @@ export interface TacticalTimerInfo {
   countdown: number;
   current: number;
   stopped: boolean;
+  conditionId?: string;
 }
 
 export interface TacticalOpeningInfo {

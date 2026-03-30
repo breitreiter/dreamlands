@@ -14,7 +14,11 @@ public abstract record TacticalStep
 
     public record ShowTurn(TacticalTurnData Data) : TacticalStep;
 
-    public record Finished(TacticalFinishReason Reason, List<MechanicResult>? FailureResults = null, List<MechanicResult>? ConditionResults = null) : TacticalStep;
+    public record Finished(
+        TacticalFinishReason Reason,
+        List<MechanicResult>? FailureResults = null,
+        List<MechanicResult>? SuccessResults = null,
+        List<MechanicResult>? ConditionResults = null) : TacticalStep;
 }
 
 public enum TacticalFinishReason { ResistanceKill, ControlKill, SpiritsLoss }
@@ -78,6 +82,28 @@ public static class TacticalRunner
         }
 
         return StartTurn(state, session, encounter);
+    }
+
+    /// <summary>
+    /// Reconstruct the current step from persisted state (for page refresh / reconnect).
+    /// </summary>
+    public static TacticalStep Resume(GameSession session, TacticalEncounter encounter, TacticalState state)
+    {
+        // If no timers drawn yet, player hasn't picked an approach
+        if (encounter.Variant == Variant.Combat && encounter.Approaches.Count > 0 && state.Timers.Count == 0)
+            return new TacticalStep.ChooseApproach(encounter, encounter.Approaches);
+
+        return new TacticalStep.ShowTurn(new TacticalTurnData(
+            state.Turn,
+            state.Resistance,
+            encounter.Resistance,
+            state.Momentum,
+            session.Player.Spirits,
+            state.Timers,
+            state.Openings,
+            VisibleQueue(state, session, encounter),
+            state.LastTimersFired,
+            state.PendingConditions));
     }
 
     public static TacticalStep ApplyApproach(
@@ -171,11 +197,23 @@ public static class TacticalRunner
 
         // Check win conditions
         if (state.Resistance <= 0)
+        {
+            var successResults = encounter.Success != null
+                ? Mechanics.Apply(encounter.Success.Mechanics, session.Player, session.Balance, session.Rng)
+                : null;
             return new TacticalStep.Finished(TacticalFinishReason.ResistanceKill,
+                SuccessResults: successResults,
                 ConditionResults: ResolvePendingConditions(state, session));
+        }
         if (state.Timers.All(t => t.Stopped))
+        {
+            var successResults = encounter.Success != null
+                ? Mechanics.Apply(encounter.Success.Mechanics, session.Player, session.Balance, session.Rng)
+                : null;
             return new TacticalStep.Finished(TacticalFinishReason.ControlKill,
+                SuccessResults: successResults,
                 ConditionResults: ResolvePendingConditions(state, session));
+        }
 
         // Traverse: advance path
         if (encounter.Variant == Variant.Traverse && state.Queue != null && state.Queue.Count > 0)
@@ -225,7 +263,8 @@ public static class TacticalRunner
             if (encounter.Failure != null)
                 failureResults = Mechanics.Apply(encounter.Failure.Mechanics, session.Player, session.Balance, session.Rng);
             var conditionResults = ResolvePendingConditions(state, session);
-            return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss, failureResults, conditionResults);
+            return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss,
+                FailureResults: failureResults, ConditionResults: conditionResults);
         }
 
         // Passive momentum gain

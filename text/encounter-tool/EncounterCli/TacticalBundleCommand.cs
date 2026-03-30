@@ -155,6 +155,11 @@ static class TacticalBundleCommand
         {
             text = f.Text,
             mechanics = f.Mechanics
+        } : null,
+        success = enc.Success is { } su ? new
+        {
+            text = su.Text,
+            mechanics = su.Mechanics
         } : null
     };
 
