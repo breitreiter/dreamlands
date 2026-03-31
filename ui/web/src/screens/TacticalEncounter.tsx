@@ -39,6 +39,29 @@ function effectIcon(kind: string): string | null {
   return null;
 }
 
+function describeOpening(o: TacticalOpeningInfo): string {
+  const costLabel = (kind: string, amount: number): string => {
+    if (kind === "free") return "Free";
+    if (kind === "tick") return "Advance threat timers";
+    if (kind === "momentum") return `Pay ${amount} momentum`;
+    if (kind === "spirits") return `Pay ${amount} spirits`;
+    return `Pay ${amount} ${kind}`;
+  };
+
+  const effectLabel = (kind: string, amount: number): string => {
+    if (kind === "damage") return `gain ${amount} progress`;
+    if (kind === "momentum") return `gain ${amount} momentum`;
+    if (kind === "stop_timer") return "stop a threat timer";
+    return `gain ${amount} ${kind}`;
+  };
+
+  const cost = costLabel(o.costKind, o.costAmount);
+  const effect = effectLabel(o.effectKind, o.effectAmount);
+
+  if (o.costKind === "free") return `${cost} — ${effect}`;
+  return `${cost}, ${effect}`;
+}
+
 function CostEffect({ opening }: { opening: TacticalOpeningInfo }) {
   const cIcon = costIcon(opening.costKind);
   const eIcon = effectIcon(opening.effectKind);
@@ -332,6 +355,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                     {turn.queue.slice(1).map((q, i) => (
                       <div
                         key={i}
+                        title={describeOpening(q)}
                         className="shrink-0 px-3 py-2 rounded-lg bg-btn/50 text-muted"
                       >
                         <div>{q.name}</div>
@@ -354,6 +378,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                       key={i}
                       onClick={affordable ? () => takeOpening(i) : undefined}
                       disabled={loading || !affordable}
+                      title={describeOpening(o)}
                       className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
                         affordable
                           ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
@@ -376,6 +401,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                 <button
                   onClick={pressAdvantage}
                   disabled={loading || turn.momentum < PRESS_COST}
+                  title={`Pay ${PRESS_COST} momentum, draw 3 new moves`}
                   className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
                     turn.momentum >= PRESS_COST
                       ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
@@ -392,6 +418,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                 <button
                   onClick={forceOpening}
                   disabled={loading || turn.spirits < FORCE_COST}
+                  title={`Pay ${FORCE_COST} spirits, draw 3 new moves`}
                   className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
                     turn.spirits >= FORCE_COST
                       ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
