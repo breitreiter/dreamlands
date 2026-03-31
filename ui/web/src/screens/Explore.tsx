@@ -568,9 +568,7 @@ export default function Explore({ state }: { state: GameResponse }) {
       return;
     }
 
-    if (result.deliveries?.length) {
-      setPendingDeliveries(result.deliveries);
-    }
+    const deferredDeliveries = result.deliveries?.length ? result.deliveries : null;
 
     const effectiveLen = Math.min(result.travel.stepsCompleted + 1, pathSnapshot.length);
     const rawPts = pathSnapshot.slice(0, effectiveLen).map(
@@ -588,6 +586,7 @@ export default function Explore({ state }: { state: GameResponse }) {
 
     setTravelPhase("idle");
     setAnimSpline([]);
+    if (deferredDeliveries) setPendingDeliveries(deferredDeliveries);
     // MapFollower will remount and flyTo; its onFlyEnd clears traveling.
   }, [traveling, doAction, clearCampReport]);
 
