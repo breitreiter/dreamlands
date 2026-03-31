@@ -15,6 +15,10 @@ public sealed class TacticalBalance
     public static readonly TacticalBalance Default = new();
 
     public int DeckSize { get; init; } = 15;
+    public int PressAdvantageCost { get; init; } = 2;
+    public int ForceOpeningCost { get; init; } = 2;
+    public int BonusOpeningCount { get; init; } = 3;
+    public int MomentumPerTurn { get; init; } = 1;
 
     /// <summary>Archetype definitions: template ID → cost/effect.</summary>
     public IReadOnlyDictionary<string, TacticalArchetype> Archetypes { get; init; } = BuildArchetypes();
@@ -75,6 +79,20 @@ public sealed class TacticalBalance
             new("Read the terrain", "free_momentum"),
             new("Find your footing", "momentum_to_progress_large"),
             new("Push through it", "momentum_to_progress_huge"),
+        },
+        [Skill.Luck] = new TacticalCard[]
+        {
+            new("A fortunate stumble", "free_progress_small"),
+            new("Something catches your eye", "free_momentum"),
+            new("Unlikely timing", "momentum_to_cancel"),
+            new("Against all odds", "spirits_to_progress_large"),
+        },
+        [Skill.Mercantile] = new TacticalCard[]
+        {
+            new("Name your price", "momentum_to_progress"),
+            new("Sweeten the deal", "free_momentum"),
+            new("Call in a favour", "threat_to_progress"),
+            new("Make an offer they can't refuse", "momentum_to_progress_huge"),
         },
     };
 }

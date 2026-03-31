@@ -43,10 +43,6 @@ public enum TacticalAction { TakeOpening, PressAdvantage, ForceOpening }
 
 public static class TacticalRunner
 {
-    const int PressAdvantageCost = 2;
-    const int ForceOpeningCost = 2;
-    const int BonusOpeningCount = 3;
-    const int MomentumPerTurn = 1;
 
     public static TacticalStep Begin(GameSession session, TacticalEncounter encounter, TacticalState state)
     {
@@ -139,17 +135,18 @@ public static class TacticalRunner
 
     static TacticalStep PressOrForce(GameSession session, TacticalEncounter encounter, TacticalState state, bool isMomentum)
     {
+        var tb = session.Balance.Tactical;
         if (isMomentum)
         {
-            if (state.Momentum < PressAdvantageCost)
+            if (state.Momentum < tb.PressAdvantageCost)
                 throw new InvalidOperationException("Not enough momentum to Press the Advantage.");
-            state.Momentum -= PressAdvantageCost;
+            state.Momentum -= tb.PressAdvantageCost;
         }
         else
         {
-            if (session.Player.Spirits < ForceOpeningCost)
+            if (session.Player.Spirits < tb.ForceOpeningCost)
                 throw new InvalidOperationException("Not enough spirits to Force an Opening.");
-            session.Player.Spirits -= ForceOpeningCost;
+            session.Player.Spirits -= tb.ForceOpeningCost;
         }
         state.BonusNextTurn = true;
         return AdvanceTurn(state, session, encounter);
@@ -268,14 +265,14 @@ public static class TacticalRunner
         }
 
         // Passive momentum gain
-        state.Momentum += MomentumPerTurn;
+        state.Momentum += session.Balance.Tactical.MomentumPerTurn;
 
         return StartTurn(state, session, encounter);
     }
 
     static TacticalStep StartTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
-        int count = state.BonusNextTurn ? BonusOpeningCount : 1;
+        int count = state.BonusNextTurn ? session.Balance.Tactical.BonusOpeningCount : 1;
         state.BonusNextTurn = false;
 
         if (encounter.Variant == Variant.Traverse && state.Queue != null)

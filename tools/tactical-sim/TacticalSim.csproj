@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TacticalSim</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../lib/Rules/Dreamlands.Rules.csproj" />
+    <ProjectReference Include="../../lib/Game/Dreamlands.Game.csproj" />
+    <ProjectReference Include="../../lib/Orchestration/Dreamlands.Orchestration.csproj" />
+    <ProjectReference Include="../../lib/Tactical/Dreamlands.Tactical.csproj" />
+  </ItemGroup>
+</Project>

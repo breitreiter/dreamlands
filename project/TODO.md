@@ -26,14 +26,9 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Road Encounter System (Tableau)
 
-- [ ] Design aspect taxonomy — brainstorm 15-25 aspects starting from biome vocabularies
-      (affordance: flammable, heavy, loose, elevated, etc. + capability: fire, reach, sharp, etc.).
-      Factor from concrete "clever moment" sentences, not top-down. Spec in
-      `project/design/encounter-redesign/aspect-based.md`.
-- [ ] Design verbs as aspect-threshold slot machines — build on aspect list, define slot
-      requirements and output rules
-- [ ] Design biome card pools — curated aspect bundles per biome, weighted toward
-      characteristic vocabularies
+- [ ] Finish out and test AI authoring tools for tac encounters
+- [ ] Sketch out single-paragraph intros for every biome/tier (50 total? 8x5+5x2)
+- [ ] Playtest a bunch and tune
 
 ### Rules & Balancing
 
