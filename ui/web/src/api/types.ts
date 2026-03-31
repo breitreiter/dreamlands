@@ -237,6 +237,13 @@ export interface GameResponse {
   innRecovery?: InnRecoveryInfo;
   deliveries?: DeliveryInfo[];
   tactical?: TacticalInfo;
+  travel?: TravelInfo;
+}
+
+export interface TravelInfo {
+  path: { x: number; y: number }[];
+  stepsCompleted: number;
+  stopReason: "arrived" | "encounter" | "tactical" | "rescued";
 }
 
 export interface MechanicsInfo {

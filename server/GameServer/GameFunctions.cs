@@ -306,6 +306,172 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 break;
             }
 
+            case "travel":
+            {
+                if (session.Mode != SessionMode.Exploring)
+                    return new BadRequestObjectResult(new { error = "Cannot travel while not exploring" });
+                if (player.CurrentDungeonId != null)
+                    return new BadRequestObjectResult(new { error = "Cannot travel while in a dungeon" });
+                if (actionReq.Path is not { Count: >= 2 } proposedPath)
+                    return new BadRequestObjectResult(new { error = "Path is required (at least 2 points)" });
+
+                // Validate start matches current position
+                if (proposedPath[0].X != player.X || proposedPath[0].Y != player.Y)
+                    return new BadRequestObjectResult(new { error = "Path must start at current position" });
+
+                var stepsCompleted = 0;
+                string stopReason = "arrived";
+                List<DeliveryInfo> allDeliveries = [];
+
+                for (var i = 1; i < proposedPath.Count; i++)
+                {
+                    var from = proposedPath[i - 1];
+                    var to = proposedPath[i];
+                    var dx = to.X - from.X;
+                    var dy = to.Y - from.Y;
+
+                    // Validate each step is a single cardinal move
+                    if (Math.Abs(dx) + Math.Abs(dy) != 1)
+                        return new BadRequestObjectResult(new { error = $"Invalid step at index {i}: not adjacent" });
+
+                    var stepDir = dx == 1 ? Direction.East
+                        : dx == -1 ? Direction.West
+                        : dy == 1 ? Direction.South
+                        : Direction.North;
+
+                    // Validate the move is legal (not into water, not out of bounds)
+                    if (Movement.TryMove(session, stepDir) == null)
+                        return new BadRequestObjectResult(new { error = $"Blocked step at index {i}" });
+
+                    Movement.Execute(session, stepDir);
+                    stepsCompleted = i;
+
+                    // Settlement arrival logic (same as move)
+                    if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
+                    {
+                        foreach (var cid in player.ActiveConditions.Keys.ToList())
+                            if (data.Balance.Conditions.TryGetValue(cid, out var cdef) && cdef.ClearedOnSettlement)
+                                player.ActiveConditions.Remove(cid);
+                        player.PendingNoBiome = true;
+
+                        SettlementRunner.EnsureSettlement(session);
+
+                        if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
+                        {
+                            var delivered = HaulDelivery.Deliver(player, arrivalId, data.Balance.Hauls, session.Rng, data.Balance);
+                            if (delivered.Count > 0)
+                                allDeliveries.AddRange(delivered.Select(d => new DeliveryInfo
+                                {
+                                    Name = d.DisplayName,
+                                    Payout = d.Payout,
+                                    Flavor = d.DeliveryFlavor,
+                                }));
+                        }
+                    }
+
+                    // Time advancement
+                    if (player.Time < TimePeriod.Night)
+                    {
+                        player.Time = player.Time + 1;
+                    }
+                    else if (!data.NoCamp)
+                    {
+                        player.Time = TimePeriod.Morning;
+                        player.Day++;
+                        player.PendingEndOfDay = true;
+                    }
+
+                    // End-of-day: auto-resolve camp during travel
+                    if (player.PendingEndOfDay && !data.NoCamp)
+                    {
+                        var campNode = session.CurrentNode;
+                        var campBiome = campNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
+                        var campTier = campNode.Region?.Tier ?? 1;
+                        var campTerrain = campNode.Region?.Terrain ?? Terrain.Plains;
+                        var startCity = data.Map.StartingCity;
+
+                        EndOfDay.Resolve(
+                            player, campBiome, campTier,
+                            data.Balance, session.Rng,
+                            startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0,
+                            createFood: (type, rng) =>
+                            {
+                                var (name, desc) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
+                                return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name)
+                                    { FoodType = type, Description = desc };
+                            });
+
+                        player.PendingEndOfDay = false;
+
+                        // If player was rescued (died overnight), stop travel
+                        if (player.Health <= 0)
+                        {
+                            stopReason = "rescued";
+                            break;
+                        }
+                    }
+
+                    // Encounter check
+                    player.MoveCount++;
+                    if (player.MoveCount >= player.NextEncounterMove)
+                    {
+                        player.NextEncounterMove = player.MoveCount
+                            + session.Rng.Next(data.Balance.Character.EncounterCadenceMin,
+                                               data.Balance.Character.EncounterCadenceMax + 1);
+
+                        var encNode = session.CurrentNode;
+                        var eligible = player.Time is not TimePeriod.Morning
+                                       && encNode.Poi is null;
+
+                        if (eligible && !data.NoEncounters)
+                        {
+                            var enc = EncounterSelection.PickOverworld(session, encNode);
+                            if (enc != null)
+                            {
+                                var step = EncounterRunner.Begin(session, enc);
+                                await store.Save(player);
+                                return new OkObjectResult(new GameResponse
+                                {
+                                    Mode = "encounter",
+                                    Status = BuildStatus(player),
+                                    Node = BuildNodeInfo(session.CurrentNode, player),
+                                    Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
+                                    Inventory = BuildInventory(player),
+                                    Mechanics = BuildMechanics(player),
+                                    Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                                    Travel = new TravelInfo
+                                    {
+                                        Path = proposedPath,
+                                        StepsCompleted = stepsCompleted,
+                                        StopReason = "encounter",
+                                    },
+                                });
+                            }
+                        }
+                    }
+                }
+
+                await store.Save(player);
+                response = new GameResponse
+                {
+                    Mode = "exploring",
+                    Status = BuildStatus(player),
+                    Node = BuildNodeInfo(session.CurrentNode, player, session),
+                    Exits = BuildExits(session),
+                    Inventory = BuildInventory(player),
+                    Mechanics = BuildMechanics(player),
+                    Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                    DungeonHub = BuildDungeonHubInfo(session, session.CurrentNode),
+                    Travel = new TravelInfo
+                    {
+                        Path = proposedPath,
+                        StepsCompleted = stepsCompleted,
+                        StopReason = stopReason,
+                    },
+                };
+                break;
+            }
+
             case "choose":
             {
                 if (session.CurrentEncounter == null)

@@ -47,6 +47,27 @@ public class GameResponse
 
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
+
+    // Travel (click-to-move journey results)
+    public TravelInfo? Travel { get; init; }
+}
+
+public class TravelInfo
+{
+    /// <summary>Full path from start to destination (grid coordinates).</summary>
+    public List<TravelPoint> Path { get; init; } = [];
+
+    /// <summary>How many tiles of the path were actually traversed (1-based, includes start).</summary>
+    public int StepsCompleted { get; init; }
+
+    /// <summary>Why the journey ended: "arrived", "encounter", "tactical", "rescued".</summary>
+    public string StopReason { get; init; } = "arrived";
+}
+
+public class TravelPoint
+{
+    public int X { get; init; }
+    public int Y { get; init; }
 }
 
 public class DiscoveryInfo
@@ -391,6 +412,7 @@ public class ActionRequest
     public string? Approach { get; set; }
     public string? TacticalAction { get; set; }
     public int? OpeningIndex { get; set; }
+    public List<TravelPoint>? Path { get; set; }
 }
 
 public class DebugConditionRequest

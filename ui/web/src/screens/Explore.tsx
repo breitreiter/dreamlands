@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, Tooltip, useMap, useMapEvents } from "react-leaflet";
-import { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Tooltip, Polyline, useMap, useMapEvents } from "react-leaflet";
+import L, { CRS, LatLngBounds, DivIcon, Icon, type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { loadGrid, findPath, type MapData } from "../pathfinding";
 import { useGame } from "../GameContext";
 import Inventory from "./Inventory";
 import MarketScreen from "./Market";
@@ -53,80 +54,212 @@ function MapFollower({ position, onFlyEnd }: { position: LatLngExpression; onFly
   return null;
 }
 
-const DIR_VECTORS: Record<string, { dx: number; dy: number; rotation: number }> = {
-  east:  { dx: 1,  dy: 0,  rotation: 0 },
-  south: { dx: 0,  dy: 1,  rotation: 90 },
-  west:  { dx: -1, dy: 0,  rotation: 180 },
-  north: { dx: 0,  dy: -1, rotation: 270 },
-};
-
-function DirectionIndicator({
-  playerX,
-  playerY,
-  exits,
-  loading,
-  hidden,
-  onMove,
-}: {
-  playerX: number;
-  playerY: number;
-  exits: string[];
-  loading: boolean;
-  hidden: boolean;
-  onMove: (dir: string) => void;
-}) {
-  const [direction, setDirection] = useState<string | null>(null);
-
-  const computeDirection = useCallback(
-    (latlng: { lat: number; lng: number }) => {
-      const playerPos = gridToLatLng(playerX, playerY) as [number, number];
-      const dlat = latlng.lat - playerPos[0];
-      const dlng = latlng.lng - playerPos[1];
-      if (Math.abs(dlat) > Math.abs(dlng)) {
-        return dlat > 0 ? "north" : "south";
-      } else {
-        return dlng > 0 ? "east" : "west";
-      }
-    },
-    [playerX, playerY]
-  );
-
+/** Forwards map clicks to a handler. No visual output. */
+function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
   useMapEvents({
-    mousemove(e) {
-      if (loading || hidden) { setDirection(null); return; }
-      const dir = computeDirection(e.latlng);
-      setDirection(exits.includes(dir) ? dir : null);
-    },
-    mouseout() {
-      setDirection(null);
-    },
-    click(e) {
-      if (loading) return;
-      const dir = computeDirection(e.latlng);
-      if (exits.includes(dir)) onMove(dir);
-    },
+    click(e) { onClick(e.latlng.lat, e.latlng.lng); },
   });
-
-  if (!direction) return null;
-
-  const vec = DIR_VECTORS[direction];
-  const pos = gridToLatLng(playerX + vec.dx, playerY + vec.dy);
-  const icon = new DivIcon({
-    html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:32px;height:32px;transform:rotate(${vec.rotation}deg);pointer-events:none;"><path d="M106.854 106.002a26.003 26.003 0 0 0-25.64 29.326c16 124 16 117.344 0 241.344a26.003 26.003 0 0 0 35.776 27.332l298-124a26.003 26.003 0 0 0 0-48.008l-298-124a26.003 26.003 0 0 0-10.136-1.994z" fill="#6bffae" stroke="#232d46" stroke-width="80" paint-order="stroke"/></svg>`,
-    className: "",
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-  });
-
-  return <Marker position={pos} icon={icon} interactive={false} zIndexOffset={1000} />;
+  return null;
 }
 
-const DIR_KEYS: Record<string, string> = {
-  north: "w",
-  south: "s",
-  east: "d",
-  west: "a",
-};
+// ── Travel animation ──────────────────────────────────
+
+type TravelPhase = "idle" | "preview" | "animating";
+
+const TILE_MS = 300; // milliseconds per tile during animation
+
+/** Freeze all Leaflet interactions. */
+function freezeMap(map: L.Map) {
+  map.dragging.disable();
+  map.touchZoom.disable();
+  map.scrollWheelZoom.disable();
+  map.boxZoom.disable();
+  map.keyboard.disable();
+  map.doubleClickZoom.disable();
+}
+
+/** Restore all Leaflet interactions. */
+function unfreezeMap(map: L.Map) {
+  map.dragging.enable();
+  map.touchZoom.enable();
+  map.scrollWheelZoom.enable();
+  map.boxZoom.enable();
+  map.keyboard.enable();
+  map.doubleClickZoom.enable();
+}
+
+/**
+ * Catmull-Rom spline interpolation through control points.
+ * Returns a point on the spline for parameter t in [0, 1] within
+ * the segment between p1 and p2, given neighbors p0 and p3.
+ */
+function catmullRom(
+  p0: [number, number], p1: [number, number],
+  p2: [number, number], p3: [number, number],
+  t: number
+): [number, number] {
+  const t2 = t * t, t3 = t2 * t;
+  return [
+    0.5 * ((2 * p1[0]) + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+    0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
+  ];
+}
+
+const SPLINE_SAMPLES = 8; // points per segment
+const JITTER_AMOUNT = 0.35; // max perpendicular offset in latlng units (~1/3 tile)
+
+/** Simple deterministic hash for a coordinate pair. */
+function coordHash(lat: number, lng: number): number {
+  let h = (lat * 73856093) ^ (lng * 19349663);
+  h = ((h >>> 16) ^ h) * 0x45d9f3b;
+  return (((h >>> 16) ^ h) >>> 0) / 0xffffffff; // 0..1
+}
+
+/**
+ * Nudge interior points perpendicular to their travel direction.
+ * Gives straight runs an organic wobble; diagonals barely change
+ * since they already produce nice spline curves.
+ */
+function jitterPath(points: [number, number][]): [number, number][] {
+  if (points.length <= 2) return points;
+
+  const result: [number, number][] = [points[0]];
+  for (let i = 1; i < points.length - 1; i++) {
+    const prev = points[i - 1];
+    const cur = points[i];
+    const next = points[i + 1];
+    // Direction through this point (lat, lng)
+    const dlat = next[0] - prev[0];
+    const dlng = next[1] - prev[1];
+    const len = Math.sqrt(dlat * dlat + dlng * dlng);
+    if (len === 0) { result.push(cur); continue; }
+    // Perpendicular unit vector: rotate direction 90 degrees
+    const plat = -dlng / len;
+    const plng = dlat / len;
+    // Deterministic signed offset from coordinate hash
+    const t = coordHash(cur[0], cur[1]) * 2 - 1; // -1..1
+    result.push([cur[0] + plat * t * JITTER_AMOUNT, cur[1] + plng * t * JITTER_AMOUNT]);
+  }
+  result.push(points[points.length - 1]);
+  return result;
+}
+
+/** Generate a smooth spline through the given control points, with jitter. */
+function splinePath(points: [number, number][]): [number, number][] {
+  if (points.length < 2) return points;
+  if (points.length === 2) return points;
+
+  const jittered = jitterPath(points);
+  const result: [number, number][] = [jittered[0]];
+  for (let i = 0; i < jittered.length - 1; i++) {
+    const p0 = jittered[Math.max(0, i - 1)];
+    const p1 = jittered[i];
+    const p2 = jittered[i + 1];
+    const p3 = jittered[Math.min(jittered.length - 1, i + 2)];
+    for (let s = 1; s <= SPLINE_SAMPLES; s++) {
+      result.push(catmullRom(p0, p1, p2, p3, s / SPLINE_SAMPLES));
+    }
+  }
+  return result;
+}
+
+/** Linearly interpolate marker position between path nodes. progress is 0..pathLen-1. */
+function interpolateLinear(
+  pts: [number, number][],
+  progress: number
+): [number, number] {
+  if (pts.length < 2) return pts[0] ?? [0, 0];
+  const idx = Math.floor(progress);
+  if (idx >= pts.length - 1) return pts[pts.length - 1];
+  const frac = progress - idx;
+  const [lat1, lng1] = pts[idx];
+  const [lat2, lng2] = pts[idx + 1];
+  return [lat1 + (lat2 - lat1) * frac, lng1 + (lng2 - lng1) * frac];
+}
+
+/** Renders the travel path preview as a smooth spline. */
+function PathPreview({ path }: { path: { x: number; y: number }[] }) {
+  const curvePoints = useMemo(
+    () => splinePath(path.map((p) => gridToLatLng(p.x, p.y) as [number, number])),
+    [path]
+  );
+  return (
+    <Polyline
+      positions={curvePoints}
+      pathOptions={{ color: "#D0925D", weight: 4, dashArray: "8 6", opacity: 0.7 }}
+    />
+  );
+}
+
+/** Pure render component — no effects, no lifecycle, no StrictMode issues. */
+function TravelOverlay({
+  spline,
+  markerPos,
+}: {
+  spline: [number, number][];
+  markerPos: [number, number];
+}) {
+  return (
+    <>
+      {spline.length > 1 && (
+        <Polyline
+          positions={spline}
+          pathOptions={{ color: "#D0925D", weight: 4, dashArray: "8 6", opacity: 0.4 }}
+        />
+      )}
+      <Marker position={markerPos} icon={playerIcon} interactive={false} zIndexOffset={2000} />
+    </>
+  );
+}
+
+/** Freezes the map, zooms to fit, runs the rAF animation, then resolves. */
+function runTravelAnimation(
+  map: L.Map,
+  pts: [number, number][],
+  setMarkerPos: (pos: [number, number]) => void,
+): Promise<void> {
+  return new Promise((resolve) => {
+    freezeMap(map);
+    map.fitBounds(new LatLngBounds(pts).pad(0.4), { animate: true, duration: 0.4 });
+
+    const totalSteps = pts.length - 1;
+    if (totalSteps <= 0) {
+      unfreezeMap(map);
+      resolve();
+      return;
+    }
+
+    const totalMs = totalSteps * TILE_MS;
+
+    // Wait for zoom to settle, then animate
+    setTimeout(() => {
+      const startTime = performance.now();
+
+      function tick(now: number) {
+        const elapsed = now - startTime;
+        const progress = Math.max(0, Math.min((elapsed / totalMs) * totalSteps, totalSteps));
+
+        setMarkerPos(interpolateLinear(pts, progress));
+
+        if (progress >= totalSteps) {
+          unfreezeMap(map);
+          resolve();
+        } else {
+          requestAnimationFrame(tick);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }, 500);
+  });
+}
+
+/** Grabs the Leaflet map instance and exposes it via ref. */
+function MapRef({ mapRef }: { mapRef: React.MutableRefObject<L.Map | null> }) {
+  const map = useMap();
+  mapRef.current = map;
+  return null;
+}
 
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",
@@ -145,6 +278,12 @@ const poiPinIcon = new DivIcon({
   iconSize: [24, 24],
   iconAnchor: [12, 12],
 });
+
+function latLngToGrid(lat: number, lng: number): { x: number; y: number } {
+  const gx = Math.floor((lng * SCALE) / TILE_PX);
+  const gy = Math.floor((-lat * SCALE) / TILE_PX);
+  return { x: Math.max(0, Math.min(GRID - 1, gx)), y: Math.max(0, Math.min(GRID - 1, gy)) };
+}
 
 function gridToLatLngTopRight(x: number, y: number): LatLngExpression {
   const tileLng = TILE_PX / SCALE;
@@ -372,27 +511,102 @@ export default function Explore({ state }: { state: GameResponse }) {
   const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
   const [traveling, setTraveling] = useState(false);
+  const [gridReady, setGridReady] = useState(false);
+
+  // Travel state
+  const [travelPhase, setTravelPhase] = useState<TravelPhase>("idle");
+  const [previewPath, setPreviewPath] = useState<{ x: number; y: number }[]>([]);
+  const [animSpline, setAnimSpline] = useState<[number, number][]>([]);
+  const [animMarkerPos, setAnimMarkerPos] = useState<[number, number]>([0, 0]);
+  const mapRef = useRef<L.Map | null>(null);
+
+  // Load map grid for pathfinding (once)
+  useEffect(() => {
+    fetch("/world/map.json")
+      .then((r) => r.json())
+      .then((data: MapData) => {
+        loadGrid(data);
+        setGridReady(true);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!gameId) return;
     getDiscoveries(gameId).then(setDiscoveries).catch(() => {});
   }, [gameId]);
 
-  const move = useCallback(async (dir: string) => {
-    if (traveling) return;
+  // Execute travel along a path: server call, then animate
+  const executeTravel = useCallback(async (path: { x: number; y: number }[]) => {
+    if (path.length < 2 || traveling) return;
+
+    const pathSnapshot = [...path];
+
     setTraveling(true);
+    setPreviewPath([]);
+    setTravelPhase("idle");
     clearCampReport();
-    const result = await doAction({ action: "move", direction: dir });
-    if (result?.deliveries?.length) {
+
+    const result = await doAction({ action: "travel", path: pathSnapshot });
+
+    if (!result?.travel) {
+      setTraveling(false);
+      return;
+    }
+
+    if (result.deliveries?.length) {
       setPendingDeliveries(result.deliveries);
     }
-    if (result?.node?.poi && (result.node.poi.kind === "settlement" || result.node.poi.kind === "dungeon")) {
-      setDiscoveries(prev => {
-        if (prev.some(d => d.x === result.node!.x && d.y === result.node!.y)) return prev;
-        return [...prev, { x: result.node!.x, y: result.node!.y, kind: result.node!.poi!.kind, name: result.node!.poi!.name ?? result.node!.poi!.kind }];
-      });
+
+    const effectiveLen = Math.min(result.travel.stepsCompleted + 1, pathSnapshot.length);
+    const rawPts = pathSnapshot.slice(0, effectiveLen).map(
+      (p) => gridToLatLng(p.x, p.y) as [number, number]
+    );
+    const spline = rawPts.length >= 2 ? splinePath(rawPts) : [];
+
+    setAnimSpline(spline);
+    setAnimMarkerPos(rawPts[0] ?? [0, 0]);
+    setTravelPhase("animating");
+
+    if (mapRef.current && rawPts.length >= 2) {
+      await runTravelAnimation(mapRef.current, rawPts, setAnimMarkerPos);
     }
-  }, [doAction, traveling]);
+
+    setTravelPhase("idle");
+    setAnimSpline([]);
+    // MapFollower will remount and flyTo; its onFlyEnd clears traveling.
+  }, [traveling, doAction, clearCampReport]);
+
+  const cancelTravel = useCallback(() => {
+    if (travelPhase === "preview") {
+      setTravelPhase("idle");
+      setPreviewPath([]);
+    }
+  }, [travelPhase]);
+
+  // All map clicks go through pathfinding
+  const handleMapClick = useCallback(
+    (lat: number, lng: number) => {
+      if (!state.node || !gridReady || traveling || loading) return;
+
+      const target = latLngToGrid(lat, lng);
+      if (target.x === state.node.x && target.y === state.node.y) return;
+
+      const path = findPath(state.node.x, state.node.y, target.x, target.y);
+      if (!path || path.length < 2) return;
+
+      // Short paths: execute immediately, no confirmation
+      if (path.length <= 3) {
+        executeTravel(path);
+        return;
+      }
+
+      // Long paths: show preview for confirmation
+      setPreviewPath(path);
+      setTravelPhase("preview");
+    },
+    [state.node, gridReady, traveling, loading, executeTravel]
+  );
 
   const position = useMemo(
     () => (state.node ? gridToLatLng(state.node.x, state.node.y) : [0, 0] as LatLngExpression),
@@ -401,17 +615,18 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (loading || traveling || activeService != null || pendingDeliveries.length > 0) return;
+      if (activeService != null || pendingDeliveries.length > 0) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
-      for (const [dir, key] of Object.entries(DIR_KEYS)) {
-        if (e.key === key) {
-          e.preventDefault();
-          move(dir);
-          return;
-        }
+      if (e.key === "Escape" && travelPhase === "preview") {
+        e.preventDefault();
+        cancelTravel();
+        return;
       }
+
+      if (loading || traveling) return;
+
       if (e.key === "i") {
         e.preventDefault();
         setShowInventory((v) => !v);
@@ -419,12 +634,15 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [move, loading, traveling, activeService, pendingDeliveries.length]);
+  }, [loading, traveling, activeService, pendingDeliveries.length, travelPhase, cancelTravel]);
 
   if (!state.node || !state.exits) return null;
 
-  const { node, exits } = state;
   const isLost = state.status.conditions.some((c) => c.id === "lost");
+  const isAnimating = travelPhase === "animating";
+  // Hide Leaflet's own marker and MapFollower during the entire travel flow
+  // (both the execute-moves phase and the animation phase)
+  const hideLeafletPlayer = isAnimating || (traveling && travelPhase !== "idle");
 
   if (activeService === "market") return <MarketScreen state={state} onBack={() => setActiveService(null)} />;
   if (activeService === "bank") return <BankScreen state={state} onBack={() => setActiveService(null)} />;
@@ -456,22 +674,52 @@ export default function Explore({ state }: { state: GameResponse }) {
           minZoom={0}
           maxZoom={MAX_ZOOM}
         />
-        {!isLost && <Marker position={position} icon={playerIcon} />}
-        <DirectionIndicator
-          playerX={node.x}
-          playerY={node.y}
-          exits={exits.map((e) => e.direction)}
-          loading={loading || traveling}
-          hidden={isLost}
-          onMove={move}
-        />
+
+        {/* Leaflet player marker — hidden during entire travel flow */}
+        {!isLost && !hideLeafletPlayer && <Marker position={position} icon={playerIcon} />}
+
+        {/* Map click handler — disabled during travel/lost */}
+        {gridReady && !isLost && !hideLeafletPlayer && !loading && !traveling && (
+          <MapClickHandler onClick={handleMapClick} />
+        )}
+
+        {/* Path preview polyline */}
+        {travelPhase === "preview" && <PathPreview path={previewPath} />}
+
+        {/* Travel animation overlay — pure render, no effects */}
+        {isAnimating && (
+          <TravelOverlay spline={animSpline} markerPos={animMarkerPos} />
+        )}
+
+        {/* Exposes the Leaflet map instance for imperative animation */}
+        <MapRef mapRef={mapRef} />
+
         {discoveries.map((d) => (
           <Marker key={`${d.x},${d.y}`} position={gridToLatLngTopRight(d.x, d.y)} icon={poiPinIcon}>
             <Tooltip direction="top" offset={[0, -12]}>{d.name}</Tooltip>
           </Marker>
         ))}
-        <MapFollower position={position} onFlyEnd={() => setTraveling(false)} />
+
+        {/* MapFollower — disabled during entire travel flow */}
+        {!hideLeafletPlayer && (
+          <MapFollower position={position} onFlyEnd={() => setTraveling(false)} />
+        )}
       </MapContainer>
+
+      {/* Travel confirmation bar */}
+      {travelPhase === "preview" && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-panel rounded-2xl px-6 py-3 flex items-center gap-4">
+          <span className="text-primary">
+            Travel {previewPath.length - 1} tiles?
+          </span>
+          <Button variant="default" size="sm" onClick={() => executeTravel(previewPath)}>
+            Go
+          </Button>
+          <Button variant="secondary" size="sm" onClick={cancelTravel}>
+            Cancel
+          </Button>
+        </div>
+      )}
 
       {/* Instrument cluster — bottom center overlay */}
       <InstrumentCluster

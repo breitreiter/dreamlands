@@ -77,6 +77,7 @@ export async function action(
     offerIndex?: number;
     offerId?: string;
     encounterId?: string;
+    path?: { x: number; y: number }[];
   }
 ): Promise<GameResponse> {
   return post(`${BASE}/${id}/action`, body);

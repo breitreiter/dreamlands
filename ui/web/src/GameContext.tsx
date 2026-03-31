@@ -43,6 +43,7 @@ interface GameContextValue extends GameState {
     approach?: string;
     tacticalAction?: string;
     openingIndex?: number;
+    path?: { x: number; y: number }[];
   }) => Promise<GameResponse | null>;
   clearError: () => void;
   setCampReport: (report: CampReport) => void;
@@ -70,8 +71,9 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
   }
-  // Deliveries are one-shot — clear unless the response explicitly includes them
+  // One-shot fields — clear unless the response explicitly includes them
   if (!result.deliveries) cleared.deliveries = undefined;
+  if (!result.travel) cleared.travel = undefined;
   return cleared;
 }
 
@@ -162,6 +164,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       bankIndex?: number;
       offerIndex?: number;
       offerId?: string;
+      path?: { x: number; y: number }[];
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));
