@@ -67,6 +67,20 @@ function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => v
 type TravelPhase = "idle" | "preview" | "animating";
 
 const TILE_MS = 300; // milliseconds per tile during animation
+const TILES_PER_DAY = 5;
+const FOOD_PER_DAY = 3;
+const FOOD_IDS = ["food_protein", "food_grain", "food_sweets"];
+
+function tripEstimate(tiles: number) {
+  const remainder = tiles % TILES_PER_DAY;
+  if (remainder === 0) return { days: tiles / TILES_PER_DAY, modifier: "" };
+  if (remainder <= 2) return { days: Math.floor(tiles / TILES_PER_DAY), modifier: "just over" };
+  return { days: Math.ceil(tiles / TILES_PER_DAY), modifier: "nearly" };
+}
+
+function countFood(haversack: { defId: string }[]): number {
+  return haversack.filter(i => FOOD_IDS.includes(i.defId)).length;
+}
 
 /** Freeze all Leaflet interactions. */
 function freezeMap(map: L.Map) {
@@ -706,20 +720,37 @@ export default function Explore({ state }: { state: GameResponse }) {
         )}
       </MapContainer>
 
-      {/* Travel confirmation bar */}
-      {travelPhase === "preview" && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-panel rounded-2xl px-6 py-3 flex items-center gap-4">
-          <span className="text-primary">
-            Travel {previewPath.length - 1} tiles?
-          </span>
-          <Button variant="default" size="sm" onClick={() => executeTravel(previewPath)}>
-            Go
-          </Button>
-          <Button variant="secondary" size="sm" onClick={cancelTravel}>
-            Cancel
-          </Button>
-        </div>
-      )}
+      {/* Travel confirmation dialog */}
+      {travelPhase === "preview" && (() => {
+        const tiles = previewPath.length - 1;
+        const { days, modifier } = tripEstimate(tiles);
+        const foodOnHand = countFood(state.inventory?.haversack ?? []);
+        const foodNeeded = days * FOOD_PER_DAY;
+        return (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-panel rounded-2xl px-6 py-4 flex flex-col items-center gap-3 min-w-[280px]">
+            <span className="font-header text-[32px] text-accent">The Road</span>
+            <div className="flex flex-col items-center gap-1 text-primary">
+              <span>
+                This journey will take{modifier ? ` ${modifier}` : ""} <strong>{days}</strong> day{days !== 1 ? "s" : ""}
+              </span>
+              <span>
+                You'll consume <strong>{foodNeeded}</strong> food
+                {foodOnHand < foodNeeded && (
+                  <span className="text-negative ml-1">({foodOnHand} on hand)</span>
+                )}
+              </span>
+            </div>
+            <div className="flex gap-3 mt-1">
+              <Button variant="default" size="sm" onClick={() => executeTravel(previewPath)}>
+                Venture forth
+              </Button>
+              <Button variant="secondary" size="sm" onClick={cancelTravel}>
+                Not yet
+              </Button>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Instrument cluster — bottom center overlay */}
       <InstrumentCluster

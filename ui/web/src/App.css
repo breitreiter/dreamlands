@@ -36,6 +36,7 @@
 
 .leaflet-container {
   background: url("./assets/parchment.png") repeat;
+  cursor: pointer;
 }
 
 .leaflet-tile {
