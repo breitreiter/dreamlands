@@ -22,7 +22,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [ ] Bisect oversized T1 regions — same technique as T3 bisect (TierAssigner splits by
       distance from city), but inner nodes stay T1 and outer nodes become T2. Prevents a
       mega-T1 region from making an entire biome feel safe.
-- [ ] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
+- [x] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 
 ### Road Encounter System (Tableau)
 
@@ -103,16 +103,10 @@ Ship-readiness: hosting, testing, polish, cleanup.
       Design in `project/design/river_decals.md`.
 - [ ] Improve settlement sprite variability — avoid placing identical decals near each other;
       may need more decals (recolored variants)
-- [ ] Remove old decal directories — the tier-aware passes now load from the new
-      `assets/map/decals/{plains,swamp,forest}/` structure instead of the old flat dirs.
-      After visually confirming the new paths work (`mapgen generate test`, inspect map.png
-      — T1 areas should look identical to before), delete these originals:
-        - `assets/map/decals/grass_tufts/` → split into `plains/t1/grass/` and `swamp/t1/grass/`
-        - `assets/map/decals/farm_stuff/` → moved to `plains/t1/farms/`
-        - `assets/map/decals/bogs/` → moved to `swamp/t1/bogs/`
-        - `assets/map/decals/trees/` → moved to `forest/t1t2/` (palm + beech excluded, same as before)
-      Verification: grep mapgen/Rendering/ for old directory names (`grass_tufts`, `farm_stuff`,
-      `bogs`, `"trees"`) — should return zero hits.
+- [ ] Migrate decal directories to tier-aware structure — rendering code (`PoiPass.cs`,
+      `SwampPass.cs`, `HillPass.cs`) still references the old flat dirs (`grass_tufts/`,
+      `farm_stuff/`, `bogs/`, `trees/`). Migrate code to load from
+      `assets/map/decals/{plains,swamp,forest}/` tier-aware structure, then delete old dirs.
 
 ### Cleanup
 
@@ -130,8 +124,6 @@ None are obviously aged-out — keep for now, revisit when their parent systems 
 - `FlavorText.cs` — 9 placeholder methods (temple, inn, market, weather, etc.)
 - `ImperialCalendar.cs` — full calendar type, not yet wired into UI
 - `ItemDef.Slots`, `ItemDef.CapacityBonus` — inventory system not finalized
-- `SettlementBalance.Services` — settlement services config not yet used
-- `SettlementGraph.GetParent/GetChildren/GetSettlementsInBiome` — query methods for future use
 
 **Utility methods with no callers yet:**
 - `Direction.Opposite()`
@@ -142,12 +134,6 @@ None are obviously aged-out — keep for now, revisit when their parent systems 
 **Mapgen:**
 - `Noise.Octaves()`, `TerrainPass.Draw()`, `SettlementPlacer.GetTraversableNeighbor()`
 - `MapGenerator.FindRegions()`, `PoiPass.BiomeToDungeonFolder`
-
-**Server DTOs:**
-- `ActionRequest.Quantity`, `ActionRequest.OfferIndex` — request fields not yet read
-
-**Enum member:**
-- `EncounterResult.Completed` — never matched on
 
 ## 3. Writing
 

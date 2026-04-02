@@ -548,7 +548,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   useEffect(() => {
     if (!gameId) return;
     getDiscoveries(gameId).then(setDiscoveries).catch(() => {});
-  }, [gameId]);
+  }, [gameId, state.node]);
 
   // Execute travel along a path: server call, then animate
   const executeTravel = useCallback(async (path: { x: number; y: number }[]) => {

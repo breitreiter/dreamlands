@@ -19,7 +19,7 @@ public static class ContentPopulator
         SizeSettlements(map);
         AssignSettlementIds(map);
         StampTradeTree(map);
-        NameRegions(map);
+        NameRegions(map, rng);
         NameSettlements(map, rng);
         AssignNodeDescriptions(map);
         Console.Error.WriteLine("  Dungeons...");
@@ -86,10 +86,11 @@ public static class ContentPopulator
         }
     }
 
-    private static void NameRegions(Map map)
+    private static void NameRegions(Map map, Random rng)
     {
+        var used = new HashSet<string>();
         foreach (var region in map.Regions)
-            region.Name = FlavorText.RegionName(region.Terrain, region.Tier);
+            region.Name = FlavorText.RegionName(region.Terrain, region.Tier, rng, used);
     }
 
     private static void NameSettlements(Map map, Random rng)

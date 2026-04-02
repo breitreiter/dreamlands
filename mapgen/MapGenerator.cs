@@ -209,7 +209,6 @@ public static class MapGenerator
         }
     }
 
-    // TODO: use this to auto-name regions for game UI ("You have entered The Cursed Bog")
     private static List<List<Node>> FindRegions(Map map, Func<Node, bool> predicate)
     {
         var visited = new HashSet<Node>();
