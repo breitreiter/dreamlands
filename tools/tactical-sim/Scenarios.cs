@@ -7,174 +7,149 @@ using Dreamlands.Tactical;
 
 namespace TacticalSim;
 
-record PlayerProfile(string Name, Skill GoverningSkill, int SkillLevel, string? WeaponId, string? ArmorId = null, string[]? CustomDeck = null);
+// ── Platonic decks ──────────────────────────────────────────────
+//
+// Hand-crafted 15-card decks representing "what fun feels like."
+// Cancel deck: control-kill fantasy, pairs with cautious approach.
+// Aggro deck: damage-race fantasy, pairs with aggressive approach.
+// These are the gold standard. Difficulty = swapping good cards for chaff.
+
+static class PlatonicDecks
+{
+    public static readonly string[] Cancel =
+    [
+        // Cancel engine (5)
+        "momentum_to_cancel",
+        "momentum_to_cancel",
+        "spirits_to_cancel",
+        "free_cancel",
+        "momentum_to_cancel",
+        // Momentum fuel (4)
+        "free_momentum",
+        "free_momentum",
+        "free_momentum",
+        "free_momentum",
+        // Light progress (3)
+        "momentum_to_progress",
+        "momentum_to_progress",
+        "momentum_to_progress",
+        // Chaff (3)
+        "free_progress_small",
+        "free_progress_small",
+        "free_progress_small",
+    ];
+
+    public static readonly string[] Aggro =
+    [
+        // Damage engine (5)
+        "momentum_to_progress_huge",
+        "momentum_to_progress_large",
+        "momentum_to_progress_large",
+        "threat_to_progress_large",
+        "momentum_to_progress_large",
+        // Momentum fuel (4)
+        "free_momentum",
+        "free_momentum",
+        "free_momentum",
+        "free_momentum",
+        // Bread and butter (3)
+        "momentum_to_progress",
+        "momentum_to_progress",
+        "momentum_to_progress",
+        // Chaff (3)
+        "free_progress_small",
+        "free_progress_small",
+        "free_progress_small",
+    ];
+
+    // Quality tier for degradation — higher = swapped out first
+    static readonly Dictionary<string, int> QualityTier = new()
+    {
+        ["free_cancel"] = 5,
+        ["momentum_to_progress_huge"] = 5,
+        ["spirits_to_cancel"] = 4,
+        ["momentum_to_cancel"] = 4,
+        ["momentum_to_progress_large"] = 4,
+        ["threat_to_progress_large"] = 4,
+        ["spirits_to_progress"] = 3,
+        ["threat_to_progress"] = 3,
+        ["spirits_to_momentum"] = 2,
+        ["momentum_to_progress"] = 2,
+        ["free_momentum"] = 1,
+        ["free_momentum_small"] = 0,
+        ["free_progress_small"] = 0,
+    };
+
+    /// <summary>Replace the N highest-quality cards with chaff.</summary>
+    public static string[] Degrade(string[] deck, int n)
+    {
+        var indexed = deck.Select((arch, i) => (i, arch, tier: QualityTier.GetValueOrDefault(arch, 0)))
+            .OrderByDescending(x => x.tier)
+            .ToList();
+
+        var result = (string[])deck.Clone();
+        for (int i = 0; i < Math.Min(n, indexed.Count); i++)
+            result[indexed[i].i] = "free_progress_small";
+        return result;
+    }
+}
+
+// ── Encounter definitions ───────────────────────────────────────
 
 record EncounterScenario(
     string Name,
-    Variant Variant,
-    string Stat,
     int Resistance,
     int TimerDraw,
     List<TimerDef> Timers,
     List<OpeningDef> Openings,
-    List<ApproachDef>? Approaches = null,
-    List<OpeningDef>? Path = null);
+    List<ApproachDef> Approaches);
 
 static class Scenarios
 {
-    // ── Player profiles ───────────────────────────────────────────
-
-    public static readonly PlayerProfile[] Profiles =
-    [
-        new("Early (Combat 1, bodkin)", Skill.Combat, 1, "bodkin"),
-        new("Mid (Combat 2, short_sword)", Skill.Combat, 2, "short_sword"),
-        new("Mid (Combat 3, tulwar)", Skill.Combat, 3, "tulwar"),
-        new("Late (Combat 4, scimitar)", Skill.Combat, 4, "scimitar"),
-    ];
-
-    // ── Custom deck profiles ─────────────────────────────────────
-
-    static readonly string[] Chaff =
-    [
-        "free_progress_small",
-        "free_progress_small",
-        "free_momentum_small",
-        "free_momentum_small",
-        "free_progress_small",
-    ];
-
-    public static readonly PlayerProfile[] CustomProfiles =
-    [
-        new("3 cancel + momentum", Skill.Combat, 0, null, CustomDeck:
-        [
-            // 3 cancels
-            "momentum_to_cancel",
-            "momentum_to_cancel",
-            "spirits_to_cancel",
-            // 7 momentum builders
-            "free_momentum",
-            "free_momentum",
-            "free_momentum",
-            "spirits_to_momentum",
-            "spirits_to_momentum",
-            "free_momentum_small",
-            "free_momentum",
-            // 5 chaff
-            ..Chaff,
-        ]),
-        new("1 cancel + hybrid", Skill.Combat, 0, null, CustomDeck:
-        [
-            // 1 cancel
-            "momentum_to_cancel",
-            // 4 momentum builders
-            "free_momentum",
-            "free_momentum",
-            "spirits_to_momentum",
-            "free_momentum_small",
-            // 5 damage dealers
-            "momentum_to_progress",
-            "momentum_to_progress",
-            "momentum_to_progress_large",
-            "momentum_to_progress_large",
-            "threat_to_progress",
-            // 5 chaff
-            ..Chaff,
-        ]),
-        new("0 cancel + momentum/damage", Skill.Combat, 0, null, CustomDeck:
-        [
-            // 5 momentum builders
-            "free_momentum",
-            "free_momentum",
-            "spirits_to_momentum",
-            "free_momentum",
-            "free_momentum_small",
-            // 5 damage dealers
-            "momentum_to_progress",
-            "momentum_to_progress",
-            "momentum_to_progress_large",
-            "momentum_to_progress_large",
-            "momentum_to_progress_huge",
-            // 5 chaff
-            ..Chaff,
-        ]),
-    ];
-
-    // ── Encounter scenarios ───────────────────────────────────────
-
+    // Filler openings — enough to pad any deck to 15
     static readonly List<OpeningDef> StandardFiller =
     [
-        new("Scramble forward", "free_progress_small"),
+        new("Desperate lunge", "free_progress_small"),
+        new("Use the terrain", "free_momentum"),
+        new("Press the advantage", "momentum_to_progress"),
         new("Brace yourself", "free_momentum_small"),
-        new("Catch your breath", "free_momentum"),
-        new("Dig in", "free_progress_small"),
-        new("Wait for an opening", "free_momentum_small"),
-        new("Steady your nerve", "free_momentum"),
+        new("Find an angle", "free_progress_small"),
+        new("Shout a challenge", "free_momentum"),
+        new("Scramble forward", "momentum_to_progress"),
+        new("Duck and weave", "free_progress_small"),
+        new("Grit your teeth", "free_momentum_small"),
+        new("Rush in", "momentum_to_progress"),
+        new("Hold your ground", "free_progress_small"),
+        new("Look for cover", "free_momentum"),
+        new("Force a gap", "momentum_to_progress"),
     ];
 
-    // Timer counts match the encounter's TimerDraw — approaches vary momentum/openings, not timer count.
-    // Built per-encounter by ScaleApproaches().
-    static List<ApproachDef> ScaleApproaches(int timerDraw) =>
-    [
-        new(ApproachKind.Scout, 0, timerDraw, 3),
-        new(ApproachKind.Direct, 3, timerDraw),
-        new(ApproachKind.Wild, 6, timerDraw),
-    ];
-
-    public static readonly EncounterScenario[] Encounters =
-    [
-        new("Easy (res 6, 2 timers)",
-            Variant.Combat, "combat", Resistance: 6, TimerDraw: 2,
-            Timers:
-            [
-                new("Threat", TimerEffect.Spirits, 1, 4, "Stop Threat"),
-                new("Pressure", TimerEffect.Spirits, 1, 3, "Relieve Pressure"),
-                new("Recovery", TimerEffect.Resistance, 1, 5, "Prevent Recovery"),
-            ],
-            Openings: StandardFiller,
-            Approaches: ScaleApproaches(2)),
-
-        new("Medium (res 7, 3 timers)",
-            Variant.Combat, "combat", Resistance: 7, TimerDraw: 3,
-            Timers:
-            [
-                new("Threat", TimerEffect.Spirits, 1, 4, "Stop Threat"),
-                new("Pressure", TimerEffect.Spirits, 1, 3, "Relieve Pressure"),
-                new("Recovery", TimerEffect.Resistance, 1, 5, "Prevent Recovery"),
-                new("Menace", TimerEffect.Spirits, 1, 3, "Face the Menace"),
-            ],
-            Openings: StandardFiller,
-            Approaches: ScaleApproaches(3)),
-
-        new("Hard (res 8, 4 timers)",
-            Variant.Combat, "combat", Resistance: 8, TimerDraw: 4,
-            Timers:
-            [
-                new("Threat", TimerEffect.Spirits, 2, 4, "Stop Threat"),
-                new("Pressure", TimerEffect.Spirits, 1, 3, "Relieve Pressure"),
-                new("Recovery", TimerEffect.Resistance, 2, 5, "Prevent Recovery"),
-                new("Menace", TimerEffect.Spirits, 1, 3, "Face the Menace"),
-                new("Dread", TimerEffect.Spirits, 1, 4, "Overcome Dread"),
-            ],
-            Openings: StandardFiller,
-            Approaches: ScaleApproaches(4)),
-    ];
+    public static readonly EncounterScenario Platonic = new(
+        "Platonic",
+        Resistance: 8,
+        TimerDraw: 1,
+        Timers:
+        [
+            new("Spirits drain", TimerEffect.Spirits, 1, 5, "Stop drain"),
+            new("Condition", TimerEffect.Condition, 1, 6, "Stop condition", ConditionId: "injured"),
+        ],
+        Openings: StandardFiller,
+        Approaches:
+        [
+            new(ApproachKind.Scout, 0, 1, 3),
+            new(ApproachKind.Direct, 3, 1),
+            new(ApproachKind.Wild, 6, 1),
+        ]);
 
     // ── Factories ─────────────────────────────────────────────────
 
-    public static GameSession BuildSession(PlayerProfile profile, int seed, BalanceData? balance = null)
+    public static GameSession BuildSession(int seed, BalanceData? balance = null)
     {
         balance ??= BalanceData.Default;
         var player = PlayerState.NewGame("sim", seed, balance);
-        player.Skills[profile.GoverningSkill] = profile.SkillLevel;
-
-        if (profile.WeaponId != null)
-            player.Equipment.Weapon = new ItemInstance(profile.WeaponId, balance.Items[profile.WeaponId].Name);
-        if (profile.ArmorId != null)
-            player.Equipment.Armor = new ItemInstance(profile.ArmorId, balance.Items[profile.ArmorId].Name);
 
         var map = new Dreamlands.Map.Map(1, 1);
         map.AllNodes().First().Terrain = Terrain.Plains;
-
         var bundle = EncounterBundle.FromJson("""{"index":{"byId":{},"byCategory":{}},"encounters":[]}""");
         return new GameSession(player, map, bundle, balance, new Random(seed));
     }
@@ -182,7 +157,7 @@ static class Scenarios
     static T ParseSnakeCase<T>(string value) where T : struct, Enum =>
         Enum.Parse<T>(value.Replace("_", ""), ignoreCase: true);
 
-    public static List<OpeningSnapshot> BuildCustomDeck(string[] archetypeIds, BalanceData balance, Random rng)
+    public static List<OpeningSnapshot> BuildDeck(string[] archetypeIds, BalanceData balance, Random rng)
     {
         var archetypes = balance.Tactical.Archetypes;
         var deck = new List<OpeningSnapshot>(archetypeIds.Length);
@@ -198,7 +173,6 @@ static class Scenarios
                 EffectAmount = arch.EffectAmount,
             });
         }
-        // Fisher-Yates shuffle
         for (int i = deck.Count - 1; i > 0; i--)
         {
             int j = rng.Next(i + 1);
@@ -211,13 +185,13 @@ static class Scenarios
     {
         Id = "sim/" + scenario.Name,
         Title = scenario.Name,
-        Variant = scenario.Variant,
-        Stat = scenario.Stat,
+        Variant = Variant.Combat,
+        Stat = "combat",
         Resistance = scenario.Resistance,
         TimerDraw = scenario.TimerDraw,
         Timers = scenario.Timers,
         Openings = scenario.Openings,
-        Path = scenario.Path ?? [],
-        Approaches = scenario.Approaches ?? [],
+        Path = [],
+        Approaches = scenario.Approaches,
     };
 }

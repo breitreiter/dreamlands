@@ -1,90 +1,109 @@
-using Dreamlands.Orchestration;
-
 namespace TacticalSim;
 
 static class SimReport
 {
-    public static void Print(
-        List<(string Bot, string Profile, string Encounter, List<RunResult> Results)> data,
-        bool verbose)
+    public static void PrintDetailed(List<RunVibes> runs, string label)
     {
-        // Header
-        Console.WriteLine(
-            $"{"Bot",-14} {"Profile",-32} {"Encounter",-24} {"Win%",6} {"Res%",5} {"Ctrl%",5} " +
-            $"{"SpCost",7} {"Sp p10",6} {"Sp p90",6} {"Turns",6} {"T p10",5} {"T p90",5}");
-        Console.WriteLine(new string('─', 140));
+        int n = runs.Count;
+        int maxTurn = runs.Max(r => r.Turns.Count);
 
-        string lastEncounter = "";
-        foreach (var (bot, profile, encounter, results) in data)
+        Console.WriteLine();
+        Console.WriteLine(new string('=', 70));
+        Console.WriteLine($"  {label}  ({n:N0} runs)");
+        Console.WriteLine(new string('=', 70));
+        Console.WriteLine($"{"Turn",4}  {"Choice",7}  {"Tension",7}  {"Juice",7}  {"Weight",7}  {"Triumph",7}  {"Fired",6}  {"Cond",5}");
+        Console.WriteLine($"{"────",4}  {"───────",7}  {"───────",7}  {"───────",7}  {"───────",7}  {"───────",7}  {"──────",6}  {"─────",5}");
+
+        for (int t = 1; t <= maxTurn; t++)
         {
-            if (encounter != lastEncounter)
-            {
-                if (lastEncounter != "")
-                    Console.WriteLine();
-                lastEncounter = encounter;
-            }
+            var turns = runs.Where(r => r.Turns.Count >= t).Select(r => r.Turns[t - 1]).ToList();
+            if (turns.Count == 0) break;
+            double pctActive = (double)turns.Count / n;
 
-            int total = results.Count;
-            int wins = results.Count(r => r.Outcome != TacticalFinishReason.SpiritsLoss);
-            int resKills = results.Count(r => r.Outcome == TacticalFinishReason.ResistanceKill);
-            int ctrlKills = results.Count(r => r.Outcome == TacticalFinishReason.ControlKill);
+            double avgChoice = turns.Average(v => v.Choice);
+            double avgTension = turns.Average(v => v.Tension);
+            double avgJuice = turns.Average(v => v.Juice);
+            double avgWeight = turns.Average(v => v.Weight);
+            double avgTriumph = turns.Average(v => v.Triumph);
+            double pctFired = turns.Count(v => v.TimerFired) / (double)turns.Count;
+            double pctCond = turns.Count(v => v.Conditioned) / (double)turns.Count;
 
-            var spiritsCosts = results.Where(r => r.Outcome != TacticalFinishReason.SpiritsLoss)
-                .Select(r => r.SpiritsStart - r.SpiritsEnd).OrderBy(x => x).ToList();
-            var turns = results.Select(r => r.Turns).OrderBy(x => x).ToList();
-
-            double winPct = 100.0 * wins / total;
-            double resPct = total > 0 ? 100.0 * resKills / total : 0;
-            double ctrlPct = total > 0 ? 100.0 * ctrlKills / total : 0;
-
-            string spMean = spiritsCosts.Count > 0 ? $"{spiritsCosts.Average():F1}" : "-";
-            string spP10 = spiritsCosts.Count > 0 ? $"{Percentile(spiritsCosts, 10)}" : "-";
-            string spP90 = spiritsCosts.Count > 0 ? $"{Percentile(spiritsCosts, 90)}" : "-";
-
-            double turnsMean = turns.Average();
-            int turnsP10 = Percentile(turns, 10);
-            int turnsP90 = Percentile(turns, 90);
-
+            string active = pctActive < 0.95 ? $" ({pctActive:P0})" : "";
             Console.WriteLine(
-                $"{bot,-14} {profile,-32} {encounter,-24} {winPct,5:F1}% {resPct,4:F0}% {ctrlPct,4:F0}%  " +
-                $"{spMean,6} {spP10,6} {spP90,6} {turnsMean,5:F1} {turnsP10,5} {turnsP90,5}");
+                $"  {t,2}{active,5}" +
+                $"  {avgChoice,7:F2}" +
+                $"  {avgTension,7:F2}" +
+                $"  {avgJuice,7:F2}" +
+                $"  {avgWeight,+7:F2}" +
+                $"  {avgTriumph,7:F2}" +
+                $"  {pctFired,5:P0}" +
+                $"  {pctCond,4:P0}");
         }
 
-        if (verbose)
-            PrintVerbose(data);
+        PrintSummary(runs);
     }
 
-    static void PrintVerbose(List<(string Bot, string Profile, string Encounter, List<RunResult> Results)> data)
+    public static void PrintCompact(List<RunVibes> runs, string label)
     {
-        Console.WriteLine();
-        Console.WriteLine("=== Detailed Outcome Distribution ===");
-        Console.WriteLine();
+        int n = runs.Count;
+        var allTurns = runs.SelectMany(r => r.Turns).ToList();
+        double avgLen = runs.Average(r => r.Turns.Count);
+        double avgJuice = allTurns.Count > 0 ? allTurns.Average(t => t.Juice) : 0;
+        double avgChoice = allTurns.Count > 0 ? allTurns.Average(t => t.Choice) : 0;
+        double condRate = (double)runs.Count(r => r.Turns.Any(t => t.Conditioned)) / n;
+        double oofRate = (double)runs.Count(r => r.Turns.Any(t => t.Weight <= -0.7)) / n;
+        double clickerRate = (double)ClickerRuns(runs) / n;
+        double droughtRate = (double)DroughtRuns(runs) / n;
 
-        foreach (var (bot, profile, encounter, results) in data)
+        Console.WriteLine(
+            $"  {label,-50}" +
+            $"  len={avgLen,4:F1}" +
+            $"  juice={avgJuice:F2}" +
+            $"  choice={avgChoice:F2}" +
+            $"  cond={condRate,4:P0}" +
+            $"  oof={oofRate,4:P0}" +
+            $"  clicker={clickerRate,4:P0}" +
+            $"  drought={droughtRate,4:P0}");
+    }
+
+    static void PrintSummary(List<RunVibes> runs)
+    {
+        int n = runs.Count;
+        var allTurns = runs.SelectMany(r => r.Turns).ToList();
+        double avgLen = runs.Average(r => r.Turns.Count);
+        double avgJuice = allTurns.Count > 0 ? allTurns.Average(t => t.Juice) : 0;
+        double avgChoice = allTurns.Count > 0 ? allTurns.Average(t => t.Choice) : 0;
+        int conditions = runs.Count(r => r.Turns.Any(t => t.Conditioned));
+        var spiritsList = runs.Select(r => r.SpiritsSpent).ToList();
+        int oofRuns = runs.Count(r => r.Turns.Any(t => t.Weight <= -0.7));
+        int clickerRuns = ClickerRuns(runs);
+        int droughtRuns = DroughtRuns(runs);
+
+        Console.WriteLine();
+        Console.WriteLine($"  Avg length:    {avgLen:F1} turns");
+        Console.WriteLine($"  Avg juice:     {avgJuice:F2}");
+        Console.WriteLine($"  Avg choice:    {avgChoice:F2}");
+        Console.WriteLine($"  Conditioned:   {(double)conditions / n:P1}");
+        Console.WriteLine($"  Spirits lost:  {spiritsList.Average():F1} avg, {spiritsList.Max()} worst");
+        Console.WriteLine($"  Oof rate:      {(double)oofRuns / n:P1} (weight <= -0.7)");
+        Console.WriteLine($"  Clicker rate:  {(double)clickerRuns / n:P1} (choice < 0.15 for 3+ turns)");
+        Console.WriteLine($"  Juice drought: {(double)droughtRuns / n:P1} (juice < 0.25 for 3+ turns)");
+    }
+
+    static int ClickerRuns(List<RunVibes> runs) =>
+        runs.Count(r => HasStreak(r.Turns, t => t.Choice < 0.15, 3));
+
+    static int DroughtRuns(List<RunVibes> runs) =>
+        runs.Count(r => HasStreak(r.Turns, t => t.Juice < 0.25, 3));
+
+    static bool HasStreak(List<TurnVibe> turns, Func<TurnVibe, bool> pred, int length)
+    {
+        int streak = 0;
+        foreach (var t in turns)
         {
-            int total = results.Count;
-            var byOutcome = results.GroupBy(r => r.Outcome)
-                .OrderByDescending(g => g.Count());
-
-            Console.WriteLine($"{bot} | {profile} | {encounter}");
-            foreach (var group in byOutcome)
-                Console.WriteLine($"  {group.Key,-20} {group.Count(),5} ({100.0 * group.Count() / total:F1}%)");
-
-            var wins = results.Where(r => r.Outcome != TacticalFinishReason.SpiritsLoss).ToList();
-            if (wins.Count > 0)
-            {
-                var costs = wins.Select(r => r.SpiritsStart - r.SpiritsEnd).OrderBy(x => x).ToList();
-                Console.WriteLine($"  Spirits cost on win:  min={costs[0]}  median={Percentile(costs, 50)}  max={costs[^1]}");
-            }
-            Console.WriteLine();
+            streak = pred(t) ? streak + 1 : 0;
+            if (streak >= length) return true;
         }
-    }
-
-    static int Percentile(List<int> sorted, int p)
-    {
-        if (sorted.Count == 0) return 0;
-        double index = (p / 100.0) * (sorted.Count - 1);
-        int lower = (int)Math.Floor(index);
-        return sorted[Math.Min(lower, sorted.Count - 1)];
+        return false;
     }
 }

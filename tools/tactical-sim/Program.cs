@@ -1,12 +1,21 @@
+using Dreamlands.Tactical;
+
 namespace TacticalSim;
 
 class Program
 {
     static int Main(string[] args)
     {
-        int runs = 1000;
-        bool verbose = false;
-        bool custom = false;
+        int runs = 10_000;
+        string? deck = null;     // "cancel", "aggro", or null for both
+        int? degrade = null;     // replace N best cards with chaff
+        bool sweep = false;      // degrade 0..10 for both decks
+        bool verbose = false;    // detailed per-turn output
+        bool ga = false;
+
+        // GA-specific overrides (defaults in GaConfig)
+        int? gaPop = null, gaGens = null, gaSims = null;
+        string? gaApproach = null;
 
         for (int i = 0; i < args.Length; i++)
         {
@@ -15,32 +24,125 @@ class Program
                 case "--runs" when i + 1 < args.Length:
                     runs = int.Parse(args[++i]);
                     break;
+                case "--deck" when i + 1 < args.Length:
+                    deck = args[++i];
+                    break;
+                case "--degrade" when i + 1 < args.Length:
+                    degrade = int.Parse(args[++i]);
+                    break;
+                case "--sweep":
+                    sweep = true;
+                    break;
                 case "--verbose":
                     verbose = true;
                     break;
-                case "--custom":
-                    custom = true;
+                case "--ga":
+                    ga = true;
+                    break;
+                case "--ga-pop" when i + 1 < args.Length:
+                    gaPop = int.Parse(args[++i]);
+                    break;
+                case "--ga-gens" when i + 1 < args.Length:
+                    gaGens = int.Parse(args[++i]);
+                    break;
+                case "--ga-sims" when i + 1 < args.Length:
+                    gaSims = int.Parse(args[++i]);
+                    break;
+                case "--ga-approach" when i + 1 < args.Length:
+                    gaApproach = args[++i];
                     break;
                 default:
                     return PrintUsage();
             }
         }
 
-        Console.WriteLine($"Running tactical balance simulation ({runs} runs per scenario)...\n");
-        if (custom)
-            SimRunner.RunCustomDecks(runs, verbose);
-        else
-            SimRunner.RunAll(runs, verbose);
+        if (ga)
+        {
+            var approach = gaApproach switch
+            {
+                "scout" => ApproachKind.Scout,
+                "direct" => ApproachKind.Direct,
+                "wild" => ApproachKind.Wild,
+                _ => ApproachKind.Direct,
+            };
+            var config = new GaConfig(
+                PopulationSize: gaPop ?? 500,
+                Generations: gaGens ?? 200,
+                SimsPerDeck: gaSims ?? 30,
+                Approach: approach);
+            GeneticSearch.Run(config);
+            return 0;
+        }
+
+        if (sweep)
+        {
+            RunSweep(runs);
+            return 0;
+        }
+
+        var decks = new List<(string Name, string[] Spec, ApproachKind Approach)>();
+        if (deck == null || deck == "cancel")
+            decks.Add(("cancel", PlatonicDecks.Cancel, ApproachKind.Scout));
+        if (deck == null || deck == "aggro")
+            decks.Add(("aggro", PlatonicDecks.Aggro, ApproachKind.Direct));
+
+        foreach (var (name, spec, approach) in decks)
+        {
+            var deckCards = degrade.HasValue ? PlatonicDecks.Degrade(spec, degrade.Value) : spec;
+            var label = degrade.HasValue
+                ? $"{name} / degrade={degrade}"
+                : $"{name} / platonic";
+
+            var results = SimRunner.Run(deckCards, approach, runs);
+
+            if (verbose)
+                SimReport.PrintDetailed(results, label);
+            else
+                SimReport.PrintCompact(results, label);
+        }
+
         return 0;
+    }
+
+    static void RunSweep(int runs)
+    {
+        foreach (var (name, spec, approach) in new[]
+        {
+            ("aggro", PlatonicDecks.Aggro, ApproachKind.Direct),
+            ("cancel", PlatonicDecks.Cancel, ApproachKind.Scout),
+        })
+        {
+            Console.WriteLine();
+            Console.WriteLine(new string('=', 90));
+            Console.WriteLine($"  SWEEP: {name} — degrading 0..10 cards");
+            Console.WriteLine(new string('=', 90));
+
+            for (int n = 0; n <= 10; n++)
+            {
+                var deckCards = n > 0 ? PlatonicDecks.Degrade(spec, n) : spec;
+                var results = SimRunner.Run(deckCards, approach, runs);
+                SimReport.PrintCompact(results, $"degrade={n,2}");
+            }
+        }
     }
 
     static int PrintUsage()
     {
-        Console.WriteLine("Usage: tactical-sim [--runs N] [--verbose]");
+        Console.WriteLine("Usage: tactical-sim [options]");
         Console.WriteLine();
         Console.WriteLine("Options:");
-        Console.WriteLine("  --runs N      Number of simulation runs per scenario (default: 1000)");
-        Console.WriteLine("  --verbose     Show per-scenario card usage breakdown");
+        Console.WriteLine("  --runs N        Simulation runs per scenario (default: 10000)");
+        Console.WriteLine("  --deck NAME     cancel, aggro, or omit for both");
+        Console.WriteLine("  --degrade N     Replace N best cards with chaff");
+        Console.WriteLine("  --sweep         Degrade 0..10 for both decks");
+        Console.WriteLine("  --verbose       Detailed per-turn vibe table");
+        Console.WriteLine();
+        Console.WriteLine("Genetic algorithm:");
+        Console.WriteLine("  --ga            Run GA deck search");
+        Console.WriteLine("  --ga-pop N      Population size (default: 500)");
+        Console.WriteLine("  --ga-gens N     Generations (default: 200)");
+        Console.WriteLine("  --ga-sims N     Simulations per deck (default: 30)");
+        Console.WriteLine("  --ga-approach X scout, direct, or wild (default: direct)");
         return 1;
     }
 }

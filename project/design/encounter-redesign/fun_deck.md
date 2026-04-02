@@ -265,6 +265,14 @@ Archetypes we don't have:
 - The tank — slow but safe is just not gameplay we want
 - The healer — solo, no one to protect
 
+## Traverse Cancel Meta
+
+Traverse encounters get their cancel cards from **gear-gated filler openings** in the encounter definition, not from weapons. The `.tac` format already supports `[requires has item_id]` on openings. This means traverse is tool-dependent rather than equipment-dependent — the right tool for the right situation.
+
+Example: an encounter involving ancient grid defenses might have a cancel opening gated behind a specific scanning tool. That tool is useless everywhere else, but it's the key to trivializing this particular traverse. This creates a "right tool for the job" dynamic where smart packing matters more than raw combat stats.
+
+This is the natural complement to the combat system where cancel comes from weapon type (daggers, swords). In traverse, cancel comes from the encounter author's filler pool.
+
 ## Open Questions
 
 - Does the player choose collection cards when they have more available than their stat allows, or is it automatic (best N)?
