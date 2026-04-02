@@ -25,12 +25,12 @@ choices:
     You rest your hand on the grip of the knife, its presence reassuring. You will need it to forage, to cut bark for kindling, to dress whatever game you can trap or kill. And perhaps to defend yourself, should it come to that.
 
     It is no weapon of war, but out here it will serve.
-    +add_item skinning_knife
+    +add_item bodkin
   } @else {
     Your father gave you the knife when you were still a child, small enough to carry on your hip like a tiny sword. You have never ventured far from the city walls, not truly, but you kept it with you all the same. It's mostly served to open letters and cut fruit.
 
     The city crowds press close around you, alive with voices and coin and the smell of bread and sweat, but you think ahead to the quiet roads out in the borderlands. Perhaps you will find a use for the knife, or perhaps it will bring you luck.
-    +add_item skinning_knife
+    +add_item bodkin
   }
 
 * A fine pair of boots = A wanderer's companion

@@ -9,8 +9,11 @@ public static class FlavorText
 
     // --- Map regions (biome, tier) ---
 
-    public static string RegionName(Terrain biome, int tier)
+    public static string RegionName(Terrain biome, int tier, Random rng, HashSet<string> used)
     {
+        if (RegionNames.Draw(biome, tier, rng, used) is { } name)
+            return name;
+
         var prefix = TierPrefix(tier);
         var noun = biome switch
         {
@@ -125,13 +128,16 @@ public static class FlavorText
         // Weapons
         "bodkin" => "More suited to court than the frontier.",
         "jambiya" => "Curved dagger carried by nearly every adult desert clan member.",
-        "seax" => "A utility knife common among the hill folk.",
+        "kukri" => "A heavy recurved blade, wickedly efficient.",
+        "hunting_knife" => "A long knife of mountain steel, meant for more than game.",
         "hatchet" => "Ubiquitous tool of the forest folk.",
+        "tomahawk" => "Light enough to throw, heavy enough to mean it.",
         "war_axe" => "A heavy axe built for war.",
-        "bardiche" => "A mighty two-handed axe.",
+        "broadaxe" => "A mighty two-handed axe.",
+        "falchion" => "A crude cleaver of a sword. It will do.",
         "short_sword" => "A well-balanced blade, designed for quick thrusts.",
+        "tulwar" => "A curved sword favored by the desert clans.",
         "scimitar" => "A true warrior's blade, swift and deadly.",
-        "arming_sword" => "The pinnacle of the swordmaker's art. A masterpiece.",
         // Armor
         "tunic" => "A simple tunic, comfortable but offering little protection.",
         "leather" => "Flexible lamellar armor, favored by hunters.",

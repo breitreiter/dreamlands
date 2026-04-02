@@ -111,7 +111,6 @@ export interface ItemInfo {
   cost: number | null;
   skillModifiers: Record<string, number>;
   resistModifiers: Record<string, number>;
-  foragingBonus: number;
   cures: string[];
   isEquippable: boolean;
   destinationName: string | null;

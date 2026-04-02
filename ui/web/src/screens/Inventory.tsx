@@ -239,7 +239,6 @@ function itemModifierSummary(item: ItemInfo): string {
   for (const [cond, val] of Object.entries(item.resistModifiers)) {
     if (val !== 0) parts.push(`${val > 0 ? "+" : ""}${val} resist ${cond}`);
   }
-  if (item.foragingBonus) parts.push(`+${item.foragingBonus} foraging`);
   if (item.cures.length > 0) parts.push(`cures ${item.cures.join(", ")}`);
   return parts.join(", ");
 }

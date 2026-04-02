@@ -1367,7 +1367,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Cost = def?.Cost,
             SkillModifiers = def?.SkillModifiers.ToDictionary(kv => kv.Key.ScriptName(), kv => kv.Value) ?? [],
             ResistModifiers = def?.ResistModifiers.ToDictionary(kv => kv.Key, kv => kv.Value) ?? [],
-            ForagingBonus = def?.ForagingBonus ?? 0,
             Cures = def?.Cures.ToList() ?? [],
             IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
             DestinationName = i.DestinationName,
@@ -1461,7 +1460,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         });
 
         var totalForaging = p.Skills.GetValueOrDefault(Skill.Bushcraft)
-                          + SkillChecks.GetForagingBonus(p, data.Balance);
+                          + SkillChecks.GetItemBonus(Skill.Bushcraft, p, data.Balance);
         other.Add(new MechanicLine
         {
             Label = "Foraging checks",
@@ -1779,8 +1778,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             parts.Add($"{skill.GetInfo().DisplayName} {(mod >= 0 ? "+" : "")}{mod}");
         foreach (var (resist, mod) in item.ResistModifiers)
             parts.Add($"{resist} resist {(mod >= 0 ? "+" : "")}{mod}");
-        if (item.ForagingBonus != 0)
-            parts.Add($"Foraging {(item.ForagingBonus >= 0 ? "+" : "")}{item.ForagingBonus}");
         if (item.Cures.Count > 0)
             parts.Add($"Cures: {string.Join(", ", item.Cures)}");
         return string.Join(", ", parts);

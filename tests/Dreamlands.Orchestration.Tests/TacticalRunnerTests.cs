@@ -29,6 +29,17 @@ public class TacticalRunnerTests
             Openings = openings ?? [
                 new OpeningDef("Strike", "momentum_to_progress_large"),
                 new OpeningDef("Guard", "free_momentum"),
+                new OpeningDef("Jab", "free_progress_small"),
+                new OpeningDef("Push", "momentum_to_progress"),
+                new OpeningDef("Shove", "free_progress_small"),
+                new OpeningDef("Dodge", "free_momentum"),
+                new OpeningDef("Rush", "momentum_to_progress"),
+                new OpeningDef("Block", "free_progress_small"),
+                new OpeningDef("Taunt", "free_momentum"),
+                new OpeningDef("Lunge", "momentum_to_progress"),
+                new OpeningDef("Parry", "free_progress_small"),
+                new OpeningDef("Kick", "free_progress_small"),
+                new OpeningDef("Grapple", "momentum_to_progress"),
             ],
             Approaches = approaches ?? [
                 new ApproachDef(ApproachKind.Scout, 0, 1, 3),
@@ -71,7 +82,7 @@ public class TacticalRunnerTests
     {
         var session = Helpers.MakeSession();
         // Give the player a weapon so they have some collection cards
-        session.Player.Equipment.Weapon = new ItemInstance("falchion", "Falchion");
+        session.Player.Equipment.Weapon = new ItemInstance("short_sword", "Short Sword");
         // Set bushcraft so traverse queue visibility works (base stat drives visible depth)
         session.Player.Skills[Skill.Bushcraft] = 3;
         var state = new TacticalState();
@@ -166,12 +177,12 @@ public class TacticalRunnerTests
     public void DeckContainsCollectionCards()
     {
         var (session, state) = MakeContext();
-        // Falchion contributes collection cards
+        // Short sword contributes collection cards
         var enc = MakeCombat(approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
-        Assert.Contains(state.Deck, c => c.Name == "Hack at their defense");
-        Assert.Contains(state.Deck, c => c.Name == "Swing your blade in an arcing chop");
+        Assert.Contains(state.Deck, c => c.Name == "Test their guard with a quick cut");
+        Assert.Contains(state.Deck, c => c.Name == "Feint high and step back to recover");
     }
 
     [Fact]

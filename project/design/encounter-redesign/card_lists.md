@@ -10,94 +10,75 @@ Archetype notation: see card_archetypes.md for cost/effect definitions.
 
 ### Combat skill (4 cards)
 
+No cancels in the skill pool — cancel only comes from weapons and tokens.
+
 - Combat 1: "Zornhau - wrathful strike" = momentum_to_progress
 - Combat 2: "Nachdrängen - take initiative" = spirits_to_momentum
 - Combat 3: "Überlaufen - fearless strike" = threat_to_progress
 - Combat 4: "Scheitelhau - inevitable end" = momentum_to_progress_large
 
-### Daggers (Combat +1, all contribute 1 card)
+### Weapon types
 
-Design: quick, efficient, low-ceiling. Good at free chips, bad at big momentum conversions.
+All three weapon types scale Combat +1 to +5 (5 weapons each). Cards are **additive** — a +3 weapon has the same cards as the +2, plus one new card. All weapons of the same type share the same card pool.
 
-- **bodkin** (plains T1, 15gp) — "Stab desperately" = momentum_to_progress
-- **skinning_knife** (swamp T1, 15gp) — "Slash wildly with your knife" = momentum_to_progress
-- **jambiya** (scrub T1, 15gp) — "Strike with your jambiya" = momentum_to_progress
-- **seax** (mountains T2, 40gp) — "Hack at their defense" = spirits_to_momentum
-- **kukri** (scrub T2, 40gp) — "Stab deep and twist" = momentum_to_cancel
-- **hunting_knife** (mountains T2, 80gp) — "Stab under their guard" = momentum_to_progress
-- **the_old_tooth** (unique) — "Wish upon the Old Tooth" = free_cancel
+Cancel card names are never shown to the player (overwritten by the encounter's timer counterName at draw time).
 
-NOTE: All daggers are Combat +1, so they only contribute 1 card each. T1 and T2 daggers give momentum_to_progress or momentum_to_cancel (basic utility). The unique gives free_cancel. Daggers never offer huge progress — they're tools, not proper weapons.
+### Daggers (Combat +1 to +5, cancel-focused)
 
-### Axes (Combat +1 to +4, each contributes cards = Combat modifier)
+Design: the expert's weapon. Find openings, neutralize threats. Cancel cards appear at level 2, making even cheap daggers control-viable. Pairs naturally with cautious approach.
 
-Design: big, slow, top-heavy. Strong momentum_to_progress_large and _huge. Weak on control (no cancel). Wind-up dependent.
+**Dagger pool:**
+1. "Lunge forward and stab at their guard" = momentum_to_progress
+2. (cancel) = momentum_to_cancel
+3. "Circle your opponent, looking for a gap" = free_momentum
+4. (cancel) = spirits_to_cancel
+5. (cancel) = free_cancel
 
-- **hatchet** (forest T1, 15gp, Combat +1) — 1 card
-  - "Bury the hatchet in their guard" = momentum_to_progress
+- **bodkin** (plains T1, 15gp, Combat +1) — 1 card (level 1)
+- **jambiya** (scrub T1, 15gp, Combat +2) — 2 cards (levels 1–2)
+- **kukri** (scrub T2, 40gp, Combat +3) — 3 cards (levels 1–3)
+- **hunting_knife** (mountains T2, 80gp, Combat +4) — 4 cards (levels 1–4)
+- **the_old_tooth** (unique, Combat +5) — 5 cards (levels 1–5)
 
-- **tomahawk** (forest T1, 15gp, Combat +2) — 2 cards
-  - "Push past their defense and chop" = threat_to_progress
-  - "Exploit a gap in their guard" = momentum_to_progress
+NOTE: A +5 dagger has 3 cancel cards (momentum, spirits, free), 1 progress, and 1 free_momentum. Very control-heavy — 3 of 5 cards neutralize threats.
 
-- **war_axe** (forest T2, 40gp, Combat +2) — 2 cards
-  - "Bring the axe down with both hands" = momentum_to_progress_large
-  - "Drive the beard of the axe into their defense" = momentum_to_progress
+### Axes (Combat +1 to +5, aggro-focused, zero cancels)
 
-- **broadaxe** (mountains T2, 80gp, Combat +3) — 3 cards
-  - "Bring the broadaxe down in a terrible arc" = momentum_to_progress_large
-  - "Wind up and put everything behind the swing" = momentum_to_progress_huge
-  - "Shove them back with the axe's haft" = free_momentum
+Design: the berserker's weapon. Big momentum dumps, overwhelm before timers fire. No cancels at all — pair with armor or skill-based cancel if you want control. Pairs naturally with aggressive approach.
 
-- **bardiche** (mountains T2, 80gp, Combat +3) — 3 cards
-  - "Swing the bardiche in a wide, committed arc" = momentum_to_progress_large
-  - "Drive the axe's spike into their foot" = free_momentum
-  - "Brace the shaft and let them come to you" = threat_to_progress_large
+**Axe pool:**
+1. "Swing the axe into their defense" = momentum_to_progress
+2. "Shift your grip and ready a heavy swing" = free_momentum
+3. "Put your weight behind a brutal chop" = momentum_to_progress_large
+4. "Charge forward swinging wildly" = threat_to_progress_large
+5. "Bring the axe down with everything you have" = momentum_to_progress_huge
 
-- **revathi_labrys** (unique, Combat +4) — 4 cards
-  - "Bring the labrys down like a felled tree" = momentum_to_progress_huge
-  - "Let the weight carry through in a brutal arc" = momentum_to_progress_large
-  - "The ground trembles where the labrys strikes" = free_momentum
-  - "Call upon the Revathi to guide your arm" = spirits_to_progress_large
+- **hatchet** (forest T1, 15gp, Combat +1) — 1 card (level 1)
+- **tomahawk** (forest T1, 15gp, Combat +2) — 2 cards (levels 1–2)
+- **war_axe** (forest T2, 40gp, Combat +3) — 3 cards (levels 1–3)
+- **broadaxe** (mountains T2, 80gp, Combat +4) — 4 cards (levels 1–4)
+- **revathi_labrys** (unique, Combat +5) — 5 cards (levels 1–5)
 
-NOTE: Axes have no cancel cards at all. A pure axe fighter powers through threats by racing them, not by neutralizing them. This is a deliberate weakness — pair with armor or a skill-based cancel if you want control.
+NOTE: A +5 axe has 3 progress cards (regular, large, huge), 1 threat_to_progress_large, and 1 free_momentum. Pure damage ramp — free_momentum at level 2 fuels the big spends at 3+.
 
-### Swords (Combat +2 to +5, each contributes cards = Combat modifier)
+### Swords (Combat +1 to +5, hybrid)
 
-Design: balanced, the optimal martial weapon. Good at everything, best at nothing. Only swords offer cancel.
+Design: the generalist's weapon. Some progress, some cancel, best at neither. Gets cancel at level 3 (later than dagger's level 2). Works with either approach.
 
-- **falchion** (plains T1, 15gp, Combat +2) — 2 cards
-  - "Hack at their defense" = spirits_to_momentum
-  - "Swing your blade in an arcing chop" = momentum_to_progress
+**Sword pool:**
+1. "Test their guard with a quick cut" = momentum_to_progress
+2. "Feint high and step back to recover" = free_momentum
+3. (cancel) = momentum_to_cancel
+4. "Commit to a powerful driving thrust" = momentum_to_progress_large
+5. (cancel) = free_cancel
 
-- **short_sword** (plains T2, 40gp, Combat +3) — 3 cards
-  - "Probe their defenses" = free_momentum
-  - "Thrust your blade through an opening" = momentum_to_progress
-  - "Exploit their error" = momentum_to_cancel
+- **falchion** (plains T1, 15gp, Combat +1) — 1 card (level 1)
+- **short_sword** (plains T1, 15gp, Combat +2) — 2 cards (levels 1–2)
+- **tulwar** (scrub T2, 40gp, Combat +3) — 3 cards (levels 1–3)
+- **scimitar** (scrub T2, 80gp, Combat +4) — 4 cards (levels 1–4)
+- **shimmering_blade** (unique, Combat +5) — 5 cards (levels 1–5)
 
-- **tulwar** (scrub T2, 40gp, Combat +3) — 3 cards
-  - "Hack and slash" = momentum_to_progress
-  - "Bring your tulwar down in a brutal chop" = momentum_to_progress_large
-  - "Exploit their error" = momentum_to_cancel
-
-- **scimitar** (scrub T2, 80gp, Combat +4) — 4 cards
-  - "Hammer their defense with quick slashes" = free_momentum
-  - "Feint high, then kick them off balance" = momentum_to_progress
-  - "Exploit their error" = momentum_to_cancel
-  - "Making a daring attack" = threat_to_progress
-
-- **arming_sword** (plains T2, 80gp, Combat +4) — 4 cards
-  - "Thrust, then pull back with a draw cut" = momentum_to_progress
-  - "Grasp your blade and hammer with the pommel" = momentum_to_progress_large
-  - "Step in close and trip them" = spirits_to_cancel
-  - "Bind and control their weapon" = free_momentum
-
-- **shimmering_blade** (unique, Combat +5) — 5 cards
-  - "Obscure your strikes" = free_momentum
-  - "Lace the air with uncolor" = momentum_to_progress
-  - "Burn through iron and sinew" = momentum_to_cancel
-  - "Let the Lattice guide your hand" = threat_to_progress_large
-  - "Unleash the Lattice from the blade" = free_cancel
+NOTE: A +5 sword has 2 progress cards, 2 cancel cards, and 1 free_momentum. True hybrid — jack of all trades, master of none.
 
 ### Token: lucky_buckle (Combat +1, 1 card)
 

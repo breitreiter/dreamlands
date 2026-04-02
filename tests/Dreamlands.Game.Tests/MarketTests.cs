@@ -288,7 +288,7 @@ public class MarketTests
     [Fact]
     public void GetSellPrice_ReturnsBaseTimesRatio()
     {
-        var def = Balance.Items["arming_sword"];
+        var def = Balance.Items["scimitar"];
         var price = Market.GetSellPrice(def, Balance);
         var expected = Math.Max(1, (int)Math.Round(def.Cost!.Value * Balance.Trade.SellRatio));
         Assert.Equal(expected, price);

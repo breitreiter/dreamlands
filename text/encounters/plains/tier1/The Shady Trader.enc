@@ -31,7 +31,7 @@ choices:
 
   You don't need to be asked twice.
   +give_gold 500
-  +add_item arming_sword
+  +add_item scimitar
   +add_item brigandine
   +add_item trail_boots
   +add_item waterskin

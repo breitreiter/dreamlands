@@ -250,7 +250,6 @@ public class ItemInfo
     public int? Cost { get; init; }
     public Dictionary<string, int> SkillModifiers { get; init; } = [];
     public Dictionary<string, int> ResistModifiers { get; init; } = [];
-    public int ForagingBonus { get; init; }
     public List<string> Cures { get; init; } = [];
     public bool IsEquippable { get; init; }
     public string? DestinationName { get; init; }

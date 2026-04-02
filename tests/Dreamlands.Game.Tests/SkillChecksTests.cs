@@ -110,7 +110,7 @@ public class SkillChecksTests
     public void GetItemBonus_Combat_UsesWeaponOnly()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword");
+        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
         state.Equipment.Armor = new ItemInstance("scale_armor", "Scale Armor");
 
         Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Combat, state, Balance));
@@ -137,21 +137,12 @@ public class SkillChecksTests
     }
 
     [Fact]
-    public void GetItemBonus_Bushcraft_WeaponForagingDoesNotCount()
+    public void GetItemBonus_Bushcraft_WeaponDoesNotCount()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("kopis", "Kopis"); // ForagingBonus = 5
+        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
 
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Bushcraft, state, Balance));
-    }
-
-    [Fact]
-    public void GetForagingBonus_ReturnsWeaponForaging()
-    {
-        var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("skinning_knife", "Skinning Knife"); // ForagingBonus = 2
-
-        Assert.Equal(2, SkillChecks.GetForagingBonus(state, Balance));
     }
 
     [Fact]
@@ -165,7 +156,7 @@ public class SkillChecksTests
     public void GetItemBonus_Luck_AlwaysZero()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword");
+        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
         state.Equipment.Armor = new ItemInstance("chainmail", "Chainmail");
 
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Luck, state, Balance));
@@ -205,7 +196,7 @@ public class SkillChecksTests
     public void GetItemBonus_TokenAddsOneToMatchingSkill()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("arming_sword", "Arming Sword"); // +4 combat
+        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar"); // +4 combat
         state.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb")); // +1 negotiation token
 
         Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Combat, state, Balance)); // no token for combat

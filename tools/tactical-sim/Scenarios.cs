@@ -27,9 +27,9 @@ static class Scenarios
     public static readonly PlayerProfile[] Profiles =
     [
         new("Early (Combat 1, bodkin)", Skill.Combat, 1, "bodkin"),
-        new("Mid (Combat 2, falchion)", Skill.Combat, 2, "falchion"),
-        new("Mid (Combat 3, arming_sword)", Skill.Combat, 3, "arming_sword"),
-        new("Late (Combat 4, shimmering_blade)", Skill.Combat, 4, "shimmering_blade"),
+        new("Mid (Combat 2, short_sword)", Skill.Combat, 2, "short_sword"),
+        new("Mid (Combat 3, tulwar)", Skill.Combat, 3, "tulwar"),
+        new("Late (Combat 4, scimitar)", Skill.Combat, 4, "scimitar"),
     ];
 
     // ── Custom deck profiles ─────────────────────────────────────

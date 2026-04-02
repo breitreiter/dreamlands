@@ -185,13 +185,6 @@ public static class SkillChecks
         return 0;
     }
 
-    public static int GetForagingBonus(PlayerState state, BalanceData balance)
-    {
-        if (state.Equipment.Weapon == null) return 0;
-        if (balance.Items.TryGetValue(state.Equipment.Weapon.DefId, out var def))
-            return def.ForagingBonus;
-        return 0;
-    }
 
     static int GetBestToolBonuses(Skill skill, PlayerState state, BalanceData balance)
     {
