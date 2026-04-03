@@ -1,23 +1,19 @@
 Road Toll Fight
-[variant combat]
 [stat combat]
 [tier 1]
 
 The pretense drops. You draw your weapon and the thieves rush in. No formation, no discipline, just desperation and numbers. The leader hangs back, shouting orders.
 
-stats:
-  resistance 8
-
 timers:
-  draw 2
-  * The thieves surround you [counter Throw them into disarray]: spirits 1 every 4
-  * The bandit leader rallies his men [counter Cut the leader down]: resistance 1 every 3
+  * You are overwhelmed: fatal every 10
+  * The thieves surround you [counter Throw them into disarray]: tick "You are overwhelmed" 1 every 4
+  * The bandit leader rallies his men [counter Cut the leader down]: tick "You are overwhelmed" 1 every 3
   * You take another cudgel blow [counter Put you back to the mile marker]: condition injured every 4
 
 openings:
   * Shove one aside: free_progress_small
   * Kick a bandit in the groin: momentum_to_progress
-  * Should a vile curse: free_momentum
+  * Shout a vile curse: free_momentum
   * Smash a bandit into the mile marker: momentum_to_progress_large
   * Headbutt the closest one: spirits_to_progress
   * Wait for a gap: free_momentum_small
@@ -31,9 +27,8 @@ openings:
   * Fight through your exhaustion: spirits_to_momentum
 
 approaches:
-  * scout: momentum 0, timers 1, openings 3
-  * direct: momentum 2, timers 2
-  * wild: momentum 4, timers 3
+  * aggressive
+  * cautious
 
 success:
   The last of them scatters into the tall grass. You catch your breath, standing over their abandoned toll post. A few coins glint in the road dust where they dropped them.

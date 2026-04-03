@@ -1,0 +1,57 @@
+The Conscripts
+[trigger road]
+
+You hear the shouting before you reach the depot. An argument; A woman's voice, hoarse from it. A man talking over her, flat and certain.
+
+You round the earthwork wall and take in the scene. Three locals kneel in the yard with their hands bound. A fourth lies near the well, not moving. An officer in a sweat-stained coat stands over them, gloves tucked into his belt like he's paused mid-task. Four soldiers line the wall-walk, watching.
+
+"They're not criminals," the woman says. "They're workers. You can't just"
+
+"I can," the officer cuts in. "And I will."
+
+"We lost three men last week," he says, almost conversational. "Walked off in the night. Took kit, took food."
+
+He gestures at the kneeling figures.
+
+"So we found new recruits. Legion's tough but fair. I'm sure they'll get the hang of it."
+
+One of the soldiers notices you. His hand shifts toward his belt, then stills when he sees your ring. The officer follows the glance, eyes settling on you.
+
+"Trader," he says. Not warm. Not unfriendly, either.
+
+He looks you over, then flicks his gaze back to the prisoners.
+
+"Nothing here worth your trouble." His eyes hold yours. "Seems to me you didn't see anything worth remembering."
+
+Behind him, one of the bound locals shifts, rope creaking. No one reacts.
+
+The officer straightens, voice conciliatory now.
+
+"You can take water, if you need it," he says. "Then be on your way."
+
+choices:
+
+* Convince the officer = Encourage him to release these people
+  You step forward and speak. The officer turns his head toward you, one brow raised. You frame your argument carefully: pressed men fight poorly, deserters breed more deserters, loyalty cannot be bound with rope. The officer listens, jaw slack, eyes attentive. He nods twice as though considering.
+
+  Then he looks to his soldiers along the wall. "What say you, lads?" His voice carries a note of false ceremony. "Shall we spare these fine citizens the rigors of service?"
+
+  One of them straightens, hand pressed to his chest in mock solemnity. "Well now, milord captain, I do believe the Guilder raises a point worthy of pondering." Another leans forward, chin resting on his fist. "Aye, the honor of the Legion, sir. Would we not tarnish it, conscripting such low folk?" The others break first. Laughter rolls across the yard, rough and sharp. The officer grins, shaking his head.
+
+  The first soldier pitches his voice high, mockery dripping from every syllable. "Oh milord sire, wouldst thou tarnish the honor of thy Legion with these peasants?" The rest roar. One slaps the wall beside him, choking on his own mirth. Another doubles over, wheezing.
+
+  They talk now among themselves, voices rising and overlapping, crude jests traded back and forth. Your words vanish beneath the noise. The officer does not look at you again. Behind him, the woman presses her face into her hands. Her shoulders shake without sound. You turn and walk back toward the road. The laughter follows you until the earthwork wall cuts it off.
+  +damage_spirits 2
+
+* Rescue the locals = Fight off these so-called soldiers
+  +open "The Conscripts Combat"
+
+* Walk on = This is no business of yours
+  You turn from the depot without a word. The woman's voice rises behind you, sharp with protest, but you do not slow. The officer's reply comes flat and final, then silence settles save for the scrape of boots on stone.
+
+  The road stretches before you, rutted and pale with dust. You shift the weight of your pack and feel the ring press against your finger. It marks you as exempt from such seizures, a small mercy purchased at no small cost. The conscripts have no such token. They will march where they are bid.
+
+  For a moment the thought comes: does this protection bind you to some duty? Does it demand that you turn back, that you set yourself between the officer and his prey? You shake your head. The road is long. Your pack is heavy. The strong take what they will.
+
+  The depot fades behind you. The sun climbs higher, and the dust clings to your throat.
+  +damage_spirits 2

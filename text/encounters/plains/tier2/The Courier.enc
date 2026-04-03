@@ -1,0 +1,59 @@
+The Courier
+[trigger road]
+
+The woman kneeling at the roadside presses her palms into dirt still warm from a small, controlled fire. Her courier's satchel lies open beside her, its contents neatly laid out--sealed packets, oiled paper, a single dispatch set apart from the rest.
+
+When she sees you, her eyes scan you, then flick to your ring.
+
+Her gaze drops to the isolated dispatch. The seal is broken and the document half-unfolded. She moves to conceal it, but it's too later. You know she's tampered with a contract. There will be hell to pay.
+
+"I had no right," she says. "I know that."
+
+"Captain Aldric," she goes on. "You know the name? He's one of the decent ones. Keeps his men alive, still tries to keep order where others wouldn't bother." She gazes into the middle distance for a moment. "He's bailed me out of some tight situations, I owe him."
+
+She taps the opened dispatch with two fingers.
+
+"Word is he has enemies. Higher-ups who want to see him punished worse than he already has been. So I looked."
+
+"Orders to take his company out past the cordon. Deep sweep. No support. No resupply. Just 'confirm conditions and report.'" A thin, humorless smile. "That's The Spires, friend. That's a death sentence."
+
+She folds the paper once, then stops, like she's not sure what comes next.
+
+"He'll know it's bad," she says quietly. "He'll go anyway."
+
+Silence stretches. The small fire beside her crackles, ready.
+
+"Six year I've done this, delivered words from Aldgate to the poor bastards out here. Never once questioned it. You don't look inside, you're just a courier."
+
+Her hand hovers between the dispatch and the flame.
+
+"I'm going to burn it," she says. "It was lost on the road. No one would know."
+
+But she doesn't. Not yet.
+
+choices:
+
+* Talk her down = Convince her not to burn the letter
+  +open "The Courier Conflict"
+
+* Watch in silence = Wait for the deed to be done
+  You will not be a part of this, but neither will you intervene. You stand witness as a fellow guild member breaks her oath.
+
+  The silence stretches between you, heavy as iron. She searches your face for judgment or permission and finds neither. At last she lifts the dispatch with both hands and holds it to the embers. The corner catches. She holds it steady as the flame spreads, curling the edges black, consuming words you will never read. Heat reddens her fingertips. Only when the fire licks toward her knuckles does she release it. The burning fragment slips from her grasp and tumbles through the air, weightless as ash, fluttering like some bright and dying butterfly. Then all at once the letter is gone.
+
+  You wonder if you did the right thing. The warmth of the embers lingers. The courier says nothing. The road ahead stretches on, indifferent and eternal.
+  +quality faction.tradeguild -1
+  +damage_spirits 2
+
+* Encourage her = The world is a better place without that letter
+  You lower yourself to the ground beside her, settling onto the earth. The warmth of her small fire breathes against your face.
+
+  "It is the right thing to do," you say. "Our oath is not worth their lives."
+
+  She meets your eyes for a long moment, then nods once. Her hand moves to the dispatch, lifts it from the dirt. She holds it above the flames, fingers steady, then releases it.
+
+  The paper catches. Fire races across its surface, bright and hungry. The wax seal of the guild contract hisses where the heat reaches it, bubbling and spitting as the document curls inward upon itself. The edges blacken. Soon there is nothing but ash drifting on the air, settling among the embers, and silence.
+
+  You remain there beside her, neither of you speaking. The fire subsides to coals. At length you exchange a single nod with the woman. You rise, brush the dust from your hands, and continue down the road.
+  +quality faction.tradeguild -2
+  +heal_spirits 2

@@ -10,14 +10,14 @@ The area is rolling hills, still high with grain. There is a farmhouse in the di
 
 choices:
 
-* Fight your way through
+* Fight your way through = Draw steel
   +open "Road Toll Fight"
 
-* Make a run for it
+* Make a run for it = You might be able to outrun them
   +repool
   +open "Road Toll Chase"
 
-* Pay the toll and move on
+* Pay the toll = Be out 25 gold but on your way
   You fish out the coins and hand them over. The leader counts them with practiced fingers, nods, and waves you through. "Fair travels, hope to meet again soon," he calls after you.
   +rem_gold 25
   +repool

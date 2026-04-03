@@ -1,32 +1,33 @@
 The Requisition Line
+[trigger road]
 
-The patrol flags you down at the crossroads depot like you’ve just wandered into their afternoon entertainment. Three soldiers in sun-faded uniforms. The sergeant leans on the supply shed door and crooks a finger at you, slow and casual.
+The patrol flags you down at the crossroads depot like you've just wandered into their afternoon entertainment. Three soldiers in sun-faded uniforms. The sergeant leans on the supply shed door and crooks a finger at you, slow and casual.
 
-She doesn’t ask for papers. Her eyes go straight to your hand.
+She doesn't ask for papers. Her eyes go straight to your hand.
 
-“Well now,” she says, pushing off the door. “That’s a nice ring.”
+"Well now," she says, pushing off the door. "That's a nice ring."
 
-The younger one lets out a low whistle. “Bit fancy for this road.”
+The younger one lets out a low whistle. "Bit fancy for this road."
 
-“Where’d you pick that up?” the sergeant asks, already smiling like she won’t believe you. “Win it off a drunk? Find it in the dust?”
+"Where'd you pick that up?" the sergeant asks, already smiling like she won't believe you. "Win it off a drunk? Find it in the dust?"
 
-She jerks her chin at the third soldier. “Jory, check the book. See if we’ve got someone important.”
+She jerks her chin at the third soldier. "Jory, check the book. See if we've got someone important."
 
 Jory sighs, hauls out a ledger, flips through it with exaggerated care.
 
-“Mm. Nope.”
+"Mm. Nope."
 
-“Shame,” the sergeant says. “Thought we’d finally met someone important.”
+"Shame," the sergeant says. "Thought we'd finally met someone important."
 
 The third soldier shifts, settling in. Boots grind dust. Behind them, cookfire smoke curls up from the yard.
 
 The sergeant steps closer, eyeing the ring.
 
-“We get all sorts through here,” she says. “Couriers, factors, big men with big stories.” A small, mean smile. “None of them look like you.”
+"We get all sorts through here," she says. "Couriers, factors, big men with big stories." A small, mean smile. "None of them look like you."
 
 She rocks back on her heels, easy, unhurried.
 
-“So go on,” she says. “Let’s hear yours.”
+"So go on," she says. "Let's hear yours."
 
 choices:
 
@@ -34,8 +35,26 @@ choices:
   +open "The Requisition Line Conflict"
 
 * Threaten them = Ready your weapon and show you mean business
-  FIXME: the sergeant laughs, "well now we've got a big talker" she looks to jory, "up for a fight lads?" jory, still trying to fit the ledger back in his haversack replies "no ma'm, not today, still sore after the last." the sergeant frowns. "Looks like it's your lucky day merchant, safe travels and all."
+  The sergeant studies you carefully.
+
+  She glances over her shoulder at Jory, who is wrestling the ledger back into his haversack. "What say you, lads? Up for a fight?"
+
+  Jory grunts, still forcing the buckle through its worn hole. "No ma'am. Not today. Still sore after the last one."
+
+  The sergeant's smile collapses. She stands there a moment, jaw working, then spits into the dust beside your boot. "Looks like it's your lucky day, merchant." She waves you off, "Safe travels and all that."
 
 * Bribe them = Solve the problem with coin
-  FIXME: the sergeant tenses as you go for your belt, but relaxes when you come back with a coinpurse. "go collect 25 coins from the trader, jory." "sergeant, we're not bandits." "jory, the trader is offering. plus i owe you 25 from last weekend, so we're straight now." jory sighs and collects the money. "sorry about this traveller, orders and all"
+  You reach for your belt, and the sergeant's hand drops to her sword hilt. But when your fingers return with a coinpurse instead of steel, she exhales and her grip loosens.
+
+  "Jory," she says, eyes still on you. "Go collect twenty-five from the trader here."
+
+  Jory looks up from the ledger. "Sergeant, we're not bandits."
+
+  "Jory." The sergeant's voice drops half a tone. "The trader is offering. Besides, I owe you twenty-five from last weekend, so we're straight now."
+
+  Jory stares at her for a long moment, then snaps the book shut and steps forward. You count out the coins. They clink into his palm one by one. He pockets them without meeting your eyes.
+
+  "Sorry about this, traveler," he mutters, stepping back. "Orders and all."
+
+  Toll paid, you walk past them, the road open ahead.
   +rem_gold 25

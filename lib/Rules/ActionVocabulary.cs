@@ -220,7 +220,7 @@ public sealed class ActionVerb
         DamageSpirits, HealSpirits,
         IncreaseSkill, DecreaseSkill, SetSkill,
         AddCondition, RemoveCondition,
-        SkipTime,
+        SkipTime, AdvanceTime,
         Repool,
         FinishDungeon, FleeDungeon,
     };

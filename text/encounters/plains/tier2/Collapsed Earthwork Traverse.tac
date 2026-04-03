@@ -8,7 +8,7 @@ timers:
   * You lose your footing: fatal every 10
   * Navigate down the bank [counter Find a safe path]: tick "You lose your footing" 1 every 3 resist 2
   * Get to the crate [counter Jump to the crate]: tick "You lose your footing" 1 every 3 resist 4
-  * Climb the far slop [counter Find solid footing]: tick "You lose your footing" 1 every 3 resist 7
+  * Climb the far slope [counter Find solid footing]: tick "You lose your footing" 1 every 3 resist 7
 
 openings:
   * Test each foothold before committing weight: free_momentum_small
