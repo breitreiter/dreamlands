@@ -51,6 +51,7 @@ public static class Mechanics
             "add_condition" => ApplyAddCondition(args, state, balance, rng),
             "remove_condition" => ApplyRemoveCondition(args, state),
             "skip_time" => ApplySkipTime(args, state),
+            "advance_time" => ApplyAdvanceTime(args, state),
             "open" => ApplyOpen(args),
             "repool" => new MechanicResult.Repooled(),
             "finish_dungeon" => ApplyFinishDungeon(state),
@@ -375,6 +376,27 @@ public static class Mechanics
         }
 
         state.Time = target.Value;
+        return new MechanicResult.TimeAdvanced(state.Time, state.Day);
+    }
+
+    static MechanicResult ApplyAdvanceTime(List<string> args, PlayerState state)
+    {
+        if (args.Count < 1 || !int.TryParse(args[0], out var steps) || steps < 1)
+            return new MechanicResult.TimeAdvanced(state.Time, state.Day);
+
+        var flags = args.Skip(1).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var (newPeriod, daysCrossed) = TimePeriods.Advance(state.Time, steps);
+
+        if (daysCrossed > 0)
+        {
+            state.Day += daysCrossed;
+            state.PendingEndOfDay = true;
+            if (flags.Contains("no_sleep")) state.PendingNoSleep = true;
+            if (flags.Contains("no_meal")) state.PendingNoMeal = true;
+            if (flags.Contains("no_biome")) state.PendingNoBiome = true;
+        }
+
+        state.Time = newPeriod;
         return new MechanicResult.TimeAdvanced(state.Time, state.Day);
     }
 

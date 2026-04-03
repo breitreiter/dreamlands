@@ -45,4 +45,16 @@ public static class TimePeriods
     /// <summary>True if <paramref name="name"/> matches a known time period script name.</summary>
     public static bool IsValidScriptName(string name) =>
         ByScriptName.ContainsKey(name);
+
+    /// <summary>Advance a time period by <paramref name="steps"/> slots. Returns the new period and how many day boundaries were crossed.</summary>
+    public static (TimePeriod Period, int DaysCrossed) Advance(TimePeriod current, int steps)
+    {
+        int count = All.Count;
+        int ordinal = (int)current + steps;
+        int daysCrossed = ordinal < 0
+            ? -((-ordinal - 1) / count + 1)
+            : ordinal / count;
+        int wrapped = ((ordinal % count) + count) % count;
+        return ((TimePeriod)wrapped, daysCrossed);
+    }
 }

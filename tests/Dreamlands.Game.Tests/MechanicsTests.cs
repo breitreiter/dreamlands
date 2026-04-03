@@ -240,6 +240,47 @@ public class MechanicsTests
     }
 
     [Fact]
+    public void AdvanceTime_MovesForwardBySteps()
+    {
+        var state = Fresh();
+        state.Time = TimePeriod.Morning;
+        state.Day = 1;
+
+        var results = Mechanics.Apply(["advance_time 2"], state, Balance, Rng);
+        var r = Assert.IsType<MechanicResult.TimeAdvanced>(results[0]);
+        Assert.Equal(TimePeriod.Afternoon, state.Time);
+        Assert.Equal(1, state.Day);
+    }
+
+    [Fact]
+    public void AdvanceTime_WrapsDayBoundary()
+    {
+        var state = Fresh();
+        state.Time = TimePeriod.Evening;
+        state.Day = 1;
+
+        Mechanics.Apply(["advance_time 3"], state, Balance, Rng);
+        Assert.Equal(TimePeriod.Midday, state.Time);
+        Assert.Equal(2, state.Day);
+        Assert.True(state.PendingEndOfDay);
+    }
+
+    [Fact]
+    public void AdvanceTime_SetsEndOfDayFlags()
+    {
+        var state = Fresh();
+        state.Time = TimePeriod.Night;
+        state.Day = 1;
+
+        Mechanics.Apply(["advance_time 1 no_sleep no_meal"], state, Balance, Rng);
+        Assert.Equal(TimePeriod.Morning, state.Time);
+        Assert.Equal(2, state.Day);
+        Assert.True(state.PendingNoSleep);
+        Assert.True(state.PendingNoMeal);
+        Assert.False(state.PendingNoBiome);
+    }
+
+    [Fact]
     public void Apply_EmptyList_ReturnsEmpty()
     {
         var state = Fresh();

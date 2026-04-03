@@ -77,6 +77,7 @@ Conditions          +add_condition <condition_id>
                     +remove_condition <condition_id>
 
 Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
+                    +advance_time <N> [no_sleep] [no_meal] [no_biome]
 
 Dungeon             +finish_dungeon
                     +flee_dungeon

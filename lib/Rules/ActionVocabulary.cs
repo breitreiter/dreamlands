@@ -188,6 +188,11 @@ public sealed class ActionVerb
         new[] { new ArgDef("period", ArgType.TimePeriod) },
         new[] { "no_sleep", "no_meal", "no_biome" });
 
+    public static readonly ActionVerb AdvanceTime = new("advance_time",
+        VerbUsage.Mechanic, "Advance time by N periods",
+        new[] { new ArgDef("steps", ArgType.Int) },
+        new[] { "no_sleep", "no_meal", "no_biome" });
+
     // ── Encounter ──────────────────────────────────────────────
 
     public static readonly ActionVerb Repool = new("repool",
