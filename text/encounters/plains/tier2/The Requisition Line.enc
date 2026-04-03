@@ -1,0 +1,41 @@
+The Requisition Line
+
+The patrol flags you down at the crossroads depot like you’ve just wandered into their afternoon entertainment. Three soldiers in sun-faded uniforms. The sergeant leans on the supply shed door and crooks a finger at you, slow and casual.
+
+She doesn’t ask for papers. Her eyes go straight to your hand.
+
+“Well now,” she says, pushing off the door. “That’s a nice ring.”
+
+The younger one lets out a low whistle. “Bit fancy for this road.”
+
+“Where’d you pick that up?” the sergeant asks, already smiling like she won’t believe you. “Win it off a drunk? Find it in the dust?”
+
+She jerks her chin at the third soldier. “Jory, check the book. See if we’ve got someone important.”
+
+Jory sighs, hauls out a ledger, flips through it with exaggerated care.
+
+“Mm. Nope.”
+
+“Shame,” the sergeant says. “Thought we’d finally met someone important.”
+
+The third soldier shifts, settling in. Boots grind dust. Behind them, cookfire smoke curls up from the yard.
+
+The sergeant steps closer, eyeing the ring.
+
+“We get all sorts through here,” she says. “Couriers, factors, big men with big stories.” A small, mean smile. “None of them look like you.”
+
+She rocks back on her heels, easy, unhurried.
+
+“So go on,” she says. “Let’s hear yours.”
+
+choices:
+
+* Talk your way out = Check for something of value in the crate
+  +open "The Requisition Line Conflict"
+
+* Threaten them = Ready your weapon and show you mean business
+  FIXME: the sergeant laughs, "well now we've got a big talker" she looks to jory, "up for a fight lads?" jory, still trying to fit the ledger back in his haversack replies "no ma'm, not today, still sore after the last." the sergeant frowns. "Looks like it's your lucky day merchant, safe travels and all."
+
+* Bribe them = Solve the problem with coin
+  FIXME: the sergeant tenses as you go for your belt, but relaxes when you come back with a coinpurse. "go collect 25 coins from the trader, jory." "sergeant, we're not bandits." "jory, the trader is offering. plus i owe you 25 from last weekend, so we're straight now." jory sighs and collects the money. "sorry about this traveller, orders and all"
+  +rem_gold 25

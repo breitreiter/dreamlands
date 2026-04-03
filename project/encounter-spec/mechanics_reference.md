@@ -287,18 +287,129 @@ it to that timer's [counter] text automatically.
 ## Scrub
 - arc.tomak
 ## Plains
-- arc.torben 
+- arc.torben
 ## Mountain
 - arc.regula
 ## Forest
 - arc.briarcommons
 
-role:
-seed
-hint
-complication
-choice
-reveal
-resolution
-aftermath
-ambient
+
+ITEM DEFINITIONS
+====================================
+
+Valid item_id values for +add_item, +lose_random_item, @if has, and [requires has].
+
+WEAPONS
+------------------------------------
+
+Daggers (cancel-focused):
+  bodkin              Bodkin              Combat +1   plains T1  15g
+  jambiya             Jambiya             Combat +2   scrub T1   15g
+  kukri               Kukri               Combat +3   scrub T2   40g
+  hunting_knife       Hunting Knife       Combat +4   mountains T2  80g
+  the_old_tooth       The Old Tooth       Combat +5   (arc/reward only)
+
+Axes (aggro-focused, zero cancels):
+  hatchet             Hatchet             Combat +1   forest T1  15g
+  tomahawk            Tomahawk            Combat +2   forest T1  15g
+  war_axe             War Axe             Combat +3   forest T2  40g
+  broadaxe            Broadaxe            Combat +4   mountains T2  80g
+  revathi_labrys      Revathi Labrys      Combat +5   (arc/reward only)
+
+Swords (hybrid):
+  falchion            Falchion            Combat +1   plains T1  15g
+  short_sword         Short Sword         Combat +2   plains T1  15g
+  tulwar              Tulwar              Combat +3   scrub T2   40g
+  scimitar            Scimitar            Combat +4   scrub T2   80g
+  shimmering_blade    Shimmering Blade    Combat +5   (arc/reward only)
+
+ARMOR
+------------------------------------
+
+Light (Cunning scaling, minor Freezing resist):
+  tunic               Tunic                                        plains T1  (free)
+  silks               Silks               Cunning +1               scrub T1   15g
+  hunters_gear        Hunter's Gear       Cunning +2  Freezing +1  swamp T1   15g
+  cartographers_cloak Cartographer's Cloak Cunning +3 Freezing +2  mountains T2  40g
+  desert_scout_gear   Desert Scout Gear   Cunning +4  Freezing +2  scrub T2   80g
+  robe_of_twilight    Robe of Twilight    Cunning +5  Freezing +3  (arc/reward only)
+
+Medium (balanced Cunning + Injury + Freezing resist):
+  leather             Leather             Cunning +1  Injured +1  Freezing +1  forest T1  15g
+  hide_armor          Hide Armor          Cunning +1  Injured +1  Freezing +2  mountains T1  15g
+  buff_coat           Buff Coat           Cunning +1  Injured +2  Freezing +3  forest T2  40g
+  lamellar            Lamellar            Cunning +2  Injured +2  Freezing +3  mountains T2  80g
+  mountain_regiment_armor  17th Mountain Regiment Armor  Cunning +2  Injured +3  Freezing +5  (arc/reward only)
+
+Heavy (Injury resist scaling, no Cunning):
+  gambeson            Gambeson            Injured +1  Freezing +1  mountains T1  15g
+  chainmail           Chainmail           Injured +2               plains T1  15g
+  scale_armor         Scale Armor         Injured +3               scrub T2   40g
+  brigandine          Brigandine          Injured +4  Freezing +1  plains T2  80g
+  golem_armor         Golem Armor         Injured +5  Freezing +2  (arc/reward only)
+
+BOOTS
+------------------------------------
+
+  fine_boots          Fine Boots          Exhausted +1   plains T1  15g
+  heavy_work_boots    Heavy Work Boots    Exhausted +2   mountains T1  15g
+  riding_boots        Riding Boots        Exhausted +3   scrub T2   40g
+  trail_boots         Trail Boots         Exhausted +4   forest T2  80g
+  windstriders        Windstriders        Exhausted +5   (arc/reward only)
+
+TOOLS
+------------------------------------
+
+Shopable:
+  canteen             Canteen             Thirsty +2               forest T1  15g
+  waterskin           Waterskin           Thirsty +3               scrub T2   40g
+  letters_of_introduction  Letters of Introduction  Negotiation +2  scrub T1  40g
+  peoples_borderlands A Guide to the Borderlands  Negotiation +3   mountains T2  80g
+  cartographers_diary Cartographer's Diary  Bushcraft +2           mountain T1  40g
+  ornate_spyglass     Ornate Spyglass     Bushcraft +3             scrub T2   80g
+  cartographers_kit   Cartographer's Kit  Lost +5                  plains T1  80g
+  sleeping_kit        Sleeping Kit        Exhausted +4             forest T2  80g
+  brass_lantern       Old Brass Lantern   (light source)           plains T1  15g
+
+Arc/dungeon-only:
+  lattice_ward        Lattice Ward        Lattice_sickness +5
+  sakharov_mask       Sakharov's Mask     Irradiated +5
+  antivenom_kit       Antivenom Kit       Poison +5
+  control_shaft       Control Shaft       (quest item)
+
+FOOD
+------------------------------------
+
+  food_protein        Meat & Fish         (consumable, 3g)
+  food_grain          Breadstuffs         (consumable, 3g)
+  food_sweets         Sweets              (consumable, 3g)
+
+MEDICINES
+------------------------------------
+
+  bandages            Bandages            Cures injured           3g
+  siphon_glass        Siphon Glass        Cures lattice_sickness  scrub T2  40g
+  pale_knot_berry     Pale Knot Berry     Cures exhausted         plains T2  15g
+  shustov_tonic       Shustov Tonic       Cures irradiated        plains T2  40g
+  mudcap_fungus       Mudcap Fungus       Cures poisoned          swamp T2  15g
+
+TOKENS
+------------------------------------
+
+Skill tokens (+1 to a skill, found in encounters):
+  ivory_comb          Ivory Comb          Negotiation +1
+  lucky_buckle        Lucky Buckle        Combat +1
+  knotwork_seed       Knotwork Seed       Bushcraft +1
+  tarnished_key       Tarnished Key       Cunning +1
+
+Capstone arc keys (no stats, unlock arc progression):
+  hunters_journal     Hunter's Journal
+  grid_cipher         Grid Cipher
+  color_lens          Color Lens
+  revathi_tile        Revathi Tile
+
+HAUL
+------------------------------------
+
+  haul                Haul                (generic — identity comes from HaulDef on the instance)
+

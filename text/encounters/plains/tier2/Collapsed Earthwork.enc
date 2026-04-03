@@ -1,0 +1,20 @@
+Collapsed Earthwork
+[trigger road]
+
+The military road ends at a gap. The embankment has slumped into the gully below, taking half the packed stone surface with it.  What remains looks too steep to descend safely and the far side rises twelve feet straight. The remains of an old wooden post and an arrow sign lie nearby. If there was once guidance to a detour, it's lone gone now.
+
+Below in the gully, something catches the light. Scattered among the fallen earth are pieces of worked metal and broken crates. Supply wagons, most likely, caught in the collapse or dumped here after. One crate sits intact, wedged against a stone. The imperial seal is still visible on the wood.
+
+choices:
+
+* Scramble down = Check for something of value in the crate
+  +open "Collapsed Earthwork Traverse"
+
+* Head north = Hope to find a way around to the north
+  You head north a short ways and find a muddy crossing. The smell is rancid, and you'll be carrying on your boots for days, but the detour was short.
+  +damage_spirits 1
+  +advance_time 1
+
+* Head south = Hope to find a way around the other way
+  You lose nearly the full day trying false starts, discovering the footing is bad, and scrambling back up. Several times you consider doubling back, but there's always a promising route just a bit further on. At last you find a narrow crossing with a makeshift wooden bridge. The bridge creaks dangerously as you cross, but somehow holds. You wind your way back north to the old military road, but on the correct side now, and continue your journey.
+  +advance_time 4
