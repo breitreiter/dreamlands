@@ -22,10 +22,8 @@ public class BundleTests
               "variant": "combat",
               "tier": 1,
               "requires": [],
-              "resistance": 8,
-              "timerDraw": 1,
               "timers": [
-                { "name": "Flanking", "effect": "spirits", "amount": 2, "countdown": 4 }
+                { "name": "Flanking", "effect": "spirits", "amount": 2, "countdown": 4, "resistance": 8 }
               ],
               "openings": [
                 { "name": "Lunge", "archetype": "momentum_to_progress_large", "requires": null },
@@ -34,8 +32,8 @@ public class BundleTests
                 { "name": "Trap", "archetype": "spirits_to_progress_large", "requires": "has bear_trap" }
               ],
               "approaches": [
-                { "kind": "scout", "momentum": 0, "timerCount": 1, "bonusOpenings": 3 },
-                { "kind": "direct", "momentum": 3, "timerCount": 1, "bonusOpenings": 0 }
+                { "kind": "aggressive" },
+                { "kind": "cautious" }
               ],
               "failure": { "text": "You lose.", "mechanics": ["damage_spirits 2"] }
             }
@@ -66,7 +64,6 @@ public class BundleTests
         var enc = bundle.Encounters[0];
         Assert.Equal("Wolves", enc.Title);
         Assert.Equal(Variant.Combat, enc.Variant);
-        Assert.Equal(8, enc.Resistance);
     }
 
     [Fact]
@@ -78,6 +75,7 @@ public class BundleTests
         Assert.Equal(TimerEffect.Spirits, enc.Timers[0].Effect);
         Assert.Equal(2, enc.Timers[0].Amount);
         Assert.Equal(4, enc.Timers[0].Countdown);
+        Assert.Equal(8, enc.Timers[0].Resistance);
     }
 
     [Fact]
@@ -89,9 +87,8 @@ public class BundleTests
               "encounters": [
                 {
                   "id": "t", "category": "", "title": "T", "body": ".", "variant": "combat",
-                  "resistance": 8, "timerDraw": 1,
                   "timers": [
-                    { "name": "Jagged", "effect": "condition", "amount": 0, "countdown": 4, "conditionId": "injured" }
+                    { "name": "Jagged", "effect": "condition", "amount": 0, "countdown": 4, "resistance": 8, "conditionId": "injured" }
                   ],
                   "openings": [{ "name": "Hit", "archetype": "momentum_to_progress", "requires": null }],
                   "failure": { "text": "Fail.", "mechanics": [] }
@@ -132,9 +129,8 @@ public class BundleTests
     {
         var enc = TacticalBundle.FromJson(BundleJson).Encounters[0];
         Assert.Equal(2, enc.Approaches.Count);
-        Assert.Equal(ApproachKind.Scout, enc.Approaches[0].Kind);
-        Assert.Equal(3, enc.Approaches[0].BonusOpenings);
-        Assert.Equal(ApproachKind.Direct, enc.Approaches[1].Kind);
+        Assert.Equal(ApproachKind.Aggressive, enc.Approaches[0].Kind);
+        Assert.Equal(ApproachKind.Cautious, enc.Approaches[1].Kind);
     }
 
     [Fact]

@@ -13,14 +13,10 @@ public class ParserTests
         Three wolves materialize from the scrub grass on either side of the road.
         The largest has a scar across its muzzle.
 
-        stats:
-          resistance 12
-
         timers:
-          draw 2
-          * Flanking Maneuver: spirits 2 every 4
-          * Alpha's Howl: resistance 2 every 5
-          * Cornered Prey: spirits 1 every 3
+          * Flanking Maneuver: spirits 2 every 4 resist 4
+          * Alpha's Howl: resistance 2 every 5 resist 5
+          * Cornered Prey: spirits 1 every 3 resist 3
 
         openings:
           * Throat Strike: momentum_to_progress_large
@@ -30,9 +26,8 @@ public class ParserTests
           * Spring the Trap: spirits_to_progress_large [requires has bear_trap]
 
         approaches:
-          * scout: momentum 0, timers 3, openings 3
-          * direct: momentum 4, timers 3
-          * wild: momentum 6, timers 4
+          * aggressive
+          * cautious
 
         failure:
           The wolves drag you down. You stagger away bloodied.
@@ -48,13 +43,9 @@ public class ParserTests
         The bridge across the gorge has collapsed to a skeleton of stone pillars
         and dangling rope.
 
-        stats:
-          resistance 8
-
         timers:
-          draw 1
-          * Crumbling Pillar: resistance 1 every 3
-          * Wind Gust: spirits 1 every 2
+          * Crumbling Pillar: resistance 1 every 3 resist 4
+          * Wind Gust: spirits 1 every 2 resist 4
 
         openings:
           * Rope Swing: threat_to_progress_large
@@ -116,17 +107,9 @@ public class ParserTests
     }
 
     [Fact]
-    public void CombatStats()
-    {
-        var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
-        Assert.Equal(12, enc.Resistance);
-    }
-
-    [Fact]
     public void CombatTimers()
     {
         var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
-        Assert.Equal(2, enc.TimerDraw);
         Assert.Equal(3, enc.Timers.Count);
 
         var flanking = enc.Timers[0];
@@ -134,10 +117,12 @@ public class ParserTests
         Assert.Equal(TimerEffect.Spirits, flanking.Effect);
         Assert.Equal(2, flanking.Amount);
         Assert.Equal(4, flanking.Countdown);
+        Assert.Equal(4, flanking.Resistance);
 
         var howl = enc.Timers[1];
         Assert.Equal("Alpha's Howl", howl.Name);
         Assert.Equal(TimerEffect.Resistance, howl.Effect);
+        Assert.Equal(5, howl.Resistance);
     }
 
     [Fact]
@@ -168,20 +153,10 @@ public class ParserTests
     public void CombatApproaches()
     {
         var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
-        Assert.Equal(3, enc.Approaches.Count);
+        Assert.Equal(2, enc.Approaches.Count);
 
-        Assert.Equal(ApproachKind.Scout, enc.Approaches[0].Kind);
-        Assert.Equal(0, enc.Approaches[0].Momentum);
-        Assert.Equal(3, enc.Approaches[0].TimerCount);
-        Assert.Equal(3, enc.Approaches[0].BonusOpenings);
-
-        Assert.Equal(ApproachKind.Direct, enc.Approaches[1].Kind);
-        Assert.Equal(4, enc.Approaches[1].Momentum);
-        Assert.Equal(0, enc.Approaches[1].BonusOpenings);
-
-        Assert.Equal(ApproachKind.Wild, enc.Approaches[2].Kind);
-        Assert.Equal(6, enc.Approaches[2].Momentum);
-        Assert.Equal(4, enc.Approaches[2].TimerCount);
+        Assert.Equal(ApproachKind.Aggressive, enc.Approaches[0].Kind);
+        Assert.Equal(ApproachKind.Cautious, enc.Approaches[1].Kind);
     }
 
     [Fact]
@@ -207,10 +182,12 @@ public class ParserTests
     }
 
     [Fact]
-    public void TraverseStats()
+    public void TraverseTimerResistance()
     {
         var enc = TacticalParser.Parse(TraverseEncounter).Encounter!;
-        Assert.Equal(8, enc.Resistance);
+        Assert.Equal(2, enc.Timers.Count);
+        Assert.Equal(4, enc.Timers[0].Resistance);
+        Assert.Equal(4, enc.Timers[1].Resistance);
     }
 
     [Fact]
@@ -277,9 +254,6 @@ public class ParserTests
 
             Body text.
 
-            stats:
-              resistance 8
-
             openings:
               * Strike: momentum_to_progress_large
 
@@ -292,7 +266,7 @@ public class ParserTests
     }
 
     [Fact]
-    public void TimerDrawExceedsPoolErrors()
+    public void TimerResistanceParsed()
     {
         var source = """
             Test Encounter
@@ -300,12 +274,8 @@ public class ParserTests
 
             Body text.
 
-            stats:
-              resistance 8
-
             timers:
-              draw 5
-              * Timer A: spirits 1 every 3
+              * Timer A: spirits 1 every 3 resist 6
 
             openings:
               * Strike: momentum_to_progress_large
@@ -314,8 +284,8 @@ public class ParserTests
               You fail.
             """;
         var result = TacticalParser.Parse(source);
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("draw"));
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+        Assert.Equal(6, result.Encounter!.Timers[0].Resistance);
     }
 
     [Fact]
@@ -327,8 +297,8 @@ public class ParserTests
 
             Body.
 
-            stats:
-              resistance 8
+            openings:
+              * Strike: momentum_to_progress_large
 
             branches:
               * Fight -> some_encounter
@@ -346,9 +316,6 @@ public class ParserTests
             [variant combat]
 
             Body text.
-
-            stats:
-              resistance 8
 
             openings:
               * Strike: mana_blast_supreme
@@ -371,9 +338,6 @@ public class ParserTests
             [requires has sword]
 
             Body text.
-
-            stats:
-              resistance 8
 
             openings:
               * Strike: momentum_to_progress_large
@@ -399,12 +363,8 @@ public class ParserTests
 
             Sharp rocks everywhere.
 
-            stats:
-              resistance 8
-
             timers:
-              draw 1
-              * Falling Rocks: condition injured every 4
+              * Falling Rocks: condition injured every 4 resist 8
 
             openings:
               * Strike: momentum_to_progress_large
@@ -432,12 +392,8 @@ public class ParserTests
 
             The path is treacherous.
 
-            stats:
-              resistance 6
-
             timers:
-              draw 1
-              * Exhausting Climb [counter Pace yourself]: condition exhausted every 3
+              * Exhausting Climb [counter Pace yourself]: condition exhausted every 3 resist 6
 
             openings:
               * Step: free_progress_small
@@ -465,14 +421,10 @@ public class ParserTests
 
             Danger everywhere.
 
-            stats:
-              resistance 10
-
             timers:
-              draw 2
-              * Drain: spirits 2 every 4
-              * Wound Risk: condition injured every 3
-              * Regen: resistance 1 every 5
+              * Drain: spirits 2 every 4 resist 5
+              * Wound Risk: condition injured every 3 resist 5
+              * Regen: resistance 1 every 5 resist 5
 
             openings:
               * Strike: momentum_to_progress_large
@@ -497,12 +449,8 @@ public class ParserTests
 
             Test.
 
-            stats:
-              resistance 8
-
             timers:
-              draw 1
-              * Bad: condition cursed_by_the_moon every 3
+              * Bad: condition cursed_by_the_moon every 3 resist 5
 
             openings:
               * Strike: momentum_to_progress_large
@@ -524,24 +472,19 @@ public class ParserTests
 
             A straightforward encounter with no timers.
 
-            stats:
-              resistance 6
-
             openings:
               * Strike: momentum_to_progress
               * Guard: free_momentum_small
 
             approaches:
-              * scout: momentum 0, timers 0, openings 3
-              * direct: momentum 3, timers 0
-              * wild: momentum 6, timers 0
+              * aggressive
+              * cautious
 
             failure:
               You lose.
             """;
         var result = TacticalParser.Parse(source);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-        Assert.Equal(0, result.Encounter!.TimerDraw);
-        Assert.Empty(result.Encounter.Timers);
+        Assert.Empty(result.Encounter!.Timers);
     }
 }

@@ -25,11 +25,17 @@ public enum TacticalFinishReason { ResistanceKill, ControlKill, SpiritsLoss }
 
 public record TacticalTurnData(
     int Turn,
-    int Resistance,
-    int ResistanceMax,
     int Momentum,
     int PlayerSpirits,
+    /// <summary>Current active timer's remaining resistance.</summary>
+    int Resistance,
+    /// <summary>Current active timer's max resistance.</summary>
+    int ResistanceMax,
+    /// <summary>Whether press/force has been used this turn.</summary>
+    bool DigUsed,
     IReadOnlyList<ActiveTimer> Timers,
+    /// <summary>Index of current active timer in the Timers list.</summary>
+    int CurrentTimerIndex,
     IReadOnlyList<OpeningSnapshot> Openings,
     IReadOnlyList<OpeningSnapshot>? Queue,
     IReadOnlyList<TimerFired> TimersFired,
@@ -40,32 +46,46 @@ public record TimerFired(string Name, TimerEffect Effect, int Amount, string? Co
 public enum TacticalAction { TakeOpening, PressAdvantage, ForceOpening }
 
 // ── Runner ─────────────────────────────────────────────────────────
+//
+// vNext turn flow (from fun_deck.md):
+//   1. Active timer ticks down (fires if 0, effect applied, countdown resets)
+//   2. Momentum +1 (cautious) or +2 (aggressive)
+//   3. Draw 1 card (aggressive) or 2 cards (cautious)
+//   4. Either play one card, OR press/force to draw 2 more then pick one
+//   5. Progress applied to current timer's resistance
+//   6. Timer resistance cleared → next timer activates
+//   7. Last timer cleared → victory
+//
+// Press: costs 2 momentum, draws 2 more cards into hand
+// Force: costs 2 spirits, draws 2 more cards into hand
+// Press and Force are mutually exclusive per turn.
+// Must always play a card.
 
 public static class TacticalRunner
 {
-
     public static TacticalStep Begin(GameSession session, TacticalEncounter encounter, TacticalState state)
     {
         state.EncounterId = encounter.Id;
-        state.Resistance = encounter.Resistance;
         state.Turn = 0;
+        state.CurrentTimerIndex = 0;
 
         if (encounter.Variant == Variant.Combat)
         {
             if (encounter.Approaches.Count > 0)
                 return new TacticalStep.ChooseApproach(encounter, encounter.Approaches);
 
-            // No approaches — start with 0 momentum
-            state.Momentum = 0;
-            DrawTimers(state, encounter, encounter.TimerDraw, session.Rng);
+            // No approaches defined — default to aggressive
+            state.Approach = ApproachKind.Aggressive;
+            InitTimers(state, encounter);
             BuildDeck(state, session, encounter);
             return StartTurn(state, session, encounter);
         }
 
         // Traverse: no approach selection
+        state.Approach = ApproachKind.Cautious;
         state.Momentum = 0;
         state.PathIndex = 0;
-        DrawTimers(state, encounter, encounter.TimerDraw, session.Rng);
+        InitTimers(state, encounter);
         BuildDeck(state, session, encounter);
 
         // Populate queue from authored path
@@ -80,41 +100,21 @@ public static class TacticalRunner
         return StartTurn(state, session, encounter);
     }
 
-    /// <summary>
-    /// Reconstruct the current step from persisted state (for page refresh / reconnect).
-    /// </summary>
     public static TacticalStep Resume(GameSession session, TacticalEncounter encounter, TacticalState state)
     {
-        // If no timers drawn yet, player hasn't picked an approach
         if (encounter.Variant == Variant.Combat && encounter.Approaches.Count > 0 && state.Timers.Count == 0)
             return new TacticalStep.ChooseApproach(encounter, encounter.Approaches);
 
-        return new TacticalStep.ShowTurn(new TacticalTurnData(
-            state.Turn,
-            state.Resistance,
-            encounter.Resistance,
-            state.Momentum,
-            session.Player.Spirits,
-            state.Timers,
-            state.Openings,
-            VisibleQueue(state, session, encounter),
-            state.LastTimersFired,
-            state.PendingConditions));
+        return MakeShowTurn(state, session, encounter);
     }
 
     public static TacticalStep ApplyApproach(
         GameSession session, TacticalEncounter encounter, TacticalState state, ApproachKind approach)
     {
-        var def = encounter.Approaches.FirstOrDefault(a => a.Kind == approach)
-            ?? throw new ArgumentException($"Invalid approach: {approach}");
-
-        state.Momentum = def.Momentum;
-        DrawTimers(state, encounter, def.TimerCount, session.Rng);
+        state.Approach = approach;
+        state.Momentum = 0;
+        InitTimers(state, encounter);
         BuildDeck(state, session, encounter);
-
-        if (def.BonusOpenings > 0)
-            state.BonusNextTurn = true;
-
         return StartTurn(state, session, encounter);
     }
 
@@ -131,26 +131,38 @@ public static class TacticalRunner
         };
     }
 
-    // ── Internal ───────────────────────────────────────
+    // ── Press / Force: instant draw-2 into current hand ───────
 
     static TacticalStep PressOrForce(GameSession session, TacticalEncounter encounter, TacticalState state, bool isMomentum)
     {
+        if (state.DigUsedThisTurn)
+            throw new InvalidOperationException("Already used press/force this turn.");
+
         var tb = session.Balance.Tactical;
         if (isMomentum)
         {
             if (state.Momentum < tb.PressAdvantageCost)
-                throw new InvalidOperationException("Not enough momentum to Press the Advantage.");
+                throw new InvalidOperationException("Not enough momentum to Press.");
             state.Momentum -= tb.PressAdvantageCost;
         }
         else
         {
             if (session.Player.Spirits < tb.ForceOpeningCost)
-                throw new InvalidOperationException("Not enough spirits to Force an Opening.");
+                throw new InvalidOperationException("Not enough spirits to Force.");
             session.Player.Spirits -= tb.ForceOpeningCost;
         }
-        state.BonusNextTurn = true;
-        return AdvanceTurn(state, session, encounter);
+
+        state.DigUsedThisTurn = true;
+
+        // Draw 2 more cards into the current hand
+        for (int i = 0; i < 2; i++)
+            state.Openings.Add(ReThemeStopTimer(DeckBuilder.Draw(state, session.Rng), state));
+
+        EnsurePlayable(state, session);
+        return MakeShowTurn(state, session, encounter);
     }
+
+    // ── Take Opening: play a card, apply effects ──────────────
 
     static TacticalStep TakeOpening(
         GameSession session, TacticalEncounter encounter, TacticalState state, int index)
@@ -159,6 +171,7 @@ public static class TacticalRunner
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var opening = state.Openings[index];
+        var currentTimer = GetCurrentTimer(state);
 
         // Pay cost
         switch (opening.CostKind)
@@ -174,40 +187,46 @@ public static class TacticalRunner
                 session.Player.Spirits -= opening.CostAmount;
                 break;
             case CostKind.Tick:
-                TickRandomTimer(state, session.Rng);
+                if (currentTimer != null)
+                    currentTimer.Current--;
                 break;
         }
 
-        // Apply effect
+        // Apply effect to current timer
         switch (opening.EffectKind)
         {
             case EffectKind.Damage:
-                state.Resistance = Math.Max(0, state.Resistance - opening.EffectAmount);
+                if (currentTimer != null)
+                    currentTimer.Resistance = Math.Max(0, currentTimer.Resistance - opening.EffectAmount);
                 break;
             case EffectKind.StopTimer:
-                StopTimer(state, opening.StopsTimerIndex);
+                // Cancel clears the current timer entirely
+                if (currentTimer != null)
+                    currentTimer.Resistance = 0;
                 break;
             case EffectKind.Momentum:
                 state.Momentum += opening.EffectAmount;
                 break;
         }
 
-        // Check win conditions
-        if (state.Resistance <= 0)
+        // Advance past cleared timers
+        while (state.CurrentTimerIndex < state.Timers.Count
+            && state.Timers[state.CurrentTimerIndex].Resistance <= 0)
         {
-            var successResults = encounter.Success != null
-                ? Mechanics.Apply(encounter.Success.Mechanics, session.Player, session.Balance, session.Rng)
-                : null;
-            return new TacticalStep.Finished(TacticalFinishReason.ResistanceKill,
-                SuccessResults: successResults,
-                ConditionResults: ResolvePendingConditions(state, session));
+            state.Timers[state.CurrentTimerIndex].Stopped = true;
+            state.CurrentTimerIndex++;
         }
-        if (state.Timers.All(t => t.Stopped))
+
+        // Win: all timers cleared
+        if (state.CurrentTimerIndex >= state.Timers.Count)
         {
+            var reason = opening.EffectKind == EffectKind.StopTimer
+                ? TacticalFinishReason.ControlKill
+                : TacticalFinishReason.ResistanceKill;
             var successResults = encounter.Success != null
                 ? Mechanics.Apply(encounter.Success.Mechanics, session.Player, session.Balance, session.Rng)
                 : null;
-            return new TacticalStep.Finished(TacticalFinishReason.ControlKill,
+            return new TacticalStep.Finished(reason,
                 SuccessResults: successResults,
                 ConditionResults: ResolvePendingConditions(state, session));
         }
@@ -222,13 +241,17 @@ public static class TacticalRunner
         return AdvanceTurn(state, session, encounter);
     }
 
+    // ── Turn advancement ──────────────────────────────────────
+
     static TacticalStep AdvanceTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
         state.Turn++;
+        state.DigUsedThisTurn = false;
 
-        // Tick all active timers
+        // 1. Tick the current active timer
         var fired = new List<TimerFired>();
-        foreach (var timer in state.Timers.Where(t => !t.Stopped))
+        var timer = GetCurrentTimer(state);
+        if (timer != null)
         {
             timer.Current--;
             if (timer.Current <= 0)
@@ -240,7 +263,7 @@ public static class TacticalRunner
                         fired.Add(new TimerFired(timer.Name, timer.Effect, timer.Amount));
                         break;
                     case TimerEffect.Resistance:
-                        state.Resistance += timer.Amount;
+                        timer.Resistance += timer.Amount;
                         fired.Add(new TimerFired(timer.Name, timer.Effect, timer.Amount));
                         break;
                     case TimerEffect.Condition:
@@ -248,7 +271,7 @@ public static class TacticalRunner
                         fired.Add(new TimerFired(timer.Name, timer.Effect, 0, timer.ConditionId));
                         break;
                 }
-                timer.Current = timer.Countdown;
+                timer.Current = timer.Countdown; // reset countdown
             }
         }
         state.LastTimersFired = fired;
@@ -259,56 +282,83 @@ public static class TacticalRunner
             List<MechanicResult>? failureResults = null;
             if (encounter.Failure != null)
                 failureResults = Mechanics.Apply(encounter.Failure.Mechanics, session.Player, session.Balance, session.Rng);
-            var conditionResults = ResolvePendingConditions(state, session);
             return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss,
-                FailureResults: failureResults, ConditionResults: conditionResults);
+                FailureResults: failureResults,
+                ConditionResults: ResolvePendingConditions(state, session));
         }
 
-        // Passive momentum gain
-        state.Momentum += session.Balance.Tactical.MomentumPerTurn;
+        // 2. Gain momentum (approach-dependent)
+        int momentumGain = state.Approach == ApproachKind.Aggressive ? 2 : 1;
+        state.Momentum += momentumGain;
 
         return StartTurn(state, session, encounter);
     }
 
     static TacticalStep StartTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
-        int count = state.BonusNextTurn ? session.Balance.Tactical.BonusOpeningCount : 1;
-        state.BonusNextTurn = false;
+        // 3. Draw cards (approach-dependent)
+        int drawCount = state.Approach == ApproachKind.Cautious ? 2 : 1;
 
-        if (encounter.Variant == Variant.Traverse && state.Queue != null)
+        if (encounter.Variant == Variant.Traverse && state.Queue != null && state.Queue.Count > 0)
         {
-            // Traverse: current opening comes from the path
-            if (state.Queue.Count > 0)
-            {
-                state.Openings = [state.Queue[0]];
-                // Bonus openings are drawn from deck (detour)
-                for (int i = 1; i < count; i++)
-                    state.Openings.Add(ReThemeStopTimer(DeckBuilder.Draw(state, session.Rng), state));
-            }
-            else
-            {
-                // Path exhausted — draw from deck
-                state.Openings = DrawOpenings(state, count, session.Rng);
-            }
+            state.Openings = [state.Queue[0]];
+            for (int i = 1; i < drawCount; i++)
+                state.Openings.Add(ReThemeStopTimer(DeckBuilder.Draw(state, session.Rng), state));
         }
         else
         {
-            // Combat: draw from deck
-            state.Openings = DrawOpenings(state, count, session.Rng);
+            state.Openings = DrawOpenings(state, drawCount, session.Rng);
         }
 
+        EnsurePlayable(state, session);
+        return MakeShowTurn(state, session, encounter);
+    }
+
+    static TacticalStep.ShowTurn MakeShowTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
+    {
+        var timer = GetCurrentTimer(state);
         return new TacticalStep.ShowTurn(new TacticalTurnData(
             state.Turn,
-            state.Resistance,
-            encounter.Resistance,
             state.Momentum,
             session.Player.Spirits,
+            timer?.Resistance ?? 0,
+            encounter.Timers.Count > state.CurrentTimerIndex
+                ? encounter.Timers[state.CurrentTimerIndex].Resistance : 0,
+            state.DigUsedThisTurn,
             state.Timers,
+            state.CurrentTimerIndex,
             state.Openings,
             VisibleQueue(state, session, encounter),
             state.LastTimersFired,
             state.PendingConditions));
     }
+
+    // ── Helpers ────────────────────────────────────────────────
+
+    /// <summary>
+    /// If no card in the hand is playable, silently cycle the last slot
+    /// through the deck until at least one card is affordable.
+    /// </summary>
+    static void EnsurePlayable(TacticalState state, GameSession session)
+    {
+        if (state.Openings.Count == 0) return;
+
+        bool HasPlayable() => state.Openings.Any(o =>
+            o.CostKind == CostKind.Free
+            || (o.CostKind == CostKind.Momentum && state.Momentum >= o.CostAmount)
+            || (o.CostKind == CostKind.Spirits && session.Player.Spirits >= o.CostAmount)
+            || o.CostKind == CostKind.Tick);
+
+        int safety = state.Deck.Count;
+        int lastIdx = state.Openings.Count - 1;
+        while (!HasPlayable() && safety-- > 0)
+        {
+            state.Openings[lastIdx] = ReThemeStopTimer(DeckBuilder.Draw(state, session.Rng), state);
+        }
+    }
+
+    static ActiveTimer? GetCurrentTimer(TacticalState state) =>
+        state.CurrentTimerIndex < state.Timers.Count ? state.Timers[state.CurrentTimerIndex] : null;
 
     static List<OpeningSnapshot> DrawOpenings(TacticalState state, int count, Random rng)
     {
@@ -318,21 +368,15 @@ public static class TacticalRunner
         return result;
     }
 
-    /// <summary>If a stop_timer card is drawn, assign it to the most urgent active timer.</summary>
     static OpeningSnapshot ReThemeStopTimer(OpeningSnapshot card, TacticalState state)
     {
         if (card.EffectKind != EffectKind.StopTimer) return card;
 
-        var target = state.Timers
-            .Select((t, i) => (Timer: t, Index: i))
-            .Where(x => !x.Timer.Stopped)
-            .OrderBy(x => x.Timer.Current)
-            .FirstOrDefault();
+        var timer = GetCurrentTimer(state);
+        if (timer == null) return card;
 
-        if (target.Timer == null) return card;
-
-        card.StopsTimerIndex = target.Index;
-        card.Name = target.Timer.CounterName ?? card.Name;
+        card.StopsTimerIndex = state.CurrentTimerIndex;
+        card.Name = timer.CounterName ?? card.Name;
         return card;
     }
 
@@ -342,15 +386,12 @@ public static class TacticalRunner
         state.DrawIndex = 0;
     }
 
-    static void DrawTimers(TacticalState state, TacticalEncounter encounter, int count, Random rng)
+    static void InitTimers(TacticalState state, TacticalEncounter encounter)
     {
-        var available = encounter.Timers.ToList();
         state.Timers = [];
-        for (int i = 0; i < count && available.Count > 0; i++)
+        state.CurrentTimerIndex = 0;
+        foreach (var def in encounter.Timers)
         {
-            var idx = rng.Next(available.Count);
-            var def = available[idx];
-            available.RemoveAt(idx);
             state.Timers.Add(new ActiveTimer
             {
                 Name = def.Name,
@@ -359,28 +400,10 @@ public static class TacticalRunner
                 Amount = def.Amount,
                 Countdown = def.Countdown,
                 Current = def.Countdown,
+                Resistance = def.Resistance,
                 Stopped = false,
                 ConditionId = def.ConditionId,
             });
-        }
-    }
-
-    static void TickRandomTimer(TacticalState state, Random rng)
-    {
-        var active = state.Timers.Where(t => !t.Stopped).ToList();
-        if (active.Count > 0)
-            active[rng.Next(active.Count)].Current--;
-    }
-
-    static void StopTimer(TacticalState state, int? timerIndex)
-    {
-        if (timerIndex.HasValue && timerIndex.Value < state.Timers.Count)
-            state.Timers[timerIndex.Value].Stopped = true;
-        else
-        {
-            // Fallback: stop most urgent
-            var target = state.Timers.Where(t => !t.Stopped).OrderBy(t => t.Current).FirstOrDefault();
-            if (target != null) target.Stopped = true;
         }
     }
 
@@ -417,11 +440,7 @@ public static class TacticalRunner
             foreach (var _ in group)
             {
                 lastCheck = SkillChecks.RollResist(conditionId, dc, session.Player, session.Balance, session.Rng);
-                if (!lastCheck.Passed)
-                {
-                    anyFailed = true;
-                    break;
-                }
+                if (!lastCheck.Passed) { anyFailed = true; break; }
             }
 
             if (anyFailed)

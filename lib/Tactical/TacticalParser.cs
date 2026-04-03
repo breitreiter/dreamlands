@@ -4,17 +4,17 @@ namespace Dreamlands.Tactical;
 
 public static partial class TacticalParser
 {
-    enum Section { None, Stats, Timers, Openings, Path, Approaches, Failure, Success, Branches }
+    enum Section { None, Timers, Openings, Path, Approaches, Failure, Success, Branches }
 
     [GeneratedRegex(@"^\[(\w+)\s+(.+?)\]\s*$")]
     private static partial Regex FrontMatterPattern();
 
-    // * Timer Name [counter Stop text]: spirits 2 every 4
-    [GeneratedRegex(@"^\*\s+(.+?):\s+(spirits|resistance)\s+(\d+)\s+every\s+(\d+)\s*$")]
+    // * Timer Name [counter Stop text]: spirits 2 every 4 resist 3
+    [GeneratedRegex(@"^\*\s+(.+?):\s+(spirits|resistance)\s+(\d+)\s+every\s+(\d+)\s+resist\s+(\d+)\s*$")]
     private static partial Regex TimerPattern();
 
-    // * Timer Name: condition injured every 4
-    [GeneratedRegex(@"^\*\s+(.+?):\s+condition\s+(\w+)\s+every\s+(\d+)\s*$")]
+    // * Timer Name: condition injured every 4 resist 3
+    [GeneratedRegex(@"^\*\s+(.+?):\s+condition\s+(\w+)\s+every\s+(\d+)\s+resist\s+(\d+)\s*$")]
     private static partial Regex ConditionTimerPattern();
 
     [GeneratedRegex(@"\[counter\s+(.+?)\]")]
@@ -24,8 +24,8 @@ public static partial class TacticalParser
     [GeneratedRegex(@"^\*\s+(.+?):\s+(\w+)\s*(.*)$")]
     private static partial Regex OpeningPattern();
 
-    // * kind: momentum N, timers N[, openings N]
-    [GeneratedRegex(@"^\*\s+(scout|direct|wild):\s*(.+)$")]
+    // * aggressive or * cautious
+    [GeneratedRegex(@"^\*\s+(aggressive|cautious)\s*$")]
     private static partial Regex ApproachPattern();
 
     // * Label -> encounter_ref [requires condition]
@@ -131,7 +131,6 @@ public static partial class TacticalParser
                 var name = sm.Groups[1].Value;
                 var section = name switch
                 {
-                    "stats" => Section.Stats,
                     "timers" => Section.Timers,
                     "openings" => Section.Openings,
                     "path" => Section.Path,
@@ -156,7 +155,7 @@ public static partial class TacticalParser
 
         // Detect encounter vs group
         bool isGroup = sections.ContainsKey(Section.Branches);
-        bool isEncounter = sections.ContainsKey(Section.Stats) || sections.ContainsKey(Section.Openings)
+        bool isEncounter = sections.ContainsKey(Section.Openings)
                         || sections.ContainsKey(Section.Path) || sections.ContainsKey(Section.Timers) || sections.ContainsKey(Section.Approaches)
                         || sections.ContainsKey(Section.Failure) || sections.ContainsKey(Section.Success);
 
@@ -168,7 +167,7 @@ public static partial class TacticalParser
 
         if (!isGroup && !isEncounter)
         {
-            errors.Add(new ParseError(null, "No sections found. Expected stats:/openings:/failure: (encounter) or branches: (group)."));
+            errors.Add(new ParseError(null, "No sections found. Expected openings:/failure: (encounter) or branches: (group)."));
             return new TacticalParseResult { Errors = errors };
         }
 
@@ -187,48 +186,15 @@ public static partial class TacticalParser
         if (variant == null)
             errors.Add(new ParseError(null, "Encounter is missing [variant combat|traverse]."));
 
-        if (!sections.ContainsKey(Section.Stats))
-            errors.Add(new ParseError(null, "Missing required section 'stats:'."));
         if (!sections.ContainsKey(Section.Openings))
             errors.Add(new ParseError(null, "Missing required section 'openings:'."));
         if (!sections.ContainsKey(Section.Failure))
             errors.Add(new ParseError(null, "Missing required section 'failure:'."));
 
-        // Stats
-        int resistance = 0;
-
-        if (sections.TryGetValue(Section.Stats, out var statsRange))
-        {
-            for (int i = statsRange.start; i < statsRange.end; i++)
-            {
-                var trimmed = lines[i].Trim();
-                if (string.IsNullOrEmpty(trimmed)) continue;
-
-                var parts = trimmed.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length != 2 || !int.TryParse(parts[1], out var val))
-                {
-                    errors.Add(new ParseError(i + 1, $"Invalid stat line '{trimmed}'. Expected 'key value'."));
-                    continue;
-                }
-
-                switch (parts[0])
-                {
-                    case "resistance": resistance = val; break;
-                    default:
-                        errors.Add(new ParseError(i + 1, $"Unknown stat '{parts[0]}'."));
-                        break;
-                }
-            }
-        }
-
         // Timers
-        int timerDraw = 0;
         var timers = new List<TimerDef>();
         if (sections.TryGetValue(Section.Timers, out var timerRange))
-            ParseTimers(lines, timerRange.start, timerRange.end, ref timerDraw, timers, errors);
-
-        if (timerDraw > timers.Count && timers.Count > 0)
-            errors.Add(new ParseError(null, $"Timer draw ({timerDraw}) exceeds timer pool size ({timers.Count})."));
+            ParseTimers(lines, timerRange.start, timerRange.end, timers, errors);
 
         // Openings
         var openings = new List<OpeningDef>();
@@ -271,8 +237,6 @@ public static partial class TacticalParser
                 Stat = stat,
                 Tier = tier,
                 Requires = requires,
-                Resistance = resistance,
-                TimerDraw = timerDraw,
                 Timers = timers,
                 Openings = openings,
                 Path = path,
@@ -312,7 +276,7 @@ public static partial class TacticalParser
         };
     }
 
-    static void ParseTimers(string[] lines, int start, int end, ref int draw,
+    static void ParseTimers(string[] lines, int start, int end,
         List<TimerDef> timers, List<ParseError> errors)
     {
         for (int i = start; i < end; i++)
@@ -320,24 +284,14 @@ public static partial class TacticalParser
             var trimmed = lines[i].Trim();
             if (string.IsNullOrEmpty(trimmed)) continue;
 
-            // draw N
-            if (trimmed.StartsWith("draw "))
-            {
-                if (!int.TryParse(trimmed[5..].Trim(), out var d) || d < 1)
-                    errors.Add(new ParseError(i + 1, $"Invalid draw count '{trimmed}'."));
-                else
-                    draw = d;
-                continue;
-            }
-
             // * Name: effect amount every countdown
             if (!trimmed.StartsWith("* "))
             {
-                errors.Add(new ParseError(i + 1, $"Expected '* Timer Name: ...' or 'draw N', got '{trimmed}'."));
+                errors.Add(new ParseError(i + 1, $"Expected '* Timer Name: ...', got '{trimmed}'."));
                 continue;
             }
 
-            // Try condition timer pattern first: * Name: condition <id> every N
+            // Try condition timer pattern first: * Name: condition <id> every N resist N
             var cm = ConditionTimerPattern().Match(trimmed);
             if (cm.Success)
             {
@@ -352,19 +306,20 @@ public static partial class TacticalParser
 
                 var conditionId = cm.Groups[2].Value;
                 var cCountdown = int.Parse(cm.Groups[3].Value);
+                var cResistance = int.Parse(cm.Groups[4].Value);
 
                 if (!KnownConditions.Contains(conditionId))
                     errors.Add(new ParseError(i + 1, $"Unknown condition '{conditionId}'."));
                 else
-                    timers.Add(new TimerDef(cName, TimerEffect.Condition, 0, cCountdown, cCounter, conditionId));
+                    timers.Add(new TimerDef(cName, TimerEffect.Condition, 0, cCountdown, cResistance, cCounter, conditionId));
                 continue;
             }
 
-            // Standard timer: * Name: spirits|resistance N every N
+            // Standard timer: * Name: spirits|resistance N every N resist N
             var m = TimerPattern().Match(trimmed);
             if (!m.Success)
             {
-                errors.Add(new ParseError(i + 1, $"Invalid timer format. Expected '* Name: spirits|resistance N every N' or '* Name: condition <id> every N'."));
+                errors.Add(new ParseError(i + 1, $"Invalid timer format. Expected '* Name: spirits|resistance N every N resist N' or '* Name: condition <id> every N resist N'."));
                 continue;
             }
 
@@ -382,8 +337,9 @@ public static partial class TacticalParser
             var effect = m.Groups[2].Value == "spirits" ? TimerEffect.Spirits : TimerEffect.Resistance;
             var amount = int.Parse(m.Groups[3].Value);
             var countdown = int.Parse(m.Groups[4].Value);
+            var resistance = int.Parse(m.Groups[5].Value);
 
-            timers.Add(new TimerDef(name, effect, amount, countdown, counterName));
+            timers.Add(new TimerDef(name, effect, amount, countdown, resistance, counterName));
         }
     }
 
@@ -457,14 +413,14 @@ public static partial class TacticalParser
 
             if (!trimmed.StartsWith("* "))
             {
-                errors.Add(new ParseError(i + 1, $"Expected '* scout|direct|wild: ...' in approaches section."));
+                errors.Add(new ParseError(i + 1, $"Expected '* aggressive|cautious' in approaches section."));
                 continue;
             }
 
             var m = ApproachPattern().Match(trimmed);
             if (!m.Success)
             {
-                errors.Add(new ParseError(i + 1, $"Invalid approach format. Expected '* kind: momentum N, timers N'."));
+                errors.Add(new ParseError(i + 1, $"Invalid approach format. Expected '* aggressive' or '* cautious'."));
                 continue;
             }
 
@@ -474,28 +430,7 @@ public static partial class TacticalParser
                 continue;
             }
 
-            int mom = 0, timers = 0, bonusOpenings = 0;
-            var pairs = m.Groups[2].Value.Split(',', StringSplitOptions.TrimEntries);
-            foreach (var pair in pairs)
-            {
-                var kv = pair.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
-                if (kv.Length != 2 || !int.TryParse(kv[1], out var val))
-                {
-                    errors.Add(new ParseError(i + 1, $"Invalid approach parameter '{pair}'."));
-                    continue;
-                }
-                switch (kv[0])
-                {
-                    case "momentum": mom = val; break;
-                    case "timers": timers = val; break;
-                    case "openings": bonusOpenings = val; break;
-                    default:
-                        errors.Add(new ParseError(i + 1, $"Unknown approach parameter '{kv[0]}'."));
-                        break;
-                }
-            }
-
-            approaches.Add(new ApproachDef(kind, mom, timers, bonusOpenings));
+            approaches.Add(new ApproachDef(kind));
         }
     }
 

@@ -11,6 +11,8 @@ class Program
         int? degrade = null;     // replace N best cards with chaff
         bool sweep = false;      // degrade 0..10 for both decks
         bool verbose = false;    // detailed per-turn output
+        bool trace = false;     // single encounter play-by-play
+        int? traceSeed = null;
         bool ga = false;
 
         // GA-specific overrides (defaults in GaConfig)
@@ -36,6 +38,12 @@ class Program
                 case "--verbose":
                     verbose = true;
                     break;
+                case "--trace":
+                    trace = true;
+                    break;
+                case "--seed" when i + 1 < args.Length:
+                    traceSeed = int.Parse(args[++i]);
+                    break;
                 case "--ga":
                     ga = true;
                     break;
@@ -60,10 +68,9 @@ class Program
         {
             var approach = gaApproach switch
             {
-                "scout" => ApproachKind.Scout,
-                "direct" => ApproachKind.Direct,
-                "wild" => ApproachKind.Wild,
-                _ => ApproachKind.Direct,
+                "cautious" => ApproachKind.Cautious,
+                "aggressive" => ApproachKind.Aggressive,
+                _ => ApproachKind.Aggressive,
             };
             var config = new GaConfig(
                 PopulationSize: gaPop ?? 500,
@@ -71,6 +78,22 @@ class Program
                 SimsPerDeck: gaSims ?? 30,
                 Approach: approach);
             GeneticSearch.Run(config);
+            return 0;
+        }
+
+        if (trace)
+        {
+            int seed = traceSeed ?? new Random().Next(10000);
+            var deckName = deck ?? "aggro";
+            var (spec, approach) = deckName == "cancel"
+                ? (PlatonicDecks.Cancel, ApproachKind.Cautious)
+                : (PlatonicDecks.Aggro, ApproachKind.Aggressive);
+            var deckCards = degrade.HasValue ? PlatonicDecks.Degrade(spec, degrade.Value) : spec;
+            var label = degrade.HasValue
+                ? $"{deckName} / degrade={degrade} / seed={seed}"
+                : $"{deckName} / platonic / seed={seed}";
+            var result = SimRunner.RunOneTrace(deckCards, approach, seed);
+            SimReport.PrintTrace(result, label);
             return 0;
         }
 
@@ -82,9 +105,9 @@ class Program
 
         var decks = new List<(string Name, string[] Spec, ApproachKind Approach)>();
         if (deck == null || deck == "cancel")
-            decks.Add(("cancel", PlatonicDecks.Cancel, ApproachKind.Scout));
+            decks.Add(("cancel", PlatonicDecks.Cancel, ApproachKind.Cautious));
         if (deck == null || deck == "aggro")
-            decks.Add(("aggro", PlatonicDecks.Aggro, ApproachKind.Direct));
+            decks.Add(("aggro", PlatonicDecks.Aggro, ApproachKind.Aggressive));
 
         foreach (var (name, spec, approach) in decks)
         {
@@ -108,8 +131,8 @@ class Program
     {
         foreach (var (name, spec, approach) in new[]
         {
-            ("aggro", PlatonicDecks.Aggro, ApproachKind.Direct),
-            ("cancel", PlatonicDecks.Cancel, ApproachKind.Scout),
+            ("aggro", PlatonicDecks.Aggro, ApproachKind.Aggressive),
+            ("cancel", PlatonicDecks.Cancel, ApproachKind.Cautious),
         })
         {
             Console.WriteLine();
@@ -136,13 +159,15 @@ class Program
         Console.WriteLine("  --degrade N     Replace N best cards with chaff");
         Console.WriteLine("  --sweep         Degrade 0..10 for both decks");
         Console.WriteLine("  --verbose       Detailed per-turn vibe table");
+        Console.WriteLine("  --trace         Single encounter play-by-play");
+        Console.WriteLine("  --seed N        RNG seed for trace mode");
         Console.WriteLine();
         Console.WriteLine("Genetic algorithm:");
         Console.WriteLine("  --ga            Run GA deck search");
         Console.WriteLine("  --ga-pop N      Population size (default: 500)");
         Console.WriteLine("  --ga-gens N     Generations (default: 200)");
         Console.WriteLine("  --ga-sims N     Simulations per deck (default: 30)");
-        Console.WriteLine("  --ga-approach X scout, direct, or wild (default: direct)");
+        Console.WriteLine("  --ga-approach X aggressive or cautious (default: aggressive)");
         return 1;
     }
 }

@@ -106,4 +106,102 @@ static class SimReport
         }
         return false;
     }
+
+    // ── Trace mode ──────────────────────────────────────────────
+
+    public static void PrintTrace(TraceResult trace, string label)
+    {
+        Console.WriteLine();
+        Console.WriteLine(new string('=', 80));
+        Console.WriteLine($"  TRACE: {label}");
+        Console.WriteLine(new string('=', 80));
+
+        foreach (var t in trace.Turns)
+        {
+            var v = t.Vibe;
+            Console.WriteLine();
+            Console.WriteLine($"  ── Turn {v.Turn} ──────────────────────────────────────────────");
+            Console.WriteLine($"  State:  M={t.Momentum}  Sp={t.Spirits}  Resist={t.Resistance}/{t.ResistanceMax}");
+
+            // Timers
+            foreach (var (name, cd, stopped) in t.Timers)
+            {
+                string status = stopped ? "STOPPED" : $"cd={cd}";
+                Console.WriteLine($"  Timer:  {name} [{status}]");
+            }
+
+            // Timers that fired
+            if (t.TimersFired.Count > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                foreach (var fired in t.TimersFired)
+                    Console.WriteLine($"  FIRED:  {fired}");
+                Console.ResetColor();
+            }
+
+            // Hand
+            Console.WriteLine($"  Hand ({t.Hand.Count} cards):");
+            for (int i = 0; i < t.Hand.Count; i++)
+            {
+                var c = t.Hand[i];
+                string afford = c.Affordable ? " " : "X";
+                string cost = c.CostKind == "Free" ? "free" : $"{c.CostKind} {c.CostAmount}";
+                string effect = $"{c.EffectKind} {c.EffectAmount}";
+                string marker = v.Action == "play" && c.Name == v.CardPlayed ? " <──" : "";
+                Console.WriteLine($"    [{afford}] {c.Name,-35} {cost,-14} → {effect}{marker}");
+            }
+
+            // Decision
+            Console.ForegroundColor = v.Action switch
+            {
+                "press" => ConsoleColor.Yellow,
+                "force" => ConsoleColor.Red,
+                "stuck" => ConsoleColor.DarkRed,
+                _ => ConsoleColor.Green,
+            };
+            Console.WriteLine($"  Decision: {v.Action.ToUpper()} — {t.Reasoning}");
+            Console.ResetColor();
+
+            if (v.Action == "play")
+                Console.WriteLine($"  Played:   {v.CardPlayed}");
+
+            // Vibe scores
+            Console.Write("  Vibe:    ");
+            WriteScore("choice", v.Choice);
+            WriteScore("tension", v.Tension);
+            WriteScore("juice", v.Juice);
+            WriteScore("weight", v.Weight, signed: true);
+            if (v.Triumph > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(" TRIUMPH!");
+                Console.ResetColor();
+            }
+            Console.WriteLine();
+
+            if (v.SpiritsLost > 0)
+                Console.WriteLine($"  Cost:     -{v.SpiritsLost} spirits");
+        }
+
+        // Outcome
+        Console.WriteLine();
+        Console.ForegroundColor = trace.Won ? ConsoleColor.Green : ConsoleColor.Red;
+        Console.WriteLine($"  ── Result: {trace.FinishReason} ── ({trace.Turns.Count} turns, {trace.SpiritsSpent} spirits spent)");
+        Console.ResetColor();
+        Console.WriteLine();
+    }
+
+    static void WriteScore(string name, double value, bool signed = false)
+    {
+        var color = value switch
+        {
+            >= 0.7 => ConsoleColor.Green,
+            >= 0.4 => ConsoleColor.Yellow,
+            _ when value < -0.3 => ConsoleColor.Red,
+            _ => ConsoleColor.DarkGray,
+        };
+        Console.ForegroundColor = color;
+        Console.Write(signed ? $" {name}={value:+0.00;-0.00}" : $" {name}={value:F2}");
+        Console.ResetColor();
+    }
 }

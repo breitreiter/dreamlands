@@ -10,15 +10,29 @@ public enum EffectKind { Damage, StopTimer, Momentum }
 
 public enum TimerEffect { Spirits, Resistance, Condition }
 
-public enum ApproachKind { Scout, Direct, Wild }
+public enum ApproachKind { Aggressive, Cautious }
 
 // ── Value types ────────────────────────────────────────────────────
 
-public sealed record TimerDef(string Name, TimerEffect Effect, int Amount, int Countdown, string? CounterName = null, string? ConditionId = null);
+/// <summary>
+/// Timer definition. Sequential — only one active at a time.
+/// Each timer has its own resistance that must be depleted (or cancelled) to advance.
+/// </summary>
+public sealed record TimerDef(
+    string Name,
+    TimerEffect Effect,
+    int Amount,
+    int Countdown,
+    int Resistance,
+    string? CounterName = null,
+    string? ConditionId = null);
 
 public sealed record OpeningDef(string Name, string Archetype, string? Requires = null);
 
-public sealed record ApproachDef(ApproachKind Kind, int Momentum, int TimerCount, int BonusOpenings = 0);
+/// <summary>
+/// Approach definition. Aggressive = +2 momentum/turn, draw 1. Cautious = +1 momentum/turn, draw 2.
+/// </summary>
+public sealed record ApproachDef(ApproachKind Kind);
 
 public sealed record FailureOutcome(string Text, IReadOnlyList<string> Mechanics);
 
@@ -39,9 +53,7 @@ public sealed record TacticalEncounter
     public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = [];
 
-    public int Resistance { get; init; }
-
-    public int TimerDraw { get; init; }
+    /// <summary>Sequential timers — played one at a time in order.</summary>
     public IReadOnlyList<TimerDef> Timers { get; init; } = [];
     public IReadOnlyList<OpeningDef> Openings { get; init; } = [];
     public IReadOnlyList<OpeningDef> Path { get; init; } = [];

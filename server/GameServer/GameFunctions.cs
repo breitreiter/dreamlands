@@ -1816,9 +1816,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Approaches = ca.Approaches.Select(a => new TacticalApproachInfo
                     {
                         Kind = a.Kind.ToString().ToLowerInvariant(),
-                        Momentum = a.Momentum,
-                        TimerCount = a.TimerCount,
-                        BonusOpenings = a.BonusOpenings,
                     }).ToList(),
                 };
                 break;

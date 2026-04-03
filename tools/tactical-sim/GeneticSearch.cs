@@ -7,14 +7,14 @@ namespace TacticalSim;
 // ── Configuration ──────────────────────────────────────────────
 
 record GaConfig(
-    int PopulationSize = 500,
-    int Generations = 200,
+    int PopulationSize = 5000,
+    int Generations = 300,
     int TournamentSize = 5,
     double CrossoverRate = 0.5,
     double MutationRate = 0.10,
     double ElitismPct = 0.05,
     int SimsPerDeck = 30,
-    ApproachKind Approach = ApproachKind.Direct);
+    ApproachKind Approach = ApproachKind.Aggressive);
 
 // ── GA engine ──────────────────────────────────────────────────
 
@@ -23,9 +23,22 @@ static class GeneticSearch
     public static void Run(GaConfig config)
     {
         var balance = BalanceData.Default;
-        var pool = balance.Tactical.Archetypes.Keys.OrderBy(k => k).ToArray();
+        var pool = balance.Tactical.Archetypes.Keys
+            .Where(k => k != "free_cancel")
+            .OrderBy(k => k).ToArray();
         int deckSize = balance.Tactical.DeckSize;
         int eliteCount = Math.Max(1, (int)(config.PopulationSize * config.ElitismPct));
+
+        // Identify cancel card indices for the max-3-cancels constraint
+        var cancelIndices = new HashSet<int>();
+        var nonCancelIndices = new List<int>();
+        for (int i = 0; i < pool.Length; i++)
+        {
+            if (balance.Tactical.Archetypes[pool[i]].EffectKind is "stop_timer")
+                cancelIndices.Add(i);
+            else
+                nonCancelIndices.Add(i);
+        }
 
         Console.WriteLine($"GA search: pop={config.PopulationSize}, gen={config.Generations}, " +
                           $"sims/deck={config.SimsPerDeck}, approach={config.Approach}");
@@ -36,7 +49,10 @@ static class GeneticSearch
         var population = new int[config.PopulationSize][];
         var rng = new Random(42);
         for (int i = 0; i < config.PopulationSize; i++)
+        {
             population[i] = RandomDeck(deckSize, pool.Length, rng);
+            RepairDeck(population[i], cancelIndices, nonCancelIndices, pool.Length, rng);
+        }
 
         // Track best-ever for convergence detection
         double bestEver = double.NegativeInfinity;
@@ -45,9 +61,10 @@ static class GeneticSearch
 
         // Generational loop
         double[] fitness = [];
+        double[] medianTurns = [];
         for (int gen = 0; gen < config.Generations; gen++)
         {
-            fitness = EvaluatePopulation(population, pool, config);
+            (fitness, medianTurns) = EvaluatePopulation(population, pool, config);
 
             // Stats
             int bestIdx = 0;
@@ -78,6 +95,7 @@ static class GeneticSearch
 
             // Log
             Console.WriteLine($"Gen {gen,3}  best={bestFit,7:F3}  avg={avgFit,7:F3}  worst={worstFit,7:F3}  " +
+                              $"turns={medianTurns[bestIdx],2:F0}  " +
                               $"diversity={unique.Count}/{config.PopulationSize}  " +
                               $"deck=[{FormatDeck(population[bestIdx], pool)}]");
 
@@ -101,6 +119,7 @@ static class GeneticSearch
                 var parentB = TournamentSelect(population, fitness, config.TournamentSize, rng);
                 var child = UniformCrossover(parentA, parentB, config.CrossoverRate, rng);
                 Mutate(child, pool.Length, config.MutationRate, rng);
+                RepairDeck(child, cancelIndices, nonCancelIndices, pool.Length, rng);
                 Normalize(child);
                 next[i] = child;
             }
@@ -109,28 +128,26 @@ static class GeneticSearch
         }
 
         // End-of-run report
-        PrintEndOfRun(population, fitness, pool, config, convergenceGen);
+        PrintEndOfRun(population, fitness, medianTurns, pool, config, convergenceGen);
     }
 
     // ── Fitness ─────────────────────────────────────────────────
 
-    static double[] EvaluatePopulation(int[][] population, string[] pool, GaConfig config)
+    static (double[] Fitness, double[] MedianTurns) EvaluatePopulation(int[][] population, string[] pool, GaConfig config)
     {
         var scores = new double[population.Length];
+        var medTurns = new double[population.Length];
 
         Parallel.For(0, population.Length, i =>
         {
             var deckSpec = population[i].Select(id => pool[id]).ToArray();
-            scores[i] = EvaluateDeck(deckSpec, config.Approach, config.SimsPerDeck);
+            var results = SimRunner.Run(deckSpec, config.Approach, config.SimsPerDeck);
+            scores[i] = FitnessFunction(results);
+            var turnCounts = results.Where(r => r.Won).Select(r => r.Turns.Count).OrderBy(x => x).ToList();
+            medTurns[i] = turnCounts.Count > 0 ? turnCounts[turnCounts.Count / 2] : 0;
         });
 
-        return scores;
-    }
-
-    static double EvaluateDeck(string[] deckSpec, ApproachKind approach, int sims)
-    {
-        var results = SimRunner.Run(deckSpec, approach, sims);
-        return FitnessFunction(results);
+        return (scores, medTurns);
     }
 
     /// <summary>
@@ -156,9 +173,43 @@ static class GeneticSearch
         //     .Action           "play", "press", "force"
         //     .SpiritsLost      int, spirits lost this turn
 
-        var allTurns = results.SelectMany(r => r.Turns).ToList();
-        if (allTurns.Count == 0) return 0;
-        return allTurns.Average(t => t.Juice);
+        double totalVibe = 0.0;
+        int goodRuns = 0;
+
+        foreach (var r in results)
+        {
+            // Fail out losses, pyrrhic victories, or degenerate lengths
+            if (!r.Won || r.SpiritsSpent > 4 || r.Turns.Count > 12 || r.Turns.Count < 5)
+                continue;
+
+            double runVibe = 0.0;
+            string? lastCard = null;
+            int repeatStreak = 0;
+            foreach (var t in r.Turns)
+            {
+                double turnScore = t.Choice + t.Tension + t.Juice + t.Weight;
+
+                // Penalize seeing the same card repeatedly — "not this again"
+                if (t.CardPlayed == lastCard)
+                {
+                    repeatStreak++;
+                    turnScore -= 0.8 * repeatStreak; // escalating penalty
+                }
+                else
+                {
+                    repeatStreak = 0;
+                }
+                lastCard = t.CardPlayed;
+
+                runVibe += turnScore;
+            }
+
+            totalVibe += runVibe / r.Turns.Count;
+            goodRuns++;
+        }
+
+        if (goodRuns == 0) return 0.0;
+        return totalVibe / goodRuns;
     }
 
     // ── Selection ───────────────────────────────────────────────
@@ -206,6 +257,43 @@ static class GeneticSearch
     /// <summary>Sort card IDs so permutation-equivalent decks have identical representation.</summary>
     static void Normalize(int[] deck) => Array.Sort(deck);
 
+    const int MaxCancels = 2;
+
+    const int MaxCopies = 3;
+
+    /// <summary>Enforce cancel cap and per-card copy cap.</summary>
+    static void RepairDeck(int[] deck, HashSet<int> cancelIds, List<int> nonCancelIds, int poolSize, Random rng)
+    {
+        // Cap cancels
+        int cancelCount = 0;
+        for (int i = 0; i < deck.Length; i++)
+        {
+            if (!cancelIds.Contains(deck[i])) continue;
+            cancelCount++;
+            if (cancelCount > MaxCancels)
+                deck[i] = nonCancelIds[rng.Next(nonCancelIds.Count)];
+        }
+
+        // Cap copies of any single card — loop until clean
+        bool dirty = true;
+        int safety = 50;
+        while (dirty && safety-- > 0)
+        {
+            dirty = false;
+            var counts = new Dictionary<int, int>();
+            for (int i = 0; i < deck.Length; i++)
+            {
+                counts.TryGetValue(deck[i], out int c);
+                counts[deck[i]] = c + 1;
+                if (c + 1 > MaxCopies)
+                {
+                    deck[i] = rng.Next(poolSize);
+                    dirty = true;
+                }
+            }
+        }
+    }
+
     static string FormatDeck(int[] deck, string[] pool)
     {
         return string.Join(", ", deck
@@ -217,7 +305,7 @@ static class GeneticSearch
 
     // ── End-of-run report ───────────────────────────────────────
 
-    static void PrintEndOfRun(int[][] population, double[] fitness, string[] pool,
+    static void PrintEndOfRun(int[][] population, double[] fitness, double[] medianTurns, string[] pool,
         GaConfig config, int convergenceGen)
     {
         Console.WriteLine();
@@ -231,12 +319,12 @@ static class GeneticSearch
             .ToArray();
 
         var seen = new HashSet<string>();
-        var topDecks = new List<(int[] Deck, double Fitness)>();
+        var topDecks = new List<(int[] Deck, double Fitness, double MedianTurns)>();
         foreach (var i in ranked)
         {
             var key = string.Join(",", population[i]);
             if (seen.Add(key))
-                topDecks.Add((population[i], fitness[i]));
+                topDecks.Add((population[i], fitness[i], medianTurns[i]));
             if (topDecks.Count >= 20) break;
         }
 
@@ -244,8 +332,8 @@ static class GeneticSearch
         Console.WriteLine("  Top 20 decks (deduplicated):");
         for (int i = 0; i < topDecks.Count; i++)
         {
-            var (deck, fit) = topDecks[i];
-            Console.WriteLine($"    {i + 1,2}. {fit,7:F3}  [{FormatDeck(deck, pool)}]");
+            var (deck, fit, mt) = topDecks[i];
+            Console.WriteLine($"    {i + 1,2}. {fit,7:F3}  turns={mt,2:F0}  [{FormatDeck(deck, pool)}]");
         }
 
         // Card frequency in top 10%

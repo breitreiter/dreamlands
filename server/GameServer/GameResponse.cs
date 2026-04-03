@@ -355,9 +355,6 @@ public record TacticalInfo
 public class TacticalApproachInfo
 {
     public string Kind { get; init; } = "";
-    public int Momentum { get; init; }
-    public int TimerCount { get; init; }
-    public int BonusOpenings { get; init; }
 }
 
 public class TacticalTurnInfo

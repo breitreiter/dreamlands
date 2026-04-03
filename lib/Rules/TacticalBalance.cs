@@ -17,8 +17,6 @@ public sealed class TacticalBalance
     public int DeckSize { get; init; } = 15;
     public int PressAdvantageCost { get; init; } = 2;
     public int ForceOpeningCost { get; init; } = 2;
-    public int BonusOpeningCount { get; init; } = 3;
-    public int MomentumPerTurn { get; init; } = 1;
 
     /// <summary>Archetype definitions: template ID → cost/effect.</summary>
     public IReadOnlyDictionary<string, TacticalArchetype> Archetypes { get; init; } = BuildArchetypes();
@@ -31,22 +29,22 @@ public sealed class TacticalBalance
         // Progress cards
         ["free_progress_small"] = new("free_progress_small", "free", 0, "damage", 1),
         ["momentum_to_progress"] = new("momentum_to_progress", "momentum", 1, "damage", 2),
-        ["momentum_to_progress_large"] = new("momentum_to_progress_large", "momentum", 2, "damage", 3),
-        ["momentum_to_progress_huge"] = new("momentum_to_progress_huge", "momentum", 3, "damage", 5),
+        ["momentum_to_progress_large"] = new("momentum_to_progress_large", "momentum", 2, "damage", 4),
+        ["momentum_to_progress_huge"] = new("momentum_to_progress_huge", "momentum", 3, "damage", 6),
         ["spirits_to_progress"] = new("spirits_to_progress", "spirits", 1, "damage", 3),
-        ["spirits_to_progress_large"] = new("spirits_to_progress_large", "spirits", 2, "damage", 5),
-        ["threat_to_progress"] = new("threat_to_progress", "tick", 0, "damage", 2),
-        ["threat_to_progress_large"] = new("threat_to_progress_large", "tick", 0, "damage", 3),
+        ["spirits_to_progress_large"] = new("spirits_to_progress_large", "spirits", 3, "damage", 6),
+        ["threat_to_progress"] = new("threat_to_progress", "tick", 1, "damage", 2),
+        ["threat_to_progress_large"] = new("threat_to_progress_large", "tick", 2, "damage", 4),
 
         // Momentum cards
         ["free_momentum_small"] = new("free_momentum_small", "free", 0, "momentum", 1),
         ["free_momentum"] = new("free_momentum", "free", 0, "momentum", 2),
-        ["threat_to_momentum"] = new("threat_to_momentum", "tick", 0, "momentum", 2),
+        ["threat_to_momentum"] = new("threat_to_momentum", "tick", 1, "momentum", 3),
         ["spirits_to_momentum"] = new("spirits_to_momentum", "spirits", 1, "momentum", 3),
 
         // Stop-threat cards
-        ["momentum_to_cancel"] = new("momentum_to_cancel", "momentum", 2, "stop_timer", 0),
-        ["spirits_to_cancel"] = new("spirits_to_cancel", "spirits", 1, "stop_timer", 0),
+        ["momentum_to_cancel"] = new("momentum_to_cancel", "momentum", 3, "stop_timer", 0),
+        ["spirits_to_cancel"] = new("spirits_to_cancel", "spirits", 4, "stop_timer", 0),
         ["free_cancel"] = new("free_cancel", "free", 0, "stop_timer", 0),
     };
 

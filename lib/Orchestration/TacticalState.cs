@@ -9,15 +9,22 @@ namespace Dreamlands.Orchestration;
 public class TacticalState
 {
     public string EncounterId { get; set; } = "";
-    public int Resistance { get; set; }
     public int Momentum { get; set; }
     public int Turn { get; set; }
-    public bool BonusNextTurn { get; set; }
 
-    /// <summary>Active timers drawn from the pool, with current countdown values.</summary>
+    /// <summary>The chosen approach for this encounter.</summary>
+    public ApproachKind? Approach { get; set; }
+
+    /// <summary>Index of the current active timer. Timers are sequential.</summary>
+    public int CurrentTimerIndex { get; set; }
+
+    /// <summary>Whether press or force has been used this turn.</summary>
+    public bool DigUsedThisTurn { get; set; }
+
+    /// <summary>Active timers in sequence order. Only CurrentTimerIndex is active.</summary>
     public List<ActiveTimer> Timers { get; set; } = [];
 
-    /// <summary>The opening(s) presented this turn. Normally 1; 3 after press/force.</summary>
+    /// <summary>The opening(s) presented this turn.</summary>
     public List<OpeningSnapshot> Openings { get; set; } = [];
 
     /// <summary>Traverse only: the visible queue of upcoming path entries.</summary>
@@ -47,6 +54,7 @@ public class ActiveTimer
     public int Amount { get; set; }
     public int Countdown { get; set; }
     public int Current { get; set; }
+    public int Resistance { get; set; }
     public bool Stopped { get; set; }
     public string? ConditionId { get; set; }
 }

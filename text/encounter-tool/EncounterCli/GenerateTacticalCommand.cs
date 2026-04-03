@@ -30,54 +30,42 @@ static class GenerateTacticalCommand
     record TierData(
         (int Lo, int Hi) Resistance,
         (int Lo, int Hi) TimerCount,
-        (int Lo, int Hi) TimerDraw,
         (int Lo, int Hi) TimerCountdown,
         (int Lo, int Hi) TimerDamage,
+        (int Lo, int Hi) TimerResistance,
         (int Lo, int Hi) OpeningsTraverse,
         (int Lo, int Hi) OpeningsCombat,
-        (int Lo, int Hi) PathCards,
-        int ApproachDirectMomentum,
-        int ApproachWildMomentum,
-        int ApproachBaseTimers);
+        (int Lo, int Hi) PathCards);
 
     static readonly Dictionary<int, TierData> Tiers = new()
     {
         [1] = new(
             Resistance: (6, 8),
             TimerCount: (2, 3),
-            TimerDraw: (1, 2),
             TimerCountdown: (3, 5),
             TimerDamage: (1, 1),
+            TimerResistance: (4, 6),
             OpeningsTraverse: (9, 12),
             OpeningsCombat: (10, 14),
-            PathCards: (4, 6),
-            ApproachDirectMomentum: 2,
-            ApproachWildMomentum: 4,
-            ApproachBaseTimers: 1),
+            PathCards: (4, 6)),
         [2] = new(
             Resistance: (8, 12),
             TimerCount: (3, 4),
-            TimerDraw: (2, 3),
             TimerCountdown: (3, 4),
             TimerDamage: (1, 2),
+            TimerResistance: (5, 8),
             OpeningsTraverse: (11, 14),
             OpeningsCombat: (12, 16),
-            PathCards: (5, 8),
-            ApproachDirectMomentum: 3,
-            ApproachWildMomentum: 5,
-            ApproachBaseTimers: 2),
+            PathCards: (5, 8)),
         [3] = new(
             Resistance: (12, 16),
             TimerCount: (4, 6),
-            TimerDraw: (2, 3),
             TimerCountdown: (2, 4),
             TimerDamage: (1, 2),
+            TimerResistance: (6, 10),
             OpeningsTraverse: (13, 16),
             OpeningsCombat: (14, 18),
-            PathCards: (6, 10),
-            ApproachDirectMomentum: 4,
-            ApproachWildMomentum: 6,
-            ApproachBaseTimers: 2),
+            PathCards: (6, 10)),
     };
 
     public static int Run(string[] args)
@@ -144,7 +132,7 @@ static class GenerateTacticalCommand
         var rng = seed.HasValue ? new Random(seed.Value) : new Random();
         var td = Tiers[tier];
 
-        var (draw, timers, resTimerCount) = GenerateTimers(rng, td);
+        var (timers, resTimerCount) = GenerateTimers(rng, td);
         var resistance = RandRange(rng, td.Resistance);
 
         var lines = new List<string>();
@@ -158,16 +146,10 @@ static class GenerateTacticalCommand
         lines.Add("FIXME: body text");
         lines.Add("");
 
-        // Stats
-        lines.Add("stats:");
-        lines.Add($"  resistance {resistance}");
-        lines.Add("");
-
         // Timers
         lines.Add("timers:");
-        lines.Add($"  draw {draw}");
-        foreach (var (effect, damage, countdown) in timers)
-            lines.Add($"  * FIXME [counter FIXME]: {effect} {damage} every {countdown}");
+        foreach (var (effect, damage, countdown, timerResist) in timers)
+            lines.Add($"  * FIXME [counter FIXME]: {effect} {damage} every {countdown} resist {timerResist}");
         lines.Add("");
 
         // Openings
@@ -209,12 +191,10 @@ static class GenerateTacticalCommand
         // Approaches (combat only)
         if (variant == "combat")
         {
-            var baseT = td.ApproachBaseTimers;
             lines.Add("");
             lines.Add("approaches:");
-            lines.Add($"  * scout: momentum 0, timers {baseT}, openings 3");
-            lines.Add($"  * direct: momentum {td.ApproachDirectMomentum}, timers {baseT}");
-            lines.Add($"  * wild: momentum {td.ApproachWildMomentum}, timers {baseT + 1}");
+            lines.Add("  * aggressive");
+            lines.Add("  * cautious");
         }
 
         // Success (combat only)
@@ -237,13 +217,12 @@ static class GenerateTacticalCommand
 
     // --- Timers ---
 
-    static (int Draw, List<(string Effect, int Damage, int Countdown)> Timers, int ResTimerCount) GenerateTimers(
+    static (List<(string Effect, int Damage, int Countdown, int Resistance)> Timers, int ResTimerCount) GenerateTimers(
         Random rng, TierData td)
     {
         var count = RandRange(rng, td.TimerCount);
-        var draw = Math.Min(RandRange(rng, td.TimerDraw), count);
 
-        var timers = new List<(string, int, int)>();
+        var timers = new List<(string, int, int, int)>();
         var resTimerCount = 0;
 
         for (int i = 0; i < count; i++)
@@ -254,10 +233,11 @@ static class GenerateTacticalCommand
                 resTimerCount++;
             var damage = RandRange(rng, td.TimerDamage);
             var countdown = RandRange(rng, td.TimerCountdown);
-            timers.Add((effect, damage, countdown));
+            var timerResist = RandRange(rng, td.TimerResistance);
+            timers.Add((effect, damage, countdown, timerResist));
         }
 
-        return (draw, timers, resTimerCount);
+        return (timers, resTimerCount);
     }
 
     // --- Traverse openings (momentum only) ---
@@ -435,11 +415,11 @@ static class GenerateTacticalCommand
 
     // --- Balance helpers ---
 
-    static int EstimateResistanceTimerPressure(List<(string Effect, int Damage, int Countdown)> timers, int resistance)
+    static int EstimateResistanceTimerPressure(List<(string Effect, int Damage, int Countdown, int Resistance)> timers, int resistance)
     {
         var turns = resistance / 2 + 1;
         var extra = 0;
-        foreach (var (effect, damage, countdown) in timers)
+        foreach (var (effect, damage, countdown, _) in timers)
         {
             if (effect == "resistance")
             {

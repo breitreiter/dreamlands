@@ -22,6 +22,26 @@ record TurnVibe(
 
 record RunVibes(List<TurnVibe> Turns, bool Won, int SpiritsSpent);
 
+// ── Richer snapshot for trace mode ──────────────────────────────
+
+record TurnTrace(
+    TurnVibe Vibe,
+    // State at start of turn
+    int Momentum,
+    int Spirits,
+    int Resistance,
+    int ResistanceMax,
+    // Timer state
+    List<(string Name, int Countdown, bool Stopped)> Timers,
+    // What fired this turn
+    List<string> TimersFired,
+    // Hand shown to player
+    List<(string Name, string Archetype, string CostKind, int CostAmount, string EffectKind, int EffectAmount, bool Affordable)> Hand,
+    // What the bot considered
+    string Reasoning);
+
+record TraceResult(List<TurnTrace> Turns, bool Won, int SpiritsSpent, string FinishReason);
+
 // ── Juice ratings ───────────────────────────────────────────────
 
 static class JuiceRatings
@@ -68,6 +88,120 @@ static class SimRunner
         });
 
         return [.. bag];
+    }
+
+    public static TraceResult RunOneTrace(string[] deckSpec, ApproachKind approach, int seed = 42)
+    {
+        var balance = BalanceData.Default;
+        var scenario = Scenarios.Platonic;
+        var session = Scenarios.BuildSession(seed, balance);
+        var encounter = Scenarios.BuildEncounter(scenario);
+        var state = new TacticalState();
+        var tb = balance.Tactical;
+
+        int spiritsStart = session.Player.Spirits;
+        var step = TacticalRunner.Begin(session, encounter, state);
+
+        bool deckInjected = false;
+        var traces = new List<TurnTrace>();
+        int badStreak = 0;
+        int turn = 0;
+        int prevActiveTimers = -1;
+
+        while (true)
+        {
+            if (!deckInjected && step is not TacticalStep.ChooseApproach)
+            {
+                var deckRng = new Random(seed + 99);
+                state.Deck = Scenarios.BuildDeck(deckSpec, balance, deckRng);
+                state.DrawIndex = 0;
+                deckInjected = true;
+            }
+
+            switch (step)
+            {
+                case TacticalStep.ChooseApproach:
+                    step = TacticalRunner.ApplyApproach(session, encounter, state, approach);
+                    break;
+
+                case TacticalStep.ShowTurn show:
+                    if (++turn > MaxTurns)
+                        return new TraceResult(traces, false, spiritsStart - session.Player.Spirits, "timeout");
+
+                    var td = show.Data;
+                    int preSpirits = session.Player.Spirits;
+                    int activeTimers = td.Timers.Count(t => !t.Stopped);
+
+                    // Snapshot state
+                    var timerStates = td.Timers.Select(t => (t.Name, t.Countdown, t.Stopped)).ToList();
+                    var firedNames = td.TimersFired.Select(f => $"{f.Name} ({f.Effect} {f.Amount})").ToList();
+
+                    // Snapshot hand with affordability
+                    var hand = td.Openings.Select(o => (
+                        o.Name,
+                        Archetype: o.Name, // Name is archetype for custom decks
+                        CostKind: o.CostKind.ToString(),
+                        CostAmount: o.CostAmount,
+                        EffectKind: o.EffectKind.ToString(),
+                        EffectAmount: o.EffectAmount,
+                        Affordable: CanAfford(o, td)
+                    )).ToList();
+
+                    // Choose action with reasoning
+                    var (action, idx, label, reasoning) = ChooseActionWithReasoning(td, approach, tb);
+
+                    // Measure vibe
+                    double choice = MeasureChoice(td);
+                    double tension = MeasureTension(td);
+
+                    // Act
+                    try
+                    {
+                        step = TacticalRunner.Act(session, encounter, state, action, idx);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        var failVibe = new TurnVibe(turn, choice, tension, 0, 0, 0, "none", "fail", false, 0, false);
+                        traces.Add(new TurnTrace(failVibe, td.Momentum, preSpirits, td.Resistance, td.ResistanceMax,
+                            timerStates, firedNames, hand, "spirits depleted"));
+                        return new TraceResult(traces, false, spiritsStart - session.Player.Spirits, "spirits_loss");
+                    }
+
+                    // Measure results
+                    int spiritsLost = preSpirits - session.Player.Spirits;
+                    var played = idx >= 0 && idx < td.Openings.Count ? td.Openings[idx] : null;
+                    double juice = played != null ? JuiceRatings.Of(played) : 0.1;
+
+                    double triumph = 0.0;
+                    if (step is TacticalStep.Finished) triumph = 1.0;
+                    else if (step is TacticalStep.ShowTurn next)
+                    {
+                        int newActive = next.Data.Timers.Count(t => !t.Stopped);
+                        if (prevActiveTimers >= 0 && newActive < activeTimers) triumph = 1.0;
+                    }
+                    prevActiveTimers = activeTimers;
+
+                    bool isBad = juice < 0.25 || label is "force" or "stuck";
+                    badStreak = isBad ? badStreak + 1 : 0;
+                    double weight = badStreak == 0 ? 0.0
+                        : -0.2 * badStreak - 0.1 * Math.Max(0, badStreak - 1);
+
+                    var vibe = new TurnVibe(turn, choice, tension, juice, weight, triumph,
+                        played?.Name ?? "none", label, td.TimersFired.Count > 0, spiritsLost,
+                        td.PendingConditions.Count > 0);
+
+                    traces.Add(new TurnTrace(vibe, td.Momentum, preSpirits, td.Resistance, td.ResistanceMax,
+                        timerStates, firedNames, hand, reasoning));
+                    break;
+
+                case TacticalStep.Finished fin:
+                    return new TraceResult(traces, fin.Reason != TacticalFinishReason.SpiritsLoss,
+                        spiritsStart - session.Player.Spirits, fin.Reason.ToString());
+
+                default:
+                    throw new InvalidOperationException($"Unexpected step: {step.GetType().Name}");
+            }
+        }
     }
 
     static RunVibes RunOne(string[] deckSpec, EncounterScenario scenario, ApproachKind approach,
@@ -177,9 +311,82 @@ static class SimRunner
     static (TacticalAction Action, int Idx, string Label) ChooseAction(
         TacticalTurnData turn, ApproachKind approach, TacticalBalance tb)
     {
-        if (approach == ApproachKind.Scout)
+        if (approach == ApproachKind.Cautious)
             return CancelBot(turn, tb);
         return AggroBot(turn, tb);
+    }
+
+    static (TacticalAction Action, int Idx, string Label, string Reasoning) ChooseActionWithReasoning(
+        TacticalTurnData turn, ApproachKind approach, TacticalBalance tb)
+    {
+        if (approach == ApproachKind.Cautious)
+        {
+            var cancel = FindCancel(turn);
+            if (cancel >= 0) return (TacticalAction.TakeOpening, cancel, "play", "found cancel card — taking it");
+
+            if (!turn.DigUsed && turn.Momentum >= tb.PressAdvantageCost)
+                return (TacticalAction.PressAdvantage, 0, "press", "no cancel visible, pressing to dig for one");
+
+            var best = BestAffordable(turn);
+            if (best >= 0)
+            {
+                var o = turn.Openings[best];
+                return (TacticalAction.TakeOpening, best, "play",
+                    $"no cancel, can't press (M={turn.Momentum}), taking best: {o.EffectKind} {o.EffectAmount}");
+            }
+
+            if (!turn.DigUsed && turn.PlayerSpirits > tb.ForceOpeningCost)
+                return (TacticalAction.ForceOpening, 0, "force", "nothing playable or pressable, forcing");
+
+            return (TacticalAction.TakeOpening, 0, "stuck", "no affordable options, stuck");
+        }
+        else
+        {
+            var finisher = FindFinisher(turn);
+            if (finisher >= 0) return (TacticalAction.TakeOpening, finisher, "play",
+                $"finisher available! {turn.Openings[finisher].EffectAmount} dmg vs {turn.Resistance} resist");
+
+            var damage = BestDamage(turn);
+
+            // Press if best option is weak and we'd keep M>=1 after pressing
+            int mAfterPress = turn.Momentum - tb.PressAdvantageCost;
+            bool canPressUsefully = !turn.DigUsed && mAfterPress >= 1;
+
+            if (canPressUsefully)
+            {
+                bool bestIsWeak = damage < 0
+                    || turn.Openings[damage].EffectAmount <= 1
+                    || (turn.Openings[damage].CostKind == CostKind.Free && turn.Openings[damage].EffectAmount <= 2);
+                if (bestIsWeak)
+                    return (TacticalAction.PressAdvantage, 0, "press",
+                        $"best card is weak, pressing for better (M={turn.Momentum}, M after={mAfterPress})");
+            }
+
+            if (damage >= 0)
+            {
+                var o = turn.Openings[damage];
+                return (TacticalAction.TakeOpening, damage, "play",
+                    $"best damage: {o.EffectAmount} for {o.CostKind} {o.CostAmount}");
+            }
+
+            var best = BestAffordable(turn);
+            if (best >= 0)
+            {
+                var o = turn.Openings[best];
+                return (TacticalAction.TakeOpening, best, "play",
+                    $"no damage affordable, taking: {o.EffectKind} {o.EffectAmount}");
+            }
+
+            // Desperation press
+            if (!turn.DigUsed && turn.Momentum >= tb.PressAdvantageCost)
+                return (TacticalAction.PressAdvantage, 0, "press",
+                    $"nothing playable, desperation press (M={turn.Momentum})");
+
+            if (!turn.DigUsed && turn.PlayerSpirits > tb.ForceOpeningCost)
+                return (TacticalAction.ForceOpening, 0, "force", "nothing playable, forcing");
+
+            return (TacticalAction.TakeOpening, 0, "stuck", "no affordable options, stuck");
+        }
     }
 
     static (TacticalAction, int, string) CancelBot(TacticalTurnData turn, TacticalBalance tb)
@@ -187,13 +394,13 @@ static class SimRunner
         var cancel = FindCancel(turn);
         if (cancel >= 0) return (TacticalAction.TakeOpening, cancel, "play");
 
-        if (turn.Momentum >= tb.PressAdvantageCost)
+        if (!turn.DigUsed && turn.Momentum >= tb.PressAdvantageCost)
             return (TacticalAction.PressAdvantage, 0, "press");
 
         var best = BestAffordable(turn);
         if (best >= 0) return (TacticalAction.TakeOpening, best, "play");
 
-        if (turn.PlayerSpirits > tb.ForceOpeningCost)
+        if (!turn.DigUsed && turn.PlayerSpirits > tb.ForceOpeningCost)
             return (TacticalAction.ForceOpening, 0, "force");
 
         return (TacticalAction.TakeOpening, 0, "stuck");
@@ -205,15 +412,32 @@ static class SimRunner
         if (finisher >= 0) return (TacticalAction.TakeOpening, finisher, "play");
 
         var damage = BestDamage(turn);
+
+        // Press if best option is weak and we have momentum to spare.
+        // Aggro needs momentum AFTER pressing to play what we dig into,
+        // so only press if we'd keep at least 1M after paying the cost.
+        int momentumAfterPress = turn.Momentum - tb.PressAdvantageCost;
+        bool canPressUsefully = !turn.DigUsed && momentumAfterPress >= 1;
+
+        if (canPressUsefully)
+        {
+            bool bestIsWeak = damage < 0
+                || turn.Openings[damage].EffectAmount <= 1
+                || (turn.Openings[damage].CostKind == CostKind.Free && turn.Openings[damage].EffectAmount <= 2);
+            if (bestIsWeak)
+                return (TacticalAction.PressAdvantage, 0, "press");
+        }
+
         if (damage >= 0) return (TacticalAction.TakeOpening, damage, "play");
 
         var best = BestAffordable(turn);
         if (best >= 0) return (TacticalAction.TakeOpening, best, "play");
 
-        if (turn.Momentum >= tb.PressAdvantageCost)
+        // Desperation press — nothing playable, press even if we'll be broke
+        if (!turn.DigUsed && turn.Momentum >= tb.PressAdvantageCost)
             return (TacticalAction.PressAdvantage, 0, "press");
 
-        if (turn.PlayerSpirits > tb.ForceOpeningCost)
+        if (!turn.DigUsed && turn.PlayerSpirits > tb.ForceOpeningCost)
             return (TacticalAction.ForceOpening, 0, "force");
 
         return (TacticalAction.TakeOpening, 0, "stuck");

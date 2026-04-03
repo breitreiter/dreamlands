@@ -120,8 +120,6 @@ static class TacticalBundleCommand
         stat = enc.Stat,
         tier = enc.Tier,
         requires = enc.Requires,
-        resistance = enc.Resistance,
-        timerDraw = enc.TimerDraw,
         timers = enc.Timers.Select(t => new
         {
             name = t.Name,
@@ -129,6 +127,7 @@ static class TacticalBundleCommand
             effect = t.Effect.ToString().ToLowerInvariant(),
             amount = t.Amount,
             countdown = t.Countdown,
+            resistance = t.Resistance,
             conditionId = t.ConditionId
         }),
         openings = enc.Openings.Select(o => new
@@ -145,10 +144,7 @@ static class TacticalBundleCommand
         }),
         approaches = enc.Approaches.Select(a => new
         {
-            kind = a.Kind.ToString().ToLowerInvariant(),
-            momentum = a.Momentum,
-            timerCount = a.TimerCount,
-            bonusOpenings = a.BonusOpenings
+            kind = a.Kind.ToString().ToLowerInvariant()
         }),
         failure = enc.Failure is { } f ? new
         {

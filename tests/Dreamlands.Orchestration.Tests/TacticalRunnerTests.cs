@@ -11,7 +11,7 @@ public class TacticalRunnerTests
     static readonly BalanceData Balance = BalanceData.Default;
 
     static TacticalEncounter MakeCombat(
-        int resistance = 8, int timerDraw = 1,
+        int resistance = 8,
         List<TimerDef>? timers = null, List<OpeningDef>? openings = null,
         List<ApproachDef>? approaches = null, FailureOutcome? failure = null)
     {
@@ -23,9 +23,7 @@ public class TacticalRunnerTests
             Body = "Test.",
             Variant = Variant.Combat,
             Stat = "combat",
-            Resistance = resistance,
-            TimerDraw = timerDraw,
-            Timers = timers ?? [new TimerDef("Threat", TimerEffect.Spirits, 1, 4, "Stop Threat")],
+            Timers = timers ?? [new TimerDef("Threat", TimerEffect.Spirits, 1, 4, resistance, "Stop Threat")],
             Openings = openings ?? [
                 new OpeningDef("Strike", "momentum_to_progress_large"),
                 new OpeningDef("Guard", "free_momentum"),
@@ -42,16 +40,15 @@ public class TacticalRunnerTests
                 new OpeningDef("Grapple", "momentum_to_progress"),
             ],
             Approaches = approaches ?? [
-                new ApproachDef(ApproachKind.Scout, 0, 1, 3),
-                new ApproachDef(ApproachKind.Direct, 3, 1),
-                new ApproachDef(ApproachKind.Wild, 6, 1),
+                new ApproachDef(ApproachKind.Aggressive),
+                new ApproachDef(ApproachKind.Cautious),
             ],
             Failure = failure ?? new FailureOutcome("You lose.", ["damage_spirits 2"]),
         };
     }
 
     static TacticalEncounter MakeTraverse(
-        int resistance = 6, int timerDraw = 1)
+        int resistance = 6)
     {
         return new TacticalEncounter
         {
@@ -61,9 +58,7 @@ public class TacticalRunnerTests
             Body = "Test.",
             Variant = Variant.Traverse,
             Stat = "bushcraft",
-            Resistance = resistance,
-            TimerDraw = timerDraw,
-            Timers = [new TimerDef("Hazard", TimerEffect.Spirits, 1, 3, "Avoid Hazard")],
+            Timers = [new TimerDef("Hazard", TimerEffect.Spirits, 1, 3, resistance, "Avoid Hazard")],
             Openings = [
                 new OpeningDef("Step", "free_progress_small"),
                 new OpeningDef("Push", "momentum_to_progress"),
@@ -100,7 +95,7 @@ public class TacticalRunnerTests
 
         Assert.IsType<TacticalStep.ChooseApproach>(step);
         var ca = (TacticalStep.ChooseApproach)step;
-        Assert.Equal(3, ca.Approaches.Count);
+        Assert.Equal(2, ca.Approaches.Count);
     }
 
     [Fact]
@@ -112,7 +107,7 @@ public class TacticalRunnerTests
 
         Assert.IsType<TacticalStep.ShowTurn>(step);
         var st = (TacticalStep.ShowTurn)step;
-        Assert.Equal(6, st.Data.Resistance);
+        Assert.Equal(6, st.Data.ResistanceMax);
         Assert.Equal(0, st.Data.Momentum);
         Assert.NotNull(st.Data.Queue);
     }
@@ -138,27 +133,27 @@ public class TacticalRunnerTests
         var enc = MakeCombat();
         TacticalRunner.Begin(session, enc, state);
 
-        var step = TacticalRunner.ApplyApproach(session, enc, state, ApproachKind.Direct);
+        var step = TacticalRunner.ApplyApproach(session, enc, state, ApproachKind.Aggressive);
 
         Assert.IsType<TacticalStep.ShowTurn>(step);
         var st = (TacticalStep.ShowTurn)step;
-        Assert.Equal(3, st.Data.Momentum);
+        Assert.Equal(0, st.Data.Momentum);
         Assert.Single(st.Data.Openings);
     }
 
     [Fact]
-    public void ScoutApproachGivesBonusOpenings()
+    public void CautiousApproachDrawsTwoCards()
     {
         var (session, state) = MakeContext();
         var enc = MakeCombat();
         TacticalRunner.Begin(session, enc, state);
 
-        var step = TacticalRunner.ApplyApproach(session, enc, state, ApproachKind.Scout);
+        var step = TacticalRunner.ApplyApproach(session, enc, state, ApproachKind.Cautious);
 
         Assert.IsType<TacticalStep.ShowTurn>(step);
         var st = (TacticalStep.ShowTurn)step;
         Assert.Equal(0, st.Data.Momentum);
-        Assert.Equal(3, st.Data.Openings.Count);
+        Assert.Equal(2, st.Data.Openings.Count);
     }
 
     // ── Deck ───────────────────────────────────────────────────────
@@ -231,7 +226,7 @@ public class TacticalRunnerTests
         };
 
         TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
-        Assert.True(state.Resistance < 10);
+        Assert.True(state.Timers[0].Resistance < 10);
     }
 
     [Fact]
@@ -258,7 +253,7 @@ public class TacticalRunnerTests
     public void AllTimersStoppedEndsWithControlKill()
     {
         var (session, state) = MakeContext();
-        var enc = MakeCombat(resistance: 100, timerDraw: 1, approaches: []);
+        var enc = MakeCombat(resistance: 100, approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
         state.Openings[0] = new OpeningSnapshot
@@ -324,8 +319,7 @@ public class TacticalRunnerTests
         var (session, state) = MakeContext();
         session.Player.Spirits = 1;
         var enc = MakeCombat(
-            timerDraw: 1,
-            timers: [new TimerDef("Lethal", TimerEffect.Spirits, 5, 1, "Stop Lethal")],
+            timers: [new TimerDef("Lethal", TimerEffect.Spirits, 5, 1, 100, "Stop Lethal")],
             approaches: [],
             failure: new FailureOutcome("Dead.", ["damage_spirits 1"]));
         TacticalRunner.Begin(session, enc, state);
@@ -354,8 +348,7 @@ public class TacticalRunnerTests
         session.Player.Spirits = 20;
         var enc = MakeCombat(
             resistance: 100,
-            timerDraw: 1,
-            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, 100, ConditionId: "injured")],
             approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
@@ -380,8 +373,7 @@ public class TacticalRunnerTests
         session.Player.Spirits = 20;
         var enc = MakeCombat(
             resistance: 100,
-            timerDraw: 1,
-            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, 100, ConditionId: "injured")],
             approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
@@ -409,7 +401,7 @@ public class TacticalRunnerTests
     {
         // Seed 42 + default player: RollResist for "injured" should fail with enough stacks
         var (session, state) = MakeContext();
-        var enc = MakeCombat(resistance: 1, timerDraw: 0, timers: [], approaches: []);
+        var enc = MakeCombat(resistance: 1, timers: [], approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
         // Manually add pending conditions to simulate timer firings
@@ -434,8 +426,8 @@ public class TacticalRunnerTests
     public void PendingConditionsResolvedOnControlKill()
     {
         var (session, state) = MakeContext();
-        var enc = MakeCombat(resistance: 100, timerDraw: 1,
-            timers: [new TimerDef("Threat", TimerEffect.Spirits, 1, 99, "Stop")],
+        var enc = MakeCombat(resistance: 100,
+            timers: [new TimerDef("Threat", TimerEffect.Spirits, 1, 99, 100, "Stop")],
             approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
@@ -462,8 +454,7 @@ public class TacticalRunnerTests
         var (session, state) = MakeContext();
         session.Player.Spirits = 1;
         var enc = MakeCombat(
-            timerDraw: 1,
-            timers: [new TimerDef("Lethal", TimerEffect.Spirits, 5, 1, "Stop")],
+            timers: [new TimerDef("Lethal", TimerEffect.Spirits, 5, 1, 100, "Stop")],
             approaches: [],
             failure: new FailureOutcome("Dead.", ["damage_spirits 1"]));
         TacticalRunner.Begin(session, enc, state);
@@ -489,7 +480,7 @@ public class TacticalRunnerTests
     public void NoPendingConditionsReturnsEmptyList()
     {
         var (session, state) = MakeContext();
-        var enc = MakeCombat(resistance: 1, timerDraw: 0, timers: [], approaches: []);
+        var enc = MakeCombat(resistance: 1, timers: [], approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
         state.Openings[0] = new OpeningSnapshot
@@ -513,8 +504,7 @@ public class TacticalRunnerTests
         session.Player.Spirits = 20;
         var enc = MakeCombat(
             resistance: 100,
-            timerDraw: 1,
-            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, 100, ConditionId: "injured")],
             approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
@@ -541,8 +531,7 @@ public class TacticalRunnerTests
         session.Player.Spirits = 20;
         var enc = MakeCombat(
             resistance: 100,
-            timerDraw: 1,
-            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, ConditionId: "injured")],
+            timers: [new TimerDef("Rocks", TimerEffect.Condition, 0, 1, 100, ConditionId: "injured")],
             approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
@@ -565,7 +554,7 @@ public class TacticalRunnerTests
     {
         var (session, state) = MakeContext();
         session.Player.ActiveConditions["injured"] = 3;
-        var enc = MakeCombat(resistance: 1, timerDraw: 0, timers: [], approaches: []);
+        var enc = MakeCombat(resistance: 1, timers: [], approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
         state.PendingConditions.AddRange(["injured", "injured"]);
@@ -621,6 +610,7 @@ public class TacticalRunnerTests
         var momBefore = state.Momentum;
 
         TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
-        Assert.Equal(momBefore + 1, state.Momentum);
+        // Default approach is Aggressive = +2 momentum per turn
+        Assert.Equal(momBefore + 2, state.Momentum);
     }
 }

@@ -83,13 +83,12 @@ public sealed class TacticalBundle
                 Stat = e.Stat,
                 Tier = e.Tier,
                 Requires = e.Requires ?? [],
-                Resistance = e.Resistance,
-                TimerDraw = e.TimerDraw,
                 Timers = e.Timers.Select(t => new TimerDef(
                     t.Name,
                     Enum.Parse<TimerEffect>(t.Effect, ignoreCase: true),
                     t.Amount,
                     t.Countdown,
+                    t.Resistance,
                     t.CounterName,
                     t.ConditionId)).ToList(),
                 Openings = e.Openings.Select(o => new OpeningDef(
@@ -97,10 +96,7 @@ public sealed class TacticalBundle
                 Path = e.Path?.Select(o => new OpeningDef(
                     o.Name, o.Archetype, o.Requires)).ToList() ?? [],
                 Approaches = e.Approaches?.Select(a => new ApproachDef(
-                    Enum.Parse<ApproachKind>(a.Kind, ignoreCase: true),
-                    a.Momentum,
-                    a.TimerCount,
-                    a.BonusOpenings)).ToList() ?? [],
+                    Enum.Parse<ApproachKind>(a.Kind, ignoreCase: true))).ToList() ?? [],
                 Failure = e.Failure is { } f
                     ? new FailureOutcome(f.Text, f.Mechanics ?? [])
                     : null,
@@ -156,12 +152,11 @@ public sealed class TacticalBundle
     record EncounterDto(
         string Id, string Category, string Title, string Body, string Variant,
         string? Stat, int? Tier, List<string>? Requires,
-        int Resistance,
-        int TimerDraw, List<TimerDto> Timers, List<OpeningDto> Openings,
+        List<TimerDto> Timers, List<OpeningDto> Openings,
         List<OpeningDto>? Path, List<ApproachDto>? Approaches, FailureDto? Failure, SuccessDto? Success);
-    record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown, string? ConditionId);
+    record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown, int Resistance, string? ConditionId);
     record OpeningDto(string Name, string Archetype, string? Requires);
-    record ApproachDto(string Kind, int Momentum, int TimerCount, int BonusOpenings);
+    record ApproachDto(string Kind);
     record FailureDto(string Text, List<string>? Mechanics);
     record SuccessDto(string Text, List<string>? Mechanics);
     record GroupDto(
