@@ -96,8 +96,6 @@ FILE STRUCTURE
 ------------------------------------
 
     Title                           First line, plain text
-    [variant combat|traverse]       Required for encounters, not groups
-    [intent <tag>]                  Optional intent tag (violence, stealth, etc.)
     [stat <skill>]                  Governing skill (combat, cunning, negotiation, bushcraft)
     [tier 1|2|3]                    Tier restriction
     [requires <condition>]          Gate (same syntax as .enc requires)
@@ -105,37 +103,52 @@ FILE STRUCTURE
     Prose body text describing the scene. Everything between front-matter
     and the first section marker.
 
-    stats:
     timers:
     openings:
-    path:                           Traverse only
-    approaches:                     Combat only
+    approaches:                     Optional — if omitted, defaults to aggressive
+    success:                        Optional — prose + mechanics on victory
     failure:
 
 ENCOUNTER SECTIONS
 ------------------------------------
 
-### stats:
-
-    resistance <N>                  Hit points — progress needed to win
-
 ### timers:
 
-    draw <N>                        How many timers are active at once
-    * Timer Name [counter Counter Text]: <effect> <amount> every <countdown>
+Two kinds of timers based on whether `resist` is present:
+
+  **Sequential** (resist > 0): one active at a time, player depletes
+  resistance to advance. These form the encounter's progression.
+
+  **Ambient** (resist omitted or 0): tick every turn, can't be directly
+  damaged, auto-cleared when all sequential timers are done.
+
+Syntax:
+
+    * Name [counter Text]: <effect> <amount> every <countdown> [resist <N>]
 
 Effect types:
-  `spirits <N>`          Drain N spirits when the timer fires
-  `resistance <N>`       Restore N resistance when the timer fires
-  `condition <id>`       Add a pending condition check (resolved at encounter end)
+  `spirits <N>`              Drain N spirits when the timer fires, resets
+  `resistance <N>`           Add N resistance to current timer, resets
+  `condition <id>`           Add a pending condition check, resets
+  `tick "<target>" <N>`      Decrement target timer's countdown by N, resets
+  `fatal`                    Encounter fails when countdown reaches 0 (no reset)
 
 Counter text is what the UI shows when the player stops this timer. Example:
 
     timers:
-      draw 2
-      * Flanking Maneuver [counter Block the flank]: spirits 2 every 4
-      * Pack Howl [counter Silence the alpha]: resistance 1 every 5
-      * Jagged Terrain [counter Find safer footing]: condition injured every 4
+      * Flanking Maneuver [counter Block the flank]: spirits 2 every 4 resist 5
+      * Pack Howl [counter Silence the alpha]: resistance 1 every 5 resist 6
+      * Jagged Terrain [counter Find safer footing]: condition injured every 4 resist 4
+
+Traverse example (ambient fatal master + sequential tick-timer waypoints):
+
+    timers:
+      * They're gaining on you: fatal every 20
+      * Reach the creek [counter Slide down]: tick "They're gaining on you" 3 every 4 resist 6
+      * Climb the ledge [counter Find handholds]: tick "They're gaining on you" 2 every 3 resist 5
+
+Win condition: all sequential timers cleared → ambient auto-cleared.
+Failure: spirits = 0 (SpiritsLoss) or fatal timer fires (TimerExpired).
 
 Condition timers don't resolve immediately. Each firing adds one pending
 resist check. When the encounter ends (win or lose), all pending checks are
@@ -165,31 +178,28 @@ Gated openings (with [requires]) are added first, then ungated. Example:
 
 With the default UI size, openings max out at around 60 characters.
 
-### path: (traverse only)
+### approaches: (optional)
 
-Authored sequence of cards the player must work through. Same syntax as
-openings but order matters — these define the terrain/route.
+If present, the player chooses an approach before the encounter starts.
+If omitted, the encounter defaults to aggressive.
 
-    path:
-      * Wade Carefully: free -> damage 1
-      * Brace and Push: momentum 1 -> damage 2
-      * Strong Stroke: spirits 1 -> damage 3
+    * aggressive                    +2 momentum/turn, draw 1 card
+    * cautious                      +1 momentum/turn, draw 2 cards
 
-### approaches: (combat only)
-
-Three approach options that set starting conditions:
-
-    * scout: momentum <N>, timers <N>, openings <N>
-    * direct: momentum <N>, timers <N>
-    * wild: momentum <N>, timers <N>
-
-`momentum` = starting momentum, `timers` = how many timers begin active,
-`openings` = bonus filler openings drawn. Example:
+Example:
 
     approaches:
-      * scout: momentum 0, timers 2, openings 3
-      * direct: momentum 3, timers 2
-      * wild: momentum 5, timers 3
+      * aggressive
+      * cautious
+
+### success: (optional)
+
+Prose + mechanics applied when the player wins. Uses the same +verb syntax
+as .enc mechanics.
+
+    success:
+      You push through. The bandits scatter.
+      +add_gold 15
 
 ### failure:
 
@@ -229,10 +239,10 @@ Example:
       * Sneak past [intent stealth] -> plains/tier2/Bandit Roadblock Stealth [requires has light_armor]
       * Talk your way out [intent negotiation] -> plains/tier2/Bandit Roadblock Parley
 
-CARD ARCHETYPES (for openings and path)
+CARD ARCHETYPES (for openings)
 ------------------------------------
 
-When authoring openings/path, use costs and effects that map to the standard
+When authoring openings, use costs and effects that map to the standard
 archetypes. See card_archetypes.md for the full list. Common patterns:
 
     free -> damage 1              free_progress_small

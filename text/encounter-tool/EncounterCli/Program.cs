@@ -38,7 +38,7 @@ class Program
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter push [<path>] [--world <name>]");
         Console.WriteLine("  encounter walk <arc-dir> [--skill combat=5] [--tag foo] [--item torch] [--quality guild=3] [--gold 50]");
-        Console.WriteLine("  encounter generate-tactical <variant> <tier> [--out <file>] [--seed <n>]");
+        Console.WriteLine("  encounter generate-tactical <tier> [--out <file>] [--seed <n>]");
         Console.WriteLine();
         Console.WriteLine("generate looks for locale_guide.txt in the current directory and archetype");
         Console.WriteLine("pools in text/encounters/generation/v2/.");

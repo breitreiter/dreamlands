@@ -8,24 +8,17 @@ contexts:
   main:
     - include: front-matter
     - include: section-marker
-    - include: timer-draw
     - include: timer-line
     - include: opening-line
     - include: approach-line
     - include: branch-line
     - include: verb-command
-    - include: stat-line
     - include: bold-text
     - include: italic-text
 
   # --- Front matter ---
 
   front-matter:
-    - match: '^(\[variant)\s+(combat|traverse)(\])'
-      captures:
-        1: keyword.other.frontmatter.tac
-        2: constant.language.variant.tac
-        3: keyword.other.frontmatter.tac
     - match: '^(\[stat)\s+(combat|negotiation|bushcraft|cunning)(\])'
       captures:
         1: keyword.other.frontmatter.tac
@@ -45,52 +38,36 @@ contexts:
   # --- Section markers ---
 
   section-marker:
-    - match: '^(stats|timers|openings|path|approaches|failure|branches):\s*$'
+    - match: '^(timers|openings|approaches|failure|success|branches):\s*$'
       scope: keyword.control.section.tac
-
-  # --- Stats ---
-
-  stat-line:
-    - match: '^\s+(resistance)\s+(\d+)\s*$'
-      captures:
-        1: support.function.stat.tac
-        2: constant.numeric.value.tac
 
   # --- Timers ---
 
-  timer-draw:
-    - match: '^\s+(draw)\s+(\d+)\s*$'
-      captures:
-        1: support.function.draw.tac
-        2: constant.numeric.value.tac
-
   timer-line:
-    # Timer with [counter] and numeric effect (spirits/resistance)
-    - match: '^\s*(\*)\s+(.*?)(\[counter)\s+(.*?)(\]):\s+(spirits|resistance)\s+(\d+)\s+(every)\s+(\d+)\s*$'
+    # Fatal timer: * Name: fatal every N [resist N]
+    - match: '^\s*(\*)\s+(.*?):\s+(fatal)\s+(every)\s+(\d+)(?:\s+(resist)\s+(\d+))?\s*$'
       captures:
         1: keyword.operator.bullet.tac
         2: entity.name.tag.timer-name.tac
-        3: keyword.other.counter.tac
-        4: string.unquoted.counter-text.tac
-        5: keyword.other.counter.tac
-        6: constant.language.effect.tac
-        7: constant.numeric.amount.tac
-        8: keyword.other.every.tac
-        9: constant.numeric.countdown.tac
-    # Timer with [counter] and condition effect
-    - match: '^\s*(\*)\s+(.*?)(\[counter)\s+(.*?)(\]):\s+(condition)\s+(\S+)\s+(every)\s+(\d+)\s*$'
+        3: constant.language.effect.tac
+        4: keyword.other.every.tac
+        5: constant.numeric.countdown.tac
+        6: keyword.other.resist.tac
+        7: constant.numeric.resistance.tac
+    # Tick timer: * Name: tick "Target" N every N [resist N]
+    - match: '^\s*(\*)\s+(.*?):\s+(tick)\s+(".*?")\s+(\d+)\s+(every)\s+(\d+)(?:\s+(resist)\s+(\d+))?\s*$'
       captures:
         1: keyword.operator.bullet.tac
         2: entity.name.tag.timer-name.tac
-        3: keyword.other.counter.tac
-        4: string.unquoted.counter-text.tac
-        5: keyword.other.counter.tac
-        6: constant.language.effect.tac
-        7: string.unquoted.id.tac
-        8: keyword.other.every.tac
-        9: constant.numeric.countdown.tac
-    # Timer without [counter], numeric effect
-    - match: '^\s*(\*)\s+(.*?):\s+(spirits|resistance)\s+(\d+)\s+(every)\s+(\d+)\s*$'
+        3: constant.language.effect.tac
+        4: string.quoted.double.target.tac
+        5: constant.numeric.amount.tac
+        6: keyword.other.every.tac
+        7: constant.numeric.countdown.tac
+        8: keyword.other.resist.tac
+        9: constant.numeric.resistance.tac
+    # Standard timer with numeric effect: * Name: spirits|resistance N every N [resist N]
+    - match: '^\s*(\*)\s+(.*?):\s+(spirits|resistance)\s+(\d+)\s+(every)\s+(\d+)(?:\s+(resist)\s+(\d+))?\s*$'
       captures:
         1: keyword.operator.bullet.tac
         2: entity.name.tag.timer-name.tac
@@ -98,8 +75,10 @@ contexts:
         4: constant.numeric.amount.tac
         5: keyword.other.every.tac
         6: constant.numeric.countdown.tac
-    # Timer without [counter], condition effect
-    - match: '^\s*(\*)\s+(.*?):\s+(condition)\s+(\S+)\s+(every)\s+(\d+)\s*$'
+        7: keyword.other.resist.tac
+        8: constant.numeric.resistance.tac
+    # Condition timer: * Name: condition <id> every N [resist N]
+    - match: '^\s*(\*)\s+(.*?):\s+(condition)\s+(\S+)\s+(every)\s+(\d+)(?:\s+(resist)\s+(\d+))?\s*$'
       captures:
         1: keyword.operator.bullet.tac
         2: entity.name.tag.timer-name.tac
@@ -107,8 +86,10 @@ contexts:
         4: string.unquoted.id.tac
         5: keyword.other.every.tac
         6: constant.numeric.countdown.tac
+        7: keyword.other.resist.tac
+        8: constant.numeric.resistance.tac
 
-  # --- Openings / path ---
+  # --- Openings ---
 
   opening-line:
     - match: '^\s*(\*)\s+(.*?):\s+(free_progress_small|momentum_to_progress(?:_(?:large|huge))?|spirits_to_progress(?:_large)?|threat_to_progress(?:_large)?|free_momentum(?:_small)?|threat_to_momentum|spirits_to_momentum|momentum_to_cancel|spirits_to_cancel|free_cancel)(?:\s*(\[requires)\s+(.*?)(\]))?\s*$'
@@ -123,11 +104,10 @@ contexts:
   # --- Approaches ---
 
   approach-line:
-    - match: '^\s*(\*)\s+(scout|direct|wild):\s*(.*)\s*$'
+    - match: '^\s*(\*)\s+(aggressive|cautious)\s*$'
       captures:
         1: keyword.operator.bullet.tac
         2: constant.language.approach.tac
-        3: string.unquoted.approach-params.tac
 
   # --- Branches ---
 
