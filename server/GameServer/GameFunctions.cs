@@ -1804,6 +1804,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             Title = tacEnc.Title,
             Body = tacEnc.Body,
+            Stat = tacEnc.Stat?.ToLowerInvariant(),
         };
 
         switch (step)

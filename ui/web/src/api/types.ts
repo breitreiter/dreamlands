@@ -313,6 +313,7 @@ export interface TacticalInfo {
   phase: "approach" | "turn" | "finished";
   title: string;
   body: string;
+  stat?: string;
   approaches?: TacticalApproachInfo[];
   turn?: TacticalTurnInfo;
   finishReason?: string;

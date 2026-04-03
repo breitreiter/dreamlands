@@ -250,17 +250,22 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
         <div className="max-w-2xl w-full space-y-6">
           <h2 className="font-header text-[32px] text-accent uppercase">{tactical.title}</h2>
 
-          {/* Approach phase (combat) */}
+          {/* Approach phase */}
           {tactical.phase === "approach" && tactical.approaches && (
             <>
               <div className="text-primary/80 leading-loose whitespace-pre-wrap">
                 {formatProse(tactical.body)}
               </div>
               <div className="space-y-3 pt-2">
-                <p className="text-dim font-bold">It's a fight.</p>
+                <p className="text-dim font-bold">
+                  {tactical.stat === "negotiation" ? "Words are your weapon." : "It's a fight."}
+                </p>
                 {tactical.approaches.map((a) => {
+                  const isNeg = tactical.stat === "negotiation";
                   const label =
-                    a.kind === "aggressive" ? "Charge them" : "Make ready";
+                    a.kind === "aggressive"
+                      ? isNeg ? "Press them" : "Charge them"
+                      : isNeg ? "Hear them out" : "Make ready";
                   const desc =
                     a.kind === "aggressive"
                       ? "Strike fast: +2 momentum/turn, draw 1 move"

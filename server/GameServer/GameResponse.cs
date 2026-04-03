@@ -336,6 +336,7 @@ public record TacticalInfo
     public string Phase { get; init; } = "";  // approach, turn, finished
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
+    public string? Stat { get; init; }  // governing skill: "combat", "negotiation", etc.
     // approach phase
     public List<TacticalApproachInfo>? Approaches { get; init; }
 
