@@ -103,6 +103,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return new OkObjectResult(BuildEncounterResponse(session, enc, gated));
         }
 
+        // Auto-start Lost encounter when player has the lost condition
+        if (player.ActiveConditions.ContainsKey("lost"))
+        {
+            var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
+            if (lostEnc != null)
+            {
+                var step = EncounterRunner.Begin(session, lostEnc);
+                await store.Save(player);
+                return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
+            }
+        }
+
         return new OkObjectResult(BuildExploringResponse(session));
     }
 

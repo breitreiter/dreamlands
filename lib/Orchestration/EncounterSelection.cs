@@ -38,6 +38,16 @@ public static class EncounterSelection
         };
     }
 
+    /// <summary>
+    /// Returns the Lost encounter for the player's current biome/tier, if one exists in the bundle.
+    /// </summary>
+    public static Encounter.Encounter? PickLostEncounter(GameSession session, Dreamlands.Map.Node node)
+    {
+        var category = GetCategory(node);
+        if (category == null) return null;
+        return session.Bundle.GetById($"{category}/Lost");
+    }
+
     public static Encounter.Encounter? PickOverworld(GameSession session, Dreamlands.Map.Node node)
     {
         var category = GetCategory(node);

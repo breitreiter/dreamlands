@@ -26,8 +26,8 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Lost Condition
 
-- [ ] Engine: force-select `Lost.enc` for current biome/tier when player has `lost` condition
-- [ ] UI: show "You are lost" state on explore screen instead of disabled map
+- [x] Engine: force-select `Lost.enc` for current biome/tier when player has `lost` condition
+- [x] UI: auto-start Lost encounter on status check — no UI changes needed, encounter screen shows naturally
 - [ ] Review all 15 Lost.enc files for prose quality and mechanic balance
 
 ### Road Encounter System (Tableau)
