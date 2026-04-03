@@ -24,6 +24,12 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       mega-T1 region from making an entire biome feel safe.
 - [x] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 
+### Lost Condition
+
+- [ ] Engine: force-select `Lost.enc` for current biome/tier when player has `lost` condition
+- [ ] UI: show "You are lost" state on explore screen instead of disabled map
+- [ ] Review all 15 Lost.enc files for prose quality and mechanic balance
+
 ### Road Encounter System (Tableau)
 
 - [ ] Finish out and test AI authoring tools for tac encounters

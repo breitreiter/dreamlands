@@ -1,0 +1,53 @@
+Lost in the Ghassuleth
+[trigger none]
+[requires tag lost]
+
+The track you followed into the plateau is gone. Not diverged, not obscured--gone, as though it was never here. The black rock of the Ghassuleth extends in every direction, fractured and glassy, and the wind moves through it making a sound that is almost words and is never quite silence. The sky is wrong, or your sense of where the sun should sit is wrong. Either possibility is unwelcome.
+
+The tomb faces carved into the mesa walls watch you with empty socket-eyes. There are thousands of them. The guides who work this region navigate by the taste of the dust, by things they do not explain. You have been navigating by landmarks, and the landmarks have stopped cooperating.
+
+Your water situation is not what you'd like it to be. You think you know which direction the caravan road lies. You are probably wrong.
+
+choices:
+
+* Read the tombs = The tomb carvings follow a pattern; study it and find the edge of the plateau
+  Whoever built these tombs knew where they were. The facades face a direction, follow a grammar, mark something--cardinal directions, astronomical alignments, routes. If there's a system here, a careful eye might catch it. It is a long reading in brutal sun, leaning close to carvings that seem to shift when approached directly.
+  @if check cunning hard {
+    It takes longer than you have time to spend, but eventually the pattern emerges: the tomb mouths face the prevailing wind, and the prevailing wind on the Ghassuleth blows north-northwest from the high plateau edge. The carvings confirm it. Deeper faces, older, more deeply cut--they orient differently, toward something that was probably magnetic north before whatever changed it. You triangulate clumsily between the two directions and pick a bearing that threads between them. Three hours across black rock in the afternoon heat, and the plateau edge appears as a drop in the darkness of the horizon.
+
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    You find what you think is the pattern, commit to it, and walk for two hours before the mesa wall ahead presents another thousand tombs, all oriented the same as the ones you left. You've walked in an arc and the dust has worked into everything. The second reading of the carvings gives you a different answer than the first. You take it. By the time you find something resembling a trail, your hands are cut from pressing against the glass-edged rock and the sun is long past useful.
+
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 2
+    +add_condition injured
+  }
+
+* Follow the wind = The guides navigate by smell and sense; trust the wind's direction and walk into it
+  The caravan guides who cross the Ghassuleth talk about the dust tasting different near the plateau edge. They navigate by things they don't name. You cannot taste what they taste, but you can read the wind--its temperature, its load, where it comes from and what it carries. Cold air drains from high ground. Mineral taste concentrates near the central plateau. The trick is trusting the reading.
+  @if check bushcraft medium {
+    The wind shifts twice while you're walking, and both times you adjust. The third time, the grit in it goes fine and pale--different from the black mineral dust of the deep plateau. You follow that change, into it, tracking the gradation. The temperature drops two degrees as the ground ahead begins to slope. The slope becomes a scree field, and the scree field becomes the plateau's broken edge, and below the edge, far below, is the brown thread of the caravan road.
+
+    You sit on the edge for a full minute before starting down.
+
+    +remove_condition lost
+    +advance_time 4
+  } @else {
+    You trust the wrong shift. The wind here circles around the plateau's centerpoint and by the time you realize you've been turned, the sun angle confirms what you didn't want to know. You've moved laterally. You correct, walk into the wind regardless, and eventually the ground begins to change beneath you--but it's evening before the plateau edge appears and the descent is too dangerous to attempt in fading light. You camp on the rim, cold, and make the descent at first light.
+
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 1
+  }
+
+* Walk toward the firelight = At the plateau's center stands a city that shows firelight at night; you wait and walk toward it at dusk
+  Everything the caravan guides say about the center of the Ghassuleth is a warning. And yet: firelight means presence, and presence might mean water and direction. You have spent enough time out here to know that the alternative is another night in the open, which may not be survivable in the condition you're in. You wait for dark and walk toward the glow.
+
+  What you find is not a city, or not entirely a city. The doorless walls are real, the stone is real, and at the edge of a wide street paved in something darker than the surrounding rock, something watches you make the decision to stop and turn back. You are not hurt. Whatever attends this place is interested but not hostile--or perhaps indifferent on a scale that includes you only incidentally. You walk away as deliberately as you walked in, and the firelight dims behind you. When dawn comes you are on the plateau's eastern rim, close enough to the caravan road to hear mule bells in the valley below.
+
+  +remove_condition lost
+  +advance_time 6
+  +damage_spirits 1

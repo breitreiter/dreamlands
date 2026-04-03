@@ -1,0 +1,55 @@
+Lost in the Mosswater
+[trigger none]
+
+The channel you were following stopped being a channel somewhere in the last hour. It did not end -- it widened and slowed and became a series of shallow pools connected by thin strings of current, and then the current disappeared into the moss, and now there is no current and every direction looks like every other direction. The canopy is dense enough that the sky is a green suggestion above you. The sun might as well be a rumor.
+
+You are testing each step before you commit to it, the way you learned to, but the footing has been wrong in different ways each time: solid ground that gives without warning, knee-deep water that proves suddenly shallow, mud that grips like a living thing. Your left boot made a sound you did not enjoy when you pulled it free of that last channel crossing. Your gear is damp. Your food is going soft. The insects have found you.
+
+There are no landmarks here that stay still. The moss shifts on the water. The root structures at the water's edge make shapes that all look like shapes you have seen before but are not the same shapes. You have been walking in what you believe is a circle, but the mosswater keeps its own record and does not share it.
+
+choices:
+
+* Read the water = Navigate by flow direction, find the current that leads out
+  Still water tells you nothing. Moving water tells you everything -- where it came from, what it connects to, which way the land slopes underneath the swamp. You stop and look, really look, until you find it: a surface film of pollen tracking almost imperceptibly to the southeast. Current. Small, but real. You follow it.
+  @if check bushcraft hard {
+    Current downstream leads to a junction and the junction has two choices and you choose wrong and backtrack and choose right and then the current strengthens and within the hour you are in an actual channel, moving water, and the channel leads you out of the canopy into something like sky. You emerge onto a hummock of solid ground and sit on it and eat something and let your hands stop shaking. The hummock has someone's old fire ring on it. Other people have been here. Other people have been lost here and found their way out. You are one of those people now.
+    +remove_condition lost
+    +advance_time 2
+  } @else {
+    The current is real but it leads you wrong -- downstream into a bog that has no outlet, a basin where the water collects and stagnates and the smell is something you will not be able to name but will remember. You backtrack in water that reaches your chest at one point. Your pack is soaked. You find higher ground eventually by following a line of trees whose canopy looks slightly different, slightly less dim, which means less water beneath them, which turns out to be true. You are free of the mosswater but you are not where you were trying to be, and you are exhausted in the deep-muscle way that does not resolve with one night's sleep.
+    +remove_condition lost
+    +advance_time 5
+    +damage_spirits 2
+    +add_condition exhausted
+  }
+
+* Look for a camp = Someone lives out here, or passes through. Find their mark.
+  The mosswater has people in it -- trappers, herb-pickers, the occasional fugitive -- and people leave traces. You start looking for them properly: broken stems, a pole impression in mud, a rope line tied between trees to mark a route. This is patient work. You move slowly and scan instead of pushing forward.
+  @if check cunning medium {
+    You find a rope line. It is old, green with algae, tied at waist height between two trees, and it runs in a direction. You follow it. The line connects to a second line and the second line ends at a raised platform, a pole-and-plank shelf above the waterline where someone caches gear. There is a jar of rendered fat and a hand-scratched oilcloth map and nothing else. The map is mostly smeared but one route is traced twice, deeply, by someone who wanted to be sure they remembered it. You follow that route. It takes you out.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    You find traces -- a broken pole stuck upright in the mud, a bundle of dried herbs cached in a root hollow -- but nothing that leads anywhere. The pole is pointing at sky. The herbs are someone's stash, not a trail marker. You study the bundle for longer than it deserves, trying to make it mean something, and eventually admit it doesn't. You fall back on instinct and instinct is bad out here, and you spend a long wet afternoon going in the wrong direction before the mosswater finally releases you into a channel you can follow to firmer ground.
+    +remove_condition lost
+    +advance_time 5
+    +damage_spirits 1
+  }
+
+* Climb for a sightline = Find a tree worth climbing, get above the canopy
+  Most of the trees are not worth climbing -- too soft, too thin, rooted in mud that shifts when you put your weight on the trunk. But there, forty meters east, something thicker, something that looks like it has been standing here for a generation or two. You wade to it and test it with your full weight before you commit to the climb. The bark is wet. Your hands slip twice on the way up. But the canopy breaks above you and you get thirty seconds of sky.
+  @if check bushcraft medium {
+    Thirty seconds is enough. You find the sun's position, find the line of slightly higher canopy that means higher ground that means a dry route, and fix it in your memory before you come back down. The descent is faster and more painful than the ascent. But you know where you are going now, roughly, and roughly is enough to get you out by late afternoon, muddy and stiff and deeply ready to stop moving through water.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    The sky tells you where the sun is. The sun tells you which way is west. West does not tell you which specific route through the mosswater will hold your weight and which will not, and that turns out to be the information you needed. You descend with a bearing and immediately lose it in the ground-level sameness of the swamp, channel after identical channel, and by the time you find solid ground it is through persistence rather than navigation, the swamp tired of you before you tired of it.
+    +remove_condition lost
+    +advance_time 5
+    +damage_spirits 1
+  }
+
+* Wait for morning = Make a platform, sit tight, move when you can see the sun
+  An hour of building: poles across a root structure, reeds laid thick, your pack elevated, yourself above the waterline in something that is not comfortable but is not going to sink. You light a small fire with effort and dry your socks. Something large surfaces fifty meters off and does not surface again. In the morning the mist is heavy but the sun comes through it eventually, and you have a bearing, and you use it, and you are out before midday. You are slow and stiff and you have lost a day, but you are out.
+  +remove_condition lost
+  +advance_time 5

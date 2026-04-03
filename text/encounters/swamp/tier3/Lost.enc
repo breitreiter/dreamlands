@@ -1,0 +1,44 @@
+Lost in the Mire
+[trigger none]
+
+There was a direction. There was a heading, a plan, a sequence of landmarks you were watching for. And then the ground did something unexpected and you adjusted, and then you adjusted again, and at some point the adjustments became the journey and the journey became this: standing on a surface that is neither land nor water, in a swamp that looks the same in every direction, aware that you have no reliable information about where you are or how far you have come.
+
+The mire does not feel like wilderness. It feels like attention. The water around your feet has the same temperature as your feet. When you stop moving, the root structures nearby seem to settle, very slightly, into new arrangements, the way a person shifts weight when they stop to look at something. You tell yourself it is the current. There is no current here.
+
+You have been reading the swamp for landmarks and the swamp has been offering you things that are almost landmarks. A root formation that is almost an arrow. A pattern of bioluminescence on the water's surface that pulses in something that is almost a rhythm and keeps almost resolving into a direction before the sequence resets. You do not know if you are being guided or if you have been standing still long enough to start hallucinating structure in noise. You do not know how long you have been standing here. You know you need to move.
+
+choices:
+
+* Force a heading by dead reckoning = Count steps, hold a compass bearing, refuse to interpret anything
+  You stop looking at the swamp. You take out your compass and you pick a bearing and you walk it. You count steps. You do not look at the root formations. You do not read the light patterns. You watch your compass, count your paces, and trust geometry when the swamp is offering you epistemology. The ground fights you. There are passages you cannot cross on your bearing, channels too wide to ford, thickets that do not give, and each time you divert you take note and compensate. This is mechanical work. It is terrible in a different way than the swamp is terrible: it asks nothing of you except persistence.
+  @if check bushcraft hard {
+    Persistence is the only currency that works out here. You count two thousand steps. You count three thousand. At four thousand the canopy thins slightly and at five thousand you can feel that the ground underfoot has more resistance, is more solid, is asking less of you with each step. At six thousand you reach a berm of higher ground and sit on it and your hands are shaking from the cold and the effort and something else you cannot name. You are out of the mire. You do not know how deep you went. You do not look back to see if anything is watching.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    The compass holds. Your count does not. Somewhere in the third thousand steps you are compensating for a diversion and you lose your accumulated offset and start fresh, and the fresh count is wrong in a way you do not realize until the bearing has walked you into a basin of open water, chest-deep, that goes on farther than you can see. You wade it. You wade through a thing that is too warm and moves against you without current and has a texture in the dark water that you decide not to examine. You come out the other side raw and wrung and have no idea which direction was which anymore. You find higher ground through no method you could reproduce. By the time solid earth holds your weight, you are done.
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 2
+    +add_condition injured
+  }
+
+* Follow the warm water = The mire circulates. Find the inflow, find the edge.
+  The water here is not uniformly temperature. There are gradients, subtle, that you find by standing still in the shallows and moving your feet slowly. Warmer water flows in from somewhere -- surface runoff from higher ground, a spring, something -- and cooler water flows nowhere, standing in the deep basins. If you can follow the gradient toward its source you are following it toward higher, drier ground. This is either good biology or an excuse to believe the swamp is telling you something. You decide it does not matter which.
+  @if check bushcraft medium {
+    You find the gradient and follow it. The work is slow -- you are testing with your feet, not your eyes, which means moving at a pace that feels geological. But the temperature differential is real, and it leads. An hour of this work brings you to a spring seeping from a tree root shelf, and the shelf is the highest point for fifty meters, and from the shelf you can see a line of canopy that goes brighter, and brighter means sky, and sky means edge. You are out before full dark. You do not understand how, exactly. That feels appropriate.
+    +remove_condition lost
+    +advance_time 4
+  } @else {
+    The gradient is real but the mire's geometry is not built to accommodate it. You follow warmth toward a source and the source is a decomposition vent, a bubble of biological heat rising from something dying at depth, and it points nowhere. The second gradient you find is genuine and you follow it for forty minutes before it disappears into a pool that is the same temperature in every direction and offers you nothing. You move through the mire until the mire ends. That is the whole of your method and it is enough, eventually, but eventually is very far away.
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 1
+  }
+
+* Let the mire work = Stop moving. Wait. See if anything resolves.
+  This is not strategy, exactly. It is what you have left when you have eliminated the alternatives that require you to know something you do not know. You find a root mass that holds your weight, you sit on it, and you stop. The mire shifts around you in the way it does. The bioluminescence does its work on the water. A root structure nearby makes a shape you spend a while with. You stop trying to read it and simply look at it. Something about the angle of it, or the particular way it catches the light, or something else entirely, suggests a direction. You choose to follow the suggestion.
+  You wade. You do not know if the suggestion was guidance or your own desperate pattern-recognition filling in the blank with whatever it had available. You walk for a long time through water and mud and things that are worse than water and mud. The mire is patient with you. Eventually the ground changes under your feet and you realize you have been on a slope for the last hundred steps, rising, and above the waterline the air is different, and different is enough.
+  +remove_condition lost
+  +advance_time 6
+  +damage_spirits 1

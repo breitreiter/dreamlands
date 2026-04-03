@@ -1,0 +1,43 @@
+Lost
+[trigger none]
+
+You have been walking for what your body says is four hours. Your map says you should be at the ridge by now.
+
+The trees here are not like trees elsewhere. The trunks are wider than a house, the bark deeply furrowed, the lowest branches thirty feet up and each one as thick as an ordinary trunk. The ferns grow to your shoulder. Scale has come unmoored, gradually, over the past day -- not a single alarming moment but an accumulation of small wrongnesses. The landmark you've been navigating toward all morning is still the same distance away. The stream you crossed two hours ago sounds like it's ahead of you now. Your compass agrees with itself but not with the terrain.
+
+You are not panicking. That's important. You stop, find a root to sit against, eat deliberately, drink water. The forest is silent in the way that only very old places are silent -- not an absence of sound but a weight of it, sound absorbed rather than reflected. You talk through the problem out loud and your voice comes out smaller than you intended, like the trees are measuring it against something much larger.
+
+choices:
+
+* Work the watershed = Stop trusting direction and trust water instead -- downhill until the streams converge
+  Water doesn't lie. You stop navigating and start following the land. Off all ridges, down all slopes, moving without commitment to direction, letting gravity make the decisions. The going is brutal -- ravines that don't appear until you're at the edge, deadfall over hollows that groans under your weight, undergrowth that requires forcing at every step. But the streams get wider. Tributaries join the main thread. Wide water means lower elevation. Lower elevation means the forest edge, eventually.
+  @if check bushcraft hard {
+    It takes everything you have. Your legs are dead weight by the time the trees thin enough to see a real sky. But thin they do. The stream leads out of the old growth and into younger scrub, and then into cleared land, and there is smoke from a chimney somewhere ahead, and you follow it.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    The watershed gets complicated. A false summit sends you down the wrong valley. You backtrack hours of effort. At one crossing, the bank gives and you go in to your waist in fast cold water and have to haul yourself out by a root. By the time the forest releases you, more hours later than it should have, you are cold through and each step is an act of will.
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 2
+    +add_condition injured
+  }
+
+* Read the canopy breaks = Find where trees have fallen and the light comes in -- the gaps tell you where the edge is
+  Old growth doesn't thin gradually. It ends, or it doesn't. But where trees have fallen and light breaks through, the understory grows dense and the younger growth angles toward that light -- you can read the angle of young stems to orient toward open sky. You move from break to break, reading each one, triangulating. It is slow work. The forest offers breaks rarely and at random.
+  @if check cunning medium {
+    The pattern holds. Not a straight line -- the canopy breaks describe a rough arc -- but consistent enough that you trust it, and trust is what you needed. You follow the arc for hours, stopping at each break to re-read the angle, until the breaks come more frequently and the young growth between them is shorter and then you are out of the old growth and into secondary forest and the trees are ordinary-sized again.
+    +remove_condition lost
+    +advance_time 4
+  } @else {
+    The light misleads you -- a gap that reads as edge-direction is just a larger blowdown, and you follow it into a tangle of fallen trunks that takes an hour to get through. The next break and the next disagree with each other. You pick the one that feels right and it takes you sideways for half a day before the land finally drops and the true direction reveals itself.
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 1
+  }
+
+* Make camp and move at dawn = Navigating in old growth by night is a death wish; wait for first light
+  The light is going and you know it. The decision isn't comfortable but it's obvious. You find the most sheltered root hollow you can, build a fire against the wood, eat the minimum, and sleep. You wake twice -- once to feed the fire, once to absolute silence that feels like pressure. At first light, the canopy lets through just enough dawn to give you a shadow, and a shadow is a direction, and a direction is a start. You walk for six hours before you see sky that isn't filtered through leaves.
+  +remove_condition lost
+  +advance_time 6
+  +damage_spirits 1

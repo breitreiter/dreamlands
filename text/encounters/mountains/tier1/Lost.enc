@@ -1,0 +1,40 @@
+Lost in the Near Ranges
+[trigger none]
+
+The trail was clear an hour ago. You're certain of it. But the switchbacks have multiplied somehow, and the cairn you've been following for the last mile has no successor that you can find. The sky is still bright, the air still thin and cool, but the familiar clang of pick-work and mule bells has faded below the ridge, and the slope ahead of you looks wrong in a way you can't name.
+
+You stop. The wind cuts across bare rock. A hawk describes a slow circle above, indifferent. Below, somewhere in the fold of the valley, there are people and a road and a waystation with a tin cup chained to a spring. Getting back to them is simply a matter of making the right choices.
+
+The stream to your right runs fast and cold off the snowfields above. To the north, a rocky shoulder catches the afternoon light and shows a trail scar crossing its face. Uphill, a surveyor's marker stake--orange-painted wood--juts from a cairn you can just make out against the sky.
+
+choices:
+
+* Follow the stream downhill = Water runs to settlement; trace it to the valley road
+  You pick your way down beside the stream, boots slipping on wet stone where the water spills across the trail. The channel narrows, then widens, then drops through a short cascade you have to scramble around on hands and knees. Below the cascade, the grade eases and the stream braids through gravel flats. You can hear the valley now--a mule, somewhere, and the distant ringing of metal.
+  @if check bushcraft medium {
+    The stream bends east around a shoulder of hill, and you trust it. Good call. The valley road emerges from the treeline a quarter mile ahead, and within the hour you've picked up your bearings and your pace. The detour cost you time but nothing worse. You drink from the stream before you leave it--cold and clean, tasting faintly of minerals--and mark the spot in case you need it again.
+    +remove_condition lost
+    +advance_time 2
+  } @else {
+    The stream drops into a steep-sided gorge with no good way down either bank. You spend an hour finding a crossing point, backtracking, trying again. By the time you scramble up to a ridge that shows you the valley, the afternoon is further gone than you'd like. Your knees ache and your boots are soaked through. But the road is visible below, and you're moving again.
+    +remove_condition lost
+    +advance_time 4
+    +damage_spirits 1
+  }
+
+* Cross to the trail scar on the north shoulder = That's a maintained route; reach it before the light shifts
+  You angle across the slope toward the trail scar, picking a diagonal line through loose scree. The footing is honest if unpleasant--gravel that shifts and crunches but doesn't give way beneath you. The shoulder is further than it looked.
+  @if check cunning easy {
+    You read the slope right, cutting below a band of unstable rock and crossing where the scree compacts to solid ground. The trail scar proves to be a legitimate mule track, rutted and well-worn, descending in long switchbacks toward the valley road. An hour later you're back on familiar ground, the only cost a few scrapes on your palms and some wasted morning light.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    You cut too high and have to descend a crumbling bank of scree that shifts under every step, slowing you to a crawl. The trail scar, when you reach it, is older than it looked--more a memory of a trail than a trail, its switchbacks washed out in two places. You find the valley road eventually, but by a longer route than you planned.
+    +remove_condition lost
+    +advance_time 4
+  }
+
+* Make for the surveyor's marker = If it's on a current map, it can orient you
+  The marker stake is a good hour's climb in thin air that makes itself felt on the steep sections. You stop twice to breathe, hands on knees, watching a mule train thread the valley far below. When you reach the cairn, you can see three ridgelines and the full sweep of the valley. The marker has a claim number scratched into the wood, which tells you nothing. But the terrain tells you everything.
+  +remove_condition lost
+  +advance_time 4

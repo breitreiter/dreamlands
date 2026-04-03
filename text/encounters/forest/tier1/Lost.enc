@@ -1,0 +1,41 @@
+Lost
+[trigger none]
+
+You took what looked like a shortcut and now you aren't sure what you took.
+
+The trees here are tall enough to swallow the horizon but not so tall that scale gets strange. Dappled light shifts with the breeze. Somewhere out of sight, wood splits with a clean crack. A stream runs somewhere to your left, or possibly your right -- sound moves oddly under a full canopy. The path you were following petered out into game trails and then into nothing in particular, and now every direction looks equally plausible and equally wrong.
+
+The forest isn't threatening. A charcoal kiln is smoking somewhere nearby -- you can smell it, low and sweet. There are trail markers carved into the bark of older trees, if you can read them. People live close enough to this wood that you'll find your way out by nightfall one way or another. It's just a question of how long it takes.
+
+choices:
+
+* Listen for the kiln = Follow the smell of charcoal smoke toward whoever's tending it
+  You stop moving and let the forest settle around you. The birdsong fills in. A woodpecker works somewhere up the slope. And there it is -- the char-sweet weight of a burning mound, drifting left. You find the kiln in a small clearing, a domed mound of earth venting thin blue smoke from a dozen holes, tended by a woman who looks up without surprise. She listens to where you're trying to go, points southeast, describes three landmarks in a patient voice. "Forest road's an hour that way," she says, turning back to her work. "Stay on the high side of the stream."
+
+  An hour later you step out of the trees onto packed dirt and recognize the road.
+  @if check bushcraft medium {
+    +remove_condition lost
+    +advance_time 2
+  } @else {
+    You misread her directions somewhere along the way -- took the low side of the stream, ended up in a boggy hollow, had to backtrack. The kiln woman is gone by the time you find your way back to where you started. You sort it out eventually, following the sound of an axe until you hit a logging track and follow that to the road.
+    +remove_condition lost
+    +advance_time 4
+    +damage_spirits 1
+  }
+
+* Read the trail markers = Find the carved blazes on the old trees and figure out what they mean
+  Foresters and woodcutters carve their own codes into the bark. A notch means a boundary. An X means something to avoid. A slash with an arrow might mean direction, or property, or distance to water -- the system was invented by people who already knew what it meant. You study the marks on three trees, try to fit them into a pattern, and set off in the direction that seems most consistent.
+  @if check cunning easy {
+    It takes some doubling back, but the markers are telling a coherent story once you understand the grammar of them. They lead you from tree to tree, along a path that isn't visible but is real, until the canopy thins and you smell road dust and horse.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    You pick wrong somewhere. The blazes lead you deeper, or at least they seem to, and after an hour of following a trail that may be a boundary line or may be a fence claim or may be nothing, you give up on interpretation and just walk toward the sound of the wood-splitting you heard at the start. A woodcutter points you out without comment. Two more hours of walking.
+    +remove_condition lost
+    +advance_time 4
+  }
+
+* Pick a direction and walk = Downhill, toward water, until you hit something you recognize
+  Downhill is always right in a worked forest. Water leads to people, and people lead to roads. You find the stream within twenty minutes, follow it south where the bank is easy walking, and spend the next hour listening to it chuckle over stones. The forest is pleasant enough company. Mushrooms cluster around rotting logs. A fox watches you from a safe distance. Eventually the stream joins a wider channel and there's a plank bridge across it, and a plank bridge means a road, and there you are.
+  +remove_condition lost
+  +advance_time 4

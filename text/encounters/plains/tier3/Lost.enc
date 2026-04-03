@@ -1,0 +1,53 @@
+Lost
+[trigger none]
+
+You know you are lost because the horizon is wrong.
+
+It's been wrong for the last hour -- too sharp, too far, as if the plain extends farther in every direction than geometry allows. The ground underfoot stopped being soil and started being something else: smooth, fused, ringing slightly under your boots like fired ceramic. The grass thinned out and then stopped bothering entirely, and now there is nothing in any direction except the glassy plain and whatever is out there on it. A structure to the northwest. Something moving to the east that is too large and too far away to resolve into a shape. The hum you felt in your sternum twenty minutes ago has settled into your jaw.
+
+There is no road. Whatever road you were following has been absorbed by the fused ground, subsumed back into the surface that was here before roads were a concept anyone had. The tracks you made getting here are already fading -- the ground doesn't hold impressions the way soil does. It holds other things instead. Behind you, very evenly spaced, something has made marks in the glass that you didn't make.
+
+You need to move. Standing still near active structures is how people disappear here. The Sunder is not hostile. It simply doesn't account for you.
+
+choices:
+
+* Navigate by the structures = They were built to a plan. Find the pattern.
+  The golems walk routes. The routes connect things. The things -- towers, platforms, dolmens -- are arranged in a grid that still makes geometric sense even if its purpose doesn't. If you can read the grid, you can find the edge of it, and the edge is where the glass gives way to ordinary earth and ordinary earth eventually has roads.
+
+  You move toward the nearest structure -- a low platform covered in symbols cycling through their sequence -- and study it without touching anything. You study the positions of the other structures from there. You do not look at the symbols long enough for the pattern to start making sense, which takes discipline.
+
+  @if check cunning hard {
+    The grid resolves. It's not a perfect cartesian arrangement -- the scale shifts, and some structures are clearly off-axis, relocated or damaged -- but the underlying geometry holds enough to navigate by. You find your bearing relative to the edge of the glass plain and walk toward it. You pass within thirty paces of a golem on its route and neither of you acknowledges the other. The glass gives way to dead soil, and the dead soil eventually yields to dry grass, and the dry grass has a wagon track pressed into it. You follow the track until you recognize where you are.
+    +remove_condition lost
+    +advance_time 3
+  } @else {
+    The grid makes sense until it doesn't. You think you've read the pattern and walk toward what should be the edge and instead find yourself at a structure you haven't seen before, deeper in, with the hum now loud enough to feel in your back teeth. You backtrack, or try to -- the landmarks have rearranged, not moved, just rearranged, as if they were always where they are now and your memory is wrong. It takes hours to reach the edge, and by then your head is splitting from the resonance and your legs have been carrying you through ground that doesn't quite sit still.
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 2
+    +add_condition injured
+  }
+
+* Watch the golem's route = It's walking a perimeter. Perimeters have outsides.
+  There's a golem to the east, walking its patrol with the mechanical precision of something that has repeated this action every day for decades. Exactly even footfalls, exactly timed, never varying. You watch it from distance long enough to read the shape of its route, then begin to move parallel to it, tracking what it's enclosing.
+
+  @if check bushcraft medium {
+    The perimeter is an ellipse, roughly. You walk the outside of its arc, keeping enough distance that you're never in its path, and the arc carries you toward the edge of the glass plain. Wherever the golem's route ends, the structured ground ends too -- beyond its furthest point the fused surface gives way to cratered earth and then to dead scrub and then to the sparse grass of the outer Sunder margin. You follow the margin until you find a track pressed into the dirt by boots that were here recently enough to mean other people have a reason to come and go.
+    +remove_condition lost
+    +advance_time 4
+  } @else {
+    You misjudge the shape of the route. The ellipse closes tighter than you calculated and you end up in the path of the golem's return, and you have to move fast and without preparation across a section of ground you haven't read yet. The glass here is pitted, some sort of subsidence, and you turn an ankle on a lip you didn't see. You make the edge eventually but you're limping and the day is far gone and the Sunder's hum follows you for another hour after you're clear.
+    +remove_condition lost
+    +advance_time 6
+    +damage_spirits 1
+  }
+
+* Keep moving, keep the structures behind you = Don't try to read this place. Just leave.
+  Every instinct you have says that understanding what the Sunder is doing would be dangerous. The pattern is visible. You can see it starting to resolve in your peripheral vision. You don't let it. You pick the direction with the fewest structures and walk, fast and steady, keeping your eyes on the horizon and not on anything between you and it.
+
+  The ground does things under your feet. A section rings differently, hollow, and you skirt it without stopping to find out why. A column of air shimmers to your left, warm from twenty paces away, and you give it a wide margin. Somewhere behind you a dolmen sequence completes -- you hear the tone shift -- and you don't look back to see what changed.
+
+  You reach the edge of the glass by feel as much as sight: the ground softens, your boots stop ringing, and the hum drops away over fifty paces until it's gone entirely. The absence of it is so complete that your ears ring with ordinary silence. You stand in dry scrub at the Sunder's margin, breathing, and wait for your jaw to stop aching.
+  +remove_condition lost
+  +advance_time 6
+  +damage_spirits 1
