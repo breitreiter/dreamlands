@@ -325,9 +325,6 @@ export interface TacticalInfo {
 
 export interface TacticalApproachInfo {
   kind: string;
-  momentum: number;
-  timerCount: number;
-  bonusOpenings: number;
 }
 
 export interface TacticalTurnInfo {
@@ -336,6 +333,7 @@ export interface TacticalTurnInfo {
   resistanceMax: number;
   momentum: number;
   spirits: number;
+  digUsed: boolean;
   timers: TacticalTimerInfo[];
   openings: TacticalOpeningInfo[];
 }

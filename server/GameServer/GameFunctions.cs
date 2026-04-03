@@ -1830,6 +1830,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         ResistanceMax = st.Data.ResistanceMax,
                         Momentum = st.Data.Momentum,
                         Spirits = st.Data.PlayerSpirits,
+                        DigUsed = st.Data.DigUsed,
                         Timers = st.Data.Timers.Select(t => new TacticalTimerInfo
                         {
                             Name = t.Name,

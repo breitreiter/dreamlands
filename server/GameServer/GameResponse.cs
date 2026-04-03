@@ -363,6 +363,7 @@ public class TacticalTurnInfo
     public int ResistanceMax { get; init; }
     public int Momentum { get; init; }
     public int Spirits { get; init; }
+    public bool DigUsed { get; init; }
     public List<TacticalTimerInfo> Timers { get; init; } = [];
     public List<TacticalOpeningInfo> Openings { get; init; } = [];
 }

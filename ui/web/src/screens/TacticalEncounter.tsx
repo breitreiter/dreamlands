@@ -136,7 +136,7 @@ function MechanicLines({ results }: { results: MechanicResultInfo[] }) {
 }
 
 function FinishedSummary({ tactical, onContinue, loading }: { tactical: TacticalInfo; onContinue: () => void; loading: boolean }) {
-  const isVictory = tactical.finishReason !== "spiritsloss";
+  const isVictory = tactical.finishReason === "resistancekill" || tactical.finishReason === "controlkill";
   const epilogue = isVictory ? tactical.successText : tactical.failureText;
   const mechanics = isVictory ? tactical.successMechanics : tactical.failureMechanics;
   const conditions = tactical.conditionResults;
@@ -155,7 +155,9 @@ function FinishedSummary({ tactical, onContinue, loading }: { tactical: Tactical
             ? "Victory — Goal Reached"
             : tactical.finishReason === "controlkill"
               ? "Victory — Total Control"
-              : "Defeated — Spirits Depleted"}
+              : tactical.finishReason === "timerexpired"
+                ? "Defeated — Time Ran Out"
+                : "Defeated — Spirits Depleted"}
         </p>
       </div>
 
@@ -258,13 +260,11 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                 <p className="text-dim font-bold">It's a fight.</p>
                 {tactical.approaches.map((a) => {
                   const label =
-                    a.kind === "scout" ? "Let them come"
-                    : a.kind === "direct" ? "Make ready"
-                    : "Charge them";
+                    a.kind === "aggressive" ? "Charge them" : "Make ready";
                   const desc =
-                    a.kind === "scout" ? "Watch for tells, learn their patterns"
-                    : a.kind === "direct" ? "Find a position of strength"
-                    : "Strike fast and hard";
+                    a.kind === "aggressive"
+                      ? "Strike fast: +2 momentum/turn, draw 1 move"
+                      : "Play it safe: +1 momentum/turn, draw 2 moves";
                   return (
                     <button
                       key={a.kind}
@@ -316,34 +316,59 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
               {turn.timers.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-dim font-bold">Threats</p>
-                  {turn.timers.map((t, i) => (
-                    <div
-                      key={i}
-                      className={`flex items-center gap-3 ${t.stopped ? "opacity-30 line-through" : ""}`}
-                    >
-                      <MaskedIcon icon={ICONS.threat} className="w-4 h-4" color={t.stopped ? "#8b8b8b" : "#aca377"} />
-                      <span className="flex-1">{t.name}</span>
-                      <span className="text-dim">
-                        {t.effect === "spirits" ? `Lose ${t.amount} Spirits`
-                          : t.effect === "condition" ? <span className="capitalize">{t.conditionId}</span>
-                          : `Lose ${t.amount} Progress`}
-                      </span>
-                      <div className="flex gap-1">
-                        {Array.from({ length: t.countdown }, (_, j) => (
-                          <span
-                            key={j}
-                            className={`w-2.5 h-2.5 rounded-full ${
-                              j < t.current
-                                ? t.effect === "resistance"
-                                  ? "bg-accent"
-                                  : "bg-negative"
-                                : "bg-edge"
-                            }`}
-                          />
-                        ))}
+                  {turn.timers.map((t, i) => {
+                    const isFatal = t.effect === "fatal";
+                    const isTick = t.effect === "ticktimer";
+                    const effectText =
+                      isFatal ? "Encounter fails"
+                      : isTick ? `Advances ${t.ticksTimerName}`
+                      : t.effect === "spirits" ? `Lose ${t.amount} Spirits`
+                      : t.effect === "condition" ? <span className="capitalize">{t.conditionId}</span>
+                      : `Lose ${t.amount} Progress`;
+                    const dotColor =
+                      isFatal ? "bg-negative"
+                      : t.effect === "resistance" ? "bg-accent"
+                      : "bg-negative";
+                    const iconColor =
+                      t.stopped ? "#8b8b8b"
+                      : isFatal ? "#C45656"
+                      : t.isAmbient ? "#8b8b8b"
+                      : "#aca377";
+
+                    return (
+                      <div
+                        key={i}
+                        className={`flex items-center gap-3 ${
+                          t.stopped ? "opacity-30 line-through"
+                          : t.isAmbient ? "opacity-60"
+                          : ""
+                        }`}
+                      >
+                        <MaskedIcon icon={ICONS.threat} className="w-4 h-4" color={iconColor} />
+                        <span className={`flex-1 ${isFatal && !t.stopped ? "text-negative font-bold" : ""}`}>
+                          {t.name}
+                        </span>
+                        <span className={`${isFatal ? "text-negative" : "text-dim"}`}>
+                          {effectText}
+                        </span>
+                        {!t.isAmbient && t.resistance > 0 && !t.stopped && (
+                          <span className="text-accent text-dim">
+                            Resist {t.resistance}
+                          </span>
+                        )}
+                        <div className="flex gap-1">
+                          {Array.from({ length: t.countdown }, (_, j) => (
+                            <span
+                              key={j}
+                              className={`w-2.5 h-2.5 rounded-full ${
+                                j < t.current ? dotColor : "bg-edge"
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
@@ -380,40 +405,44 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                     </button>
                   );
                 })}
-                <button
-                  onClick={pressAdvantage}
-                  disabled={loading || turn.momentum < PRESS_COST}
-                  title={`Pay ${PRESS_COST} momentum, draw 3 new moves`}
-                  className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
-                    turn.momentum >= PRESS_COST
-                      ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
-                      : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
-                  }`}
-                >
-                  <span className={`font-bold ${turn.momentum >= PRESS_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
-                    Press the Advantage
-                  </span>
-                  <span className="flex items-center gap-1.5 text-dim">
-                    <IconChip icon={ICONS.momentum} value={`-${PRESS_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+3" />
-                  </span>
-                </button>
-                <button
-                  onClick={forceOpening}
-                  disabled={loading || turn.spirits < FORCE_COST}
-                  title={`Pay ${FORCE_COST} spirits, draw 3 new moves`}
-                  className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
-                    turn.spirits >= FORCE_COST
-                      ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
-                      : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
-                  }`}
-                >
-                  <span className={`font-bold ${turn.spirits >= FORCE_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
-                    Force an Opening
-                  </span>
-                  <span className="flex items-center gap-1.5 text-dim">
-                    <IconChip icon={ICONS.spirits} value={`-${FORCE_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+3" />
-                  </span>
-                </button>
+                {!turn.digUsed && (
+                  <>
+                    <button
+                      onClick={pressAdvantage}
+                      disabled={loading || turn.momentum < PRESS_COST}
+                      title={`Pay ${PRESS_COST} momentum, draw 2 extra moves`}
+                      className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
+                        turn.momentum >= PRESS_COST
+                          ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
+                          : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
+                      }`}
+                    >
+                      <span className={`font-bold ${turn.momentum >= PRESS_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
+                        Press the Advantage
+                      </span>
+                      <span className="flex items-center gap-1.5 text-dim">
+                        <IconChip icon={ICONS.momentum} value={`-${PRESS_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+2" />
+                      </span>
+                    </button>
+                    <button
+                      onClick={forceOpening}
+                      disabled={loading || turn.spirits < FORCE_COST}
+                      title={`Pay ${FORCE_COST} spirits, draw 2 extra moves`}
+                      className={`w-full text-left p-4 border rounded-lg transition-colors flex items-center justify-between ${
+                        turn.spirits >= FORCE_COST
+                          ? "bg-btn hover:bg-btn-hover border-edge cursor-pointer group"
+                          : "bg-btn/50 border-edge/50 opacity-50 cursor-default"
+                      }`}
+                    >
+                      <span className={`font-bold ${turn.spirits >= FORCE_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
+                        Force an Opening
+                      </span>
+                      <span className="flex items-center gap-1.5 text-dim">
+                        <IconChip icon={ICONS.spirits} value={`-${FORCE_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+2" />
+                      </span>
+                    </button>
+                  </>
+                )}
               </div>
             </>
           )}
