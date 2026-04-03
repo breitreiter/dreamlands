@@ -2,75 +2,36 @@ namespace EncounterCli;
 
 static class GenerateTacticalCommand
 {
-    // Archetype pools: (id, progress_value)
-    static readonly (string Id, int Value)[] MomentumArchetypes =
-    [
-        ("free_momentum_small", 1),
-        ("free_momentum", 2),
-        ("threat_to_momentum", 2),
-        ("spirits_to_momentum", 3),
-    ];
-
-    static readonly (string Id, int Value)[] ProgressArchetypes =
-    [
-        ("free_progress_small", 1),
-        ("momentum_to_progress", 2),
-        ("momentum_to_progress_large", 3),
-        ("momentum_to_progress_huge", 5),
-        ("spirits_to_progress", 3),
-        ("spirits_to_progress_large", 5),
-        ("threat_to_progress", 2),
-        ("threat_to_progress_large", 3),
-    ];
-
-    static readonly string[] CancelArchetypes = ["momentum_to_cancel", "spirits_to_cancel"];
     static readonly string[] TimerEffects = ["spirits", "resistance"];
 
     // Tier tables: keyed by tier (1-3)
     record TierData(
-        (int Lo, int Hi) Resistance,
         (int Lo, int Hi) TimerCount,
         (int Lo, int Hi) TimerCountdown,
         (int Lo, int Hi) TimerDamage,
-        (int Lo, int Hi) TimerResistance,
-        (int Lo, int Hi) OpeningsTraverse,
-        (int Lo, int Hi) OpeningsCombat,
-        (int Lo, int Hi) PathCards);
+        (int Lo, int Hi) TimerResistance);
 
     static readonly Dictionary<int, TierData> Tiers = new()
     {
         [1] = new(
-            Resistance: (6, 8),
             TimerCount: (2, 3),
             TimerCountdown: (3, 5),
             TimerDamage: (1, 1),
-            TimerResistance: (4, 6),
-            OpeningsTraverse: (9, 12),
-            OpeningsCombat: (10, 14),
-            PathCards: (4, 6)),
+            TimerResistance: (4, 6)),
         [2] = new(
-            Resistance: (8, 12),
             TimerCount: (3, 4),
             TimerCountdown: (3, 4),
             TimerDamage: (1, 2),
-            TimerResistance: (5, 8),
-            OpeningsTraverse: (11, 14),
-            OpeningsCombat: (12, 16),
-            PathCards: (5, 8)),
+            TimerResistance: (5, 8)),
         [3] = new(
-            Resistance: (12, 16),
             TimerCount: (4, 6),
             TimerCountdown: (2, 4),
             TimerDamage: (1, 2),
-            TimerResistance: (6, 10),
-            OpeningsTraverse: (13, 16),
-            OpeningsCombat: (14, 18),
-            PathCards: (6, 10)),
+            TimerResistance: (6, 10)),
     };
 
     public static int Run(string[] args)
     {
-        string? variant = null;
         int? tier = null;
         string? outPath = null;
         int? seed = null;
@@ -80,20 +41,13 @@ static class GenerateTacticalCommand
             else if (args[i] == "--seed" && i + 1 < args.Length && int.TryParse(args[i + 1], out var s)) { seed = s; i++; }
             else if (!args[i].StartsWith('-'))
             {
-                if (variant == null) variant = args[i].ToLowerInvariant();
-                else if (tier == null && int.TryParse(args[i], out var t)) tier = t;
+                if (tier == null && int.TryParse(args[i], out var t)) tier = t;
             }
         }
 
-        if (variant == null || tier == null)
+        if (tier == null)
         {
-            Console.Error.WriteLine("Usage: encounter generate-tactical <variant> <tier> [--out <file>] [--seed <n>]");
-            return 1;
-        }
-
-        if (variant is not "combat" and not "traverse")
-        {
-            Console.Error.WriteLine($"Unknown variant: {variant}. Must be 'combat' or 'traverse'.");
+            Console.Error.WriteLine("Usage: encounter generate-tactical <tier> [--out <file>] [--seed <n>]");
             return 1;
         }
 
@@ -103,7 +57,7 @@ static class GenerateTacticalCommand
             return 1;
         }
 
-        var output = Generate(variant, tier.Value, seed);
+        var output = Generate(tier.Value, seed);
 
         if (outPath != null)
         {
@@ -127,26 +81,25 @@ static class GenerateTacticalCommand
 
     // --- Generation ---
 
-    static string Generate(string variant, int tier, int? seed)
+    static string Generate(int tier, int? seed)
     {
         var rng = seed.HasValue ? new Random(seed.Value) : new Random();
         var td = Tiers[tier];
 
-        var (timers, resTimerCount) = GenerateTimers(rng, td);
-        var resistance = RandRange(rng, td.Resistance);
+        var timers = GenerateTimers(rng, td);
 
         var lines = new List<string>();
 
         // Header
         lines.Add("FIXME: Title");
-        lines.Add($"[variant {variant}]");
         lines.Add($"[stat FIXME]");
         lines.Add($"[tier {tier}]");
         lines.Add("");
         lines.Add("FIXME: body text");
         lines.Add("");
 
-        // Timers
+        // Timers (shuffled for variety — order doesn't affect balance)
+        Shuffle(rng, timers);
         lines.Add("timers:");
         foreach (var (effect, damage, countdown, timerResist) in timers)
             lines.Add($"  * FIXME [counter FIXME]: {effect} {damage} every {countdown} resist {timerResist}");
@@ -154,56 +107,20 @@ static class GenerateTacticalCommand
 
         // Openings
         lines.Add("openings:");
-        List<string> openings;
-        if (variant == "traverse")
-        {
-            var openingCount = RandRange(rng, td.OpeningsTraverse);
-            openings = GenerateTraverseOpenings(rng, tier, openingCount);
-        }
-        else
-        {
-            var openingCount = RandRange(rng, td.OpeningsCombat);
-            openings = GenerateCombatOpenings(rng, tier, openingCount);
-        }
+        var openings = GenerateOpenings(rng, tier);
         foreach (var arch in openings)
             lines.Add($"  * FIXME: {arch}");
 
-        // Path (traverse only)
-        if (variant == "traverse")
-        {
-            var cardCount = RandRange(rng, td.PathCards);
-            var extraPressure = EstimateResistanceTimerPressure(timers, resistance);
-            var target = resistance + extraPressure;
-            var path = GeneratePath(rng, tier, target, cardCount);
-            var actualSum = path.Sum(ProgressValue);
+        // Approaches
+        lines.Add("");
+        lines.Add("approaches:");
+        lines.Add("  * aggressive");
+        lines.Add("  * cautious");
 
-            lines.Add("");
-            lines.Add("path:");
-            foreach (var arch in path)
-                lines.Add($"  * FIXME: {arch}");
-            var comment = $"  # path sum: {actualSum} (resistance: {resistance}";
-            if (extraPressure > 0)
-                comment += $" + ~{extraPressure} timer pressure";
-            comment += ")";
-            lines.Add(comment);
-        }
-
-        // Approaches (combat only)
-        if (variant == "combat")
-        {
-            lines.Add("");
-            lines.Add("approaches:");
-            lines.Add("  * aggressive");
-            lines.Add("  * cautious");
-        }
-
-        // Success (combat only)
-        if (variant == "combat")
-        {
-            lines.Add("");
-            lines.Add("success:");
-            lines.Add("  FIXME: success text");
-        }
+        // Success
+        lines.Add("");
+        lines.Add("success:");
+        lines.Add("  FIXME: success text");
 
         // Failure
         lines.Add("");
@@ -217,231 +134,85 @@ static class GenerateTacticalCommand
 
     // --- Timers ---
 
-    static (List<(string Effect, int Damage, int Countdown, int Resistance)> Timers, int ResTimerCount) GenerateTimers(
+    static List<(string Effect, int Damage, int Countdown, int Resistance)> GenerateTimers(
         Random rng, TierData td)
     {
         var count = RandRange(rng, td.TimerCount);
-
         var timers = new List<(string, int, int, int)>();
-        var resTimerCount = 0;
 
         for (int i = 0; i < count; i++)
         {
             // Bias toward spirits; resistance timers are rarer
             var effect = rng.NextDouble() < 0.25 ? "resistance" : "spirits";
-            if (effect == "resistance")
-                resTimerCount++;
             var damage = RandRange(rng, td.TimerDamage);
             var countdown = RandRange(rng, td.TimerCountdown);
             var timerResist = RandRange(rng, td.TimerResistance);
             timers.Add((effect, damage, countdown, timerResist));
         }
 
-        return (timers, resTimerCount);
+        return timers;
     }
 
-    // --- Traverse openings (momentum only) ---
+    // --- Openings (tier-degraded from canonical base) ---
+    //
+    // The canonical base deck (from GA optimization) represents "what fun feels like."
+    // Higher tiers degrade by removing the best cards from the top, replacing with chaff.
+    // This forces players to bring good cards via gear. Cancels are T1 only — bring your own.
+    //
+    // The base is 15 cards. Player collection fills some slots, filler fills the rest.
+    // The generator produces filler openings (typically 10-14 depending on player gear).
 
-    static List<string> GenerateTraverseOpenings(Random rng, int tier, int count)
+    // Canonical filler ranked best-to-worst. Degradation removes from the top.
+    static readonly string[] CanonicalFiller =
+    [
+        // Top tier — removed first at higher tiers
+        "spirits_to_cancel",           // insurance cancel (T1 only)
+        "spirits_to_progress_large",   // big burst
+        "spirits_to_progress_large",
+        "threat_to_progress",          // always-playable damage
+        "threat_to_progress",
+        "spirits_to_momentum",         // spirits-to-momentum ramp
+        // Mid tier — removed at T3
+        "momentum_to_progress",        // bread and butter
+        "threat_to_progress",
+        "free_momentum",               // setup
+        "free_momentum",
+        // Floor — always present
+        "free_progress_small",
+        "free_progress_small",
+        "free_progress_small",
+        "free_momentum_small",
+    ];
+
+    // How many top cards to remove per tier
+    static int DegradeCount(int tier) => tier switch
     {
-        var cards = new List<string>
-        {
-            "free_momentum",
-            "free_momentum",
-            "threat_to_momentum",
-        };
-
-        // Maybe a spirits_to_momentum haymaker at higher tiers
-        if (tier >= 2 || rng.NextDouble() < 0.3)
-            cards.Add("spirits_to_momentum");
-
-        // Maybe a second threat_to_momentum at higher tiers
-        if (tier >= 2 && rng.NextDouble() < 0.5)
-            cards.Add("threat_to_momentum");
-
-        // Fill the rest with free_momentum_small
-        while (cards.Count < count)
-            cards.Add("free_momentum_small");
-
-        Shuffle(rng, cards);
-        return cards;
-    }
-
-    // --- Combat openings (mixed) ---
-
-    static List<string> GenerateCombatOpenings(Random rng, int tier, int count)
-    {
-        var cards = new List<string>();
-
-        // Momentum generators (~35% of deck)
-        var momentumCount = Math.Max(4, (int)Math.Round(count * 0.35));
-        cards.Add("free_momentum");
-        cards.Add("free_momentum_small");
-        cards.Add("free_momentum_small");
-        cards.Add("threat_to_momentum");
-        var momentumExtras = momentumCount - 4;
-        for (int i = 0; i < momentumExtras; i++)
-        {
-            if (rng.NextDouble() < 0.3 && tier >= 2)
-                cards.Add("spirits_to_momentum");
-            else
-                cards.Add("free_momentum_small");
-        }
-
-        // Cancel card (optional, more likely at higher tiers)
-        if (rng.NextDouble() < 0.2 + tier * 0.15)
-            cards.Add("momentum_to_cancel");
-
-        // Progress converters (fill remaining slots)
-        var progressCount = count - cards.Count;
-
-        // Caps on expensive cards
-        var budget = new Dictionary<string, int>
-        {
-            ["momentum_to_progress_huge"] = tier >= 2 ? 1 : 0,
-            ["spirits_to_progress_large"] = tier >= 3 ? 1 : 0,
-            ["momentum_to_progress_large"] = 1,
-            ["spirits_to_progress"] = 1,
-            ["threat_to_progress_large"] = tier >= 2 ? 1 : 0,
-        };
-        var placed = budget.Keys.ToDictionary(k => k, _ => 0);
-
-        // Guarantee one haymaker
-        var haymakers = budget.Where(kv => kv.Value > 0).Select(kv => kv.Key).ToList();
-        var pick = haymakers[rng.Next(haymakers.Count)];
-        cards.Add(pick);
-        placed[pick]++;
-        progressCount--;
-
-        // Fill the rest, weighted toward cheap cards
-        for (int i = 0; i < progressCount; i++)
-        {
-            var roll = rng.NextDouble();
-            if (roll < 0.30)
-                cards.Add("free_progress_small");
-            else if (roll < 0.55)
-                cards.Add("momentum_to_progress");
-            else if (roll < 0.70)
-                cards.Add("threat_to_progress");
-            else
-            {
-                var candidates = budget.Where(kv => placed[kv.Key] < kv.Value).Select(kv => kv.Key).ToList();
-                if (candidates.Count > 0)
-                {
-                    pick = candidates[rng.Next(candidates.Count)];
-                    cards.Add(pick);
-                    placed[pick]++;
-                }
-                else
-                {
-                    cards.Add("momentum_to_progress");
-                }
-            }
-        }
-
-        Shuffle(rng, cards);
-        return cards;
-    }
-
-    // --- Path generation (traverse only) ---
-
-    static List<string> GeneratePath(Random rng, int tier, int targetProgress, int cardCount)
-    {
-        var allowSpirits = tier >= 2 || rng.NextDouble() < 0.2;
-        var cards = new List<string>();
-        var remaining = targetProgress;
-
-        for (int i = 0; i < cardCount; i++)
-        {
-            if (remaining <= 0)
-                break;
-
-            // Fine-tune with small cards when close
-            if (remaining <= 2)
-            {
-                if (remaining == 1)
-                {
-                    cards.Add("free_progress_small");
-                    remaining -= 1;
-                }
-                else
-                {
-                    cards.Add("momentum_to_progress");
-                    remaining -= 2;
-                }
-                continue;
-            }
-
-            var roll = rng.NextDouble();
-            if (roll < 0.15 && allowSpirits && remaining >= 3)
-            {
-                cards.Add("spirits_to_progress");
-                remaining -= 3;
-            }
-            else if (roll < 0.35 && remaining >= 3)
-            {
-                cards.Add("momentum_to_progress_large");
-                remaining -= 3;
-            }
-            else if (remaining >= 2)
-            {
-                cards.Add("momentum_to_progress");
-                remaining -= 2;
-            }
-            else
-            {
-                cards.Add("free_progress_small");
-                remaining -= 1;
-            }
-        }
-
-        // Cover any remaining progress
-        while (remaining > 0)
-        {
-            if (remaining >= 2)
-            {
-                cards.Add("momentum_to_progress");
-                remaining -= 2;
-            }
-            else
-            {
-                cards.Add("free_progress_small");
-                remaining -= 1;
-            }
-        }
-
-        return cards;
-    }
-
-    // --- Balance helpers ---
-
-    static int EstimateResistanceTimerPressure(List<(string Effect, int Damage, int Countdown, int Resistance)> timers, int resistance)
-    {
-        var turns = resistance / 2 + 1;
-        var extra = 0;
-        foreach (var (effect, damage, countdown, _) in timers)
-        {
-            if (effect == "resistance")
-            {
-                var ticks = turns / countdown;
-                extra += ticks * damage;
-            }
-        }
-        return extra;
-    }
-
-    static int ProgressValue(string archetype) => archetype switch
-    {
-        "free_progress_small" => 1,
-        "momentum_to_progress" => 2,
-        "momentum_to_progress_large" => 3,
-        "momentum_to_progress_huge" => 5,
-        "spirits_to_progress" => 3,
-        "spirits_to_progress_large" => 5,
-        "threat_to_progress" => 2,
-        "threat_to_progress_large" => 3,
+        1 => 0,   // full canonical — tutorial, everything handed to you
+        2 => 3,   // lose the cancel + 2 best damage cards
+        3 => 6,   // lose cancel + all burst damage + ramp. Gear or suffer.
         _ => 0,
     };
+
+    const int FillerCount = 14; // deck is 15; assume at least 1 collection card
+
+    static List<string> GenerateOpenings(Random rng, int tier)
+    {
+        int degrade = DegradeCount(tier);
+
+        // Start from canonical, degrade top N to chaff
+        var pool = new List<string>(CanonicalFiller);
+        for (int i = 0; i < Math.Min(degrade, pool.Count); i++)
+            pool[i] = "free_progress_small";
+
+        // Trim or pad to exactly FillerCount
+        while (pool.Count > FillerCount)
+            pool.RemoveAt(pool.Count - 1);
+        while (pool.Count < FillerCount)
+            pool.Add("free_progress_small");
+
+        Shuffle(rng, pool);
+        return pool;
+    }
 
     // --- Utilities ---
 

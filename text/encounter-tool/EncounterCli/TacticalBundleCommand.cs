@@ -116,7 +116,6 @@ static class TacticalBundleCommand
         category,
         title = enc.Title,
         body = enc.Body,
-        variant = enc.Variant.ToString().ToLowerInvariant(),
         stat = enc.Stat,
         tier = enc.Tier,
         requires = enc.Requires,
@@ -128,15 +127,10 @@ static class TacticalBundleCommand
             amount = t.Amount,
             countdown = t.Countdown,
             resistance = t.Resistance,
-            conditionId = t.ConditionId
+            conditionId = t.ConditionId,
+            ticksTimerName = t.TicksTimerName
         }),
         openings = enc.Openings.Select(o => new
-        {
-            name = o.Name,
-            archetype = o.Archetype,
-            requires = o.Requires
-        }),
-        path = enc.Path.Select(o => new
         {
             name = o.Name,
             archetype = o.Archetype,

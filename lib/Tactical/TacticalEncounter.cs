@@ -2,21 +2,20 @@ namespace Dreamlands.Tactical;
 
 // ── Enums ──────────────────────────────────────────────────────────
 
-public enum Variant { Combat, Traverse }
-
 public enum CostKind { Free, Momentum, Spirits, Tick }
 
 public enum EffectKind { Damage, StopTimer, Momentum }
 
-public enum TimerEffect { Spirits, Resistance, Condition }
+public enum TimerEffect { Spirits, Resistance, Condition, TickTimer, Fatal }
 
 public enum ApproachKind { Aggressive, Cautious }
 
 // ── Value types ────────────────────────────────────────────────────
 
 /// <summary>
-/// Timer definition. Sequential — only one active at a time.
-/// Each timer has its own resistance that must be depleted (or cancelled) to advance.
+/// Timer definition. Two kinds determined by Resistance:
+///   Resistance > 0 → sequential (has HP, one active at a time, player depletes to advance)
+///   Resistance = 0 → ambient (always ticking, auto-cleared when all sequential timers are done)
 /// </summary>
 public sealed record TimerDef(
     string Name,
@@ -25,7 +24,8 @@ public sealed record TimerDef(
     int Countdown,
     int Resistance,
     string? CounterName = null,
-    string? ConditionId = null);
+    string? ConditionId = null,
+    string? TicksTimerName = null);
 
 public sealed record OpeningDef(string Name, string Archetype, string? Requires = null);
 
@@ -48,15 +48,12 @@ public sealed record TacticalEncounter
     public string Category { get; init; } = "";
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
-    public Variant Variant { get; init; }
     public string? Stat { get; init; }
     public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = [];
 
-    /// <summary>Sequential timers — played one at a time in order.</summary>
     public IReadOnlyList<TimerDef> Timers { get; init; } = [];
     public IReadOnlyList<OpeningDef> Openings { get; init; } = [];
-    public IReadOnlyList<OpeningDef> Path { get; init; } = [];
     public IReadOnlyList<ApproachDef> Approaches { get; init; } = [];
     public FailureOutcome? Failure { get; init; }
     public SuccessOutcome? Success { get; init; }

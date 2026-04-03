@@ -182,11 +182,9 @@ static class Scenarios
     {
         Id = "sim/" + scenario.Name,
         Title = scenario.Name,
-        Variant = Variant.Combat,
         Stat = "combat",
         Timers = scenario.Timers,
         Openings = scenario.Openings,
-        Path = [],
         Approaches = scenario.Approaches,
     };
 }

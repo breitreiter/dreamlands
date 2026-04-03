@@ -347,24 +347,6 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                 </div>
               )}
 
-              {/* Queue (traverse) */}
-              {turn.queue && turn.queue.length > 1 && (
-                <div className="space-y-2">
-                  <p className="text-dim font-bold">Ahead</p>
-                  <div className="flex gap-2 items-center overflow-x-auto">
-                    {turn.queue.slice(1).map((q, i) => (
-                      <div
-                        key={i}
-                        title={describeOpening(q)}
-                        className="shrink-0 px-3 py-2 rounded-lg bg-btn/50 text-muted"
-                      >
-                        <div>{q.name}</div>
-                        <CostEffect opening={q} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Openings + Press/Force */}
               <div className="space-y-2">

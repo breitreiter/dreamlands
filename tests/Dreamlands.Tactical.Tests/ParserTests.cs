@@ -94,7 +94,6 @@ public class ParserTests
     public void CombatFrontMatter()
     {
         var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
-        Assert.Equal(Variant.Combat, enc.Variant);
         Assert.Equal(2, enc.Tier);
     }
 
@@ -177,8 +176,7 @@ public class ParserTests
     {
         var result = TacticalParser.Parse(TraverseEncounter);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-        var enc = result.Encounter!;
-        Assert.Equal(Variant.Traverse, enc.Variant);
+        Assert.NotNull(result.Encounter);
     }
 
     [Fact]
@@ -247,7 +245,7 @@ public class ParserTests
     }
 
     [Fact]
-    public void MissingVariantErrors()
+    public void NoVariantIsValid()
     {
         var source = """
             Test Encounter
@@ -261,8 +259,7 @@ public class ParserTests
               You fail.
             """;
         var result = TacticalParser.Parse(source);
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("variant"));
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
     }
 
     [Fact]
@@ -486,5 +483,185 @@ public class ParserTests
         var result = TacticalParser.Parse(source);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
         Assert.Empty(result.Encounter!.Timers);
+    }
+
+    // ── Fatal timers ──────────────────────────────────────────────────
+
+    [Fact]
+    public void FatalTimerParses()
+    {
+        var source = """
+            Chase
+            [tier 1]
+
+            They're after you.
+
+            timers:
+              * They're gaining on you: fatal every 20
+
+            openings:
+              * Run: free_progress_small
+
+            failure:
+              They catch you.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        var timer = result.Encounter!.Timers[0];
+        Assert.Equal("They're gaining on you", timer.Name);
+        Assert.Equal(TimerEffect.Fatal, timer.Effect);
+        Assert.Equal(20, timer.Countdown);
+        Assert.Equal(0, timer.Resistance); // ambient
+    }
+
+    [Fact]
+    public void FatalTimerWithResistParses()
+    {
+        var source = """
+            Bomb
+            [tier 2]
+
+            Tick tick tick.
+
+            timers:
+              * Ticking Bomb: fatal every 5 resist 4
+
+            openings:
+              * Defuse: momentum_to_progress
+
+            failure:
+              Boom.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        var timer = result.Encounter!.Timers[0];
+        Assert.Equal(TimerEffect.Fatal, timer.Effect);
+        Assert.Equal(5, timer.Countdown);
+        Assert.Equal(4, timer.Resistance); // sequential — can be defused
+    }
+
+    // ── Tick-timer ────────────────────────────────────────────────────
+
+    [Fact]
+    public void TickTimerParses()
+    {
+        var source = """
+            Traverse
+            [tier 1]
+
+            Navigate the hazards.
+
+            timers:
+              * Master: fatal every 20
+              * Reach the creek: tick "Master" 3 every 4 resist 6
+
+            openings:
+              * Step: free_progress_small
+
+            failure:
+              Lost.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        Assert.Equal(2, result.Encounter!.Timers.Count);
+
+        var master = result.Encounter.Timers[0];
+        Assert.Equal(TimerEffect.Fatal, master.Effect);
+        Assert.Equal(0, master.Resistance);
+
+        var creek = result.Encounter.Timers[1];
+        Assert.Equal("Reach the creek", creek.Name);
+        Assert.Equal(TimerEffect.TickTimer, creek.Effect);
+        Assert.Equal(3, creek.Amount);
+        Assert.Equal(4, creek.Countdown);
+        Assert.Equal(6, creek.Resistance);
+        Assert.Equal("Master", creek.TicksTimerName);
+    }
+
+    [Fact]
+    public void TickTimerWithCounterParses()
+    {
+        var source = """
+            Test
+            [tier 1]
+
+            Body.
+
+            timers:
+              * Master: fatal every 20
+              * Climb [counter Find handholds]: tick "Master" 2 every 3 resist 5
+
+            openings:
+              * Step: free_progress_small
+
+            failure:
+              Fall.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        var timer = result.Encounter!.Timers[1];
+        Assert.Equal("Climb", timer.Name);
+        Assert.Equal("Find handholds", timer.CounterName);
+        Assert.Equal("Master", timer.TicksTimerName);
+    }
+
+    // ── Ambient timers (resist omitted) ───────────────────────────────
+
+    [Fact]
+    public void TimerWithoutResistIsAmbient()
+    {
+        var source = """
+            Test
+            [tier 1]
+
+            Body.
+
+            timers:
+              * Constant Drain: spirits 1 every 3
+
+            openings:
+              * Strike: momentum_to_progress
+
+            failure:
+              You fail.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+
+        var timer = result.Encounter!.Timers[0];
+        Assert.Equal(0, timer.Resistance);
+        Assert.Equal(TimerEffect.Spirits, timer.Effect);
+        Assert.Equal(3, timer.Countdown);
+    }
+
+    // ── Path section ignored ──────────────────────────────────────────
+
+    [Fact]
+    public void PathSectionIsIgnored()
+    {
+        var source = """
+            Old Format
+            [tier 1]
+
+            Body.
+
+            timers:
+              * Threat: spirits 1 every 3 resist 5
+
+            openings:
+              * Strike: momentum_to_progress
+
+            path:
+              * Step: free_progress_small
+
+            failure:
+              You fail.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
     }
 }

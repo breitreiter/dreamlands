@@ -336,7 +336,6 @@ public record TacticalInfo
     public string Phase { get; init; } = "";  // approach, turn, finished
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
-    public string Variant { get; init; } = "";
     // approach phase
     public List<TacticalApproachInfo>? Approaches { get; init; }
 
@@ -366,7 +365,6 @@ public class TacticalTurnInfo
     public int Spirits { get; init; }
     public List<TacticalTimerInfo> Timers { get; init; } = [];
     public List<TacticalOpeningInfo> Openings { get; init; } = [];
-    public List<TacticalOpeningInfo>? Queue { get; init; }
 }
 
 public class TacticalTimerInfo
@@ -377,8 +375,11 @@ public class TacticalTimerInfo
     public int Amount { get; init; }
     public int Countdown { get; init; }
     public int Current { get; init; }
+    public int Resistance { get; init; }
     public bool Stopped { get; init; }
+    public bool IsAmbient { get; init; }
     public string? ConditionId { get; init; }
+    public string? TicksTimerName { get; init; }
 }
 
 public class TacticalOpeningInfo

@@ -72,7 +72,7 @@ static class TacticalCheckCommand
     static List<string> CheckOpeningCount(TacticalEncounter enc)
     {
         var warnings = new List<string>();
-        var distinct = enc.Openings.Concat(enc.Path)
+        var distinct = enc.Openings
             .Select(o => o.Name)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .Count();

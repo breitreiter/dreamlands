@@ -63,7 +63,6 @@ public class BundleTests
 
         var enc = bundle.Encounters[0];
         Assert.Equal("Wolves", enc.Title);
-        Assert.Equal(Variant.Combat, enc.Variant);
     }
 
     [Fact]

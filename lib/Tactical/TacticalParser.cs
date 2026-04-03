@@ -4,18 +4,26 @@ namespace Dreamlands.Tactical;
 
 public static partial class TacticalParser
 {
-    enum Section { None, Timers, Openings, Path, Approaches, Failure, Success, Branches }
+    enum Section { None, Timers, Openings, Approaches, Failure, Success, Branches }
 
     [GeneratedRegex(@"^\[(\w+)\s+(.+?)\]\s*$")]
     private static partial Regex FrontMatterPattern();
 
-    // * Timer Name [counter Stop text]: spirits 2 every 4 resist 3
-    [GeneratedRegex(@"^\*\s+(.+?):\s+(spirits|resistance)\s+(\d+)\s+every\s+(\d+)\s+resist\s+(\d+)\s*$")]
+    // * Timer Name: spirits|resistance N every N [resist N]
+    [GeneratedRegex(@"^\*\s+(.+?):\s+(spirits|resistance)\s+(\d+)\s+every\s+(\d+)(?:\s+resist\s+(\d+))?\s*$")]
     private static partial Regex TimerPattern();
 
-    // * Timer Name: condition injured every 4 resist 3
-    [GeneratedRegex(@"^\*\s+(.+?):\s+condition\s+(\w+)\s+every\s+(\d+)\s+resist\s+(\d+)\s*$")]
+    // * Timer Name: condition <id> every N [resist N]
+    [GeneratedRegex(@"^\*\s+(.+?):\s+condition\s+(\w+)\s+every\s+(\d+)(?:\s+resist\s+(\d+))?\s*$")]
     private static partial Regex ConditionTimerPattern();
+
+    // * Timer Name: fatal every N [resist N]
+    [GeneratedRegex(@"^\*\s+(.+?):\s+fatal\s+every\s+(\d+)(?:\s+resist\s+(\d+))?\s*$")]
+    private static partial Regex FatalTimerPattern();
+
+    // * Timer Name: tick "Target Name" N every N [resist N]
+    [GeneratedRegex(@"^\*\s+(.+?):\s+tick\s+""(.+?)""\s+(\d+)\s+every\s+(\d+)(?:\s+resist\s+(\d+))?\s*$")]
+    private static partial Regex TickTimerPattern();
 
     [GeneratedRegex(@"\[counter\s+(.+?)\]")]
     private static partial Regex CounterTag();
@@ -57,7 +65,6 @@ public static partial class TacticalParser
 
         // Front-matter
         var requires = new List<string>();
-        Variant? variant = null;
         string? stat = null;
         int? tier = null;
         int bodyStart = 1;
@@ -75,13 +82,7 @@ public static partial class TacticalParser
             switch (key)
             {
                 case "variant":
-                    if (variant != null)
-                        errors.Add(new ParseError(i + 1, "Duplicate [variant]."));
-                    else if (!Enum.TryParse<Variant>(value, ignoreCase: true, out var v))
-                        errors.Add(new ParseError(i + 1, $"Invalid variant '{value}'. Must be 'combat' or 'traverse'."));
-                    else
-                        variant = v;
-                    break;
+                    break; // Ignored — kept for backwards compatibility with existing .tac files
                 case "stat":
                     stat = value;
                     break;
@@ -133,7 +134,7 @@ public static partial class TacticalParser
                 {
                     "timers" => Section.Timers,
                     "openings" => Section.Openings,
-                    "path" => Section.Path,
+                    "path" => Section.None, // Ignored — removed feature, kept for backwards compat
                     "approaches" => Section.Approaches,
                     "failure" => Section.Failure,
                     "success" => Section.Success,
@@ -141,9 +142,9 @@ public static partial class TacticalParser
                     _ => Section.None,
                 };
 
-                if (section == Section.None)
+                if (section == Section.None && name != "path")
                     errors.Add(new ParseError(i + 1, $"Unknown section '{name}'."));
-                else if (sections.ContainsKey(section))
+                else if (section != Section.None && sections.ContainsKey(section))
                     errors.Add(new ParseError(i + 1, $"Duplicate section '{name}'."));
 
                 currentSection = section == Section.None ? null : section;
@@ -156,7 +157,7 @@ public static partial class TacticalParser
         // Detect encounter vs group
         bool isGroup = sections.ContainsKey(Section.Branches);
         bool isEncounter = sections.ContainsKey(Section.Openings)
-                        || sections.ContainsKey(Section.Path) || sections.ContainsKey(Section.Timers) || sections.ContainsKey(Section.Approaches)
+                        || sections.ContainsKey(Section.Timers) || sections.ContainsKey(Section.Approaches)
                         || sections.ContainsKey(Section.Failure) || sections.ContainsKey(Section.Success);
 
         if (isGroup && isEncounter)
@@ -174,18 +175,15 @@ public static partial class TacticalParser
         if (isGroup)
             return ParseGroup(lines, title, body, tier, requires, sections, errors);
 
-        return ParseEncounter(lines, title, body, variant, stat, tier, requires, sections, errors);
+        return ParseEncounter(lines, title, body, stat, tier, requires, sections, errors);
     }
 
     static TacticalParseResult ParseEncounter(
         string[] lines, string title, string body,
-        Variant? variant, string? stat, int? tier,
+        string? stat, int? tier,
         List<string> requires, Dictionary<Section, (int start, int end)> sections,
         List<ParseError> errors)
     {
-        if (variant == null)
-            errors.Add(new ParseError(null, "Encounter is missing [variant combat|traverse]."));
-
         if (!sections.ContainsKey(Section.Openings))
             errors.Add(new ParseError(null, "Missing required section 'openings:'."));
         if (!sections.ContainsKey(Section.Failure))
@@ -201,17 +199,12 @@ public static partial class TacticalParser
         if (sections.TryGetValue(Section.Openings, out var openingRange))
             ParseOpenings(lines, openingRange.start, openingRange.end, openings, errors);
 
-        // Path (traverse authored path — same syntax as openings)
-        var path = new List<OpeningDef>();
-        if (sections.TryGetValue(Section.Path, out var pathRange))
-            ParseOpenings(lines, pathRange.start, pathRange.end, path, errors);
-
         // Approaches
         var approaches = new List<ApproachDef>();
         if (sections.TryGetValue(Section.Approaches, out var approachRange))
             ParseApproaches(lines, approachRange.start, approachRange.end, approaches, errors);
 
-        if (variant == Variant.Combat && approaches.Count == 0 && sections.ContainsKey(Section.Approaches))
+        if (approaches.Count == 0 && sections.ContainsKey(Section.Approaches))
             errors.Add(new ParseError(null, "Approaches section is empty."));
 
         // Failure
@@ -233,13 +226,11 @@ public static partial class TacticalParser
             {
                 Title = title,
                 Body = body,
-                Variant = variant!.Value,
                 Stat = stat,
                 Tier = tier,
                 Requires = requires,
                 Timers = timers,
                 Openings = openings,
-                Path = path,
                 Approaches = approaches,
                 Failure = failure,
                 Success = success,
@@ -284,63 +275,82 @@ public static partial class TacticalParser
             var trimmed = lines[i].Trim();
             if (string.IsNullOrEmpty(trimmed)) continue;
 
-            // * Name: effect amount every countdown
             if (!trimmed.StartsWith("* "))
             {
                 errors.Add(new ParseError(i + 1, $"Expected '* Timer Name: ...', got '{trimmed}'."));
                 continue;
             }
 
-            // Try condition timer pattern first: * Name: condition <id> every N resist N
+            // Try each timer pattern in order
+
+            // Fatal timer: * Name: fatal every N [resist N]
+            var fm = FatalTimerPattern().Match(trimmed);
+            if (fm.Success)
+            {
+                var name = ExtractNameAndCounter(fm.Groups[1].Value, out var counter);
+                var countdown = int.Parse(fm.Groups[2].Value);
+                var resistance = fm.Groups[3].Success ? int.Parse(fm.Groups[3].Value) : 0;
+                timers.Add(new TimerDef(name, TimerEffect.Fatal, 0, countdown, resistance, counter));
+                continue;
+            }
+
+            // Tick timer: * Name: tick "Target" N every N [resist N]
+            var tm = TickTimerPattern().Match(trimmed);
+            if (tm.Success)
+            {
+                var name = ExtractNameAndCounter(tm.Groups[1].Value, out var counter);
+                var target = tm.Groups[2].Value;
+                var amount = int.Parse(tm.Groups[3].Value);
+                var countdown = int.Parse(tm.Groups[4].Value);
+                var resistance = tm.Groups[5].Success ? int.Parse(tm.Groups[5].Value) : 0;
+                timers.Add(new TimerDef(name, TimerEffect.TickTimer, amount, countdown, resistance, counter, TicksTimerName: target));
+                continue;
+            }
+
+            // Condition timer: * Name: condition <id> every N [resist N]
             var cm = ConditionTimerPattern().Match(trimmed);
             if (cm.Success)
             {
-                var cName = cm.Groups[1].Value.Trim();
-                var counterMatch2 = CounterTag().Match(cName);
-                string? cCounter = null;
-                if (counterMatch2.Success)
-                {
-                    cCounter = counterMatch2.Groups[1].Value.Trim();
-                    cName = cName[..counterMatch2.Index].Trim();
-                }
-
+                var name = ExtractNameAndCounter(cm.Groups[1].Value, out var counter);
                 var conditionId = cm.Groups[2].Value;
-                var cCountdown = int.Parse(cm.Groups[3].Value);
-                var cResistance = int.Parse(cm.Groups[4].Value);
+                var countdown = int.Parse(cm.Groups[3].Value);
+                var resistance = cm.Groups[4].Success ? int.Parse(cm.Groups[4].Value) : 0;
 
                 if (!KnownConditions.Contains(conditionId))
                     errors.Add(new ParseError(i + 1, $"Unknown condition '{conditionId}'."));
                 else
-                    timers.Add(new TimerDef(cName, TimerEffect.Condition, 0, cCountdown, cResistance, cCounter, conditionId));
+                    timers.Add(new TimerDef(name, TimerEffect.Condition, 0, countdown, resistance, counter, conditionId));
                 continue;
             }
 
-            // Standard timer: * Name: spirits|resistance N every N resist N
+            // Standard timer: * Name: spirits|resistance N every N [resist N]
             var m = TimerPattern().Match(trimmed);
-            if (!m.Success)
+            if (m.Success)
             {
-                errors.Add(new ParseError(i + 1, $"Invalid timer format. Expected '* Name: spirits|resistance N every N resist N' or '* Name: condition <id> every N resist N'."));
+                var name = ExtractNameAndCounter(m.Groups[1].Value, out var counter);
+                var effect = m.Groups[2].Value == "spirits" ? TimerEffect.Spirits : TimerEffect.Resistance;
+                var amount = int.Parse(m.Groups[3].Value);
+                var countdown = int.Parse(m.Groups[4].Value);
+                var resistance = m.Groups[5].Success ? int.Parse(m.Groups[5].Value) : 0;
+                timers.Add(new TimerDef(name, effect, amount, countdown, resistance, counter));
                 continue;
             }
 
-            var name = m.Groups[1].Value.Trim();
-
-            // Extract [counter ...] from name
-            string? counterName = null;
-            var counterMatch = CounterTag().Match(name);
-            if (counterMatch.Success)
-            {
-                counterName = counterMatch.Groups[1].Value.Trim();
-                name = name[..counterMatch.Index].Trim();
-            }
-
-            var effect = m.Groups[2].Value == "spirits" ? TimerEffect.Spirits : TimerEffect.Resistance;
-            var amount = int.Parse(m.Groups[3].Value);
-            var countdown = int.Parse(m.Groups[4].Value);
-            var resistance = int.Parse(m.Groups[5].Value);
-
-            timers.Add(new TimerDef(name, effect, amount, countdown, resistance, counterName));
+            errors.Add(new ParseError(i + 1, "Invalid timer format. Expected '* Name: spirits|resistance N every N [resist N]', '* Name: condition <id> every N [resist N]', '* Name: fatal every N [resist N]', or '* Name: tick \"Target\" N every N [resist N]'."));
         }
+    }
+
+    static string ExtractNameAndCounter(string raw, out string? counterName)
+    {
+        var name = raw.Trim();
+        counterName = null;
+        var match = CounterTag().Match(name);
+        if (match.Success)
+        {
+            counterName = match.Groups[1].Value.Trim();
+            name = name[..match.Index].Trim();
+        }
+        return name;
     }
 
     /// <summary>Known condition IDs for validation. Must match ConditionDef.All keys.</summary>

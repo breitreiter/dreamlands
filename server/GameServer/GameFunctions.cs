@@ -1804,7 +1804,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             Title = tacEnc.Title,
             Body = tacEnc.Body,
-            Variant = tacEnc.Variant.ToString().ToLowerInvariant(),
         };
 
         switch (step)
@@ -1839,11 +1838,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             Amount = t.Amount,
                             Countdown = t.Countdown,
                             Current = t.Current,
+                            Resistance = t.Resistance,
                             Stopped = t.Stopped,
+                            IsAmbient = t.IsAmbient,
                             ConditionId = t.ConditionId,
+                            TicksTimerName = t.TicksTimerName,
                         }).ToList(),
                         Openings = st.Data.Openings.Select(BuildOpeningInfo).ToList(),
-                        Queue = st.Data.Queue?.Select(BuildOpeningInfo).ToList(),
                     },
                 };
                 break;

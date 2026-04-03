@@ -21,7 +21,6 @@ public class TacticalRunnerTests
             Category = "test",
             Title = "Test Combat",
             Body = "Test.",
-            Variant = Variant.Combat,
             Stat = "combat",
             Timers = timers ?? [new TimerDef("Threat", TimerEffect.Spirits, 1, 4, resistance, "Stop Threat")],
             Openings = openings ?? [
@@ -44,32 +43,6 @@ public class TacticalRunnerTests
                 new ApproachDef(ApproachKind.Cautious),
             ],
             Failure = failure ?? new FailureOutcome("You lose.", ["damage_spirits 2"]),
-        };
-    }
-
-    static TacticalEncounter MakeTraverse(
-        int resistance = 6)
-    {
-        return new TacticalEncounter
-        {
-            Id = "test/traverse",
-            Category = "test",
-            Title = "Test Traverse",
-            Body = "Test.",
-            Variant = Variant.Traverse,
-            Stat = "bushcraft",
-            Timers = [new TimerDef("Hazard", TimerEffect.Spirits, 1, 3, resistance, "Avoid Hazard")],
-            Openings = [
-                new OpeningDef("Step", "free_progress_small"),
-                new OpeningDef("Push", "momentum_to_progress"),
-            ],
-            Path = [
-                new OpeningDef("Step", "free_progress_small"),
-                new OpeningDef("Push", "momentum_to_progress"),
-                new OpeningDef("Step", "free_progress_small"),
-                new OpeningDef("Step", "free_progress_small"),
-            ],
-            Failure = new FailureOutcome("You fall.", ["damage_spirits 1"]),
         };
     }
 
@@ -98,31 +71,6 @@ public class TacticalRunnerTests
         Assert.Equal(2, ca.Approaches.Count);
     }
 
-    [Fact]
-    public void TraverseBeginReturnsShowTurn()
-    {
-        var (session, state) = MakeContext();
-        var enc = MakeTraverse();
-        var step = TacticalRunner.Begin(session, enc, state);
-
-        Assert.IsType<TacticalStep.ShowTurn>(step);
-        var st = (TacticalStep.ShowTurn)step;
-        Assert.Equal(6, st.Data.ResistanceMax);
-        Assert.Equal(0, st.Data.Momentum);
-        Assert.NotNull(st.Data.Queue);
-    }
-
-    [Fact]
-    public void TraverseQueuePopulatedFromPath()
-    {
-        var (session, state) = MakeContext();
-        var enc = MakeTraverse();
-        TacticalRunner.Begin(session, enc, state);
-
-        Assert.NotNull(state.Queue);
-        Assert.Equal(4, state.Queue.Count);
-        Assert.Equal("Step", state.Queue[0].Name);
-    }
 
     // ── Approach ───────────────────────────────────────────────────
 
@@ -573,22 +521,167 @@ public class TacticalRunnerTests
         Assert.Empty(fin.ConditionResults);
     }
 
-    // ── Traverse ───────────────────────────────────────
+    // ── Ambient timers ─────────────────────────────────
 
     [Fact]
-    public void TraversePathAdvancesOnTakeOpening()
+    public void AmbientTimersTickEveryTurn()
     {
         var (session, state) = MakeContext();
-        var enc = MakeTraverse(resistance: 100);
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timers: [
+                new TimerDef("Ambient Drain", TimerEffect.Spirits, 1, 3, 0),  // ambient (resist 0)
+                new TimerDef("Sequential", TimerEffect.Spirits, 1, 99, 100),  // sequential
+            ],
+            approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
-        Assert.NotNull(state.Queue);
-        var queueBefore = state.Queue.Count;
-        state.Momentum = 10;
+        // Ambient timer should have its own countdown ticking
+        var ambient = state.Timers[0];
+        Assert.True(ambient.IsAmbient);
+        var initialCurrent = ambient.Current;
 
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
         TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
-        Assert.Equal(queueBefore - 1, state.Queue.Count);
-        Assert.Equal(1, state.PathIndex);
+
+        Assert.Equal(initialCurrent - 1, ambient.Current);
+    }
+
+    [Fact]
+    public void AmbientTimersClearWhenSequentialDone()
+    {
+        var (session, state) = MakeContext();
+        var enc = MakeCombat(
+            resistance: 1,
+            timers: [
+                new TimerDef("Ambient", TimerEffect.Spirits, 1, 99, 0),  // ambient
+                new TimerDef("Sequential", TimerEffect.Spirits, 1, 99, 1),  // sequential, 1 resist
+            ],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Kill Shot",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Damage,
+            EffectAmount = 5,
+        };
+
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        Assert.IsType<TacticalStep.Finished>(step);
+        var fin = (TacticalStep.Finished)step;
+        Assert.Equal(TacticalFinishReason.ResistanceKill, fin.Reason);
+        Assert.True(state.Timers[0].Stopped); // ambient was auto-cleared
+    }
+
+    // ── Fatal timers ──────────────────────────────────
+
+    [Fact]
+    public void FatalTimerEndsEncounterOnFire()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timers: [
+                new TimerDef("Doom", TimerEffect.Fatal, 0, 2, 0),  // ambient fatal, fires in 2 turns
+                new TimerDef("Sequential", TimerEffect.Spirits, 1, 99, 100),
+            ],
+            approaches: [],
+            failure: new FailureOutcome("You're caught.", ["damage_spirits 3"]));
+        TacticalRunner.Begin(session, enc, state);
+
+        var stall = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+
+        // Turn 1: doom at 2 → 1
+        state.Openings[0] = stall;
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        Assert.IsType<TacticalStep.ShowTurn>(step);
+
+        // Turn 2: doom at 1 → 0 → fatal
+        state.Openings[0] = stall;
+        step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        Assert.IsType<TacticalStep.Finished>(step);
+        var fin = (TacticalStep.Finished)step;
+        Assert.Equal(TacticalFinishReason.TimerExpired, fin.Reason);
+        Assert.NotNull(fin.FailureResults);
+    }
+
+    // ── Tick-timer effect ─────────────────────────────
+
+    [Fact]
+    public void TickTimerAdvancesTargetCountdown()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timers: [
+                new TimerDef("Master", TimerEffect.Fatal, 0, 20, 0),  // ambient fatal
+                new TimerDef("Waypoint", TimerEffect.TickTimer, 3, 1, 100,
+                    TicksTimerName: "Master"),  // sequential, ticks Master by 3 every turn
+            ],
+            approaches: []);
+        TacticalRunner.Begin(session, enc, state);
+
+        var master = state.Timers[0];
+        var initialMasterCurrent = master.Current;
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+        TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+
+        // Master ticked by 1 (ambient natural tick) + 3 (from tick-timer) = 4 less
+        Assert.Equal(initialMasterCurrent - 4, master.Current);
+    }
+
+    [Fact]
+    public void TickTimerCascadesCausingFatalExpiry()
+    {
+        var (session, state) = MakeContext();
+        session.Player.Spirits = 20;
+        var enc = MakeCombat(
+            resistance: 100,
+            timers: [
+                new TimerDef("Master", TimerEffect.Fatal, 0, 5, 0),  // ambient fatal, 5 turns
+                new TimerDef("Tick Source", TimerEffect.TickTimer, 10, 1, 100,
+                    TicksTimerName: "Master"),  // ticks Master by 10 on first fire
+            ],
+            approaches: [],
+            failure: new FailureOutcome("Caught.", []));
+        TacticalRunner.Begin(session, enc, state);
+
+        state.Openings[0] = new OpeningSnapshot
+        {
+            Name = "Stall",
+            CostKind = CostKind.Free,
+            EffectKind = EffectKind.Momentum,
+            EffectAmount = 1,
+        };
+
+        // Turn 1: Master 5→4 (ambient tick), Tick Source fires→Master 4→-6. Fatal!
+        var step = TacticalRunner.Act(session, enc, state, TacticalAction.TakeOpening, 0);
+        Assert.IsType<TacticalStep.Finished>(step);
+        Assert.Equal(TacticalFinishReason.TimerExpired, ((TacticalStep.Finished)step).Reason);
     }
 
     // ── Momentum ───────────────────────────────────────

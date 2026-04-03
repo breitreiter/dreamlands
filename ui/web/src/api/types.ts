@@ -313,7 +313,6 @@ export interface TacticalInfo {
   phase: "approach" | "turn" | "finished";
   title: string;
   body: string;
-  variant: string;
   approaches?: TacticalApproachInfo[];
   turn?: TacticalTurnInfo;
   finishReason?: string;
@@ -339,7 +338,6 @@ export interface TacticalTurnInfo {
   spirits: number;
   timers: TacticalTimerInfo[];
   openings: TacticalOpeningInfo[];
-  queue?: TacticalOpeningInfo[];
 }
 
 export interface TacticalTimerInfo {
@@ -349,8 +347,11 @@ export interface TacticalTimerInfo {
   amount: number;
   countdown: number;
   current: number;
+  resistance: number;
   stopped: boolean;
+  isAmbient: boolean;
   conditionId?: string;
+  ticksTimerName?: string;
 }
 
 export interface TacticalOpeningInfo {

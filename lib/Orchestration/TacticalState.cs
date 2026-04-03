@@ -15,29 +15,23 @@ public class TacticalState
     /// <summary>The chosen approach for this encounter.</summary>
     public ApproachKind? Approach { get; set; }
 
-    /// <summary>Index of the current active timer. Timers are sequential.</summary>
+    /// <summary>Index of the current active sequential timer. Ambient timers are skipped.</summary>
     public int CurrentTimerIndex { get; set; }
 
     /// <summary>Whether press or force has been used this turn.</summary>
     public bool DigUsedThisTurn { get; set; }
 
-    /// <summary>Active timers in sequence order. Only CurrentTimerIndex is active.</summary>
+    /// <summary>All timers (ambient + sequential) in authored order.</summary>
     public List<ActiveTimer> Timers { get; set; } = [];
 
     /// <summary>The opening(s) presented this turn.</summary>
     public List<OpeningSnapshot> Openings { get; set; } = [];
-
-    /// <summary>Traverse only: the visible queue of upcoming path entries.</summary>
-    public List<OpeningSnapshot>? Queue { get; set; }
 
     /// <summary>The shuffled 15-card deck. Draw from DrawIndex.</summary>
     public List<OpeningSnapshot> Deck { get; set; } = [];
 
     /// <summary>Current draw position in the deck. Reset to 0 on reshuffle.</summary>
     public int DrawIndex { get; set; }
-
-    /// <summary>Traverse only: current position along the authored path.</summary>
-    public int PathIndex { get; set; }
 
     /// <summary>Condition IDs accumulated from condition timers. Resolved on encounter completion.</summary>
     public List<string> PendingConditions { get; set; } = [];
@@ -57,6 +51,10 @@ public class ActiveTimer
     public int Resistance { get; set; }
     public bool Stopped { get; set; }
     public string? ConditionId { get; set; }
+    public string? TicksTimerName { get; set; }
+
+    /// <summary>Ambient timers (no resistance) tick every turn and auto-clear when sequential timers are done.</summary>
+    public bool IsAmbient { get; set; }
 }
 
 /// <summary>Snapshot of an opening for the UI.</summary>
