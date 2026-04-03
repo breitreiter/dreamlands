@@ -32,7 +32,7 @@ static class FixmeCommand
         var fixmeIndices = new List<int>();
         for (int i = 0; i < lines.Count; i++)
         {
-            if (lines[i].TrimStart().StartsWith("FIXME:", StringComparison.OrdinalIgnoreCase))
+            if (ContainsFixme(lines[i]))
                 fixmeIndices.Add(i);
         }
 
@@ -84,9 +84,9 @@ static class FixmeCommand
         {
             var lineIndex = fixmeIndices[idx];
             var line = lines[lineIndex];
-            var trim = line.TrimStart();
             var summary = ExtractSummary(line);
-            var leading = line[..(line.Length - trim.Length)];
+            var fixmePos = line.IndexOf("FIXME:", StringComparison.OrdinalIgnoreCase);
+            var leading = line[..fixmePos];
             var choiceLine = FindChoiceLine(lines, lineIndex);
             var precedingProse = FindPrecedingProse(lines, lineIndex);
             var mechanics = FindMechanics(lines, lineIndex);
@@ -137,12 +137,18 @@ static class FixmeCommand
         return 0;
     }
 
-    static string ExtractSummary(string line)
+    static bool ContainsFixme(string line)
     {
         var trim = line.TrimStart();
+        return trim.StartsWith("FIXME:", StringComparison.OrdinalIgnoreCase)
+            || trim.StartsWith("* FIXME:", StringComparison.OrdinalIgnoreCase);
+    }
+
+    static string ExtractSummary(string line)
+    {
         const string prefix = "FIXME:";
-        var idx = trim.IndexOf(prefix, StringComparison.OrdinalIgnoreCase);
-        return idx >= 0 ? trim[(idx + prefix.Length)..].Trim() : trim;
+        var idx = line.IndexOf(prefix, StringComparison.OrdinalIgnoreCase);
+        return idx >= 0 ? line[(idx + prefix.Length)..].Trim() : line.Trim();
     }
 
     static string Truncate(string s, int max) =>
