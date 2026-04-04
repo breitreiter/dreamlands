@@ -1,0 +1,29 @@
+The Scavengers
+[trigger road]
+
+The Old Satara Road runs straight as a lance-shaft through scrub pine and blackened stumps, its paving stones still fitted tight after centuries of neglect. Whatever empire laid this road built it to last. The same cannot be said for the two men currently blocking it.
+They've got a handcart, a sorry, mule-drawn affair with one wheel already threatening to part company. They're trying to lever something onto it with a plank and a length of rope. The something is heavy and angular, wrapped haphazardly in canvas that's slipped loose at one end to reveal smooth, dark iron.
+The shorter of the two sees you first. He drops his end of the rope and comes forward, all puffed-up shoulders and open palms,
+"Private enterprise," he says, planting himself more firmly in your path. "Salvage rights. We were here first, and I'll thank you to-"
+"Ged." The tall one's voice has gone tight and careful.
+"...respect the customary claim, which as anyone who knows the trade will tell you-"
+"Ged."
+"For the love of, what, Mickey?"
+Mickey doesn't answer. He's backing away from the cart. The canvas is moving.
+The thing stands up. It doesn't unfold the way a living creature does, it lurches upright all at once, like a table flipped onto its legs, metal groaning and shrieking. The cart cracks and splinters as canvas tears away. Underneath is something the color of old cannon-barrels, a squat iron trunk on three jointed legs, one of which hitches and scrapes with every movement. Where a head should be there is a cluster of dark glass that catches the light like a dead man's eye.
+It sways. Something inside it grinds and clicks, a sound like a mill wheel catching.
+Ged turns around slowly. He raises both hands, fingers spread, as if calming a horse.
+"Easy now. Easy. We weren't gonna hurt you, friend, we were just-"
+A point of light appears in the thing's chest. There is a sound like a whip-crack and a smell like a forge, and Ged is on the ground and not moving and the front of his coat is on fire.
+Mickey runs.
+The dead eye turns to you. The grinding sound comes again, hitching, stuttering, the scrape of metal on metal. One halting step. Then another.
+It is not fast. It is not steady. Something inside it is broken, maybe many things, and it moves like a puppet half-cut from its strings.
+But it is coming for you.
+
+choices:
+
+* Stand your ground = Send this devil back to hell
+  +open "The Scavengers Fight"
+
+* Make a run for it = It is slow, perhaps you can outrun it
+  +open "The Scavengers Chase"
