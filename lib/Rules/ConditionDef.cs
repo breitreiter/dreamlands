@@ -63,7 +63,7 @@ public sealed class ConditionDef
             Id = "lost", Name = "Lost", Biome = "none", Tier = "none",
             Stacks = 1, ResistDifficulty = Difficulty.Easy,
             ClearedOnSettlement = true,
-            SpecialEffect = "Your location on the map is hidden.",
+            SpecialEffect = "You must resolve a Lost encounter.",
         },
         ["injured"] = new()
         {

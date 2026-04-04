@@ -651,7 +651,6 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   if (!state.node || !state.exits) return null;
 
-  const isLost = state.status.conditions.some((c) => c.id === "lost");
   const isAnimating = travelPhase === "animating";
   // Hide Leaflet's own marker and MapFollower during the entire travel flow
   // (both the execute-moves phase and the animation phase)
@@ -689,10 +688,10 @@ export default function Explore({ state }: { state: GameResponse }) {
         />
 
         {/* Leaflet player marker — hidden during entire travel flow */}
-        {!isLost && !hideLeafletPlayer && <Marker position={position} icon={playerIcon} />}
+        {!hideLeafletPlayer && <Marker position={position} icon={playerIcon} />}
 
         {/* Map click handler — disabled during travel/lost */}
-        {gridReady && !isLost && !hideLeafletPlayer && !loading && !traveling && (
+        {gridReady && !hideLeafletPlayer && !loading && !traveling && (
           <MapClickHandler onClick={handleMapClick} />
         )}
 
