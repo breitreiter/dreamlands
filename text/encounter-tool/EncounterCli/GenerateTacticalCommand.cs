@@ -2,32 +2,26 @@ namespace EncounterCli;
 
 static class GenerateTacticalCommand
 {
-    static readonly string[] TimerEffects = ["spirits", "resistance"];
-
     // Tier tables: keyed by tier (1-3)
     record TierData(
-        (int Lo, int Hi) TimerCount,
-        (int Lo, int Hi) TimerCountdown,
-        (int Lo, int Hi) TimerDamage,
-        (int Lo, int Hi) TimerResistance);
+        (int Lo, int Hi) Clock,
+        (int Lo, int Hi) ChallengeCount,
+        (int Lo, int Hi) ChallengeResistance);
 
     static readonly Dictionary<int, TierData> Tiers = new()
     {
         [1] = new(
-            TimerCount: (2, 3),
-            TimerCountdown: (3, 5),
-            TimerDamage: (1, 1),
-            TimerResistance: (4, 6)),
+            Clock: (8, 10),
+            ChallengeCount: (2, 3),
+            ChallengeResistance: (3, 5)),
         [2] = new(
-            TimerCount: (3, 4),
-            TimerCountdown: (3, 4),
-            TimerDamage: (1, 2),
-            TimerResistance: (5, 8)),
+            Clock: (9, 12),
+            ChallengeCount: (3, 4),
+            ChallengeResistance: (4, 7)),
         [3] = new(
-            TimerCount: (4, 6),
-            TimerCountdown: (2, 4),
-            TimerDamage: (1, 2),
-            TimerResistance: (6, 10)),
+            Clock: (10, 14),
+            ChallengeCount: (3, 5),
+            ChallengeResistance: (5, 9)),
     };
 
     public static int Run(string[] args)
@@ -86,7 +80,11 @@ static class GenerateTacticalCommand
         var rng = seed.HasValue ? new Random(seed.Value) : new Random();
         var td = Tiers[tier];
 
-        var timers = GenerateTimers(rng, td);
+        var clock = RandRange(rng, td.Clock);
+        var challengeCount = RandRange(rng, td.ChallengeCount);
+        var challenges = new List<int>();
+        for (int i = 0; i < challengeCount; i++)
+            challenges.Add(RandRange(rng, td.ChallengeResistance));
 
         var lines = new List<string>();
 
@@ -98,11 +96,15 @@ static class GenerateTacticalCommand
         lines.Add("FIXME: body text");
         lines.Add("");
 
-        // Timers (shuffled for variety — order doesn't affect balance)
-        Shuffle(rng, timers);
-        lines.Add("timers:");
-        foreach (var (effect, damage, countdown, timerResist) in timers)
-            lines.Add($"  * FIXME [counter FIXME]: {effect} {damage} every {countdown} resist {timerResist}");
+        // Clock
+        lines.Add("clock:");
+        lines.Add($"  {clock}");
+        lines.Add("");
+
+        // Challenges
+        lines.Add("challenges:");
+        for (int i = 0; i < challenges.Count; i++)
+            lines.Add($"  * FIXME [counter FIXME]: {challenges[i]}");
         lines.Add("");
 
         // Openings
@@ -130,27 +132,6 @@ static class GenerateTacticalCommand
         lines.Add("");
 
         return string.Join("\n", lines);
-    }
-
-    // --- Timers ---
-
-    static List<(string Effect, int Damage, int Countdown, int Resistance)> GenerateTimers(
-        Random rng, TierData td)
-    {
-        var count = RandRange(rng, td.TimerCount);
-        var timers = new List<(string, int, int, int)>();
-
-        for (int i = 0; i < count; i++)
-        {
-            // Bias toward spirits; resistance timers are rarer
-            var effect = rng.NextDouble() < 0.25 ? "resistance" : "spirits";
-            var damage = RandRange(rng, td.TimerDamage);
-            var countdown = RandRange(rng, td.TimerCountdown);
-            var timerResist = RandRange(rng, td.TimerResistance);
-            timers.Add((effect, damage, countdown, timerResist));
-        }
-
-        return timers;
     }
 
     // --- Openings (tier-degraded from canonical base) ---

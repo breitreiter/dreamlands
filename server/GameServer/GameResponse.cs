@@ -349,7 +349,6 @@ public record TacticalInfo
     public string? SuccessText { get; init; }
     public List<MechanicResultInfo>? FailureMechanics { get; init; }
     public List<MechanicResultInfo>? SuccessMechanics { get; init; }
-    public List<MechanicResultInfo>? ConditionResults { get; init; }
 }
 
 public class TacticalApproachInfo
@@ -360,28 +359,22 @@ public class TacticalApproachInfo
 public class TacticalTurnInfo
 {
     public int Turn { get; init; }
-    public int Resistance { get; init; }
-    public int ResistanceMax { get; init; }
+    public int Clock { get; init; }
     public int Momentum { get; init; }
     public int Spirits { get; init; }
     public bool DigUsed { get; init; }
-    public List<TacticalTimerInfo> Timers { get; init; } = [];
+    public int CurrentChallengeIndex { get; init; }
+    public List<TacticalChallengeInfo> Challenges { get; init; } = [];
     public List<TacticalOpeningInfo> Openings { get; init; } = [];
 }
 
-public class TacticalTimerInfo
+public class TacticalChallengeInfo
 {
     public string Name { get; init; } = "";
     public string? CounterName { get; init; }
-    public string Effect { get; init; } = "";
-    public int Amount { get; init; }
-    public int Countdown { get; init; }
-    public int Current { get; init; }
     public int Resistance { get; init; }
-    public bool Stopped { get; init; }
-    public bool IsAmbient { get; init; }
-    public string? ConditionId { get; init; }
-    public string? TicksTimerName { get; init; }
+    public int MaxResistance { get; init; }
+    public bool Cleared { get; init; }
 }
 
 public class TacticalOpeningInfo

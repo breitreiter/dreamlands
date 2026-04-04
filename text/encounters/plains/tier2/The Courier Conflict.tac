@@ -2,13 +2,15 @@ The Courier Conflict
 [stat Negotiation]
 [tier 2]
 
-"Wait," you begin. "I am certain Captain Aldric is a good soldier, and it is right to honor his service to you. But you have a duty to the guild to deliver the letter, regardless of the contents." 
+"Wait," you begin. "I am certain Captain Aldric is a good soldier, and it is right to honor his service to you. But you have a duty to the guild to deliver the letter, regardless of the contents."
 
-timers:
-  * The courier burns the paper: fatal every 9
-  * The letter sentences a good man to death [counter We must trust the wisdom of the empire]: spirits 1 every 3 resist 3
-  * The letter is already unsealed [counter Offer your ring to mend the seal]: tick "The courier burns the paper" 1 every 3 resist 5
-  * We are instruments of wicked people [counter No one has clean hands]: tick "The courier burns the paper" 1 every 3 resist 3
+clock:
+  9
+
+challenges:
+  * The letter sentences a good man to death [counter We must trust the wisdom of the empire]: 3
+  * The letter is already unsealed [counter Offer your ring to mend the seal]: 5
+  * We are instruments of wicked people [counter No one has clean hands]: 3
 
 openings:
   * Cite guild regulations with quiet authority: free_progress_small

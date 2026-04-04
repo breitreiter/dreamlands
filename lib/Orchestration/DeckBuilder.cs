@@ -19,7 +19,6 @@ public static class DeckBuilder
         TacticalEncounter encounter,
         PlayerState player,
         BalanceData balance,
-        List<ActiveTimer> drawnTimers,
         Random rng)
     {
         var tb = balance.Tactical;

@@ -119,16 +119,12 @@ static class TacticalBundleCommand
         stat = enc.Stat,
         tier = enc.Tier,
         requires = enc.Requires,
-        timers = enc.Timers.Select(t => new
+        clock = enc.Clock,
+        challenges = enc.Challenges.Select(c => new
         {
-            name = t.Name,
-            counterName = t.CounterName,
-            effect = t.Effect.ToString().ToLowerInvariant(),
-            amount = t.Amount,
-            countdown = t.Countdown,
-            resistance = t.Resistance,
-            conditionId = t.ConditionId,
-            ticksTimerName = t.TicksTimerName
+            name = c.Name,
+            counterName = c.CounterName,
+            resistance = c.Resistance,
         }),
         openings = enc.Openings.Select(o => new
         {

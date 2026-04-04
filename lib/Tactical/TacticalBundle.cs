@@ -82,15 +82,9 @@ public sealed class TacticalBundle
                 Stat = e.Stat,
                 Tier = e.Tier,
                 Requires = e.Requires ?? [],
-                Timers = e.Timers.Select(t => new TimerDef(
-                    t.Name,
-                    Enum.Parse<TimerEffect>(t.Effect, ignoreCase: true),
-                    t.Amount,
-                    t.Countdown,
-                    t.Resistance,
-                    t.CounterName,
-                    t.ConditionId,
-                    t.TicksTimerName)).ToList(),
+                Clock = e.Clock,
+                Challenges = e.Challenges?.Select(c => new ChallengeDef(
+                    c.Name, c.CounterName, c.Resistance)).ToList() ?? [],
                 Openings = e.Openings.Select(o => new OpeningDef(
                     o.Name, o.Archetype, o.Requires)).ToList(),
                 Approaches = e.Approaches?.Select(a => new ApproachDef(
@@ -150,9 +144,10 @@ public sealed class TacticalBundle
     record EncounterDto(
         string Id, string Category, string Title, string Body,
         string? Stat, int? Tier, List<string>? Requires,
-        List<TimerDto> Timers, List<OpeningDto> Openings,
+        int Clock, List<ChallengeDto>? Challenges,
+        List<OpeningDto> Openings,
         List<ApproachDto>? Approaches, FailureDto? Failure, SuccessDto? Success);
-    record TimerDto(string Name, string? CounterName, string Effect, int Amount, int Countdown, int Resistance, string? ConditionId, string? TicksTimerName);
+    record ChallengeDto(string Name, string? CounterName, int Resistance);
     record OpeningDto(string Name, string Archetype, string? Requires);
     record ApproachDto(string Kind);
     record FailureDto(string Text, List<string>? Mechanics);

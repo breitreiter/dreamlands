@@ -8,11 +8,13 @@ You draw your weapon. The officer's gaze tracks the motion; his mouth opens slig
 
 The scavenger woman watches you. Her eyes shift between you and her bound allies. She does not move, not yet.
 
-timers:
-  * You are overwhelmed: fatal every 12
-  * Jeoffry and Tanner press you [counter Break their ranks]: tick "You are overwhelmed" 1 every 3 resist 4
-  * The officer maneuvers his small troop [counter Cut the officer down]: spirits 1 every 3 resist 3
-  * Wynn and Taylor circle behind you [counter Hobble Wynn]: tick "You are overwhelmed" 1 every 3 resist 8
+clock:
+  12
+
+challenges:
+  * Jeoffry and Tanner press you [counter Break their ranks]: 4
+  * The officer maneuvers his small troop [counter Cut the officer down]: 3
+  * Wynn and Taylor circle behind you [counter Hobble Wynn]: 8
 
 openings:
   * Feint toward the soldier's weak side: free_progress_small

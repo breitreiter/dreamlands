@@ -4,10 +4,12 @@ Road Toll Chase
 
 You bolt off the road and into the tall grass. Behind you, the thieves curse and give chase. They're road bandits, not trackers. If you can stay ahead through the fields and find cover, they'll give up soon enough.
 
-timers:
-  * You are caught: fatal every 8
-  * They're gaining on you [counter Slide down a gully]: tick "You are caught" 1 every 3
-  * They can see you [counter Duck into an old barn]: tick "You are caught" 1 every 3
+clock:
+  8
+
+challenges:
+  * They're gaining on you [counter Slide down a gully]: 3
+  * They can see you [counter Duck into an old barn]: 5
 
 openings:
   * Keep a steady pace: free_momentum_small

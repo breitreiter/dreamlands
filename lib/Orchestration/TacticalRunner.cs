@@ -4,7 +4,7 @@ using Dreamlands.Tactical;
 
 namespace Dreamlands.Orchestration;
 
-// ── Step results ───────────────────────────────────────────────────
+// ── Step results ───────��───────────────────────────────────────────
 
 public abstract record TacticalStep
 {
@@ -17,45 +17,34 @@ public abstract record TacticalStep
     public record Finished(
         TacticalFinishReason Reason,
         List<MechanicResult>? FailureResults = null,
-        List<MechanicResult>? SuccessResults = null,
-        List<MechanicResult>? ConditionResults = null) : TacticalStep;
+        List<MechanicResult>? SuccessResults = null) : TacticalStep;
 }
 
-public enum TacticalFinishReason { ResistanceKill, ControlKill, SpiritsLoss, TimerExpired }
+public enum TacticalFinishReason { ResistanceKill, ControlKill, SpiritsLoss, ClockExpired }
 
 public record TacticalTurnData(
     int Turn,
     int Momentum,
     int PlayerSpirits,
-    /// <summary>Current active timer's remaining resistance.</summary>
-    int Resistance,
-    /// <summary>Current active timer's max resistance.</summary>
-    int ResistanceMax,
-    /// <summary>Whether press/force has been used this turn.</summary>
+    int Clock,
+    IReadOnlyList<ActiveChallenge> Challenges,
+    int CurrentChallengeIndex,
     bool DigUsed,
-    IReadOnlyList<ActiveTimer> Timers,
-    /// <summary>Index of current active timer in the Timers list.</summary>
-    int CurrentTimerIndex,
-    IReadOnlyList<OpeningSnapshot> Openings,
-    IReadOnlyList<TimerFired> TimersFired,
-    IReadOnlyList<string> PendingConditions);
-
-public record TimerFired(string Name, TimerEffect Effect, int Amount, string? ConditionId = null);
+    IReadOnlyList<OpeningSnapshot> Openings);
 
 public enum TacticalAction { TakeOpening, PressAdvantage, ForceOpening }
 
-// ── Runner ─────────────────────────────────────────────────────────
+// ── Runner ──────��──────────────────────────────────────────────────
 //
 // Turn flow:
-//   1. Tick ambient timers (check fatal after each)
-//   2. Tick current sequential timer (check fatal cascade from tick-timer)
-//   3. Check spirits loss
-//   4. Momentum gain (approach-dependent)
-//   5. Draw cards
-//   6. Player plays one card, OR press/force to draw 2 more then pick one
-//   7. Progress applied to current sequential timer's resistance
-//   8. Timer resistance cleared → next sequential timer activates
-//   9. All sequential timers cleared → ambient auto-cleared → victory
+//   1. Decrement clock (check clock expiry)
+//   2. Check spirits loss
+//   3. Momentum gain (approach-dependent)
+//   4. Draw cards
+//   5. Player plays one card, OR press/force to draw 2 more then pick one
+//   6. Progress applied to current challenge's resistance
+//   7. Challenge resistance cleared → next challenge activates
+//   8. All challenges cleared → victory
 
 public static class TacticalRunner
 {
@@ -63,7 +52,7 @@ public static class TacticalRunner
     {
         state.EncounterId = encounter.Id;
         state.Turn = 0;
-        state.CurrentTimerIndex = 0;
+        state.CurrentChallengeIndex = 0;
 
         if (encounter.Approaches.Count > 0)
             return new TacticalStep.ChooseApproach(encounter, encounter.Approaches);
@@ -71,14 +60,14 @@ public static class TacticalRunner
         // No approaches defined — default to aggressive
         state.Approach = ApproachKind.Aggressive;
         state.Momentum = 0;
-        InitTimers(state, encounter);
+        InitChallenges(state, encounter);
         BuildDeck(state, session, encounter);
         return StartTurn(state, session, encounter);
     }
 
     public static TacticalStep Resume(GameSession session, TacticalEncounter encounter, TacticalState state)
     {
-        if (encounter.Approaches.Count > 0 && state.Timers.Count == 0)
+        if (encounter.Approaches.Count > 0 && state.Challenges.Count == 0)
             return new TacticalStep.ChooseApproach(encounter, encounter.Approaches);
 
         return MakeShowTurn(state, session, encounter);
@@ -89,7 +78,7 @@ public static class TacticalRunner
     {
         state.Approach = approach;
         state.Momentum = 0;
-        InitTimers(state, encounter);
+        InitChallenges(state, encounter);
         BuildDeck(state, session, encounter);
         return StartTurn(state, session, encounter);
     }
@@ -147,7 +136,7 @@ public static class TacticalRunner
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var opening = state.Openings[index];
-        var currentTimer = GetCurrentSequentialTimer(state);
+        var currentChallenge = GetCurrentChallenge(state);
 
         // Pay cost
         switch (opening.CostKind)
@@ -163,157 +152,79 @@ public static class TacticalRunner
                 session.Player.Spirits -= opening.CostAmount;
                 break;
             case CostKind.Tick:
-                if (currentTimer != null)
-                    currentTimer.Current--;
+                // Tick costs advance the clock by 1
+                state.Clock--;
                 break;
         }
 
-        // Apply effect to current sequential timer
+        // Apply effect to current challenge
         switch (opening.EffectKind)
         {
             case EffectKind.Damage:
-                if (currentTimer != null)
-                    currentTimer.Resistance = Math.Max(0, currentTimer.Resistance - opening.EffectAmount);
+                if (currentChallenge != null)
+                    currentChallenge.Resistance = Math.Max(0, currentChallenge.Resistance - opening.EffectAmount);
                 break;
             case EffectKind.StopTimer:
-                // Cancel clears the current timer entirely
-                if (currentTimer != null)
-                    currentTimer.Resistance = 0;
+                // Cancel clears the current challenge entirely
+                if (currentChallenge != null)
+                    currentChallenge.Resistance = 0;
                 break;
             case EffectKind.Momentum:
                 state.Momentum += opening.EffectAmount;
                 break;
         }
 
-        // Advance past cleared sequential timers
-        AdvancePastClearedTimers(state);
+        // Advance past cleared challenges
+        AdvancePastClearedChallenges(state);
 
-        // Win: all sequential timers cleared
-        if (AllSequentialCleared(state))
+        // Win: all challenges cleared
+        if (AllChallengesCleared(state))
         {
-            // Auto-clear ambient timers
-            foreach (var t in state.Timers.Where(t => t.IsAmbient))
-                t.Stopped = true;
-
             var reason = opening.EffectKind == EffectKind.StopTimer
                 ? TacticalFinishReason.ControlKill
                 : TacticalFinishReason.ResistanceKill;
             var successResults = encounter.Success != null
                 ? Mechanics.Apply(encounter.Success.Mechanics, session.Player, session.Balance, session.Rng)
                 : null;
-            return new TacticalStep.Finished(reason,
-                SuccessResults: successResults,
-                ConditionResults: ResolvePendingConditions(state, session));
+            return new TacticalStep.Finished(reason, SuccessResults: successResults);
         }
 
         return AdvanceTurn(state, session, encounter);
     }
 
-    // ── Turn advancement ──────────────────────────────────────
+    // ── Turn advancement ───���──────────────────────────────────
 
     static TacticalStep AdvanceTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
         state.Turn++;
         state.DigUsedThisTurn = false;
 
-        var fired = new List<TimerFired>();
+        // 1. Decrement clock
+        state.Clock--;
 
-        // 1. Tick all ambient timers
-        foreach (var timer in state.Timers.Where(t => t.IsAmbient && !t.Stopped))
+        // 2. Check clock expiry
+        if (state.Clock <= 0)
         {
-            var result = TickTimerOnce(timer, state, session);
-            if (result != null) fired.Add(result);
+            List<MechanicResult>? failureResults = null;
+            if (encounter.Failure != null)
+                failureResults = Mechanics.Apply(encounter.Failure.Mechanics, session.Player, session.Balance, session.Rng);
+            return new TacticalStep.Finished(TacticalFinishReason.ClockExpired, FailureResults: failureResults);
         }
 
-        // Check for fatal expiry after ambient ticks
-        var fatalCheck = CheckFatalExpiry(state, encounter, session, fired);
-        if (fatalCheck != null) return fatalCheck;
-
-        // 2. Tick current sequential timer
-        var seqTimer = GetCurrentSequentialTimer(state);
-        if (seqTimer != null)
-        {
-            var result = TickTimerOnce(seqTimer, state, session);
-            if (result != null) fired.Add(result);
-        }
-
-        // Check for fatal expiry after sequential tick (tick-timer cascades)
-        fatalCheck = CheckFatalExpiry(state, encounter, session, fired);
-        if (fatalCheck != null) return fatalCheck;
-
-        state.LastTimersFired = fired;
-
-        // Spirits loss check
+        // 3. Check spirits loss
         if (session.Player.Spirits <= 0)
         {
             List<MechanicResult>? failureResults = null;
             if (encounter.Failure != null)
                 failureResults = Mechanics.Apply(encounter.Failure.Mechanics, session.Player, session.Balance, session.Rng);
-            return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss,
-                FailureResults: failureResults,
-                ConditionResults: ResolvePendingConditions(state, session));
+            return new TacticalStep.Finished(TacticalFinishReason.SpiritsLoss, FailureResults: failureResults);
         }
 
-        // 3. Gain momentum (approach-dependent)
+        // 4. Gain momentum (approach-dependent)
         int momentumGain = state.Approach == ApproachKind.Aggressive ? 2 : 1;
         state.Momentum += momentumGain;
 
         return StartTurn(state, session, encounter);
-    }
-
-    /// <summary>Tick a single timer's countdown. If it fires, apply effect and reset.</summary>
-    static TimerFired? TickTimerOnce(ActiveTimer timer, TacticalState state, GameSession session)
-    {
-        timer.Current--;
-        if (timer.Current > 0) return null;
-
-        // Timer fired
-        switch (timer.Effect)
-        {
-            case TimerEffect.Spirits:
-                session.Player.Spirits = Math.Max(0, session.Player.Spirits - timer.Amount);
-                break;
-            case TimerEffect.Resistance:
-                var seqTimer = GetCurrentSequentialTimer(state);
-                if (seqTimer != null)
-                    seqTimer.Resistance += timer.Amount;
-                break;
-            case TimerEffect.Condition:
-                state.PendingConditions.Add(timer.ConditionId!);
-                break;
-            case TimerEffect.TickTimer:
-                var target = state.Timers.FirstOrDefault(t => t.Name == timer.TicksTimerName);
-                if (target != null)
-                    target.Current -= timer.Amount;
-                break;
-            case TimerEffect.Fatal:
-                // Don't reset — fatal fires once. CheckFatalExpiry handles the failure.
-                return new TimerFired(timer.Name, timer.Effect, 0);
-        }
-
-        // Reset countdown (except fatal — it stays at 0)
-        if (timer.Effect != TimerEffect.Fatal)
-            timer.Current = timer.Countdown;
-
-        return new TimerFired(timer.Name, timer.Effect, timer.Amount,
-            timer.Effect == TimerEffect.Condition ? timer.ConditionId : null);
-    }
-
-    /// <summary>Check if any fatal timer has reached 0 (from direct countdown or tick-timer cascade).</summary>
-    static TacticalStep.Finished? CheckFatalExpiry(
-        TacticalState state, TacticalEncounter encounter, GameSession session, List<TimerFired> fired)
-    {
-        var expired = state.Timers.FirstOrDefault(t =>
-            t.Effect == TimerEffect.Fatal && !t.Stopped && t.Current <= 0);
-        if (expired == null) return null;
-
-        state.LastTimersFired = fired;
-        List<MechanicResult>? failureResults = null;
-        if (encounter.Failure != null)
-            failureResults = Mechanics.Apply(encounter.Failure.Mechanics, session.Player, session.Balance, session.Rng);
-        return new TacticalStep.Finished(TacticalFinishReason.TimerExpired,
-            FailureResults: failureResults,
-            ConditionResults: ResolvePendingConditions(state, session));
     }
 
     static TacticalStep StartTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
@@ -326,24 +237,18 @@ public static class TacticalRunner
 
     static TacticalStep.ShowTurn MakeShowTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
-        var timer = GetCurrentSequentialTimer(state);
         return new TacticalStep.ShowTurn(new TacticalTurnData(
             state.Turn,
             state.Momentum,
             session.Player.Spirits,
-            timer?.Resistance ?? 0,
-            encounter.Timers
-                .Where(t => t.Resistance > 0)
-                .ElementAtOrDefault(GetSequentialIndex(state))?.Resistance ?? 0,
+            state.Clock,
+            state.Challenges,
+            state.CurrentChallengeIndex,
             state.DigUsedThisTurn,
-            state.Timers,
-            state.CurrentTimerIndex,
-            state.Openings,
-            state.LastTimersFired,
-            state.PendingConditions));
+            state.Openings));
     }
 
-    // ── Helpers ────────────────────────────────────────────────
+    // ── Helpers ─────────────��──────────────────────────────────
 
     /// <summary>
     /// If no card in the hand is playable, silently cycle the last slot
@@ -367,46 +272,29 @@ public static class TacticalRunner
         }
     }
 
-    /// <summary>Get the current sequential (non-ambient) timer, or null if all are cleared.</summary>
-    static ActiveTimer? GetCurrentSequentialTimer(TacticalState state)
+    /// <summary>Get the current challenge, or null if all are cleared.</summary>
+    static ActiveChallenge? GetCurrentChallenge(TacticalState state)
     {
-        for (int i = state.CurrentTimerIndex; i < state.Timers.Count; i++)
+        for (int i = state.CurrentChallengeIndex; i < state.Challenges.Count; i++)
         {
-            var t = state.Timers[i];
-            if (t.IsAmbient || t.Stopped) continue;
-            return t;
+            var c = state.Challenges[i];
+            if (!c.Cleared) return c;
         }
         return null;
     }
 
-    /// <summary>Get how many sequential timers have been passed (for ResistanceMax lookup).</summary>
-    static int GetSequentialIndex(TacticalState state)
-    {
-        int idx = 0;
-        for (int i = 0; i < state.CurrentTimerIndex && i < state.Timers.Count; i++)
-        {
-            if (!state.Timers[i].IsAmbient) idx++;
-        }
-        return idx;
-    }
+    static bool AllChallengesCleared(TacticalState state) =>
+        state.Challenges.All(c => c.Cleared || c.Resistance <= 0);
 
-    static bool AllSequentialCleared(TacticalState state) =>
-        state.Timers.Where(t => !t.IsAmbient).All(t => t.Stopped || t.Resistance <= 0);
-
-    static void AdvancePastClearedTimers(TacticalState state)
+    static void AdvancePastClearedChallenges(TacticalState state)
     {
-        while (state.CurrentTimerIndex < state.Timers.Count)
+        while (state.CurrentChallengeIndex < state.Challenges.Count)
         {
-            var t = state.Timers[state.CurrentTimerIndex];
-            if (t.IsAmbient)
-            {
-                state.CurrentTimerIndex++;
-                continue;
-            }
-            if (t.Resistance > 0)
+            var c = state.Challenges[state.CurrentChallengeIndex];
+            if (c.Resistance > 0)
                 break;
-            t.Stopped = true;
-            state.CurrentTimerIndex++;
+            c.Cleared = true;
+            state.CurrentChallengeIndex++;
         }
     }
 
@@ -422,91 +310,36 @@ public static class TacticalRunner
     {
         if (card.EffectKind != EffectKind.StopTimer) return card;
 
-        var timer = GetCurrentSequentialTimer(state);
-        if (timer == null) return card;
+        var challenge = GetCurrentChallenge(state);
+        if (challenge == null) return card;
 
-        card.StopsTimerIndex = state.CurrentTimerIndex;
-        card.Name = timer.CounterName ?? card.Name;
+        card.StopsTimerIndex = state.CurrentChallengeIndex;
+        card.Name = challenge.CounterName ?? card.Name;
         return card;
     }
 
     static void BuildDeck(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
-        state.Deck = DeckBuilder.Build(encounter, session.Player, session.Balance, state.Timers, session.Rng);
+        state.Deck = DeckBuilder.Build(encounter, session.Player, session.Balance, session.Rng);
         state.DrawIndex = 0;
     }
 
-    static void InitTimers(TacticalState state, TacticalEncounter encounter)
+    static void InitChallenges(TacticalState state, TacticalEncounter encounter)
     {
-        state.Timers = [];
-        state.CurrentTimerIndex = 0;
-        foreach (var def in encounter.Timers)
+        state.Challenges = [];
+        state.CurrentChallengeIndex = 0;
+        state.Clock = encounter.Clock;
+
+        foreach (var def in encounter.Challenges)
         {
-            state.Timers.Add(new ActiveTimer
+            state.Challenges.Add(new ActiveChallenge
             {
                 Name = def.Name,
                 CounterName = def.CounterName,
-                Effect = def.Effect,
-                Amount = def.Amount,
-                Countdown = def.Countdown,
-                Current = def.Countdown,
                 Resistance = def.Resistance,
-                Stopped = false,
-                ConditionId = def.ConditionId,
-                TicksTimerName = def.TicksTimerName,
-                IsAmbient = def.Resistance == 0,
+                MaxResistance = def.Resistance,
+                Cleared = false,
             });
         }
-
-        // Advance CurrentTimerIndex to first non-ambient timer
-        while (state.CurrentTimerIndex < state.Timers.Count
-            && state.Timers[state.CurrentTimerIndex].IsAmbient)
-        {
-            state.CurrentTimerIndex++;
-        }
-    }
-
-    static int GetGoverningSkillLevel(GameSession session, TacticalEncounter encounter)
-    {
-        var skill = encounter.Stat != null ? Skills.FromScriptName(encounter.Stat) : null;
-        if (skill == null) return 0;
-        return session.Player.Skills.TryGetValue(skill.Value, out var level) ? level : 0;
-    }
-
-    static List<MechanicResult> ResolvePendingConditions(TacticalState state, GameSession session)
-    {
-        var results = new List<MechanicResult>();
-        if (state.PendingConditions.Count == 0) return results;
-
-        var grouped = state.PendingConditions.GroupBy(id => id);
-        foreach (var group in grouped)
-        {
-            var conditionId = group.Key;
-            if (session.Player.ActiveConditions.ContainsKey(conditionId)) continue;
-
-            session.Balance.Conditions.TryGetValue(conditionId, out var def);
-            var dc = def?.ResistDifficulty ?? session.Balance.Character.AmbientResistDifficulty;
-
-            bool anyFailed = false;
-            SkillCheckResult? lastCheck = null;
-            foreach (var _ in group)
-            {
-                lastCheck = SkillChecks.RollResist(conditionId, dc, session.Player, session.Balance, session.Rng);
-                if (!lastCheck.Passed) { anyFailed = true; break; }
-            }
-
-            if (anyFailed)
-            {
-                var stacks = def?.Stacks ?? 1;
-                session.Player.ActiveConditions[conditionId] = stacks;
-                results.Add(new MechanicResult.ConditionAdded(conditionId, stacks, lastCheck));
-            }
-            else
-            {
-                results.Add(new MechanicResult.ConditionResisted(conditionId, lastCheck!));
-            }
-        }
-
-        return results;
     }
 }

@@ -15,14 +15,17 @@ public class TacticalState
     /// <summary>The chosen approach for this encounter.</summary>
     public ApproachKind? Approach { get; set; }
 
-    /// <summary>Index of the current active sequential timer. Ambient timers are skipped.</summary>
-    public int CurrentTimerIndex { get; set; }
+    /// <summary>Master clock. Decrements each turn. Hit zero = lose.</summary>
+    public int Clock { get; set; }
+
+    /// <summary>Index of the current active challenge.</summary>
+    public int CurrentChallengeIndex { get; set; }
 
     /// <summary>Whether press or force has been used this turn.</summary>
     public bool DigUsedThisTurn { get; set; }
 
-    /// <summary>All timers (ambient + sequential) in authored order.</summary>
-    public List<ActiveTimer> Timers { get; set; } = [];
+    /// <summary>All challenges in authored order.</summary>
+    public List<ActiveChallenge> Challenges { get; set; } = [];
 
     /// <summary>The opening(s) presented this turn.</summary>
     public List<OpeningSnapshot> Openings { get; set; } = [];
@@ -32,29 +35,15 @@ public class TacticalState
 
     /// <summary>Current draw position in the deck. Reset to 0 on reshuffle.</summary>
     public int DrawIndex { get; set; }
-
-    /// <summary>Condition IDs accumulated from condition timers. Resolved on encounter completion.</summary>
-    public List<string> PendingConditions { get; set; } = [];
-
-    /// <summary>Timers that fired on the most recent turn advance. Used by TurnData for the UI.</summary>
-    public List<TimerFired> LastTimersFired { get; set; } = [];
 }
 
-public class ActiveTimer
+public class ActiveChallenge
 {
     public string Name { get; set; } = "";
     public string? CounterName { get; set; }
-    public TimerEffect Effect { get; set; }
-    public int Amount { get; set; }
-    public int Countdown { get; set; }
-    public int Current { get; set; }
     public int Resistance { get; set; }
-    public bool Stopped { get; set; }
-    public string? ConditionId { get; set; }
-    public string? TicksTimerName { get; set; }
-
-    /// <summary>Ambient timers (no resistance) tick every turn and auto-clear when sequential timers are done.</summary>
-    public bool IsAmbient { get; set; }
+    public int MaxResistance { get; set; }
+    public bool Cleared { get; set; }
 }
 
 /// <summary>Snapshot of an opening for the UI.</summary>

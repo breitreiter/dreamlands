@@ -4,11 +4,13 @@ Road Toll Fight
 
 The pretense drops. You draw your weapon and the thieves rush in. No formation, no discipline, just desperation and numbers. The leader hangs back, shouting orders.
 
-timers:
-  * You are overwhelmed: fatal every 10
-  * The thieves surround you [counter Throw them into disarray]: tick "You are overwhelmed" 1 every 4
-  * The bandit leader rallies his men [counter Cut the leader down]: tick "You are overwhelmed" 1 every 3
-  * You take another cudgel blow [counter Put you back to the mile marker]: condition injured every 4
+clock:
+  10
+
+challenges:
+  * The thieves surround you [counter Throw them into disarray]: 3
+  * The bandit leader rallies his men [counter Cut the leader down]: 4
+  * A few rough men, armed [counter Finish the last of them]: 6
 
 openings:
   * Shove one aside: free_progress_small

@@ -10,15 +10,13 @@ namespace TacticalSim;
 record TurnVibe(
     int Turn,
     double Choice,      // 0 = obvious pick, 1 = genuinely hard decision
-    double Tension,      // 0 = timer safe, 1 = about to fire
+    double Tension,      // 0 = clock safe, 1 = about to expire
     double Juice,        // 0 = chaff, 1 = haymaker/cancel
     double Weight,       // rolling frustration (negative = bad streak)
-    double Triumph,      // 0 or 1 — cleared a timer this turn
+    double Triumph,      // 0 or 1 — cleared a challenge this turn
     string CardPlayed,   // archetype of card played
     string Action,       // "play", "press", "force"
-    bool TimerFired,
-    int SpiritsLost,
-    bool Conditioned);
+    int SpiritsLost);
 
 record RunVibes(List<TurnVibe> Turns, bool Won, int SpiritsSpent);
 
@@ -29,12 +27,11 @@ record TurnTrace(
     // State at start of turn
     int Momentum,
     int Spirits,
+    int Clock,
     int Resistance,
     int ResistanceMax,
-    // Timer state
-    List<(string Name, int Countdown, bool Stopped)> Timers,
-    // What fired this turn
-    List<string> TimersFired,
+    // Challenge state
+    List<(string Name, int Resistance, bool Cleared)> Challenges,
     // Hand shown to player
     List<(string Name, string Archetype, string CostKind, int CostAmount, string EffectKind, int EffectAmount, bool Affordable)> Hand,
     // What the bot considered
@@ -106,7 +103,7 @@ static class SimRunner
         var traces = new List<TurnTrace>();
         int badStreak = 0;
         int turn = 0;
-        int prevActiveTimers = -1;
+        int prevChallengesCleared = 0;
 
         while (true)
         {
@@ -130,11 +127,15 @@ static class SimRunner
 
                     var td = show.Data;
                     int preSpirits = session.Player.Spirits;
-                    int activeTimers = td.Timers.Count(t => !t.Stopped);
+                    int challengesCleared = td.Challenges.Count(c => c.Cleared);
 
                     // Snapshot state
-                    var timerStates = td.Timers.Select(t => (t.Name, t.Countdown, t.Stopped)).ToList();
-                    var firedNames = td.TimersFired.Select(f => $"{f.Name} ({f.Effect} {f.Amount})").ToList();
+                    var challengeStates = td.Challenges.Select(c => (c.Name, c.Resistance, c.Cleared)).ToList();
+
+                    // Get current challenge info
+                    var currentChallenge = td.Challenges.ElementAtOrDefault(td.CurrentChallengeIndex);
+                    int resistance = currentChallenge?.Resistance ?? 0;
+                    int resistanceMax = currentChallenge?.MaxResistance ?? 0;
 
                     // Snapshot hand with affordability
                     var hand = td.Openings.Select(o => (
@@ -161,9 +162,9 @@ static class SimRunner
                     }
                     catch (InvalidOperationException)
                     {
-                        var failVibe = new TurnVibe(turn, choice, tension, 0, 0, 0, "none", "fail", false, 0, false);
-                        traces.Add(new TurnTrace(failVibe, td.Momentum, preSpirits, td.Resistance, td.ResistanceMax,
-                            timerStates, firedNames, hand, "spirits depleted"));
+                        var failVibe = new TurnVibe(turn, choice, tension, 0, 0, 0, "none", "fail", 0);
+                        traces.Add(new TurnTrace(failVibe, td.Momentum, preSpirits, td.Clock, resistance, resistanceMax,
+                            challengeStates, hand, "spirits depleted"));
                         return new TraceResult(traces, false, spiritsStart - session.Player.Spirits, "spirits_loss");
                     }
 
@@ -176,10 +177,10 @@ static class SimRunner
                     if (step is TacticalStep.Finished) triumph = 1.0;
                     else if (step is TacticalStep.ShowTurn next)
                     {
-                        int newActive = next.Data.Timers.Count(t => !t.Stopped);
-                        if (prevActiveTimers >= 0 && newActive < activeTimers) triumph = 1.0;
+                        int newCleared = next.Data.Challenges.Count(c => c.Cleared);
+                        if (newCleared > challengesCleared) triumph = 1.0;
                     }
-                    prevActiveTimers = activeTimers;
+                    prevChallengesCleared = challengesCleared;
 
                     bool isBad = juice < 0.25 || label is "force" or "stuck";
                     badStreak = isBad ? badStreak + 1 : 0;
@@ -187,11 +188,10 @@ static class SimRunner
                         : -0.2 * badStreak - 0.1 * Math.Max(0, badStreak - 1);
 
                     var vibe = new TurnVibe(turn, choice, tension, juice, weight, triumph,
-                        played?.Name ?? "none", label, td.TimersFired.Count > 0, spiritsLost,
-                        td.PendingConditions.Count > 0);
+                        played?.Name ?? "none", label, spiritsLost);
 
-                    traces.Add(new TurnTrace(vibe, td.Momentum, preSpirits, td.Resistance, td.ResistanceMax,
-                        timerStates, firedNames, hand, reasoning));
+                    traces.Add(new TurnTrace(vibe, td.Momentum, preSpirits, td.Clock, resistance, resistanceMax,
+                        challengeStates, hand, reasoning));
                     break;
 
                 case TacticalStep.Finished fin:
@@ -219,7 +219,7 @@ static class SimRunner
         var vibes = new List<TurnVibe>();
         int badStreak = 0;
         int turn = 0;
-        int prevActiveTimers = -1;
+        int prevChallengesCleared = 0;
 
         while (true)
         {
@@ -243,12 +243,11 @@ static class SimRunner
 
                     var td = show.Data;
                     int preSpirits = session.Player.Spirits;
-                    int activeTimers = td.Timers.Count(t => !t.Stopped);
+                    int challengesCleared = td.Challenges.Count(c => c.Cleared);
 
-                    // Detect timer fire from previous turn
-                    bool timerFired = false;
-                    bool conditioned = false;
-                    // (Timer fire detection happens via spirits loss after act)
+                    // Get current challenge for resistance info
+                    var currentChallenge = td.Challenges.ElementAtOrDefault(td.CurrentChallengeIndex);
+                    int resistance = currentChallenge?.Resistance ?? 0;
 
                     // Choose action
                     var (action, idx, label) = ChooseAction(td, approach, tb);
@@ -272,7 +271,7 @@ static class SimRunner
                     var played = idx >= 0 && idx < td.Openings.Count ? td.Openings[idx] : null;
                     double juice = played != null ? JuiceRatings.Of(played) : 0.1;
 
-                    // Triumph: did we advance to the next timer or finish?
+                    // Triumph: did we clear a challenge or finish?
                     double triumph = 0.0;
                     if (step is TacticalStep.Finished)
                     {
@@ -280,11 +279,11 @@ static class SimRunner
                     }
                     else if (step is TacticalStep.ShowTurn next)
                     {
-                        int newActive = next.Data.Timers.Count(t => !t.Stopped);
-                        if (prevActiveTimers >= 0 && newActive < activeTimers)
+                        int newCleared = next.Data.Challenges.Count(c => c.Cleared);
+                        if (newCleared > challengesCleared)
                             triumph = 1.0;
                     }
-                    prevActiveTimers = activeTimers;
+                    prevChallengesCleared = challengesCleared;
 
                     // Rolling weight
                     bool isBad = juice < 0.25 || label is "force" or "stuck";
@@ -293,7 +292,7 @@ static class SimRunner
                         : -0.2 * badStreak - 0.1 * Math.Max(0, badStreak - 1);
 
                     vibes.Add(new TurnVibe(turn, choice, tension, juice, weight, triumph,
-                        played?.Name ?? "none", label, timerFired, spiritsLost, conditioned));
+                        played?.Name ?? "none", label, spiritsLost));
                     break;
 
                 case TacticalStep.Finished fin:
@@ -319,6 +318,9 @@ static class SimRunner
     static (TacticalAction Action, int Idx, string Label, string Reasoning) ChooseActionWithReasoning(
         TacticalTurnData turn, ApproachKind approach, TacticalBalance tb)
     {
+        var currentChallenge = turn.Challenges.ElementAtOrDefault(turn.CurrentChallengeIndex);
+        int resistance = currentChallenge?.Resistance ?? 0;
+
         if (approach == ApproachKind.Cautious)
         {
             var cancel = FindCancel(turn);
@@ -342,9 +344,9 @@ static class SimRunner
         }
         else
         {
-            var finisher = FindFinisher(turn);
+            var finisher = FindFinisher(turn, resistance);
             if (finisher >= 0) return (TacticalAction.TakeOpening, finisher, "play",
-                $"finisher available! {turn.Openings[finisher].EffectAmount} dmg vs {turn.Resistance} resist");
+                $"finisher available! {turn.Openings[finisher].EffectAmount} dmg vs {resistance} resist");
 
             var damage = BestDamage(turn);
 
@@ -408,14 +410,15 @@ static class SimRunner
 
     static (TacticalAction, int, string) AggroBot(TacticalTurnData turn, TacticalBalance tb)
     {
-        var finisher = FindFinisher(turn);
+        var currentChallenge = turn.Challenges.ElementAtOrDefault(turn.CurrentChallengeIndex);
+        int resistance = currentChallenge?.Resistance ?? 0;
+
+        var finisher = FindFinisher(turn, resistance);
         if (finisher >= 0) return (TacticalAction.TakeOpening, finisher, "play");
 
         var damage = BestDamage(turn);
 
         // Press if best option is weak and we have momentum to spare.
-        // Aggro needs momentum AFTER pressing to play what we dig into,
-        // so only press if we'd keep at least 1M after paying the cost.
         int momentumAfterPress = turn.Momentum - tb.PressAdvantageCost;
         bool canPressUsefully = !turn.DigUsed && momentumAfterPress >= 1;
 
@@ -458,12 +461,12 @@ static class SimRunner
         return best;
     }
 
-    static int FindFinisher(TacticalTurnData turn)
+    static int FindFinisher(TacticalTurnData turn, int resistance)
     {
         for (int i = 0; i < turn.Openings.Count; i++)
         {
             var o = turn.Openings[i];
-            if (o.EffectKind == EffectKind.Damage && o.EffectAmount >= turn.Resistance && CanAfford(o, turn))
+            if (o.EffectKind == EffectKind.Damage && o.EffectAmount >= resistance && CanAfford(o, turn))
                 return i;
         }
         return -1;
@@ -513,10 +516,6 @@ static class SimRunner
 
     static double MeasureChoice(TacticalTurnData turn)
     {
-        // Two dimensions of choice:
-        // 1. Card selection: are visible options close in value?
-        // 2. Press decision: is the best card "good enough" or should I dig?
-
         var values = new List<double>();
         for (int i = 0; i < turn.Openings.Count; i++)
         {
@@ -552,21 +551,21 @@ static class SimRunner
 
     static double MeasureTension(TacticalTurnData turn)
     {
-        double worst = 0;
-        foreach (var t in turn.Timers)
+        // Tension based on how much clock remains vs challenges left
+        int remainingResistance = turn.Challenges.Where(c => !c.Cleared).Sum(c => c.Resistance);
+        if (remainingResistance == 0) return 0.0;
+
+        // Rough estimate: can we finish in time?
+        // Higher tension when clock is low relative to remaining work
+        double turnsPerResistance = remainingResistance > 0 ? (double)turn.Clock / remainingResistance : 10;
+        return turnsPerResistance switch
         {
-            if (t.Stopped) continue;
-            double tension = t.Countdown switch
-            {
-                <= 1 => 1.0,
-                2 => 0.8,
-                3 => 0.6,
-                4 => 0.4,
-                5 => 0.2,
-                _ => 0.1,
-            };
-            if (tension > worst) worst = tension;
-        }
-        return worst;
+            <= 0.5 => 1.0,
+            <= 1.0 => 0.8,
+            <= 1.5 => 0.6,
+            <= 2.0 => 0.4,
+            <= 3.0 => 0.2,
+            _ => 0.1,
+        };
     }
 }

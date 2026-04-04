@@ -4,11 +4,13 @@ Collapsed Earthwork Traverse
 
 The route looks treacherous. You'll need to navigate down a steep bank of loose scree, then hop from boulder to boulder to reach the sealed crate. Once you've secured the crate to your pack, you've got a hard climb ahed on the far bank. At any moment you could lose your footing and tumble into the rocks below.
 
-timers:
-  * You lose your footing: fatal every 10
-  * Navigate down the bank [counter Find a safe path]: tick "You lose your footing" 1 every 3 resist 2
-  * Get to the crate [counter Jump to the crate]: tick "You lose your footing" 1 every 3 resist 4
-  * Climb the far slope [counter Find solid footing]: tick "You lose your footing" 1 every 3 resist 7
+clock:
+  10
+
+challenges:
+  * Navigate down the bank [counter Find a safe path]: 2
+  * Get to the crate [counter Jump to the crate]: 4
+  * Climb the far slope [counter Find solid footing]: 7
 
 openings:
   * Test each foothold before committing weight: free_momentum_small

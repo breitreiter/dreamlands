@@ -110,22 +110,14 @@ static class WalkTacticalCommand
             PrintWrapped(encounter.Body);
         }
 
-        // Print timers overview
+        // Print encounter overview
         Console.WriteLine();
-        Console.WriteLine("\u001b[90mtimers:\u001b[0m");
-        foreach (var t in encounter.Timers)
+        Console.WriteLine($"\u001b[90mclock: {encounter.Clock} turns\u001b[0m");
+        Console.WriteLine("\u001b[90mchallenges:\u001b[0m");
+        foreach (var c in encounter.Challenges)
         {
-            var desc = t.Effect switch
-            {
-                TimerEffect.Spirits => $"spirits {t.Amount} every {t.Countdown}",
-                TimerEffect.Resistance => $"resistance {t.Amount} every {t.Countdown}",
-                TimerEffect.Condition => $"condition {t.ConditionId} every {t.Countdown}",
-                TimerEffect.Fatal => $"fatal every {t.Countdown}",
-                TimerEffect.TickTimer => $"tick \"{t.TicksTimerName}\" {t.Amount} every {t.Countdown}",
-                _ => "?"
-            };
-            var kind = t.Resistance > 0 ? $"sequential (resistance {t.Resistance})" : "ambient";
-            Console.WriteLine($"  \u001b[90m• {t.Name}: {desc} [{kind}]{(t.CounterName != null ? $" [counter: {t.CounterName}]" : "")}\u001b[0m");
+            var counter = c.CounterName != null ? $" [counter: {c.CounterName}]" : "";
+            Console.WriteLine($"  \u001b[90m• {c.Name}: resistance {c.Resistance}{counter}\u001b[0m");
         }
 
         // Begin
@@ -193,44 +185,22 @@ static class WalkTacticalCommand
         Console.WriteLine();
         Console.WriteLine($"── Turn {data.Turn} ──────────────────────────────");
 
-        // Show timer fires from last turn
-        if (data.TimersFired.Count > 0)
-        {
-            foreach (var fired in data.TimersFired)
-            {
-                var desc = fired.Effect switch
-                {
-                    TimerEffect.Spirits => $"\u001b[31m-{fired.Amount} spirits\u001b[0m",
-                    TimerEffect.Resistance => $"\u001b[33m+{fired.Amount} resistance\u001b[0m",
-                    TimerEffect.Condition => $"\u001b[33mcondition: {fired.ConditionId}\u001b[0m",
-                    TimerEffect.Fatal => "\u001b[31mFATAL\u001b[0m",
-                    TimerEffect.TickTimer => $"\u001b[33mtick\u001b[0m",
-                    _ => "?"
-                };
-                Console.WriteLine($"  ⚡ {fired.Name} fired: {desc}");
-            }
-        }
-
         // Status line
-        Console.Write($"  Spirits: {data.PlayerSpirits}  Momentum: {data.Momentum}");
-        if (data.Resistance > 0)
-            Console.Write($"  Resistance: {data.Resistance}/{data.ResistanceMax}");
+        Console.Write($"  Spirits: {data.PlayerSpirits}  Momentum: {data.Momentum}  Clock: {data.Clock}");
         Console.WriteLine();
 
-        // Timer status
-        for (int i = 0; i < data.Timers.Count; i++)
+        // Challenge status
+        for (int i = 0; i < data.Challenges.Count; i++)
         {
-            var t = data.Timers[i];
-            if (t.Stopped) continue;
-            var marker = i == data.CurrentTimerIndex ? " ◆" : "";
-            var bar = t.IsAmbient
-                ? $"[{t.Current}/{t.Countdown}]"
-                : $"[{t.Current}/{t.Countdown}] resistance {t.Resistance}";
-            Console.WriteLine($"  \u001b[90m  {t.Name}{marker}: {bar}\u001b[0m");
+            var c = data.Challenges[i];
+            if (c.Cleared)
+            {
+                Console.WriteLine($"  \u001b[90m  ✓ {c.Name}\u001b[0m");
+                continue;
+            }
+            var marker = i == data.CurrentChallengeIndex ? " ◆" : "";
+            Console.WriteLine($"  \u001b[90m  {c.Name}{marker}: resistance {c.Resistance}/{c.MaxResistance}\u001b[0m");
         }
-
-        if (data.PendingConditions.Count > 0)
-            Console.WriteLine($"  \u001b[33mpending conditions: {string.Join(", ", data.PendingConditions)}\u001b[0m");
 
         // Show openings
         Console.WriteLine();
@@ -296,9 +266,9 @@ static class WalkTacticalCommand
         var (label, color) = fin.Reason switch
         {
             TacticalFinishReason.ResistanceKill => ("VICTORY (resistance depleted)", "\u001b[32m"),
-            TacticalFinishReason.ControlKill => ("VICTORY (timer cancelled)", "\u001b[32m"),
+            TacticalFinishReason.ControlKill => ("VICTORY (challenge cancelled)", "\u001b[32m"),
             TacticalFinishReason.SpiritsLoss => ("DEFEAT (spirits exhausted)", "\u001b[31m"),
-            TacticalFinishReason.TimerExpired => ("DEFEAT (timer expired)", "\u001b[31m"),
+            TacticalFinishReason.ClockExpired => ("DEFEAT (clock expired)", "\u001b[31m"),
             _ => ("FINISHED", "\u001b[0m")
         };
         Console.WriteLine($"{color}═══ {label} ═══\u001b[0m");
@@ -333,14 +303,6 @@ static class WalkTacticalCommand
                 Console.WriteLine($"    \u001b[32m{r}\u001b[0m");
         }
 
-        if (fin.ConditionResults is { Count: > 0 })
-        {
-            Console.WriteLine();
-            Console.WriteLine("  Condition resolution:");
-            foreach (var r in fin.ConditionResults)
-                Console.WriteLine($"    {r}");
-        }
-
         // Final state
         var player = session.Player;
         Console.WriteLine();
@@ -362,7 +324,7 @@ static class WalkTacticalCommand
     static string FormatEffect(OpeningSnapshot o) => o.EffectKind switch
     {
         EffectKind.Damage => $"damage {o.EffectAmount}",
-        EffectKind.StopTimer => "cancel timer",
+        EffectKind.StopTimer => "cancel challenge",
         EffectKind.Momentum => $"+{o.EffectAmount} momentum",
         _ => "?"
     };

@@ -6,26 +6,18 @@ public enum CostKind { Free, Momentum, Spirits, Tick }
 
 public enum EffectKind { Damage, StopTimer, Momentum }
 
-public enum TimerEffect { Spirits, Resistance, Condition, TickTimer, Fatal }
-
 public enum ApproachKind { Aggressive, Cautious }
 
 // ── Value types ────────────────────────────────────────────────────
 
 /// <summary>
-/// Timer definition. Two kinds determined by Resistance:
-///   Resistance > 0 → sequential (has HP, one active at a time, player depletes to advance)
-///   Resistance = 0 → ambient (always ticking, auto-cleared when all sequential timers are done)
+/// A challenge is one stage the player must overcome. Linear progression —
+/// burn through resistance to advance to the next challenge.
 /// </summary>
-public sealed record TimerDef(
+public sealed record ChallengeDef(
     string Name,
-    TimerEffect Effect,
-    int Amount,
-    int Countdown,
-    int Resistance,
-    string? CounterName = null,
-    string? ConditionId = null,
-    string? TicksTimerName = null);
+    string? CounterName,
+    int Resistance);
 
 public sealed record OpeningDef(string Name, string Archetype, string? Requires = null);
 
@@ -52,7 +44,9 @@ public sealed record TacticalEncounter
     public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = [];
 
-    public IReadOnlyList<TimerDef> Timers { get; init; } = [];
+    /// <summary>Master clock. Decrements each turn. Hit zero = lose.</summary>
+    public int Clock { get; init; }
+    public IReadOnlyList<ChallengeDef> Challenges { get; init; } = [];
     public IReadOnlyList<OpeningDef> Openings { get; init; } = [];
     public IReadOnlyList<ApproachDef> Approaches { get; init; } = [];
     public FailureOutcome? Failure { get; init; }

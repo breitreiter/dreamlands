@@ -19,11 +19,12 @@ public class BundleTests
               "category": "plains/tier1",
               "title": "Wolves",
               "body": "Three wolves.",
-              "variant": "combat",
+              "stat": "combat",
               "tier": 1,
               "requires": [],
-              "timers": [
-                { "name": "Flanking", "effect": "spirits", "amount": 2, "countdown": 4, "resistance": 8 }
+              "clock": 10,
+              "challenges": [
+                { "name": "Flanking", "counterName": "Break flank", "resistance": 8 }
               ],
               "openings": [
                 { "name": "Lunge", "archetype": "momentum_to_progress_large", "requires": null },
@@ -66,41 +67,20 @@ public class BundleTests
     }
 
     [Fact]
-    public void LoadsTimers()
+    public void LoadsClock()
     {
         var enc = TacticalBundle.FromJson(BundleJson).Encounters[0];
-        Assert.Single(enc.Timers);
-        Assert.Equal("Flanking", enc.Timers[0].Name);
-        Assert.Equal(TimerEffect.Spirits, enc.Timers[0].Effect);
-        Assert.Equal(2, enc.Timers[0].Amount);
-        Assert.Equal(4, enc.Timers[0].Countdown);
-        Assert.Equal(8, enc.Timers[0].Resistance);
+        Assert.Equal(10, enc.Clock);
     }
 
     [Fact]
-    public void LoadsConditionTimer()
+    public void LoadsChallenges()
     {
-        var json = """
-            {
-              "index": { "encountersById": { "t": 0 }, "groupsById": {}, "encountersByCategory": {} },
-              "encounters": [
-                {
-                  "id": "t", "category": "", "title": "T", "body": ".", "variant": "combat",
-                  "timers": [
-                    { "name": "Jagged", "effect": "condition", "amount": 0, "countdown": 4, "resistance": 8, "conditionId": "injured" }
-                  ],
-                  "openings": [{ "name": "Hit", "archetype": "momentum_to_progress", "requires": null }],
-                  "failure": { "text": "Fail.", "mechanics": [] }
-                }
-              ],
-              "groups": []
-            }
-            """;
-        var enc = TacticalBundle.FromJson(json).Encounters[0];
-        Assert.Single(enc.Timers);
-        Assert.Equal(TimerEffect.Condition, enc.Timers[0].Effect);
-        Assert.Equal("injured", enc.Timers[0].ConditionId);
-        Assert.Equal(4, enc.Timers[0].Countdown);
+        var enc = TacticalBundle.FromJson(BundleJson).Encounters[0];
+        Assert.Single(enc.Challenges);
+        Assert.Equal("Flanking", enc.Challenges[0].Name);
+        Assert.Equal("Break flank", enc.Challenges[0].CounterName);
+        Assert.Equal(8, enc.Challenges[0].Resistance);
     }
 
     [Fact]

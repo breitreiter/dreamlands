@@ -7,16 +7,19 @@ public class ParserTests
 {
     const string CombatEncounter = """
         Wolves of the Cairn Road
-        [variant combat]
+        [stat combat]
         [tier 2]
 
         Three wolves materialize from the scrub grass on either side of the road.
         The largest has a scar across its muzzle.
 
-        timers:
-          * Flanking Maneuver: spirits 2 every 4 resist 4
-          * Alpha's Howl: resistance 2 every 5 resist 5
-          * Cornered Prey: spirits 1 every 3 resist 3
+        clock:
+          10
+
+        challenges:
+          * Flanking Maneuver [counter Break their flank]: 4
+          * Alpha's Howl [counter Silence the alpha]: 5
+          * Cornered Prey: 3
 
         openings:
           * Throat Strike: momentum_to_progress_large
@@ -37,15 +40,18 @@ public class ParserTests
 
     const string TraverseEncounter = """
         The Shattered Bridge
-        [variant traverse]
+        [stat bushcraft]
         [tier 1]
 
         The bridge across the gorge has collapsed to a skeleton of stone pillars
         and dangling rope.
 
-        timers:
-          * Crumbling Pillar: resistance 1 every 3 resist 4
-          * Wind Gust: spirits 1 every 2 resist 4
+        clock:
+          8
+
+        challenges:
+          * Crumbling Pillar: 4
+          * Wind Gust: 4
 
         openings:
           * Rope Swing: threat_to_progress_large
@@ -106,22 +112,32 @@ public class ParserTests
     }
 
     [Fact]
-    public void CombatTimers()
+    public void CombatClock()
     {
         var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
-        Assert.Equal(3, enc.Timers.Count);
+        Assert.Equal(10, enc.Clock);
+    }
 
-        var flanking = enc.Timers[0];
+    [Fact]
+    public void CombatChallenges()
+    {
+        var enc = TacticalParser.Parse(CombatEncounter).Encounter!;
+        Assert.Equal(3, enc.Challenges.Count);
+
+        var flanking = enc.Challenges[0];
         Assert.Equal("Flanking Maneuver", flanking.Name);
-        Assert.Equal(TimerEffect.Spirits, flanking.Effect);
-        Assert.Equal(2, flanking.Amount);
-        Assert.Equal(4, flanking.Countdown);
+        Assert.Equal("Break their flank", flanking.CounterName);
         Assert.Equal(4, flanking.Resistance);
 
-        var howl = enc.Timers[1];
+        var howl = enc.Challenges[1];
         Assert.Equal("Alpha's Howl", howl.Name);
-        Assert.Equal(TimerEffect.Resistance, howl.Effect);
+        Assert.Equal("Silence the alpha", howl.CounterName);
         Assert.Equal(5, howl.Resistance);
+
+        var prey = enc.Challenges[2];
+        Assert.Equal("Cornered Prey", prey.Name);
+        Assert.Null(prey.CounterName);
+        Assert.Equal(3, prey.Resistance);
     }
 
     [Fact]
@@ -180,12 +196,12 @@ public class ParserTests
     }
 
     [Fact]
-    public void TraverseTimerResistance()
+    public void TraverseChallenges()
     {
         var enc = TacticalParser.Parse(TraverseEncounter).Encounter!;
-        Assert.Equal(2, enc.Timers.Count);
-        Assert.Equal(4, enc.Timers[0].Resistance);
-        Assert.Equal(4, enc.Timers[1].Resistance);
+        Assert.Equal(2, enc.Challenges.Count);
+        Assert.Equal(4, enc.Challenges[0].Resistance);
+        Assert.Equal(4, enc.Challenges[1].Resistance);
     }
 
     [Fact]
@@ -263,16 +279,19 @@ public class ParserTests
     }
 
     [Fact]
-    public void TimerResistanceParsed()
+    public void ClockParsed()
     {
         var source = """
             Test Encounter
-            [variant combat]
+            [stat combat]
 
             Body text.
 
-            timers:
-              * Timer A: spirits 1 every 3 resist 6
+            clock:
+              12
+
+            challenges:
+              * Timer A: 6
 
             openings:
               * Strike: momentum_to_progress_large
@@ -282,7 +301,9 @@ public class ParserTests
             """;
         var result = TacticalParser.Parse(source);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-        Assert.Equal(6, result.Encounter!.Timers[0].Resistance);
+        Assert.Equal(12, result.Encounter!.Clock);
+        Assert.Single(result.Encounter.Challenges);
+        Assert.Equal(6, result.Encounter.Challenges[0].Resistance);
     }
 
     [Fact]
@@ -290,7 +311,7 @@ public class ParserTests
     {
         var source = """
             Test
-            [variant combat]
+            [stat combat]
 
             Body.
 
@@ -310,7 +331,7 @@ public class ParserTests
     {
         var source = """
             Test Encounter
-            [variant combat]
+            [stat combat]
 
             Body text.
 
@@ -330,7 +351,7 @@ public class ParserTests
     {
         var source = """
             Test Encounter
-            [variant combat]
+            [stat combat]
             [requires tag some_flag]
             [requires has sword]
 
@@ -349,48 +370,22 @@ public class ParserTests
         Assert.Equal("has sword", result.Encounter.Requires[1]);
     }
 
-    // ── Condition timers ───────────────────────────────────────────
+    // ── Challenges ────────────────────────────────────────────────
 
     [Fact]
-    public void ConditionTimerParses()
-    {
-        var source = """
-            Jagged Terrain
-            [variant combat]
-
-            Sharp rocks everywhere.
-
-            timers:
-              * Falling Rocks: condition injured every 4 resist 8
-
-            openings:
-              * Strike: momentum_to_progress_large
-
-            failure:
-              You stumble.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-
-        var timer = result.Encounter!.Timers[0];
-        Assert.Equal("Falling Rocks", timer.Name);
-        Assert.Equal(TimerEffect.Condition, timer.Effect);
-        Assert.Equal("injured", timer.ConditionId);
-        Assert.Equal(0, timer.Amount);
-        Assert.Equal(4, timer.Countdown);
-    }
-
-    [Fact]
-    public void ConditionTimerWithCounterParses()
+    public void ChallengeWithCounterParses()
     {
         var source = """
             Treacherous Path
-            [variant traverse]
+            [stat bushcraft]
 
             The path is treacherous.
 
-            timers:
-              * Exhausting Climb [counter Pace yourself]: condition exhausted every 3 resist 6
+            clock:
+              8
+
+            challenges:
+              * Exhausting Climb [counter Pace yourself]: 6
 
             openings:
               * Step: free_progress_small
@@ -401,27 +396,28 @@ public class ParserTests
         var result = TacticalParser.Parse(source);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
 
-        var timer = result.Encounter!.Timers[0];
-        Assert.Equal("Exhausting Climb", timer.Name);
-        Assert.Equal("Pace yourself", timer.CounterName);
-        Assert.Equal(TimerEffect.Condition, timer.Effect);
-        Assert.Equal("exhausted", timer.ConditionId);
-        Assert.Equal(3, timer.Countdown);
+        var challenge = result.Encounter!.Challenges[0];
+        Assert.Equal("Exhausting Climb", challenge.Name);
+        Assert.Equal("Pace yourself", challenge.CounterName);
+        Assert.Equal(6, challenge.Resistance);
     }
 
     [Fact]
-    public void MixedTimerTypesParse()
+    public void MultipleChallengesParse()
     {
         var source = """
             Mixed Fight
-            [variant combat]
+            [stat combat]
 
             Danger everywhere.
 
-            timers:
-              * Drain: spirits 2 every 4 resist 5
-              * Wound Risk: condition injured every 3 resist 5
-              * Regen: resistance 1 every 5 resist 5
+            clock:
+              12
+
+            challenges:
+              * First wave: 5
+              * Second push [counter Break through]: 7
+              * Final stand: 10
 
             openings:
               * Strike: momentum_to_progress_large
@@ -431,43 +427,20 @@ public class ParserTests
             """;
         var result = TacticalParser.Parse(source);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-        Assert.Equal(3, result.Encounter!.Timers.Count);
-        Assert.Equal(TimerEffect.Spirits, result.Encounter.Timers[0].Effect);
-        Assert.Equal(TimerEffect.Condition, result.Encounter.Timers[1].Effect);
-        Assert.Equal(TimerEffect.Resistance, result.Encounter.Timers[2].Effect);
+        Assert.Equal(3, result.Encounter!.Challenges.Count);
+        Assert.Equal(5, result.Encounter.Challenges[0].Resistance);
+        Assert.Equal(7, result.Encounter.Challenges[1].Resistance);
+        Assert.Equal(10, result.Encounter.Challenges[2].Resistance);
     }
 
     [Fact]
-    public void UnknownConditionErrors()
-    {
-        var source = """
-            Bad Timer
-            [variant combat]
-
-            Test.
-
-            timers:
-              * Bad: condition cursed_by_the_moon every 3 resist 5
-
-            openings:
-              * Strike: momentum_to_progress_large
-
-            failure:
-              You fail.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message.Contains("Unknown condition"));
-    }
-
-    [Fact]
-    public void NoTimerSectionIsValid()
+    public void NoChallengesIsValid()
     {
         var source = """
             Simple Fight
-            [variant combat]
+            [stat combat]
 
-            A straightforward encounter with no timers.
+            A straightforward encounter with no challenges.
 
             openings:
               * Strike: momentum_to_progress
@@ -482,166 +455,13 @@ public class ParserTests
             """;
         var result = TacticalParser.Parse(source);
         Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-        Assert.Empty(result.Encounter!.Timers);
+        Assert.Empty(result.Encounter!.Challenges);
     }
 
-    // ── Fatal timers ──────────────────────────────────────────────────
+    // ── Legacy section ignored ───────────────────────────────────
 
     [Fact]
-    public void FatalTimerParses()
-    {
-        var source = """
-            Chase
-            [tier 1]
-
-            They're after you.
-
-            timers:
-              * They're gaining on you: fatal every 20
-
-            openings:
-              * Run: free_progress_small
-
-            failure:
-              They catch you.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-
-        var timer = result.Encounter!.Timers[0];
-        Assert.Equal("They're gaining on you", timer.Name);
-        Assert.Equal(TimerEffect.Fatal, timer.Effect);
-        Assert.Equal(20, timer.Countdown);
-        Assert.Equal(0, timer.Resistance); // ambient
-    }
-
-    [Fact]
-    public void FatalTimerWithResistParses()
-    {
-        var source = """
-            Bomb
-            [tier 2]
-
-            Tick tick tick.
-
-            timers:
-              * Ticking Bomb: fatal every 5 resist 4
-
-            openings:
-              * Defuse: momentum_to_progress
-
-            failure:
-              Boom.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-
-        var timer = result.Encounter!.Timers[0];
-        Assert.Equal(TimerEffect.Fatal, timer.Effect);
-        Assert.Equal(5, timer.Countdown);
-        Assert.Equal(4, timer.Resistance); // sequential — can be defused
-    }
-
-    // ── Tick-timer ────────────────────────────────────────────────────
-
-    [Fact]
-    public void TickTimerParses()
-    {
-        var source = """
-            Traverse
-            [tier 1]
-
-            Navigate the hazards.
-
-            timers:
-              * Master: fatal every 20
-              * Reach the creek: tick "Master" 3 every 4 resist 6
-
-            openings:
-              * Step: free_progress_small
-
-            failure:
-              Lost.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-
-        Assert.Equal(2, result.Encounter!.Timers.Count);
-
-        var master = result.Encounter.Timers[0];
-        Assert.Equal(TimerEffect.Fatal, master.Effect);
-        Assert.Equal(0, master.Resistance);
-
-        var creek = result.Encounter.Timers[1];
-        Assert.Equal("Reach the creek", creek.Name);
-        Assert.Equal(TimerEffect.TickTimer, creek.Effect);
-        Assert.Equal(3, creek.Amount);
-        Assert.Equal(4, creek.Countdown);
-        Assert.Equal(6, creek.Resistance);
-        Assert.Equal("Master", creek.TicksTimerName);
-    }
-
-    [Fact]
-    public void TickTimerWithCounterParses()
-    {
-        var source = """
-            Test
-            [tier 1]
-
-            Body.
-
-            timers:
-              * Master: fatal every 20
-              * Climb [counter Find handholds]: tick "Master" 2 every 3 resist 5
-
-            openings:
-              * Step: free_progress_small
-
-            failure:
-              Fall.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-
-        var timer = result.Encounter!.Timers[1];
-        Assert.Equal("Climb", timer.Name);
-        Assert.Equal("Find handholds", timer.CounterName);
-        Assert.Equal("Master", timer.TicksTimerName);
-    }
-
-    // ── Ambient timers (resist omitted) ───────────────────────────────
-
-    [Fact]
-    public void TimerWithoutResistIsAmbient()
-    {
-        var source = """
-            Test
-            [tier 1]
-
-            Body.
-
-            timers:
-              * Constant Drain: spirits 1 every 3
-
-            openings:
-              * Strike: momentum_to_progress
-
-            failure:
-              You fail.
-            """;
-        var result = TacticalParser.Parse(source);
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
-
-        var timer = result.Encounter!.Timers[0];
-        Assert.Equal(0, timer.Resistance);
-        Assert.Equal(TimerEffect.Spirits, timer.Effect);
-        Assert.Equal(3, timer.Countdown);
-    }
-
-    // ── Path section ignored ──────────────────────────────────────────
-
-    [Fact]
-    public void PathSectionIsIgnored()
+    public void TimersSectionIsIgnored()
     {
         var source = """
             Old Format
@@ -651,6 +471,25 @@ public class ParserTests
 
             timers:
               * Threat: spirits 1 every 3 resist 5
+
+            openings:
+              * Strike: momentum_to_progress
+
+            failure:
+              You fail.
+            """;
+        var result = TacticalParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors));
+    }
+
+    [Fact]
+    public void PathSectionIsIgnored()
+    {
+        var source = """
+            Old Format
+            [tier 1]
+
+            Body.
 
             openings:
               * Strike: momentum_to_progress

@@ -11,8 +11,8 @@ static class SimReport
         Console.WriteLine(new string('=', 70));
         Console.WriteLine($"  {label}  ({n:N0} runs)");
         Console.WriteLine(new string('=', 70));
-        Console.WriteLine($"{"Turn",4}  {"Choice",7}  {"Tension",7}  {"Juice",7}  {"Weight",7}  {"Triumph",7}  {"Fired",6}  {"Cond",5}");
-        Console.WriteLine($"{"────",4}  {"───────",7}  {"───────",7}  {"───────",7}  {"───────",7}  {"───────",7}  {"──────",6}  {"─────",5}");
+        Console.WriteLine($"{"Turn",4}  {"Choice",7}  {"Tension",7}  {"Juice",7}  {"Weight",7}  {"Triumph",7}");
+        Console.WriteLine($"{"────",4}  {"───────",7}  {"───────",7}  {"───────",7}  {"───────",7}  {"───────",7}");
 
         for (int t = 1; t <= maxTurn; t++)
         {
@@ -25,8 +25,6 @@ static class SimReport
             double avgJuice = turns.Average(v => v.Juice);
             double avgWeight = turns.Average(v => v.Weight);
             double avgTriumph = turns.Average(v => v.Triumph);
-            double pctFired = turns.Count(v => v.TimerFired) / (double)turns.Count;
-            double pctCond = turns.Count(v => v.Conditioned) / (double)turns.Count;
 
             string active = pctActive < 0.95 ? $" ({pctActive:P0})" : "";
             Console.WriteLine(
@@ -35,9 +33,7 @@ static class SimReport
                 $"  {avgTension,7:F2}" +
                 $"  {avgJuice,7:F2}" +
                 $"  {avgWeight,+7:F2}" +
-                $"  {avgTriumph,7:F2}" +
-                $"  {pctFired,5:P0}" +
-                $"  {pctCond,4:P0}");
+                $"  {avgTriumph,7:F2}");
         }
 
         PrintSummary(runs);
@@ -50,7 +46,6 @@ static class SimReport
         double avgLen = runs.Average(r => r.Turns.Count);
         double avgJuice = allTurns.Count > 0 ? allTurns.Average(t => t.Juice) : 0;
         double avgChoice = allTurns.Count > 0 ? allTurns.Average(t => t.Choice) : 0;
-        double condRate = (double)runs.Count(r => r.Turns.Any(t => t.Conditioned)) / n;
         double oofRate = (double)runs.Count(r => r.Turns.Any(t => t.Weight <= -0.7)) / n;
         double clickerRate = (double)ClickerRuns(runs) / n;
         double droughtRate = (double)DroughtRuns(runs) / n;
@@ -60,7 +55,6 @@ static class SimReport
             $"  len={avgLen,4:F1}" +
             $"  juice={avgJuice:F2}" +
             $"  choice={avgChoice:F2}" +
-            $"  cond={condRate,4:P0}" +
             $"  oof={oofRate,4:P0}" +
             $"  clicker={clickerRate,4:P0}" +
             $"  drought={droughtRate,4:P0}");
@@ -73,7 +67,6 @@ static class SimReport
         double avgLen = runs.Average(r => r.Turns.Count);
         double avgJuice = allTurns.Count > 0 ? allTurns.Average(t => t.Juice) : 0;
         double avgChoice = allTurns.Count > 0 ? allTurns.Average(t => t.Choice) : 0;
-        int conditions = runs.Count(r => r.Turns.Any(t => t.Conditioned));
         var spiritsList = runs.Select(r => r.SpiritsSpent).ToList();
         int oofRuns = runs.Count(r => r.Turns.Any(t => t.Weight <= -0.7));
         int clickerRuns = ClickerRuns(runs);
@@ -83,7 +76,6 @@ static class SimReport
         Console.WriteLine($"  Avg length:    {avgLen:F1} turns");
         Console.WriteLine($"  Avg juice:     {avgJuice:F2}");
         Console.WriteLine($"  Avg choice:    {avgChoice:F2}");
-        Console.WriteLine($"  Conditioned:   {(double)conditions / n:P1}");
         Console.WriteLine($"  Spirits lost:  {spiritsList.Average():F1} avg, {spiritsList.Max()} worst");
         Console.WriteLine($"  Oof rate:      {(double)oofRuns / n:P1} (weight <= -0.7)");
         Console.WriteLine($"  Clicker rate:  {(double)clickerRuns / n:P1} (choice < 0.15 for 3+ turns)");
@@ -121,22 +113,13 @@ static class SimReport
             var v = t.Vibe;
             Console.WriteLine();
             Console.WriteLine($"  ── Turn {v.Turn} ──────────────────────────────────────────────");
-            Console.WriteLine($"  State:  M={t.Momentum}  Sp={t.Spirits}  Resist={t.Resistance}/{t.ResistanceMax}");
+            Console.WriteLine($"  State:  M={t.Momentum}  Sp={t.Spirits}  Clock={t.Clock}  Resist={t.Resistance}/{t.ResistanceMax}");
 
-            // Timers
-            foreach (var (name, cd, stopped) in t.Timers)
+            // Challenges
+            foreach (var (name, resistance, cleared) in t.Challenges)
             {
-                string status = stopped ? "STOPPED" : $"cd={cd}";
-                Console.WriteLine($"  Timer:  {name} [{status}]");
-            }
-
-            // Timers that fired
-            if (t.TimersFired.Count > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                foreach (var fired in t.TimersFired)
-                    Console.WriteLine($"  FIRED:  {fired}");
-                Console.ResetColor();
+                string status = cleared ? "CLEARED" : $"resist={resistance}";
+                Console.WriteLine($"  Challenge:  {name} [{status}]");
             }
 
             // Hand

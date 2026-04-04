@@ -1839,24 +1839,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Turn = new TacticalTurnInfo
                     {
                         Turn = st.Data.Turn,
-                        Resistance = st.Data.Resistance,
-                        ResistanceMax = st.Data.ResistanceMax,
+                        Clock = st.Data.Clock,
                         Momentum = st.Data.Momentum,
                         Spirits = st.Data.PlayerSpirits,
                         DigUsed = st.Data.DigUsed,
-                        Timers = st.Data.Timers.Select(t => new TacticalTimerInfo
+                        CurrentChallengeIndex = st.Data.CurrentChallengeIndex,
+                        Challenges = st.Data.Challenges.Select(c => new TacticalChallengeInfo
                         {
-                            Name = t.Name,
-                            CounterName = t.CounterName,
-                            Effect = t.Effect.ToString().ToLowerInvariant(),
-                            Amount = t.Amount,
-                            Countdown = t.Countdown,
-                            Current = t.Current,
-                            Resistance = t.Resistance,
-                            Stopped = t.Stopped,
-                            IsAmbient = t.IsAmbient,
-                            ConditionId = t.ConditionId,
-                            TicksTimerName = t.TicksTimerName,
+                            Name = c.Name,
+                            CounterName = c.CounterName,
+                            Resistance = c.Resistance,
+                            MaxResistance = c.MaxResistance,
+                            Cleared = c.Cleared,
                         }).ToList(),
                         Openings = st.Data.Openings.Select(BuildOpeningInfo).ToList(),
                     },
@@ -1872,7 +1866,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     SuccessText = tacEnc.Success?.Text,
                     FailureMechanics = fin.FailureResults != null ? BuildMechanicResults(fin.FailureResults) : null,
                     SuccessMechanics = fin.SuccessResults != null ? BuildMechanicResults(fin.SuccessResults) : null,
-                    ConditionResults = fin.ConditionResults != null ? BuildMechanicResults(fin.ConditionResults) : null,
                 };
                 break;
         }

@@ -98,7 +98,8 @@ static class PlatonicDecks
 
 record EncounterScenario(
     string Name,
-    List<TimerDef> Timers,
+    int Clock,
+    List<ChallengeDef> Challenges,
     List<OpeningDef> Openings,
     List<ApproachDef> Approaches);
 
@@ -124,12 +125,12 @@ static class Scenarios
 
     public static readonly EncounterScenario Platonic = new(
         "Platonic",
-        //     TimerDef(name, effect, amount, countdown, resistance, counterName, ConditionId)
-        Timers:
+        Clock: 12,
+        Challenges:
         [
-            new("Spirits drain", TimerEffect.Spirits, 1, 2, 2, "Stop drain"),
-            new("Spirits drain", TimerEffect.Spirits, 1, 3, 3, "Stop drain"),
-            new("Condition", TimerEffect.Condition, 1, 6, 8, "Stop condition", ConditionId: "injured"),
+            new("First wave", "Break through", 4),
+            new("Second wave", "Overrun them", 5),
+            new("Final stand", "End it", 8),
         ],
         Openings: StandardFiller,
         Approaches:
@@ -183,7 +184,8 @@ static class Scenarios
         Id = "sim/" + scenario.Name,
         Title = scenario.Name,
         Stat = "combat",
-        Timers = scenario.Timers,
+        Clock = scenario.Clock,
+        Challenges = scenario.Challenges,
         Openings = scenario.Openings,
         Approaches = scenario.Approaches,
     };

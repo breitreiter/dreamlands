@@ -2,38 +2,40 @@ The Requisition Line Conflict
 [stat Negotiation]
 [tier 2]
 
-The sergeant and Jory await some interesting tale from your travels. They've been out here for months with few visitors and they've decided it's your turn to amuse them. You consider your travels and, after a moment, recall a suitable story, something the soldiers are unlikely to have heard from another traveler.
+The sergeant and Jory await some interesting tale from your travels. They've been out here for months with few visitors and they've decided it's your turn to amuse them. You consider your travels and, after a moment, decide on a ghost story. Everyone loves a ghost story.
 
-timers:
-  * The soldiers grow irritated: fatal every 9
-  * The sun beats down mercilessly [counter Move the group into the shade]: spirits 1 every 3 resist 3
-  * Jory fidgets with his book [counter Pull Jory into the conversation]: tick "The soldiers grow irritated" 1 every 3 resist 5
-  * The sergeant is restless [counter Flatter the sergeant]: tick "The soldiers grow irritated" 1 every 3 resist 3
+clock:
+  9
+
+challenges:
+  * The sun beats down mercilessly [counter Move the group into the shade]: 3
+  * Jory fidgets with his book [counter Pull Jory into the conversation]: 5
+  * The sergeant is restless [counter Flatter the sergeant]: 3
 
 openings:
-  * Mention the wind that never stopped: free_momentum_small
-  * Describe the vitrified stone you saw: free_progress_small
-  * Recount the deserter who helped you: free_momentum
-  * Tell of the checkpoint with no papers: free_progress_small
-  * Speak of the scavenger matriarch's maps: free_progress_small
-  * Embellish the part about Grid weapons: threat_to_progress
-  * Explain the sealed vault you passed: free_progress_small
-  * Describe the children playing in ruins: free_progress_small
-  * Mention the quartermaster's expired inventory: free_progress_small
-  * Weave in the lieutenant's fading authority: momentum_to_progress
-  * Claim you opened a Grid component: threat_to_progress
-  * Suggest you know what broke the empire: threat_to_progress
-  * Recall the night you sheltered there alone: spirits_to_momentum
-  * Let the story breathe and settle: free_momentum
+  * "The cave's slow, mineral cold settled into my bones": free_momentum_small
+  * "Pale lichen painted the walls in sickly greens": free_momentum_small
+  * "In the dark, water dripped like patient counting": free_momentum
+  * "I was certain someone, or something, was walking just behind me": momentum_to_progress
+  * "On the ground, rusted pitons and a length of frayed rope": free_progress_small
+  * "A narrow passage forced me sideways, stone pressing close": free_progress_small
+  * "I saw movement up ahead, but when I reached it, nothing": momentum_to_progress
+  * "There were strange scratches on the rock at shoulder height": free_progress_small
+  * "My lantern guttered without wind, nearly going out": spirits_to_momentum
+  * "I found a pool of still liquid, black, reflecting nothing at all": free_progress_small
+  * "I heard laughter in the distance, a woman's, and then silence": momentum_to_progress_large
+  * "There was a sudden icy chill in the air": momentum_to_progress
+  * "The darkness ahead gathered into shapes, blurring and twisted": momentum_to_cancel
+  * "Every path seemed to slope inward, gently guiding me": free_momentum
 
 approaches:
   * aggressive
   * cautious
 
 success:
-  By the time you finish your story, you have the whole patrol's rapt attention. Sensing you've finished, one soldier pipes up with "that's it? But it was just getting good." The sergeant shoots him a hard look and the man frowns and falls silent. Jory nods, "best story we've heard all week. Road ahead is hard, friend. Take some provisions for the trip. Let it not be said the legion is a poor host." You collect the cloth-wrapped bundle, nod to the soldiers, and continue on your journey.
+  By the time you finish, the whole patrol has drawn in close. One soldier breaks the silence: "That's it? But what happened after?" The sergeant shoots him a look and the man falls quiet. Jory closes his book. "Best story we've heard all month. Road ahead is hard, friend. Take some provisions for the trip. Let it not be said the legion is a poor host." You collect the cloth-wrapped bundle, nod to the soldiers, and continue on your way.
   +add_random_items 6 food
 
 failure:
-  The soldiers lose attention, despite your assurances you're nearly to the good part. After a minute or so, only Jory remains. But what optimism you had quickly fades, as you realize he's deep in his book and hasn't been paying attention for some time. You clear your throats and Jory looks up, "Oh, you're still here?" You decide now is a good time to make an exit.
-  ++damage_spirits 2
+  You lose the thread somewhere in the middle and the soldiers' eyes glaze over. You try to recover, but the details come out muddled and the ending falls flat. After a moment, only Jory remains, though you quickly realize he's deep in his book and hasn't been listening for some time. He looks up. "Oh, you're still here?" You decide now is a good time to move on.
+  +damage_spirits 2
