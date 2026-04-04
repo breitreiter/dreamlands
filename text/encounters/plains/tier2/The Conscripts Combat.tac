@@ -12,9 +12,10 @@ clock:
   12
 
 challenges:
-  * Jeoffry and Tanner press you [counter Break their ranks]: 4
-  * The officer maneuvers his small troop [counter Cut the officer down]: 3
-  * Wynn and Taylor circle behind you [counter Hobble Wynn]: 8
+  * Stop Wynn and Taylor from flanking you [counter Hobble Wynn]: 4
+  * Break the soldiers' morale [counter Cut the officer down]: 6
+  * Finish Jeoffry and Tanner [counter Strike under Tanner's guard]: 6
+
 
 openings:
   * Feint toward the soldier's weak side: free_progress_small

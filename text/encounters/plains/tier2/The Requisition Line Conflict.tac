@@ -8,9 +8,9 @@ clock:
   9
 
 challenges:
-  * The sun beats down mercilessly [counter Move the group into the shade]: 3
-  * Jory fidgets with his book [counter Pull Jory into the conversation]: 5
-  * The sergeant is restless [counter Flatter the sergeant]: 3
+  * The soldiers are unimpressed [counter "The locals say the cave is haunted, but I knew better"]: 3
+  * Jory is fidgeting with his book [counter "What would you have done, Jory?"]: 5
+  * The sergeant is restless [counter "But I'm sure your sergeant would be fearless"]: 3
 
 openings:
   * "The cave's slow, mineral cold settled into my bones": free_momentum_small

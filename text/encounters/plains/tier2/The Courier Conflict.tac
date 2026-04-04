@@ -8,9 +8,9 @@ clock:
   9
 
 challenges:
-  * The letter sentences a good man to death [counter We must trust the wisdom of the empire]: 3
-  * The letter is already unsealed [counter Offer your ring to mend the seal]: 5
-  * We are instruments of wicked people [counter No one has clean hands]: 3
+  * Focus her attention [counter Kneel down beside her]: 3
+  * Give her a way out [counter Offer your ring to mend the seal]: 5
+  * Help her remember her duty [counter Recall the grim weight of the guild ring]: 3
 
 openings:
   * Cite guild regulations with quiet authority: free_progress_small

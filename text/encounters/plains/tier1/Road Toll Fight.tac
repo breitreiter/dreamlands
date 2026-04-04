@@ -8,9 +8,9 @@ clock:
   10
 
 challenges:
-  * The thieves surround you [counter Throw them into disarray]: 3
-  * The bandit leader rallies his men [counter Cut the leader down]: 4
-  * A few rough men, armed [counter Finish the last of them]: 6
+  * Prevent the thieves from surrounding you [counter Throw them into disarray]: 3
+  * Break their morale [counter Wound one of the bandits]: 4
+  * Finish the leader [counter Cut the leader down]: 4
 
 openings:
   * Shove one aside: free_progress_small

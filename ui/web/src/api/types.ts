@@ -321,7 +321,6 @@ export interface TacticalInfo {
   successText?: string;
   failureMechanics?: MechanicResultInfo[];
   successMechanics?: MechanicResultInfo[];
-  conditionResults?: MechanicResultInfo[];
 }
 
 export interface TacticalApproachInfo {
@@ -330,27 +329,21 @@ export interface TacticalApproachInfo {
 
 export interface TacticalTurnInfo {
   turn: number;
-  resistance: number;
-  resistanceMax: number;
+  clock: number;
   momentum: number;
   spirits: number;
   digUsed: boolean;
-  timers: TacticalTimerInfo[];
+  currentChallengeIndex: number;
+  challenges: TacticalChallengeInfo[];
   openings: TacticalOpeningInfo[];
 }
 
-export interface TacticalTimerInfo {
+export interface TacticalChallengeInfo {
   name: string;
   counterName?: string;
-  effect: string;
-  amount: number;
-  countdown: number;
-  current: number;
   resistance: number;
-  stopped: boolean;
-  isAmbient: boolean;
-  conditionId?: string;
-  ticksTimerName?: string;
+  maxResistance: number;
+  cleared: boolean;
 }
 
 export interface TacticalOpeningInfo {

@@ -8,7 +8,7 @@ import parchment from "../assets/parchment.png";
 const ICONS = {
   momentum: "flamer.svg",
   progress: "dodge.svg",
-  threat: "stopwatch.svg",
+  clock: "stopwatch.svg",
   draw: "card-draw.svg",
   spirits: "sensuousness.svg",
 } as const;
@@ -25,17 +25,27 @@ function IconChip({ icon, value, color = "#aca377" }: { icon: string; value: str
   );
 }
 
+function NumberCircle({ n, color = "#aca377" }: { n: number; color?: string }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" className="shrink-0">
+      <circle cx="11" cy="11" r="9.5" fill="none" stroke={color} strokeWidth="1.5" />
+      <text x="11" y="11.5" textAnchor="middle" dominantBaseline="central"
+        fill={color} fontSize="12" fontWeight="bold" fontFamily="sans-serif">{n}</text>
+    </svg>
+  );
+}
+
 function costIcon(kind: string): string | null {
   if (kind === "momentum") return ICONS.momentum;
   if (kind === "spirits") return ICONS.spirits;
-  if (kind === "tick") return ICONS.threat;
+  if (kind === "tick") return ICONS.clock;
   return null;
 }
 
 function effectIcon(kind: string): string | null {
   if (kind === "damage") return ICONS.progress;
   if (kind === "momentum") return ICONS.momentum;
-  if (kind === "stop_timer") return ICONS.threat;
+  if (kind === "stop_timer") return ICONS.progress;
   return null;
 }
 
@@ -51,7 +61,7 @@ function describeOpening(o: TacticalOpeningInfo): string {
   const effectLabel = (kind: string, amount: number): string => {
     if (kind === "damage") return `gain ${amount} progress`;
     if (kind === "momentum") return `gain ${amount} momentum`;
-    if (kind === "stop_timer") return "stop a threat timer";
+    if (kind === "stop_timer") return "clear the challenge";
     return `gain ${amount} ${kind}`;
   };
 
@@ -139,8 +149,7 @@ function FinishedSummary({ tactical, onContinue, loading }: { tactical: Tactical
   const isVictory = tactical.finishReason === "resistancekill" || tactical.finishReason === "controlkill";
   const epilogue = isVictory ? tactical.successText : tactical.failureText;
   const mechanics = isVictory ? tactical.successMechanics : tactical.failureMechanics;
-  const conditions = tactical.conditionResults;
-  const hasEffects = (mechanics && mechanics.length > 0) || (conditions && conditions.length > 0);
+  const hasEffects = mechanics && mechanics.length > 0;
 
   return (
     <div className="space-y-6">
@@ -155,7 +164,7 @@ function FinishedSummary({ tactical, onContinue, loading }: { tactical: Tactical
             ? "Victory — Goal Reached"
             : tactical.finishReason === "controlkill"
               ? "Victory — Total Control"
-              : tactical.finishReason === "timerexpired"
+              : tactical.finishReason === "clockexpired"
                 ? "Defeated — Time Ran Out"
                 : "Defeated — Spirits Depleted"}
         </p>
@@ -171,7 +180,6 @@ function FinishedSummary({ tactical, onContinue, loading }: { tactical: Tactical
       {/* Effects: conditions and mechanics */}
       {hasEffects && (
         <div className="space-y-2 border-t border-edge pt-3">
-          {conditions && conditions.length > 0 && <MechanicLines results={conditions} />}
           {mechanics && mechanics.length > 0 && <MechanicLines results={mechanics} />}
         </div>
       )}
@@ -294,11 +302,10 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
               {/* Resources */}
               <div className="flex gap-6">
                 <div className="flex-1 text-center">
-                  <div className="text-dim">Progress</div>
+                  <div className="text-dim">Clock</div>
                   <div className="font-bold text-primary text-[32px] leading-tight flex items-center justify-center gap-1.5">
-                    <MaskedIcon icon={ICONS.progress} className="w-7 h-7" color="#d0bd62" />
-                    {turn.resistanceMax - turn.resistance}
-                    <span className="text-dim font-normal"> of {turn.resistanceMax}</span>
+                    <MaskedIcon icon={ICONS.clock} className="w-7 h-7" color="#d0bd62" />
+                    {turn.clock}
                   </div>
                 </div>
                 <div className="flex-1 text-center">
@@ -317,60 +324,27 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                 </div>
               </div>
 
-              {/* Threats */}
-              {turn.timers.length > 0 && (
+              {/* Challenges */}
+              {turn.challenges.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-dim font-bold">Threats</p>
-                  {turn.timers.map((t, i) => {
-                    const isFatal = t.effect === "fatal";
-                    const isTick = t.effect === "ticktimer";
-                    const effectText =
-                      isFatal ? "Encounter fails"
-                      : isTick ? `Advances ${t.ticksTimerName}`
-                      : t.effect === "spirits" ? `Lose ${t.amount} Spirits`
-                      : t.effect === "condition" ? <span className="capitalize">{t.conditionId}</span>
-                      : `Lose ${t.amount} Progress`;
-                    const dotColor =
-                      isFatal ? "bg-negative"
-                      : t.effect === "resistance" ? "bg-accent"
-                      : "bg-negative";
-                    const iconColor =
-                      t.stopped ? "#8b8b8b"
-                      : isFatal ? "#C45656"
-                      : t.isAmbient ? "#8b8b8b"
-                      : "#aca377";
+                  <p className="text-dim font-bold">Challenges</p>
+                  {turn.challenges.map((c, i) => {
+                    const isCurrent = i === turn.currentChallengeIndex;
+                    const color = c.cleared ? "#8b8b8b" : isCurrent ? "#d0bd62" : "#aca377";
+                    const progress = c.maxResistance - c.resistance;
 
                     return (
                       <div
                         key={i}
-                        className={`flex items-center gap-3 ${
-                          t.stopped ? "opacity-30 line-through"
-                          : t.isAmbient ? "opacity-60"
-                          : ""
-                        }`}
+                        className={`flex items-center gap-3 ${c.cleared ? "opacity-30 line-through" : ""}`}
                       >
-                        <MaskedIcon icon={ICONS.threat} className="w-4 h-4" color={iconColor} />
-                        <span className={`flex-1 ${isFatal && !t.stopped ? "text-negative font-bold" : ""}`}>
-                          {t.name}
+                        <NumberCircle n={i + 1} color={color} />
+                        <span className={`flex-1 ${isCurrent ? "text-accent font-bold" : ""}`}>
+                          {c.name}
                         </span>
-                        <span className={`${isFatal ? "text-negative" : "text-dim"}`}>
-                          {effectText}
+                        <span className="text-dim inline-flex items-center gap-1">
+                          {progress} / {c.maxResistance} <MaskedIcon icon={ICONS.progress} className="w-4 h-4" color={color} />
                         </span>
-                        {!t.isAmbient && t.resistance > 0 && !t.stopped && (
-                          <span className="text-accent text-dim">
-                            Resist {t.resistance}
-                          </span>
-                        )}
-                        <div className="flex gap-1">
-                          {Array.from({ length: t.countdown }, (_, j) => (
-                            <span
-                              key={j}
-                              className={`w-2.5 h-2.5 rounded-full ${
-                                j < t.current ? dotColor : "bg-edge"
-                              }`}
-                            />
-                          ))}
-                        </div>
                       </div>
                     );
                   })}
@@ -423,7 +397,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                       }`}
                     >
                       <span className={`font-bold ${turn.momentum >= PRESS_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
-                        Press the Advantage
+                        Press the advantage
                       </span>
                       <span className="flex items-center gap-1.5 text-dim">
                         <IconChip icon={ICONS.momentum} value={`-${PRESS_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+2" />
@@ -440,7 +414,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
                       }`}
                     >
                       <span className={`font-bold ${turn.spirits >= FORCE_COST ? "text-action group-hover:text-action-hover" : "text-muted"}`}>
-                        Force an Opening
+                        Force an opening
                       </span>
                       <span className="flex items-center gap-1.5 text-dim">
                         <IconChip icon={ICONS.spirits} value={`-${FORCE_COST}`} /> <span className="text-muted">➽</span> <IconChip icon={ICONS.draw} value="+2" />
