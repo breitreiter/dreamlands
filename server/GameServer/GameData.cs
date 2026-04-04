@@ -73,6 +73,11 @@ public class GameData
     {
         var fresh = EncounterBundle.Load(_bundlePath);
         lock (_bundleLock) _bundle = fresh;
+
+        var tacticalPath = Environment.GetEnvironmentVariable("DREAMLANDS_TACTICAL_BUNDLE")
+            ?? Path.Combine(Path.GetDirectoryName(_bundlePath)!, "tactical.bundle.json");
+        if (File.Exists(tacticalPath))
+            TacticalBundle = Dreamlands.Tactical.TacticalBundle.Load(tacticalPath);
     }
 
     static string FindRepoRoot()

@@ -39,12 +39,28 @@ static class PushCommand
             return 1;
         }
 
+        Console.WriteLine("Checking tactical encounters...");
+        var tacCheckResult = TacticalCheckCommand.Run(new[] { encounterPath });
+        if (tacCheckResult != 0)
+        {
+            Console.Error.WriteLine("Tactical check failed — aborting.");
+            return 1;
+        }
+
         // 2. Bundle
-        Console.WriteLine("Bundling...");
+        Console.WriteLine("Bundling encounters...");
         var bundleResult = BundleCommand.Run(new[] { encounterPath, "--out", worldDir });
         if (bundleResult != 0)
         {
             Console.Error.WriteLine("Bundle failed.");
+            return 1;
+        }
+
+        Console.WriteLine("Bundling tactical encounters...");
+        var tacBundleResult = TacticalBundleCommand.Run(new[] { encounterPath, "--out", worldDir });
+        if (tacBundleResult != 0)
+        {
+            Console.Error.WriteLine("Tactical bundle failed.");
             return 1;
         }
 
