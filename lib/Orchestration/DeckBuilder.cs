@@ -13,7 +13,8 @@ public static class DeckBuilder
 {
     /// <summary>
     /// Build a deck for the given encounter and player state.
-    /// Returns exactly balance.Tactical.DeckSize cards, shuffled.
+    /// Returns exactly balance.Tactical.DeckSize cards, shuffled once.
+    /// The deck loops without reshuffling when exhausted.
     /// </summary>
     public static List<OpeningSnapshot> Build(
         TacticalEncounter encounter,
@@ -36,33 +37,30 @@ public static class DeckBuilder
         if (deck.Count < deckSize)
             FillFromEncounter(deck, deckSize, encounter, player, balance);
 
-        // 4. Shuffle
         Shuffle(deck, rng);
         return deck;
     }
 
-    /// <summary>Draw one card from the deck. Reshuffles when exhausted.</summary>
-    public static OpeningSnapshot Draw(TacticalState state, Random rng)
+    /// <summary>Draw one card from the deck. Wraps to the start when exhausted.</summary>
+    public static OpeningSnapshot Draw(TacticalState state)
     {
         if (state.DrawIndex >= state.Deck.Count)
-        {
-            Shuffle(state.Deck, rng);
             state.DrawIndex = 0;
-        }
         return state.Deck[state.DrawIndex++];
     }
 
     /// <summary>Draw multiple cards from the deck.</summary>
-    public static List<OpeningSnapshot> DrawMultiple(TacticalState state, int count, Random rng)
+    public static List<OpeningSnapshot> DrawMultiple(TacticalState state, int count)
     {
         var result = new List<OpeningSnapshot>(count);
         for (int i = 0; i < count; i++)
-            result.Add(Draw(state, rng));
+            result.Add(Draw(state));
         return result;
     }
 
-    /// <summary>Fisher-Yates shuffle in place.</summary>
-    public static void Shuffle(List<OpeningSnapshot> deck, Random rng)
+    // ── Internals ──────────────────────────────────────
+
+    static void Shuffle(List<OpeningSnapshot> deck, Random rng)
     {
         for (int i = deck.Count - 1; i > 0; i--)
         {
@@ -70,8 +68,6 @@ public static class DeckBuilder
             (deck[i], deck[j]) = (deck[j], deck[i]);
         }
     }
-
-    // ── Internals ──────────────────────────────────────
 
     static List<OpeningSnapshot> GatherCollection(
         TacticalEncounter encounter, PlayerState player, BalanceData balance)

@@ -142,18 +142,18 @@ public class TacticalRunnerTests
     }
 
     [Fact]
-    public void DeckReshufflesWhenExhausted()
+    public void DeckLoopsWhenExhausted()
     {
         var (session, state) = MakeContext();
         var enc = MakeCombat(approaches: []);
         TacticalRunner.Begin(session, enc, state);
 
-        // Draw until exhausted
+        // Draw until exhausted + 2 more
         var deckSize = state.Deck.Count;
         for (int i = state.DrawIndex; i < deckSize + 2; i++)
-            DeckBuilder.Draw(state, session.Rng);
+            DeckBuilder.Draw(state);
 
-        // DrawIndex should have reset (reshuffled)
+        // DrawIndex should have wrapped
         Assert.True(state.DrawIndex <= 2);
     }
 

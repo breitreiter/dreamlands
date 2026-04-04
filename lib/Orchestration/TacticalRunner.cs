@@ -121,7 +121,7 @@ public static class TacticalRunner
 
         // Draw 2 more cards into the current hand
         for (int i = 0; i < 2; i++)
-            state.Openings.Add(ReThemeStopTimer(DeckBuilder.Draw(state, session.Rng), state));
+            state.Openings.Add(ReThemeStopTimer(DeckBuilder.Draw(state), state));
 
         EnsurePlayable(state, session);
         return MakeShowTurn(state, session, encounter);
@@ -230,7 +230,7 @@ public static class TacticalRunner
     static TacticalStep StartTurn(TacticalState state, GameSession session, TacticalEncounter encounter)
     {
         int drawCount = state.Approach == ApproachKind.Cautious ? 2 : 1;
-        state.Openings = DrawOpenings(state, drawCount, session.Rng);
+        state.Openings = DrawOpenings(state, drawCount);
         EnsurePlayable(state, session);
         return MakeShowTurn(state, session, encounter);
     }
@@ -268,7 +268,7 @@ public static class TacticalRunner
         int lastIdx = state.Openings.Count - 1;
         while (!HasPlayable() && safety-- > 0)
         {
-            state.Openings[lastIdx] = ReThemeStopTimer(DeckBuilder.Draw(state, session.Rng), state);
+            state.Openings[lastIdx] = ReThemeStopTimer(DeckBuilder.Draw(state), state);
         }
     }
 
@@ -298,11 +298,11 @@ public static class TacticalRunner
         }
     }
 
-    static List<OpeningSnapshot> DrawOpenings(TacticalState state, int count, Random rng)
+    static List<OpeningSnapshot> DrawOpenings(TacticalState state, int count)
     {
         var result = new List<OpeningSnapshot>(count);
         for (int i = 0; i < count; i++)
-            result.Add(ReThemeStopTimer(DeckBuilder.Draw(state, rng), state));
+            result.Add(ReThemeStopTimer(DeckBuilder.Draw(state), state));
         return result;
     }
 
