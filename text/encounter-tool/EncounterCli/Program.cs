@@ -22,6 +22,7 @@ class Program
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "push" => PushCommand.Run(rest).GetAwaiter().GetResult(),
             "walk" => WalkCommand.Run(rest),
+            "walk-tac" => WalkTacticalCommand.Run(rest),
             "generate-tactical" => GenerateTacticalCommand.Run(rest),
             _ => PrintUsage()
         };
@@ -40,6 +41,7 @@ class Program
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter push [<path>] [--world <name>]");
         Console.WriteLine("  encounter walk <arc-dir> [--skill combat=5] [--tag foo] [--item torch] [--quality guild=3] [--gold 50]");
+        Console.WriteLine("  encounter walk-tac <file.tac> [--skill combat=5] [--tag foo] [--item torch] [--quality guild=3] [--gold 50] [--seed N]");
         Console.WriteLine("  encounter generate-tactical <tier> [--out <file>] [--seed <n>]");
         Console.WriteLine();
         Console.WriteLine("generate looks for locale_guide.txt in the current directory and archetype");

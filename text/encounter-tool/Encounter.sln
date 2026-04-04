@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Game", "..\..\li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Tactical", "..\..\lib\Tactical\Dreamlands.Tactical.csproj", "{122AEEA2-5965-4135-9390-E86F91E4E7C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Orchestration", "..\..\lib\Orchestration\Dreamlands.Orchestration.csproj", "{84E9DA8B-D805-4004-95BF-87FA3919850A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Map", "..\..\lib\Map\Dreamlands.Map.csproj", "{992C7D21-79AC-4627-82C4-7DDC90FA2AFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreamlands.Flavor", "..\..\lib\Flavor\Dreamlands.Flavor.csproj", "{54768F06-868F-43BF-99EC-CC0BC4EFD837}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +43,17 @@ Global
 		{122AEEA2-5965-4135-9390-E86F91E4E7C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{122AEEA2-5965-4135-9390-E86F91E4E7C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{122AEEA2-5965-4135-9390-E86F91E4E7C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84E9DA8B-D805-4004-95BF-87FA3919850A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E9DA8B-D805-4004-95BF-87FA3919850A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E9DA8B-D805-4004-95BF-87FA3919850A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E9DA8B-D805-4004-95BF-87FA3919850A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992C7D21-79AC-4627-82C4-7DDC90FA2AFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992C7D21-79AC-4627-82C4-7DDC90FA2AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992C7D21-79AC-4627-82C4-7DDC90FA2AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992C7D21-79AC-4627-82C4-7DDC90FA2AFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54768F06-868F-43BF-99EC-CC0BC4EFD837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54768F06-868F-43BF-99EC-CC0BC4EFD837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54768F06-868F-43BF-99EC-CC0BC4EFD837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54768F06-868F-43BF-99EC-CC0BC4EFD837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
