@@ -1,53 +1,55 @@
 Lost
 [trigger none]
 
-You know you are lost because the horizon is wrong.
+You know you are lost because the dome is in the wrong place.
 
-It's been wrong for the last hour -- too sharp, too far, as if the plain extends farther in every direction than geometry allows. The ground underfoot stopped being soil and started being something else: smooth, fused, ringing slightly under your boots like fired ceramic. The grass thinned out and then stopped bothering entirely, and now there is nothing in any direction except the glassy plain and whatever is out there on it. A structure to the northwest. Something moving to the east that is too large and too far away to resolve into a shape. The hum you felt in your sternum twenty minutes ago has settled into your jaw.
+It was to the northwest an hour ago. Now it's north, or northeast--pale and clean-lined against the flat sky, close enough to see the curve of it, too far to reach before dark. You've been walking long enough that the ground changed under you without your noticing: packed earth gave way to fused glass that rings under your boots like ceramic. The dead stumps of an orchard stand in neat rows to your left, bleached white, the irrigation channels between them cracked and empty. Somewhere ahead, you can hear one of the Iron--the steady clank-whir-clank of heavy feet on glass, unhurried, mechanical, loud enough to carry across the flats.
 
-There is no road. Whatever road you were following has been absorbed by the fused ground, subsumed back into the surface that was here before roads were a concept anyone had. The tracks you made getting here are already fading -- the ground doesn't hold impressions the way soil does. It holds other things instead. Behind you, very evenly spaced, something has made marks in the glass that you didn't make.
+There is no road. Whatever track you were following has been absorbed by the fused ground. Behind you, evenly spaced, something has made marks in the glass that you didn't make. To the south, a red pylon stands against the pale ground like a warning post. You are already past it.
 
-You need to move. Standing still near active structures is how people disappear here. The Sunder is not hostile. It simply doesn't account for you.
+You need to move. Standing still near the Grid's perimeter is how people stop being people. The Iron are not hunting you. They simply don't account for you, and you are inside the boundary they were built to enforce.
 
 choices:
 
-* Navigate by the structures = They were built to a plan. Find the pattern.
-  The golems walk routes. The routes connect things. The things -- towers, platforms, dolmens -- are arranged in a grid that still makes geometric sense even if its purpose doesn't. If you can read the grid, you can find the edge of it, and the edge is where the glass gives way to ordinary earth and ordinary earth eventually has roads.
+* Navigate by the pylons = They mark a perimeter. Find the outside of it.
+  The red pylons are the Grid's boundary markers--warnings for visitors, and trigger points for the Iron's patrol routes. If you can spot enough of them to read the shape of the perimeter, you can work out which side of it you're on and walk toward the edge.
 
-  You move toward the nearest structure -- a low platform covered in symbols cycling through their sequence -- and study it without touching anything. You study the positions of the other structures from there. You do not look at the symbols long enough for the pattern to start making sense, which takes discipline.
+  You climb a squat concrete pump house for a better vantage and scan the flats. Three more pylons are visible, their oxide-red paint vivid against the pale ground. You study the angles without moving closer to any of them.
 
   @if check cunning hard {
-    The grid resolves. It's not a perfect cartesian arrangement -- the scale shifts, and some structures are clearly off-axis, relocated or damaged -- but the underlying geometry holds enough to navigate by. You find your bearing relative to the edge of the glass plain and walk toward it. You pass within thirty paces of a golem on its route and neither of you acknowledges the other. The glass gives way to dead soil, and the dead soil eventually yields to dry grass, and the dry grass has a wagon track pressed into it. You follow the track until you recognize where you are.
+    The perimeter resolves. The pylons describe a rough arc, and you're inside it--but only just. You pick your bearing toward the nearest gap between two pylons and walk steadily, keeping the dome behind you. One of the Iron crosses your path two hundred paces ahead, clanking along its route, pistons cycling. You wait for it to pass. The glass gives way to cratered earth, then dead soil, then dry grass with a wagon track pressed into it--the remains of the imperial advance, sixty years overgrown. You follow the ruts until you recognize where you are.
     +remove_condition lost
     +advance_time 3
   } @else {
-    The grid makes sense until it doesn't. You think you've read the pattern and walk toward what should be the edge and instead find yourself at a structure you haven't seen before, deeper in, with the hum now loud enough to feel in your back teeth. You backtrack, or try to -- the landmarks have rearranged, not moved, just rearranged, as if they were always where they are now and your memory is wrong. It takes hours to reach the edge, and by then your head is splitting from the resonance and your legs have been carrying you through ground that doesn't quite sit still.
+    You misread the arc. Two pylons you thought were adjacent turn out to bracket a third you couldn't see from the pump house, and your line of escape carries you deeper in. The hum in your jaw gets worse. You pass a row of dead orchard stumps and then another and then a concrete building you're certain you've already passed once. By the time you find the actual edge, the dome is behind you and the day is gone and your head is splitting from a resonance you can still feel in your back teeth.
     +remove_condition lost
     +advance_time 6
     +damage_spirits 2
     +add_condition injured
   }
 
-* Watch the golem's route = It's walking a perimeter. Perimeters have outsides.
-  There's a golem to the east, walking its patrol with the mechanical precision of something that has repeated this action every day for decades. Exactly even footfalls, exactly timed, never varying. You watch it from distance long enough to read the shape of its route, then begin to move parallel to it, tracking what it's enclosing.
+* Follow one of the Iron = It's walking a route. Routes go somewhere.
+  There's one of the Iron to the east, clanking along its patrol with the grinding mechanical patience of something that has repeated this exact path every day for longer than the empire has existed. Heavy limbs, whirring servos, riveted plating. It doesn't know you're here. It was built to keep children safe in the orchards, and it is still doing that, and there are no children and no orchards and it does not care.
+
+  You follow it at distance, tracking the shape of its route by the sound--the clank-whir-clank carries a quarter-mile across the silent flats.
 
   @if check bushcraft medium {
-    The perimeter is an ellipse, roughly. You walk the outside of its arc, keeping enough distance that you're never in its path, and the arc carries you toward the edge of the glass plain. Wherever the golem's route ends, the structured ground ends too -- beyond its furthest point the fused surface gives way to cratered earth and then to dead scrub and then to the sparse grass of the outer Sunder margin. You follow the margin until you find a track pressed into the dirt by boots that were here recently enough to mean other people have a reason to come and go.
+    The route is a long ellipse around the dome's eastern perimeter. You walk the outside of its arc, keeping far enough back that you're never in its path, and the arc carries you toward the edge of the Grid's territory. Where the Iron's route ends, the fused ground ends too--beyond its furthest point, the glass gives way to blast craters from the imperial campaign, then dead scrub, then sparse grass with bootprints in it. Other people come and go from here. You follow the prints south until the dome is small on the horizon and you can breathe again.
     +remove_condition lost
     +advance_time 4
   } @else {
-    You misjudge the shape of the route. The ellipse closes tighter than you calculated and you end up in the path of the golem's return, and you have to move fast and without preparation across a section of ground you haven't read yet. The glass here is pitted, some sort of subsidence, and you turn an ankle on a lip you didn't see. You make the edge eventually but you're limping and the day is far gone and the Sunder's hum follows you for another hour after you're clear.
+    You misjudge the shape of the route. The ellipse closes tighter than you calculated, and the Iron's return leg brings it clanking straight toward you--not attacking, not even aware of you, just executing its path. You scramble sideways across ground you haven't read. The glass here is pitted, some kind of old subsidence, and you turn an ankle on a lip you didn't see. You make the edge eventually, limping, the Iron's clank-whir-clank fading behind you with the indifference of a machine that never registered your existence.
     +remove_condition lost
     +advance_time 6
     +damage_spirits 1
   }
 
-* Keep moving, keep the structures behind you = Don't try to read this place. Just leave.
-  Every instinct you have says that understanding what the Sunder is doing would be dangerous. The pattern is visible. You can see it starting to resolve in your peripheral vision. You don't let it. You pick the direction with the fewest structures and walk, fast and steady, keeping your eyes on the horizon and not on anything between you and it.
+* Keep the dome behind you and walk = Don't try to understand this place. Just leave.
+  Every instinct you have says that reading the Grid's logic would be a mistake. The pattern is there--the pylons, the patrol routes, the concrete buildings spaced at intervals that obviously mean something. You can feel it starting to resolve. You don't let it. You put the dome at your back and walk, fast and steady, looking at the horizon and nothing between you and it.
 
-  The ground does things under your feet. A section rings differently, hollow, and you skirt it without stopping to find out why. A column of air shimmers to your left, warm from twenty paces away, and you give it a wide margin. Somewhere behind you a dolmen sequence completes -- you hear the tone shift -- and you don't look back to see what changed.
+  The ground does things under your feet. A section rings hollow and you skirt it without stopping. A column of air shimmers to your left, warm from twenty paces, and you give it a wide margin. One of the Iron crosses behind you--you hear the clank-whir-clank grow and then fade--and you don't turn around. Somewhere to the north a red pylon begins to pulse and you walk faster.
 
-  You reach the edge of the glass by feel as much as sight: the ground softens, your boots stop ringing, and the hum drops away over fifty paces until it's gone entirely. The absence of it is so complete that your ears ring with ordinary silence. You stand in dry scrub at the Sunder's margin, breathing, and wait for your jaw to stop aching.
+  You reach the edge by feel as much as sight: the glass softens to cratered earth, your boots stop ringing, and the hum drops away over fifty paces until it's gone. An overturned imperial supply wagon lies rusting in the dead grass--collapsed wheels, skeletal frame, canvas long rotted. Past it, a desiccated corpse in faded imperial kit, leather-skinned, undisturbed for sixty years. You stand at the margin of the Spires, breathing, and wait for your jaw to stop aching.
   +remove_condition lost
   +advance_time 6
   +damage_spirits 1

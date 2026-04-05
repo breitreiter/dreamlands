@@ -1,0 +1,33 @@
+The Passage
+[trigger road]
+
+You hear it before you see it, not the steady clank-whir of the big Iron, but skittering and scraping. A burst of metal on glass. Silence. A grinding lurch.
+
+It comes around a junction box at a dead sprint, shoulder-checking the wall and throwing sparks. Horse-sized, iron body, black glass where a face should be. One foreleg cycles faster than the others. It crosses the street in a crooked diagonal, slams into a pump house, shudders--then bolts back the way it came.
+
+Erratice and unpredictable; you can't outsmart this one. You search for an exit. Anything to get out of the monster's path. You see the hatch, heavy steel, torn open and hanging loose from a single hinge. 
+
+Below the hatch, stairs. Concrete, utilitarian, descending into a maintenance tunnel lit by dim amber lights.
+
+The tunnel is dry and wide enough for two abreast. Pipe runs along the ceiling. Junction markings at every intersection, the same inscrutable symbols you find everywhere here. But also someone has carved crude arrows into the walls. You follow them, perhaps someone has marked a safe path for you. A lucky break at last.
+
+Sixty yards in you find the camp. Someone had time here. One of the walls is fire-blackened, nearby you find empty water skins, empty ration wraps, a fire kit with the striker worn to a nub. Tally marks in the wall; four days. They held this position for a while. They were organized, disciplined.
+
+Twenty yards more, you find where the carved arrows were leading you; the tunnel ends at a sealed hatch, heavy and recessed.  They couldn't open it. They tried. There are pry marks around the frame, chisel strikes on the hinges, a shallow hole chipped into the concrete where someone tried to go around it. Diagrams and notes carved on the wall.
+
+They died here. Seven of them. You can see it in the way they fell; tight cluster, backs to the hatch, facing the corridor. Shield positions. They locked formation and held. The remains are sixty years dry. Leather over bone, kit corroded but intact enough to read: 17th Mountain Regiment, hard men, but no match for the Grid.
+
+The soldier on the right flank wears better armor. Maybe an officer, maybe a decorated veteran. It won't save you any more than it saved them, but you take it anyway. It belongs with the legion, not here in this tomb.
+
+Behind you, from the direction of the stairs, a sound. Metal on concrete. A grinding lurch, a staccato burst, then a scrape that echoes down the corridor and doesn't stop. The thing from the street found the hatch, and its coming for you.
+
+choices:
+
+* Stand and fight = There's no way you can outrun the monster
+  +open "The Passage Combat"
+
+* Figure out the door = Try to puzzle out the lock
+  +open "The Passage Door"
+
+* Find another way = There are passages you didn't explore
+  +open "The Passage Traverse"

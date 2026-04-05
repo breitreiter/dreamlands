@@ -1,0 +1,26 @@
+The Gentle Giant
+[trigger road]
+
+You find the remains of an old orchard. The bleached white stumps are head-height, real trees once, tall enough that the canopy must have blocked the sky. The grove is surrounded by mosaic walkways in concentric rings, small handprints pressed into the grouting at regular intervals. You follow the rings inward to a low concrete pavilion. On the outside is a faded, cheerful mural. Children stand on one of the enormous Iron creatures, its head poking above the treetops. They're pull fruit from the trees, loading them into overflowing baskets. One kid sits cross-legged on top, eating, not even holding on. You look at it the way you look at anything here: briefly, without letting it settle.
+
+You take shelter in what remains of the pavilion, pull off your boots and rub your feet. What you wouldn't give for an inn and a hot meal. Or the sumptuous delights of the great Guild chapterhouse in Aldgate.
+
+Then the ground shakes. Thomp. Thomp. Thomp.
+
+You hear the clank-whir-clank, but this one is heavier, lower-pitched. It must be enormous. The stumps vibrate. Dust shakes off the cracked roof. You pull your boots on and press flat against the interior wall of the crèche and wait for it to pass.
+
+It doesn't pass.
+
+It stops. The crèche shudders once as the ground takes the weight of it coming to rest. You can't see it from inside but you can feel it, the sense of something enormous directly overhead. You hear servos adjusting. Micro-corrections. It's shifting its weight the way a person shifts when they intend to stay awhile.
+
+You wait a minute. Two. Five. It's not moving. It's not patrolling. It's just standing over a dead schoolhouse in a dead orchard. You edge far enough toward the doorway to look up, and you see its head, the size of the room you're sitting in, bowed toward the wall, toward the mural, toward a painting of itself crouched low with laughing children on its shoulders picking fruit from trees that have been dead for longer than you've been alive.
+
+It's making a sound. Low, almost tonal, almost varied. Not mechanical. Not quite.
+
+choices:
+
+* Sprint though the nearby streets = Perhaps you can escape before it catches you
+  +open "The Gentle Giant Escape"
+
+* Sneak underneath the thing = A gamble, but if you can get behind it, you're home free
+  +open "The Gentle Giant Sneak"
