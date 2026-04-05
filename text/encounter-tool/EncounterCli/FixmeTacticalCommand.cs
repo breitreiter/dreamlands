@@ -58,11 +58,12 @@ static class FixmeTacticalCommand
 
         // Gather encounter context
         var title = lines.Count > 0 ? lines[0].Trim() : "";
+        var stat = ExtractStat(lines);
         var body = ExtractBody(lines);
         var localeGuide = FindLocaleGuide(filePath);
         var existingLabels = ExtractExistingLabels(lines, openingsStart);
 
-        var prompt = BuildPrompt(title, body, localeGuide, existingLabels, fixmes);
+        var prompt = BuildPrompt(title, stat, body, localeGuide, existingLabels, fixmes);
 
         if (promptsOnly)
         {
@@ -113,6 +114,17 @@ static class FixmeTacticalCommand
         return 0;
     }
 
+    static string? ExtractStat(List<string> lines)
+    {
+        foreach (var line in lines.Take(10))
+        {
+            var trim = line.Trim();
+            if (trim.StartsWith("[stat ", StringComparison.OrdinalIgnoreCase) && trim.EndsWith(']'))
+                return trim[6..^1].Trim();
+        }
+        return null;
+    }
+
     static string ExtractBody(List<string> lines)
     {
         // Body is between the header block and the first section (timers:/openings:/etc.)
@@ -128,7 +140,7 @@ static class FixmeTacticalCommand
                 if (i == 0) continue; // title
                 bodyStart = i;
             }
-            if (bodyStart >= 0 && (trim == "timers:" || trim == "openings:" || trim == "stats:" || trim == "approaches:"))
+            if (bodyStart >= 0 && (trim == "clock:" || trim == "challenges:" || trim == "timers:" || trim == "openings:" || trim == "stats:" || trim == "approaches:"))
             {
                 bodyEnd = i;
                 break;
@@ -168,7 +180,7 @@ static class FixmeTacticalCommand
         return labels;
     }
 
-    static string BuildPrompt(string title, string body, string? localeGuide,
+    static string BuildPrompt(string title, string? stat, string body, string? localeGuide,
         List<string> existingLabels, List<(int LineIndex, string Archetype)> fixmes)
     {
         var archetypeList = string.Join("\n", fixmes.Select((f, i) => $"  {i + 1}. {f.Archetype}"));
@@ -180,6 +192,17 @@ static class FixmeTacticalCommand
         var existingSection = existingLabels.Count > 0
             ? $"\nExisting labels in this encounter (do not repeat these):\n{string.Join("\n", existingLabels.Select(l => $"  - {l}"))}\n"
             : "";
+
+        var statGuidance = (stat?.ToLowerInvariant()) switch
+        {
+            "combat" => "This is a Combat encounter. Every action label should involve fighting, striking, dodging, blocking, or physical violence. The player is in a fight.",
+            "bushcraft" => "This is a Bushcraft encounter. Actions should involve traversal, navigation, endurance, climbing, foraging, or surviving the environment. The player is overcoming terrain or weather.",
+            "cunning" => "This is a Cunning encounter. Actions should involve trickery, stealth, observation, quick thinking, or exploiting the situation. The player is outsmarting a problem.",
+            "negotiation" => "This is a Negotiation encounter. Actions should involve persuasion, reading people, leveraging information, standing firm, or finding common ground. The player is talking their way through.",
+            _ => ""
+        };
+
+        var statSection = statGuidance.Length > 0 ? $"\n{statGuidance}\n" : "";
 
         return $@"You are naming action cards for a tactical encounter in a low-fantasy RPG.
 
@@ -195,7 +218,7 @@ Rules:
 - Match the intensity to the archetype (free_momentum_small = small/easy actions,
   momentum_to_progress_huge = dramatic/decisive actions, threat_to_progress = risky plays,
   spirits_to_momentum = exhausting/painful efforts)
-
+{statSection}
 Encounter: {title}
 
 Setting:
