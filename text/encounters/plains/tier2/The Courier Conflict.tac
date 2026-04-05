@@ -1,4 +1,4 @@
-The Courier Conflict
+Convince the Courier
 [stat Negotiation]
 [tier 2]
 

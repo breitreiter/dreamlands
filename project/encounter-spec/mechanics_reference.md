@@ -1,6 +1,28 @@
 ENCOUNTER MECHANICS QUICK REFERENCE
 ====================================
 
+NAMING & IDENTITY
+------------------------------------
+Each .enc/.tac file has two distinct names. Don't confuse them.
+
+Filename (without .ext)         Identity / ID — used for all lookups
+  "Road Toll.enc"               → ShortId "Road Toll", fully qualified "plains/tier1/Road Toll"
+
+First line of the file          Display title — shown to the player in the UI
+  "A Toll on the King's Road"   → Title text, purely cosmetic
+
+Where each one is used:
+  +open <target>                Matches against filename (ShortId), not the display title
+  Storylet list / selection     Keyed by filename (ShortId), not the display title
+  Encounter screen header       Shows the display title (first line of the file)
+
++open resolution order (same for both .enc and .tac bundles):
+  1. Short-name match within the current category (arc/directory) — case-insensitive
+  2. Fall back to fully qualified id (e.g. "arcs/plains/grainway_station/Captain Aldric")
+  Targets only need to be unique within the arc. Two arcs can both have "Start".
+  An .enc can +open a .tac target and vice versa — resolution checks both bundles.
+
+
 FRONT-MATTER
 ------------------------------------
 Required metadata lines between title and body. Order doesn't matter.

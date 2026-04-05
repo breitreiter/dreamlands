@@ -1,4 +1,4 @@
-The Gentle Giant Escape
+Flee the Giant
 [stat Bushcraft]
 [tier 3]
 

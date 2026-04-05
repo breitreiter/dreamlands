@@ -32,9 +32,9 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Road Encounter System (Tableau)
 
-- [ ] Finish out and test AI authoring tools for tac encounters
+- [x] Finish out and test AI authoring tools for tac encounters
 - [ ] Sketch out single-paragraph intros for every biome/tier (50 total? 8x5+5x2)
-- [ ] Playtest a bunch and tune
+- [ ] ~~Playtest a bunch and tune~~ (ongoing)
 
 ### Rules & Balancing
 
@@ -52,7 +52,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       player as a UI hint. This breaks with arc encounters that offer the same choice multiple
       times gated by different mutually-exclusive conditions (e.g. faction standing). Remove or
       rethink the locked-choice display before launch.
-- [ ] Server "quick start" flag — start the player with basic gear and extra gold to skip the early trade loop
+- [x] Server "quick start" flag — solved via shady trader encounter (temporary, remove before launch)
 - [ ] Biome intro encounters — one-time scripted encounter per biome/tier that fires on
       first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
       in selection logic. Design in `project/design/biome_intro_encounters.md`.
@@ -62,8 +62,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 `lib/Flavor/FlavorText.cs` has real content for region/settlement names and descriptions.
 Everything else is a one-liner placeholder.
 
-- [ ] Improve settlement and region names — current names are mechanical (biome root + size
-      suffix). Rework after lore bibles are finalized so names can draw on established lore.
+- [x] Improve settlement and region names
 
 ### Nice to Have
 
@@ -143,9 +142,10 @@ None are obviously aged-out — keep for now, revisit when their parent systems 
 
 ## 3. Writing
 
-Content authoring — encounters, lore, art. Can proceed incrementally with minimal code changes.
+Content authoring — encounters, lore, art. ~163 hours remaining.
+Pace: ~24 hr/week (Mon–Thu 2hr, Sat–Sun 8hr, Fri off). Target: late May 2026.
 
-Each tier is ~5 encounters (~30 min each). Each arc is ~1 hour.
+Time estimates: simple .enc ~30 min, .tac add-on ~20 min, arc ~5 hr, locale guide ~1 hr.
 
 ### World Building
 
@@ -153,62 +153,83 @@ Each tier is ~5 encounters (~30 min each). Each arc is ~1 hour.
 
 ### Encounter Pipeline
 
-- [ ] Locale guides for remaining biome/tier combos
+- [x] Locale guides for all biome/tier combos
 - [ ] Batch-generate skeletons via `generate` command
 - [ ] Arc reachability lint — `check` command should walk the encounter graph from Start,
       enumerate all paths (branching on choices × check pass/fail), and warn on: unreachable
       encounters, paths that never reach `+finish_dungeon`/`+flee_dungeon`, and cycles with
       no exit. Treats arcs as directed graphs, not individual files.
 
-### Plains
-- [ ] Tier 1
-- [ ] Tier 2
-- [ ] Tier 3
-- [ ] Repeating
-- [ ] Arc — Sodality of the Furrow
+### Plains — ~13 hr (Week 1: Apr 5–11)
 
-### Swamp
-- [ ] Tier 1
-- [ ] Tier 2
-- [ ] Tier 3
-- [ ] Repeating
-- [ ] Arc — Fort Contrition
-- [ ] Arc — The Bile Vaults
-- [ ] Arc — Redoubt of the Mire Baron
-- [ ] Arc — The Fever Palace
-- [ ] Arc — Submersion of Saint Evarre
+- [x] Tier 1 — encounters
+- [x] Tier 1 — locale guide
+- [x] Tier 2 — encounters
+- [x] Tier 2 — locale guide
+- [x] Tier 3 — encounters
+- [x] Tier 3 — locale guide
+- [ ] Review Lost.enc (plains tiers 1–3)
+- [ ] Settlement flavor encounters
+- [x] Arc — Bride's Cave
+- [x] Arc — Metal Beast
+- [x] Arc — Grainway Station
+- [ ] Arc — Wrenbury (~5 hr)
+- [ ] Arc — The City (~6 hr)
 
-### Mountains
-- [ ] Tier 1
-- [ ] Tier 2
-- [ ] Tier 3
-- [ ] Repeating
-- [ ] Arc — Vulture's Pulpit
-- [ ] Arc — The Tabernacle of Honest Men
-- [ ] Arc — The Frostwright's Needle
-- [ ] Arc — Greyspire Hermitage
-- [ ] Arc — Marrowpeak Redoubt
+### Scrub — ~28 hr (Weeks 2–3: Apr 12–25)
 
-### Scrub
-- [ ] Tier 1
-- [ ] Tier 2
-- [ ] Tier 3
-- [ ] Repeating
-- [ ] Arc — Azharan, the Unruled
-- [ ] Arc — The Caliph's Dreaming
-- [ ] Arc — Sepulcher of the Ninety-Nine
+- [x] Tier 1 — locale guide
+- [ ] Tier 1 — encounters (~3 more needed)
+- [x] Tier 2 — locale guide
+- [ ] Tier 2 — encounters (nearly done, 1–2 more)
+- [x] Tier 3 — locale guide
+- [ ] Tier 3 — encounters (~4 needed)
+- [ ] Review Lost.enc (scrub tiers 1–3)
+- [ ] Arc — The Census House (~5 hr)
+- [ ] Arc — The Foundry (~5 hr)
+- [ ] Arc — The Relay Post (~5 hr)
+- [ ] Arc — The Wellhead Station (~5 hr)
 
-### Forest
-- [ ] Tier 1
-- [ ] Tier 2
-- [ ] Tier 3
-- [ ] Repeating
-- [ ] Arc — Blackivy Manse
-- [ ] Arc — The Charnel Garden
-- [ ] Arc — The Librarians' Mound
-- [ ] Arc — The Fane of Whispering Antlers
-- [ ] Arc — The Pallid Court
-- [ ] Arc — Lammasgate
+### Swamp — ~28 hr (Weeks 4–5: Apr 26–May 9)
+
+- [x] Tier 1 — locale guide
+- [ ] Tier 1 — encounters (1–2 more needed)
+- [x] Tier 2 — locale guide
+- [ ] Tier 2 — encounters (~4 needed)
+- [x] Tier 3 — locale guide
+- [ ] Tier 3 — encounters (~5 needed)
+- [ ] Review Lost.enc (swamp tiers 1–3)
+- [ ] Arc — The Drowning Post (~5 hr)
+- [ ] Arc — The Listening Blind (~5 hr)
+- [ ] Arc — The Revenakh (~5 hr)
+- [ ] Arc — The Tile House (~5 hr)
+
+### Mountains — ~28 hr (Weeks 5–7: May 10–23)
+
+- [x] Tier 1 — locale guide
+- [ ] Tier 1 — encounters (1–2 more needed)
+- [x] Tier 2 — locale guide
+- [ ] Tier 2 — encounters (~4 needed)
+- [x] Tier 3 — locale guide
+- [ ] Tier 3 — encounters (~5 needed)
+- [ ] Review Lost.enc (mountains tiers 1–3)
+- [ ] Arc — The Halfway House (~5 hr)
+- [ ] Arc — The Ledgerhaus (~5 hr)
+- [ ] Arc — The Stift (~5 hr)
+- [ ] Arc — The Zahlenhaus (~5 hr)
+
+### Forest — ~27 hr (Weeks 7–9: May 24–Jun 6)
+
+- [x] Tier 1 — locale guide
+- [ ] Tier 1 — encounters (~5 needed)
+- [x] Tier 2 — locale guide
+- [ ] Tier 2 — encounters (~5 needed)
+- [x] Tier 3 — locale guide
+- [ ] Tier 3 — encounters (~5 needed)
+- [ ] Review Lost.enc (forest tiers 1–3)
+- [ ] Arc — The Forester's Post (~5 hr)
+- [ ] Arc — The Lodge (~5 hr)
+- [ ] Arc — The Warrant Oak (~5 hr)
 
 ### Art Assets
 

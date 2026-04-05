@@ -1,4 +1,4 @@
-The Scavengers Chase
+Flee the Monster
 [stat Cunning]
 [tier 2]
 

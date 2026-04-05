@@ -1,4 +1,4 @@
-The Gentle Giant Sneak
+Sneak by the Giant
 [stat Cunning]
 [tier 3]
 
@@ -40,5 +40,5 @@ success:
   You pad swiftly past the metal monster. It sits silently, absorbed in its vigil, unaware of your presence. You marvel at the enormity of the thing, but don't dare to let your gaze linger. You move quickly to the nearest cluster of low concrete buildings, breaking line of sight.
 
 failure:
-  You're too slow. The monster shudders to life, slowly rising up. Uncertain what else to do, you clutch desperately to the creature's monstrous metal leg. It does not notice you, but the ride is punishing, each footfall shaking through you. You pick an opportune moment to leap from the foot, landing hard on a patch of glassed terrain. You scramble to your feet and sprint to safety.
+  The monster shudders to life, slowly standing back up. Uncertain what else to do, you clutch desperately to the creature's monstrous metal leg. It does not notice you, but the ride is punishing, each footfall shaking through you. You pick an opportune moment to leap from the foot, landing hard on a patch of glassed terrain. You scramble to your feet and sprint to safety.
   +add_condition injured

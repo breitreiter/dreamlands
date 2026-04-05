@@ -1,4 +1,4 @@
-The Passage Door
+Unlock the Door
 [stat Cunning]
 [tier 3]
 

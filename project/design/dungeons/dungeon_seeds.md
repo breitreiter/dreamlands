@@ -165,7 +165,7 @@ of reference so alien that human urgency becomes geological.
 
 **Asset:** 
 
-### The Harrow Line (Tier 2)
+### Wrenbury (Tier 2)
 
 Miles of zigzag campaign trenches, now a mass grave and a salvage economy.
 Bodies were left where they fell; the empire advanced over them and then
@@ -548,7 +548,7 @@ indescribable Color, are already closer to nodes than to people.
 | Biome    | Tier 2                                                              | Tier 3           |
 |----------|---------------------------------------------------------------------|------------------|
 | Forest   | Briar Commons, The Warrant Oak, The Forester's Post, Inkwell Hollow | The Lodge        |
-| Plains   | The Counting House, The Glassway, The Harrow Line, Grainway Station | The Works        |
+| Plains   | The Counting House, The Glassway, Wrenbury, Grainway Station | The Works        |
 | Mountains| The Ledgerhaus, The Halfway House, The Petition Road, The Requiem Shaft | The Anteroom  |
 | Swamp    | The Tile House, The Drowning Post, The Listening Blind, The Anchor  | The Nursery      |
 | Scrub    | The Alignment School, Wellhead Station, The Relay Post, The Census House | The Foundry  |

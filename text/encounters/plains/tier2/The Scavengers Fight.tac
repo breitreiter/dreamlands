@@ -1,4 +1,4 @@
-The Scavengers Fight
+Fight the Monster
 [stat Combat]
 [tier 2]
 

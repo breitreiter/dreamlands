@@ -7,7 +7,7 @@
 ### grainway_station — Grainway Station (T2)
 - key: Combat > 4
 - reward: mountain_regiment_armor — (Medium, Cunning +2, Injury +3, Freezing +5)
-### harrow_line — The Harrow Line (T2)
+### wrenbury — Wrenbury (T2)
 - key: faction.scavengers > 4
 - reward: lucky_buckle (+1 combat)
 ### metal_beast — The Metal Beast (T2)

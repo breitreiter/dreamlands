@@ -1,4 +1,4 @@
-The Conscripts Combat
+Rescue the Conscripts
 [stat Combat]
 [tier 2]
 

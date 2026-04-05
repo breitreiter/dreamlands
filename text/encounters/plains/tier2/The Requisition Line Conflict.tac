@@ -1,4 +1,4 @@
-The Requisition Line Conflict
+The Ghost Story
 [stat Negotiation]
 [tier 2]
 

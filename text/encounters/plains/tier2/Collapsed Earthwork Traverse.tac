@@ -1,4 +1,4 @@
-Collapsed Earthwork Traverse
+Navigating the Collapse
 [stat Bushcraft]
 [tier 2]
 

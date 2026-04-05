@@ -147,11 +147,11 @@ dungeons:
     folder: grainway_station
     tier_range: [2, 2]
 
-  - id: harrow_line
-    name: The Harrow Line
+  - id: wrenbury
+    name: Wrenbury
     biome: plains
-    decal: harrow_line.png
-    folder: harrow_line
+    decal: wrenbury.png
+    folder: wrenbury
     tier_range: [2, 2]
 
   - id: metal_beast

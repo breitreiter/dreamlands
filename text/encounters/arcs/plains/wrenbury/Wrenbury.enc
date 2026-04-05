@@ -1,0 +1,71 @@
+Wrenbury
+[trigger none]
+[vignette dungeons/wrenbury]
+
+The tourist path cuts between the old earthworks and the merchant stalls, muddy from foot traffic. The reconstructed stake-wall marks the rough center of things, the guide's voice carries from there, mid-performance as always. Beyond the stalls, the village ruins are visible as low stone foundations in the grass. A man in worn workman's clothes sits on a fallen stone nearby eating a meal.
+
+choices:
+
+* Explore the village ruins = Head up the hill to take a closer look
+  Stone steps climb the slope to the village, worn smooth in the center and crumbling at the edges. They're older than the battle. Whatever Wrenbury was before it became a battlefield, people walked these stairs daily.
+
+  At the top, three children are deep into a game that involves one of them standing on a foundation wall and stomping while the others hurl pinecones. The stomper catches one in the shoulder and howls in outrage. "That doesn't work, I'm *iron*," she insists, and the argument that follows is clearly a recurring constitutional crisis.
+
+  From up here, the earthworks make sense in a way they don't from the path. You can read the defensive logic: the trenches interlock, each covering the approach to the next, funneling anything large toward the flooded pits. It was good work. It must have been terrifying work, too, digging all of this while knowing what was coming.
+
+  The village is mostly shells. Knee-high walls trace out the foundations of what were small, close-built houses -- you can step through doorways into rooms open to the sky, grass where the floors were. A few still have a wall or two standing at full height, and you can see where the lintels sat. It has the quality of a diagram of itself.
+
+  Here and there, though, a house is just a house. Shutters. Smoke from a chimney. Laundry on a line strung between what was once someone else's kitchen wall and a post driven into the foundation next door. The people who live and work here have built their lives into the gaps of the ruins like moss in the mortar, and they don't look up when visitors wander past.
+
+  You head back to the village entrance.
+  +open "Wrenbury"
+
+* Visit the stalls = See what's for sale here
+    +open "Wrenbury Market"
+
+* Find the guide = Listen in on the performance [requires quality wrenbury.tour_visits 0]
+  The guide has arranged his audience in a semicircle at the reconstructed stake-wall, positioning himself so the earthworks slope away behind him like a stage set. He's dressed in something that's close enough to a legion uniform to play the part, but not so close as to be disrespectful.
+
+  "...and the Ninth had been marching for six days. Six days on field rations, half of them raw recruits who'd never seen action, and they come over that ridge," he sweeps his walking stick dramatically, and every head turns, "and they see this. Miles of earthwork. Pits deep enough to swallow a house. And they know, every one of them knows, because they've all heard the stories of what's coming."
+
+  Two women near the edge of the group are having a murmured conversation about the prior evening's dinner. An older man in front of them turns and hisses something sharp. They fall quiet with the practiced blankness of people who intend to resume in thirty seconds.
+
+  "The skirmishers came first. Small, fast, the size of a horse. Imagine a hundred coming through that treeline at a dead sprint and screaming. Yes, they screamed. The old sources all agree on that. High, metallic, like a-"
+
+  "Like a badly-forged bell," someone in the audience volunteers. "Terrano's account describes it as-"
+
+  "As a badly-forged bell, exactly right, thank you sir." The guide folds it in without breaking stride, "Like a badly-forged bell, and a hundred of them at once, and you're nineteen years old and holding a pike."
+
+  He pauses. Steps back. Lowers his voice.
+
+  "The siege engines came at dawn. You heard them before you saw them. You felt them before you heard them. This ground, right here where you're standing, shaking so badly the water was jumping out of the canteens. And then they came over the ridge. Thomp. Thomp. Thomp. Each footfall echoing. There's no pause, no moment where they assess the field. They just stride forward, crushing anything in their path."
+
+  "Centurion Aldessi, seventeen years old, field promotion, half his senior officers dead the day before. Aldessi stands on the earthwork. On top of it. In full view. He's holding a standard that isn't his because the man whose job it was is gone. And he's shouting at his men to hold. Hold."
+
+  The guide holds up his walking stick to demonstrate, and for a moment you can see it clearly. The frightened men. The inexorable Iron cresting the hill. The centurion full of bravery and foolishness.
+
+  No one is talking now. You can hear the wind in the grass and somewhere behind you a merchant is calling prices, distant and obscene. The guide holds it for one breath.
+
+  "You there, in the back. Private tour. Next one starts in half an hour. I'd ask you kindly to queue with the rest of the visitors."
+
+  And you're back. The spell cracks and the sky is just the sky and the guide is just a man who does this three times a day for coins. Someone in the audience coughs. Someone else laughs, a little too loud, shaking something off.
+
+  You head back to the village entrance.
+  +quality wrenbury.tour_visits 1
+  +open "Wrenbury"
+
+* Talk to the worker = Hear his perspective [requires quality wrenbury.worker_visits 0]
+  The man sits on a toppled block of masonry with a meal spread beside him on a cloth: bread, hard cheese, something pickled, a clay bottle. His shovel leans against the stone within arm's reach, and it catches the light in a way that makes you look twice. The blade is that bronzy Kesharat alloy, smooth-ground, not a spot of corrosion on it.
+  He notices you noticing. "Nice, isn't she? Month's wages, but worth every penny. Probably the only thing on this hill less than fifty years old." He tears the bread without urgency. "Present company excepted."
+  He works the excavations, he says. Has for a few years now. But he takes his lunch up here because the light's good and the view's better. He nods toward the tourist path below, where a child is trying to sell a corroded buckle to a woman who clearly wants to keep walking. "Better than any stage play, this lot. You get all kinds."
+  He asks where you've come from, the way people do when they already know the answer is going to be interesting. Listens without performing interest. Offers you a pickle, which is either a courtesy or a test of your character depending on how seriously he takes his pickles.
+  "You want to see the real Wrenbury, not," he gestures at the stalls, the guide's audience, the general circus of it, "all that? I can take you down to the pits. Show you where the actual work happens." He takes a bite. Chews. Swallows. "After I've finished, though. Nothing down there's going anywhere. Hasn't for sixty years."
+  You take your leave and return to the entrance.
+  +quality wrenbury.worker_visits 1
+  +open "Wrenbury"
+
+* Depart = Leave this place behind
+    Nothing here of interest to you, and you've got contracts to complete.
+
+    You walk. The road, always familiar, always new, always awaiting your return.
+    +flee_dungeon

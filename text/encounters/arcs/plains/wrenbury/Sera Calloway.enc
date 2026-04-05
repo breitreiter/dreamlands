@@ -1,0 +1,131 @@
+Sera Calloway
+[trigger none]
+[vignette dungeons/wrenbury]
+
+You're barely within earshot before the woman turns to you fully. "You're Trade Guild, yes?" She says it like she's confirming something she's already decided. "I need an arbiter."
+
+The scavenger, a weathered man with careful hands and an organized blanket, sighs. "There's nothing to arbitrate. I conducted a fair transaction."
+
+Her name is Sera Calloway. She's from Aldgate, she's traveled days to get here. Her uncle purchased an item from this man -- she gestures at the scavenger. A buckle clasp, old legion issue, sold with a letter of provenance claiming it belonged to one Corporal Emory Calloway of the Ninth, who died at Wrenbury. The scavenger tracked the family down. Presented it as a reunion of sorts. Heirloom returned to its rightful home. Her uncle wept. Her uncle also paid over a hundred gold.
+
+"High price for a bit of green brass and a nice story," she says. "And I want to know which part he's selling."
+
+The scavenger gives his name as Pardell, just Pardell. He dug it from the eastern trench. The markings are consistent with the Ninth. He cross-referenced the muster rolls, which are public record, available in the Aldgate archive to anyone who cares to look. Corporal Calloway is listed. The provenance is as good as provenance gets for anything pulled from this ground.
+
+"I didn't seek your family out to swindle them. I sought them out because I found something that belonged to someone, and I thought the family would want it back."
+
+"For a hundred twenty-four coins."
+
+"Just as you say. I spent two months on the research. I do this for a living, Miss Calloway. The alternative was selling it on a blanket for ten."
+
+She doesn't have a counter for this that isn't just anger, and she knows it. The buckle clasp is genuine or it isn't, and she can't prove either.
+
+"Then show me," she says. "Show me where you found it. Show me where he died."
+
+Pardell hesitates. "I can tell you the area. Eastern trench, north section, near the third pit. Any guide can take you."
+
+"I don't want any guide. I want to see exactly where you dug it up."
+
+"Miss Calloway, I have a stall to mind. I can't walk you across the hillside." He turns to you, and you can see him calculating. "Cardenio does private tours. Knows this ground better than anyone alive. You tell him Pardell sent you, tell him the unit and the section. He'll take you right to the spot. He'll tell you what happened there. Your grandfather held the line, Miss Calloway. It's a story worth hearing properly."
+
+You think about the man on the stone block. The shovel. The excavations past the tourist paths, where they do the actual digging. The worker could show her where it was found. Not the story. The hole. The actual earth her grandfather was buried in for sixty years before someone dug him up and sorted him into piles.
+
+The crowd has mostly lost interest, this isn't a spectacle anymore. It's just three people and a decision.
+
+choices:
+
+* Take her to Cardenio = Send her home with a story
+  Cardenio is mid-break when you approach, sitting on block of masonry. He glances up. "Next tour's not for a quarter hour, but you're welcome to-"
+
+  "Pardell sent us."
+
+  He frowns just slightly. He looks at Sera, looks at you, and something settles in his expression. He's clearly done this before. "Right," he says. "Right. Give me the details, then."
+
+  Sera tells him. Corporal Emory Calloway, Ninth Legion, eastern trench, north section. Cardenio nods along, and you can almost see him pulling the threads together, unit, position, timeline. Cross-referencing some internal archive of his own. He asks what company. Sera doesn't know. He asks if the family has any letters. They don't. He nods again, as if this is fine, as if the absence of specifics is just more room to work.
+
+  "I know the spot. Come on, then. Bit of a walk."
+
+  The path out to the eastern trench runs along the spine of the earthworks, and Cardenio narrates as he goes, easy and automatic. He points out where a trench line was extended overnight when scouts reported the incursion was larger than expected. Indicates a depression in the hillside that was a supply cache. Mentions, almost in passing, that the soil here grows exceptional wildflowers in spring because of the iron content in the ground.
+
+  Sera walks between you, arms folded, not talking much.
+
+  Cardenio stops at a point along the trench where the earthwork curves to cover a shallow approach between two of the defensive pits. It's a good spot. You can see the full sweep of the line from here, the pits dark with standing water, the treeline beyond. The wind moves the grass in long waves.
+
+  "This is the north section," he says. "Your grandfather's unit was here. Third company, most likely, based on the position. They'd have been covering the approach between those two pits, critical ground. If the siege engines came through that gap, the whole eastern line folds."
+
+  He pauses. Looks at Sera.
+
+  "The Iron engines came at dawn. You heard them before you saw them. You felt them before you heard them. This ground, right here where you're standing, shaking so badly the water was jumping out of the canteens. And then they came over the ridge. Thomp. Thomp. Thomp. Each footfall echoing. There's no pause, no moment where they assess the field. They just stride forward, crushing anything in their path."
+
+  "Corporal Emory Calloway, twenty-four years old, field promotion, half his senior officers dead the day before. Emory stands on the earthwork. On top of it. In full view. He's holding a standard that isn't his because the man whose job it was is gone. And he's shouting at his men to hold. Hold."
+
+  "They held. Until the bitter end."
+
+  Sera is crying. Not the wrenching kind, the quiet kind, the relieved kind. She's looking out at the earthwork and seeing her grandfather in it, young and heroic and a credit to the family name. The buckle is his, for certain, and it will return to Aldgate with her and take a special place on the mantle. And she'll tell the young corporal's story from time to time.
+
+  The walk back is quieter. Cardenio doesn't narrate. Sera walks ahead, slightly apart, holding the buckle clasp in her closed hand.
+
+  At the market, Sera turns to both of you. Her eyes are red but her voice is steady. She presses a purse into your hands, heavy, heavier than you expect. "For your trouble," she says. "Both of you." She looks at the buckle clasp one more time, closes her fingers around it, and walks toward the road without looking back.
+
+  Cardenio watches her go. He hefts the purse, does a quick count, and whistles softly. "Two hundred. That's a first." He fishes out coins with practiced ease and offers you your half. You accept the coin with a nod, and return to the road.
+  +give_gold 100
+  +finish_dungeon
+
+* Take her to the pits = Send her home with the truth
+  You find the worker where you last saw him, finishing his meal on the flat stone slab. You explain the situation and he nods. He'll take you.
+
+  He offers his name on the walk, Tomasz. He takes you down the back of the hill, away from the sweeping scenery of the earthworks and battlefield, along a trail worn into the grass by boots and barrow wheels.
+
+  He narrates as he goes, a different sort of tour. He points to a house with blue shutters and a leaning fence. "That's mine. Roof leaks when the wind comes from the south, which it mostly does, so." A stone cottage with a kitchen garden and smoke curling from a squat chimney. "That's Edina's. She does the pies in the market. You try one yet?" A low-walled ruin with a canvas lean-to built against the one remaining wall. "Reshel lives there. Revathi woman. Brings her tile fragments up from the valley to sell to the tourists. Makes the trip back when winter sets in. She does readings for the folk here. I don't go in for that stuff, personally."
+
+  The excavations start where the houses stop.
+
+  It's organized. That's the first thing. Whatever you might have expected, ransacked earth, mad looters, it's not that. Shallow rectangular cuts in the soil, gridded with twine and wooden stakes, each one numbered with a painted marker. Tarps cover some of them. Others are open, showing neat cross-sections of earth in layers, topsoil, clay, a darker stratum beneath. A few workers move between the pits with buckets and hand tools, not rushing. A woman with a kerchief over her hair is kneeling in one of the cuts, brushing soil from something with a patience that looks almost tender.
+
+  Tomasz walks Sera to a particular excavation, checks the marker, nods. "This is where Pardell was working last season. About here." He points to a section of exposed earth, unremarkable, a shallow depression with a darker stain in the soil that might be anything.
+
+  Sera stares at it.
+
+  "What's in those buckets," she says. She's not asking.
+
+  "We sort as we go," he says. "Metal goes in one, personal effects in another. Bone in the third. We keep records -- which pit, which layer, what was found with what. It's not..." He pauses, choosing a word. "It's not careless. We're careful with them."
+  
+  "Them," Sera repeats.
+  
+  "The dead, Miss Calloway. Your grandfather. We're careful with them."
+  
+  "Who identifies them," she says.
+
+  "Nobody," Tomasz says. "Can't, mostly. Not after this long. The personal effects sometimes have markings. That's how Pardell does his work. Finds something with a name or a unit stamp, cross-references the rolls. The rest..." He shrugs. Not callous, just honest. "The rest are Wrenbury dead. That's as specific as it gets."
+
+  "So... he could be in any of these?"
+
+  "He could be in any of these."
+
+  "This is monstrous. This is a violation. The empire... The empire will hear of this."
+  
+  Tomasz shrugs. "The empire sent them here and the empire left them here. Sixty years, Miss Calloway. No recovery detail. No monument with names. Just us. We're what there is."
+
+  Sera nods. She's quiet for a while, then she turns and walks back up the path toward the market, alone. 
+
+  You and Tomasz stand there.
+
+  "She going to be all right?" he asks.
+
+  You don't know.
+
+  "Yeah," he says. "They usually aren't, for a bit."
+
+  He picks up his shovel. "The work won't wait, trader. If you're still around after sundown, I can introduce you to the locals." You appreciate the offer, but you won't be.
+
+  You find Sera at the market. She's standing near the pie vendor, not eating, just standing. She sees you and something in her face shifts, not warmth exactly, but recognition. You did what she asked. You showed her the truth. She doesn't thank you for it.
+
+  She holds out the buckle clasp. Just holds it out, flat in her palm.
+  
+  "I don't want it in my house," she says.
+  
+  It's lighter than you expected. Or maybe that's not the right word. It's less than you expected, a small thing, ordinary, slightly green with age. You put it in your haversack. By the time your done, Sera has left.
+
+  You return to the waiting road.
+  +add_item lucky_buckle
+  +finish_dungeon

@@ -1,4 +1,4 @@
-The Passage Combat
+Fight the Machine
 [stat Combat]
 [tier 3]
 

@@ -378,7 +378,7 @@ Short sketches, clear binary/ternary clutch, 2-3 scenes.
 | Inkwell Hollow | Forest | 148 | |
 | Metal Beast | Plains | 195 | |
 | Grainway Station | Plains | 196 | |
-| Harrow Line | Plains | 191 | |
+| Wrenbury | Plains | 191 | |
 
 ### Tier B — Standard (do second)
 
@@ -442,8 +442,8 @@ Each finished dungeon directory should contain:
 - [ ] Metal Beast — AI draft + polish
 - [ ] Grainway Station — scene plan
 - [ ] Grainway Station — AI draft + polish
-- [ ] Harrow Line — scene plan
-- [ ] Harrow Line — AI draft + polish
+- [ ] Wrenbury — scene plan
+- [ ] Wrenbury — AI draft + polish
 
 ### Tier B — Standard
 - [ ] The Lodge — scene plan
