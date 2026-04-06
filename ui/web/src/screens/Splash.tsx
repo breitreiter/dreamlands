@@ -53,7 +53,10 @@ export default function Splash() {
         {error && (
           <p className="text-negative">{error}</p>
         )}
-        <div>
+        <div className="space-x-4">
+          <a href="/reference.html" target="_blank" rel="noopener noreferrer">
+            <Button variant="ghost" className="tracking-wide">How to Play</Button>
+          </a>
           <Button variant="ghost" className="tracking-wide" onClick={() => setShowCredits(!showCredits)}>
             {showCredits ? "Close Credits" : "Credits"}
           </Button>

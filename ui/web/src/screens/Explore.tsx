@@ -380,6 +380,11 @@ function InstrumentCluster({
             <Button variant="secondary" size="icon-sm" onClick={() => onOpenInventory()} disabled={loading} title="Inventory (I)">
               <img src="/world/assets/icons/backpack.svg" alt="Inventory" className="w-5 h-5 opacity-80" />
             </Button>
+            <a href="/reference.html" target="_blank" rel="noopener noreferrer">
+              <Button variant="secondary" size="icon-sm" title="Player Reference">
+                <img src="/world/assets/icons/tied-scroll.svg" alt="Reference" className="w-5 h-5 opacity-80" />
+              </Button>
+            </a>
 
             <div className="flex items-center gap-1">
             <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />

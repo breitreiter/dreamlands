@@ -189,9 +189,11 @@ public static class SkillChecks
     static int GetBestToolBonuses(Skill skill, PlayerState state, BalanceData balance)
     {
         int best = 0, secondBest = 0;
+        var seen = new HashSet<string>();
 
         foreach (var item in state.Pack)
         {
+            if (!seen.Add(item.DefId)) continue;
             if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
             if (def.Type != ItemType.Tool) continue;
             if (!def.SkillModifiers.TryGetValue(skill, out var mod) || mod <= 0) continue;

@@ -17,6 +17,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        reference: path.resolve(__dirname, "reference.html"),
+      },
+    },
+  },
   server: {
     port: 3000,
     proxy: {

@@ -14,7 +14,7 @@ public sealed class CharacterBalance
     public int SpiritDisadvantageThreshold { get; init; } = 10;
 
     /// <summary>Luck reroll trigger chance by skill level (index = level, 0% for ≤0).</summary>
-    public IReadOnlyList<int> LuckRerollChance { get; init; } = [0, 5, 10, 15, 15];
+    public IReadOnlyList<int> LuckRerollChance { get; init; } = [0, 5, 10, 15, 20];
 
     public int MinSkillLevel { get; init; } = -2;
     public int MaxSkillLevel { get; init; } = 4;
