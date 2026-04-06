@@ -382,7 +382,7 @@ function InstrumentCluster({
             </Button>
             <a href="/reference.html" target="_blank" rel="noopener noreferrer">
               <Button variant="secondary" size="icon-sm" title="Player Reference">
-                <img src="/world/assets/icons/tied-scroll.svg" alt="Reference" className="w-5 h-5 opacity-80" />
+                <img src="/world/assets/icons/rule-book.svg" alt="Reference" className="w-5 h-5 opacity-80" />
               </Button>
             </a>
 

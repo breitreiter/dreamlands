@@ -32,6 +32,7 @@ Definitive icon mapping
 - explored settlements - `black-flag.svg`
 - enter dungeon - `dungeon-gate.svg`
 - open inventory - `backpack.svg`
+- player reference - `rule-book.svg`
 - click-to-move - `play-button.svg`
 
 ## Market and inventory
