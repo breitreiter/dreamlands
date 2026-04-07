@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useGame } from "../GameContext";
 import { formatDateTime } from "../calendar";
 import type { GameResponse, OutcomeInfo } from "../api/types";
-import parchment from "../assets/parchment.png";
+import parchment from "../assets/parchment.webp";
 import { formatProse } from "../prose";
 import MaskedIcon from "../components/MaskedIcon";
 

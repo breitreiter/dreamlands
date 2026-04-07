@@ -4,7 +4,7 @@ import { getInnQuote } from "../api/client";
 import type { GameResponse, InnQuoteResponse, InnRecoveryInfo } from "../api/types";
 import { Button } from "@/components/ui/button";
 import MaskedIcon from "@/components/MaskedIcon";
-import parchment from "../assets/parchment.png";
+import parchment from "../assets/parchment.webp";
 
 export default function Inn({
   isChapterhouse,

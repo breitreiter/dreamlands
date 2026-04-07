@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useGame, type CampReportLine, type CampReport } from "../GameContext";
 import type { GameResponse, CampEventInfo, ConditionRowInfo } from "../api/types";
 import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
-import parchment from "../assets/parchment.png";
+import parchment from "../assets/parchment.webp";
 
 const CONDITION_ICONS: Record<string, string> = {
   freezing: "mountains.svg",

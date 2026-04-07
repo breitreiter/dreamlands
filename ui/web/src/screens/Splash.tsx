@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGame } from "../GameContext";
 import { Button } from "@/components/ui/button";
 import splashStars from "../assets/splash_stars.jpg";
-import splashTower from "../assets/splash_tower.png";
+import splashTower from "../assets/splash_tower.webp";
 
 const credits = [
   { name: "Leaflet", license: "BSD 2-Clause", author: "Vladimir Agafonkin" },

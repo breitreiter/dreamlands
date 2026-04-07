@@ -3,7 +3,7 @@ import type { TacticalInfo, TacticalOpeningInfo, TacticalApproachInfo, MechanicR
 import { useGame } from "../GameContext";
 import { formatProse } from "../prose";
 import MaskedIcon from "../components/MaskedIcon";
-import parchment from "../assets/parchment.png";
+import parchment from "../assets/parchment.webp";
 
 const ICONS = {
   momentum: "flamer.svg",

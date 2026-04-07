@@ -35,7 +35,7 @@
 }
 
 .leaflet-container.leaflet-container {
-  background: url("./assets/parchment.png") repeat;
+  background: url("./assets/parchment.webp") repeat;
   cursor: pointer;
 }
 

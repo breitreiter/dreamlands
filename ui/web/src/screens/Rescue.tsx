@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useGame } from "../GameContext";
 import type { GameResponse } from "../api/types";
 import MaskedIcon from "../components/MaskedIcon";
-import parchment from "../assets/parchment.png";
+import parchment from "../assets/parchment.webp";
 
 export default function Rescue({ state }: { state: GameResponse }) {
   const { refreshState, loading } = useGame();
