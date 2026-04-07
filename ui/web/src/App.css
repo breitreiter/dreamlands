@@ -34,7 +34,7 @@
   --font-hand: 'Sue Ellen Francisco', cursive;
 }
 
-.leaflet-container {
+.leaflet-container.leaflet-container {
   background: url("./assets/parchment.png") repeat;
   cursor: pointer;
 }
