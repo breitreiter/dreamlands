@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Dreamlands.Rules;
 
 namespace Dreamlands.Tactical;
 
@@ -72,7 +73,10 @@ public static partial class TacticalParser
                 case "variant":
                     break; // Ignored — kept for backwards compatibility with existing .tac files
                 case "stat":
-                    stat = value;
+                    if (!Skills.IsValidScriptName(value))
+                        errors.Add(new ParseError(i + 1, $"Unknown stat '{value}'. Must be a valid skill name."));
+                    else
+                        stat = value;
                     break;
                 case "tier":
                     if (!int.TryParse(value, out var t) || t < 1 || t > 3)

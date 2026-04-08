@@ -29,7 +29,7 @@ public static class Skills
     };
 
     private static readonly Dictionary<string, Skill> ByScriptName =
-        All.ToDictionary(i => i.ScriptName, i => i.Skill);
+        All.ToDictionary(i => i.ScriptName, i => i.Skill, StringComparer.OrdinalIgnoreCase);
 
     private static readonly Dictionary<Skill, SkillInfo> InfoBySkill =
         All.ToDictionary(i => i.Skill);
