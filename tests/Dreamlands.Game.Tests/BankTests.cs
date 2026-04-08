@@ -31,13 +31,27 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Haversack.Add(new ItemInstance("food_protein", "Jerky"));
+        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
 
-        var error = Bank.Deposit(state, "food_protein", "haversack", settlement, Balance);
+        var error = Bank.Deposit(state, "bandages", "haversack", settlement, Balance);
 
         Assert.Null(error);
         Assert.Empty(state.Haversack);
         Assert.Single(settlement.Bank);
+    }
+
+    [Fact]
+    public void Deposit_Rations_Rejected()
+    {
+        var state = Fresh();
+        var settlement = MakeSettlement();
+        state.Haversack.Add(new ItemInstance("food_ration", "Jerky"));
+
+        var error = Bank.Deposit(state, "food_ration", "haversack", settlement, Balance);
+
+        Assert.NotNull(error);
+        Assert.Single(state.Haversack);
+        Assert.Empty(settlement.Bank);
     }
 
     [Fact]
@@ -151,13 +165,13 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        settlement.Bank.Add(new ItemInstance("food_protein", "Jerky") { FoodType = FoodType.Protein });
+        settlement.Bank.Add(new ItemInstance("food_ration", "Rations"));
 
         var error = Bank.Withdraw(state, 0, settlement, Balance);
 
         Assert.Null(error);
         Assert.Empty(settlement.Bank);
-        Assert.Contains(state.Haversack, i => i.DefId == "food_protein");
+        Assert.Contains(state.Haversack, i => i.DefId == "food_ration");
     }
 
     [Fact]
@@ -180,7 +194,7 @@ public class BankTests
         var state = Fresh();
         state.HaversackCapacity = 0;
         var settlement = MakeSettlement();
-        settlement.Bank.Add(new ItemInstance("food_protein", "Jerky") { FoodType = FoodType.Protein });
+        settlement.Bank.Add(new ItemInstance("food_ration", "Rations"));
 
         var error = Bank.Withdraw(state, 0, settlement, Balance);
 

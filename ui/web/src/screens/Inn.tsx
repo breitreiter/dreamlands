@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useGame } from "../GameContext";
-import { getInnQuote } from "../api/client";
-import type { GameResponse, InnQuoteResponse, InnRecoveryInfo } from "../api/types";
+import { getInnServices } from "../api/client";
+import type { GameResponse, InnServicesResponse, InnRecoveryInfo } from "../api/types";
 import { Button } from "@/components/ui/button";
 import MaskedIcon from "@/components/MaskedIcon";
 import parchment from "../assets/parchment.webp";
@@ -15,16 +15,16 @@ export default function Inn({
   onBack: () => void;
 }) {
   const { doAction, loading, gameId } = useGame();
-  const [quote, setQuote] = useState<InnQuoteResponse | null>(null);
-  const [quoteError, setQuoteError] = useState<string | null>(null);
+  const [services, setServices] = useState<InnServicesResponse | null>(null);
+  const [servicesError, setServicesError] = useState<string | null>(null);
   const [recovery, setRecovery] = useState<InnRecoveryInfo | null>(null);
   const [vignetteError, setVignetteError] = useState(false);
 
   useEffect(() => {
     if (!gameId) return;
-    getInnQuote(gameId)
-      .then(setQuote)
-      .catch((e) => setQuoteError(e.message));
+    getInnServices(gameId)
+      .then(setServices)
+      .catch((e) => setServicesError(e.message));
   }, [gameId]);
 
   const vignetteSrc = isChapterhouse
@@ -33,9 +33,8 @@ export default function Inn({
 
   const title = isChapterhouse ? "The Chapterhouse" : "A Quiet Inn";
 
-  async function handleRecover() {
-    const action = isChapterhouse ? "chapterhouse_recover" : "inn_full_recovery";
-    const result = await doAction({ action });
+  async function handleBook(serviceId: "bed" | "bath" | "full") {
+    const result = await doAction({ action: "inn_book", innService: serviceId });
     if (result?.innRecovery) {
       setRecovery(result.innRecovery);
     }
@@ -79,17 +78,10 @@ export default function Inn({
             </h2>
 
             <div className="text-primary/80 leading-loose">
-              {recovery.nightsStayed === 1
-                ? "After a night's rest, you feel restored."
-                : `After ${recovery.nightsStayed} nights, you feel fully restored.`}
+              After a night's rest, you feel restored.
             </div>
 
             <div className="space-y-1 border-t border-edge pt-3">
-              {recovery.healthRecovered > 0 && (
-                <div className="text-positive">
-                  Health restored: +{recovery.healthRecovered}
-                </div>
-              )}
               {recovery.spiritsRecovered > 0 && (
                 <div className="text-positive">
                   Spirits restored: +{recovery.spiritsRecovered}
@@ -100,11 +92,6 @@ export default function Inn({
                   Gold spent: {recovery.goldSpent}
                 </div>
               )}
-              {recovery.conditionsCleared.map((c) => (
-                <div key={c} className="text-positive">
-                  {c} cured
-                </div>
-              ))}
               {recovery.medicinesConsumed.map((m, i) => (
                 <div key={i} className="text-dim">
                   {m} consumed
@@ -159,103 +146,34 @@ export default function Inn({
             {title}
           </h2>
 
-          {quoteError && (
-            <div className="text-negative">{quoteError}</div>
+          {servicesError && (
+            <div className="text-negative">{servicesError}</div>
           )}
 
-          {!quote && !quoteError && (
+          {!services && !servicesError && (
             <div className="text-dim">Loading...</div>
           )}
 
-          {quote && isChapterhouse && (
+          {services && (
             <>
               <div className="text-primary/80 leading-loose">
-                Food and lodging is free for guild members in good standing.
-                An on-site physician will tend to any injuries or illnesses
-                you've encountered on the road.
+                {isChapterhouse
+                  ? "Choose your accommodation. Guild patrons keep the lights on, but the rates are the same as anywhere else."
+                  : "Choose your accommodation."}
               </div>
 
-              {quote.needsRecovery && (
-                <div className="text-dim">
-                  Given your current state, recovery will take{" "}
-                  {quote.quote.nights === 1
-                    ? "one night"
-                    : `${quote.quote.nights} nights`}
-                  .
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                {quote.needsRecovery && (
-                  <Button variant="secondary" onClick={handleRecover} disabled={loading}>
-                    <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
-                    Recover in the Chapterhouse
-                  </Button>
-                )}
-                <Button variant="secondary" onClick={onBack} disabled={loading}>
-                  <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
-                  Depart
-                </Button>
-              </div>
-            </>
-          )}
-
-          {quote && !isChapterhouse && (
-            <>
               <div className="flex flex-col gap-3">
-                {quote.canFullRecover && quote.needsRecovery && (
-                  <>
-                    <div className="text-primary/80 leading-loose">
-                      You may rest here until fully recovered. Given your
-                      current state, that will take{" "}
-                      {quote.quote.nights === 1
-                        ? "one night"
-                        : `${quote.quote.nights} nights`}
-                      {quote.quote.goldCost > 0
-                        ? ` and cost ${quote.quote.goldCost} gold`
-                        : ""}
-                      .
-                    </div>
-                    <Button variant="secondary" className="self-start" onClick={handleRecover} disabled={loading || !quote.canAfford}>
-                      <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
-                      Recover
-                      {quote.quote.goldCost > 0 && ` (${quote.quote.goldCost} gold)`}
-                    </Button>
-                    {!quote.canAfford && (
-                      <div className="text-negative">
-                        You don't have enough gold.
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {quote.canFullRecover && !quote.needsRecovery && (
-                  <div className="text-primary/80 leading-loose">
-                    You're in good shape. No need to stay.
-                  </div>
-                )}
-
-                {!quote.canFullRecover &&
-                  quote.disqualifyingConditions.length > 0 && (
-                    <div className="space-y-1">
-                      {quote.disqualifyingConditions.length === 1 ? (
-                        <div className="text-negative">
-                          You don't have the medical supplies to treat your{" "}
-                          {quote.disqualifyingConditions[0]}.
-                        </div>
-                      ) : (
-                        <div className="text-negative">
-                          You don't have the medical supplies to treat your
-                          conditions:{" "}
-                          {quote.disqualifyingConditions.join(", ")}.
-                        </div>
-                      )}
-                      <div className="text-dim">
-                        You'll only get worse if you stay here. You need to
-                        buy medical supplies in the market.
-                      </div>
-                    </div>
-                  )}
+                {services.services.map((svc) => (
+                  <ServiceRow
+                    key={svc.id}
+                    name={svc.name}
+                    cost={svc.cost}
+                    spiritsLabel={svc.restoresFull ? "full spirits" : `+${svc.spirits} spirits`}
+                    canAfford={svc.canAfford}
+                    disabled={loading}
+                    onClick={() => handleBook(svc.id)}
+                  />
+                ))}
               </div>
 
               <Button variant="secondary" onClick={onBack} disabled={loading}>
@@ -267,5 +185,36 @@ export default function Inn({
         </div>
       </div>
     </div>
+  );
+}
+
+function ServiceRow({
+  name,
+  cost,
+  spiritsLabel,
+  canAfford,
+  disabled,
+  onClick,
+}: {
+  name: string;
+  cost: number;
+  spiritsLabel: string;
+  canAfford: boolean;
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Button
+      variant="secondary"
+      className="self-start"
+      onClick={onClick}
+      disabled={disabled || !canAfford}
+    >
+      <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
+      <span>
+        {name} — {cost} gold, {spiritsLabel}
+        {!canAfford && " (can't afford)"}
+      </span>
+    </Button>
   );
 }

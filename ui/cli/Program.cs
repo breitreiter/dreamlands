@@ -163,69 +163,30 @@ try
             break;
 
         case "camp":
-        {
-            // Auto-select: all food + all medicine from haversack
-            // First get current state to read inventory
-            var stateJson = await client.GetState(ResolveGameId());
-            using var stateDoc = JsonDocument.Parse(stateJson);
-
-            var food = new List<string>();
-            var medicine = new List<string>();
-
-            if (stateDoc.RootElement.TryGetProperty("inventory", out var inv)
-                && inv.TryGetProperty("haversack", out var hs))
-            {
-                foreach (var item in hs.EnumerateArray())
-                {
-                    var defId = item.GetProperty("defId").GetString() ?? "";
-                    if (defId.StartsWith("food_"))
-                        food.Add(defId);
-                    else if (!string.IsNullOrEmpty(defId))
-                        medicine.Add(defId);
-                }
-            }
-
-            // Take up to 3 food (try for balanced: 1 protein, 1 grain, 1 sweet)
-            var selectedFood = new List<string>();
-            var foodByType = food.GroupBy(f => f).ToDictionary(g => g.Key, g => g.Count());
-            foreach (var type in new[] { "food_protein", "food_grain", "food_sweets" })
-            {
-                if (selectedFood.Count >= 3) break;
-                if (foodByType.ContainsKey(type) && foodByType[type] > 0)
-                {
-                    selectedFood.Add(type);
-                    foodByType[type]--;
-                }
-            }
-            // Fill remaining slots
-            foreach (var (type, count) in foodByType)
-            {
-                for (int j = 0; j < count && selectedFood.Count < 3; j++)
-                    selectedFood.Add(type);
-            }
-
-            // Select medicine items that have cure properties (non-food consumables)
-            var selectedMedicine = medicine.Where(m => !m.StartsWith("food_")).Take(5).ToList();
-
-            var campJson = JsonSerializer.Serialize(new
-            {
-                action = "camp_resolve",
-                campChoices = new { food = selectedFood, medicine = selectedMedicine },
-            });
-            result = await client.Action(ResolveGameId(), campJson);
+            // Camp resolution is fully automatic post-refactor: one ration consumed,
+            // matching medicine for serious conditions, no player input required.
+            result = await client.Action(ResolveGameId(), """{"action":"camp_resolve"}""");
             break;
-        }
 
         case "inn":
             result = await client.GetInn(ResolveGameId());
             break;
 
-        case "inn-recover":
-            result = await client.Action(ResolveGameId(), """{"action":"inn_full_recovery"}""");
+        case "inn-book":
+        {
+            var service = positional.Count > 1 ? positional[1].ToLowerInvariant() : "bed";
+            if (service != "bed" && service != "bath" && service != "full")
+            {
+                Console.Error.WriteLine($"Unknown inn service '{service}'. Use bed | bath | full.");
+                return 1;
+            }
+            var bookJson = $$"""{"action":"inn_book","innService":"{{service}}"}""";
+            result = await client.Action(ResolveGameId(), bookJson);
             break;
+        }
 
-        case "chapterhouse":
-            result = await client.Action(ResolveGameId(), """{"action":"chapterhouse_recover"}""");
+        case "rest":
+            result = await client.Action(ResolveGameId(), """{"action":"inn_book","innService":"bed"}""");
             break;
 
         case "market-order":

@@ -22,7 +22,6 @@ public sealed class ItemDef
 
     public WeaponClass? WeaponClass { get; init; }
     public ArmorClass? ArmorClass { get; init; }
-    public FoodType? FoodType { get; init; }
     public int? Cost { get; init; }
     public string? Biome { get; init; }
     public int? ShopTier { get; init; }
@@ -535,23 +534,13 @@ public sealed class ItemDef
         },
 
         // ── Food ──
-        // One def per FoodType. Display names come from FlavorText.FoodName() at purchase/forage
-        // time and are stored on the ItemInstance. Each food item occupies 1 haversack slot.
+        // Single ration item; display name set via FlavorText.RationName(biome) at refill time.
+        // 1 ration = 1 day of food = 1 haversack slot. Free at any settlement.
 
-        ["food_protein"] = new()
+        ["food_ration"] = new()
         {
-            Id = "food_protein", Name = "Meat & Fish", Type = ItemType.Consumable,
-            FoodType = Rules.FoodType.Protein, Cost = 3,
-        },
-        ["food_grain"] = new()
-        {
-            Id = "food_grain", Name = "Breadstuffs", Type = ItemType.Consumable,
-            FoodType = Rules.FoodType.Grain, Cost = 3,
-        },
-        ["food_sweets"] = new()
-        {
-            Id = "food_sweets", Name = "Sweets", Type = ItemType.Consumable,
-            FoodType = Rules.FoodType.Sweets, Cost = 3,
+            Id = "food_ration", Name = "Rations", Type = ItemType.Consumable,
+            Cost = 3,
         },
 
         // ── Medicines ──
@@ -570,13 +559,8 @@ public sealed class ItemDef
             Cures = new HashSet<string> { "lattice_sickness" },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
-        ["pale_knot_berry"] = new()
-        {
-            Id = "pale_knot_berry", Name = "Pale Knot Berry", Type = ItemType.Consumable,
-            Description = "Waxy white berries found on wind-stunted shrubs. A handful restores vigor and cures exhaustion.",
-            Cures = new HashSet<string> { "exhausted" },
-            Biome = "plains", ShopTier = 2, Cost = 15,
-        },
+        // Removed: pale_knot_berry cured exhausted, but exhaustion is now ClearedOnSettlement.
+        // Minor conditions no longer have item cures (haversack_refactor.md).
         ["shustov_tonic"] = new()
         {
             Id = "shustov_tonic", Name = "Shustov Tonic", Type = ItemType.Consumable,

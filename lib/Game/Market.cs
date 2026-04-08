@@ -14,9 +14,9 @@ public static class Market
         var state = new SettlementState { Biome = biome };
         var catalog = new List<string>();
 
-        // Food — always stocked at every settlement
-        foreach (var foodId in new[] { "food_protein", "food_grain", "food_sweets" })
-            catalog.Add(foodId);
+        // Food is not sold in the market UI — players use the "Restock food and leave"
+        // button to refill the haversack for free. Rations dropped from encounters can
+        // still be sold at the flat ration sell price (see GetSellPrice).
 
         // Bandages — always stocked everywhere
         catalog.Add("bandages");
@@ -84,7 +84,6 @@ public static class Market
             {
                 { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
                 { Type: ItemType.Tool } => 1,
-                { FoodType: not null } => maxStock, // food always well-stocked
                 { Id: "bandages" } => maxStock, // bandages always plentiful
                 { Cures.Count: > 0 } => 1, // specialty medicines are scarce
                 _ => maxStock,
@@ -147,7 +146,7 @@ public static class Market
     }
 
     public static MarketResult Buy(PlayerState player, string itemId, SettlementState settlement,
-        BalanceData balance, Random rng, Func<FoodType, string, Random, ItemInstance>? createFood = null)
+        BalanceData balance, Random rng)
     {
         if (!balance.Items.TryGetValue(itemId, out var def))
             return new MarketResult(false, $"Unknown item: {itemId}");
@@ -163,9 +162,7 @@ public static class Market
         if (player.Gold < price)
             return new MarketResult(false, "Not enough gold");
 
-        var instance = def.FoodType is FoodType ft && createFood != null
-            ? createFood(ft, settlement.Biome, rng)
-            : new ItemInstance(def.Id, def.Name) { FoodType = def.FoodType };
+        var instance = new ItemInstance(def.Id, def.Name);
 
         // Auto-equip weapon/armor/boots if the slot is empty (bypasses pack capacity)
         var autoEquipped = false;
@@ -189,8 +186,7 @@ public static class Market
         }
 
         player.Gold -= price;
-        if (def.FoodType == null) // food has unlimited stock in settlements
-            settlement.Stock[itemId] = stock - 1;
+        settlement.Stock[itemId] = stock - 1;
         var verb = autoEquipped ? "Bought and equipped" : "Bought";
         return new MarketResult(true, $"{verb} {def.Name} for {price} gold");
     }
@@ -213,6 +209,10 @@ public static class Market
 
     public static int GetSellPrice(ItemDef item, BalanceData balance)
     {
+        // Rations sell at flat Cost (no ratio) — they're a player gold source.
+        if (item.Id == Rations.RationDefId)
+            return GetBasePrice(item, balance);
+
         var basePrice = GetBasePrice(item, balance);
         if (basePrice <= 0) return 0;
         return Math.Max(1, (int)Math.Round(basePrice * balance.Trade.SellRatio));
@@ -271,8 +271,7 @@ public static class Market
     }
 
     public static MarketOrderResult ApplyOrder(PlayerState player, MarketOrder order,
-        SettlementState settlement, BalanceData balance, Random rng,
-        Func<FoodType, string, Random, ItemInstance>? createFood = null)
+        SettlementState settlement, BalanceData balance, Random rng)
     {
         var results = new List<MarketLineResult>();
 
@@ -289,7 +288,7 @@ public static class Market
             if (buyFailed) break;
             for (int i = 0; i < buy.Quantity; i++)
             {
-                var result = Buy(player, buy.ItemId, settlement, balance, rng, createFood);
+                var result = Buy(player, buy.ItemId, settlement, balance, rng);
                 results.Add(new MarketLineResult("buy", buy.ItemId, result.Success, result.Message));
                 if (!result.Success) { buyFailed = true; break; }
             }

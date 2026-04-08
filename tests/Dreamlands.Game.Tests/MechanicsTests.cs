@@ -108,6 +108,16 @@ public class MechanicsTests
     }
 
     [Fact]
+    public void AddCondition_Idempotent()
+    {
+        var state = Fresh();
+        state.ActiveConditions.Add("freezing");
+        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
+        Assert.Empty(results);
+        Assert.Single(state.ActiveConditions);
+    }
+
+    [Fact]
     public void AddCondition_AppearsInActiveConditions()
     {
         var state = Fresh();
@@ -116,17 +126,7 @@ public class MechanicsTests
 
         var r = Assert.IsType<MechanicResult.ConditionAdded>(results[0]);
         Assert.Equal("freezing", r.ConditionId);
-        Assert.True(state.ActiveConditions.ContainsKey("freezing"));
-    }
-
-    [Fact]
-    public void AddCondition_UsesStacksFromBalance()
-    {
-        var state = Fresh();
-        Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
-
-        var expectedStacks = Balance.Conditions["freezing"].Stacks;
-        Assert.Equal(expectedStacks, state.ActiveConditions["freezing"]);
+        Assert.True(state.ActiveConditions.Contains("freezing"));
     }
 
     [Fact]
@@ -139,18 +139,18 @@ public class MechanicsTests
         var r = Assert.IsType<MechanicResult.ConditionResisted>(results[0]);
         Assert.Equal("freezing", r.ConditionId);
         Assert.True(r.Check.Passed);
-        Assert.False(state.ActiveConditions.ContainsKey("freezing"));
+        Assert.False(state.ActiveConditions.Contains("freezing"));
     }
 
     [Fact]
     public void RemoveCondition_RemovesFromActiveConditions()
     {
         var state = Fresh();
-        state.ActiveConditions["freezing"] = 3;
+        state.ActiveConditions.Add("freezing");
         var results = Mechanics.Apply(["remove_condition freezing"], state, Balance, Rng);
 
         Assert.IsType<MechanicResult.ConditionRemoved>(results[0]);
-        Assert.False(state.ActiveConditions.ContainsKey("freezing"));
+        Assert.False(state.ActiveConditions.Contains("freezing"));
     }
 
     [Fact]

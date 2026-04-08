@@ -333,7 +333,7 @@ public static class Mechanics
     {
         if (args.Count < 1) return null;
         var id = args[0];
-        if (state.ActiveConditions.ContainsKey(id)) return null;
+        if (state.ActiveConditions.Contains(id)) return null;
 
         balance.Conditions.TryGetValue(id, out var def);
         var dc = def?.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
@@ -342,9 +342,8 @@ public static class Mechanics
         if (check.Passed)
             return new MechanicResult.ConditionResisted(id, check);
 
-        var stacks = def?.Stacks ?? 1;
-        state.ActiveConditions[id] = stacks;
-        return new MechanicResult.ConditionAdded(id, stacks, check);
+        state.ActiveConditions.Add(id);
+        return new MechanicResult.ConditionAdded(id, check);
     }
 
     static MechanicResult? ApplyRemoveCondition(List<string> args, PlayerState state)

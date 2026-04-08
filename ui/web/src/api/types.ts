@@ -173,18 +173,19 @@ export interface InnRecoveryInfo {
   medicinesConsumed: string[];
 }
 
-export interface InnQuoteResponse {
-  isChapterhouse: boolean;
-  canFullRecover: boolean;
-  disqualifyingConditions: string[];
-  quote: {
-    nights: number;
-    goldCost: number;
-    healthRecovered: number;
-    spiritsRecovered: number;
-  };
-  needsRecovery: boolean;
+export interface InnServiceInfo {
+  id: "bed" | "bath" | "full";
+  name: string;
+  cost: number;
+  spirits: number;
+  restoresFull: boolean;
   canAfford: boolean;
+}
+
+export interface InnServicesResponse {
+  isChapterhouse: boolean;
+  needsRecovery: boolean;
+  services: InnServiceInfo[];
 }
 
 export interface DiscoveryInfo {

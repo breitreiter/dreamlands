@@ -3,9 +3,16 @@ using Dreamlands.Rules;
 namespace Dreamlands.Game;
 
 /// <summary>
-/// End-of-day resolution engine. Auto-consumes food and medicine from haversack,
-/// resolves ambient conditions, condition drain, and rest recovery.
-/// Health never recovers at camp — only at inn/chapterhouse.
+/// End-of-day resolution engine. Auto-consumes a single ration and any matching medicine,
+/// resolves ambient resists, condition drain, and HP regen.
+///
+/// New regime (haversack_refactor.md + spirits_economy.md):
+///   - Single food_ration item, 1 per day. No balanced-meal bonus.
+///   - Conditions are binary; minor conditions drain spirits, serious conditions tick HP.
+///   - HP +1/day when no serious conditions, HP -1/day when any serious is active.
+///   - No daily passive spirits regen on the road.
+///   - Exhaustion DC scales with ConsecutiveWildernessNights.
+///   - Foraging is binary (success skips the day's ration consumption).
 /// </summary>
 public static class EndOfDay
 {
@@ -43,19 +50,17 @@ public static class EndOfDay
     }
 
     /// <summary>
-    /// Execute the full end-of-day resolution sequence.
-    /// Food and medicine are auto-selected from haversack — no player choices.
+    /// Execute the full end-of-day resolution sequence. Wilderness only —
+    /// settlement nights bypass this entirely.
     /// </summary>
     public static List<EndOfDayEvent> Resolve(
         PlayerState state, string biome, int tier,
         BalanceData balance, Random rng,
-        int startX = 0, int startY = 0,
-        Func<FoodType, Random, ItemInstance>? createFood = null)
+        int startX = 0, int startY = 0)
     {
         var events = new List<EndOfDayEvent>();
 
         // Read and clear pending flags
-        var noSleep = state.PendingNoSleep;
         var noMeal = state.PendingNoMeal;
         var noBiome = state.PendingNoBiome;
         state.PendingEndOfDay = false;
@@ -64,68 +69,83 @@ public static class EndOfDay
         state.PendingNoBiome = false;
 
         // Snapshot which conditions the player already has entering this rest
-        var preExisting = new HashSet<string>(state.ActiveConditions.Keys);
+        var preExisting = new HashSet<string>(state.ActiveConditions);
 
         // 1. Roll resists silently — record pass/fail, do NOT apply new conditions yet
         var resistResults = RollResists(state, biome, tier, noBiome, balance, rng, events);
 
-        // 2. Forage for food (wilderness only)
-        ResolveForaging(state, noBiome, balance, rng, createFood, events);
+        // 2. Forage check — success skips the day's ration consumption
+        var foragedToday = ResolveForaging(state, noBiome, balance, rng, events);
 
-        // 3. Auto-consume food
-        bool ate = false, balanced = false;
+        // 3. Auto-consume one ration (unless foraged or noMeal)
         if (!noMeal)
-            (ate, balanced) = ResolveFood(state, balance, events);
+            ResolveFood(state, foragedToday, events);
 
-        // 4. Auto-consume medicine (only cures pre-existing conditions)
+        // 4. Auto-consume medicine for serious conditions
         var treatedConditions = ResolveMedicines(state, preExisting, balance, events);
 
-        // 5. Apply new conditions from failed resists (for conditions player didn't already have)
+        // 5. Apply new conditions from failed resists
         ApplyNewConditions(state, resistResults, balance, events);
 
-        // 6. Condition drain — spirits from minor conditions, health from untreated severe
-        string? worstDrainCondition = ResolveConditionDrain(state, treatedConditions, balance, events);
+        // 6. Spirits drain from active minor conditions
+        ResolveSpiritsDrain(state, balance, events);
 
-        // 7. Death check — rescue instead of permadeath
+        // 7. HP regen / drain based on serious conditions
+        var hpDrainCondition = ResolveHealthTick(state, treatedConditions, balance, events);
+
+        // 8. Death check — rescue instead of permadeath
         if (state.Health <= 0)
         {
-            events.Add(new EndOfDayEvent.PlayerDied(worstDrainCondition));
+            events.Add(new EndOfDayEvent.PlayerDied(hpDrainCondition));
             var rescue = Rescue.Apply(state, startX, startY, balance);
             events.Add(new EndOfDayEvent.PlayerRescued(rescue.LostItems, rescue.GoldLost));
             return events;
         }
 
-        // 8. Rest recovery (spirits only — health never recovers at camp)
-        if (!noSleep && ate)
-            ResolveRest(state, balanced, balance, events);
+        // 9. Increment consecutive wilderness nights counter (feeds exhaustion DC)
+        if (!noBiome)
+            state.ConsecutiveWildernessNights++;
 
         return events;
     }
 
     /// <summary>
     /// Roll resist checks for all ambient threats. Returns failed condition IDs.
-    /// Does NOT mutate state — condition application happens later.
+    /// Exhaustion uses a scaling DC tied to consecutive wilderness nights;
+    /// other conditions use their static ResistDifficulty.
     /// </summary>
     static HashSet<string> RollResists(PlayerState state, string biome, int tier,
         bool noBiome, BalanceData balance, Random rng, List<EndOfDayEvent> events)
     {
         var failed = new HashSet<string>();
-        var threats = GetThreats(biome, tier, balance);
-
         if (noBiome) return failed;
+
+        var threats = GetThreats(biome, tier, balance);
 
         foreach (var threat in threats)
         {
-            var dc = threat.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
-            var check = SkillChecks.RollResist(threat.Id, dc, state, balance, rng);
+            // Skip rolls for conditions the player already has — adding is a no-op
+            if (state.ActiveConditions.Contains(threat.Id)) continue;
+
+            SkillCheckResult check;
+            if (threat.Id == "exhausted")
+            {
+                var dc = balance.Character.ExhaustionBaseDC
+                       + balance.Character.ExhaustionDCPerNight * state.ConsecutiveWildernessNights;
+                check = SkillChecks.RollResist(threat.Id, dc, state, balance, rng);
+            }
+            else
+            {
+                var dc = threat.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
+                check = SkillChecks.RollResist(threat.Id, dc, state, balance, rng);
+            }
 
             if (check.Passed)
                 events.Add(new EndOfDayEvent.ResistPassed(threat.Id, check));
             else
             {
                 failed.Add(threat.Id);
-                events.Add(new EndOfDayEvent.ResistFailed(threat.Id, check,
-                    state.ActiveConditions.GetValueOrDefault(threat.Id)));
+                events.Add(new EndOfDayEvent.ResistFailed(threat.Id, check));
             }
         }
 
@@ -133,15 +153,14 @@ public static class EndOfDay
     }
 
     /// <summary>
-    /// Automatic foraging: roll bushcraft + gear bonus against 3 DC thresholds.
-    /// Yield 0-3 food items added to haversack. Skipped at settlements (noBiome).
+    /// Binary foraging: d20 + bushcraft + bushcraft gear vs ForageDC. Success means
+    /// the player skips the day's ration consumption (eats from the land). Failure
+    /// is silent — they fall back on their pack rations. No items added either way.
     /// </summary>
-    static void ResolveForaging(PlayerState state, bool noBiome,
-        BalanceData balance, Random rng,
-        Func<FoodType, Random, ItemInstance>? createFood,
-        List<EndOfDayEvent> events)
+    static bool ResolveForaging(PlayerState state, bool noBiome,
+        BalanceData balance, Random rng, List<EndOfDayEvent> events)
     {
-        if (noBiome) return;
+        if (noBiome) return false;
 
         var skillLevel = state.Skills.GetValueOrDefault(Skill.Bushcraft);
         var itemBonus = SkillChecks.GetItemBonus(Skill.Bushcraft, state, balance);
@@ -149,111 +168,45 @@ public static class EndOfDay
 
         var natural = SkillChecks.RollD20(RollMode.Normal, rng);
         var total = natural + modifier;
+        var fed = total >= balance.Character.ForageDC;
 
-        var dc = balance.Character;
-        int yield = total >= dc.ForageDC3 ? 3
-                  : total >= dc.ForageDC2 ? 2
-                  : total >= dc.ForageDC1 ? 1
-                  : 0;
-
-        var itemsFound = new List<string>();
-        var foodTypes = new[] { FoodType.Protein, FoodType.Grain, FoodType.Sweets };
-
-        for (int i = 0; i < yield; i++)
-        {
-            var type = foodTypes[i % foodTypes.Length];
-            var item = createFood?.Invoke(type, rng)
-                ?? new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", type.ToString())
-                    { FoodType = type };
-            state.Haversack.Add(item);
-            itemsFound.Add(item.DisplayName);
-        }
-
-        events.Add(new EndOfDayEvent.Foraged(total, modifier, itemsFound));
+        events.Add(new EndOfDayEvent.Foraged(total, modifier, fed));
+        return fed;
     }
 
     /// <summary>
-    /// Auto-select and consume food from haversack. Tries for balanced meal first
-    /// (1 protein + 1 grain + 1 sweets), then fills remaining slots with whatever is available.
+    /// Eat one ration from the haversack. If foraging fed the player, skip consumption.
+    /// If no ration is available, the day is hungry — caller checks the Starving event
+    /// and applies a spirits penalty.
     /// </summary>
-    static (bool Ate, bool Balanced) ResolveFood(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
+    static void ResolveFood(PlayerState state, bool foragedToday, List<EndOfDayEvent> events)
     {
-        var eaten = new List<string>();
-        bool hasProtein = false, hasGrain = false, hasSweets = false;
+        if (foragedToday) return;
 
-        // Pass 1: pick one of each food type for balanced meal
-        int? proteinIdx = null, grainIdx = null, sweetsIdx = null;
-        for (int i = 0; i < state.Haversack.Count; i++)
+        var idx = state.Haversack.FindIndex(i => i.DefId == Rations.RationDefId);
+        if (idx >= 0)
         {
-            var item = state.Haversack[i];
-            if (!balance.Items.TryGetValue(item.DefId, out var def) || def.FoodType == null)
-                continue;
-
-            switch (def.FoodType.Value)
-            {
-                case FoodType.Protein when proteinIdx == null: proteinIdx = i; break;
-                case FoodType.Grain when grainIdx == null: grainIdx = i; break;
-                case FoodType.Sweets when sweetsIdx == null: sweetsIdx = i; break;
-            }
-        }
-
-        // Collect indices to consume (balanced first, then fill)
-        var toConsume = new List<int>();
-
-        if (proteinIdx != null && grainIdx != null && sweetsIdx != null)
-        {
-            toConsume.Add(proteinIdx.Value);
-            toConsume.Add(grainIdx.Value);
-            toConsume.Add(sweetsIdx.Value);
-            hasProtein = hasGrain = hasSweets = true;
-        }
-        else
-        {
-            // No balanced meal possible — grab up to 3 food items
-            for (int i = 0; i < state.Haversack.Count && toConsume.Count < 3; i++)
-            {
-                var item = state.Haversack[i];
-                if (balance.Items.TryGetValue(item.DefId, out var def) && def.FoodType != null)
-                {
-                    toConsume.Add(i);
-                    switch (def.FoodType.Value)
-                    {
-                        case FoodType.Protein: hasProtein = true; break;
-                        case FoodType.Grain: hasGrain = true; break;
-                        case FoodType.Sweets: hasSweets = true; break;
-                    }
-                }
-            }
-        }
-
-        // Remove consumed items in reverse index order
-        foreach (var idx in toConsume.OrderByDescending(i => i))
-        {
-            eaten.Insert(0, state.Haversack[idx].DisplayName);
+            var item = state.Haversack[idx];
             state.Haversack.RemoveAt(idx);
+            events.Add(new EndOfDayEvent.FoodConsumed([item.DisplayName]));
         }
-
-        bool balanced = hasProtein && hasGrain && hasSweets;
-
-        if (eaten.Count > 0)
-            events.Add(new EndOfDayEvent.FoodConsumed(eaten, balanced));
         else
+        {
+            // No food: spirits penalty applied in ResolveSpiritsDrain via the Starving event
             events.Add(new EndOfDayEvent.Starving());
-
-        return (eaten.Count > 0, balanced);
+        }
     }
 
     /// <summary>
-    /// Auto-consume medicine from haversack for pre-existing active conditions.
-    /// One medicine per condition per night, reduces stacks by 1.
+    /// Auto-consume medicine for pre-existing serious conditions. Conditions are binary —
+    /// one matching medicine clears one condition.
     /// </summary>
     static HashSet<string> ResolveMedicines(PlayerState state, HashSet<string> preExisting,
         BalanceData balance, List<EndOfDayEvent> events)
     {
-        // Find all haversack items that cure an active pre-existing condition
         var consumed = new List<(int Index, string DefId, string ConditionId)>();
 
-        foreach (var (conditionId, _) in state.ActiveConditions)
+        foreach (var conditionId in state.ActiveConditions)
         {
             if (!preExisting.Contains(conditionId)) continue;
 
@@ -262,87 +215,84 @@ public static class EndOfDay
                 var item = state.Haversack[i];
                 if (!balance.Items.TryGetValue(item.DefId, out var itemDef)) continue;
                 if (!itemDef.Cures.Contains(conditionId)) continue;
-
-                // Don't double-consume the same haversack slot
                 if (consumed.Any(c => c.Index == i)) continue;
 
                 consumed.Add((i, item.DefId, conditionId));
-                break; // one medicine per condition per night
+                break;
             }
         }
 
         var treated = new HashSet<string>();
 
-        // Remove items in reverse index order, then apply effects
         foreach (var (idx, defId, conditionId) in consumed.OrderByDescending(c => c.Index))
         {
             state.Haversack.RemoveAt(idx);
             treated.Add(conditionId);
 
-            if (!state.ActiveConditions.TryGetValue(conditionId, out var stacks))
-                continue;
-
-            var newStacks = stacks - 1;
-            if (newStacks <= 0)
+            if (state.ActiveConditions.Remove(conditionId))
             {
-                state.ActiveConditions.Remove(conditionId);
-                events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, 1, 0));
+                events.Add(new EndOfDayEvent.CureApplied(defId, conditionId));
                 events.Add(new EndOfDayEvent.ConditionCured(conditionId));
-            }
-            else
-            {
-                state.ActiveConditions[conditionId] = newStacks;
-                events.Add(new EndOfDayEvent.CureApplied(defId, conditionId, 1, newStacks));
             }
         }
 
         return treated;
     }
 
-    /// <summary>
-    /// Apply new conditions from failed resists — only for conditions the player didn't already have.
-    /// </summary>
     static void ApplyNewConditions(PlayerState state, HashSet<string> failedResists,
         BalanceData balance, List<EndOfDayEvent> events)
     {
         foreach (var conditionId in failedResists)
         {
-            if (state.ActiveConditions.ContainsKey(conditionId)) continue;
-
-            if (balance.Conditions.TryGetValue(conditionId, out var def))
-            {
-                state.ActiveConditions[conditionId] = def.Stacks;
-                events.Add(new EndOfDayEvent.ConditionAcquired(conditionId, def.Stacks));
-            }
+            if (!state.ActiveConditions.Add(conditionId)) continue;
+            events.Add(new EndOfDayEvent.ConditionAcquired(conditionId));
         }
     }
 
     /// <summary>
-    /// Resolve condition effects at end of day.
-    /// Spirits drain: per-condition SpiritsDrain as before.
-    /// Health drain: if ANY severe condition is active (after medicine), lose 1 HP total.
+    /// Apply spirits drain from active minor conditions and from missed meals.
+    /// Drains stack — exhausted + thirsty in the desert costs 2 spirits/day.
     /// </summary>
-    static string? ResolveConditionDrain(PlayerState state, HashSet<string> treatedConditions,
+    static void ResolveSpiritsDrain(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
+    {
+        // Missed meal drains 1 spirit
+        var noFoodToday = events.Any(e => e is EndOfDayEvent.Starving);
+        if (noFoodToday)
+        {
+            state.Spirits = Math.Max(0, state.Spirits - 1);
+            events.Add(new EndOfDayEvent.ConditionDrain("starving", 0, 1));
+        }
+
+        // Per-condition drains
+        foreach (var conditionId in state.ActiveConditions)
+        {
+            if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
+            if (def.SpiritsDrain is not { } drain || drain <= 0) continue;
+
+            state.Spirits = Math.Max(0, state.Spirits - drain);
+            events.Add(new EndOfDayEvent.ConditionDrain(conditionId, 0, drain));
+        }
+    }
+
+    /// <summary>
+    /// HP regen or drain based on serious conditions:
+    ///   - Any active untreated serious condition → HP -1
+    ///   - Otherwise → HP +1 (capped at MaxHealth)
+    /// Returns the worst untreated serious condition id, if any (used for death messaging).
+    /// </summary>
+    static string? ResolveHealthTick(PlayerState state, HashSet<string> treatedConditions,
         BalanceData balance, List<EndOfDayEvent> events)
     {
         string? worstCondition = null;
-        bool hasUntreatedSevere = false;
+        bool hasUntreatedSerious = false;
 
-        foreach (var (conditionId, _) in state.ActiveConditions)
+        foreach (var conditionId in state.ActiveConditions)
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
 
-            // Spirits drain still applies per-condition
-            if (def.SpiritsDrain is { } sDrain)
-            {
-                state.Spirits = Math.Max(0, state.Spirits - sDrain);
-                events.Add(new EndOfDayEvent.ConditionDrain(conditionId, 0, sDrain));
-            }
-
-            // Track whether any severe condition is active and untreated
             if (def.Severity == ConditionSeverity.Severe && !treatedConditions.Contains(conditionId))
             {
-                hasUntreatedSevere = true;
+                hasUntreatedSerious = true;
                 worstCondition ??= conditionId;
             }
 
@@ -350,26 +300,17 @@ public static class EndOfDay
                 events.Add(new EndOfDayEvent.SpecialEffect(conditionId, def.SpecialEffect));
         }
 
-        // Binary health drain: only if a severe condition got NO medicine at all
-        if (hasUntreatedSevere)
+        if (hasUntreatedSerious)
         {
             state.Health = Math.Max(0, state.Health - 1);
             events.Add(new EndOfDayEvent.ConditionDrain(worstCondition!, 1, 0));
         }
+        else if (state.Health < state.MaxHealth)
+        {
+            state.Health++;
+            events.Add(new EndOfDayEvent.HealthRegen(1));
+        }
 
         return worstCondition;
-    }
-
-    static void ResolveRest(PlayerState state, bool balanced,
-        BalanceData balance, List<EndOfDayEvent> events)
-    {
-        var spiritsGain = balance.Character.BaseRestSpirits;
-
-        if (balanced)
-            spiritsGain += balance.Character.BalancedMealSpiritsBonus;
-
-        state.Spirits = Math.Min(state.MaxSpirits, state.Spirits + spiritsGain);
-
-        events.Add(new EndOfDayEvent.RestRecovery(0, spiritsGain));
     }
 }

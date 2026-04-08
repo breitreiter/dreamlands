@@ -169,10 +169,12 @@ export default function BankScreen({
                       <div className="text-dim mt-0.5">equipped ({source})</div>
                     )}
                   </div>
-                  <Button variant="secondary" size="sm" onClick={() => deposit(item.defId, source)} disabled={loading || bankFull} className="flex-shrink-0">
-                    <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
-                    Deposit
-                  </Button>
+                  {item.defId !== "food_ration" && (
+                    <Button variant="secondary" size="sm" onClick={() => deposit(item.defId, source)} disabled={loading || bankFull} className="flex-shrink-0">
+                      <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
+                      Deposit
+                    </Button>
+                  )}
                 </div>
               ))
             )}

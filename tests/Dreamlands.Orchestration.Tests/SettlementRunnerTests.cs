@@ -42,6 +42,49 @@ public class SettlementRunnerTests
     }
 
     [Fact]
+    public void EnsureSettlement_ClearsClearedOnSettlementConditions()
+    {
+        var session = MakeSessionWithSettlement();
+        session.Player.ActiveConditions.Add("freezing");
+        session.Player.ActiveConditions.Add("thirsty");
+        session.Player.ActiveConditions.Add("exhausted");
+        session.Player.ActiveConditions.Add("lost");
+        session.Player.ActiveConditions.Add("injured"); // serious — should NOT clear
+
+        SettlementRunner.EnsureSettlement(session);
+
+        Assert.DoesNotContain("freezing", session.Player.ActiveConditions);
+        Assert.DoesNotContain("thirsty", session.Player.ActiveConditions);
+        Assert.DoesNotContain("exhausted", session.Player.ActiveConditions);
+        Assert.DoesNotContain("lost", session.Player.ActiveConditions);
+        Assert.Contains("injured", session.Player.ActiveConditions);
+    }
+
+    [Fact]
+    public void EnsureSettlement_ResetsConsecutiveWildernessNights()
+    {
+        var session = MakeSessionWithSettlement();
+        session.Player.ConsecutiveWildernessNights = 7;
+
+        SettlementRunner.EnsureSettlement(session);
+
+        Assert.Equal(0, session.Player.ConsecutiveWildernessNights);
+    }
+
+    [Fact]
+    public void EnsureSettlement_DoesNotAutoRefillRations()
+    {
+        // Players restock rations explicitly via the market's "Restock food and leave"
+        // button, not as a side effect of settlement entry.
+        var session = MakeSessionWithSettlement();
+        Assert.Empty(session.Player.Haversack);
+
+        SettlementRunner.EnsureSettlement(session);
+
+        Assert.Empty(session.Player.Haversack);
+    }
+
+    [Fact]
     public void EnsureSettlement_InitializesOnFirstVisit()
     {
         var session = MakeSessionWithSettlement();

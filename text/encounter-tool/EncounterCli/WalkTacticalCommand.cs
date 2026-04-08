@@ -309,7 +309,7 @@ static class WalkTacticalCommand
         Console.WriteLine("  Final state:");
         Console.WriteLine($"    Health: {player.Health}/{player.MaxHealth}  Spirits: {player.Spirits}/{player.MaxSpirits}  Gold: {player.Gold}");
         if (player.ActiveConditions.Count > 0)
-            Console.WriteLine($"    Conditions: {string.Join(", ", player.ActiveConditions.OrderBy(c => c.Key).Select(c => $"{c.Key}({c.Value})"))}");
+            Console.WriteLine($"    Conditions: {string.Join(", ", player.ActiveConditions.OrderBy(c => c))}");
     }
 
     static string FormatCost(OpeningSnapshot o) => o.CostKind switch

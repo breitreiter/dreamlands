@@ -40,6 +40,7 @@ interface GameContextValue extends GameState {
     offerIndex?: number;
     offerId?: string;
     encounterId?: string;
+    innService?: "bed" | "bath" | "full";
     approach?: string;
     tacticalAction?: string;
     openingIndex?: number;

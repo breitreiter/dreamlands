@@ -68,8 +68,8 @@ type TravelPhase = "idle" | "preview" | "animating";
 
 const TILE_MS = 300; // milliseconds per tile during animation
 const TILES_PER_DAY = 5;
-const FOOD_PER_DAY = 3;
-const FOOD_IDS = ["food_protein", "food_grain", "food_sweets"];
+const FOOD_PER_DAY = 1;
+const FOOD_IDS = ["food_ration"];
 
 function tripEstimate(tiles: number) {
   const remainder = tiles % TILES_PER_DAY;

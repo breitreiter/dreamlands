@@ -18,8 +18,9 @@ public static class SkillChecks
 {
     /// <summary>
     /// Roll a skill check: d20 + skill level + equipment bonus >= DC.
-    /// Low spirits imposes disadvantage. Natural 1 always fails, natural 20 always passes.
-    /// On failure, luck may trigger a reroll.
+    /// Natural 1 always fails, natural 20 always passes. On failure, luck may trigger a reroll.
+    /// Teeth at zero spirits live in TacticalRunner (auto-fail on Spirits ≤ 0); skill checks
+    /// themselves have no spirits modifier.
     /// </summary>
     public static SkillCheckResult Roll(
         Skill skill, Difficulty difficulty, PlayerState state, BalanceData balance, Random rng,
@@ -88,10 +89,17 @@ public static class SkillChecks
     /// and maps each condition to its resist skill (if any).
     /// </summary>
     public static SkillCheckResult RollResist(
-        string conditionId, Difficulty difficulty, PlayerState state, BalanceData balance, Random rng)
-    {
-        var dc = difficulty.Target();
+        string conditionId, Difficulty difficulty, PlayerState state, BalanceData balance, Random rng) =>
+        RollResist(conditionId, difficulty.Target(), state, balance, rng);
 
+    /// <summary>
+    /// Roll a resist check against a specific integer DC. Used for conditions whose
+    /// difficulty isn't a fixed Difficulty value (e.g. exhaustion's scaling DC tied to
+    /// consecutive wilderness nights).
+    /// </summary>
+    public static SkillCheckResult RollResist(
+        string conditionId, int dc, PlayerState state, BalanceData balance, Random rng)
+    {
         // Map condition to skill (some conditions are gear-only, no skill bonus)
         var skill = conditionId switch
         {

@@ -6,6 +6,9 @@ public static class Bank
 {
     public static string? Deposit(PlayerState player, string defId, string source, SettlementState settlement, BalanceData balance)
     {
+        if (defId == Rations.RationDefId)
+            return "Rations restock for free on every visit — no need to store them.";
+
         var capacity = balance.Settlements.BankCapacity;
         if (settlement.Bank.Count >= capacity)
             return "Bank is full";

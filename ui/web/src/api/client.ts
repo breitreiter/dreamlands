@@ -3,7 +3,7 @@ import type {
   NewGameResponse,
   MarketStockResponse,
   MarketOrder,
-  InnQuoteResponse,
+  InnServicesResponse,
   BankResponse,
   DiscoveryInfo,
   NoticesResponse,
@@ -77,6 +77,7 @@ export async function action(
     offerIndex?: number;
     offerId?: string;
     encounterId?: string;
+    innService?: "bed" | "bath" | "full";
     path?: { x: number; y: number }[];
   }
 ): Promise<GameResponse> {
@@ -105,8 +106,8 @@ export async function getNotices(
   return get(`${BASE}/${id}/notices`);
 }
 
-export async function getInnQuote(
+export async function getInnServices(
   id: string
-): Promise<InnQuoteResponse> {
+): Promise<InnServicesResponse> {
   return get(`${BASE}/${id}/inn`);
 }

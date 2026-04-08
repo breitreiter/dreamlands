@@ -391,6 +391,7 @@ public class ActionRequest
 {
     public string Action { get; set; } = "";
     public string? Direction { get; set; }
+    public string? InnService { get; set; } // bed | bath | full
     public int? ChoiceIndex { get; set; }
     public string? ItemId { get; set; }
     public string? EncounterId { get; set; }

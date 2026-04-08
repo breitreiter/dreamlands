@@ -12,14 +12,17 @@ public class MarketTests
     static SettlementState MakeSettlement(string biome = "plains") => new() { Biome = biome };
 
     [Fact]
-    public void InitializeSettlement_StocksFood()
+    public void InitializeSettlement_DoesNotStockFood()
     {
+        // Food was removed from market catalogs in haversack_refactor.md.
+        // Rations are now free at any settlement (Rations.Refill on entry).
         var state = Fresh();
         var settlement = Market.InitializeSettlement("Camp", "forest", 1, SettlementSize.Camp, state, Balance, new Random(1));
 
-        Assert.True(settlement.Stock.ContainsKey("food_protein"));
-        Assert.True(settlement.Stock.ContainsKey("food_grain"));
-        Assert.True(settlement.Stock.ContainsKey("food_sweets"));
+        Assert.False(settlement.Stock.ContainsKey("food_protein"));
+        Assert.False(settlement.Stock.ContainsKey("food_grain"));
+        Assert.False(settlement.Stock.ContainsKey("food_sweets"));
+        Assert.False(settlement.Stock.ContainsKey("food_ration"));
     }
 
     [Fact]
@@ -138,21 +141,8 @@ public class MarketTests
         Assert.Equal(0, tradeGoodCount);
     }
 
-    [Fact]
-    public void Buy_Food_Success()
-    {
-        var state = Fresh();
-        state.Gold = 100;
-        var settlement = MakeSettlement();
-        settlement.Prices["food_protein"] = 3;
-        settlement.Stock["food_protein"] = 5;
-
-        var result = Market.Buy(state, "food_protein", settlement, Balance, new Random(1));
-
-        Assert.True(result.Success);
-        Assert.Equal(5, settlement.Stock["food_protein"]); // food stock doesn't decrease
-        Assert.Equal(97, state.Gold);
-    }
+    // Removed: Buy_Food_Success — food no longer sold by markets.
+    // Rations are free at any settlement (Rations.Refill on entry).
 
     [Fact]
     public void Buy_Equipment_AutoEquips()

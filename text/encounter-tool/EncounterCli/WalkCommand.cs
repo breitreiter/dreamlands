@@ -303,7 +303,7 @@ static class WalkCommand
         if (state.Haversack.Count > 0)
             parts.Add($"haversack=[{string.Join(", ", state.Haversack.Select(i => i.DefId))}]");
         if (state.ActiveConditions.Count > 0)
-            parts.Add($"conditions=[{string.Join(", ", state.ActiveConditions.OrderBy(c => c.Key).Select(c => $"{c.Key}({c.Value})"))}]");
+            parts.Add($"conditions=[{string.Join(", ", state.ActiveConditions.OrderBy(c => c))}]");
 
         if (parts.Count > 0)
             Console.WriteLine($"\n  \u001b[90mstate: {string.Join("  ", parts)}\u001b[0m");
@@ -322,7 +322,7 @@ static class WalkCommand
         if (state.Haversack.Count > 0)
             Console.WriteLine($"    Haversack: {string.Join(", ", state.Haversack.Select(i => i.DefId))}");
         if (state.ActiveConditions.Count > 0)
-            Console.WriteLine($"    Conditions: {string.Join(", ", state.ActiveConditions.OrderBy(c => c.Key).Select(c => $"{c.Key}({c.Value})"))}");
+            Console.WriteLine($"    Conditions: {string.Join(", ", state.ActiveConditions.OrderBy(c => c))}");
 
         var skills = state.Skills.Where(s => s.Value != 0).OrderBy(s => s.Key);
         if (skills.Any())

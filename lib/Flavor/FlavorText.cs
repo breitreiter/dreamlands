@@ -166,9 +166,20 @@ public static class FlavorText
 
     // --- Food ---
 
-    public static (string Name, string Description) FoodName(
-        FoodType type, Terrain biome, bool foraged, Random? rng = null) =>
-        FoodNames.Pick(type, biome, foraged, rng);
+    /// <summary>
+    /// Biome-flavored display name for a single ration. Each biome returns a
+    /// meal kit description; players see "you have 5 dried goat, dates, and flatbread"
+    /// rather than "you have 5 rations".
+    /// </summary>
+    public static string RationName(string biome) => biome.ToLowerInvariant() switch
+    {
+        "plains"    => "smoked sausage, hard cheese, oat cakes",
+        "mountains" => "dried goat, dates, flatbread",
+        "forest"    => "mushroom jerky, hazelnuts, honey biscuit",
+        "scrub"     => "dried lizard, cactus pulp, pemmican",
+        "swamp"     => "smoked eel, river rice, swamp berries",
+        _           => "trail rations",
+    };
 
     // --- Helpers ---
 

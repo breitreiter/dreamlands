@@ -58,10 +58,13 @@ public class PlayerState
     public bool PendingNoMeal { get; set; }
     public bool PendingNoBiome { get; set; }
 
+    // Consecutive wilderness nights since last settlement entry — feeds exhaustion DC
+    public int ConsecutiveWildernessNights { get; set; }
+
     // World state
     public HashSet<string> Tags { get; set; } = new();
     public Dictionary<string, int> Qualities { get; set; } = new();
-    public Dictionary<string, int> ActiveConditions { get; set; } = new();
+    public HashSet<string> ActiveConditions { get; set; } = new();
     public HashSet<string> CompletedDungeons { get; set; } = new();
     public HashSet<string> UsedEncounterIds { get; set; } = new();
     public HashSet<long> VisitedNodes { get; set; } = new();

@@ -23,6 +23,18 @@ public static class SettlementRunner
         var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
         var size = node.Poi.Size ?? SettlementSize.Camp;
 
+        // Settlement entry side effects: clear ClearedOnSettlement conditions
+        // and reset the consecutive-wilderness-nights counter (feeds exhaustion DC).
+        foreach (var conditionId in session.Player.ActiveConditions.ToList())
+        {
+            if (session.Balance.Conditions.TryGetValue(conditionId, out var def)
+                && def.ClearedOnSettlement)
+            {
+                session.Player.ActiveConditions.Remove(conditionId);
+            }
+        }
+        session.Player.ConsecutiveWildernessNights = 0;
+
         // Initialize settlement state on first visit
         if (!session.Player.Settlements.ContainsKey(node.Poi.SettlementId))
         {

@@ -16,6 +16,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       fixed-width panels (420px inventory mechanics column), 3-column layouts with
       no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
       overlay not adapted for small screens, no touch-friendly target sizing
+- [ ] Rewrite any encounters that use single-spacing between paragraphs
 
 ### Map Generation
 
@@ -35,6 +36,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [x] Finish out and test AI authoring tools for tac encounters
 - [ ] Sketch out single-paragraph intros for every biome/tier (50 total? 8x5+5x2)
 - [ ] ~~Playtest a bunch and tune~~ (ongoing)
+- [ ] Add custom intros per governing skill (right now everything shows "It's a fight" for tac encounters)
 
 ### Rules & Balancing
 
@@ -45,6 +47,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging
       players to try new branches and pick up fresh storylets.
+- [ ] Raise DCs for serious condition resist
 
 ### Quality of Life
 
@@ -56,6 +59,7 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [ ] Biome intro encounters — one-time scripted encounter per biome/tier that fires on
       first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
       in selection logic. Design in `project/design/biome_intro_encounters.md`.
+- [ ] More variety in meal labels
 
 ### Flavor Text
 

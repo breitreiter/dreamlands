@@ -7,7 +7,19 @@ public class EndOfDayTests
 {
     static readonly BalanceData Balance = BalanceData.Default;
 
-    static PlayerState Fresh() => PlayerState.NewGame("test", 99, Balance);
+    static PlayerState Fresh()
+    {
+        var p = PlayerState.NewGame("test", 99, Balance);
+        p.MaxHealth = 4;
+        p.Health = 4;
+        return p;
+    }
+
+    static void AddRation(PlayerState p, int count = 1)
+    {
+        for (int i = 0; i < count; i++)
+            p.Haversack.Add(new ItemInstance(Rations.RationDefId, "Rations"));
+    }
 
     [Fact]
     public void GetThreats_UniversalAlwaysPresent()
@@ -35,324 +47,322 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void ResolveFood_NoFood_EmitsStarving()
+    public void Resolve_NoFood_EmitsStarving()
     {
-        var state = Fresh();
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        var p = Fresh();
+        // Make resists trivially pass and bushcraft trivially fail to skip foraging
+        p.PendingNoBiome = true; // skips both resists and foraging
+        var spiritsBefore = p.Spirits;
+
+        var events = EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+
         Assert.Contains(events, e => e is EndOfDayEvent.Starving);
+        Assert.Equal(spiritsBefore - 1, p.Spirits);
     }
 
     [Fact]
-    public void ResolveFood_BalancedMeal_Detected()
+    public void Resolve_HasRation_ConsumesOne()
     {
-        var state = Fresh();
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        AddRation(p, 3);
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        var foodEvent = events.OfType<EndOfDayEvent.FoodConsumed>().Single();
-        Assert.True(foodEvent.Balanced);
+        Assert.Equal(2, p.Haversack.Count(i => i.DefId == Rations.RationDefId));
     }
 
     [Fact]
-    public void ResolveFood_AutoSelectsBalancedMeal()
+    public void Resolve_CleanRestDay_NoSpiritsChange()
     {
-        var state = Fresh();
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_protein", "More Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.PendingNoBiome = true; // no resist rolls, no foraging
+        AddRation(p);
+        var spiritsBefore = p.Spirits;
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        var foodEvent = events.OfType<EndOfDayEvent.FoodConsumed>().Single();
-        Assert.True(foodEvent.Balanced);
-        Assert.Equal(3, foodEvent.FoodEaten.Count);
-        Assert.Single(state.Haversack, i => i.DefId == "food_protein");
+        Assert.Equal(spiritsBefore, p.Spirits);
     }
 
     [Fact]
-    public void Resolve_Rest_RecoverSpiritsOnly()
+    public void Resolve_NoSpiritsRegen_OnRoad()
     {
-        var state = Fresh();
-        state.Health = 2;
-        state.Spirits = 15;
-        foreach (var skill in state.Skills.Keys.ToList())
-            state.Skills[skill] = Balance.Character.MaxSkillLevel;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.Spirits = 10;
+        p.PendingNoBiome = true;
+        AddRation(p);
 
-        var healthBefore = state.Health;
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        var rest = events.OfType<EndOfDayEvent.RestRecovery>().Single();
-        Assert.Equal(0, rest.HealthGained); // no health recovery at camp
-        Assert.True(rest.SpiritsGained > 0);
-        Assert.Equal(healthBefore, state.Health); // health unchanged
+        // No daily passive +1 anymore — spirits unchanged
+        Assert.Equal(10, p.Spirits);
     }
 
     [Fact]
-    public void Resolve_BalancedMeal_BonusSpiritRecovery()
+    public void Resolve_MinorCondition_Drains1Spirit()
     {
-        var state = Fresh();
-        state.Spirits = 10;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.Spirits = 10;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("freezing");
+        AddRation(p);
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        var restEvent = events.OfType<EndOfDayEvent.RestRecovery>().Single();
-        Assert.Equal(0, restEvent.HealthGained);
-        Assert.Equal(Balance.Character.BaseRestSpirits + Balance.Character.BalancedMealSpiritsBonus, restEvent.SpiritsGained);
+        Assert.Equal(9, p.Spirits);
     }
 
     [Fact]
-    public void Resolve_SevereCondition_Loses1Health()
+    public void Resolve_MultipleMinorConditions_DrainsStack()
     {
-        var state = Fresh();
-        state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.Spirits = 10;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("freezing");
+        p.ActiveConditions.Add("thirsty");
+        AddRation(p);
 
-        var healthBefore = state.Health;
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        // Should lose exactly 1 HP from untreated severe condition
-        Assert.Equal(healthBefore - 1, state.Health);
-        var drain = events.OfType<EndOfDayEvent.ConditionDrain>()
-            .FirstOrDefault(d => d.HealthLost > 0);
-        Assert.NotNull(drain);
-        Assert.Equal(1, drain.HealthLost);
+        Assert.Equal(8, p.Spirits);
     }
 
     [Fact]
-    public void Resolve_MultipleSevereConditions_StillLoses1Health()
+    public void Resolve_SeriousCondition_LosesHealth()
     {
-        var state = Fresh();
-        state.ActiveConditions["injured"] = 3;
-        state.ActiveConditions["poisoned"] = 2;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("injured");
+        AddRation(p);
 
-        var healthBefore = state.Health;
-        EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        var hpBefore = p.Health;
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        // Still only 1 HP loss total, not per-condition
-        Assert.Equal(healthBefore - 1, state.Health);
+        Assert.Equal(hpBefore - 1, p.Health);
     }
 
     [Fact]
-    public void Resolve_SevereConditionTreated_NoHealthLoss()
+    public void Resolve_NoSeriousCondition_RegensHealth()
     {
-        var state = Fresh();
-        state.ActiveConditions["injured"] = 1; // 1 stack
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages")); // cures it
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.MaxHealth = 4;
+        p.Health = 2;
+        p.PendingNoBiome = true;
+        AddRation(p);
 
-        var healthBefore = state.Health;
-        EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        // Medicine cured it before drain check, so no HP loss
-        Assert.Equal(healthBefore, state.Health);
+        Assert.Equal(3, p.Health);
     }
 
     [Fact]
-    public void Resolve_SevereConditionTreatedButNotCured_NoHealthLoss()
+    public void Resolve_HealthRegen_CappedAtMax()
     {
-        var state = Fresh();
-        state.ActiveConditions["injured"] = 3; // 3 stacks — bandages reduce to 2, still active
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        AddRation(p);
 
-        var healthBefore = state.Health;
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        // Medicine was applied, so no health drain even though condition persists
-        Assert.Equal(healthBefore, state.Health);
-        Assert.Equal(2, state.ActiveConditions["injured"]);
-        Assert.Contains(events, e => e is EndOfDayEvent.CureApplied);
-        Assert.DoesNotContain(events, e => e is EndOfDayEvent.ConditionDrain d && d.HealthLost > 0);
+        Assert.Equal(p.MaxHealth, p.Health);
     }
 
     [Fact]
-    public void Resolve_MixedSevereConditions_UntreatedStillDrains()
+    public void Resolve_MinorConditionDoesNotBlockHealthRegen()
     {
-        var state = Fresh();
-        state.ActiveConditions["injured"] = 2;  // has bandages
-        state.ActiveConditions["poisoned"] = 2; // no antidote
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.MaxHealth = 4;
+        p.Health = 2;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("freezing");
+        AddRation(p);
 
-        var healthBefore = state.Health;
-        EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        // Poisoned is untreated severe — still lose 1 HP
-        Assert.Equal(healthBefore - 1, state.Health);
+        Assert.Equal(3, p.Health);
     }
 
     [Fact]
-    public void Resolve_FreezingDrainsSpiritsOnly()
+    public void Resolve_MultipleSeriousConditions_StillLoses1Health()
     {
-        var state = Fresh();
-        state.ActiveConditions["freezing"] = 1;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("injured");
+        p.ActiveConditions.Add("poisoned");
+        AddRation(p);
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        var hpBefore = p.Health;
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        var drain = events.OfType<EndOfDayEvent.ConditionDrain>()
-            .FirstOrDefault(d => d.ConditionId == "freezing");
-        Assert.NotNull(drain);
-        Assert.Equal(0, drain.HealthLost);
-        Assert.True(drain.SpiritsLost > 0);
+        // Flat -1 regardless of count
+        Assert.Equal(hpBefore - 1, p.Health);
     }
 
     [Fact]
-    public void Resolve_ThirstyDrainsSpiritsOnly()
+    public void Resolve_CuredSerious_NoHealthLoss_AndRegens()
     {
-        var state = Fresh();
-        state.ActiveConditions["thirsty"] = 1;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.MaxHealth = 4;
+        p.Health = 2;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("injured");
+        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        AddRation(p);
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        var drain = events.OfType<EndOfDayEvent.ConditionDrain>()
-            .FirstOrDefault(d => d.ConditionId == "thirsty");
-        Assert.NotNull(drain);
-        Assert.Equal(0, drain.HealthLost);
-        Assert.True(drain.SpiritsLost > 0);
+        // Bandage removes injured before the HP tick — regen kicks in same day
+        Assert.DoesNotContain("injured", p.ActiveConditions);
+        Assert.DoesNotContain(p.Haversack, i => i.DefId == "bandages");
+        Assert.Equal(3, p.Health);
     }
 
     [Fact]
-    public void Resolve_UntreatedSevereCondition_TriggersRescue()
+    public void Resolve_BandageCuresInjured_HealsOverMultipleDays()
     {
-        var state = Fresh();
-        state.Health = 1;
-        state.PendingNoSleep = true;
-        state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.MaxHealth = 4;
+        p.Health = 1;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("injured");
+        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        AddRation(p, 5);
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+        Assert.DoesNotContain("injured", p.ActiveConditions);
+        Assert.Equal(2, p.Health);
 
-        Assert.Contains(events, e => e is EndOfDayEvent.PlayerDied);
-        Assert.Contains(events, e => e is EndOfDayEvent.PlayerRescued);
-        Assert.Equal(state.MaxHealth, state.Health); // rescue restores health
+        p.PendingNoBiome = true;
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+        Assert.Equal(3, p.Health);
     }
 
     [Fact]
-    public void Resolve_ConditionDrain_RescuesBeforeRest()
+    public void Resolve_MissedMealAndCondition_DrainsBoth()
     {
-        var state = Fresh();
-        state.Health = 1;
-        state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.Spirits = 10;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("freezing");
+        // No ration
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        Assert.Contains(events, e => e is EndOfDayEvent.PlayerDied);
-        Assert.Contains(events, e => e is EndOfDayEvent.PlayerRescued);
-        Assert.DoesNotContain(events, e => e is EndOfDayEvent.RestRecovery);
+        // -1 missed meal, -1 freezing
+        Assert.Equal(8, p.Spirits);
     }
 
     [Fact]
-    public void Resolve_Medicine_AutoConsumedForActiveCondition()
+    public void ExhaustionDC_ScalesWithConsecutiveWildernessNights()
     {
-        var state = Fresh();
-        state.ActiveConditions["injured"] = 3;
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        // Verify the DC math by checking it produces different outcomes at different night counts
+        var seed = 7; // chosen so the d20 falls in the band where the scaling matters
+        bool resistedEarly = false, resistedLate = false;
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
-
-        Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
-        Assert.Contains(events, e => e is EndOfDayEvent.CureApplied);
-    }
-
-    [Fact]
-    public void Resolve_NewCondition_AppliedAfterMedicine()
-    {
-        var state = Fresh();
-        state.Spirits = 0;
-        foreach (var skill in state.Skills.Keys.ToList())
-            state.Skills[skill] = 0;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-
-        var rng = new Random(0);
-        var events = EndOfDay.Resolve(state, "mountains", 1, Balance, rng);
-
-        var acquired = events.OfType<EndOfDayEvent.ConditionAcquired>().ToList();
-        var resisted = events.OfType<EndOfDayEvent.ResistPassed>().ToList();
-        Assert.True(acquired.Count + resisted.Count > 0);
-    }
-
-    [Fact]
-    public void Resolve_NoSleep_SkipsRest()
-    {
-        var state = Fresh();
-        state.Spirits = 10;
-        state.PendingNoSleep = true;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
-
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
-
-        Assert.DoesNotContain(events, e => e is EndOfDayEvent.RestRecovery);
-    }
-
-    [Fact]
-    public void ResolveForaging_HighModifier_FindsFood()
-    {
-        bool foundAny = false;
-        for (int seed = 0; seed < 20; seed++)
+        for (int trial = 0; trial < 50; trial++)
         {
-            var s = Fresh();
-            s.Skills[Skill.Bushcraft] = 4;
-            s.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-            s.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-            s.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+            var early = Fresh();
+            early.ConsecutiveWildernessNights = 0;
+            AddRation(early);
+            EndOfDay.Resolve(early, "plains", 1, Balance, new Random(seed + trial));
+            if (!early.ActiveConditions.Contains("exhausted")) resistedEarly = true;
 
-            var events = EndOfDay.Resolve(s, "plains", 1, Balance, new Random(seed));
-            var foraged = events.OfType<EndOfDayEvent.Foraged>().Single();
-            if (foraged.ItemsFound.Count > 0) { foundAny = true; break; }
+            var late = Fresh();
+            late.ConsecutiveWildernessNights = 10;
+            AddRation(late);
+            EndOfDay.Resolve(late, "plains", 1, Balance, new Random(seed + trial));
+            if (late.ActiveConditions.Contains("exhausted")) resistedLate = true;
+
+            if (resistedEarly && resistedLate) break;
         }
-        Assert.True(foundAny, "High bushcraft should find food on at least one seed");
+
+        // At 0 nights some seeds should resist; at 10 nights some should fail
+        Assert.True(resistedEarly, "Should resist exhaustion at least once with 0 nights");
+        Assert.True(resistedLate, "Should fail exhaustion at least once with 10 nights");
     }
 
     [Fact]
-    public void ResolveForaging_NoBiome_SkipsForaging()
+    public void Resolve_IncrementsConsecutiveWildernessNights()
     {
-        var state = Fresh();
-        state.PendingNoBiome = true;
-        state.Haversack.Add(new ItemInstance("food_protein", "Meat"));
-        state.Haversack.Add(new ItemInstance("food_grain", "Bread"));
-        state.Haversack.Add(new ItemInstance("food_sweets", "Sweets"));
+        var p = Fresh();
+        p.PendingNoBiome = false;
+        p.ConsecutiveWildernessNights = 3;
+        AddRation(p);
 
-        var events = EndOfDay.Resolve(state, "plains", 1, Balance, new Random(42));
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        Assert.DoesNotContain(events, e => e is EndOfDayEvent.Foraged);
+        Assert.Equal(4, p.ConsecutiveWildernessNights);
+    }
+
+    [Fact]
+    public void Resolve_NoBiome_DoesNotIncrementCounter()
+    {
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        p.ConsecutiveWildernessNights = 3;
+        AddRation(p);
+
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+
+        Assert.Equal(3, p.ConsecutiveWildernessNights);
+    }
+
+    [Fact]
+    public void Resolve_PendingNoMeal_NoStarvingPenalty()
+    {
+        var p = Fresh();
+        p.Spirits = 10;
+        p.PendingNoMeal = true;
+        p.PendingNoBiome = true;
+
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+
+        // noMeal skips the food consumption path entirely — no starving event, no penalty
+        Assert.Equal(10, p.Spirits);
+    }
+
+    [Fact]
+    public void Resolve_UntreatedSerious_LowHealth_TriggersRescue()
+    {
+        var p = Fresh();
+        p.Health = 1;
+        p.PendingNoBiome = true;
+        p.ActiveConditions.Add("injured");
+        AddRation(p);
+
+        var events = EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+
+        Assert.Contains(events, e => e is EndOfDayEvent.PlayerDied);
+        Assert.Contains(events, e => e is EndOfDayEvent.PlayerRescued);
+        Assert.Equal(p.MaxHealth, p.Health);
+    }
+
+    [Fact]
+    public void Resolve_ForageSuccess_SkipsRationConsumption()
+    {
+        // Stack the deck: max bushcraft so the d20+modifier reliably beats DC 20
+        var p = Fresh();
+        p.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+        AddRation(p, 3);
+
+        bool sawSkippedConsumption = false;
+        for (int seed = 0; seed < 50; seed++)
+        {
+            var fresh = Fresh();
+            fresh.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+            AddRation(fresh, 3);
+
+            var rationsBefore = fresh.Haversack.Count(i => i.DefId == Rations.RationDefId);
+            var events = EndOfDay.Resolve(fresh, "plains", 1, Balance, new Random(seed));
+            var foraged = events.OfType<EndOfDayEvent.Foraged>().FirstOrDefault();
+            if (foraged != null && foraged.Fed)
+            {
+                var rationsAfter = fresh.Haversack.Count(i => i.DefId == Rations.RationDefId);
+                if (rationsAfter == rationsBefore) sawSkippedConsumption = true;
+                break;
+            }
+        }
+        Assert.True(sawSkippedConsumption, "High bushcraft should occasionally feed the player");
     }
 }

@@ -54,6 +54,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var session = BuildSession(player);
         session.MarkVisited();
 
+        // Initialise the starting city as a settlement so the new character gets
+        // their initial ration refill and any other settlement-entry side effects.
+        SettlementRunner.EnsureSettlement(session);
+
         player.NextEncounterMove = session.Rng.Next(
             data.Balance.Character.EncounterCadenceMin,
             data.Balance.Character.EncounterCadenceMax + 1);
@@ -104,7 +108,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }
 
         // Auto-start Lost encounter when player has the lost condition
-        if (player.ActiveConditions.ContainsKey("lost"))
+        if (player.ActiveConditions.Contains("lost"))
         {
             var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
             if (lostEnc != null)
@@ -135,7 +139,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         switch (actionReq.Action)
         {
-            case "inn_full_recovery":
+            case "inn_book":
             {
                 if (session.Mode != SessionMode.Exploring)
                     return new BadRequestObjectResult(new { error = "Cannot rest while not exploring" });
@@ -144,15 +148,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (innNode.Poi?.Kind != PoiKind.Settlement)
                     return new BadRequestObjectResult(new { error = "Not at a settlement" });
 
-                var (canRecover, _) = Inn.CanUseInn(player, data.Balance);
-                if (!canRecover)
-                    return new BadRequestObjectResult(new { error = "Cannot fully recover — untreatable conditions" });
+                var serviceId = actionReq.InnService ?? Inn.BedServiceId;
+                var bookResult = Inn.BookService(player, data.Balance, serviceId);
+                if (!bookResult.Success)
+                    return new BadRequestObjectResult(new { error = bookResult.Reason });
 
-                var quote = Inn.GetQuote(player, data.Balance);
-                if (player.Gold < quote.GoldCost)
-                    return new BadRequestObjectResult(new { error = "Not enough gold" });
-
-                var innResult = Inn.StayAtInn(player, data.Balance);
                 await store.Save(player);
 
                 response = new GameResponse
@@ -163,48 +163,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Exits = BuildExits(session),
                     InnRecovery = new InnRecoveryInfo
                     {
-                        NightsStayed = innResult.NightsStayed,
-                        GoldSpent = innResult.GoldSpent,
-                        HealthRecovered = innResult.HealthRecovered,
-                        SpiritsRecovered = innResult.SpiritsRecovered,
-                        ConditionsCleared = innResult.ConditionsCleared,
-                        MedicinesConsumed = innResult.MedicinesConsumed,
-                    },
-                    Inventory = BuildInventory(player),
-                    Mechanics = BuildMechanics(player),
-                };
-                break;
-            }
-
-            case "chapterhouse_recover":
-            {
-                if (session.Mode != SessionMode.Exploring)
-                    return new BadRequestObjectResult(new { error = "Cannot rest while not exploring" });
-
-                var innNode = session.CurrentNode;
-                if (innNode.Poi?.Kind != PoiKind.Settlement)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
-
-                if (innNode != session.Map.StartingCity)
-                    return new BadRequestObjectResult(new { error = "Not at the chapterhouse" });
-
-                var chResult = Inn.StayChapterhouse(player, data.Balance);
-                await store.Save(player);
-
-                response = new GameResponse
-                {
-                    Mode = "exploring",
-                    Status = BuildStatus(player),
-                    Node = BuildNodeInfo(innNode, player),
-                    Exits = BuildExits(session),
-                    InnRecovery = new InnRecoveryInfo
-                    {
-                        NightsStayed = chResult.NightsStayed,
-                        GoldSpent = 0,
-                        HealthRecovered = chResult.HealthRecovered,
-                        SpiritsRecovered = chResult.SpiritsRecovered,
-                        ConditionsCleared = chResult.ConditionsCleared,
-                        MedicinesConsumed = [],
+                        NightsStayed = 1,
+                        GoldSpent = bookResult.GoldSpent,
+                        HealthRecovered = 0,
+                        SpiritsRecovered = bookResult.SpiritsRestored,
+                        ConditionsCleared = [],
+                        MedicinesConsumed = bookResult.MedicinesConsumed,
                     },
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),
@@ -220,6 +184,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (player.CurrentDungeonId != null)
                     return new BadRequestObjectResult(new { error = "Cannot move while in a dungeon — leave the dungeon first" });
 
+                // Auto-start Lost encounter when player has the lost condition
+                if (player.ActiveConditions.Contains("lost"))
+                {
+                    var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
+                    if (lostEnc != null)
+                    {
+                        var step = EncounterRunner.Begin(session, lostEnc);
+                        await store.Save(player);
+                        return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
+                    }
+                }
+
                 if (!Enum.TryParse<Direction>(actionReq.Direction, true, out var dir))
                     return new BadRequestObjectResult(new { error = $"Invalid direction: {actionReq.Direction}" });
 
@@ -232,12 +208,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 List<DeliveryInfo>? deliveries = null;
                 if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
                 {
-                    var balance = BalanceData.Default;
-                    foreach (var cid in player.ActiveConditions.Keys.ToList())
-                        if (balance.Conditions.TryGetValue(cid, out var cdef) && cdef.ClearedOnSettlement)
-                            player.ActiveConditions.Remove(cid);
                     player.PendingNoBiome = true;
-
                     SettlementRunner.EnsureSettlement(session);
 
                     if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
@@ -324,6 +295,19 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     return new BadRequestObjectResult(new { error = "Cannot travel while not exploring" });
                 if (player.CurrentDungeonId != null)
                     return new BadRequestObjectResult(new { error = "Cannot travel while in a dungeon" });
+
+                // Auto-start Lost encounter when player has the lost condition
+                if (player.ActiveConditions.Contains("lost"))
+                {
+                    var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
+                    if (lostEnc != null)
+                    {
+                        var step = EncounterRunner.Begin(session, lostEnc);
+                        await store.Save(player);
+                        return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
+                    }
+                }
+
                 if (actionReq.Path is not { Count: >= 2 } proposedPath)
                     return new BadRequestObjectResult(new { error = "Path is required (at least 2 points)" });
 
@@ -361,11 +345,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     // Settlement arrival logic (same as move)
                     if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
                     {
-                        foreach (var cid in player.ActiveConditions.Keys.ToList())
-                            if (data.Balance.Conditions.TryGetValue(cid, out var cdef) && cdef.ClearedOnSettlement)
-                                player.ActiveConditions.Remove(cid);
                         player.PendingNoBiome = true;
-
                         SettlementRunner.EnsureSettlement(session);
 
                         if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
@@ -405,13 +385,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         EndOfDay.Resolve(
                             player, campBiome, campTier,
                             data.Balance, session.Rng,
-                            startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0,
-                            createFood: (type, rng) =>
-                            {
-                                var (name, desc) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
-                                return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name)
-                                    { FoodType = type, Description = desc };
-                            });
+                            startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0);
 
                         player.PendingEndOfDay = false;
 
@@ -420,6 +394,33 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         {
                             stopReason = "rescued";
                             break;
+                        }
+
+                        // If player became lost overnight, interrupt travel with Lost encounter
+                        if (player.ActiveConditions.Contains("lost"))
+                        {
+                            var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
+                            if (lostEnc != null)
+                            {
+                                var step = EncounterRunner.Begin(session, lostEnc);
+                                await store.Save(player);
+                                return new OkObjectResult(new GameResponse
+                                {
+                                    Mode = "encounter",
+                                    Status = BuildStatus(player),
+                                    Node = BuildNodeInfo(session.CurrentNode, player),
+                                    Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
+                                    Inventory = BuildInventory(player),
+                                    Mechanics = BuildMechanics(player),
+                                    Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                                    Travel = new TravelInfo
+                                    {
+                                        Path = proposedPath,
+                                        StepsCompleted = stepsCompleted,
+                                        StopReason = "lost",
+                                    },
+                                });
+                            }
                         }
                     }
 
@@ -756,24 +757,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                 var healthBefore = player.Health;
                 var conditionsBefore = player.ActiveConditions
-                    .Where(kv => data.Balance.Conditions.TryGetValue(kv.Key, out var def)
+                    .Where(id => data.Balance.Conditions.TryGetValue(id, out var def)
                                  && def.Severity == ConditionSeverity.Severe)
-                    .ToDictionary(kv => kv.Key, kv => kv.Value);
+                    .ToHashSet();
 
                 var campEvents = EndOfDay.Resolve(
                     player, campBiome, campTier,
                     data.Balance, session.Rng,
-                    startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0,
-                    createFood: (type, rng) =>
-                    {
-                        var (name, desc) = FlavorText.FoodName(type, campTerrain, foraged: true, rng);
-                        return new ItemInstance($"food_{type.ToString().ToLowerInvariant()}", name)
-                            { FoodType = type, Description = desc };
-                    });
+                    startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0);
 
                 var rescued = campEvents.OfType<EndOfDayEvent.PlayerRescued>().FirstOrDefault();
 
-                var hasSevere = player.ActiveConditions.Keys
+                var hasSevere = player.ActiveConditions
                     .Any(id => data.Balance.Conditions.TryGetValue(id, out var def)
                                && def.Severity == ConditionSeverity.Severe);
 
@@ -842,16 +837,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     actionReq.Order.Sells?.Select(s => new SellLine(s.ItemDefId)).ToList() ?? []);
 
                 var mRng = new Random();
-                ItemInstance CreateFood(FoodType ft, string biome, Random r)
-                {
-                    var terrain = Enum.Parse<Terrain>(biome, ignoreCase: true);
-                    var (name, desc) = FlavorText.FoodName(ft, terrain, foraged: false, rng: r);
-                    return new ItemInstance($"food_{ft.ToString().ToLowerInvariant()}", name)
-                    {
-                        FoodType = ft, Description = desc,
-                    };
-                }
-                var marketResult = Market.ApplyOrder(player, order, settlementState, data.Balance, mRng, CreateFood);
+                var marketResult = Market.ApplyOrder(player, order, settlementState, data.Balance, mRng);
                 await store.Save(player);
 
                 response = new GameResponse
@@ -872,6 +858,28 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             Message = r.Message,
                         }).ToList(),
                     },
+                };
+                break;
+            }
+
+            case "restock_rations":
+            {
+                var rNode = session.CurrentNode;
+                if (rNode.Poi?.Kind != PoiKind.Settlement)
+                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+
+                var biome = rNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
+                var rationName = $"Rations ({FlavorText.RationName(biome)})";
+                Rations.Refill(player, data.Balance, rationName);
+                await store.Save(player);
+
+                response = new GameResponse
+                {
+                    Mode = "exploring",
+                    Status = BuildStatus(player),
+                    Node = BuildNodeInfo(rNode, player),
+                    Inventory = BuildInventory(player),
+                    Mechanics = BuildMechanics(player),
                 };
                 break;
             }
@@ -1103,26 +1111,25 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return new BadRequestObjectResult(new { error = "Not at a settlement" });
 
         var isChapterhouse = node == session.Map.StartingCity;
-        var (canFullRecover, disqualifying) = Inn.CanUseInn(player, data.Balance);
-        var quote = Inn.GetQuote(player, data.Balance);
-        var needsRecovery = player.Health < player.MaxHealth
-                         || player.Spirits < player.MaxSpirits
-                         || player.ActiveConditions.Count > 0;
+        var services = Inn.GetServiceOptions(data.Balance);
+        var needsRecovery = player.Spirits < player.MaxSpirits
+                         || player.ActiveConditions.Any(id =>
+                                data.Balance.Conditions.TryGetValue(id, out var def)
+                                && def.Severity == ConditionSeverity.Severe);
 
         return new OkObjectResult(new
         {
             isChapterhouse,
-            canFullRecover = isChapterhouse || canFullRecover,
-            disqualifyingConditions = isChapterhouse ? Array.Empty<string>() : disqualifying.ToArray(),
-            quote = new
-            {
-                nights = quote.Nights,
-                goldCost = isChapterhouse ? 0 : quote.GoldCost,
-                healthRecovered = quote.HealthRecovered,
-                spiritsRecovered = quote.SpiritsRecovered,
-            },
             needsRecovery,
-            canAfford = player.Gold >= (isChapterhouse ? 0 : quote.GoldCost),
+            services = services.Select(s => new
+            {
+                id = s.Id,
+                name = s.Name,
+                cost = s.Cost,
+                spirits = s.Spirits,
+                restoresFull = s.RestoresFull,
+                canAfford = player.Gold >= s.Cost,
+            }).ToList(),
         });
     }
 
@@ -1225,14 +1232,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         if (string.IsNullOrWhiteSpace(conditionId))
             return new BadRequestObjectResult(new { error = "Missing condition" });
 
-        if (player.ActiveConditions.ContainsKey(conditionId))
+        if (!player.ActiveConditions.Add(conditionId))
             return new OkObjectResult(new { message = $"Already has {conditionId}" });
 
-        var stacks = data.Balance.Conditions.TryGetValue(conditionId, out var def) ? def.Stacks : 1;
-        player.ActiveConditions[conditionId] = stacks;
         await store.Save(player);
 
-        return new OkObjectResult(new { message = $"Added {conditionId} ({stacks} stacks)" });
+        return new OkObjectResult(new { message = $"Added {conditionId}" });
     }
 
     // ── Builder helpers ──
@@ -1281,15 +1286,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Gold = p.Gold,
         Time = p.Time.ToString(),
         Day = p.Day,
-        Conditions = p.ActiveConditions.Select(kv =>
+        Conditions = p.ActiveConditions.Select(id =>
         {
-            var def = data.Balance.Conditions.GetValueOrDefault(kv.Key);
-            var flavor = data.Balance.ConditionFlavors.GetValueOrDefault(kv.Key);
+            var def = data.Balance.Conditions.GetValueOrDefault(id);
+            var flavor = data.Balance.ConditionFlavors.GetValueOrDefault(id);
             return new ConditionInfo
             {
-                Id = kv.Key,
-                Name = def?.Name ?? kv.Key,
-                Stacks = kv.Value,
+                Id = id,
+                Name = def?.Name ?? id,
+                Stacks = 1,
                 Description = flavor?.Ongoing ?? "",
                 Effect = BuildConditionEffect(def),
             };
@@ -1555,7 +1560,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 MechanicResult.ItemUnequipped iu => $"Unequipped: {iu.DisplayName} ({iu.Slot})",
                 MechanicResult.TagAdded t => $"Tag: {t.TagId}",
                 MechanicResult.TagRemoved t => $"Tag removed: {t.TagId}",
-                MechanicResult.ConditionAdded c => c.Stacks > 1 ? $"Condition: {c.ConditionId} x{c.Stacks}" : $"Condition: {c.ConditionId}",
+                MechanicResult.ConditionAdded c => $"Condition: {c.ConditionId}",
                 MechanicResult.ConditionResisted cr => $"Resisted: {cr.ConditionId} (rolled {cr.Check.Rolled} vs DC {cr.Check.Target})",
                 MechanicResult.ConditionRemoved c => $"Condition removed: {c.ConditionId}",
                 MechanicResult.TimeAdvanced ta => $"Time: {ta.NewPeriod}, Day {ta.NewDay}",
@@ -1669,7 +1674,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     }
 
     List<ConditionRowInfo> BuildConditionRows(
-        Dictionary<string, int> conditionsBefore,
+        HashSet<string> conditionsBefore,
         List<EndOfDayEvent> events)
     {
         var cures = new Dictionary<string, EndOfDayEvent.CureApplied>();
@@ -1687,7 +1692,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }
 
         var rows = new List<ConditionRowInfo>();
-        foreach (var (conditionId, stacksBefore) in conditionsBefore)
+        foreach (var conditionId in conditionsBefore)
         {
             if (!data.Balance.Conditions.TryGetValue(conditionId, out var def)) continue;
 
@@ -1696,16 +1701,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
             string? cureItem = null;
             string? cureMessage = null;
-            int stacksAfter = stacksBefore;
+            int stacksAfter = cure != null ? 0 : 1;
 
             if (cure != null)
             {
                 var itemDef = data.Balance.Items.GetValueOrDefault(cure.ItemDefId);
                 cureItem = itemDef?.Name ?? cure.ItemDefId;
-                stacksAfter = cure.Remaining;
-                cureMessage = cure.Remaining > 0
-                    ? $"Used {cureItem}, removed {cure.StacksRemoved} stack"
-                    : $"Used {cureItem}, cured!";
+                cureMessage = $"Used {cureItem}, cured!";
             }
             else
             {
@@ -1720,7 +1722,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 ConditionId = conditionId,
                 Name = def.Name,
-                Stacks = stacksBefore,
+                Stacks = 1,
                 CureItem = cureItem,
                 CureMessage = cureMessage,
                 StacksAfter = stacksAfter,
@@ -1738,25 +1740,19 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Type = e.GetType().Name,
             Description = e switch
             {
-                EndOfDayEvent.FoodConsumed f => f.Balanced
-                    ? $"Balanced meal: {string.Join(", ", f.FoodEaten)}"
-                    : $"Ate: {string.Join(", ", f.FoodEaten)}",
+                EndOfDayEvent.FoodConsumed f => $"Ate: {string.Join(", ", f.FoodEaten)}",
                 EndOfDayEvent.Starving => "No food!",
                 EndOfDayEvent.ResistPassed r => $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
                 EndOfDayEvent.ResistFailed r => $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
-                EndOfDayEvent.CureApplied c => c.Remaining > 0
-                    ? $"{c.ItemDefId} reduced {c.ConditionId} by {c.StacksRemoved} ({c.Remaining} remaining)"
-                    : $"{c.ItemDefId} cured {c.ConditionId}!",
-                EndOfDayEvent.ConditionAcquired a => a.Stacks > 1
-                    ? $"Contracted {a.ConditionId} ({a.Stacks} stacks)"
-                    : $"Contracted {a.ConditionId}",
+                EndOfDayEvent.CureApplied c => $"{c.ItemDefId} cured {c.ConditionId}!",
+                EndOfDayEvent.ConditionAcquired a => $"Contracted {a.ConditionId}",
                 EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",
                 EndOfDayEvent.ConditionDrain d => $"{d.ConditionId}: -{d.HealthLost} health, -{d.SpiritsLost} spirits",
                 EndOfDayEvent.SpecialEffect s => $"{s.ConditionId}: {s.Effect}",
-                EndOfDayEvent.Foraged f => f.ItemsFound.Count > 0
-                    ? $"Foraged: {string.Join(", ", f.ItemsFound)} (rolled {f.Rolled})"
+                EndOfDayEvent.Foraged f => f.Fed
+                    ? $"Foraged enough to skip rations (rolled {f.Rolled})"
                     : $"Found nothing while foraging (rolled {f.Rolled})",
-                EndOfDayEvent.RestRecovery r => $"Rest: +{r.HealthGained} health, +{r.SpiritsGained} spirits",
+                EndOfDayEvent.HealthRegen h => $"Rest: +{h.HealthGained} health",
                 EndOfDayEvent.PlayerDied d => d.ConditionId != null
                     ? $"Perished from {d.ConditionId}."
                     : "Perished in the night.",
