@@ -2,18 +2,22 @@
 
 ## Identity
 
-**Theme / Philosophy:**
-Wind-cut plateaus and dry riverbeds define a frontier where kinship and administration grind against each other under an ambiguous cosmic order called the Lattice. This is a place where honor-based clan politics collide with procedural bureaucracy, where hospitality is both binding and political, and where rail lines cut across ancestral territory. But the tension is not simply between two models of human order. The Kesharat Administration is no longer entirely human in its thinking: it has been compromised by an extra-dimensional intelligence that colonizes minds and reshapes societies into instruments of its own expansion.
+**Theme / Philosophy: Is civilization a sickness?**
+
+Wind-cut plateaus and dry riverbeds define a frontier where two branches of the same people grind against each other under an ambiguous cosmic order called the Lattice. The Kesharat were once brutal, vital monsters — honestly what they were. The cosmic horror that consumed their empire didn't destroy them; it *domesticated* them. Domestication turns out to be a form of parasitism. The Kesharat are now polite, productive, and something is deeply wrong with them in a way none of them can articulate. There is no clean moment where you can point and say "there, that's the evil." The horror is ambient, structural, and indistinguishable from progress.
 
 **Defining Contradiction:**
-Long ago, the Kesharat was a functional martial empire built on conquest—not admirable, but comprehensible. Through brute stupidity, they destroyed the people who had been containing an extra-dimensional entity. The Lattice was unleashed, and it consumed their leadership—not physically, but as a parasite consumes the will of its host. The empire ceased to be about martial conquest and honor; it became a machine. The Lattice is simultaneously:
-- A hyper-intelligent phenomenon
-- A manifestation perceived as an indescribable Color at inflection points in physical space
-- The entity's drive to colonize and reshape the world
-- The decrees issued by compromised leadership
-- A totalizing ideology of order that serves the entity's expansion
+Generations ago, the Kesharat were a functional martial empire built on conquest — not admirable, but comprehensible. Think Kal Drogo. Through hubris and curiosity in equal measure, they unsealed an extra-dimensional entity (color-out-of-space in nature) which used their empire as a vehicle to expand its influence. It did not enslave them or destroy them. It civilized them.
 
-Clans insist the Kesharat worships the Lattice; the Kesharat insists it is merely a philosophical system. Both are wrong. Both are right.
+The modern Kesharat are bureaucratic, industrious, and expanding through rail and steam rather than steel and fire. They build schools, adjudicate disputes fairly, cure diseases. By every material metric, they are an improvement over what came before. But spend time around them and something is off. They don't sleep well. They organize things in compulsive, specific ways. They get uncomfortable when things are asymmetrical. Nobody would call it a problem. Everyone would say they're doing better than their grandfathers, who died in pointless raids at thirty. They're right. That's what makes it horrible.
+
+**The Lattice is simultaneously three things, and they are the same thing:**
+
+- **A civic philosophy.** The ordering principle of Kesharat society — law, infrastructure, hierarchy, rational administration. The Kesharat experience it as secular and self-evident. Asking a Kesharat if they worship the Lattice is like asking a bureaucrat if they worships the org chart.
+- **An esoteric concept.** A principle connecting heaven and earth, the order of all things. "It's a lattice. It's right there in the name."
+- **The corruption vector.** The mechanism by which the entity propagates through the empire. Order, legibility, and rational administration are the delivery system. There is no version where you get the courts and the rail but not the horror, because they are the same process.
+
+The Tashkari insist the Kesharat worships the Lattice; the Kesharat insists it is merely a philosophical system. Both are wrong. Both are right. The Kesharat are not lying when they call it philosophy — the denial is not cynical, it is a symptom. The sickness makes itself invisible to the sick.
 
 ---
 
@@ -38,10 +42,22 @@ The mesa supports hardy desert fauna adapted to scarcity. Goats are the primary 
 
 ## Peoples
 
-### Plateau Clans
+### The Tashkari
 
 **Overview:**
-Highland kin-groups controlling passes, wells, and terraced valleys. They practice honor-based kinship with strong local autonomy. Outsiders must negotiate passage. Hospitality is binding but political. They are not desert princes—they are mountain plateau tribes with a structural resemblance to Afghan highland culture.
+The Tashkari are *not* a separate indigenous people. They are breakaway Kesharat — the descendants of Prince Tashkar, who gathered his strongest warriors and fled the empire generations ago, before the domestication took hold. They still do things the old way. They are what the Kesharat were, preserved in amber.
+
+They are not noble savages. They still have blood feuds, casual violence, patriarchs who settle disputes by breaking someone's arm. They are messy and vital and sometimes awful in ordinary human ways rather than cosmically wrong ways. They are undomesticated.
+
+The Tashkari are organized into loose, family-based clans occupying scrubland the empire has largely tolerated out of a mix of vestigial ceremonial respect for their martial tradition and simple inconvenience — the scrub wasn't worth the trouble. That calculus is now shifting. Rail makes the scrub less remote. Steam makes its resources worth extracting. Nobody in Kesharat administration *decided* to crush the clans. It's just that the rail survey says the line goes *there*, and *there* is through clan territory.
+
+Practically, they are highland kin-groups controlling passes, wells, and terraced valleys. They practice honor-based kinship with strong local autonomy. Outsiders must negotiate passage. Hospitality is binding but political. Structurally they resemble Afghan highland culture.
+
+**Tashkar (the founder):**
+A Kesharat prince strong enough to refuse the empire's transformation, who led his warriors into the waste. By the old Kesharat values he is unambiguously a hero. By Lattice values he is a traitor and an anarchist. The official Kesharat version of Tashkar has been softened into something "misguided" or "tragic" — rewritten just enough to be safe. The Tashkari know the real version. It infuriates them.
+
+**The Old Gods:**
+The Tashkari still worship the old Kesharat gods — messy, transactional, sometimes cruel gods you bargain with and curse at. Real gods that feel like something. When the Tashkari look at how a Kesharat talks about the Lattice — the reverence, the way it structures every decision, the glassy contentment — they see worship. They insist the Kesharat have abandoned the old gods for a new one. They are more right than they realize. The Lattice isn't just a god. It's worse than a god.
 
 **Settlement Names:**
 Settlement names use harder consonants and compact structures. Examples include Gharok, Tarsin, Drazhul, Sarghun Ridge, Kethar Pass, and Vornak Hollow. Structure follows the pattern of single-word place names or name plus landform (e.g., "Sarghun Ridge").
@@ -55,7 +71,7 @@ Clan folk dress for sun, wind, and modesty. Layered robes in undyed or earth-ton
 **Names:**
 - *Given names:* Zarik, Davun, Haris, Nadir, Sorin, Kalen, Arva, Selim, Tarek
 - *Surnames / epithets:* Names typically follow a clan-based structure rather than fixed surnames.
-- *Linguistic patterns:* Hard stops (k, g, t, d), aspirates (kh, gh), strong r, and short vowels. Settlement names are compact. Personal names follow the structure of Given + Father + Clan (e.g., "Zarik Davun of Tarsin").
+- *Linguistic patterns:* Hard stops (k, g, t, d), aspirates (kh, gh), strong r, and short vowels. Settlement names are compact. Personal names follow Given + Father + Clan (e.g., "Zarik Davun of Tarsin"). This is the *old* Kesharat tongue, preserved by the Tashkari more or less unchanged. The Kesharat naming style has since smoothed and balanced — but the shared root is audible to anyone listening for it, and overlap names (Tarek, for instance) appear on both sides.
 
 **Disposition Toward Merchants:**
 Hospitality is binding but political. Merchants who respect protocol—announcing themselves properly, accepting offered food and drink, acknowledging the host's authority—are generally safe and may trade freely. Those who violate customs (refusing hospitality, showing disrespect, attempting to bypass checkpoints) face hostility ranging from social exclusion to violence. Reputation matters enormously: merchants with established relationships trade easily; unknowns must prove themselves. Clans compete for caravan traffic and will offer competitive terms to secure ongoing trade relationships. News and gossip are as valuable as goods—merchants who carry messages and information gain favor.
@@ -65,7 +81,9 @@ Hospitality is binding but political. Merchants who respect protocol—announcin
 ### Kesharat Administration
 
 **Overview:**
-Descendants of a fallen empire, now civil stewards of infrastructure, rail, census, and quotas. They were once a martial conquest society; they are now something else. Their leadership has been compromised by the Lattice—an extra-dimensional intelligence that colonizes minds and reshapes institutions into instruments of its expansion. The Kesharat acts "in alignment with the Lattice," but this is not doctrine or philosophy in the ordinary sense: it is the manifest will of an occupying entity, filtered through human bureaucracy. Lower-ranking personnel may not fully understand what has happened to their superiors, but they follow procedures, enforce quotas, and expand infrastructure with unshakable certainty that they are bringing order to the world.
+The descendants of the warrior empire that survived domestication — civil stewards of infrastructure, rail, census, and quotas. They were once a martial conquest society; they are now something else. The Lattice did not merely compromise their leadership: it reshaped the entire society, top to bottom, into an instrument of its own expansion. Officials act "in alignment with the Lattice" as a matter of obvious good sense. Functionaries follow procedures, enforce quotas, and extend rail with unshakable certainty that they are bringing order to the world. They are not lying when they describe the Lattice as philosophy. Their denial is not cynical — it is a symptom. The sickness is not loudest in the powerful; it is uniform.
+
+The deeper into Kesharat territory you travel, the less filtered the entity's influence becomes. Lower-ranking personnel in the borderlands feel mostly like ordinary bureaucrats with off-putting habits. Higher-ranking officials in the interior exhibit increasingly alien patterns of thought: their explanations are internally coherent but rest on premises that do not map to human concerns.
 
 **Settlement Names:**
 Settlement names are balanced, symmetrical, and measured: two or three syllables, vowel-balanced. Examples include Talvek, Orast, Velyr, Qastor, Sevar, Luro, Meiren, and Vostrum.
@@ -86,13 +104,31 @@ Kesharat settlements trade actively but bureaucratically. Merchants must registe
 
 ---
 
+### The Mirror
+
+Every interaction between Kesharat and Tashkari is loaded with the unspoken recognition: *"You're us, but wrong."* Both directions.
+
+- The Kesharat look at the Tashkari and see what they used to be — and they are not nostalgic, because what they used to be was genuinely terrible.
+- The Tashkari look at the Kesharat and see what they would have become. They can see the sickness because they're standing outside it.
+- Shared cultural artifacts (martial salutes, terminology, lineage customs, given names) appear in both groups but mean completely different things. The Kesharat bureaucrat's salute is emptied ceremony. The Tashkari salute is the original gesture, spoken with its original violent intent.
+
+This recognition is the engine of nearly every charged Kesharat–Tashkari encounter. Neither side has the vocabulary for it. It comes out as contempt, as pity, as condescension, as fury — never as the thing it actually is.
+
+### Tashkari Factions
+
+The clans are divided not by ideology but by pragmatism:
+
+- **Collaborators** — though "collaborator" is far too strong a word. These are postmen, laborers, translators. People with jobs. The pay is nice and you get a free horse. They haven't betrayed anyone. They deliver letters.
+- **Isolationists** — clans trying to keep their heads down and wait it out. Hoping the rail line goes somewhere else.
+- **Guerrilla resistance** — clans actively fighting Kesharat expansion. Their tragedy is that they cannot articulate what they're fighting *for*. "Go back to raiding and blood feuds" is not a platform. They know something is wrong but the only alternative they can name is genuinely worse.
+
 ### Relations Between Groups
 
-Plateau clans value loyalty to blood, personal vengeance, and hospitality as power. They are deeply suspicious of census and rail systems, viewing them as tools of outside control and potential idolatry. Some clan elders remember when the Kesharat was merely a brutal conquest empire—comprehensible enemies who could be negotiated with, ambushed, or driven off. The current Kesharat unsettles them in ways they struggle to articulate: the functionaries speak reasonably but do not negotiate in good faith; the patrols enforce quotas that make no economic sense; and the civil priests explain the Lattice with evangelical patience but somehow make less sense the longer they talk.
+Tashkari clans value loyalty to blood, personal vengeance, and hospitality as power. They are deeply suspicious of census and rail systems, viewing them as tools of outside control and as outright idolatry. Some clan elders remember stories of when the Kesharat were merely a brutal conquest empire — comprehensible enemies who could be negotiated with, ambushed, or driven off. The current Kesharat unsettles them in ways they struggle to articulate: the functionaries speak reasonably but do not negotiate in good faith; the patrols enforce quotas that make no economic sense; and the civil priests explain the Lattice with evangelical patience but somehow make *less* sense the longer they talk.
 
-The Kesharat Administration values loyalty to system, quotas over grudges, and regulated hospitality. They justify expansion as alignment with the Lattice, framing administrative control as necessary correction rather than conquest. Most lower-ranking personnel are not consciously serving an alien intelligence—they believe they are civil servants maintaining order and infrastructure. They have been taught that the Lattice is the underlying pattern of reality, and that alignment is both rational and inevitable. Higher-ranking officials exhibit increasingly alien patterns of thought: their explanations are internally coherent but rest on premises that do not map to human concerns.
+The Kesharat Administration values loyalty to system, quotas over grudges, and regulated hospitality. They justify expansion as alignment with the Lattice, framing administrative control as necessary correction rather than conquest. They view the Tashkari with a mix of embarrassment, ceremonial respect, and bafflement — these are their cousins who refused the cure and now live in dust. Some Kesharat officials are genuinely sorry the rail has to go through clan land. They will still send the rail through.
 
-Tension between the groups is structural and pervasive: clan autonomy conflicts with administrative procedure, oral law with written codes, kinship obligations with impersonal quotas. The Lattice serves as both point of conflict (the clans accuse the administration of worshiping it, which the administration denies) and the invisible hand behind policy shifts that neither group fully controls. Rail routes and borders change without explanation because the Lattice is optimizing for goals that are not human.
+Tension between the groups is structural and pervasive: clan autonomy conflicts with administrative procedure, oral law with written codes, kinship obligations with impersonal quotas. The Lattice serves as both point of conflict (the Tashkari accuse the administration of worshiping it, which the administration denies) and the invisible hand behind policy shifts that neither group fully controls. Rail routes and borders change without explanation because the Lattice is optimizing for goals that are not human.
 
 ---
 
@@ -173,7 +209,7 @@ Standard prevention items useful in the mesa include canteens (essential for thi
 ### Safe Zone
 
 **Vibe:**
-This is the borderlands between polite society and the scrubs: a trading frontier dominated by clan caravans and merchant traffic. The Kesharat Administration is absent or irrelevant here—if a functionary or courier appears at all, they are far from their source of authority and subject to merciless teasing by the locals. In tier 1, the Kesharat are played for laughs: nerds and fish out of water in the rough-and-tumble trade camps. Clan folk give them metaphorical atomic wedgies—mocking their paperwork, their accents, their inability to read the room. The Kesharat who show up here are hapless, outnumbered, and hopelessly out of their depth.
+This is the borderlands between polite society and the scrubs: a trading frontier dominated by Tashkari caravans and merchant traffic. The Kesharat Administration is absent or irrelevant here — if a functionary or courier appears at all, they are far from their source of authority and subject to merciless teasing by the locals. In tier 1, the Kesharat are played for laughs: nerds and fish out of water in the rough-and-tumble trade camps. The Tashkari give them metaphorical atomic wedgies — mocking their paperwork, their accents, their inability to read the room — with the particular contempt reserved for a cousin who turned out wrong. The Kesharat who show up here are hapless, outnumbered, and hopelessly out of their depth.
 
 **Tensions:**
 Tensions are primarily economic and social. Clan hospitality is binding but political: who is offered guest-right and who is not signals allegiances and old grudges. Passage through clan territory must be negotiated, and tolls or tribute may be expected. Reputation matters: word travels between caravans about which merchants are trustworthy, which clans are honorable, and which routes are safer this season. Gossip is currency. Disputes over precedent, insults to honor, and arguments about trade terms are common but rarely escalate to violence in tier 1.
@@ -221,7 +257,9 @@ Tomak - more serious now, reveals he is here to kill the leader of the Kesharat.
 This is the horror of being an outsider in a foreign land where you do not speak the language and are made to feel unwelcome at every turn. You are at the true edge of the Kesharat empire, where the Lattice's influence is no longer filtered through layers of bureaucracy. The air feels wrong—too still, or vibrating at a frequency just below hearing. Colors seem oversaturated or drained depending on proximity to certain structures, but there is also *another* color: one that has no name, that cannot be properly perceived, that illuminates or shades nearby objects in ways that hurt to look at. You are being watched, but not by people who care whether you live or die. You are being watched by something that is deciding whether you are useful.
 
 **The Horror Itself:**
-The Lattice is a hyper-intelligent extra-dimensional entity that colonizes minds and reshapes reality at inflection points in physical space. It manifests as the Colors—indescribable hues that appear where the entity's influence is strongest, illuminating or shading nearby matter in ways that defy description. Prolonged exposure to the Colors ruins the body: skin takes on unnatural tones, eyes cloud or burn with alien light, and movement becomes mechanical. Workers subjected to the Colors lose individuality, becoming human machines—alive, functional, and utterly broken. This is not a byproduct of Kesharat cruelty; it is the Lattice optimizing human biology for tasks it has determined are necessary. Kesharat leadership is fully compromised: they are no longer making decisions in any human sense, but rather acting as the Lattice's administrative layer. Lower-ranking true believers insist this is correction and alignment, a necessary process that will eventually crystallize order across all lands. They cannot imagine resistance because their capacity to imagine alternatives has been systematically eroded.
+The body horror is the *visible* part, and it is real: the Lattice manifests as the Colors — indescribable hues that appear where the entity's influence is strongest, illuminating or shading nearby matter in ways that defy description. Prolonged exposure ruins the body. Skin takes on unnatural tones, eyes cloud or burn with alien light, and movement becomes mechanical. Workers subjected to the Colors lose individuality, becoming human machines — alive, functional, and utterly broken. This is not a byproduct of Kesharat cruelty; it is the Lattice optimizing human biology for tasks it has determined are necessary.
+
+But the body horror is only the loudest expression of a horror that has been ambient and structural the whole way in. Everything you found unsettling in tier 1 — the compulsive symmetry, the glassy contentment, the patient evangelism — is the same process. There is no clean line where the philosophy stopped and the corruption began. Tier 3 just stops being polite about it. Lower-ranking true believers insist this is correction and alignment, a necessary process that will eventually crystallize order across all lands. They cannot imagine resistance because their capacity to imagine alternatives has been systematically eroded.
 
 In tier 3, the Kesharat become a little sympathetic again. As you learn more about what has been done to them—the colonization of minds, the erosion of will, the way the Lattice uses human bureaucracy as its instrument—it is harder to see them purely as villains. They are victims too, even when they are doing the Lattice's work. That does not make them safe. It makes the horror stickier.
 
@@ -269,7 +307,7 @@ Wind is constant. Dust devils on the flats. Hard light and long shadows. Exposed
 - What are the specific Named NPCs for each tier? (Requires encounter design work)
 - What plot keys are relevant to mesa encounters? (Requires encounter design work)
 - How do seasons affect the plateau environment beyond the autumn campaign window?
-- What was the name of the people who contained the Lattice before the Kesharat destroyed them?
+- ~~What was the name of the people who contained the Lattice before the Kesharat destroyed them?~~ (Resolved 2026-04-06: the Kesharat themselves unsealed the entity through hubris/curiosity. There were no prior containers. Tomak's order are the survivors who tried to *re-*seal it after the unsealing, not pre-Kesharat caretakers.)
 - Are there any regions or factions actively resisting the Lattice's spread, or is resistance purely individual?
 - What happens to people who are "optimized" but then removed from Color exposure—can the process be reversed, or is it permanent?
 
@@ -277,6 +315,7 @@ Wind is constant. Dust devils on the flats. Hard light and long shadows. Exposed
 
 ## Changelog
 
+- 2026-04-06: Merged `scrub cleanup.md` addendum. Sharpened philosophical theme to "is civilization a sickness?" (domestication-as-parasitism). Reframed Plateau Clans as **Tashkari** — breakaway Kesharat descended from Prince Tashkar, not a separate indigenous people. Added Tashkar (founder), Old Gods, The Mirror, and Tashkari Factions sections. Reframed Kesharat domestication as society-wide rather than leadership-only; denial-as-symptom. Recast Lattice as simultaneously civic philosophy / esoteric concept / corruption vector — three faces of one process. Resolved origin: the Kesharat themselves unsealed the entity (no prior containers).
 - 2026-02-17: Tier tone arc—tier 1 Kesharat played for laughs (nerds, fish out of water, atomic wedgies); tier 2 Kesharat serious occupying force; tier 3 Kesharat sympathetic again as victims of the Lattice.
 - 2026-02-16: Seeded from `lib/Flavor/biomes/scrub.md`.
 
