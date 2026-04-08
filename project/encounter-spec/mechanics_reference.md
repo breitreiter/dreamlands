@@ -81,12 +81,15 @@ World state         +add_tag <tag_id>
 Items               +add_item <item_id>
                     +add_random_items <count> <category>
                     +lose_random_item
+                    +discard <item_id>                  (remove a specific item from inventory)
+
+Equipment           +equip <item_id>                    (equip from Pack)
+                    +unequip <slot>                     (slot: weapon|armor|boots)
+
+Pack                +upgrade_pack <amount>              (permanently increase pack capacity)
 
 Gold                +give_gold <amount>
                     +rem_gold <amount>
-
-Health              +damage_health <amount>
-                    +heal <amount>
 
 Spirits             +damage_spirits <amount>
                     +heal_spirits <amount>
@@ -221,7 +224,7 @@ as .enc mechanics.
 
     success:
       You push through. The bandits scatter.
-      +add_gold 15
+      +give_gold 15
 
 ### failure:
 
