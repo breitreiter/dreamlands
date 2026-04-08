@@ -58,6 +58,10 @@ public class PlayerState
     public bool PendingNoMeal { get; set; }
     public bool PendingNoBiome { get; set; }
 
+    // Conditions that the player just cleared this turn — skipped by the next ambient resist roll
+    // so resolving a Lost encounter (or similar) can't immediately re-add the same condition.
+    public HashSet<string> ConditionsClearedThisTurn { get; set; } = new();
+
     // Consecutive wilderness nights since last settlement entry — feeds exhaustion DC
     public int ConsecutiveWildernessNights { get; set; }
 

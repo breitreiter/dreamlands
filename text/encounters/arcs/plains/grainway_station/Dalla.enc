@@ -32,6 +32,7 @@ choices:
         Dalla obeys and pulls the wrench. A scrape, a click, and then a gut-wrenching grinding within the lock, loud enough to be heard throughout the camp. "Failsafe," sighs Dalla. "Lock is ruined now. They'll need a sapper team out here to undermine the walls. But no one is getting inside today."
 
         There's nothing to be done for it. The station is impenetrable now. The imperials will be annoyed, but nothing will change for them. They'll continue to guard the sealed fort. The scavengers will go on their way empty-handed.
+
         Dalla starts to pack up her tools. She says nothing. You find your way back to the road.
         +finish_dungeon
     }
@@ -50,6 +51,7 @@ choices:
     "This is imperial ground," he says. "You're squatting on it."
 
     "Then you should've held it," Dalla replies. "Looks to me like we found it first."
+
     Silence stretches. Hands hover near weapons.
 
     You step between them, "There's no need for a fight."

@@ -41,14 +41,20 @@ choices:
   The hermit's smile doesn't waver as the thing behind the sailcloth door begins to move, something massive shifting in the darkness with a wet, patient hunger. "My boy gets so few visitors," she says, rising with a mother's gentle pride, and you understand now why the bones hang from the eaves: they are not charms but trophies, markers for those who also trusted their instincts too late.
   @if check combat hard {
     The sailcloth tears away. Something fills the doorway; too tall, joints wrong. Pale skin stretched tight. Fingers tipped with yellowed bone hooks. A mouth that opens too wide, teeth jagged and uneven. It drops into the shallows. The water barely reaches its knees.
+
     It lunges. You slip aside. The hooks slice past your throat, close enough that you smell old blood and swamp rot. It is quick but clumsy. You ready your weapon. When it overreaches, you strike. You hit the monster hard with your weapon.
+
     A thin, whistling scream. It twists, tearing the weapon from your grip. One arm hangs useless; the other sweeps low for your legs. You fall back, snatch a stone from the cookfire ring, and smash it against its temple.
+
     The crack echoes. It falters. You retrieve your weapon and cut its throat in a single stroke. It collapses into the black water, which closes and stills.
+
     The hermit is gone. Only the low cookfire and a steaming pot remain. You take what supplies you can and leave the shack behind, bones clicking faintly in the wind as the fen swallows you.
     +give_gold 3
   } @else {
     The sailcloth tears away. A horrid shape fills the door; wrong-jointed, bone-hooked, ghastly mouth splitting wide. It drops into the shallows and lunges.
+
     You swing your weapon on instinct. The attack skates off its hide. No blood. No pause. A hooked hand snags your shoulder and wrenches you sideways. Another tears through your pack, spilling its contents into the black water.
+
     You twist free, stumbling into the muck. The things stares blankly at you, twists its head, and begins to lope forward. You flee, thrashing through the waters. By the time you catch your breath, the clearing is gone and so is whatever the swamp claimed from your pack.
     +lose_random_item
   }

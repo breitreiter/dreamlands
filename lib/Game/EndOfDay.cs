@@ -106,6 +106,9 @@ public static class EndOfDay
         if (!noBiome)
             state.ConsecutiveWildernessNights++;
 
+        // 10. Clear the per-turn condition-immunity set now that the day has resolved
+        state.ConditionsClearedThisTurn.Clear();
+
         return events;
     }
 
@@ -126,6 +129,10 @@ public static class EndOfDay
         {
             // Skip rolls for conditions the player already has — adding is a no-op
             if (state.ActiveConditions.Contains(threat.Id)) continue;
+
+            // Skip threats the player just cleared this turn — resolving an encounter that
+            // removes a condition shouldn't be immediately undone by the same end-of-day cycle.
+            if (state.ConditionsClearedThisTurn.Contains(threat.Id)) continue;
 
             SkillCheckResult check;
             if (threat.Id == "exhausted")

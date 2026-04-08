@@ -351,6 +351,7 @@ public static class Mechanics
         if (args.Count < 1) return null;
         var id = args[0];
         if (!state.ActiveConditions.Remove(id)) return null;
+        state.ConditionsClearedThisTurn.Add(id);
         return new MechanicResult.ConditionRemoved(id);
     }
 

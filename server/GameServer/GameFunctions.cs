@@ -1309,7 +1309,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     GameSession BuildSession(PlayerState player)
     {
-        var rng = new Random(player.Seed + player.VisitedNodes.Count);
+        // Mix in Day, Time, MoveCount and condition count alongside Seed + visited count so the
+        // RNG advances between API calls even when the player is stationary. Without this, a
+        // stuck player keeps re-rolling the exact same outcome and can lock into a bad state
+        // (e.g. an unresisted "lost" looping a Lost encounter forever).
+        var rngSeed = player.Seed
+                    + player.VisitedNodes.Count * 31
+                    + player.Day * 1009
+                    + (int)player.Time * 17
+                    + player.MoveCount * 7
+                    + player.ActiveConditions.Count;
+        var rng = new Random(rngSeed);
         var session = new GameSession(player, data.Map, data.Bundle, data.Balance, rng, data.TacticalBundle);
 
         if (player.CurrentTacticalId is { } tacId)

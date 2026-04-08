@@ -56,10 +56,15 @@ choices:
 
 * Talk to the worker = Hear his perspective [requires quality wrenbury.worker_visits 0]
   The man sits on a toppled block of masonry with a meal spread beside him on a cloth: bread, hard cheese, something pickled, a clay bottle. His shovel leans against the stone within arm's reach, and it catches the light in a way that makes you look twice. The blade is that bronzy Kesharat alloy, smooth-ground, not a spot of corrosion on it.
+
   He notices you noticing. "Nice, isn't she? Month's wages, but worth every penny. Probably the only thing on this hill less than fifty years old." He tears the bread without urgency. "Present company excepted."
+
   He works the excavations, he says. Has for a few years now. But he takes his lunch up here because the light's good and the view's better. He nods toward the tourist path below, where a child is trying to sell a corroded buckle to a woman who clearly wants to keep walking. "Better than any stage play, this lot. You get all kinds."
+
   He asks where you've come from, the way people do when they already know the answer is going to be interesting. Listens without performing interest. Offers you a pickle, which is either a courtesy or a test of your character depending on how seriously he takes his pickles.
+
   "You want to see the real Wrenbury, not," he gestures at the stalls, the guide's audience, the general circus of it, "all that? I can take you down to the pits. Show you where the actual work happens." He takes a bite. Chews. Swallows. "After I've finished, though. Nothing down there's going anywhere. Hasn't for sixty years."
+
   You take your leave and return to the entrance.
   +quality wrenbury.worker_visits 1
   +open "Wrenbury"

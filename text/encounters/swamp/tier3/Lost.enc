@@ -38,6 +38,7 @@ choices:
 
 * Let the mire work = Stop moving. Wait. See if anything resolves.
   This is not strategy, exactly. It is what you have left when you have eliminated the alternatives that require you to know something you do not know. You find a root mass that holds your weight, you sit on it, and you stop. The mire shifts around you in the way it does. The bioluminescence does its work on the water. A root structure nearby makes a shape you spend a while with. You stop trying to read it and simply look at it. Something about the angle of it, or the particular way it catches the light, or something else entirely, suggests a direction. You choose to follow the suggestion.
+
   You wade. You do not know if the suggestion was guidance or your own desperate pattern-recognition filling in the blank with whatever it had available. You walk for a long time through water and mud and things that are worse than water and mud. The mire is patient with you. Eventually the ground changes under your feet and you realize you have been on a slope for the last hundred steps, rising, and above the waterline the air is different, and different is enough.
   +remove_condition lost
   +advance_time 6
