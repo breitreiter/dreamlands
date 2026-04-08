@@ -376,24 +376,88 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     // End-of-day: auto-resolve camp during travel
                     if (player.PendingEndOfDay && !data.NoCamp)
                     {
+                        // If the player is carrying a serious condition into the night,
+                        // interrupt the journey and surface the camp/crisis screen instead
+                        // of silently auto-resolving. The player needs the chance to see
+                        // their situation (and possibly alter plans), and any death/rescue
+                        // must go through the regular camp_resolve → rescued flow.
+                        var hasSevereBefore = player.ActiveConditions
+                            .Any(id => data.Balance.Conditions.TryGetValue(id, out var def)
+                                       && def.Severity == ConditionSeverity.Severe);
+
+                        if (hasSevereBefore)
+                        {
+                            session.Mode = SessionMode.Camp;
+                            await store.Save(player);
+                            return new OkObjectResult(new GameResponse
+                            {
+                                Mode = "camp",
+                                Status = BuildStatus(player),
+                                Node = BuildNodeInfo(session.CurrentNode, player),
+                                Camp = BuildCampThreats(session),
+                                Inventory = BuildInventory(player),
+                                Mechanics = BuildMechanics(player),
+                                Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                                Travel = new TravelInfo
+                                {
+                                    Path = proposedPath,
+                                    StepsCompleted = stepsCompleted,
+                                    StopReason = "camp",
+                                },
+                            });
+                        }
+
                         var campNode = session.CurrentNode;
                         var campBiome = campNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
                         var campTier = campNode.Region?.Tier ?? 1;
                         var campTerrain = campNode.Region?.Terrain ?? Terrain.Plains;
                         var startCity = data.Map.StartingCity;
 
-                        EndOfDay.Resolve(
+                        var campEvents = EndOfDay.Resolve(
                             player, campBiome, campTier,
                             data.Balance, session.Rng,
                             startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0);
 
                         player.PendingEndOfDay = false;
 
-                        // If player was rescued (died overnight), stop travel
-                        if (player.Health <= 0)
+                        // Safety net: even with no pre-existing severe condition, a freshly-failed
+                        // resist that hands out a serious condition can drain the last HP of a
+                        // low-HP player and trigger a rescue. Surface the proper rescue screen
+                        // with camp details rather than silently teleporting.
+                        var rescued = campEvents.OfType<EndOfDayEvent.PlayerRescued>().FirstOrDefault();
+                        if (rescued != null)
                         {
-                            stopReason = "rescued";
-                            break;
+                            session.Mode = SessionMode.Exploring;
+                            await store.Save(player);
+                            return new OkObjectResult(new GameResponse
+                            {
+                                Mode = "rescued",
+                                Status = BuildStatus(player),
+                                Camp = new CampInfo
+                                {
+                                    HasSevereCondition = false,
+                                    HealthBefore = 0,
+                                    HealthAfter = player.Health,
+                                    ConditionRows = [],
+                                    Threats = BuildCampThreats(session).Threats,
+                                    Events = FormatCampEvents(campEvents),
+                                },
+                                Rescue = new RescueInfo
+                                {
+                                    LostItems = rescued.LostItems,
+                                    GoldLost = rescued.GoldLost,
+                                },
+                                Node = BuildNodeInfo(session.CurrentNode, player),
+                                Exits = BuildExits(session),
+                                Inventory = BuildInventory(player),
+                                Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                                Travel = new TravelInfo
+                                {
+                                    Path = proposedPath,
+                                    StepsCompleted = stepsCompleted,
+                                    StopReason = "rescued",
+                                },
+                            });
                         }
 
                         // If player became lost overnight, interrupt travel with Lost encounter
@@ -869,8 +933,9 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     return new BadRequestObjectResult(new { error = "Not at a settlement" });
 
                 var biome = rNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-                var rationName = $"Rations ({FlavorText.RationName(biome)})";
-                Rations.Refill(player, data.Balance, rationName);
+                var rationRng = new Random();
+                Rations.Refill(player, data.Balance,
+                    () => $"Rations ({FlavorText.RationName(biome, rationRng)})");
                 await store.Save(player);
 
                 response = new GameResponse

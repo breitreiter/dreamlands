@@ -167,18 +167,50 @@ public static class FlavorText
     // --- Food ---
 
     /// <summary>
-    /// Biome-flavored display name for a single ration. Each biome returns a
-    /// meal kit description; players see "you have 5 dried goat, dates, and flatbread"
-    /// rather than "you have 5 rations".
+    /// Biome-flavored display name for a single ration. Each call combines one
+    /// protein, one grain, and one sweet from a biome-specific palette so a
+    /// haversack of rations reads as several distinct meals rather than five
+    /// copies of the same string.
     /// </summary>
-    public static string RationName(string biome) => biome.ToLowerInvariant() switch
+    public static string RationName(string biome, Random rng)
     {
-        "plains"    => "smoked sausage, hard cheese, oat cakes",
-        "mountains" => "dried goat, dates, flatbread",
-        "forest"    => "mushroom jerky, hazelnuts, honey biscuit",
-        "scrub"     => "dried lizard, cactus pulp, pemmican",
-        "swamp"     => "smoked eel, river rice, swamp berries",
-        _           => "trail rations",
+        var key = biome.ToLowerInvariant();
+        if (!RationKits.TryGetValue(key, out var kit))
+            kit = RationKits["plains"];
+        var p = kit.Proteins[rng.Next(kit.Proteins.Length)];
+        var g = kit.Grains[rng.Next(kit.Grains.Length)];
+        var s = kit.Sweets[rng.Next(kit.Sweets.Length)];
+        return $"{p}, {g}, {s}";
+    }
+
+    record RationKit(string[] Proteins, string[] Grains, string[] Sweets);
+
+    static readonly Dictionary<string, RationKit> RationKits = new()
+    {
+        ["plains"] = new(
+            Proteins: ["smoked sausage", "salt beef", "cured ham", "dried mutton"],
+            Grains:   ["oat cakes", "barley loaf", "travel bread", "hardtack"],
+            Sweets:   ["honeycomb", "dried apricots", "molasses candy", "hedgerow jam"]),
+
+        ["mountains"] = new(
+            Proteins: ["dried goat", "yak jerky", "salt pork", "wind-dried mutton"],
+            Grains:   ["flatbread", "buckwheat cake", "stone bread", "dense hardtack"],
+            Sweets:   ["dates", "pine nut brittle", "heather honey", "dried cherries"]),
+
+        ["forest"] = new(
+            Proteins: ["mushroom jerky", "smoked trout", "dried rabbit", "venison strips"],
+            Grains:   ["acorn bread", "nut loaf", "honey biscuit", "rye hardtack"],
+            Sweets:   ["hazelnuts", "blackberry preserve", "maple candy", "wild berry jam"]),
+
+        ["scrub"] = new(
+            Proteins: ["dried lizard", "goat jerky", "spiced locusts", "pemmican"],
+            Grains:   ["flatbread", "millet cake", "dust crackers", "cactus pulp"],
+            Sweets:   ["date paste", "fig leather", "tamarind chew", "candied citron"]),
+
+        ["swamp"] = new(
+            Proteins: ["smoked eel", "salted frog", "pickled crayfish", "dried catfish"],
+            Grains:   ["river rice", "sago cake", "cattail loaf", "lotus crackers"],
+            Sweets:   ["swamp berries", "candied ginger", "cane sugar", "marsh-berry jam"]),
     };
 
     // --- Helpers ---

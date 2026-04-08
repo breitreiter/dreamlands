@@ -16,15 +16,16 @@ public static class Rations
     /// Fill all empty haversack slots with rations. Returns the number added.
     /// Does not displace existing items.
     /// </summary>
-    /// <param name="displayName">Biome-flavored display name for the ration items.
-    /// Caller is responsible for resolving via FlavorText.RationName(biome).</param>
-    public static int Refill(PlayerState player, BalanceData balance, string displayName)
+    /// <param name="displayNameFactory">Called once per ration added so each
+    /// item can carry a freshly-rolled meal name. Caller typically supplies
+    /// <c>() =&gt; FlavorText.RationName(biome, rng)</c>.</param>
+    public static int Refill(PlayerState player, BalanceData balance, Func<string> displayNameFactory)
     {
         var freeSlots = player.HaversackCapacity - player.Haversack.Count;
         if (freeSlots <= 0) return 0;
 
         for (int i = 0; i < freeSlots; i++)
-            player.Haversack.Add(new ItemInstance(RationDefId, displayName));
+            player.Haversack.Add(new ItemInstance(RationDefId, displayNameFactory()));
 
         return freeSlots;
     }
