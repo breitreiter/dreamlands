@@ -154,12 +154,55 @@ export default function Inn({
             <div className="text-dim">Loading...</div>
           )}
 
-          {services && (
+          {services && isChapterhouse && (
             <>
-              <div className="text-primary/80 leading-loose">
-                {isChapterhouse
-                  ? "Choose your accommodation. Guild patrons keep the lights on, but the rates are the same as anywhere else."
-                  : "Choose your accommodation."}
+              <div className="text-primary/80 leading-loose space-y-4">
+                <p>
+                  The chapterhouse rises above you like a cathedral cut from
+                  white granite, four stories of stone climbing to a vaulted
+                  ceiling. Brass railwork rims each gallery, casting warm lines
+                  across polished surfaces. The banisters and counting desks
+                  are dark hardwood, walnut worn to a deep amber by years of
+                  oil and hands. Murmured conversations drift down from the
+                  galleries, softened and indistinct. The air smells of
+                  incense, spice, and old leather.
+                </p>
+                <p>
+                  Food and lodging is free for guild members in good standing.
+                  An on-site physician will tend to any injuries or illnesses
+                  you've encountered on the road.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3 items-start">
+                <Button variant="secondary" onClick={() => handleBook("full")} disabled={loading}>
+                  <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
+                  Recover in the Chapterhouse
+                </Button>
+                <Button variant="secondary" onClick={onBack} disabled={loading}>
+                  <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+                  Depart
+                </Button>
+              </div>
+            </>
+          )}
+
+          {services && !isChapterhouse && (
+            <>
+              <div className="text-primary/80 leading-loose space-y-4">
+                <p>
+                  The ceiling hangs low enough that you duck without needing
+                  to. The room smells of woodsmoke and something savory
+                  that's been on the hearth since morning. A few mismatched
+                  tables crowd what was once a front room, the mantel still
+                  lined with painted clay figures no one bothered to move.
+                </p>
+                <p>
+                  The floor is uneven planking, creaking underfoot, and the
+                  walls are rough plaster, gone amber with smoke. The
+                  innkeeper looks up when you enter, always glad to see a
+                  traveler.
+                </p>
               </div>
 
               <div className="flex flex-col gap-3">
@@ -212,7 +255,7 @@ function ServiceRow({
     >
       <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
       <span>
-        {name} — {cost} gold, {spiritsLabel}
+        {name} — {cost === 0 ? "free" : `${cost} gold`}, {spiritsLabel}
         {!canAfford && " (can't afford)"}
       </span>
     </Button>

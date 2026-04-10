@@ -43,6 +43,7 @@ export default function MarketScreen({
   const [stock, setStock] = useState<MarketItem[]>([]);
   const [hauls, setHauls] = useState<HaulOffer[]>([]);
   const [sellPrices, setSellPrices] = useState<Record<string, number>>({});
+  const [rationCost, setRationCost] = useState(0);
   const [loadingStock, setLoadingStock] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,6 +82,7 @@ export default function MarketScreen({
         setStock(res.stock);
         setHauls(res.hauls ?? []);
         setSellPrices(res.sellPrices ?? {});
+        setRationCost(res.rationCost ?? 0);
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoadingStock(false));
@@ -233,6 +235,12 @@ export default function MarketScreen({
 
   const packFull = projected.packCount >= projected.packCapacity;
 
+  // Restock projection: fill empty haversack slots with rations, capped by gold.
+  const restockSlots = Math.max(0, projected.haversackCapacity - projected.haversackCount);
+  const restockAffordable = rationCost > 0 ? Math.floor(projected.gold / rationCost) : restockSlots;
+  const restockCount = Math.min(restockSlots, restockAffordable);
+  const restockCost = restockCount * rationCost;
+
   async function restockAndLeave() {
     await doAction({ action: "restock_rations" });
     onBack();
@@ -261,6 +269,7 @@ export default function MarketScreen({
             setStock(res.stock);
             setHauls(res.hauls ?? []);
             setSellPrices(res.sellPrices ?? {});
+            setRationCost(res.rationCost ?? 0);
           });
         }
       } else {
@@ -361,9 +370,11 @@ export default function MarketScreen({
           </div>
         ) : (
           <div className="flex gap-2">
-            <Button variant="secondary" size="sm" onClick={restockAndLeave} disabled={loading}>
+            <Button variant="secondary" size="sm" onClick={restockAndLeave} disabled={loading || restockCount === 0}>
               <MaskedIcon icon="knapsack.svg" className="w-4 h-4" color="currentColor" />
-              Restock Food and Leave
+              {restockCount > 0
+                ? `Restock Food and Leave (${restockCost}g)`
+                : "Restock Food and Leave"}
             </Button>
             <Button variant="secondary" size="sm" onClick={onBack}>
               <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />

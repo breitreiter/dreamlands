@@ -288,6 +288,7 @@ export interface MarketStockResponse {
   stock: MarketItem[];
   hauls: HaulOffer[];
   sellPrices: Record<string, number>;
+  rationCost: number;
 }
 
 export interface BankResponse {

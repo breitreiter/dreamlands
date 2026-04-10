@@ -113,6 +113,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
             if (lostEnc != null)
             {
+                ResetEncounterCadence(player, session);
                 var step = EncounterRunner.Begin(session, lostEnc);
                 await store.Save(player);
                 return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
@@ -149,7 +150,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     return new BadRequestObjectResult(new { error = "Not at a settlement" });
 
                 var serviceId = actionReq.InnService ?? Inn.BedServiceId;
-                var bookResult = Inn.BookService(player, data.Balance, serviceId);
+                var isChapterhouse = innNode == session.Map.StartingCity;
+                var bookResult = Inn.BookService(player, data.Balance, serviceId, free: isChapterhouse);
                 if (!bookResult.Success)
                     return new BadRequestObjectResult(new { error = bookResult.Reason });
 
@@ -190,6 +192,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
                     if (lostEnc != null)
                     {
+                        ResetEncounterCadence(player, session);
                         var step = EncounterRunner.Begin(session, lostEnc);
                         await store.Save(player);
                         return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
@@ -302,6 +305,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
                     if (lostEnc != null)
                     {
+                        ResetEncounterCadence(player, session);
                         var step = EncounterRunner.Begin(session, lostEnc);
                         await store.Save(player);
                         return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
@@ -466,6 +470,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
                             if (lostEnc != null)
                             {
+                                ResetEncounterCadence(player, session);
                                 var step = EncounterRunner.Begin(session, lostEnc);
                                 await store.Save(player);
                                 return new OkObjectResult(new GameResponse
@@ -1158,7 +1163,9 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         if (player.Equipment.Armor != null) AddSellPrice(player.Equipment.Armor);
         if (player.Equipment.Boots != null) AddSellPrice(player.Equipment.Boots);
 
-        return new OkObjectResult(new { tier, stock, hauls, sellPrices });
+        var rationCost = data.Balance.Items[Rations.RationDefId].Cost ?? 0;
+
+        return new OkObjectResult(new { tier, stock, hauls, sellPrices, rationCost });
     }
 
     [Function("GetInn")]
@@ -1186,14 +1193,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             isChapterhouse,
             needsRecovery,
-            services = services.Select(s => new
+            services = services.Select(s =>
             {
-                id = s.Id,
-                name = s.Name,
-                cost = s.Cost,
-                spirits = s.Spirits,
-                restoresFull = s.RestoresFull,
-                canAfford = player.Gold >= s.Cost,
+                var cost = isChapterhouse ? 0 : s.Cost;
+                return new
+                {
+                    id = s.Id,
+                    name = s.Name,
+                    cost,
+                    spirits = s.Spirits,
+                    restoresFull = s.RestoresFull,
+                    canAfford = player.Gold >= cost,
+                };
             }).ToList(),
         });
     }
@@ -1306,6 +1317,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     }
 
     // ── Builder helpers ──
+
+    // Reset the road-encounter cadence so the next overworld encounter is rolled
+    // fresh from "now" rather than firing immediately on the next move. Used after
+    // system encounters (like Lost) to keep the cadence from feeling too dense.
+    void ResetEncounterCadence(PlayerState player, GameSession session)
+    {
+        player.NextEncounterMove = player.MoveCount
+            + session.Rng.Next(data.Balance.Character.EncounterCadenceMin,
+                               data.Balance.Character.EncounterCadenceMax + 1);
+    }
 
     GameSession BuildSession(PlayerState player)
     {

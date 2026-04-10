@@ -37,16 +37,18 @@ public static class Inn
     /// serious-condition medicines.
     /// </summary>
     public static InnBookingResult BookService(
-        PlayerState state, BalanceData balance, string serviceId)
+        PlayerState state, BalanceData balance, string serviceId, bool free = false)
     {
         var service = GetServiceOptions(balance).FirstOrDefault(s => s.Id == serviceId);
         if (service == null)
             return new InnBookingResult(false, $"Unknown service '{serviceId}'", serviceId, 0, 0, []);
 
-        if (state.Gold < service.Cost)
+        var cost = free ? 0 : service.Cost;
+
+        if (state.Gold < cost)
             return new InnBookingResult(false, "Not enough gold", serviceId, 0, 0, []);
 
-        state.Gold -= service.Cost;
+        state.Gold -= cost;
 
         var spiritsBefore = state.Spirits;
         if (service.RestoresFull)
@@ -61,7 +63,7 @@ public static class Inn
         var medicinesConsumed = new List<string>();
         ConsumeMedicines(state, balance, medicinesConsumed);
 
-        return new InnBookingResult(true, null, serviceId, service.Cost, spiritsRestored, medicinesConsumed);
+        return new InnBookingResult(true, null, serviceId, cost, spiritsRestored, medicinesConsumed);
     }
 
     /// <summary>

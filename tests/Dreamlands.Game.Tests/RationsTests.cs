@@ -8,15 +8,25 @@ public class RationsTests
     static readonly BalanceData Balance = BalanceData.Default;
     const string RationName = "Rations (test)";
 
-    static PlayerState Fresh() => PlayerState.NewGame("test", 99, Balance);
+    static PlayerState Fresh()
+    {
+        var p = PlayerState.NewGame("test", 99, Balance);
+        p.Gold = 999; // plenty of gold for refill tests; cost-limited cases set explicitly
+        return p;
+    }
+
+    static int RationCost => Balance.Items[Rations.RationDefId].Cost ?? 0;
 
     [Fact]
-    public void Refill_Empty_FillsHaversackToCapacity()
+    public void Refill_Empty_FillsHaversackToCapacityAndCharges()
     {
         var p = Fresh();
-        var added = Rations.Refill(p, Balance, () => RationName);
+        var goldBefore = p.Gold;
+        var result = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(p.HaversackCapacity, added);
+        Assert.Equal(p.HaversackCapacity, result.Added);
+        Assert.Equal(p.HaversackCapacity * RationCost, result.GoldSpent);
+        Assert.Equal(goldBefore - result.GoldSpent, p.Gold);
         Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
         Assert.True(p.Haversack.All(i => i.DefId == Rations.RationDefId));
     }
@@ -29,9 +39,9 @@ public class RationsTests
         for (int i = 0; i < 3; i++)
             p.Haversack.Add(new ItemInstance("trinket", "Trinket"));
 
-        var added = Rations.Refill(p, Balance, () => RationName);
+        var result = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(p.HaversackCapacity - 3, added);
+        Assert.Equal(p.HaversackCapacity - 3, result.Added);
         Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
     }
 
@@ -42,9 +52,12 @@ public class RationsTests
         for (int i = 0; i < p.HaversackCapacity; i++)
             p.Haversack.Add(new ItemInstance("trinket", "Trinket"));
 
-        var added = Rations.Refill(p, Balance, () => RationName);
+        var goldBefore = p.Gold;
+        var result = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(0, added);
+        Assert.Equal(0, result.Added);
+        Assert.Equal(0, result.GoldSpent);
+        Assert.Equal(goldBefore, p.Gold);
         Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
         Assert.True(p.Haversack.All(i => i.DefId == "trinket"));
     }
@@ -67,9 +80,10 @@ public class RationsTests
     {
         var p = Fresh();
         Rations.Refill(p, Balance, () => RationName);
-        var addedSecond = Rations.Refill(p, Balance, () => RationName);
+        var second = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(0, addedSecond);
+        Assert.Equal(0, second.Added);
+        Assert.Equal(0, second.GoldSpent);
     }
 
     [Fact]
@@ -82,9 +96,35 @@ public class RationsTests
         for (int i = 0; i < 4; i++)
             p.Haversack.RemoveAt(p.Haversack.FindIndex(it => it.DefId == Rations.RationDefId));
 
-        var added = Rations.Refill(p, Balance, () => RationName);
+        var result = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(4, added);
+        Assert.Equal(4, result.Added);
         Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
+    }
+
+    [Fact]
+    public void Refill_LimitedByGold_OnlyBuysWhatPlayerCanAfford()
+    {
+        var p = Fresh();
+        p.Gold = RationCost * 3 + 1; // enough for 3 rations, with 1g left over
+
+        var result = Rations.Refill(p, Balance, () => RationName);
+
+        Assert.Equal(3, result.Added);
+        Assert.Equal(RationCost * 3, result.GoldSpent);
+        Assert.Equal(1, p.Gold);
+    }
+
+    [Fact]
+    public void Refill_NoGold_AddsNothing()
+    {
+        var p = Fresh();
+        p.Gold = 0;
+
+        var result = Rations.Refill(p, Balance, () => RationName);
+
+        Assert.Equal(0, result.Added);
+        Assert.Equal(0, result.GoldSpent);
+        Assert.Empty(p.Haversack);
     }
 }
