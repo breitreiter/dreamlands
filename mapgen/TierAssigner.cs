@@ -6,65 +6,109 @@ namespace MapGen;
 public static class TierAssigner
 {
     // T3 regions beyond this fraction of their biome's total tiles get bisected.
-    // Inner nodes become a new T2 region; outer nodes stay T3.
     private const double MaxT3Fraction = 0.10;
 
     public static void Assign(Map map)
     {
+        var oppositeEdge = GetOppositeEdge(map);
+
         var groups = map.Regions
             .Where(r => r.Terrain != Terrain.Lake)
             .GroupBy(r => r.Terrain);
 
         foreach (var group in groups)
         {
-            var regions = group
-                .Select(r => (region: r, dist: MinDistanceFromCity(r)))
-                .Where(x => x.dist < int.MaxValue)
-                .OrderBy(x => x.dist)
-                .ToList();
+            var regions = group.ToList();
 
             if (regions.Count == 0)
                 continue;
 
-            if (regions.Count == 1)
+            // Pick T3: the region whose closest node to the opposite edge is smallest
+            var t3 = regions
+                .OrderBy(r => MinDistanceToEdge(r, oppositeEdge, map))
+                .First();
+
+            // Pick T1: the region closest to the city
+            var t1 = regions
+                .OrderBy(r => MinDistanceFromCity(r))
+                .First();
+
+            // If T1 and T3 collide (only 1 region), T1 wins
+            if (t1 == t3 && regions.Count > 1)
+                t3 = regions
+                    .Where(r => r != t1)
+                    .OrderBy(r => MinDistanceToEdge(r, oppositeEdge, map))
+                    .First();
+
+            foreach (var region in regions)
             {
-                regions[0].region.Tier = 1;
-            }
-            else if (regions.Count == 2)
-            {
-                regions[0].region.Tier = 1;
-                regions[1].region.Tier = 3;
-            }
-            else
-            {
-                regions[0].region.Tier = 1;
-                regions[^1].region.Tier = 3;
-                for (int i = 1; i < regions.Count - 1; i++)
-                    regions[i].region.Tier = 2;
+                if (region == t3 && region != t1)
+                    region.Tier = 3;
+                else if (region == t1)
+                    region.Tier = 1;
+                else
+                    region.Tier = 2;
             }
 
-            // Bisect oversized T3 regions
-            if (regions.Count >= 2)
+            // Bisect oversized T3
+            if (t3.Tier == 3)
             {
-                var t3 = regions[^1].region;
-                var biomeTiles = regions.Sum(r => r.region.Size);
+                var biomeTiles = regions.Sum(r => r.Size);
                 var maxT3Size = (int)(biomeTiles * MaxT3Fraction);
 
                 if (t3.Size > maxT3Size && maxT3Size > 0)
-                    BisectRegion(map, t3, maxT3Size);
+                    BisectRegion(map, t3, maxT3Size, oppositeEdge);
             }
         }
     }
 
-    private static void BisectRegion(Map map, Region t3, int maxT3Size)
+    private enum Edge { North, South, East, West }
+
+    private static Edge GetOppositeEdge(Map map)
     {
-        // Sort nodes farthest-first; the outer portion stays T3
-        var sorted = t3.Nodes.OrderByDescending(n => n.DistanceFromCity).ToList();
+        var city = map.StartingCity;
+        if (city == null)
+            return Edge.North;
+
+        // Which edge is the city closest to?
+        int dN = city.Y;
+        int dS = map.Height - 1 - city.Y;
+        int dW = city.X;
+        int dE = map.Width - 1 - city.X;
+
+        int min = Math.Min(Math.Min(dN, dS), Math.Min(dW, dE));
+
+        // Return the opposite edge
+        if (min == dN) return Edge.South;
+        if (min == dS) return Edge.North;
+        if (min == dW) return Edge.East;
+        return Edge.West;
+    }
+
+    private static int DistanceToEdge(Node n, Edge edge, Map map) => edge switch
+    {
+        Edge.North => n.Y,
+        Edge.South => map.Height - 1 - n.Y,
+        Edge.West  => n.X,
+        Edge.East  => map.Width - 1 - n.X,
+        _ => int.MaxValue
+    };
+
+    private static int MinDistanceToEdge(Region region, Edge edge, Map map) =>
+        region.Nodes.Count > 0
+            ? region.Nodes.Min(n => DistanceToEdge(n, edge, map))
+            : int.MaxValue;
+
+    private static void BisectRegion(Map map, Region t3, int maxT3Size, Edge oppositeEdge)
+    {
+        // Sort nodes closest-to-opposite-edge first; those stay T3
+        var sorted = t3.Nodes
+            .OrderBy(n => DistanceToEdge(n, oppositeEdge, map))
+            .ToList();
 
         var nextId = map.Regions.Max(r => r.Id) + 1;
         var spillover = new Region(nextId, t3.Terrain) { Tier = 2 };
 
-        // Farthest nodes stay in T3, the rest spill into new T2
         t3.Nodes.Clear();
         for (int i = 0; i < sorted.Count; i++)
         {
