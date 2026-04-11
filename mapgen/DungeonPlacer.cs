@@ -117,6 +117,10 @@ public static class DungeonPlacer
             if (minDist < MinSeparation)
                 score -= (MinSeparation - minDist) * 15;
 
+            // Mountains look bad at region edges — reward interior depth
+            if (terrain == Terrain.Mountains)
+                score += Math.Min(RegionDepth.Compute(node, map), 5) * 8;
+
             if (isT3)
             {
                 // T3: prefer center of region

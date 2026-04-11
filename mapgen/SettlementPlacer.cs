@@ -153,6 +153,11 @@ public static class SettlementPlacer
             {
                 int connectivity = TraversableNeighborCount(map, node);
                 int score = connectivity * 10 - (covered.Contains(node) ? 5 : 0);
+
+                // Mountains look bad at region edges — reward interior depth
+                if (node.Terrain == Terrain.Mountains)
+                    score += Math.Min(RegionDepth.Compute(node, map), 5) * 8;
+
                 if (score > bestScore)
                 {
                     bestScore = score;
