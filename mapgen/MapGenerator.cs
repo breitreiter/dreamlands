@@ -17,6 +17,7 @@ public static class MapGenerator
 
         Console.Error.WriteLine("  Regions...");
         ComputeRegions(map);
+        MergeSmallRegions(map);
 
         return (map, actualSeed);
     }
@@ -29,9 +30,9 @@ public static class MapGenerator
         {
             (Terrain.Plains, 30),
             (Terrain.Forest, 20),
-            (Terrain.Scrub, 35),
-            (Terrain.Mountains, 8),
-            (Terrain.Swamp, 5),
+            (Terrain.Scrub, 20),
+            (Terrain.Mountains, 15),
+            (Terrain.Swamp, 10),
         };
         int totalWeight = landTerrains.Sum(t => t.weight);
 
@@ -206,6 +207,60 @@ public static class MapGenerator
             }
 
             map.Regions.Add(region);
+        }
+    }
+
+    private const int MinRegionSize = 12;
+
+    private static void MergeSmallRegions(Map map)
+    {
+        // Repeatedly merge the smallest region until none are below the threshold.
+        // Recheck each pass because merging can create new small regions (unlikely but safe).
+        while (true)
+        {
+            var small = map.Regions
+                .Where(r => r.Size < MinRegionSize && r.Terrain != Terrain.Lake)
+                .OrderBy(r => r.Size)
+                .FirstOrDefault();
+
+            if (small == null) break;
+
+            // Find neighboring regions by scanning border nodes
+            var neighborRegions = new HashSet<Region>();
+            foreach (var node in small.Nodes)
+            {
+                for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    if (dx == 0 && dy == 0) continue;
+                    int nx = node.X + dx, ny = node.Y + dy;
+                    if (!map.InBounds(nx, ny)) continue;
+                    var neighbor = map[nx, ny];
+                    if (neighbor.Region != null && neighbor.Region != small)
+                        neighborRegions.Add(neighbor.Region);
+                }
+            }
+
+            if (neighborRegions.Count == 0)
+            {
+                // Isolated (e.g. surrounded by map edge) — skip it
+                break;
+            }
+
+            // Pick the largest neighbor to absorb into
+            var target = neighborRegions.MaxBy(r => r.Size)!;
+            Console.Error.WriteLine($"    Merged {small.Terrain} region ({small.Size} tiles) into {target.Terrain} region ({target.Size} tiles)");
+
+            // Move all nodes from small into target, updating terrain to match
+            foreach (var node in small.Nodes)
+            {
+                node.Terrain = target.Terrain;
+                node.Region = target;
+                target.Nodes.Add(node);
+            }
+
+            small.Nodes.Clear();
+            map.Regions.Remove(small);
         }
     }
 

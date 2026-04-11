@@ -4,66 +4,76 @@ namespace Dreamlands.Map;
 
 public static class MapRenderer
 {
-    private static readonly Dictionary<Terrain, string> TerrainColors = new()
+    // 24-bit RGB colors per terrain
+    private static readonly Dictionary<Terrain, (int r, int g, int b)> TerrainRgb = new()
     {
-        [Terrain.Lake] = "\x1b[44m",       // Blue background
-        [Terrain.Plains] = "\x1b[102m",    // Bright green background
-        [Terrain.Forest] = "\x1b[42m",     // Green background
-        [Terrain.Scrub] = "\x1b[43m",      // Yellow background
-        [Terrain.Mountains] = "\x1b[100m", // Bright black (gray) background
-        [Terrain.Swamp] = "\x1b[45m"       // Magenta background
-    };
-
-    private static readonly Dictionary<PoiKind, char> PoiGlyphs = new()
-    {
-        [PoiKind.Settlement] = 'S',
-        [PoiKind.Dungeon] = 'D',
-        [PoiKind.Landmark] = 'L',
+        [Terrain.Lake]      = (0x33, 0x66, 0xCC),
+        [Terrain.Plains]    = (0x66, 0xCC, 0x66),
+        [Terrain.Forest]    = (0x22, 0x88, 0x22),
+        [Terrain.Scrub]     = (0xCC, 0xAA, 0x44),
+        [Terrain.Mountains] = (0x88, 0x88, 0x88),
+        [Terrain.Swamp]     = (0x66, 0x44, 0x88),
     };
 
     private const string Reset = "\x1b[0m";
-    private const string BlackFg = "\x1b[30m";
-    private const string BlackBg = "\x1b[40m";
-    private const string YellowFg = "\x1b[33;1m";
+
+    private static string Fg(int r, int g, int b) => $"\x1b[38;2;{r};{g};{b}m";
+    private static string Bg(int r, int g, int b) => $"\x1b[48;2;{r};{g};{b}m";
+
+    private static (int r, int g, int b) GetNodeColor(Map map, Node node)
+    {
+        if (map.StartingCity == node)
+            return (0xFF, 0xFF, 0x00); // Aldgate: yellow
+
+        if (node.Poi != null)
+        {
+            return node.Poi.Kind switch
+            {
+                PoiKind.Settlement => (0xFF, 0xFF, 0xFF), // white
+                PoiKind.Dungeon    => (0x00, 0x00, 0x00), // black
+                _                  => TerrainRgb[node.Terrain],
+            };
+        }
+
+        return TerrainRgb[node.Terrain];
+    }
 
     public static void Render(Map map, TextWriter? output = null, Node? playerLocation = null, HashSet<Node>? visitedNodes = null)
     {
         output ??= Console.Out;
 
-        for (int y = 0; y < map.Height; y++)
+        // Half-block rendering: each character covers two rows (top ▀ / bottom via bg)
+        for (int y = 0; y < map.Height; y += 2)
         {
             for (int x = 0; x < map.Width; x++)
             {
-                var node = map[x, y];
-                var isStartingCity = map.StartingCity == node;
-                var isPlayer = playerLocation == node;
-                var isVisited = visitedNodes == null || visitedNodes.Contains(node);
+                var topNode = map[x, y];
+                var botNode = y + 1 < map.Height ? map[x, y + 1] : null;
 
-                if (isPlayer)
+                var isVisitedTop = visitedNodes == null || visitedNodes.Contains(topNode);
+                var isVisitedBot = botNode != null && (visitedNodes == null || visitedNodes.Contains(botNode));
+
+                // Player marker overrides
+                if (playerLocation == topNode)
                 {
-                    output.Write($"{BlackBg}{YellowFg}☺{Reset}");
+                    var botColor = botNode != null ? GetNodeColor(map, botNode) : (r: 0, g: 0, b: 0);
+                    output.Write($"{Fg(0xFF, 0xFF, 0x00)}{Bg(botColor.r, botColor.g, botColor.b)}☺{Reset}");
+                    continue;
+                }
+                if (playerLocation != null && playerLocation == botNode)
+                {
+                    var topColor = GetNodeColor(map, topNode);
+                    output.Write($"{Fg(topColor.r, topColor.g, topColor.b)}{Bg(0, 0, 0)}▀{Reset}");
                     continue;
                 }
 
-                var bg = TerrainColors[node.Terrain];
+                var top = isVisitedTop ? GetNodeColor(map, topNode) : TerrainRgb[topNode.Terrain];
+                var bot = botNode != null
+                    ? (isVisitedBot ? GetNodeColor(map, botNode) : TerrainRgb[botNode.Terrain])
+                    : (r: 0, g: 0, b: 0);
 
-                // Unvisited: just terrain color, no details
-                if (!isVisited)
-                {
-                    output.Write($"{bg} {Reset}");
-                    continue;
-                }
-
-                var fg = BlackFg;
-                if (isStartingCity)
-                {
-                    fg = YellowFg;
-                    bg = BlackBg;
-                }
-
-                var ch = node.Poi != null && PoiGlyphs.TryGetValue(node.Poi.Kind, out var glyph) ? glyph : ' ';
-
-                output.Write($"{bg}{fg}{ch}{Reset}");
+                // ▀ = foreground is top half, background is bottom half
+                output.Write($"{Fg(top.r, top.g, top.b)}{Bg(bot.r, bot.g, bot.b)}▀{Reset}");
             }
             output.WriteLine();
         }
@@ -72,12 +82,16 @@ public static class MapRenderer
     public static void RenderLegend(TextWriter? output = null)
     {
         output ??= Console.Out;
-        output.WriteLine("Terrain Legend:");
+        output.WriteLine("Legend:");
 
         foreach (var terrain in Enum.GetValues<Terrain>())
         {
-            var bg = TerrainColors[terrain];
-            output.WriteLine($"  {bg}{BlackFg} {terrain,-10} {Reset}");
+            var (r, g, b) = TerrainRgb[terrain];
+            output.WriteLine($"  {Bg(r, g, b)}  {Reset} {terrain}");
         }
+
+        output.WriteLine($"  {Bg(0xFF, 0xFF, 0xFF)}  {Reset} Settlement");
+        output.WriteLine($"  {Bg(0x00, 0x00, 0x00)}  {Reset} Dungeon");
+        output.WriteLine($"  {Bg(0xFF, 0xFF, 0x00)}  {Reset} Aldgate");
     }
 }
