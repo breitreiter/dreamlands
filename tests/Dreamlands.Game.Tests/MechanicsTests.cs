@@ -84,10 +84,10 @@ public class MechanicsTests
     public void AddItem_Weapon_GoesToPack()
     {
         var state = Fresh();
-        var results = Mechanics.Apply(["add_item bodkin"], state, Balance, Rng);
+        var results = Mechanics.Apply(["add_item hunting_knife"], state, Balance, Rng);
 
         Assert.IsType<MechanicResult.ItemGained>(results[0]);
-        Assert.Contains(state.Pack, i => i.DefId == "bodkin");
+        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife");
     }
 
     [Fact]
@@ -157,14 +157,14 @@ public class MechanicsTests
     public void Equip_MovesFromPackToEquipment()
     {
         var state = Fresh();
-        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
-        var results = Mechanics.Apply(["equip bodkin"], state, Balance, Rng);
+        var results = Mechanics.Apply(["equip hunting_knife"], state, Balance, Rng);
         var r = Assert.IsType<MechanicResult.ItemEquipped>(results[0]);
         Assert.Equal("weapon", r.Slot);
         Assert.NotNull(state.Equipment.Weapon);
-        Assert.Equal("bodkin", state.Equipment.Weapon!.DefId);
-        Assert.DoesNotContain(state.Pack, i => i.DefId == "bodkin");
+        Assert.Equal("hunting_knife", state.Equipment.Weapon!.DefId);
+        Assert.DoesNotContain(state.Pack, i => i.DefId == "hunting_knife");
     }
 
     [Fact]
@@ -172,11 +172,11 @@ public class MechanicsTests
     {
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("old_sword", "Old Sword");
-        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
-        Mechanics.Apply(["equip bodkin"], state, Balance, Rng);
+        Mechanics.Apply(["equip hunting_knife"], state, Balance, Rng);
 
-        Assert.Equal("bodkin", state.Equipment.Weapon!.DefId);
+        Assert.Equal("hunting_knife", state.Equipment.Weapon!.DefId);
         Assert.Contains(state.Pack, i => i.DefId == "old_sword");
     }
 
@@ -184,13 +184,13 @@ public class MechanicsTests
     public void Unequip_MovesFromEquipmentToPack()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("bodkin", "Bodkin");
+        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
 
         var results = Mechanics.Apply(["unequip weapon"], state, Balance, Rng);
         var r = Assert.IsType<MechanicResult.ItemUnequipped>(results[0]);
         Assert.Equal("weapon", r.Slot);
         Assert.Null(state.Equipment.Weapon);
-        Assert.Contains(state.Pack, i => i.DefId == "bodkin");
+        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife");
     }
 
     [Fact]
@@ -302,13 +302,13 @@ public class MechanicsTests
     public void Discard_FromPack_RemovesItem()
     {
         var state = Fresh();
-        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
-        var results = Mechanics.Apply(["discard bodkin"], state, Balance, Rng);
+        var results = Mechanics.Apply(["discard hunting_knife"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.ItemLost>(results[0]);
-        Assert.Equal("bodkin", r.DefId);
-        Assert.DoesNotContain(state.Pack, i => i.DefId == "bodkin");
+        Assert.Equal("hunting_knife", r.DefId);
+        Assert.DoesNotContain(state.Pack, i => i.DefId == "hunting_knife");
     }
 
     [Fact]

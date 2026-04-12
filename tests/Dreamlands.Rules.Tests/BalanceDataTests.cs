@@ -37,12 +37,12 @@ public class BalanceDataTests
     }
 
     [Fact]
-    public void Items_IsNonEmpty_AndContainsBodkin()
+    public void Items_IsNonEmpty_AndContainsHuntingKnife()
     {
         var items = BalanceData.Default.Items;
         Assert.NotEmpty(items);
-        Assert.True(items.ContainsKey("bodkin"), "Expected 'bodkin' item");
-        Assert.Equal("Bodkin", items["bodkin"].Name);
+        Assert.True(items.ContainsKey("hunting_knife"), "Expected 'hunting_knife' item");
+        Assert.Equal("Hunting Knife", items["hunting_knife"].Name);
     }
 
     [Theory]

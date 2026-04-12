@@ -121,7 +121,7 @@ public class SkillChecksTests
     {
         var state = Fresh();
         state.Equipment.Armor = new ItemInstance("leather", "Leather"); // Cunning +1
-        state.Equipment.Weapon = new ItemInstance("bodkin", "Bodkin");
+        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
 
         Assert.Equal(1, SkillChecks.GetItemBonus(Skill.Cunning, state, Balance));
     }

@@ -16,14 +16,14 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
-        var error = Bank.Deposit(state, "bodkin", "pack", settlement, Balance);
+        var error = Bank.Deposit(state, "hunting_knife", "pack", settlement, Balance);
 
         Assert.Null(error);
-        Assert.Empty(state.Pack.Where(i => i.DefId == "bodkin"));
+        Assert.Empty(state.Pack.Where(i => i.DefId == "hunting_knife"));
         Assert.Single(settlement.Bank);
-        Assert.Equal("bodkin", settlement.Bank[0].DefId);
+        Assert.Equal("hunting_knife", settlement.Bank[0].DefId);
     }
 
     [Fact]
@@ -59,9 +59,9 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Equipment.Weapon = new ItemInstance("bodkin", "Bodkin");
+        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
 
-        var error = Bank.Deposit(state, "bodkin", "weapon", settlement, Balance);
+        var error = Bank.Deposit(state, "hunting_knife", "weapon", settlement, Balance);
 
         Assert.Null(error);
         Assert.Null(state.Equipment.Weapon);
@@ -104,8 +104,8 @@ public class BankTests
         for (int i = 0; i < Balance.Settlements.BankCapacity; i++)
             settlement.Bank.Add(new ItemInstance($"item_{i}", $"Item {i}"));
 
-        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
-        var error = Bank.Deposit(state, "bodkin", "pack", settlement, Balance);
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
+        var error = Bank.Deposit(state, "hunting_knife", "pack", settlement, Balance);
 
         Assert.Equal("Bank is full", error);
         Assert.Single(state.Pack); // item not removed
@@ -117,7 +117,7 @@ public class BankTests
         var state = Fresh();
         var settlement = MakeSettlement();
 
-        var error = Bank.Deposit(state, "bodkin", "pack", settlement, Balance);
+        var error = Bank.Deposit(state, "hunting_knife", "pack", settlement, Balance);
 
         Assert.Equal("Item not found in pack", error);
     }
@@ -129,7 +129,7 @@ public class BankTests
         var settlement = MakeSettlement();
         state.Equipment.Weapon = new ItemInstance("dagger", "Dagger");
 
-        var error = Bank.Deposit(state, "bodkin", "weapon", settlement, Balance);
+        var error = Bank.Deposit(state, "hunting_knife", "weapon", settlement, Balance);
 
         Assert.Equal("Item not equipped in weapon slot", error);
         Assert.NotNull(state.Equipment.Weapon); // weapon untouched
@@ -141,7 +141,7 @@ public class BankTests
         var state = Fresh();
         var settlement = MakeSettlement();
 
-        var error = Bank.Deposit(state, "bodkin", "backpack", settlement, Balance);
+        var error = Bank.Deposit(state, "hunting_knife", "backpack", settlement, Balance);
 
         Assert.StartsWith("Invalid source", error);
     }
@@ -151,13 +151,13 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        settlement.Bank.Add(new ItemInstance("bodkin", "Bodkin"));
+        settlement.Bank.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
         var error = Bank.Withdraw(state, 0, settlement, Balance);
 
         Assert.Null(error);
         Assert.Empty(settlement.Bank);
-        Assert.Contains(state.Pack, i => i.DefId == "bodkin");
+        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife");
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public class BankTests
         var state = Fresh();
         state.PackCapacity = 0;
         var settlement = MakeSettlement();
-        settlement.Bank.Add(new ItemInstance("bodkin", "Bodkin"));
+        settlement.Bank.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
         var error = Bank.Withdraw(state, 0, settlement, Balance);
 
@@ -217,14 +217,14 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        var item = new ItemInstance("bodkin", "Bodkin");
+        var item = new ItemInstance("hunting_knife", "Hunting Knife");
         state.Pack.Add(item);
 
-        Bank.Deposit(state, "bodkin", "pack", settlement, Balance);
-        Assert.Empty(state.Pack.Where(i => i.DefId == "bodkin"));
+        Bank.Deposit(state, "hunting_knife", "pack", settlement, Balance);
+        Assert.Empty(state.Pack.Where(i => i.DefId == "hunting_knife"));
 
         Bank.Withdraw(state, 0, settlement, Balance);
-        Assert.Contains(state.Pack, i => i.DefId == "bodkin");
+        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife");
         Assert.Empty(settlement.Bank);
     }
 
@@ -235,8 +235,8 @@ public class BankTests
         var settlement1 = MakeSettlement();
         var settlement2 = MakeSettlement();
 
-        state.Pack.Add(new ItemInstance("bodkin", "Bodkin"));
-        Bank.Deposit(state, "bodkin", "pack", settlement1, Balance);
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
+        Bank.Deposit(state, "hunting_knife", "pack", settlement1, Balance);
 
         Assert.Single(settlement1.Bank);
         Assert.Empty(settlement2.Bank);

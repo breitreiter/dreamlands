@@ -43,9 +43,9 @@ public sealed class ItemDef
         // ── Weapons: Daggers (Combat +1 to +5, cancel-focused) ──
         // Pool: momentum_to_progress, momentum_to_cancel, free_momentum, spirits_to_cancel, free_cancel
 
-        ["bodkin"] = new()
+        ["hunting_knife"] = new()
         {
-            Id = "bodkin", Name = "Bodkin", Type = ItemType.Weapon,
+            Id = "hunting_knife", Name = "Hunting Knife", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
             Biome = "plains", ShopTier = 1, Cost = 15,
@@ -79,9 +79,9 @@ public sealed class ItemDef
                 new("Circle your opponent, looking for a gap", "free_momentum"),
             ],
         },
-        ["hunting_knife"] = new()
+        ["seax"] = new()
         {
-            Id = "hunting_knife", Name = "Hunting Knife", Type = ItemType.Weapon,
+            Id = "seax", Name = "Fine Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
@@ -119,7 +119,7 @@ public sealed class ItemDef
             Biome = "forest", ShopTier = 1, Cost = 15,
             TacticalCards =
             [
-                new("Swing the axe into their defense", "momentum_to_progress"),
+                new("Swing your hatchet into their defense", "momentum_to_progress"),
             ],
         },
         ["tomahawk"] = new()
@@ -130,7 +130,7 @@ public sealed class ItemDef
             Biome = "forest", ShopTier = 1, Cost = 15,
             TacticalCards =
             [
-                new("Swing the axe into their defense", "momentum_to_progress"),
+                new("Swing your tomahawk axe into their defense", "momentum_to_progress"),
                 new("Shift your grip and ready a heavy swing", "free_momentum"),
             ],
         },
@@ -142,7 +142,7 @@ public sealed class ItemDef
             Biome = "forest", ShopTier = 2, Cost = 40,
             TacticalCards =
             [
-                new("Swing the axe into their defense", "momentum_to_progress"),
+                new("Swing your war axe into their defense", "momentum_to_progress"),
                 new("Shift your grip and ready a heavy swing", "free_momentum"),
                 new("Put your weight behind a brutal chop", "momentum_to_progress_large"),
             ],
@@ -155,7 +155,7 @@ public sealed class ItemDef
             Biome = "mountains", ShopTier = 2, Cost = 80,
             TacticalCards =
             [
-                new("Swing the axe into their defense", "momentum_to_progress"),
+                new("Swing your broadaxe into their defense", "momentum_to_progress"),
                 new("Shift your grip and ready a heavy swing", "free_momentum"),
                 new("Put your weight behind a brutal chop", "momentum_to_progress_large"),
                 new("Charge forward swinging wildly", "threat_to_progress_large"),
@@ -168,11 +168,11 @@ public sealed class ItemDef
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
             TacticalCards =
             [
-                new("Swing the axe into their defense", "momentum_to_progress"),
+                new("Swing the labrys into their defense", "momentum_to_progress"),
                 new("Shift your grip and ready a heavy swing", "free_momentum"),
                 new("Put your weight behind a brutal chop", "momentum_to_progress_large"),
                 new("Charge forward swinging wildly", "threat_to_progress_large"),
-                new("Bring the axe down with everything you have", "momentum_to_progress_huge"),
+                new("Bring your axe down with everything you have", "momentum_to_progress_huge"),
             ],
         },
 
@@ -463,8 +463,8 @@ public sealed class ItemDef
             Biome = "scrub", ShopTier = 1, Cost = 40,
             TacticalCards =
             [
-                new("Drop a name", "free_momentum"),
-                new("Mention your patron", "momentum_to_progress"),
+                new("Select an appropriate letter of introduction and present it", "free_momentum"),
+                new("Casually mention your guild patron", "momentum_to_progress"),
             ],
         },
         ["peoples_borderlands"] = new()
@@ -474,9 +474,9 @@ public sealed class ItemDef
             Biome = "mountains", ShopTier = 2, Cost = 80,
             TacticalCards =
             [
-                new("Quote the book", "momentum_to_progress"),
-                new("Cite a precedent", "momentum_to_progress_large"),
-                new("Show you understand their ways", "free_momentum"),
+                new("Quote A Guide to the Borderlands", "momentum_to_progress"),
+                new("Mention a relevant historical fact", "momentum_to_progress_large"),
+                new("Cite imperial scholarship on the matter", "free_momentum"),
             ],
         },
         ["cartographers_diary"] = new()
@@ -487,7 +487,7 @@ public sealed class ItemDef
             TacticalCards =
             [
                 new("Recall a story about this place", "momentum_to_progress"),
-                new("Check the diary", "free_momentum"),
+                new("Check the cartograph's diary for notes on this place", "free_momentum"),
             ],
         },
         ["ornate_spyglass"] = new()
@@ -497,8 +497,8 @@ public sealed class ItemDef
             Biome = "scrub", ShopTier = 2, Cost = 80,
             TacticalCards =
             [
-                new("Scout ahead", "free_momentum"),
-                new("Spot the path", "momentum_to_progress"),
+                new("Use the spyglass to scout ahead", "free_momentum"),
+                new("Keep following the path you scouted", "momentum_to_progress"),
                 new("Glass the danger", "momentum_to_cancel"),
             ],
         },

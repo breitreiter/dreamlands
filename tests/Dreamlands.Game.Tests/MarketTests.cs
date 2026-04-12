@@ -150,14 +150,14 @@ public class MarketTests
         var state = Fresh();
         state.Gold = 100;
         var settlement = MakeSettlement();
-        settlement.Prices["bodkin"] = 15;
-        settlement.Stock["bodkin"] = 1;
+        settlement.Prices["hunting_knife"] = 15;
+        settlement.Stock["hunting_knife"] = 1;
 
-        var result = Market.Buy(state, "bodkin", settlement, Balance, new Random(1));
+        var result = Market.Buy(state, "hunting_knife", settlement, Balance, new Random(1));
 
         Assert.True(result.Success);
         Assert.NotNull(state.Equipment.Weapon);
-        Assert.Equal("bodkin", state.Equipment.Weapon.DefId);
+        Assert.Equal("hunting_knife", state.Equipment.Weapon.DefId);
     }
 
     [Fact]
@@ -168,10 +168,10 @@ public class MarketTests
         state.PackCapacity = 0;
         state.Equipment.Weapon = new ItemInstance("dagger", "Dagger");
         var settlement = MakeSettlement();
-        settlement.Prices["bodkin"] = 15;
-        settlement.Stock["bodkin"] = 1;
+        settlement.Prices["hunting_knife"] = 15;
+        settlement.Stock["hunting_knife"] = 1;
 
-        var result = Market.Buy(state, "bodkin", settlement, Balance, new Random(1));
+        var result = Market.Buy(state, "hunting_knife", settlement, Balance, new Random(1));
         Assert.False(result.Success);
         Assert.Equal(100, state.Gold);
     }
@@ -182,10 +182,10 @@ public class MarketTests
         var state = Fresh();
         state.Gold = 0;
         var settlement = MakeSettlement();
-        settlement.Prices["bodkin"] = 15;
-        settlement.Stock["bodkin"] = 1;
+        settlement.Prices["hunting_knife"] = 15;
+        settlement.Stock["hunting_knife"] = 1;
 
-        var result = Market.Buy(state, "bodkin", settlement, Balance, new Random(1));
+        var result = Market.Buy(state, "hunting_knife", settlement, Balance, new Random(1));
         Assert.False(result.Success);
     }
 
