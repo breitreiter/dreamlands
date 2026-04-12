@@ -697,12 +697,54 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                 var tacStep2 = TacticalRunner.Act(session, tacEnc2, tacState2, tacAction, actionReq.OpeningIndex ?? 0);
 
-                if (tacStep2 is TacticalStep.Finished)
+                if (tacStep2 is TacticalStep.Finished fin2)
                 {
                     // Clear tactical state
                     player.CurrentTacticalId = null;
                     player.TacticalStateJson = null;
                     session.Mode = SessionMode.Exploring;
+
+                    // Check for navigation in success/failure results
+                    var navResult = fin2.SuccessResults?.OfType<MechanicResult.Navigation>().FirstOrDefault()
+                        ?? fin2.FailureResults?.OfType<MechanicResult.Navigation>().FirstOrDefault();
+
+                    if (navResult != null)
+                    {
+                        bool won = fin2.SuccessResults != null;
+                        var outcomeText = won ? tacEnc2.Success?.Text : tacEnc2.Failure?.Text;
+                        var outcomeResults = won ? fin2.SuccessResults : fin2.FailureResults;
+                        var outcome = new OutcomeInfo
+                        {
+                            Text = outcomeText ?? "",
+                            Mechanics = outcomeResults != null ? BuildMechanicResults(outcomeResults) : [],
+                        };
+
+                        // Try tactical bundle first
+                        var navTac = data.TacticalBundle?.ResolveNavigation(navResult.EncounterId, tacEnc2.Category);
+                        if (navTac != null)
+                        {
+                            var navResponse = BeginTacticalEncounter(session, player, navTac);
+                            navResponse.Outcome = outcome;
+                            await store.Save(player);
+                            return new OkObjectResult(navResponse);
+                        }
+
+                        // Try regular encounter bundle
+                        var navEnc = EncounterSelection.ResolveNavigation(session, navResult.EncounterId, session.CurrentNode);
+                        if (navEnc != null)
+                        {
+                            var encStep = EncounterRunner.Begin(session, navEnc);
+                            await store.Save(player);
+                            return new OkObjectResult(new GameResponse
+                            {
+                                Mode = "encounter",
+                                Status = BuildStatus(player),
+                                Encounter = BuildEncounterInfo(encStep.Encounter, encStep.GatedChoices),
+                                Outcome = outcome,
+                                Inventory = BuildInventory(player),
+                            });
+                        }
+                    }
                 }
                 else
                 {

@@ -266,14 +266,22 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
               </div>
               <div className="space-y-3 pt-2">
                 <p className="text-dim font-bold">
-                  {tactical.stat === "negotiation" ? "Words are your weapon." : "It's a fight."}
+                  {tactical.stat === "negotiation" ? "Words are your weapon."
+                    : tactical.stat === "cunning" ? "Stay unseen."
+                    : tactical.stat === "bushcraft" ? "Find your way through."
+                    : "It's a fight."}
                 </p>
                 {tactical.approaches.map((a) => {
-                  const isNeg = tactical.stat === "negotiation";
                   const label =
                     a.kind === "aggressive"
-                      ? isNeg ? "Press them" : "Charge them"
-                      : isNeg ? "Hear them out" : "Make ready";
+                      ? tactical.stat === "negotiation" ? "Press them"
+                        : tactical.stat === "cunning" ? "Move fast"
+                        : tactical.stat === "bushcraft" ? "Push through"
+                        : "Charge them"
+                      : tactical.stat === "negotiation" ? "Hear them out"
+                        : tactical.stat === "cunning" ? "Take it slow"
+                        : tactical.stat === "bushcraft" ? "Read the terrain"
+                        : "Make ready";
                   const desc =
                     a.kind === "aggressive"
                       ? "Strike fast: +2 momentum/turn, draw 1 move"
