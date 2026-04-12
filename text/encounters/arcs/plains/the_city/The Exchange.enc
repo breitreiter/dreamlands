@@ -1,0 +1,58 @@
+The Exchange
+[trigger none]
+[vignette dungeons/the_city]
+
+The corridor widens before it ends, opening into a high-ceilinged hall divided by a long counter that runs most of its length. On one side, the side you entered from, the floor is open and bare, a waiting area, maybe, or a place where people queued. On the other side of the counter, the space is partitioned into work stations: small desks built into the wall at intervals, each with its own recessed shelf and a flat writing surface. Behind those, a doorway leads to a back room you can see from here. Deeper shelving, heavy and industrial, with a loading area at the far end where a wide door is sealed shut.
+
+The layout is very familiar, almost comforting.
+
+choices:
+
+* Examine the work stations = Something about this room nags at you
+  You duck under the counter and move along the row of desks. Each one is identical: writing surface, shelf with compartments for documents or ledgers, a recess that could hold a scale or a counting device. The compartments are empty but the wear is visible, faint discoloration where something sat for years, smooth patches on the writing surfaces where arms rested.
+
+  The desks face the counter. The counter faces the open floor. The open floor faces the entrance.
+
+  You've stood at a desk like this. Not this desk, not in this city, not built by whatever built this place -- but a desk that faced a counter that faced a floor where people waited for their number to be called or their name to be shouted. You have haggled across a surface exactly like this one, and been haggled at, and pretended to be offended by terms you found perfectly reasonable.
+
+  The back room confirms it. Heavy shelving, industrial, spaced for crates. A loading area with tracks set into the floor: rails for carts, maybe, or rollers. Ingress on one side, egress on the other, with a choke point in the middle where someone would have stood with a manifest and checked things off. Inventory control. You've seen a dozen versions of this in a dozen trading houses and guild halls across the empire.
+
+  This was a trading floor.
+  +open "The Exchange"
+
+* Look at the back room = The loading area behind the work stations
+  The back room is larger than the hall. Shelving runs floor to ceiling along three walls, heavy-gauge, bolted into the structure. The shelves are mostly empty, but a few still hold containers -- uniform, stackable, made of something that isn't wood or metal or ceramic. They're light when you lift one. Dry packing material crumbles inside it, fine and fibrous, nothing you recognize.
+
+  The loading area at the far end has two wide doors, both sealed. Between them, a raised platform at cart height with grooves set into its surface. The grooves are worn smooth. Whatever moved through here moved through often and moved through heavy.
+
+  Markings on the shelves. Rows of characters in the Grid script, stenciled at regular intervals. You can't read them, but you can read the system: each shelf section has its own designation, and the designations follow a sequence. The containers that remain are marked to match. It's a system for knowing what's where and how much of it you have. It is, in every respect that matters, an inventory.
+  +open "The Exchange"
+
+* Ask Torben what he sees = He's at the counter, examining the desk partitions
+  "Quartermaster's office. Classic layout -- service counter, clerks behind it, stores in the back. The loading bay confirms it. This is where they processed equipment requisitions, tracked munitions, managed the logistics of a garrison this size." He runs his hand along the counter. "Good design. Efficient. You could run a thousand-man operation out of a room like this."
+
+  He pauses. Looks at you. You realize your expression has given something away.
+  +add_tag the_city_exchange_can_challenge
+  +open "The Exchange"
+
+* Challenge his read = This isn't a quartermaster's office [requires tag the_city_exchange_can_challenge]
+  "Torben." You keep your voice even. "I'm Guild. I've worked trading floors from Aldgate to the Kesharat border. This isn't a quartermaster's office."
+
+  He looks up from his notebook.
+
+  "The desks face the counter. The counter faces the waiting area. There's a loading bay in the back with inventory controls and crate storage. The shelves are marked with a tracking system." You point at the raised platform, the grooves worn smooth. "That's a receiving dock. Those are manifest stations. This is where people brought goods in, cataloged them, negotiated terms, and shipped them out."
+
+  "This is a civilian trading house."
+
+  Torben looks at the desks, the counter, the loading bay. Then back at you.
+
+  "I'm an imperial cartographer," he says. "We are trained to approach new cultures with fresh eyes. To observe without importing assumptions." He closes his notebook around his pencil. "You're a trader. You've spent your whole life in trading houses. So you walk into a room full of desks and shelves and your mind says *trading house*. That's not observation. That's bias."
+
+  He says it kindly, the way you'd correct a bright student who's made an understandable error.
+
+  You begin to compose a counter-argument, but Torben has moved on. The moment has passed, you do not press the point.
+  +add_tag the_city_exchange_challenged
+  +open "The Exchange"
+
+* Return to the plaza = Head back the way you came
+  +open "The Plaza"

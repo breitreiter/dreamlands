@@ -1,0 +1,46 @@
+The Commons
+[trigger none]
+[vignette dungeons/the_city]
+
+The corridor turns twice and the dome-light thins to nothing. Torben strikes his lantern without comment, as though he'd been counting the steps until he'd need it. The flame catches and the walls appear -- close, smooth, the same seamless material as everywhere else, but here the ceiling is lower. The proportions tighten. You are inside the city now, not under the dome but *in* the structure.
+
+The passage opens into a long room. Tables run its length in two rows, fixed to the floor on metal stems, benches on either side. The surfaces are empty. Dust sits undisturbed in an even film, and where Torben sets his lantern on the nearest table it leaves a circle of exposed surface, pale and featureless.
+
+At the far end, a counter separates the room from what lies behind it: a preparation area. Flat surfaces at working height, recessed basins with drainage channels cut into the floor beneath them, a row of dark panels set into the wall that might be heating elements or might be something else. It reads as a kitchen, and everything is where you'd expect it. Nothing is a size or shape you'd expect it to be.
+
+The lantern light doesn't reach the far corners. You dare not stray too far from Torben.
+
+choices:
+
+* Look at the wall decoration = Faded patterns cover one long wall
+  Torben hands you the lantern and asks you hold it close. The decoration runs the full length of the dining hall, a continuous band at what would be eye height for something taller than you. Not paint. The color is in the wall itself, or under a surface layer that has gone translucent with age.
+
+  Geometric forms, but softer than the statue in the plaza. Curves nested in curves, repeating and varying, something almost like foliage if foliage grew in spirals and right angles. Here and there a shape recurs: a rounded form with radiating lines that could be a sun, or a face, or a symbol for something you have no framework for.
+
+  There are marks at the bottom edge of the band. Small ones, irregular, in a handful of places. Not part of the pattern. It takes you a moment to understand what you're looking at: someone drew on the wall. A child, maybe, or someone with a child's impulse. Little shapes scratched into the surface layer with something pointed. One of them might be an animal.
+
+  Torben finishes a rough sketch of the pattern. "The same devotional patterns. The unconquered sun?"
+  +open "The Commons"
+
+* Explore the residential block = A doorway at the back leads to a corridor of smaller rooms
+  The corridor is narrow enough that your shoulders nearly brush the walls. Doors on both sides, evenly spaced. The first one is open, not ajar, just open.
+
+  The lantern reveals a small room. A sleeping surface built into the wall like a shelf, wide enough for one person. A recess below it that serves as storage. A few containers are still stacked inside, smooth-sided, lidded, empty. A narrow surface mounted to the opposite wall at sitting height, with a second recess above it holding three objects in a row: a shallow dish, something coiled that might be decorative, and a dark shape you can't identify. Personal effects, perhaps?
+
+  The next room is the same. And the next. Each one identical in layout, each one with its own small variations; a container left on the sleeping surface instead of in the recess, different small objects in a different orders, one room with nothing on the shelf at all.
+
+  The corridor goes on. You stop counting doors.
+  +open "The Commons"
+
+* Ask Torben what he sees = His notebook is already open
+  "Mess hall. Long tables, central kitchen, efficient. Feeds a lot of bodies." He's sketching as he talks, the pencil moving in quick confident strokes. "Barracks through the back. Individual billets, which means ranked personnel, not conscripts. Conscripts would have open bays, communal bunks."
+
+  He nods at the wall decoration. "Some sort of holy knights? Solar deity; I've seen it plenty. This was a permanent garrison. Possibly... some sort of monastery."
+
+  He pauses at the doorway to the residential corridor, lantern raised. Looks down the row of identical open doors disappearing into the dark.
+
+  "Orderly withdrawal. Textbook, actually. They cleared out anything sensitive, left the furniture. We do the same when we abandon a forward post." He taps his pencil against the notebook. "Good discipline. Whatever this outfit was, they ran a tight operation."
+  +open "The Commons"
+
+* Return to the plaza = Head back the way you came
+  +open "The Plaza"

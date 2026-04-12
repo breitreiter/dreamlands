@@ -1,0 +1,54 @@
+The Plaza
+[trigger none]
+[vignette dungeons/the_city]
+
+The corridor opens into light and space. A plaza, broad and circular, roofed by the dome itself. The strange glass far overhead letting in a diffuse, purplish glow that has no direction, no warmth, just illumination. The air is still and dry, tasting faintly of mineral and age.
+
+The floor is tiled in colored glass, geometric patterns interlocking across the full width of the space. Triangles nesting into hexagons, hexagons into spirals, the colors muted by centuries of dust but still visible where boot-scuff has cleared a path. In the center, a statue rises from a low plinth: an angular form, abstract, all planes and facets. It could be a figure. It could be a compass rose. It doesn't resolve into anything familiar.
+
+Around the edges, alcoves open into corridors that lead deeper into the city. Raised beds line two walls, long troughs of dry soil with the desiccated remains of root systems still visible, whatever grew here reduced to grey filament. A bench faces the statue. Two more face each other across the tiled floor, as though someone anticipated that people might want to sit here and look at things or talk to each other.
+
+Torben is already sketching the plaza layout in his notebook. He works quickly, measuring distances by pacing them out, marking corridors with shorthand you can't read. He doesn't narrate. He's working.
+
+choices:
+
+* Ask Torben about the statue = What does he make of it?
+  He glances up from his notebook. Walks over and stands in front of it, hands on hips, studying it the way he studies everything -- with the expectation that it will yield to categorization.
+
+  "Revathi, I'd wager. Or something ancestral to them. Their temples use this kind of geometry. Planes, angles, no representational forms. Formless. I suspect this is devotional."
+
+  He taps the plinth with his knuckle. "Note how it's placed, at the entrance. Prominent position. It's clearly looking down on the soldiers who lived here, observing them, making sure they stay in line."
+
+  He's already turning back to his notebook before you can respond.
+  +open "The Plaza"
+
+* Ask Torben about the city layout = What can he tell from the corridors?
+  He holds up his notebook, angling it so you can see the sketch. It's clean work: precise lines, proportional, annotated in a cramped hand. He's marked the corridors radiating from the plaza with directional arrows and estimated distances.
+
+  "Radial plan. This plaza is the hub, or one of them. These corridors go deeper in. I count five major arteries, plus service passages." He taps a cluster of marks near the bottom of the page. "The construction gets heavier toward the center. Thicker walls, reinforced doorways. Whatever they were protecting is in there."
+
+  He folds the notebook shut with the pencil inside. "We'll want to see as much as we can before the light fades. Assuming the light fades. Assuming it isn't," he looks up at the sourceless glow, "something else."
+  +open "The Plaza"
+
+* The commons = A wide passage with faded decoration on the walls
+  +open "The Commons"
+
+* The exchange = A corridor of broad, glassed-in alcoves
+  +open "The Exchange"
+
+* The watchtower = A stairway climbing toward the upper levels
+  +open "The Watchtower"
+
+* The central district = A reinforced corridor, wider than the others, leading deeper [requires tag city.hub_explored]
+  The corridor narrows after the first turning, then widens again into something that isn't a street anymore. The walls on either side are solid, windowless, the surfaces polished smooth enough to catch the lantern light and throw it back as a dim second flame. Your footsteps echo from the high ceiling.
+
+  Torben walks ahead, lantern raised, notebook in his other hand. He's quiet. Careful.
+
+  The corridor ends at a door. Not sealed -- open, or broken open, or never closed. Beyond it, a large room, and in the room a faint light that isn't the lantern.
+  +open "The Archive"
+
+* Depart = Leave the city
+  You retrace your steps through the entry corridor, past the security systems you've already learned to read, out through the dome door into the open air. The plains hit you like a wall of sound and smell and wind -- everything the city isn't.
+
+  Torben follows, blinking. He doesn't argue. He packs his notebook away and settles against his slab of masonry to review his sketches. He'll be here when you come back. He's not going anywhere.
+  +flee_dungeon

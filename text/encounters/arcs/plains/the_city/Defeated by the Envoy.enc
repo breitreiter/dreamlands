@@ -1,0 +1,24 @@
+Defeated by the Envoy
+[trigger none]
+[vignette dungeons/the_city]
+
+"Easy now, you took a hard hit."
+
+Torben leans over you. He looks like hell. You're back in the plaza somehow, the strange light filtering in through the dome. 
+
+The right side of the cartograph's face is a giant bruise. "I've had worse," he assures you.
+
+He gestures toward a heap of armor, the remains of the thing that felled you, "Though you might like to keep it. Souvenir of sorts. Might fetch a good price in town, if you haul it back."
+
+"What... was that thing?" you ask.
+
+"A mailman, if you can believe it. Have a look at this."
+
+Torben hands you a letter.
+
+choices:
+  * Take the letter 
+  +advance_time 4 no_meal
+  +add_condition injured
+  +add_item golem_armor
+  +open "The Letter"

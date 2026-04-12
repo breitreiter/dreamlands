@@ -1,0 +1,74 @@
+The Envoy
+[trigger none]
+[vignette dungeons/the_city]
+
+The tones coming from the thing start to accelerate and blend, slowly shaping into something similiar to the imperial tongue. The sound is strange and oddly melodic.
+
+"Correspondance... prepared. Please confirm... authority."
+
+Torben's sword is drawn. He looks at you.
+
+choices:
+
+* Step forward hands open = Perhaps this thing can be reasoned with
+  The creature's head tracks you, but it does not move or raise its guard.
+
+  The armor catches Torben's lantern light and throws it back in soft curves. Up close, the metalwork is extraordinary, every plate chased with fine detail, every joint articulated with a precision that makes imperial smithing look like ironmongery.
+
+  Standing closer, you notice it holds some sort brass cylinder in its right hand. The end closest to you is a knurled cap; some sort of container.
+  +remove_tag the_city_envoy_can_fight
+  +add_tag the_city_envoy_approached
+  +open "The Envoy"
+
+* "Stand down, we have returned" = Convince it you're from this place [requires tag the_city_envoy_approached]
+  The figure seems to consider this for a moment. You take the pause to press your case, "We have authority from high command to take control..."
+
+  You never finish. The thing's movement is a blur. The first blow lands in your gut, knocking the wind out of you and sending you stumbling back. The next is to your head. You remember only the flash of red pain, seeing the monster dimly through a dark tunnel, then nothing.
+  +open "Defeated by the Envoy"
+
+* "We are the imperial delegation" = Convince it you're an imperial officer [requires tag the_city_envoy_approached]
+  You step forward. The figure's head tracks you with a faint mechanical sound, smooth and precise.
+
+  "I'm here on behalf of the expeditionary command," you say. You pitch your voice the way you pitch it when you're closing a deal with someone who doesn't speak your language well, clear, simple, authoritative. "I have authority to receive correspondence on behalf of the imperial forces."
+
+  The figure processes this. 
+
+  The figure straightens, a new formality settling over the mechanical frame. It extends the cylinder with both hands, arms fully outstretched, and bows.
+
+  "The correspondence... is delivered. This office thanks... the delegation for its patience."
+
+  It reaches up and begins to remove its own armor. Plate by plate, with the same mechanical precision, setting each piece on the platform at its feet. The breastplate. The pauldrons. The greaves. Underneath, the frame is skeletal -- dark metal, articulated joints, no attempt at resemblance to anything living. It was dressing for the occasion, and the occasion is over.
+
+  It kneels. Its head bows. It does not move again.
+
+  You pick up the armor. It is lighter than it looks, and warmer than it should be.
+
+  Then you open the metal case. Inside is a letter.
+  +add_item golem_armor
+  +open "The Letter"
+
+* Overpower it = Kill it before it can attack [requires tag the_city_envoy_can_fight]
+  Torben doesn't need convincing. He brings his sword into a low guard and moves left. You move right. The figure's head tracks between you, still holding the document, still waiting for an answer to a question you're not going to give it.
+
+  @if check combat hard {
+    It's faster than it looks. The golden arm swings and you duck under it and hear the air split where your head was. It doesn't fight like a soldier. It fights like a door that's been told not to open -- mechanical, procedural, escalating force in measured increments. It is trying to complete its task, not win a battle. You are an obstacle to the delivery protocol, and it is removing you.
+
+    Torben gets behind it. His sword finds a joint in the frame, between the chased golden plates, and something inside the figure sparks and grinds. It staggers. You hit it again, harder, and it goes to one knee. The document falls from its hand and rolls across the floor.
+
+    The figure reaches for it. Its fingers close on empty air, six inches short. The head turns toward you, and the mouth opens one more time: "The correspondence... is not yet..."
+
+    It stops. The light in the shallow eye-depressions fades. The golden armor settles on the frame like a suit on a hanger, still beautiful, still wrong.
+
+    You strip the armor from the frame. It comes away in clean pieces, each one warm to the touch.
+
+    Then you open the metal case. Inside is a letter.
+    +add_item golem_armor
+    +open "The Letter"
+  } @else {
+    It's faster than it looks. The golden arm catches you across the chest and you hit the wall hard with a wet crunch. Torben is shouting now, but the words blur together. You try to scramble back to your feet, but your legs won't obey. 
+
+    Somewhere, far away, someone is fighting. Metal on metal rings. Shouts. Not your concern.
+
+    Darkness.
+    +open "Defeated by the Envoy"
+  }

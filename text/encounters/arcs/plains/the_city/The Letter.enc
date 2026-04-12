@@ -1,0 +1,97 @@
+The Letter
+[trigger none]
+[vignette dungeons/the_city]
+
+You unroll the document. The script is imperial, delicate, embossed on a copper plate.
+
+"""
+To the commanding officer of the organized force currently within the facility perimeter:
+
+This office apologizes for the disruption caused by the automated security response. The facility designated [trade station 4-West] is currently unmanned. All defensive systems are operating on standard protocol and cannot be modified without authorization from the regional administrative authority, which has relocated.
+
+Please withdraw your forces. The defensive perimeter will not pursue beyond its designated limits.
+
+This office has prepared this correspondence in your language as a courtesy. We are aware that prior interactions have resulted in casualties on your side. We apologize for any inconvenience this may have caused.
+
+The security system responds to unauthorized boundary incursion. The boundary is marked with red pylons, which should be visible from some distance.
+
+For your safety, we ask that you avoid this perimeter going forward.
+"""
+
+Torben has read it over your shoulder. He is very quiet. 
+
+When he speaks, his voice is level and careful.
+
+"My father served in the war. The Lucky Seventh. Part of the defense at Wrenbury. Never made it home. We got our own letter. Commendation for bravery in the face of the enemy."
+
+He pauses.
+
+"We weren't special. There's a thousand families who lost someone in the defense against the Iron. It can't have been a stupid misunderstanding. That much death has to mean something."
+
+His face hardens, "Hand me the letter. I'll see it destroyed."
+
+choices:
+
+* Hand him the letter = The lie holds
+  You nod. Torben's shoulders drop, relieved.
+
+  You both realize destroying the letter isn't enough. You return to the archive to finish the job.
+
+  It doesn't take long. The console shatters when Torben drives his sword through the screen. The wall panels crack and go dark under the pommel. The delicate lettering on the diplomatic missive battered into illegibility.
+
+  When it's done, Torben gathers his notebook and his tools and walks toward the exit without looking back. At the corridor he pauses.
+
+  "I'll publish the survey. The fortifications. The defensive grid. The invasion routes. Everything the empire needs to plan a proper campaign." He looks at you steadily. "The city stays a fortress. The dead stay heroes. It's better this way."
+
+  He believes it. You're not sure he's wrong.
+
+  You leave the city together, in silence, through the corridors you've mapped, past the security you've learned to read, out through the dome door into light. The red warning spires stretch into the distance.
+  +finish_dungeon
+
+* Refuse = The letter survives
+  "No."
+
+  Torben draws his sword. There is no bluster in it, no drama, just quiet professionalism.
+
+  @if check combat hard {
+    He's good. Decades of fieldwork have kept him hard, and he fights with the economy of a man who's been in enough scrapes to know that technique matters more than strength. But he's old and tired and fighting for something he's already lost.
+
+    He yields on one knee, sword on the floor, breathing hard. He doesn't look at you. "Take it, then. Take the letter. See who believes you." He laughs, a short, ugly sound. "A stranger carrying a document from an alien city. Who's going to listen?"
+
+    You take the letter. You fold it carefully and put it in your pack, next to the contracts and the manifests and the mundane paperwork of your real life. It fits right in.
+
+    Torben stays on the floor of the archive. You leave him there. He is not a villain. He is not even wrong about what the truth will cost.
+    +finish_dungeon
+  } @else {
+    He's good. Better than you expected. The sword takes you across the ribs before you can close the distance, and the pain is sharp and clarifying and too late. You stagger. He doesn't press the advantage. He steps back, sword low, waiting to see if you'll get up.
+
+    You get up. He shakes his head and hits you again, precisely, just hard enough. You go down and stay down.
+
+    When you wake, both the letter and Torben are gone.
+
+    You limp out of the city alone, through corridors that echo with your footsteps and nothing else, into the light of the plains.
+    +add_condition injured
+    +finish_dungeon
+  }
+
+* Persuade him to report the truth = His superiors will believe him [requires tag the_city_exchange_challenged]
+  You let the matter go last time, but you won't be silent now.
+
+  "Think, Torben. Think what these people could teach us. This letter, the archive. They could be a bridge between whoever built this and our empire."
+
+  He looks at you warily, "You know what we did to the Revathi. What makes you think whoever built all this wouldn't do the same to us? It's not just about the memory of the dead, trader, it's about the security of our people."
+
+  "With enough time and," he holds up his notebook, "the right story, our engineers can figure this all out. When we meet the people who built this, we'll meet them as equals, with war machines to match their own."
+
+  "What would we do with that power?" you ask. "Would we use it wisely, to enrich the lives of our people? Or build siege engines to subjugate our neighbors? Perhaps the people who built this can teach us about more than weapons."
+
+  He doesn't answer for a long time.
+
+  "Give it to me," he says at last. 
+
+  "I can't promise anything. You know that, right? I'm no high official. I'm just an old man who tells stories about the empire to the empire. But I'll tell this one just as it happened, just as we saw it. That's all I can offer you."
+
+  It's enough.
+
+  You leave the city together, but part ways at the door. Torben walks out into the plains. You ready yourself for the long journey back to civilization.
+  +finish_dungeon

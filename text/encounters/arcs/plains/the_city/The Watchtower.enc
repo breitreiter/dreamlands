@@ -1,0 +1,31 @@
+The Watchtower
+[trigger none]
+[vignette dungeons/the_city]
+
+The stairway spirals upward through the interior of a narrow tower, each step shallow and wide, built for a stride longer than yours. Torben's lantern throws shadows across the curved walls as you climb. The air changes as you rise, drier, thinner, with a faint current that suggests ventilation from somewhere above.
+
+The top is open to the dome. A circular platform, waist-high parapet, and the city laid out beneath you in every direction.
+
+It is larger than you thought. Much larger. The radial streets extend from the plaza like spokes, cutting through blocks of close-built structures that stretch to the dome wall on all sides. The dome glass curves overhead, close enough up here that you could hit it with a thrown stone. You consider asking Torben for one of his bolts, but you imagine the old man would frown on the plan.
+
+Torben is already sketching. He works fast, glancing up and down, up and down, the pencil scratching in quick bursts. He's drawn a compass rose in the corner of the page and oriented it to the dome door. His shorthand fills the margins.
+
+choices:
+
+* Ask Torben what he's thinking = He's deep in his sketch
+  He doesn't look up. "Nightmare to assault. Tight corridors, no sight lines, a hundred places to put an ambush. You'd lose half your force just getting to the second block." The pencil keeps moving. "Underground passages, and they'll know them better than us. You'd have to secure a strong point, hold it, then clear block by block. Close quarters. Messy."
+
+  He taps a cluster of structures near the dome wall. "You'd want sappers. Lots of them. And you'd want to cut off the radial streets first, isolate each district so they can't reinforce." He shakes his head, almost admiringly. "Whoever designed this knew what they were doing. Defense in depth."
+
+  "When we come back, our boys will need every advantage they can get."
+  +open "The Watchtower"
+
+* That building in the center = A squat structure at the hub of the radial streets, set apart
+  Near the center, where the radial streets converge, a single structure sits apart from the surrounding blocks. It's lower than the buildings around it but broader, heavier, with reinforced walls you can see even from this distance. A wide corridor connects it to the nearest spoke street, the only approach. The architecture is denser there, more deliberate. Whatever this building is, the city was organized around it.
+
+  You sketch a rough path from the plaza: second radial street, bearing right at the first intersection, straight through the residential block to the central clearing. You're certain you can make it there from the plaza below.
+  +add_tag city.hub_explored
+  +open "The Watchtower"
+
+* Head back down = Return to the plaza
+  +open "The Plaza"

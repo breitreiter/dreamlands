@@ -1,0 +1,37 @@
+The Archive
+[trigger none]
+[vignette dungeons/the_city]
+
+The room is large and dim and alive. Not alive -- active. Panels line the walls floor to ceiling, dark surfaces broken by faint lines of light that pulse at intervals too slow to be mechanical and too regular to be random. Filing systems, maybe, or storage of some kind. The light comes from a console at the room's center, a broad flat surface tilted at a reading angle, its glass casting a cold blue glow across the floor. 
+
+Torben taps it carefully with his knife and the glass flickers and changes; rows of strange glowing script scroll upward in neat columns. He jerks his hand back. The screen keeps scrolling.
+
+You close the distance to the glass display while Torben examines the room.
+
+The script is strange. You look for patterns, repeated characters, any sort of structure. Then you see something remarkable.
+"""
+BARRISTER: ⟟⟁⧖⩔ ⫷⟒⧗⫸ ⧋⩥⟊
+BARROW: ⧗⧖⟒ ⩔⩶⟊⧋ ⫸⟊⟟⩥
+BARTER: ⟁⟒⧗ ⧖⟟⟊ ⩔⧋⫷⟒
+BARTIZAN: ⧋⟊⩥ ⟟⧗⟁ ⫷⧖⩔⟒
+BARYPHONY: ⟒⧋⟟ ⩥⫸⧗ ⟁⟊⧖
+"""
+
+You call out to Torben. But he's nowhere to be found.
+
+choices:
+
+* Look for Torben = He might have wandered into the adjacent room
+  The next room is smaller, more deliberate. The walls are bare. The floor is clean. In the center, standing on a low platform, is a suit golden armor.
+
+  It is imperial in style, but wrong in the details. Even heavy imperial infantry armor is built for marching and maneuver. This is the sort of full body plate armor that you've only seen in museums and story books. Armor designed by someone who has never had to fight or march in that armor. The details are odd, nearly correct, but slightly off. The imperial dragon is a weird six-legged snake creature. Close enough that you recognize the ingent, but unsettling.
+
+  Torben is standing six paces back, hand on his sword. His lantern throws the figure's shadow long across the wall behind it.
+
+  "It moved," he says. "When I came in. It turned its head."
+
+  The figure's armored head is turned toward the doorway where you're standing.
+
+  It makes a harshing hissing noise, then a low tone like a broken bell.
+  +add_tag the_city_envoy_can_fight
+  +open "The Envoy"
