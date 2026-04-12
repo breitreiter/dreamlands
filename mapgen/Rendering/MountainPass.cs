@@ -175,16 +175,15 @@ public static class MountainPass
         {
             if (map[x, y].Terrain != Terrain.Mountains) continue;
 
-            bool boundary = x == 0 || x == map.Width - 1 || y == 0 || y == map.Height - 1;
-            if (!boundary)
+            bool boundary = false;
+            foreach (var (dx, dy) in Directions)
             {
-                foreach (var (dx, dy) in Directions)
+                int nx = x + dx, ny = y + dy;
+                if (!map.InBounds(nx, ny)) continue; // map edge is not a boundary
+                if (map[nx, ny].Terrain != Terrain.Mountains)
                 {
-                    if (map[x + dx, y + dy].Terrain != Terrain.Mountains)
-                    {
-                        boundary = true;
-                        break;
-                    }
+                    boundary = true;
+                    break;
                 }
             }
 

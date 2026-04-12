@@ -32,6 +32,7 @@
   --font-header: 'Cinzel Decorative', serif;
   --font-body: 'Alegreya Sans', sans-serif;
   --font-hand: 'Sue Ellen Francisco', cursive;
+  --font-inscription: 'STIX Two Text', serif;
 }
 
 .leaflet-container.leaflet-container {
