@@ -210,7 +210,7 @@ public static class MapGenerator
         }
     }
 
-    private const int MinRegionSize = 12;
+    private const int MinRegionSize = 48;
 
     private static void MergeSmallRegions(Map map)
     {
@@ -247,8 +247,9 @@ public static class MapGenerator
                 break;
             }
 
-            // Pick the largest neighbor to absorb into
-            var target = neighborRegions.MaxBy(r => r.Size)!;
+            // Pick the smallest non-lake neighbor — keeps large regions from snowballing
+            var target = neighborRegions.Where(r => r.Terrain != Terrain.Lake).MinBy(r => r.Size);
+            if (target == null) break;
             Console.Error.WriteLine($"    Merged {small.Terrain} region ({small.Size} tiles) into {target.Terrain} region ({target.Size} tiles)");
 
             // Move all nodes from small into target, updating terrain to match

@@ -2,7 +2,7 @@ worlds:
   production:
     width: 100
     height: 100
-    seed: 457364340
+    seed: 2130085583
   test:
     width: 30
     height: 30
