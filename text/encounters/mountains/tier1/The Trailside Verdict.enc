@@ -19,6 +19,7 @@ choices:
 
     The toll collector closes his ledger with a sound like a verdict deferred. "Witness testimony complicates things," he says, voice flat with the weariness of a man who knows how easily truth bends in thin air. He waves the muleteer up, tells him to move on, but the look he gives you carries weight. The miners watch you pass with eyes that remember faces. The muleteer doesn't thank you, just gathers his pack and walks quickly down the trail, and you're left with the knowledge that your word is now written in the invisible ledger this mountain keeps. Whether true or false, it's been spent.
     +heal_spirits 2
+    +quality faction.miners +2
   } @else {
     You step forward and declare that you saw the man laboring at a claim, just as he swore. Your voice carries across the switchback with what you hope sounds like certainty.
 
@@ -26,6 +27,7 @@ choices:
 
     The toll collector's gaze drops to your hand, fixing upon the ring that encircles your finger. "Lying to a toll collector." His voice carries no anger, only a terrible weariness. "You should know better than most. I remember when that ring meant something." He closes his ledger with a sound like a splitting stone. A gesture sends two miners forward to grip the muleteer's arms, hauling him upright from the gravel. "Take him away. He'll work his debt in the mines." The muleteer does not resist, does not even look at you as they lead him toward the upper trail. The toll collector turns his attention back to you, and his words fall with the weight of judgment. "You'd best be passing through. Not much law up in these mountains, so we rely on honesty, a trait you seem to lack." He moves to the side of the trail, creating a narrow passage, his silence an invitation to depart that will not be repeated.
     +damage_spirits 2
+    +quality faction.miners +2
   }
    
 * Testify against him = State you saw no one working claims where he says he was
@@ -34,6 +36,7 @@ choices:
   They bind the muleteer's wrists with rope meant for pack loads. He doesn't struggle, doesn't plead further, just stares at the spilled ore samples like a man reading his own grave marker. The toll collector marks something in his ledger, mentions the mining council, mentions examples that need making. They lead him down the trail, boots scuffing gravel, and the sound carries long after they've rounded the switchback.
 
   You're left alone with the scattered ore and the wind.
+  +quality faction.miners -2
 
 * Admit you weren't watching = Confess you saw nothing useful, offering no testimony either way
   The toll collector's face hardens into something carved from the same granite as the peaks above. "No use to me then," he says, closing the ledger with a snap that echoes off the rock face. The miners mutter, dissatisfaction rolling through them like a rockslide's first rattle. One steps forward, jabbing a thick finger toward the muleteer. "Guilty, then. Silence from a witness means he's got nothing good to say."

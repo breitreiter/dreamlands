@@ -15,13 +15,13 @@ choices:
 
   "You've brough us the final piece, suppose you deserve a peek inside the tent."
 
-  "This is one of the Iron, the war machines that decimated our legions during the Retrenchment. I was there, though only just a boy. Still, I remember seeing these the grim metal engines stride over our embankments, spitting fire. I remember seeing our arbalests and trebuchets hammer them to no effect."
+  "This is one of the Iron, the war machines that decimated our legions during the Retrenchment. I was there, though only just a boy. Still, I remember seeing these the great engines stride over our embankments, spitting fire. I remember seeing our arbalests and trebuchets hammer them to no effect."
 
-  "When they turned back, some celebrated, confident that we had won. But not me. I knew we had only bought ourselves a short reprieve before they'd return. Or before some new danger from beyond our borders would threaten the empire. Perhaps the attack has been a gift, though. Perhaps we could learn how these things work, control them. Harness that power in service to the empire."
+  "When the Iron turned back, some celebrated, confident that we had won. But not me. I knew we had only bought ourselves a little time. They'd be back. Or some new danger would threaten the empire. But what if the attack was a gift? What if we could learn how these things work, control them? Harness that power in service to the empire."
 
   "You've seen the Kesharat and their trains. Who knows what military wonders they control? Some day, we'll come to blows with them, it is the nature of things. When they happens," he pats the instrument cluster near him, "we'll have this beast."
 
-  "We'll rain down the same hell our boys endured, and fill them with the same terror that gripped our ranks."
+  "We'll rain down the same hell our boys endured."
 
   A mad grin creeps across his face.
 
@@ -31,16 +31,17 @@ choices:
 * Hand the part over = Be done with this [requires tag metal_beast.accepted_sabotage]
   Sev unties the cording and rolls out the canvas. He lifts the control shaft to examine it, but you interrupt him. "I've two more contracts, engineer, and daylight is burning. I'll need your signature and the payment, if you don't mind. Then I'll leave you to admire your gadget."
   @if check cunning medium {
-      Sev hesitates, his gaze lingering on the component a moment longer than comfort allows. "Yes, yes, of course," he mutters at last. "I'll be glad to get you out of my workshop, trader." He scratches his mark across the ledger with sharp, impatient strokes, then counts your fee into your palm. The coins are warm from his pocket, slick with the oil that seems to coat everything in this place.
+      Sev hesitates, his gaze lingering on the component a moment longer than comfort allows. "Yes, yes, of course," he mutters at last. "And I'll be glad to get you out of my workshop." He scratches his mark across the ledger with sharp, impatient strokes, then counts your fee into your palm. The coins are warm from his pocket, slick with the oil that seems to coat everything in this place.
 
-      You turn and make your way through the narrow passage, back toward the rope ladder and open air. Behind you, Sev's voice rises, urgent. Footsteps patter down the corridor, growing louder. Your blood runs cold. The sabotaged part weighs heavy in your thoughts. Has he discovered the truth?
+      The old engineer stops you as you turn to leave. "Just a moment. You seem like an intrepid sort," he says. "The Iron came from a city on the other side of the borderlands. I had meant to travel there, try to learn more about them. Perhaps find more of their wondrous machines. But I am an old man now, and the chance has passed me by. You've done me a great service today." 
 
-      He emerges breathless at your side, one hand raised. "You seem like an intrepid sort," he says, studying your face with an intensity that makes you wonder what he sees there. "The Iron came from a city on the other side of the borderlands. I had meant to travel there, try to learn more about them. Perhaps find more of their wondrous machines. But I am an old man now, and the chance has passed me by. You've done me a great service today." From within his coat he produces a polished oak box, no larger than your fist. He presses it into your hands. "It's a grid cypher. Found it while working on the beast. You'll need it to get anywhere near the city." His grin splits his weathered face. "I'll expect a fine story about what you find there. I'll be waiting."
+      From within his coat he produces a polished oak box, no larger than your fist. He presses it into your hands. "It's a grid cypher. Found it while working on the beast. You'll need it to get anywhere near the city." His grin splits his weathered face. "I'll expect a fine story about what you find there. I'll be waiting."
 
       You take the box and slip it into your haversack, then turn quickly through the winding passages. The rope ladder sways beneath your weight as you descend, hand over hand, until your boots strike solid earth. The engineer stationed at the monster's great foot returns your pack without comment. You hoist it onto your shoulders and walk away, leaving the Iron behind.
 
       A half hour later, in the distance, you hear the great crack. You turn to see the first licks of flame emerging from the beast, then tendrils of black smoke, then finally great, oily plumes. 
       +give_gold 120
+      +discard control_shaft
       +add_item grid_cipher
       +finish_dungeon
   } @else {
@@ -49,6 +50,7 @@ choices:
       "Just need to check a few things," he says, his voice flat as hammered iron. "Then I'll sign your papers and you can be on your way."
 
       His hands move with practiced sureness. The canvas falls away. He lifts the control shaft into the lamplight and begins his work, fingers working catches and seams you had not noticed. Metal rings separate with faint clicks. Components emerge in sequence: casings, rod segments, the nested mechanisms within. He lays each piece upon the canvas in methodical array, a dismantled anatomy spread before him. Then his hands go still. The lamp gutters. His gaze fixes upon the interior crystal, where Pyke's tampering has left its mark in the faceted surface, faint but unmistakable to an expert eye.
+      +discard control_shaft
       +open Confrontation
   }
 
@@ -61,5 +63,6 @@ choices:
 
   You accept the box and slip it into your haversack. The passageways yield to you once more as you wind through them, copper and shadow giving way to open air. The rope ladder sways beneath your weight, uncertain as prayer. At the foot of the beast, the engineer returns your pack without ceremony. You shoulder it and continue on your way, leaving the great iron carcass to its secrets.
   +give_gold 120
-  +add_item grid_cipher
+  +discard control_shaft
+  +add_item grid_cipher  
   +finish_dungeon

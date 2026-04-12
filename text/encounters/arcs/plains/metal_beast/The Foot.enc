@@ -47,7 +47,7 @@ choices:
 
         You shrug, "We crossed paths. Strange fellow."
 
-        "I knew it," she murmurs. "I told myself I was imagining things. A shape by the outer works. Footsteps where there shouldn't be any." Her eyes flick toward the great metal beast, then back to you. "He's been watching us."
+        "I knew it," she murmurs. "I told myself I was imagining things." Her eyes flick toward the great metal beast, then back to you. "He's been watching us."
 
         She folds her arms, more to steady herself than for warmth.
 
@@ -64,13 +64,13 @@ choices:
 * Ask what's going on here = How were you inside a metal monster?
   "Monster?" The woman's laughter rings sharp against the metal hull. "My friend, this is no monster. It is an engine of war, a clockwork colossus. Think of the Kesharat steam engines, if you've heard tell of them, then multiply their intricacy tenfold. Well. Perhaps a hundred."
 
-  She gestures upward at the vast plated limb rising behind her. "Sev witnessed the imperial siege weapons bring this thing low. He's been camped here ever since, measuring, documenting, crawling through every chamber and joint. The man believes he can wake it again." A pause, then her voice takes on a kind of admiration. "Pyke and I were dispatched to join him two years past. What we've accomplished in that time..." She shakes her head slowly. "The progress is undeniable. Sev may well be right. I'd say even odds." Her gaze drifts across the great armored foot beneath her, tracing the seams with practiced eyes. "Hell of a thing if we can make it go, though."
+  She gestures upward at the vast plated limb rising behind her. "Sev witnessed the imperial siege weapons bring this thing low. He's been camped here ever since, measuring, documenting, crawling through every chamber and joint. The man believes he can wake it again." A pause, then her voice takes on a kind of admiration. "Pyke and I were dispatched to join him two years past. What we've accomplished in that time..." She shakes her head slowly. "The progress is undeniable. Sev may well be right. I'd say even odds." Her gaze drifts across the great armored foot beneath her, tracing the seams with practiced eyes. "Hell of a thing if we can make it go."
   +open "The Foot"
 
 * Head up to Sev = Finish the contract without further delay
   You leave your pack at the foot of the great beast, trusting it to the engineer below. The control shaft fits poorly into your haversack; you shove and work it until the thing is secured, then grasp the first rung of the rope ladder. The ladder swings wide as you pull yourself up, twisting violently beneath your weight. Your boots slip once, twice. The metal hull of the creature looms beside you, vast and indifferent. You press on, grip tight, legs burning. At last you reach the hatch and haul yourself through.
 
-  The air inside is cold against your face. Metal corridors stretch in an oval passage before you, lit by unnatural lights that hum at the ceiling like trapped insects. The wind catches the monster's frame; metal groans and shifts around you. You move quickly through the narrow passages, eager to finish this business and quit these iron bowels. Each corridor resembles the last, featureless and strange, until you wonder if you circle back upon yourself. Then the passage opens into an egg-shaped chamber, deep in the belly of the thing.
+  The air inside is cold against your face. Metal corridors stretch in an oval passage before you, lit by unnatural lights that hum in the ceiling. The wind catches the monster's frame; metal groans and shifts around you. You move quickly through the narrow passages, eager to finish this business. Each corridor resembles the last, featureless and strange, until you wonder if you heading in circles. At last the passage opens into an egg-shaped chamber, deep in the belly of the thing.
 
-  Every surface crawls with diagrams and scrawled notes. A straw mattress lies wedged between stacks of books and loose papers, a living space carved from obsession. A man sits reading, grey and wizened, dressed in imperial trousers and a ragged linen shirt. He does not look up as you enter. His voice comes flat, without preamble. "We each only have so much time in this world, trader. You are wasting mine and yours. Hand over the control shaft so we can be rid of each other."
+  Every surface crawls with diagrams and scrawled notes. A straw mattress lies wedged between stacks of books and loose papers. A man sits reading, grey and wizened, dressed in imperial trousers and a ragged linen shirt. He does not look up as you enter. His voice comes flat, without preamble. "We each only have so much time in this world, trader. You are wasting mine and yours. Hand over the control shaft so we can be rid of each other."
   +open "Belly of the Beast"
