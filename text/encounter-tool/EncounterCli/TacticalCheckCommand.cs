@@ -36,21 +36,24 @@ static class TacticalCheckCommand
             var result = TacticalParser.Parse(text);
 
             var warnings = CheckForMarkers(text);
+            var dashErrors = CheckCommand.CheckForDashAffectations(text);
 
             if (result.IsSuccess && result.Encounter is { } enc)
                 warnings.AddRange(CheckOpeningCount(enc));
 
-            if (result.IsSuccess && warnings.Count == 0)
+            if (result.IsSuccess && dashErrors.Count == 0 && warnings.Count == 0)
             {
                 Console.WriteLine($"  OK  {rel}");
             }
             else
             {
-                var hasErrors = !result.IsSuccess;
+                var hasErrors = !result.IsSuccess || dashErrors.Count > 0;
                 if (hasErrors) failed++;
                 else warned++;
                 Console.WriteLine($"  {(hasErrors ? "ERR" : "WARN")} {rel}");
                 foreach (var err in result.Errors)
+                    Console.WriteLine($"      {err}");
+                foreach (var err in dashErrors)
                     Console.WriteLine($"      {err}");
                 foreach (var warn in warnings)
                     Console.WriteLine($"      {warn}");

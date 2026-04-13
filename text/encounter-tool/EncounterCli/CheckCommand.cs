@@ -86,6 +86,8 @@ static class CheckCommand
             }
 
             var markerWarnings = CheckForMarkers(text);
+            var dashErrors = CheckForDashAffectations(text);
+            vocabErrors.AddRange(dashErrors);
 
             if (result.IsSuccess && vocabErrors.Count == 0 && markerWarnings.Count == 0 && idWarnings.Count == 0)
             {
@@ -177,7 +179,6 @@ static class CheckCommand
 
     private static readonly (char Char, string Name, string Replacement)[] BadChars =
     [
-        ('\u2014', "em-dash", "--"),
         ('\u2013', "en-dash", "-"),
         ('\u201C', "left double quote", "\""),
         ('\u201D', "right double quote", "\""),
@@ -190,6 +191,27 @@ static class CheckCommand
         "trader's guild",
         "merchant guild",
     ];
+
+    private static readonly (string Pattern, string Label)[] DashAffectations =
+    [
+        ("\u2014", "em-dash (\u2014)"),
+        ("--", "double-dash (--)"),
+    ];
+
+    internal static List<string> CheckForDashAffectations(string text)
+    {
+        var errors = new List<string>();
+        var lines = text.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            foreach (var (pattern, label) in DashAffectations)
+            {
+                if (lines[i].Contains(pattern))
+                    errors.Add($"Line {i + 1}: {label} — rewrite the sentence instead of using a dash for a dramatic pause or aside");
+            }
+        }
+        return errors;
+    }
 
     private static List<string> CheckForMarkers(string text)
     {
