@@ -38,7 +38,7 @@ export default function Rescue({ state }: { state: GameResponse }) {
       {/* Right panel — narrative content */}
       <div className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
         <div className="max-w-2xl space-y-6">
-          <h2 className="text-3xl md:text-4xl font-header text-negative uppercase">
+          <h2 className="text-3xl md:text-4xl font-header text-negative">
             Rescued
           </h2>
 

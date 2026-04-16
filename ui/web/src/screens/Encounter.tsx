@@ -121,7 +121,7 @@ export default function Encounter({ state }: { state: GameResponse }) {
         <div className="max-w-2xl space-y-6">
           {/* Base title + body (shown once) */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-header text-accent uppercase">
+            <h2 className="text-3xl md:text-4xl font-header text-accent">
               {baseTitle || encounter?.title}
             </h2>
             {node?.region && status && (

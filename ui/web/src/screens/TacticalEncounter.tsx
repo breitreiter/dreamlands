@@ -256,7 +256,7 @@ export default function TacticalEncounter({ tactical, node }: { tactical: Tactic
       {/* Right panel */}
       <div className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
         <div className="max-w-2xl w-full space-y-6">
-          <h2 className="font-header text-[32px] text-accent uppercase">{tactical.title}</h2>
+          <h2 className="font-header text-[32px] text-accent">{tactical.title}</h2>
 
           {/* Approach phase */}
           {tactical.phase === "approach" && tactical.approaches && (
