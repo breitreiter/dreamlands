@@ -158,14 +158,13 @@ export default function Inn({
             <>
               <div className="text-primary/80 leading-loose space-y-4">
                 <p>
-                  The chapterhouse rises above you like a cathedral cut from
-                  white granite, four stories of stone climbing to a vaulted
-                  ceiling. Brass railwork rims each gallery, casting warm lines
-                  across polished surfaces. The banisters and counting desks
-                  are dark hardwood, walnut worn to a deep amber by years of
-                  oil and hands. Murmured conversations drift down from the
-                  galleries, softened and indistinct. The air smells of
-                  incense, spice, and old leather.
+                  The hall unfolds before you — blue columns rising to a
+                  vaulted ceiling, their surfaces traced with arabesque figures
+                  that shift and resolve as you move past. The capitals are
+                  gilded, warm against the stone. Lamps hang deep between the
+                  columns and the light they cast pools amber on floors worn
+                  smooth by generations of feet. The air smells of incense and
+                  spice.
                 </p>
                 <p>
                   Food and lodging is free for guild members in good standing.
