@@ -8,11 +8,12 @@ There are three typefaces, each used at exactly one size and weight. No exceptio
 
 | Typeface            | Weight  | Size | Use                        | Tailwind                             |
 |---------------------|---------|------|----------------------------|--------------------------------------|
-| Cinzel Decorative   | Regular | 32px | Page/section headers only  | `font-header text-[32px]`            |
+| Sorts Mill Goudy    | Regular | 32px | Page/section headers only  | `font-header text-[32px]`            |
 | Alegreya Sans       | Regular | 20px | All other text             | (default — `html { font-size: 20px }`) |
 | Sue Ellen Francisco | Regular | 20px | Handwritten/ledger accents | `font-hand`                          |
 
 - **Do not** use multiple sizes of any typeface. No `text-xs`, `text-sm`, `text-lg` overrides.
+- **Do not** use `uppercase` on titles or headers. Sorts Mill Goudy reads well in mixed case.
 - Use `font-bold` sparingly for emphasis (section subheadings, totals). Never use other weights.
 
 ## Colors
