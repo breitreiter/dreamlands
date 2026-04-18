@@ -339,6 +339,34 @@ public class EndOfDayTests
     }
 
     [Fact]
+    public void Resolve_FreezingClearedWhenLeavingMountains()
+    {
+        var p = Fresh();
+        p.Spirits = 10;
+        p.ActiveConditions.Add("freezing");
+        AddRation(p);
+
+        var events = EndOfDay.Resolve(p, "forest", 1, Balance, new Random(42));
+
+        Assert.DoesNotContain("freezing", p.ActiveConditions);
+        Assert.Contains(events, e => e is EndOfDayEvent.ConditionCured c && c.ConditionId == "freezing");
+    }
+
+    [Fact]
+    public void Resolve_FreezingPersistsInMountains()
+    {
+        var p = Fresh();
+        p.Spirits = 10;
+        p.ActiveConditions.Add("freezing");
+        p.PendingNoBiome = true; // skip resist rolls to isolate the test
+        AddRation(p);
+
+        EndOfDay.Resolve(p, "mountains", 1, Balance, new Random(42));
+
+        Assert.Contains("freezing", p.ActiveConditions);
+    }
+
+    [Fact]
     public void Resolve_ForageSuccess_SkipsRationConsumption()
     {
         // Stack the deck: max bushcraft so the d20+modifier reliably beats DC 20

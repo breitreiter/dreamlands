@@ -68,6 +68,10 @@ public static class EndOfDay
         state.PendingNoMeal = false;
         state.PendingNoBiome = false;
 
+        // 0. Clear biome-specific conditions when the player is no longer in that biome
+        if (!noBiome)
+            ClearOutOfBiomeConditions(state, biome, balance, events);
+
         // Snapshot which conditions the player already has entering this rest
         var preExisting = new HashSet<string>(state.ActiveConditions);
 
@@ -110,6 +114,24 @@ public static class EndOfDay
         state.ConditionsClearedThisTurn.Clear();
 
         return events;
+    }
+
+    static void ClearOutOfBiomeConditions(PlayerState state, string biome,
+        BalanceData balance, List<EndOfDayEvent> events)
+    {
+        var toClear = new List<string>();
+        foreach (var conditionId in state.ActiveConditions)
+        {
+            if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
+            if (def.Biome != "none" && def.Biome != biome)
+                toClear.Add(conditionId);
+        }
+
+        foreach (var conditionId in toClear)
+        {
+            state.ActiveConditions.Remove(conditionId);
+            events.Add(new EndOfDayEvent.ConditionCured(conditionId));
+        }
     }
 
     /// <summary>
