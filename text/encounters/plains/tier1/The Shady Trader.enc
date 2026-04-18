@@ -2,20 +2,15 @@ The Shady Trader
 [trigger settlement]
 [tier 1]
 
-A figure in an oversized coat leans against the wall of the general store, half-hidden behind a stack of crates. He catches your eye and beckons with a ringed finger. "Psst. You look like someone who values their time."
+DEBUG ENCOUNTER -- This encounter exists solely to help testers skip past early-game progression. It gives you a full gear loadout instantly so you can test mid- or late-game content without grinding through the starting area.
 
-He flips open the coat. The lining is sewn with dozens of pockets, each bulging with gear. Daggers, armor plates, rolled bundles of leather and steel. More equipment than should physically fit on one person.
+Choose a loadout below. Each option gives you 500 gold, a weapon, armor, boots, and field gear appropriate for that archetype. The third option gives top-tier equipment for testing high-difficulty content.
 
-"Don't ask where I got it," he says. "Don't ask how it all fits in the coat. Just tell me what kind of traveler you are, and I'll set you up. Five hundred gold, flat rate. No haggling, no questions."
+This encounter does not appear in production builds.
 
 choices:
 
-* "I'm an outdoorsman" = A sturdy kit for the self-sufficient traveler
-  He sizes you up and nods. "Practical type. I respect that." He reaches into the coat and produces, one by one: a hunting knife with a horn handle, a suit of lamellar armor still smelling of the tanner's oil, a pair of heavy trail boots, a good waterskin, a dog-eared copy of something called "A Guide to the Borderlands," and an ornate spyglass that he handles with surprising care.
-
-  "Everything you need to live off the land and talk your way out of what the land throws at you." He fans the items across a crate like a card dealer. "Five hundred. Take it or leave it."
-
-  You take it.
+* Outdoorsman loadout = Knife, lamellar, trail boots, waterskin, guidebook, spyglass
   +give_gold 500
   +add_item hunting_knife
   +add_item lamellar
@@ -24,12 +19,7 @@ choices:
   +add_item peoples_borderlands
   +add_item ornate_spyglass
 
-* "I solve problems with steel" = The best arms and armor money can buy
-  "A direct approach. I like it." He pulls a gleaming arming sword from somewhere inside the coat, followed by a brigandine that clinks heavily as he sets it down, trail boots with reinforced soles, and then the same assortment of field gear: waterskin, guidebook, spyglass.
-
-  "You'll cut through anything the plains throw at you, and the pack gear keeps you standing between fights." He stacks it all neatly. "Five hundred for the lot."
-
-  You don't need to be asked twice.
+* Combat loadout = Scimitar, brigandine, trail boots, waterskin, guidebook, spyglass
   +give_gold 500
   +add_item scimitar
   +add_item brigandine
@@ -38,12 +28,7 @@ choices:
   +add_item peoples_borderlands
   +add_item ornate_spyglass
 
-* "Give me the good stuff" = Gear that shouldn't exist in any shop
-  His eyes widen, then narrow. He glances left, glances right, and leans in close. "You're one of those, are you? Alright." He reaches deep into the coat, past the normal pockets, past what should be the back of the coat, and keeps reaching. His arm disappears to the shoulder.
-
-  He pulls out a Revathi labrys that hums faintly in the air. Then a suit of armor stamped with the crest of the 17th Mountain Regiment, which has been missing for forty years. Then a pair of windstrider boots that seem to weigh nothing at all. The field gear comes last, almost as an afterthought.
-
-  "Don't tell anyone where you got these," he says. "Especially not the 17th Mountain Regiment."
+* Max loadout (high-difficulty testing) = Best-in-slot weapon/armor/boots + full pack upgrade + all field items
   +give_gold 500
   +upgrade_pack 4
   +add_item revathi_labrys
@@ -61,5 +46,4 @@ choices:
   +add_item color_lens
   +add_item revathi_tile
 
-* "No thanks" = Walk away
-  "Suit yourself," he says, pulling the coat tighter. "I'll be here if you change your mind. Probably."
+* Skip = Take nothing
