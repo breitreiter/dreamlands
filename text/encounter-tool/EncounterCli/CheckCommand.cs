@@ -330,28 +330,52 @@ static class CheckCommand
     private static void CheckActionId(string action, IdRegistry registry, List<string> warnings)
     {
         var tokens = ActionVerb.Tokenize(action);
-        if (tokens.Count < 2) return;
-        var verb = tokens[0];
+        int pos = 0;
+        while (pos < tokens.Count)
+        {
+            var rawVerb = tokens[pos];
+            if (rawVerb is "&&" or "||") { pos++; continue; }
 
-        if (TagVerbs.Contains(verb))
-        {
-            var warn = IdRegistry.CheckId(tokens[1], registry.Tags, "tag");
-            if (warn != null) warnings.Add(warn);
-        }
-        else if (QualityVerbs.Contains(verb))
-        {
-            var warn = IdRegistry.CheckId(tokens[1], registry.Qualities, "quality");
-            if (warn != null) warnings.Add(warn);
+            var verb = rawVerb.TrimStart('!');
+            var verbDef = ActionVerb.FromName(verb);
+            pos++;
+
+            if (pos < tokens.Count && TagVerbs.Contains(verb))
+            {
+                var warn = IdRegistry.CheckId(tokens[pos], registry.Tags, "tag");
+                if (warn != null) warnings.Add(warn);
+            }
+            else if (pos < tokens.Count && QualityVerbs.Contains(verb))
+            {
+                var warn = IdRegistry.CheckId(tokens[pos], registry.Qualities, "quality");
+                if (warn != null) warnings.Add(warn);
+            }
+
+            pos += verbDef?.Args.Count ?? 0;
         }
     }
 
     private static void ValidateItemId(string action, List<string> errors)
     {
         var tokens = ActionVerb.Tokenize(action);
-        if (tokens.Count < 2) return;
-        if (!ItemIdVerbs.Contains(tokens[0])) return;
-        var itemId = tokens[1];
-        if (!ItemDef.IsValidId(itemId))
-            errors.Add($"'{tokens[0]} {itemId}': unknown item id. Not found in ItemDef.");
+        int pos = 0;
+        while (pos < tokens.Count)
+        {
+            var rawVerb = tokens[pos];
+            if (rawVerb is "&&" or "||") { pos++; continue; }
+
+            var verb = rawVerb.TrimStart('!');
+            var verbDef = ActionVerb.FromName(verb);
+            pos++;
+
+            if (pos < tokens.Count && ItemIdVerbs.Contains(verb))
+            {
+                var itemId = tokens[pos];
+                if (!ItemDef.IsValidId(itemId))
+                    errors.Add($"'{verb} {itemId}': unknown item id. Not found in ItemDef.");
+            }
+
+            pos += verbDef?.Args.Count ?? 0;
+        }
     }
 }

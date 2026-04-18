@@ -38,6 +38,15 @@ Conditions in [requires] use the same syntax as @if and choice-level [requires]:
   [requires quality <quality_id> <threshold>]
   [requires check <skill> <difficulty>]
 
+Compound conditions with &&, ||, and ! prefix negation:
+  [requires tag met_envoy && quality guild 2]
+  [requires !tag patrol_alerted]
+  [requires tag guild_member || tag kesharat_contact]
+  [requires !has torch && tag cave_explored]
+
+Operator precedence: ! (tightest) > && > ||
+Restriction: check and meets cannot be negated or used in compound expressions.
+
 
 SKILLS                          DIFFICULTY        DC
   combat       fighting            trivial         5
@@ -67,10 +76,14 @@ Flow control        @if check <skill> <difficulty> { ... } @else { ... }
                     @if has <item_id> { ... } @elif check <skill> <difficulty> { ... } @else { ... }
                     @if tag <tag_id> { ... } @else { ... }
                     @if quality <quality_id> <threshold> { ... } @else { ... }
+                    @if tag a && quality guild 2 { ... }
+                    @if !tag patrol_alerted || tag bribed_guard { ... }
 
 Choice gating       * Option text [requires has <item_id>]
                     * Option text [requires tag <tag_id>]
                     * Option text [requires quality <quality_id> <threshold>]
+                    * Option text [requires tag a && !tag b]
+                    * Option text [requires tag a || tag b]
 
 Navigation          +open <encounter_id>
 

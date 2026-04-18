@@ -28,6 +28,8 @@ public enum ArgType
     SignedInt,
     /// <summary>An item category name (e.g. "food"). Free-form for now.</summary>
     Category,
+    /// <summary>A free-form text string (must be non-empty; use quotes for multi-word values).</summary>
+    Text,
 }
 
 /// <summary>Defines one positional argument for a verb.</summary>
@@ -86,6 +88,12 @@ public sealed class ActionVerb
     public static readonly ActionVerb Open = new("open",
         VerbUsage.Mechanic, "Navigate to another encounter",
         new ArgDef("encounter_id", ArgType.Id));
+
+    // ── Identity ────────────────────────────────────────────────
+
+    public static readonly ActionVerb SetName = new("set_name",
+        VerbUsage.Mechanic, "Set the player's display name",
+        new ArgDef("name", ArgType.Text));
 
     // ── World state ─────────────────────────────────────────────
 
@@ -213,6 +221,7 @@ public sealed class ActionVerb
     {
         Check, Has, Tag, Meets, Quality,
         Open,
+        SetName,
         AddTag, RemoveTag, SetQuality,
         AddItem, AddRandomItems, LoseRandomItem,
         Equip, Unequip, Discard, UpgradePack,
@@ -243,6 +252,8 @@ public sealed class ActionVerb
 
     /// <summary>
     /// Validate a full action string (e.g. "check combat hard" or "damage_health small").
+    /// Conditions support compound expressions: &&, ||, and ! prefix negation.
+    /// check and meets cannot be negated or used in compound expressions.
     /// Returns null on success, or an error message describing the problem.
     /// </summary>
     public static string? Validate(string action, VerbUsage expectedUsage)
@@ -251,19 +262,18 @@ public sealed class ActionVerb
         if (tokens.Count == 0)
             return "Empty action.";
 
+        if (expectedUsage == VerbUsage.Condition)
+            return ValidateConditionExpression(tokens);
+
+        // ── Mechanic path ──────────────────────────────────────────
+
         var verbName = tokens[0];
         var verb = FromName(verbName, expectedUsage);
         if (verb == null)
         {
-            // Check if verb exists with opposite usage for a better error message
-            var otherUsage = expectedUsage == VerbUsage.Condition ? VerbUsage.Mechanic : VerbUsage.Condition;
-            var other = FromName(verbName, otherUsage);
+            var other = FromName(verbName, VerbUsage.Condition);
             if (other != null)
-            {
-                var expected = expectedUsage == VerbUsage.Condition ? "condition" : "mechanic";
-                var actual = other.Usage == VerbUsage.Condition ? "condition" : "mechanic";
-                return $"'{verbName}' is a {actual} but was used as a {expected}.";
-            }
+                return $"'{verbName}' is a condition but was used as a mechanic.";
             return $"Unknown verb '{verbName}'.";
         }
 
@@ -280,7 +290,6 @@ public sealed class ActionVerb
                 return $"'{verbName}' argument '{def.Name}': {err}";
         }
 
-        // Validate any trailing flags.
         var trailing = tokens.GetRange(1 + verb.Args.Count, tokens.Count - 1 - verb.Args.Count);
         if (trailing.Count > 0 && verb.Flags.Count == 0)
             return $"'{verbName}' does not accept flags, but got: {string.Join(", ", trailing)}.";
@@ -293,6 +302,62 @@ public sealed class ActionVerb
             if (!seen.Add(flag))
                 return $"'{verbName}': duplicate flag '{flag}'.";
         }
+
+        return null;
+    }
+
+    static string? ValidateConditionExpression(List<string> tokens)
+    {
+        int pos = 0;
+        bool hasOperator = false;
+        string? checkorMeetsVerb = null;
+
+        while (pos < tokens.Count)
+        {
+            var token = tokens[pos];
+
+            if (token is "&&" or "||")
+            {
+                if (pos == 0 || pos == tokens.Count - 1)
+                    return $"Operator '{token}' must have conditions on both sides.";
+                hasOperator = true;
+                pos++;
+                continue;
+            }
+
+            var negated = token.StartsWith('!');
+            var verbName = negated ? token[1..] : token;
+
+            var verb = FromName(verbName, VerbUsage.Condition);
+            if (verb == null)
+            {
+                var other = FromName(verbName, VerbUsage.Mechanic);
+                return other != null
+                    ? $"'{verbName}' is a mechanic but was used as a condition."
+                    : $"Unknown condition verb '{verbName}'.";
+            }
+
+            if (negated && verbName is "check" or "meets")
+                return $"'{verbName}' cannot be negated with '!'.";
+
+            if (verbName is "check" or "meets")
+                checkorMeetsVerb = verbName;
+
+            pos++; // consume verb token
+
+            for (int i = 0; i < verb.Args.Count; i++)
+            {
+                if (pos >= tokens.Count || tokens[pos] is "&&" or "||")
+                    return $"'{verbName}' expects {verb.Args.Count} argument(s) but got fewer.";
+                var argErr = ValidateArg(verb.Args[i], tokens[pos]);
+                if (argErr != null)
+                    return $"'{verbName}' argument '{verb.Args[i].Name}': {argErr}";
+                pos++;
+            }
+        }
+
+        if (hasOperator && checkorMeetsVerb != null)
+            return $"'{checkorMeetsVerb}' cannot be used in a compound expression (combined with && or ||).";
 
         return null;
     }
@@ -354,6 +419,8 @@ public sealed class ActionVerb
                 ? null : $"'{value}' is not a valid integer.",
             ArgType.Category => string.IsNullOrWhiteSpace(value)
                 ? "category must not be empty." : null,
+            ArgType.Text => string.IsNullOrWhiteSpace(value)
+                ? "text must not be empty." : null,
             _ => $"unknown argument type {def.Type}.",
         };
     }

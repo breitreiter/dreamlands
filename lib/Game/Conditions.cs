@@ -2,36 +2,74 @@ using Dreamlands.Rules;
 
 namespace Dreamlands.Game;
 
-/// <summary>Evaluates @if condition strings against player state.</summary>
+/// <summary>
+/// Evaluates condition expressions against player state.
+/// Supports compound expressions: &&, ||, and ! prefix negation on stateless conditions.
+/// check and meets cannot appear in compound expressions or be negated.
+/// </summary>
 public static class Conditions
 {
-    /// <summary>
-    /// Evaluate a condition string (e.g. "check combat hard", "has torch", "tag dragon_slayer").
-    /// </summary>
     public static bool Evaluate(string condition, PlayerState state, BalanceData balance, Random rng)
     {
-        var parts = ActionVerb.Tokenize(condition);
-        if (parts.Count == 0) return false;
-
-        return parts[0] switch
-        {
-            "check" when parts.Count >= 3 => EvaluateCheck(parts, state, balance, rng),
-            "has" when parts.Count >= 2 => EvaluateHas(parts[1], state),
-            "tag" when parts.Count >= 2 => EvaluateTag(parts[1], state),
-            "meets" when parts.Count >= 3 => EvaluateMeets(parts, state, balance),
-            "quality" when parts.Count >= 3 => EvaluateQuality(parts, state),
-            _ => false,
-        };
+        var tokens = ActionVerb.Tokenize(condition);
+        if (tokens.Count == 0) return false;
+        int pos = 0;
+        return EvaluateOr(tokens, ref pos, state, balance, rng);
     }
 
-    static bool EvaluateCheck(List<string> parts, PlayerState state, BalanceData balance, Random rng)
+    static bool EvaluateOr(List<string> tokens, ref int pos, PlayerState state, BalanceData balance, Random rng)
     {
-        var skill = Skills.FromScriptName(parts[1]);
-        var difficulty = Difficulties.FromScriptName(parts[2]);
-        if (skill == null || difficulty == null) return false;
+        var result = EvaluateAnd(tokens, ref pos, state, balance, rng);
+        while (pos < tokens.Count && tokens[pos] == "||")
+        {
+            pos++;
+            var right = EvaluateAnd(tokens, ref pos, state, balance, rng);
+            result = result | right;
+        }
+        return result;
+    }
 
-        var result = SkillChecks.Roll(skill.Value, difficulty.Value, state, balance, rng);
-        return result.Passed;
+    static bool EvaluateAnd(List<string> tokens, ref int pos, PlayerState state, BalanceData balance, Random rng)
+    {
+        var result = EvaluateAtom(tokens, ref pos, state, balance, rng);
+        while (pos < tokens.Count && tokens[pos] == "&&")
+        {
+            pos++;
+            var right = EvaluateAtom(tokens, ref pos, state, balance, rng);
+            result = result & right;
+        }
+        return result;
+    }
+
+    static bool EvaluateAtom(List<string> tokens, ref int pos, PlayerState state, BalanceData balance, Random rng)
+    {
+        if (pos >= tokens.Count) return false;
+
+        var token = tokens[pos];
+        var negated = token[0] == '!';
+        var verbName = negated ? token[1..] : token;
+        pos++;
+
+        var result = verbName switch
+        {
+            "check"   => EvaluateCheck(tokens, ref pos, state, balance, rng),
+            "has"     => pos < tokens.Count ? EvaluateHas(tokens[pos++], state) : false,
+            "tag"     => pos < tokens.Count ? EvaluateTag(tokens[pos++], state) : false,
+            "meets"   => EvaluateMeets(tokens, ref pos, state, balance),
+            "quality" => EvaluateQuality(tokens, ref pos, state),
+            _         => false,
+        };
+
+        return negated ? !result : result;
+    }
+
+    static bool EvaluateCheck(List<string> tokens, ref int pos, PlayerState state, BalanceData balance, Random rng)
+    {
+        if (pos + 1 > tokens.Count) return false;
+        var skill = Skills.FromScriptName(tokens[pos++]);
+        var difficulty = Difficulties.FromScriptName(tokens[pos++]);
+        if (skill == null || difficulty == null) return false;
+        return SkillChecks.Roll(skill.Value, difficulty.Value, state, balance, rng).Passed;
     }
 
     static bool EvaluateHas(string itemId, PlayerState state) =>
@@ -40,21 +78,22 @@ public static class Conditions
     static bool EvaluateTag(string tagId, PlayerState state) =>
         state.Tags.Contains(tagId);
 
-    static bool EvaluateMeets(List<string> parts, PlayerState state, BalanceData balance)
+    static bool EvaluateMeets(List<string> tokens, ref int pos, PlayerState state, BalanceData balance)
     {
-        var skill = Skills.FromScriptName(parts[1]);
-        if (skill == null || !int.TryParse(parts[2], out var target)) return false;
-
+        if (pos + 1 > tokens.Count) return false;
+        var skill = Skills.FromScriptName(tokens[pos++]);
+        if (skill == null || !int.TryParse(tokens[pos++], out var target)) return false;
         var skillLevel = state.Skills.GetValueOrDefault(skill.Value);
         var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
         return skillLevel + itemBonus >= target;
     }
 
-    static bool EvaluateQuality(List<string> parts, PlayerState state)
+    static bool EvaluateQuality(List<string> tokens, ref int pos, PlayerState state)
     {
-        if (!int.TryParse(parts[2], out var threshold)) return false;
-        var value = state.Qualities.GetValueOrDefault(parts[1]);
-        // Positive threshold: value >= n. Negative threshold: value <= n.
+        if (pos + 1 > tokens.Count) return false;
+        var id = tokens[pos++];
+        if (!int.TryParse(tokens[pos++], out var threshold)) return false;
+        var value = state.Qualities.GetValueOrDefault(id);
         return threshold >= 0 ? value >= threshold : value <= threshold;
     }
 }
