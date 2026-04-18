@@ -66,15 +66,8 @@ dungeons:
     tier_range: [2, 2]
 
   # ============================================================================
-  # SWAMP (4 dungeons)
+  # SWAMP (3 dungeons)
   # ============================================================================
-
-  - id: drowning_post
-    name: The Drowning Post
-    biome: swamp
-    decal: drowning_post.png
-    folder: drowning_post
-    tier_range: [2, 2]
 
   - id: listening_blind
     name: The Listening Blind
