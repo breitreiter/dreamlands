@@ -11,6 +11,7 @@ public abstract record MechanicResult
     public record SkillChanged(Skill Skill, int Delta, int NewValue) : MechanicResult;
     public record ItemGained(string DefId, string DisplayName) : MechanicResult;
     public record ItemLost(string DefId, string DisplayName) : MechanicResult;
+    public record NameChanged(string NewName) : MechanicResult;
     public record TagAdded(string TagId) : MechanicResult;
     public record TagRemoved(string TagId) : MechanicResult;
     public record QualityChanged(string QualityId, int Delta, int NewValue) : MechanicResult;

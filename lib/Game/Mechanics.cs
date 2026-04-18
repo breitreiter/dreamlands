@@ -45,6 +45,7 @@ public static class Mechanics
             "unequip" => ApplyUnequip(args, state, balance),
             "discard" => ApplyDiscard(args, state),
             "upgrade_pack" => ApplyUpgradePack(args, state),
+            "set_name" => ApplySetName(args, state),
             "add_tag" => ApplyAddTag(args, state),
             "remove_tag" => ApplyRemoveTag(args, state),
             "quality" => ApplyQuality(args, state),
@@ -313,6 +314,13 @@ public static class Mechanics
         var newValue = current + amount;
         state.Qualities[id] = newValue;
         return new MechanicResult.QualityChanged(id, amount, newValue);
+    }
+
+    static MechanicResult? ApplySetName(List<string> args, PlayerState state)
+    {
+        if (args.Count < 1 || string.IsNullOrWhiteSpace(args[0])) return null;
+        state.Name = args[0];
+        return new MechanicResult.NameChanged(args[0]);
     }
 
     static MechanicResult? ApplyAddTag(List<string> args, PlayerState state)
