@@ -4,7 +4,7 @@ The Gauntlet
 
 The dome door grinds open and the air that hits you is warm, oily, and humming. This is not the entrance you expected.
 
-The corridor opens into a vast bay, lit by strips of pale light running along the ceiling. Machines move inside — not the patrol units from outside, but smaller, specialized things. Worker drones. They shuttle between repair cradles on fixed paths, carrying components, welding, adjusting. The sound is constant: the whine of servos, the click of articulated limbs, the hiss of something being sealed or cut.
+The corridor opens into a vast bay, lit by strips of pale light running along the ceiling. Machines move inside. Not the patrol units from outside, but smaller, specialized things. Worker drones. They shuttle between repair cradles on fixed paths, carrying components, welding, adjusting. The sound is constant: the whine of servos, the click of articulated limbs, the hiss of something being sealed or cut.
 
 Torben pulls you behind a support column. "Workshop," he breathes. "Maintenance depot. These things are repairing each other." He watches the nearest drone complete a circuit and return to its cradle. "They're on fixed routes. Predictable. We can thread through if we time it right."
 
@@ -49,7 +49,7 @@ success:
   +open "The Plaza"
 
 failure:
-  A drone pivots toward you mid-stride. No alarm, no sound — it simply adjusts course, extending a manipulator arm that crackles with the same energy it uses to cut metal. You throw yourself sideways. The arm catches your pack and the smell of scorched leather fills the bay. Torben hauls you through the far doorway by your collar.
+  A drone pivots toward you mid-stride. No alarm, no sound. It simply adjusts course, extending a manipulator arm that crackles with the same energy it uses to cut metal. You throw yourself sideways. The arm catches your pack and the smell of scorched leather fills the bay. Torben hauls you through the far doorway by your collar.
 
   You crouch in the corridor beyond, hearts hammering, while the drone returns to its route. After a long moment, you continue.
 

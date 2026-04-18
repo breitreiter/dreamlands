@@ -4,6 +4,7 @@
 
 # ── Tags (boolean flags: set/not set) ──────────────────────────
 
+lost
 brides_cave_heard_harlan
 
 # ── Qualities (numeric, soft range -5 to +5) ───────────────────

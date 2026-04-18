@@ -55,6 +55,7 @@ public static partial class TacticalParser
         // Front-matter
         var requires = new List<string>();
         string? stat = null;
+        string? vignette = null;
         int? tier = null;
         int bodyStart = 1;
 
@@ -72,6 +73,9 @@ public static partial class TacticalParser
             {
                 case "variant":
                     break; // Ignored — kept for backwards compatibility with existing .tac files
+                case "vignette":
+                    vignette = value;
+                    break;
                 case "stat":
                     if (!Skills.IsValidScriptName(value))
                         errors.Add(new ParseError(i + 1, $"Unknown stat '{value}'. Must be a valid skill name."));
@@ -171,12 +175,12 @@ public static partial class TacticalParser
         if (isGroup)
             return ParseGroup(lines, title, body, tier, requires, sections, errors);
 
-        return ParseEncounter(lines, title, body, stat, tier, requires, sections, errors);
+        return ParseEncounter(lines, title, body, stat, vignette, tier, requires, sections, errors);
     }
 
     static TacticalParseResult ParseEncounter(
         string[] lines, string title, string body,
-        string? stat, int? tier,
+        string? stat, string? vignette, int? tier,
         List<string> requires, Dictionary<Section, (int start, int end)> sections,
         List<ParseError> errors)
     {
@@ -227,6 +231,7 @@ public static partial class TacticalParser
             {
                 Title = title,
                 Body = body,
+                Vignette = vignette,
                 Stat = stat,
                 Tier = tier,
                 Requires = requires,

@@ -40,6 +40,7 @@ public sealed record TacticalEncounter
     public string Category { get; init; } = "";
     public string Title { get; init; } = "";
     public string Body { get; init; } = "";
+    public string? Vignette { get; init; }
     public string? Stat { get; init; }
     public int? Tier { get; init; }
     public IReadOnlyList<string> Requires { get; init; } = [];

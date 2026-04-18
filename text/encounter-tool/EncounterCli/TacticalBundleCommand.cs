@@ -116,6 +116,7 @@ static class TacticalBundleCommand
         category,
         title = enc.Title,
         body = enc.Body,
+        vignette = enc.Vignette,
         stat = enc.Stat,
         tier = enc.Tier,
         requires = enc.Requires,
