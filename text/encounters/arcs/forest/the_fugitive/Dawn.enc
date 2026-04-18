@@ -1,0 +1,180 @@
+Dawn
+[trigger none]
+[vignette dungeons/the_fugitive]
+
+First light comes grey through the trees. Nobody slept well. Cook fires are low. The outlanders are breaking down their gear at the tree line, Daveth with his pack at his feet, watching Mareen's cabin.
+
+The camp is watching the outlanders.
+
+choices:
+
+* See it through = Whatever happens, happens now
+  @if !tag fugitive.rumor_corrected {
+    Daveth takes a breath and walks toward the cabin. That's all it takes.
+
+    Gault moves first, stepping into Reska's path with his hand going to his belt. Reska draws before he finishes the motion. Tashkari women of her age learn the knife early. Gault stumbles back, empty-handed, and someone in the crowd reads the blade as an attack and rushes her.
+
+    The next moments blur together. Daveth and Reska fight back to back, but the odds are impossible. They take two of the exiles with them, but are overwhelmed. Haneth flees. The old woman is slow, but the exiles do not give chase. Gault shouts a few mocking curses at her, and morale is high for a moment before the camp takes stock of their own losses and injuries.
+
+    Eventually, someone thinks to look for Mareen. Her cabin door is open and she is not inside. Nobody saw her leave.
+
+    The camp stands in the morning light with wounded on the ground and no leader to tell them what to do next.
+
+    You walk out of the camp the way you came in. Perhaps you'll return in a season to see if the camp is still there, but you leave with no answers.
+    +finish_dungeon
+  } @elif !tag fugitive.maren_engaged {
+    Daveth crosses the clearing. He calls Mareen's name at the cabin door and when she does not answer, he opens it.
+
+    The cabin is empty. The bag is gone. The knife is gone. Her ledger lies open on the table, as if she meant for it to be found.
+
+    Haneth is the one who speaks, quietly, to nobody. "Twelve years. And again."
+
+    Daveth stands in the doorway a long time. When he turns back to the clearing his face is not angry. It is old.
+
+    "There will be no justice today," he says. And then, to the camp: "We are going. I am sorry for disturbing you. If you see Mareen again, tell her she can stop running. We are done chasing."
+
+    They pack up and leave.
+
+    Mareen's ledger is still on the table. Someone will have to pick it up. Someone will have to be the person who tells the trappers where to go and keeps the stores straight and decides what to do about the winter.
+
+    You leave when the sun is up.
+    +finish_dungeon
+  } @elif tag fugitive.maren_self_marks && tag fugitive.maren_steps_down {
+    The cabin door opens. Mareen steps out into the morning carrying the knife unwrapped in her right hand. She walks to the center of the clearing. The camp goes quiet.
+
+    "I am Mareen Khavar of Tarsin," she says. Her voice carries. "Twelve years ago the clan of Tarsin trusted me with their savings. I lost them in Aldgate through bad trades and worse pride. When the hole was too deep to climb out, I ran. People died that winter who should not have died."
+
+    She looks at Daveth. At Haneth. At Reska.
+
+    "I am not dragged to this. I claim it."
+
+    She pushes her sleeve up, sets the blade to her forearm, and cuts. Clean, steady, in front of everybody. The line wells red and settles into itself as a scar.
+
+    Haneth is crying without sound. Daveth bows his head. Reska watches without speaking, not satisfied, but not looking away.
+
+    Mareen binds her arm with a cloth. Then she turns to the camp.
+
+    "I won't be leading here anymore. Edda will, or Kael if Edda doesn't want it. I will stay. I will trap and mend and haul. I will do the work. But I will not be the one who decides."
+
+    Edda is sitting on her stump at the edge of the firelight. She does not look surprised. She nods, once.
+
+    The outlanders pack up without speaking. Before he leaves, Daveth walks to Mareen and says something quietly. Whatever it is, she nods.
+
+    He turns to you last. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
+
+    "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
+    +add_item color_lens
+
+    Then they are gone through the trees.
+
+    You stay long enough to see the morning fully arrive. Then you go.
+    +finish_dungeon
+  } @elif tag fugitive.maren_self_marks {
+    The cabin door opens. Mareen steps out into the morning carrying the knife unwrapped in her right hand. She walks to the center of the clearing. The camp goes quiet.
+
+    "I am Mareen Khavar of Tarsin," she says. Her voice carries. "Twelve years ago the clan of Tarsin trusted me with their savings. I lost them in Aldgate through bad trades and worse pride. When the hole was too deep to climb out, I ran. People died that winter who should not have died."
+
+    She looks at Daveth. At Haneth. At Reska.
+
+    "I am not dragged to this. I claim it."
+
+    She pushes her sleeve up, sets the blade to her forearm, and cuts. Clean, steady, in front of everybody. The line wells red and settles into itself as a scar.
+
+    Haneth is crying without sound. Daveth bows his head. Reska watches without speaking, not satisfied, but not looking away.
+
+    Mareen binds her arm with a cloth from her own pocket. When she looks up she is looking at her camp. They look back at her. Some are crying. Some are angry. A few are already turning away. She will lead them still, but differently. There is trust to build back by hand, with people who now know exactly what she is.
+
+    The outlanders pack up. Before he leaves, Daveth walks to Mareen and says something quietly. Whatever it is, she nods.
+
+    He turns to you last. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
+
+    "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
+    +add_item color_lens
+
+    Then they are gone through the trees.
+
+    You stay long enough to see the morning fully arrive. Then you go.
+    +finish_dungeon
+  } @elif tag fugitive.maren_defies {
+    The cabin door opens. Mareen steps out into the morning. Her sleeves are down. She walks to the center of the clearing and she waits. Her hands are empty.
+
+    Daveth comes to her, Haneth a step behind with a shallow bowl of water and folded linen for the binding. The rite needs only these things and the camp to witness it.
+
+    "Bring the knife, Mareen."
+
+    "No."
+
+    It is quiet a long time. Then Mareen speaks.
+
+    "I know what I owe your clan. I will not be answering for it this way. The woman you came for was treasurer in Tarsin. She has not been that woman in twelve years. She is not coming back to be her today, not for you, not for the old ways, not for any cut I choose to take or not take."
+
+    "You cannot simply decide you are not that woman."
+
+    "I have decided." She looks past him, to the camp. Thirty exiles standing in their doorways, at their fires, in front of their cabins. None of them moving toward her. None of them moving away.
+
+    Daveth reads the numbers. He turns to his people.
+
+    "We go."
+
+    Reska is the last to leave. She is a young woman watching the old ways fail with her own eyes, and finding it worse than she had imagined. Haneth takes her arm, bowl still in her other hand. Then they are gone through the trees.
+
+    Mareen watches the tree line a long time. The camp does not disperse. When she finally turns, there are hands on her shoulders, quiet, no ceremony. The work of the day begins.
+
+    As you depart the camp, Mareen calls after you, "Trader. Thank you for your counsel last night. I hope I am making a good choice here." She fishes into a pocket and draws forth a small bundled wrapped in stained canvas. "It's a special lens. The Kesharat have done unnatural things to the land. My people make these to help us avoid these dangers. Take it, I won't be returning to those lands."
+    +add_item color_lens
+    +finish_dungeon
+  } @elif tag fugitive.maren_steps_down {
+    The cabin door opens. Mareen steps out. She has washed her face. She walks to the center of the clearing and waits.
+
+    Daveth comes to her and unwraps the knife.
+
+    "Mareen Khavar of Tarsin."
+
+    "I know."
+
+    She rolls up her sleeve and holds her arm out. Daveth sets the blade to her forearm. The cut is quick but the standing is long. She does not flinch. She does not look away from his face. When it is done, Haneth steps forward with a cloth and binds the wound.
+
+    The camp has watched. No one has spoken. Some of them look at the ground.
+
+    When her arm is wrapped, Mareen turns to the camp.
+
+    "I won't be leading here anymore. Edda will, or Kael if Edda doesn't want it. I will stay on. I will trap and mend and haul. But someone else must manage things."
+
+    Edda, at the edge of the firelight, nods once. The camp stands in silence.
+
+    Before they break camp, Daveth comes to you. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
+
+    "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
+    +add_item color_lens
+
+    The outlanders break camp. They leave at midmorning. Haneth looks back once. Daveth does not.
+
+    You leave when the sun is fully up.
+    +finish_dungeon
+  } @else {
+    The cabin door opens. Mareen steps out. She has washed her face. She walks to the center of the clearing and waits.
+
+    Daveth comes to her and unwraps the knife.
+
+    "Mareen Khavar of Tarsin."
+
+    "I know."
+
+    She rolls up her sleeve and holds her arm out. Daveth sets the blade to her forearm. The cut is quick but the standing is long. She does not flinch. She does not look away from his face. When it is done, Haneth steps forward with a cloth and binds the wound.
+
+    The camp has watched. No one has spoken. Some of them look at the ground.
+
+    When it is finished, Mareen walks back to her cabin without saying anything to anybody. The door closes behind her.
+
+    Before they break camp, Daveth comes to you. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
+
+    "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
+    +add_item color_lens
+
+    The outlanders break camp. They leave at midmorning. Haneth looks back once. Daveth does not.
+
+    The camp will keep her. But they watched their leader be marked by an outsider, and they watched her take it without a word, and they are going to have to hold that together with the woman who fed them last winter. Some of them are angry on her behalf. Some of them can't meet her eye. Neither is what she wanted.
+
+    You leave when the sun is fully up.
+    +finish_dungeon
+  }

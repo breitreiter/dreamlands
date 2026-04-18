@@ -1,0 +1,55 @@
+The Trail
+[trigger none]
+[vignette dungeons/the_fugitive]
+
+You hear them before you see them. Three voices on the trail ahead, speaking a language you don't recognize, the cadence quick and nasal. When you round the bend they're already looking back at you, three travellers, stopped to rest.
+
+The oldest is a man with sun-cracked skin and a lantern jaw. A brass-framed disk of pale glass hangs on a braided cord against his shirt, catching the light as he straightens. He raises a hand. "Trade Guild?" He's looking at your ring. "Good road behind us if you're heading east. We're going the other way."
+
+The woman beside him is maybe sixty, compact, her leather pack worn and sunbleached. She nods at you and says nothing.
+
+The third is young. Early twenties, lean, wearing her hair in the tight braided coils you've seen on Tashkari herdsmen in the scrub. She watches you warily.
+
+You introduce yourself. The man is Daveth. The older woman is Haneth. The girl is Reska. They're from the high mesa, weeks of travel behind them, heading to an exile camp a few miles ahead. Daveth says they have business there. You agree to join them; the camp is a short distance and you could use supplies.
+
+The walk is easy. Daveth asks about the forest, the settlements, what the trade routes look like out here. Practical questions. He listens carefully. Haneth walks in silence. Reska drifts ahead and then back, restless.
+
+The camp appears through the trees. A clearing with maybe thirty structures, most of them timber and hide, a few with stone foundations. Smoke from cook fires. Rope lines strung between trees with clothes drying. A woman is splitting firewood near the largest cabin, careful and unhurried. She sets the axe down when she sees the group approaching and walks out to meet you, wiping her hands on her trousers.
+
+She's maybe fifty. Tall, weathered, her posture straight in the way of someone accustomed to being the person others look to. She scans the group, eyes passing over you, settling on Daveth. Something shifts in her face. Not surprise. Recognition, and behind it, something older and heavier.
+
+She looks at Haneth. At Reska. Back to Daveth. Something flashes across her face, but just as quickly it's gone. Her voice comes steady, "you've come a long way, you must be tired."
+
+Daveth nods. He takes a breath, and when he speaks his voice carries across the clearing.
+
+"Mareen Khavar of Tarsin. Treasurer of the Clan Tarsin. I am Daveth Sorran of Tarsin, and I speak your name before witnesses."
+
+The camp goes silent. Everyone in earshot has stopped moving. The forest exile camps run on one rule above others: you do not speak anyone's given name. You do not acknowledge that anyone had a life before the forest. The words cannot be clawed back.
+
+The exile woman who greeted you doesn't flinch.
+
+Daveth continues. Not a speech. A recitation. Twelve years ago, Mareen Khavar was entrusted with the clan's savings to buy grain. She and the money never returned. The clan went hungry. Two elders died that winter.
+
+"I know," Mareen says.
+
+Daveth looks at the sky. The light is already going. "We will settle this in the morning."
+
+Then he reaches to his belt and produces something wrapped in oiled cloth. He unfolds it carefully. A knife, but not a weapon. The blade is short and curved, the handle wrapped in braided cord, the metal worked with old Tashkari patterning. He holds it out to Mareen.
+
+"You know what must be done."
+
+Mareen takes the knife, and walks in silence back to her cabin, quietly closing the door behind her.
+
+"We'll camp at the edge," Daveth says to no one in particular. He picks up his pack and walks toward the tree line.
+
+choices:
+
+* Stay = The camp is restless
+    The night is long and nobody is going to sleep through it. Whatever is happening here, it isn't over.
+    +open "The Camp"
+
+* Walk away = This isn't your problem
+    You shoulder your pack in the dark and take the trail south. Maren doesn't come out to stop you. Daveth, sitting by his fire at the edge of the clearing, watches you go. He nods once.
+
+    The argument is still audible behind you for a quarter mile, voices rising and falling through the trees, getting quieter with distance. Then just the forest. Whatever happens to that camp, you won't be the one who decides it.
+    +flee_dungeon

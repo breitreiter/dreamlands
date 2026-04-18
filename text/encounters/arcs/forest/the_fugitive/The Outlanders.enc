@@ -1,0 +1,81 @@
+The Outlanders
+[trigger none]
+[vignette dungeons/the_fugitive]
+
+Their fire is small, built low against the tree line. Daveth sits on his pack with his back to a birch trunk. Haneth is tending a travel pot. Reska stands at the edge of the firelight, arms folded, watching the camp.
+
+choices:
+
+* Ask about the knife = What did he give Mareen?
+  @if tag fugitive.knife_truth {
+    Daveth has nothing more to say about the knife. The mark is what it is.
+  } @else {
+    "The camp thinks that knife is for killing."
+
+    Daveth looks up. He stares at you for a moment, then rubs his face with both hands.
+
+    "Kill herself? With that pitted old blade? You'd have to..." He grimaces, but doesn't finish the though.
+
+    He holds out his forearm and turns it over, tracing a line along the inside with his thumb. "The oathbreaker's mark, it's a brand. Any Tashkari who sees it knows what it means."
+
+    "The mark is anathema," Reska says from the edge of the fire. "Nobody trades with you. Nobody takes your word."
+
+    Haneth speaks without looking up from her pot. "Might not mean so much out here, but the forms must be observed. The clan needs to know it was done. That's why we came this far."
+
+    "She needs to make this right, close the circle." Daveth says.
+    +add_tag fugitive.knife_truth
+  }
+  +open "The Outlanders"
+
+* Speak with Haneth = She hasn't said much tonight [requires tag fugitive.knife_truth]
+  @if tag fugitive.loophole {
+    Haneth is cleaning her pot. She's said what she was going to say.
+  } @else {
+    Daveth has walked to the tree line to check the perimeter. Reska went with him. Haneth is alone at the fire, scraping the last of her meal.
+
+    You sit down across from her. She doesn't seem to mind.
+
+    "You knew Mareen before?" you say.
+
+    "I knew her mother. We grew up in the same camp." Haneth sets the pot aside. "When Mareen left, I took over the treasury. Twelve years of rebuilding what she undid in a month." She says this evenly; she settled this long ago.
+
+    "And to make this right Daveth needs to brand her?" you ask.
+
+    "That is the way of things, that is our law."
+
+    She's quiet for a while.
+
+    "When I was a girl, one of my brothers killed another Tashkari man in a brawl. He knew what he had done, and he knew he was anathema. I remember he took the knife himself and branded his own arm."
+
+    "It did not change the punishment, but it brought the family some honor. That he chose to carry that, that he was not dragged to the fire like a criminal."
+
+    She trails off, staring now at the campfire.
+    +add_tag fugitive.loophole
+  }
+  +open "The Outlanders"
+
+* Talk to Reska = She's standing apart from the fire
+  @if tag fugitive.talked_reska {
+    Reska glances at you. She's done talking.
+  } @else {
+    She's leaning against a tree at the edge of the firelight, watching the figures move in the exile camp.
+
+    "You're a trader," she says. Not a question. "So what do you care what happens here?"
+
+    You tell her you're not sure yet.
+
+    "Back in our home the Kesharat make buildings on our land. The bring the railroads and books and clerks. Our people forget the old ways. They go to the Kesharat schools, they learn the language and history of our enemy. They forget the old ways." 
+
+    She pushes off the tree.
+
+    "Not all of us. Daveth and Haneth remember. I am learning so I can remember too. And I shall teach my children the truth of Tashkari justice. I will tell them the story of today, when we travelled deep into the forests to see Mareen Khavar of Tarsin punished for her betrayal."
+
+    "What about you, trader? What story will you tell your children about today?"
+
+    You tell her you're not sure yet.
+    +add_tag fugitive.talked_reska
+  }
+  +open "The Outlanders"
+
+* Return to camp = Head back to the clearing
+  +open "The Camp"

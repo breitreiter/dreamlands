@@ -1,0 +1,181 @@
+Mareen
+[trigger none]
+[vignette dungeons/the_fugitive]
+
+The cabin is small and clean. A ledger on the shelf, a work schedule pinned to the wall: trapping duty, rope mending, trail markers. Mareen is at the table, packing a leather bag. Dried fish. Cord. A fire kit. The ceremonial knife sits at the far corner of the table, still wrapped in its oiled cloth.
+
+choices:
+
+* Ask about the knife = The wrapped blade on the table
+  @if tag fugitive.knife_truth {
+    "The mark." She glances at the wrapped cloth, then back at the bag. "Yes."
+
+    Nothing more. She isn't going to expand on it, and she doesn't ask how you know.
+  } @else {
+    "What is it for?"
+
+    She doesn't look up from her packing. "A punishment. Something that's been coming a long time." She folds a shirt into the bag. "Why do you care, trader? Grisly curiosity?"
+
+    You don't answer. She doesn't press the question. Her hands don't stop moving.
+  }
+  +open "Mareen"
+
+* Ask what happened = In Aldgate, twelve years ago
+  @if tag fugitive.heard_mareen {
+    She's told you the story. There's nothing left to add.
+  } @elif tag fugitive.maren_engaged {
+    She stops packing. She sits back.
+
+    "The clan sent me to Aldgate to buy tools and seed grain. Most of the year's savings." Her hands rest on the table now. "The exchange rate was bad. I lost money on the first deal. Tried to recover through a different broker. Lost more. Tried again."
+
+    She looks at the knife.
+
+    "Each time I was fixing the last mistake before anyone found out. Each time the hole got deeper. By the end, most of it was gone."
+
+    "I could have gone home and confessed. But I couldn't face them." She pauses. "Instead I took what was left and walked into the forest."
+
+    "I heard the clan went hungry that winter. People died. Jida the old weaver woman. And Samara's boy child." She drifts off, then falls silent.
+    +add_tag fugitive.heard_mareen
+  } @else {
+    "I was a fool. Still a fool to think I could leave it behind." She folds another shirt. "Doesn't matter much now."
+
+    You wait. She rolls a cord bundle and tucks it into the bag.
+  }
+  +open "Mareen"
+
+* Tell her about Gault = He's stirring the camp toward violence [requires tag fugitive.saw_gault]
+  @if tag fugitive.maren_engaged {
+    She knows. She is not leaving the camp in Gault's hands.
+  } @else {
+    "There's a man out there. Gault. He's telling people the outlanders came here to kill you."
+
+    Her hands slow.
+
+    "The camp thinks I'm going to be executed?"
+
+    "They don't know what the knife is for. Gault is filling in the blanks."
+
+    She sets down the shirt she was folding. For the first time since you walked in, she looks at you directly.
+
+    "Gault will want them dead. Daveth is a stubborn, hidebound old goat, but he doesn't deserve that. Whatever has happened between us, he's still..."
+
+    She pushes the bag to the side of the table. Not far. But her hands have stopped moving.
+    +add_tag fugitive.maren_engaged
+  }
+  +open "Mareen"
+
+* Make the case she can stay = It's a scar, not a death sentence [requires tag fugitive.knife_truth]
+  @if tag fugitive.maren_engaged {
+    "I know. I'll stay tonight. I'm not promising more than that."
+  } @else {
+    "If you walk out there door tonight, you'll spend the rest of your life running. If you stay, the brand will hurt, but you'll get through it and this will finally be behind you."
+
+    She keeps folding. "You think I'm afraid of pain, trader?"
+
+    You don't answer.
+
+    "I can't stand up there in front of my people and be shamed. I can't live with them knowing who I am. With that weight, that stain. It's too much to ask."
+
+    "They're not an audience, Mareen. They're your community. You owe it to them to see this though. Whatever you decide after that is up to you."
+
+    "You're right," she says at last.
+    +add_tag fugitive.maren_engaged
+  }
+  +open "Mareen"
+
+* Urge her to defy them = Thirty exiles won't let three outlanders take her [requires tag fugitive.maren_engaged]
+  @if tag fugitive.maren_defies {
+    She's made her decision. She will defy Daveth.
+  } @elif tag fugitive.maren_accepts {
+    You try to pull her back toward defiance, but the moment is lost. She shakes her head.
+  } @elif check negotiation hard {
+    "Daveth's law is Tashkari. You left that world behind. Sever the final tie. Tell him no. The camp will back you."
+
+    "What will he tell his village?"
+
+    "That you are a wicked, defiant woman who ignores the old ways and lives like a beast in the forest. And his people will curse your name and spit. That isn't your problem anymore. The people who depend on you now are the ones out there waiting to see if you'll stand up."
+
+    She is quiet a long time.
+
+    "That's always been the way of the exiles. We have no past, only each other." She looks at the knife, then past it. "Let him come in the morning. I'll answer him in front of the camp, as a leader of this camp, not a Tashkari."
+    +add_tag fugitive.maren_defies
+    +add_tag fugitive.maren_resolve
+  } @else {
+    "The camp is yours. They'll back you. Daveth has three people."
+
+    "And then what?" She shakes her head. "I am a debtor. I owe Daveth's people resolution for my crimes. I owe the people of this camp a real reason to continue to trust me. I can pay none of those with brute defiance and bravado."
+
+    She goes back to folding.
+  }
+  +open "Mareen"
+
+* Urge her to accept responsibility = Stand there and let them close the circle [requires tag fugitive.maren_engaged]
+  @if tag fugitive.maren_accepts {
+    She's made her decision. She'll meet Daveth in the morning.
+  } @elif tag fugitive.maren_defies {
+    You try to turn her back toward submission. She shakes her head. "My choice is made, trader."
+  } @else {
+    "You owe them. You know you owe them. Running a second time doesn't make it smaller."
+
+    She looks up.
+
+    "I know."
+
+    "So stand there. Let Daveth do what he came to do. You've faced worse pain. And then it's over. They go home. You keep your camp."
+
+    "It isn't the pain." Her voice is flat. "It is standing there."
+
+    "Yes. That's the part that's owed."
+
+    She is silent a long time. Then she nods, once.
+
+    "Alright. In the morning I'll meet him in the clearing."
+    +add_tag fugitive.maren_accepts
+  }
+  +open "Mareen"
+
+* Tell her to do the brand herself, tonight = Claim it, don't let it be claimed for her [requires tag fugitive.maren_accepts && tag fugitive.loophole]
+  @if tag fugitive.maren_self_marks {
+    She's made her decision. The knife is hers to hold.
+  } @else {
+    "Haneth told me a story. Her brother killed a man in a brawl. Rather than await judgement, he branded himself."
+
+    Mareen's eyes go to the blade.
+
+    "It was different when he did it himself. He was claiming what he'd done, not being dragged to it."
+
+    She is very still.
+
+    "Self-given." She says it slowly, testing the shape of the word. "Stand in front of the camp. Tell them what I did. Show everyone what I have accepted the punishment."
+
+    You nod.
+
+    She is quiet a long time.
+
+    "Then let that be my story as well."
+    +add_tag fugitive.maren_self_marks
+    +add_tag fugitive.maren_resolve
+  }
+  +open "Mareen"
+
+* Tell her to step down as leader = She can't lead a camp that just learned what she is [requires tag fugitive.maren_accepts]
+  @if tag fugitive.maren_steps_down {
+    She's said what she'll say. In the morning she'll name a successor.
+  } @else {
+    "Take the mark. Then name a successor. You can't lead a camp that just learned what you are, and pretending you can will rot the place from the inside."
+
+    She paces for a long time, you give her room to think. At last she speaks, "Edda, maybe. Or Kael."
+
+    "Either could. You trained them."
+
+    "I'd stay on, I think. Trap, mend, haul. Just not decide."
+
+    "You'd still be here."
+
+    "I'd still be here. Not leading." She almost smiles. "That part was never really mine to keep."
+    +add_tag fugitive.maren_steps_down
+  }
+  +open "Mareen"
+
+* Return to camp = Head back to the clearing
+  +open "The Camp"

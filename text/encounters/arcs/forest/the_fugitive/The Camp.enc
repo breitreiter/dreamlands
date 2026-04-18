@@ -1,0 +1,97 @@
+The Camp
+[trigger none]
+[vignette dungeons/the_fugitive]
+
+Voices carry across the clearing in low, urgent clusters. The outlanders' fire glows at the tree line, separate from the camp.
+
+choices:
+
+* Speak with the outlanders = Find Daveth, Haneth, and Reska at their fire
+  +add_tag fugitive.night_passed
+  +open "The Outlanders"
+
+* Find Mareen = Her cabin light is on
+  +add_tag fugitive.night_passed
+  +open "Mareen"
+
+* Watch Gault = He's holding court near the cook fire
+  @if tag fugitive.saw_gault {
+    He's still talking. The audience has thinned since you first watched him work the crowd, but the ones who remain are the ones who were always going to listen.
+  } @else {
+    A man you don't recognize is holding court near the main cook fire, his voice carrying the particular pitch of someone who has finally found something he's good at. People are listening. They're nodding. The camp is scared and he's telling them what scared people want to hear.
+
+    "Way I hear it, she gots to slit her own throat. Clan honor and all that. Beastly."
+
+    He catches you watching and his gaze lingers a moment. He's deciding whether you're an audience or a problem.
+
+    "Trader. You came in with those dusties. You know they was here for this?"
+
+    You shake your head; you had no idea.
+
+    Gault leans forward slightly, lowering his voice dangerously. "Friend. We outnumber them three ten to one. If you was smart, you'd clear out before things get messy. Listen. I've no disagreement with the Trade Guild, you've always done right by us."
+
+    The people around him are nodding.
+    +add_tag fugitive.saw_gault
+  }
+  +open "The Camp"
+
+* Explain the knife = Tell people what the knife is actually for [requires tag fugitive.knife_truth]
+  @if tag fugitive.rumor_corrected {
+    The word has already spread. The camp is still tense, but the quality of the tension has changed; people are arguing about what Mareen owes, not about how to stop a killing.
+  } @else {
+    You find a knot of people near the wood store, deep into argument. Someone is saying Mareen should leave. Another saying the exiles need to take matters into their own hands. Would anyone come looking for the three travellers?
+
+    You step in.
+
+    "It's for a brand. The knife. They mean to brand her. It's a Tashkari oathbreaker's mark. Probably cause her some trouble back home, but who cares here?"
+
+    "Gault said..." one begins, but you interrupt "Gault is... ill informed."
+
+    You explain this clearly. Then you do it again for the next group, and the next.
+
+    The shift is not immediate. But Gault loses his audience in stages, people drifting away as the math changes.
+    +add_tag fugitive.rumor_corrected
+  }
+  +open "The Camp"
+
+* Talk to Edda = She's sitting apart, watching [requires tag fugitive.rumor_corrected]
+  @if tag fugitive.talked_edda {
+    She acknowledges you with a nod. She's said what she had to say.
+  } @else {
+    She's older than most of the camp, with the kind of stillness that comes from watching things go wrong enough times to know what the start of it looks like. She's sitting on a stump at the edge of the firelight, watching Gault's fire die down.
+
+    "He lost half his crowd," she says, without looking at you. "When you told them about the knife. Well done, folks could use a little settling down."
+
+    She looks at you. "People come here to start fresh. They get a new name. We judge them by what they've done since they arrived. Mareen has been a strong leader, fair. She's helped all of us one time or another."
+
+    "If she goes ahead with this punishment, she's showing us that Tashkari law trumps exile law. That none of us are safe from our pasts."
+
+    She goes back to watching the embers.
+    +add_tag fugitive.talked_edda
+  }
+  +open "The Camp"
+
+* Talk to Silla = She's near the water barrel, alone [requires tag fugitive.rumor_corrected]
+  @if tag fugitive.talked_silla {
+    She gives you a small nod. She's said everything she was going to say.
+  } @else {
+    She's a compact woman in her forties, Revathi by her patterns, and she looks like she's been standing here long enough to be waiting for something. When you approach she doesn't move away, but she doesn't exactly welcome you either.
+
+    "You're the one who explained about the knife," she says.
+
+    You confirm it.
+
+    "So she's not going to die." She says this like she's checking a sum. "Just marked. Branded, technically." A pause. "In the scrub, that means something. People would see it and know. Out here, nobody would know what it means." Another pause, longer. "So she could just go on the same as before. Except for herself. She'd know."
+
+    She turns the water dipper in her hands.
+
+    "I heard Daveth speak her name. And I thought: someone came for her. After twelve years, across all that distance. Her people didn't forget her." Her voice is careful, stripped of obvious feeling. "Mine didn't come. I've been here eight years. They didn't come." She sets the dipper down.
+
+    "Some folks are saying she should refuse. They say the exiles owe nothing to their old lives. But we do not stop being sisters and daughters and family when we come here. Those claims are deeper than," she gestures to the camp, "whatever this is."
+    +add_tag fugitive.talked_silla
+  }
+  +open "The Camp"
+
+* Wait for dawn = There's nothing more to do tonight [requires tag fugitive.night_passed]
+  The fires burn low. The camp quiets, one cluster at a time. Whatever is going to happen is going to happen in the morning.
+  +open "Dawn"
