@@ -42,3 +42,9 @@ export function formatDateTime(day: number, time: string): string {
   if (!d.month) return `${time} — Hollow Day ${d.dayOfMonth}, Year ${d.year}`;
   return `${time} of ${d.weekDay}, ${d.dayOfMonth} ${d.month}`;
 }
+
+export function getMarketDayNote(day: number, time: string): string {
+  const d = getDate(day);
+  if (!d.month) return `${time} — Hollow Days`;
+  return `${time} of ${d.weekDay}, ${d.month}`;
+}

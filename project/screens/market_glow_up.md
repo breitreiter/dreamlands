@@ -8,7 +8,7 @@ Context: we prototyped a "fresh take" on the market/shop screen and the designer
 
 Every settlement should display a **unique, flavorful market name** instead of the generic "Market". Examples of the tone we're going for:
 
-- Aldgate Caravan Stall
+- Aldgate Grand Bazaar
 - Westbrook Corner Market
 - Fenhallow Tithe Barn
 - Longford Weigh-House

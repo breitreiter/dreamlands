@@ -4,6 +4,7 @@ import type { GameResponse, MarketItem, HaulOffer, ItemInfo } from "../api/types
 import * as api from "../api/client";
 import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import HaulItem from "../components/HaulItem";
+import WaxSeal from "../components/WaxSeal";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { getMarketName, getProprietorName, getSealVariant, getSealSymbolIndex } from "../marketNaming";
+import { getMarketDayNote } from "../calendar";
 
 const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
@@ -340,6 +343,12 @@ export default function MarketScreen({
     return items.filter(i => !i.sold);
   }, [inventory, sellTab, pendingSells]);
 
+  const settlementName = state.node?.poi?.name ?? "Market";
+  const terrain = state.node?.terrain ?? null;
+  const marketName = getMarketName(settlementName, terrain);
+  const proprietorName = getProprietorName(settlementName, terrain);
+  const dayNote = getMarketDayNote(state.status.day, state.status.time);
+
   return (
     <div className="h-full flex flex-col bg-page text-primary">
 
@@ -387,9 +396,40 @@ export default function MarketScreen({
       <div className="flex-1 flex overflow-hidden">
         {/* BUY column */}
         <div className="flex-1 flex flex-col border-r border-edge min-w-0">
-          <div className="p-3">
-            <h3 className="font-header text-accent text-[32px] leading-tight">Buy</h3>
-            <div className="flex gap-1 mt-2">
+          <div className="p-3 pt-5">
+            {/* Market sign */}
+            <div
+              className="flex items-center gap-3"
+              style={{ borderBottom: "1px dashed rgba(208,189,98,.35)", paddingBottom: "0.5rem" }}
+            >
+              <MaskedIcon icon="two-coins.svg" className="w-6 h-6 flex-shrink-0" color="#D0BD62" />
+              <h2
+                className="font-header text-accent flex-shrink-0"
+                style={{ fontSize: 32, letterSpacing: ".01em", lineHeight: 1, margin: 0 }}
+              >
+                {marketName}
+              </h2>
+              <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, rgba(208,189,98,.4), transparent)" }} />
+              <div
+                style={{
+                  position: "relative",
+                  width: 18,
+                  height: 18,
+                  borderRadius: "50%",
+                  border: "1px solid rgba(208,189,98,.55)",
+                  flexShrink: 0,
+                }}
+              >
+                <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", width: 1, height: 12, backgroundColor: "rgba(208,189,98,.55)" }} />
+              </div>
+            </div>
+            {/* Byline */}
+            <div className="flex items-center mt-2 mb-2" style={{ gap: "0.9rem" }}>
+              <span className="text-muted">Proprietor: <span className="text-accent">{proprietorName}</span></span>
+              <div style={{ width: 3, height: 3, borderRadius: "50%", backgroundColor: "rgba(139,139,139,.5)", flexShrink: 0 }} />
+              <span className="text-muted">{dayNote}</span>
+            </div>
+            <div className="flex gap-1">
               <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => switchBuyTab("hauls")}>Contracts</TabButton>
               <TabButton id="supplies" active={buyTab === "supplies"} onClick={() => switchBuyTab("supplies")}>Supplies</TabButton>
               <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => switchBuyTab("equipment")}>Equipment</TabButton>
@@ -404,9 +444,7 @@ export default function MarketScreen({
               ) : (
                 hauls.map((haul) => (
                   <div key={haul.id} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
-                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                      <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
-                    </div>
+                    <WaxSeal variant={getSealVariant(haul.id)} symbolIndex={getSealSymbolIndex(haul.id)} />
                     <div className="flex-1 min-w-0">
                       <HaulItem
                         name={haul.name}
@@ -466,8 +504,9 @@ export default function MarketScreen({
 
         {/* SELL column */}
         <div className="flex-1 flex flex-col border-l border-edge min-w-0">
-          <div className="p-3">
+          <div className="p-3 pt-5">
             <h3 className="font-header text-accent text-[32px] leading-tight">Sell</h3>
+            <p className="text-muted mt-0.5">The factor will take things off your hands — click to stage.</p>
             <div className="flex gap-1 mt-2">
               <TabButton id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
               <TabButton id="haversack" active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabButton>
@@ -519,9 +558,16 @@ export default function MarketScreen({
                       className="flex items-start gap-3 p-3 rounded-lg"
                       style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
                     >
-                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                      </div>
+                      {item.type === "haul" ? (
+                        <WaxSeal
+                          variant={getSealVariant(item.haulOfferId ?? item.defId)}
+                          symbolIndex={getSealSymbolIndex(item.haulOfferId ?? item.defId)}
+                        />
+                      ) : (
+                        <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                          <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                        </div>
+                      )}
                       <div className="flex-1 min-w-0">
                         {item.type === "haul" ? (
                           <HaulItem
