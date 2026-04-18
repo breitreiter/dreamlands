@@ -5,14 +5,14 @@ The trail was clear an hour ago. You're certain of it. But the switchbacks have 
 
 You stop. The wind cuts across bare rock. A hawk describes a slow circle above, indifferent. Below, somewhere in the fold of the valley, there are people and a road and a waystation with a tin cup chained to a spring. Getting back to them is simply a matter of making the right choices.
 
-The stream to your right runs fast and cold off the snowfields above. To the north, a rocky shoulder catches the afternoon light and shows a trail scar crossing its face. Uphill, a surveyor's marker stake--orange-painted wood--juts from a cairn you can just make out against the sky.
+The stream to your right runs fast and cold off the snowfields above. To the north, a rocky shoulder catches the afternoon light and shows a trail scar crossing its face. Uphill, a surveyor's marker stake, orange-painted wood, jutting from a cairn you can just make out against the sky.
 
 choices:
 
 * Follow the stream downhill = Water runs to settlement; trace it to the valley road
-  You pick your way down beside the stream, boots slipping on wet stone where the water spills across the trail. The channel narrows, then widens, then drops through a short cascade you have to scramble around on hands and knees. Below the cascade, the grade eases and the stream braids through gravel flats. You can hear the valley now--a mule, somewhere, and the distant ringing of metal.
+  You pick your way down beside the stream, boots slipping on wet stone where the water spills across the trail. The channel narrows, then widens, then drops through a short cascade you have to scramble around on hands and knees. Below the cascade, the grade eases and the stream braids through gravel flats. You can hear the valley now: a mule somewhere, and the distant ringing of metal.
   @if check bushcraft medium {
-    The stream bends east around a shoulder of hill, and you trust it. Good call. The valley road emerges from the treeline a quarter mile ahead, and within the hour you've picked up your bearings and your pace. The detour cost you time but nothing worse. You drink from the stream before you leave it--cold and clean, tasting faintly of minerals--and mark the spot in case you need it again.
+    The stream bends east around a shoulder of hill, and you trust it. Good call. The valley road emerges from the treeline a quarter mile ahead, and within the hour you've picked up your bearings and your pace. The detour cost you time but nothing worse. You drink from the stream before you leave it, cold and clean, tasting faintly of minerals, and mark the spot in case you need it again.
     +remove_condition lost
     +advance_time 2
   } @else {
@@ -23,13 +23,13 @@ choices:
   }
 
 * Cross to the trail scar on the north shoulder = That's a maintained route; reach it before the light shifts
-  You angle across the slope toward the trail scar, picking a diagonal line through loose scree. The footing is honest if unpleasant--gravel that shifts and crunches but doesn't give way beneath you. The shoulder is further than it looked.
+  You angle across the slope toward the trail scar, picking a diagonal line through loose scree. The footing is honest if unpleasant, gravel that shifts and crunches but doesn't give way beneath you. The shoulder is further than it looked.
   @if check cunning easy {
     You read the slope right, cutting below a band of unstable rock and crossing where the scree compacts to solid ground. The trail scar proves to be a legitimate mule track, rutted and well-worn, descending in long switchbacks toward the valley road. An hour later you're back on familiar ground, the only cost a few scrapes on your palms and some wasted morning light.
     +remove_condition lost
     +advance_time 3
   } @else {
-    You cut too high and have to descend a crumbling bank of scree that shifts under every step, slowing you to a crawl. The trail scar, when you reach it, is older than it looked--more a memory of a trail than a trail, its switchbacks washed out in two places. You find the valley road eventually, but by a longer route than you planned.
+    You cut too high and have to descend a crumbling bank of scree that shifts under every step, slowing you to a crawl. The trail scar, when you reach it, is older than it looked, more a memory of a trail than a trail, its switchbacks washed out in two places. You find the valley road eventually, but by a longer route than you planned.
     +remove_condition lost
     +advance_time 4
   }

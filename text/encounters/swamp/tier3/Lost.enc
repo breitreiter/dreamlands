@@ -24,9 +24,9 @@ choices:
   }
 
 * Follow the warm water = The mire circulates. Find the inflow, find the edge.
-  The water here is not uniformly temperature. There are gradients, subtle, that you find by standing still in the shallows and moving your feet slowly. Warmer water flows in from somewhere -- surface runoff from higher ground, a spring, something -- and cooler water flows nowhere, standing in the deep basins. If you can follow the gradient toward its source you are following it toward higher, drier ground. This is either good biology or an excuse to believe the swamp is telling you something. You decide it does not matter which.
+  The water here is not uniformly temperature. There are gradients, subtle, that you find by standing still in the shallows and moving your feet slowly. Warmer water flows in from somewhere, surface runoff from higher ground or a spring, and cooler water flows nowhere, standing in the deep basins. If you can follow the gradient toward its source you are following it toward higher, drier ground. This is either good biology or an excuse to believe the swamp is telling you something. You decide it does not matter which.
   @if check bushcraft medium {
-    You find the gradient and follow it. The work is slow -- you are testing with your feet, not your eyes, which means moving at a pace that feels geological. But the temperature differential is real, and it leads. An hour of this work brings you to a spring seeping from a tree root shelf, and the shelf is the highest point for fifty meters, and from the shelf you can see a line of canopy that goes brighter, and brighter means sky, and sky means edge. You are out before full dark. You do not understand how, exactly. That feels appropriate.
+    You find the gradient and follow it. The work is slow; you are testing with your feet, not your eyes, which means moving at a pace that feels geological. But the temperature differential is real, and it leads. An hour of this work brings you to a spring seeping from a tree root shelf, and the shelf is the highest point for fifty meters, and from the shelf you can see a line of canopy that goes brighter, and brighter means sky, and sky means edge. You are out before full dark. You do not understand how, exactly. That feels appropriate.
     +remove_condition lost
     +advance_time 4
   } @else {

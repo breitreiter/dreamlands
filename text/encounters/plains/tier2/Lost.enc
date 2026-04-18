@@ -3,7 +3,7 @@ Lost
 
 The military road ended at a checkpoint that wasn't manned, and rather than wait you cut cross-country on a track that someone had marked on your map with enough confidence that you believed them. The track is gone. The waymarker you were supposed to find at the ford has either been moved or was never there, and the ford itself has split into three channels through a reed bed that doesn't appear on any map you've seen. The earthworks visible to the north could be the outpost you're aiming for or could be the ruins of a supply depot that's been swallowed to the eaves in grass.
 
-The wind comes off the plain in long, cold gusts. Nothing breaks it out here -- the trees were cut for siege timber sixty years ago and haven't grown back. The infrastructure of the campaign surrounds you without orienting you: a road that goes to a position nobody holds, a signal tower with a cracked mirror, a boundary marker whose inscription has been defaced by someone with a strong opinion about property. All of it organized, all of it useless.
+The wind comes off the plain in long, cold gusts. Nothing breaks it out here; the trees were cut for siege timber sixty years ago and haven't grown back. The infrastructure of the campaign surrounds you without orienting you: a road that goes to a position nobody holds, a signal tower with a cracked mirror, a boundary marker whose inscription has been defaced by someone with a strong opinion about property. All of it organized, all of it useless.
 
 A salvage crew was working somewhere to your east this morning. You haven't heard their tools for the last hour. You need to find the road before dark, or find someone who knows which of these earthworks is which.
 
@@ -13,11 +13,11 @@ choices:
   They built to a doctrine: roads run cardinal, supply lines run at forty-five degrees, outposts sit on ground that sees in four directions. If you can work out what kind of structure you're looking at, you can work out where you are relative to it. You pull out what passes for your map and start matching terrain features to what you know of how campaigns were laid out.
 
   @if check bushcraft hard {
-    It takes time you don't love spending, but the logic holds. The earthwork to the north is positioned wrong for an outpost -- too low, no clear sightlines -- which makes it a supply depot, which means the road you want runs two hundred paces east of it. You find it where you predicted: a pale strip of compacted stone barely wider than a cart, half-buried in encroaching grass but solid underfoot. You're back on track before the light shifts.
+    It takes time you don't love spending, but the logic holds. The earthwork to the north is positioned wrong for an outpost, too low with no clear sightlines, which makes it a supply depot, which means the road you want runs two hundred paces east of it. You find it where you predicted: a pale strip of compacted stone barely wider than a cart, half-buried in encroaching grass but solid underfoot. You're back on track before the light shifts.
     +remove_condition lost
     +advance_time 2
   } @else {
-    The doctrine was applied inconsistently, it turns out -- this section of the campaign was improvised as the advance stalled, and what looks like a supply depot is actually a gun emplacement, and the road you expected doesn't run where you calculated. You spend the next hours working outward from your wrong assumption, backtracking twice. By the time you find the road, you're tired and the light is going and your legs know every step of the detour.
+    The doctrine was applied inconsistently, it turns out; this section of the campaign was improvised as the advance stalled, and what looks like a supply depot is actually a gun emplacement, and the road you expected doesn't run where you calculated. You spend the next hours working outward from your wrong assumption, backtracking twice. By the time you find the road, you're tired and the light is going and your legs know every step of the detour.
     +remove_condition lost
     +advance_time 5
     +damage_spirits 2
@@ -25,20 +25,20 @@ choices:
   }
 
 * Find the salvage crew = They know this ground better than any map.
-  You head east toward where you heard them working, moving along the edge of a silted ditch that might once have been a drainage channel or might have been a defensive line -- impossible to say now. The crew isn't where you expected. You range wider, angling toward a smudge of cookfire smoke you spotted from a rise.
+  You head east toward where you heard them working, moving along the edge of a silted ditch that might once have been a drainage channel or a defensive line, impossible to say now. The crew isn't where you expected. You range wider, angling toward a smudge of cookfire smoke you spotted from a rise.
 
   @if check negotiation medium {
-    The crew is four people and a handcart loaded with corroded iron, working a collapsed wall section near a sealed depot. They are wary when you approach -- people out here without obvious business are usually trouble -- but you explain your situation plainly and offer something useful in trade: news from the road, a piece of information about road conditions ahead. The matriarch of the group considers this, then gives you the directions you need in the precise, confident language of someone who has memorized every landmark in a three-day radius. She even mentions the trick with the ford -- take the southernmost channel, the others are soft.
+    The crew is four people and a handcart loaded with corroded iron, working a collapsed wall section near a sealed depot. They are wary when you approach, people out here without obvious business being usually trouble, but you explain your situation plainly and offer something useful in trade: news from the road, a piece of information about road conditions ahead. The matriarch of the group considers this, then gives you the directions you need in the precise, confident language of someone who has memorized every landmark in a three-day radius. She even mentions the trick with the ford: take the southernmost channel, the others are soft.
     +remove_condition lost
     +advance_time 3
   } @else {
-    You find the crew but the approach goes wrong. They read you as a potential claim-jumper or a soldier's informant and give you nothing useful -- directions that sound plausible and lead you in the wrong direction, which may be accident or may be deliberate. By the time you figure out the error and correct course, the day is mostly gone.
+    You find the crew but the approach goes wrong. They read you as a potential claim-jumper or a soldier's informant and give you nothing useful, directions that sound plausible and lead you in the wrong direction, which may be accident or may be deliberate. By the time you figure out the error and correct course, the day is mostly gone.
     +remove_condition lost
     +advance_time 5
     +damage_spirits 1
   }
 
 * Follow a military road wherever it goes = They all connect eventually. Find one and follow it.
-  You make for the nearest cleared road surface -- a straight pale line running northeast, built for column marches and still holding its grade -- and walk it. It doesn't go where you need to go. It goes to a checkpoint that hasn't been manned in two seasons, then to a signal station, then to a junction where another road branches south. The south branch eventually connects to something on your map. You follow it all the way, walking steadily, watching the light fall across the glass-smooth face of a fortification wall that was hit by something the war reports call "unknown directed force." You don't stop to look at it. You've heard what happens when people stop to look.
+  You make for the nearest cleared road surface, a straight pale line running northeast, built for column marches and still holding its grade, and walk it. It doesn't go where you need to go. It goes to a checkpoint that hasn't been manned in two seasons, then to a signal station, then to a junction where another road branches south. The south branch eventually connects to something on your map. You follow it all the way, walking steadily, watching the light fall across the glass-smooth face of a fortification wall that was hit by something the war reports call "unknown directed force." You don't stop to look at it. You've heard what happens when people stop to look.
   +remove_condition lost
   +advance_time 5

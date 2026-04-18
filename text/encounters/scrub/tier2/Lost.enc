@@ -2,7 +2,7 @@ Lost in the Occupied Mesa
 [trigger none]
 [requires tag lost]
 
-The scratched-stone map you were given at the last settlement described a track past a signal tower and down through a boulder field to the depot road. The signal tower is somewhere--you can see a scaffolded shape on the horizon, but the land between keeps offering different routes and each one looks wrong from the moment you commit to it. Your water skin is lighter than it should be. The mineral crust underfoot crunches with each step, white and unfamiliar.
+The scratched-stone map you were given at the last settlement described a track past a signal tower and down through a boulder field to the depot road. The signal tower is somewhere ahead; you can see a scaffolded shape on the horizon, but the land between keeps offering different routes and each one looks wrong from the moment you commit to it. Your water skin is lighter than it should be. The mineral crust underfoot crunches with each step, white and unfamiliar.
 
 Both kinds of authority cross these plateaus. You've passed a toll cairn with no one manning it and a stretch of fresh rail grading cutting across what you thought was your path. Neither helped.
 
@@ -11,9 +11,9 @@ The wind picks up and the horizon shimmers and goes nowhere. You stop moving and
 choices:
 
 * Navigate to the signal tower = Climb toward the half-built tower and get eyes on the land below
-  If you can reach the scaffolding, you get height, and height gives you the whole plateau at once--the rail line, the depot road, the drainage channels that mark where settlements dig their wells. It's a hard push across open ground in the heat of the day, and the tower is further than it looks, but standing at the base of it you'll know where you are.
+  If you can reach the scaffolding, you get height, and height gives you the whole plateau at once: the rail line, the depot road, the drainage channels that mark where settlements dig their wells. It's a hard push across open ground in the heat of the day, and the tower is further than it looks, but standing at the base of it you'll know where you are.
   @if check bushcraft hard {
-    The ground between you and the tower is broken worse than it appeared--two dry washes cutting across your line, loose scree that wants to turn an ankle. You pick the route carefully and climb steadily. The scaffolding is rougher work up close, half-planked platforms and raw timber, but you find a ladder and go up until the plateau opens beneath you.
+    The ground between you and the tower is broken worse than it appeared, two dry washes cutting across your line, loose scree that wants to turn an ankle. You pick the route carefully and climb steadily. The scaffolding is rougher work up close, half-planked platforms and raw timber, but you find a ladder and go up until the plateau opens beneath you.
 
     There: the depot road, a brown scar running east-west. There: the settlement you're heading for, a cluster of low structures in a sheltered basin. You fix the angles in your mind, climb back down, and walk into the wind with actual purpose for the first time in hours.
 
@@ -29,14 +29,14 @@ choices:
   }
 
 * Find the rail line and follow it = New track goes somewhere with people; walk it until you reach a depot
-  The rail grading is a known quantity--Kesharat infrastructure runs to depots and depots have water and people who know the roads. Following it means moving through contested ground under Kesharat visibility, which has its own costs, but it gets you unlost without gambling on the terrain.
+  The rail grading is a known quantity: Kesharat infrastructure runs to depots and depots have water and people who know the roads. Following it means moving through contested ground under Kesharat visibility, which has its own costs, but it gets you unlost without gambling on the terrain.
   @if check negotiation medium {
-    You find the grading within the hour and follow it east. A Kesharat patrol comes up behind you faster than expected--two guards and a corporal who looks tired and hot and not particularly suspicious. You match their pace for a few minutes, present yourself as a traveling merchant, and by the time you reach the depot cutoff they've accepted your presence enough to point you at the right track without too much paperwork. You walk the rest of the way in late afternoon light.
+    You find the grading within the hour and follow it east. A Kesharat patrol comes up behind you faster than expected, two guards and a corporal who looks tired and hot and not particularly suspicious. You match their pace for a few minutes, present yourself as a traveling merchant, and by the time you reach the depot cutoff they've accepted your presence enough to point you at the right track without too much paperwork. You walk the rest of the way in late afternoon light.
 
     +remove_condition lost
     +advance_time 3
   } @else {
-    The patrol doesn't like what they see--or doesn't like that they can't categorize you efficiently. The corporal is thorough, then slow, then thorough again, and the sun keeps moving while he fills out something on a form that he makes you touch in what might be an oath or might be a bureaucratic formality. When he finally releases you it's with a direction and a warning you don't fully understand. You reach the depot road in early evening, dry-mouthed and irritable.
+    The patrol doesn't like what they see, or doesn't like that they can't categorize you efficiently. The corporal is thorough, then slow, then thorough again, and the sun keeps moving while he fills out something on a form that he makes you touch in what might be an oath or might be a bureaucratic formality. When he finally releases you it's with a direction and a warning you don't fully understand. You reach the depot road in early evening, dry-mouthed and irritable.
 
     +remove_condition lost
     +advance_time 5
@@ -44,9 +44,9 @@ choices:
   }
 
 * Flag down a clan outrider = If there's someone watching from the ridge, make yourself visible and wait
-  There's always someone watching in occupied territory--usually clan, usually tracking who moves through. Flagging an outrider is a risk: you're asking for attention from people who've decided to be invisible. But they know this ground in the grain, and if you can read their intentions correctly, they know the fastest way through it.
+  There's always someone watching in occupied territory, usually clan, usually tracking who moves through. Flagging an outrider is a risk: you're asking for attention from people who've decided to be invisible. But they know this ground in the grain, and if you can read their intentions correctly, they know the fastest way through it.
 
-  You move to exposed ground and wait, clearly visible, clearly lost. It takes longer than you'd like. When the outrider finally comes down from the ridge, his face is unreadable. You explain yourself carefully. He considers this for a long moment, then gestures--follow--and leads you on a route that avoids the rail grading entirely, through narrow passages between rocks you'd never have found alone. He deposits you on the depot road without a word and rides back the way he came.
+  You move to exposed ground and wait, clearly visible, clearly lost. It takes longer than you'd like. When the outrider finally comes down from the ridge, his face is unreadable. You explain yourself carefully. He considers this for a long moment, then gestures you forward and leads you on a route that avoids the rail grading entirely, through narrow passages between rocks you'd never have found alone. He deposits you on the depot road without a word and rides back the way he came.
 
   +remove_condition lost
   +advance_time 5

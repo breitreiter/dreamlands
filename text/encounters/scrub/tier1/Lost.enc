@@ -4,16 +4,16 @@ Lost in the Mesa Borderlands
 
 The road you were following has dissolved into three possible roads, or perhaps none of them was a road to begin with. Clan-cut paths across the plateau look indistinguishable from dry watercourses. The stone markers that clan travelers read like script mean nothing to you. The sun is high and unhelpful. Somewhere over the next ridge is the settlement you were aiming for, but the next ridge looks exactly like the last three.
 
-A hawk crosses the pale sky to the east, finds nothing, and turns back the way it came. The wind carries grit and the distant sound of goat bells--somewhere--but distance lies in scrubland. A sound that feels close can be an hour's walk away.
+A hawk crosses the pale sky to the east, finds nothing, and turns back the way it came. The wind carries grit and the distant sound of goat bells, though distance lies in scrubland. A sound that feels close can be an hour's walk away.
 
 You stop, drink carefully from your skin, and try to think clearly about where you went wrong.
 
 choices:
 
 * Read the terrain = Study the slope and runoff patterns to find the settlement's water source
-  The clans put their settlements near water, and water follows the land. You backtrack to a high point and spend real time looking--not at the horizon but at the ground. Where does the earth slope? Where has runoff carved a shallow groove? Dust-fine sediment collects in the low places between rocks, and the rocks themselves show a faint tideline where moisture once sat.
+  The clans put their settlements near water, and water follows the land. You backtrack to a high point and spend real time looking, not at the horizon but at the ground. Where does the earth slope? Where has runoff carved a shallow groove? Dust-fine sediment collects in the low places between rocks, and the rocks themselves show a faint tideline where moisture once sat.
   @if check bushcraft medium {
-    The pattern clicks into place. The shallow wash ahead bends south, joins another, and together they drain toward a dark line of shadow where the plateau drops. Somewhere in that shadow is water, and where there's water there's settlement. You pick your way down with more confidence than you started with. Two hours later, the smell of woodsmoke reaches you on the wind--real smoke, cook-fire smoke--and then the goat bells again, much closer. You come over a rise and find yourself above a terraced valley, the settlement's mud-brick walls warm in the afternoon light.
+    The pattern clicks into place. The shallow wash ahead bends south, joins another, and together they drain toward a dark line of shadow where the plateau drops. Somewhere in that shadow is water, and where there's water there's settlement. You pick your way down with more confidence than you started with. Two hours later, the smell of woodsmoke reaches you on the wind, cook-fire smoke, and then the goat bells again, much closer. You come over a rise and find yourself above a terraced valley, the settlement's mud-brick walls warm in the afternoon light.
 
     +remove_condition lost
     +advance_time 2
@@ -26,23 +26,23 @@ choices:
   }
 
 * Ask the bells = Follow the sound of livestock and find whoever tends them
-  Goat bells mean a herder, and a herder means someone who knows exactly where the settlement is. You angle toward the sound, picking your way across cracked earth and loose rock, keeping the bells in your ear as they shift with the wind. A lost traveler asking directions is a known quantity here. Someone will help you--though help tends to come with an obligation attached.
+  Goat bells mean a herder, and a herder means someone who knows exactly where the settlement is. You angle toward the sound, picking your way across cracked earth and loose rock, keeping the bells in your ear as they shift with the wind. A lost traveler asking directions is a known quantity here. Someone will help you, though help tends to come with an obligation attached.
   @if check negotiation easy {
-    You find the herder--a girl of perhaps fourteen, completely unmoved by your presence--watching her animals pick at sparse brush along a sheltered ledge. She looks at your pack, your ring, and your expression of polite lost-ness, and sighs as though this is the fifth time this week. She waves you along behind her. Twenty minutes of walking in silence, and she points from a ridge toward a cluster of flat-roofed buildings. Then she turns back to her goats without a word.
+    You find the herder, a girl of perhaps fourteen and completely unmoved by your presence, watching her animals pick at sparse brush along a sheltered ledge. She looks at your pack, your ring, and your expression of polite lost-ness, and sighs as though this is the fifth time this week. She waves you along behind her. Twenty minutes of walking in silence, and she points from a ridge toward a cluster of flat-roofed buildings. Then she turns back to her goats without a word.
 
     You call a thanks. She raises one hand without turning around.
 
     +remove_condition lost
     +advance_time 3
   } @else {
-    You find the herder, but he's deep in an argument with an older man about the ranging rights to this particular strip of scrub, and they're both too far into it to notice you properly. You wait. They notice, exchange a look--the argument pausing, not ending--and the older man asks you something in clan dialect you don't follow. When you spread your hands in apology, he shrugs, gestures vaguely south, and goes back to arguing. South is something. You take it.
+    You find the herder, but he's deep in an argument with an older man about the ranging rights to this particular strip of scrub, and they're both too far into it to notice you properly. You wait. They notice, exchange a look, the argument pausing but not ending, and the older man asks you something in clan dialect you don't follow. When you spread your hands in apology, he shrugs, gestures vaguely south, and goes back to arguing. South is something. You take it.
 
     +remove_condition lost
     +advance_time 4
   }
 
 * Wait for travelers = Find shade and hold your position until someone comes along
-  Wandering in the wrong direction burns time and water both. You find a boulder that throws enough shadow to sit in, drink once more, and wait. The road--if it is a road--has to lead somewhere. Eventually someone will use it. They always do.
+  Wandering in the wrong direction burns time and water both. You find a boulder that throws enough shadow to sit in, drink once more, and wait. The road, if it is a road, has to lead somewhere. Eventually someone will use it. They always do.
 
   The wait is longer than you'd like, and the shade migrates with the sun. But eventually a cart creaks into view, heading somewhere with purpose, loaded with salt sacks and driven by a man who doesn't even slow down before pointing ahead and to the left. You nod. He's already past you.
 

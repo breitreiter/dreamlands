@@ -3,29 +3,29 @@ Lost in the Fens
 
 Somewhere in the last hour you left the raised path and trusted your own sense of direction. That was the mistake. The channels all look the same, brown water threading between walls of reeds taller than your head, and the ground that looked solid underfoot has become something you probe with each step before you trust it.
 
-You have been turning left and right and left again for long enough that the sun, what little you can see of it through the reed-heads, is useless as a compass. You are not in danger -- you can hear frogs, which means water, which means life, and the fen does not swallow people so much as it sits them down in mud and makes them feel foolish. But without the raised path you could wander until dark and still be half a mile from anywhere, which is its own kind of problem.
+You have been turning left and right and left again for long enough that the sun, what little you can see of it through the reed-heads, is useless as a compass. You are not in danger; you can hear frogs, which means water, which means life, and the fen does not swallow people so much as it sits them down in mud and makes them feel foolish. But without the raised path you could wander until dark and still be half a mile from anywhere, which is its own kind of problem.
 
 A wooden marker post stands chest-high in the reeds ahead, half-sunk, a faded strip of cloth knotted to the top. Locals mark the paths. They mark the hazards. They mark the things they want found and the things they want avoided. You are looking at one of these posts and you are not sure which kind it is.
 
 choices:
 
 * Follow the marker posts = Find the next post in line, trust the local waymarking system
-  The posts are older work than the raised paths, hammered in before the big dikes were built, meant for people in punts. You scan the reeds, read the angle of the first post's lean, and pick a direction. You find the second post. The third. It is slow going -- shin-deep water, reed stems slapping your face -- but the posts are there, spaced for someone poling a flat-bottomed boat through the channels, and you are following a route someone took the time to mark.
+  The posts are older work than the raised paths, hammered in before the big dikes were built, meant for people in punts. You scan the reeds, read the angle of the first post's lean, and pick a direction. You find the second post. The third. It is slow going, shin-deep water and reed stems slapping your face, but the posts are there, spaced for someone poling a flat-bottomed boat through the channels, and you are following a route someone took the time to mark.
   @if check bushcraft medium {
     The markers lead you to a drainage channel and the channel leads you to a dike path and the dike path leads you, muddy to the knee and deeply humble, back to the raised road. You can see a cluster of stilt-houses maybe a half-mile south. The frogs are deafening. You have, it turns out, not been as lost as you felt. This is a small comfort.
     +remove_condition lost
     +advance_time 2
   } @else {
-    You follow the posts faithfully for forty minutes before the next one is simply gone -- rotted off at the base, or pulled by someone, or swallowed -- and you are back where you started, knee-deep and directionless. You pick a heading and commit to it, walking until the ground rises and the reeds thin and you find, by luck more than skill, a goat path that leads to a dike that leads to a road. You sit on a stone and wring out your socks. An old man in a boat watches you from the channel without expression.
+    You follow the posts faithfully for forty minutes before the next one is simply gone, rotted off at the base or pulled by someone, and you are back where you started, knee-deep and directionless. You pick a heading and commit to it, walking until the ground rises and the reeds thin and you find, by luck more than skill, a goat path that leads to a dike that leads to a road. You sit on a stone and wring out your socks. An old man in a boat watches you from the channel without expression.
     +remove_condition lost
     +advance_time 4
     +damage_spirits 1
   }
 
 * Call out and wait = Someone will hear you. The fen is not empty.
-  You pick a clear patch of ground, test it thoroughly before you stand on it, and shout. Not distress -- just volume. You ask for directions, same as you would in a town, because the fen is not a wilderness, it is a neighborhood, and there are people in it. This turns out to be correct. A reed-cutter materializes from the banks to your right, knife in hand, looking at you with the expression of someone who has seen this before. She listens to where you were going and points. She says three things, simply, about landmarks. She goes back to cutting reeds.
+  You pick a clear patch of ground, test it thoroughly before you stand on it, and shout. Not distress. Just volume. You ask for directions, same as you would in a town, because the fen is not a wilderness, it is a neighborhood, and there are people in it. This turns out to be correct. A reed-cutter materializes from the banks to your right, knife in hand, looking at you with the expression of someone who has seen this before. She listens to where you were going and points. She says three things, simply, about landmarks. She goes back to cutting reeds.
   @if check negotiation easy {
-    You had not intended to negotiate, but something about asking someone to spend time on you requires a small exchange. A coin, a piece of news, a genuine compliment about the quality of the dike work. She nods once, gives you a fourth landmark she had not mentioned before -- a corner post with two strips of cloth, not one -- and that landmark leads you directly to the raised road in twenty minutes. You arrive only a little late, with mud on your boots that will take days to fully shift.
+    You had not intended to negotiate, but something about asking someone to spend time on you requires a small exchange. A coin, a piece of news, a genuine compliment about the quality of the dike work. She nods once, gives you a fourth landmark she had not mentioned before, a corner post with two strips of cloth rather than one, and that landmark leads you directly to the raised road in twenty minutes. You arrive only a little late, with mud on your boots that will take days to fully shift.
     +remove_condition lost
     +advance_time 3
   } @else {

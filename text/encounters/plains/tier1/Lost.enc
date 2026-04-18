@@ -3,19 +3,19 @@ Lost
 
 The road was here a moment ago. You are certain of it. But the wheat is tall on all sides now, each row identical to the last, and the track you were following has softened into nothing more than a suggestion of flattened grass that could have been made by an animal, a cart, or your own imagination. Somewhere in the last half-hour the Aldgate bells stopped being audible and you failed to notice until just now.
 
-You can see the top of a grain elevator over the wheat to one side, or what might be a grain elevator -- it could also be a hayrick. In the other direction the land rises, just barely, toward a low ridge of scrub that might offer a view. The sun is still two hours from setting, the air smells of chaff and something baking in a farmhouse chimney, and in the middle distance a dog is barking at something with no particular urgency. You are lost, but you are not in danger.
+You can see the top of a grain elevator over the wheat to one side, or what might be a grain elevator, or a hayrick. In the other direction the land rises, just barely, toward a low ridge of scrub that might offer a view. The sun is still two hours from setting, the air smells of chaff and something baking in a farmhouse chimney, and in the middle distance a dog is barking at something with no particular urgency. You are lost, but you are not in danger.
 
 Not yet, anyway. The wheat fields all look the same at harvest time and the sky has gone hazy enough to make direction a matter of opinion.
 
 choices:
 
 * Look for a farmer = Someone works these fields. Find them and ask.
-  You move toward the barking dog, pushing through the grain with your arms out to part it. It takes longer than you expect -- the rows run at odd angles and the dog keeps moving -- but eventually you break through into a cleared margin where an old woman is seated on an upturned crate, binding wheat into sheaves with the mechanical efficiency of someone who stopped thinking about the task forty years ago. A young boy is chasing the dog in circles nearby, which explains the barking.
+  You move toward the barking dog, pushing through the grain with your arms out to part it. It takes longer than you expect, the rows running at odd angles and the dog keep moving, but eventually you break through into a cleared margin where an old woman is seated on an upturned crate, binding wheat into sheaves with the mechanical efficiency of someone who stopped thinking about the task forty years ago. A young boy is chasing the dog in circles nearby, which explains the barking.
 
   The old woman looks at you, then at the direction you came from, then at the horizon. She does not look surprised.
 
   @if check negotiation medium {
-    She hears you out, asks two pointed questions about where you started, and then gives you directions without hesitation -- landmarks you recognize, a particular barn, the angle of the road past the mill. She mentions a shortcut through a neighbor's fallow field that saves a quarter-hour. When you thank her she waves it off. "You're not the first," she says, and goes back to her sheaves.
+    She hears you out, asks two pointed questions about where you started, and then gives you directions without hesitation: a particular barn, the angle of the road past the mill, landmarks you recognize. She mentions a shortcut through a neighbor's fallow field that saves a quarter-hour. When you thank her she waves it off. "You're not the first," she says, and goes back to her sheaves.
     +remove_condition lost
     +advance_time 2
   } @else {
@@ -25,19 +25,19 @@ choices:
   }
 
 * Climb for a view = Get above the wheat and find your bearings
-  You head for the scrub ridge, skirting the edge of the field until the ground rises enough to give you something to stand on. The ridge is not much -- a low swell of dry grass and thistle, barely shoulder-height above the plain -- but it is enough. The farmland spreads below you in a pattern that makes no sense close-up and perfect sense from here: roads running between field margins, a cluster of buildings you recognize as a settlement you passed this morning, and the faint smudge of Aldgate against the sky.
+  You head for the scrub ridge, skirting the edge of the field until the ground rises enough to give you something to stand on. The ridge is not much, a low swell of dry grass and thistle barely shoulder-height above the plain, but it is enough. The farmland spreads below you in a pattern that makes no sense close-up and perfect sense from here: roads running between field margins, a cluster of buildings you recognize as a settlement you passed this morning, and the faint smudge of Aldgate against the sky.
 
   @if check bushcraft easy {
     You pick out the road immediately, a pale line cutting between two large fields toward the familiar cluster of rooftops. From here the way back to the main road is obvious, and you descend with enough confidence to make good time. The last of the afternoon is still ahead of you.
     +remove_condition lost
     +advance_time 3
   } @else {
-    The view is helpful but the light is against you -- the haze flattens everything and the roads blend with the pale grass between them. You pick a direction that seems right and walk it, and it is mostly right, which is a kind of gift. You reach the road as the shadows start to lengthen, a little sore and a lot dusty, with the day further gone than you'd like.
+    The view is helpful but the light is against you; the haze flattens everything and the roads blend with the pale grass between them. You pick a direction that seems right and walk it, and it is mostly right, which is a kind of gift. You reach the road as the shadows start to lengthen, a little sore and a lot dusty, with the day further gone than you'd like.
     +remove_condition lost
     +advance_time 4
   }
 
 * Follow the grain elevator = That structure is someone's landmark. Head toward it.
-  You move toward the shape on the skyline. It's farther than it looked, as things always are across flat ground, and it turns out to be a hayrick rather than an elevator -- but behind it is a farmyard, and behind the farmyard is a track, and the track meets a road eventually. The road doesn't go where you intended but it goes somewhere, and somewhere is enough. You follow it until you recognize a milestone you passed this morning.
+  You move toward the shape on the skyline. It's farther than it looked, as things always are across flat ground, and it turns out to be a hayrick rather than an elevator, but behind it is a farmyard, and behind the farmyard is a track, and the track meets a road eventually. The road doesn't go where you intended but it goes somewhere, and somewhere is enough. You follow it until you recognize a milestone you passed this morning.
   +remove_condition lost
   +advance_time 4

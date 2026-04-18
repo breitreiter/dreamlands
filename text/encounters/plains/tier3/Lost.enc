@@ -3,7 +3,7 @@ Lost
 
 You know you are lost because the dome is in the wrong place.
 
-It was to the northwest an hour ago. Now it's north, or northeast--pale and clean-lined against the flat sky, close enough to see the curve of it, too far to reach before dark. You've been walking long enough that the ground changed under you without your noticing: packed earth gave way to fused glass that rings under your boots like ceramic. The dead stumps of an orchard stand in neat rows to your left, bleached white, the irrigation channels between them cracked and empty. Somewhere ahead, you can hear one of the Iron--the steady clank-whir-clank of heavy feet on glass, unhurried, mechanical, loud enough to carry across the flats.
+It was to the northwest an hour ago. Now it's north, or northeast, pale and clean-lined against the flat sky, close enough to see the curve of it, too far to reach before dark. You've been walking long enough that the ground changed under you without your noticing: packed earth gave way to fused glass that rings under your boots like ceramic. The dead stumps of an orchard stand in neat rows to your left, bleached white, the irrigation channels between them cracked and empty. Somewhere ahead, you can hear one of the Iron, the steady clank-whir-clank of heavy feet on glass, unhurried, mechanical, loud enough to carry across the flats.
 
 There is no road. Whatever track you were following has been absorbed by the fused ground. Behind you, evenly spaced, something has made marks in the glass that you didn't make. To the south, a red pylon stands against the pale ground like a warning post. You are already past it.
 
@@ -12,12 +12,12 @@ You need to move. Standing still near the Grid's perimeter is how people stop be
 choices:
 
 * Navigate by the pylons = They mark a perimeter. Find the outside of it.
-  The red pylons are the Grid's boundary markers--warnings for visitors, and trigger points for the Iron's patrol routes. If you can spot enough of them to read the shape of the perimeter, you can work out which side of it you're on and walk toward the edge.
+  The red pylons are the Grid's boundary markers, warnings for visitors and trigger points for the Iron's patrol routes. If you can spot enough of them to read the shape of the perimeter, you can work out which side of it you're on and walk toward the edge.
 
   You climb a squat concrete pump house for a better vantage and scan the flats. Three more pylons are visible, their oxide-red paint vivid against the pale ground. You study the angles without moving closer to any of them.
 
   @if check cunning hard {
-    The perimeter resolves. The pylons describe a rough arc, and you're inside it--but only just. You pick your bearing toward the nearest gap between two pylons and walk steadily, keeping the dome behind you. One of the Iron crosses your path two hundred paces ahead, clanking along its route, pistons cycling. You wait for it to pass. The glass gives way to cratered earth, then dead soil, then dry grass with a wagon track pressed into it--the remains of the imperial advance, sixty years overgrown. You follow the ruts until you recognize where you are.
+    The perimeter resolves. The pylons describe a rough arc, and you're inside it, but only just. You pick your bearing toward the nearest gap between two pylons and walk steadily, keeping the dome behind you. One of the Iron crosses your path two hundred paces ahead, clanking along its route, pistons cycling. You wait for it to pass. The glass gives way to cratered earth, then dead soil, then dry grass with a wagon track pressed into it, the remains of the imperial advance, sixty years overgrown. You follow the ruts until you recognize where you are.
     +remove_condition lost
     +advance_time 3
   } @else {
@@ -31,25 +31,25 @@ choices:
 * Follow one of the Iron = It's walking a route. Routes go somewhere.
   There's one of the Iron to the east, clanking along its patrol with the grinding mechanical patience of something that has repeated this exact path every day for longer than the empire has existed. Heavy limbs, whirring servos, riveted plating. It doesn't know you're here. It was built to keep children safe in the orchards, and it is still doing that, and there are no children and no orchards and it does not care.
 
-  You follow it at distance, tracking the shape of its route by the sound--the clank-whir-clank carries a quarter-mile across the silent flats.
+  You follow it at distance, tracking the shape of its route by the sound: the clank-whir-clank carries a quarter-mile across the silent flats.
 
   @if check bushcraft medium {
-    The route is a long ellipse around the dome's eastern perimeter. You walk the outside of its arc, keeping far enough back that you're never in its path, and the arc carries you toward the edge of the Grid's territory. Where the Iron's route ends, the fused ground ends too--beyond its furthest point, the glass gives way to blast craters from the imperial campaign, then dead scrub, then sparse grass with bootprints in it. Other people come and go from here. You follow the prints south until the dome is small on the horizon and you can breathe again.
+    The route is a long ellipse around the dome's eastern perimeter. You walk the outside of its arc, keeping far enough back that you're never in its path, and the arc carries you toward the edge of the Grid's territory. Where the Iron's route ends, the fused ground ends too; beyond its furthest point, the glass gives way to blast craters from the imperial campaign, then dead scrub, then sparse grass with bootprints in it. Other people come and go from here. You follow the prints south until the dome is small on the horizon and you can breathe again.
     +remove_condition lost
     +advance_time 4
   } @else {
-    You misjudge the shape of the route. The ellipse closes tighter than you calculated, and the Iron's return leg brings it clanking straight toward you--not attacking, not even aware of you, just executing its path. You scramble sideways across ground you haven't read. The glass here is pitted, some kind of old subsidence, and you turn an ankle on a lip you didn't see. You make the edge eventually, limping, the Iron's clank-whir-clank fading behind you with the indifference of a machine that never registered your existence.
+    You misjudge the shape of the route. The ellipse closes tighter than you calculated, and the Iron's return leg brings it clanking straight toward you, not attacking, not even aware of you, just executing its path. You scramble sideways across ground you haven't read. The glass here is pitted, some kind of old subsidence, and you turn an ankle on a lip you didn't see. You make the edge eventually, limping, the Iron's clank-whir-clank fading behind you with the indifference of a machine that never registered your existence.
     +remove_condition lost
     +advance_time 6
     +damage_spirits 1
   }
 
 * Keep the dome behind you and walk = Don't try to understand this place. Just leave.
-  Every instinct you have says that reading the Grid's logic would be a mistake. The pattern is there--the pylons, the patrol routes, the concrete buildings spaced at intervals that obviously mean something. You can feel it starting to resolve. You don't let it. You put the dome at your back and walk, fast and steady, looking at the horizon and nothing between you and it.
+  Every instinct you have says that reading the Grid's logic would be a mistake. The pattern is there: the pylons, the patrol routes, the concrete buildings spaced at intervals that obviously mean something. You can feel it starting to resolve. You don't let it. You put the dome at your back and walk, fast and steady, looking at the horizon and nothing between you and it.
 
-  The ground does things under your feet. A section rings hollow and you skirt it without stopping. A column of air shimmers to your left, warm from twenty paces, and you give it a wide margin. One of the Iron crosses behind you--you hear the clank-whir-clank grow and then fade--and you don't turn around. Somewhere to the north a red pylon begins to pulse and you walk faster.
+  The ground does things under your feet. A section rings hollow and you skirt it without stopping. A column of air shimmers to your left, warm from twenty paces, and you give it a wide margin. One of the Iron crosses behind you; you hear the clank-whir-clank grow and then fade. You don't turn around. Somewhere to the north a red pylon begins to pulse and you walk faster.
 
-  You reach the edge by feel as much as sight: the glass softens to cratered earth, your boots stop ringing, and the hum drops away over fifty paces until it's gone. An overturned imperial supply wagon lies rusting in the dead grass--collapsed wheels, skeletal frame, canvas long rotted. Past it, a desiccated corpse in faded imperial kit, leather-skinned, undisturbed for sixty years. You stand at the margin of the Spires, breathing, and wait for your jaw to stop aching.
+  You reach the edge by feel as much as sight: the glass softens to cratered earth, your boots stop ringing, and the hum drops away over fifty paces until it's gone. An overturned imperial supply wagon lies rusting in the dead grass, collapsed wheels and skeletal frame, canvas long rotted. Past it, a desiccated corpse in faded imperial kit, leather-skinned, undisturbed for sixty years. You stand at the margin of the Spires, breathing, and wait for your jaw to stop aching.
   +remove_condition lost
   +advance_time 6
   +damage_spirits 1

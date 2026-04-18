@@ -1,22 +1,22 @@
 Lost in the Far Ranges
 [trigger none]
 
-The cairn route ended three hours ago at a ledge too exposed to cross, and the traverse you took to get around it has deposited you somewhere the map--if you still trust the map--does not account for. The trail infrastructure of the Near Ranges is a memory. Up here, routes are scratched on oilcloth by prospectors who navigate by landmark and instinct and the color of certain rocks, and you have none of their fluency.
+The cairn route ended three hours ago at a ledge too exposed to cross, and the traverse you took to get around it has deposited you somewhere the map, if you still trust the map, does not account for. The trail infrastructure of the Near Ranges is a memory. Up here, routes are scratched on oilcloth by prospectors who navigate by landmark and instinct and the color of certain rocks, and you have none of their fluency.
 
-The sky is still clear, but the wind has a bite now that wasn't there this morning. Below, cloud is building in the valley, white and slow, filling the lower elevations like water in a bowl. If it rises, you'll be navigating in fog. Somewhere to the south, a pair of prospectors were working a vein this morning--you heard the faint crack of their hammers. The sound stopped an hour ago.
+The sky is still clear, but the wind has a bite now that wasn't there this morning. Below, cloud is building in the valley, white and slow, filling the lower elevations like water in a bowl. If it rises, you'll be navigating in fog. Somewhere to the south, a pair of prospectors were working a vein this morning, their hammers faintly audible. The sound stopped an hour ago.
 
-A line of old pitons follows a crack system up the rock face above you, placed by someone who knew where they led. To the south, a rag of orange fabric tied to a stake marks a route--probably a prospector's claim line, probably current. Below the ledge where you stand, a snow basin slopes down into the cloud, and the mountain's own drainage should run south toward the valley.
+A line of old pitons follows a crack system up the rock face above you, placed by someone who knew where they led. To the south, a rag of orange fabric tied to a stake marks a route, probably a prospector's claim line and probably current. Below the ledge where you stand, a snow basin slopes down into the cloud, and the mountain's own drainage should run south toward the valley.
 
 choices:
 
 * Follow the piton line = Someone climbed this and lived; find where they went
-  The crack system climbs forty feet before traversing left across a slab of pale granite. You test each piton before you trust it--two are loose, pulling from the crack with unsettling ease, but the others hold. The traverse is exposed. You don't look down more than once.
+  The crack system climbs forty feet before traversing left across a slab of pale granite. You test each piton before you trust it; two are loose, pulling from the crack with unsettling ease, but the others hold. The traverse is exposed. You don't look down more than once.
   @if check bushcraft hard {
-    Above the slab, the crack system widens into a gully choked with old snow. You kick steps up the snow and emerge onto a broad shoulder with a view that reorients everything. The piton line continues--a faint trail between old bolts--and you follow it down the far side into a hanging valley with a prospector's cache under a rock overhang, a claim scratched beside it. The route from the cache is obvious. You're late and wrung out, but you're found.
+    Above the slab, the crack system widens into a gully choked with old snow. You kick steps up the snow and emerge onto a broad shoulder with a view that reorients everything. The piton line continues, a faint trail between old bolts, and you follow it down the far side into a hanging valley with a prospector's cache under a rock overhang, a claim scratched beside it. The route from the cache is obvious. You're late and wrung out, but you're found.
     +remove_condition lost
     +advance_time 2
   } @else {
-    The traverse goes wrong halfway across--a foot placement fails and you scrabble for a piton that holds, just, while your heart hammers in your throat. You make it to the far side but you've burned time and rattled yourself. The gully above is iced over in the shadow of the face, and you retreat before committing to a climb you can't safely reverse. You find the valley by the long way down, picking through broken ground until the slope relents.
+    The traverse goes wrong halfway across; a foot placement fails and you scrabble for a piton that holds, just, while your heart hammers in your throat. You make it to the far side but you've burned time and rattled yourself. The gully above is iced over in the shadow of the face, and you retreat before committing to a climb you can't safely reverse. You find the valley by the long way down, picking through broken ground until the slope relents.
     +remove_condition lost
     +advance_time 5
     +damage_spirits 2
@@ -26,7 +26,7 @@ choices:
 * Find the prospectors = They know this terrain; get directions
   You move south along the contour, calling out at intervals. The wind takes your voice and throws it sideways. The hammering doesn't resume. After twenty minutes of traversing rocky ground you find their camp: a tarp strung between two boulders, a pack frame, a small brazier still warm. The prospectors themselves are higher on the face, just visible as two slow-moving shapes against pale rock.
   @if check negotiation medium {
-    You signal until one of them sees you. He descends--slowly, with the methodical care of someone who's been on this mountain long enough to stop rushing--and gives you route directions with the economy of a man who talks mainly to himself and his partner. He points out three landmarks you can chain together back to the main cairn route. "Stay below the cloud line," he says, and goes back up without waiting for thanks.
+    You signal until one of them sees you. He descends slowly, with the methodical care of someone who's been on this mountain long enough to stop rushing, and gives you route directions with the economy of a man who talks mainly to himself and his partner. He points out three landmarks you can chain together back to the main cairn route. "Stay below the cloud line," he says, and goes back up without waiting for thanks.
 
     His landmarks are exact. Two hours later you're on ground you recognize.
     +remove_condition lost

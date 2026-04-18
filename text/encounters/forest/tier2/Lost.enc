@@ -1,18 +1,18 @@
 Lost
 [trigger none]
 
-Your return blazes are gone. Not obscured -- gone. The bark you marked two hours ago is clean, and you don't know if weather stripped them or animals or your own memory is simply wrong about where you left them.
+Your return blazes are gone. Not obscured. Gone. The bark you marked two hours ago is clean, and you don't know if weather stripped them or animals or your own memory is simply wrong about where you left them.
 
 The canopy here is closed and dark and old. Root systems ridge the ground into a maze of hollows you can't see past. Every direction sounds the same: the constant rustle of canopy, the distant crack of deadfall, the invisible stream you've been hearing for twenty minutes without getting closer. Your compass says east but east has been leading you downhill for an hour and the slope should have leveled out by now. You stop. You eat the last of your midday ration standing up, because sitting feels like giving up something.
 
-The forest is not hostile. It simply isn't aware of you. That's the feeling that gets under your skin -- not danger but irrelevance. You are a brief disturbance in something very old, and if you stay lost long enough you will stop being a disturbance.
+The forest is not hostile. It simply isn't aware of you. That's the feeling that gets under your skin: not danger but irrelevance. You are a brief disturbance in something very old, and if you stay lost long enough you will stop being a disturbance.
 
 choices:
 
 * Climb for a vantage = Find the tallest accessible tree and get above the canopy
-  You pick the largest tree with branches low enough to start on. The climb is ugly -- bark that crumbles, a branch that holds and then suddenly doesn't, a moment fifteen feet up where your arms shake and you reconsider everything. But the old growth lifts you high, and when you finally pull yourself above the canopy layer, the world opens up like a door swinging wide. You can see ridgelines. A river glint. The darker mass of the forest's edge where it meets scrub land or field. You study it long enough to burn the picture into memory, then climb back down.
+  You pick the largest tree with branches low enough to start on. The climb is ugly: bark that crumbles, a branch that holds and then suddenly doesn't, a moment fifteen feet up where your arms shake and you reconsider everything. But the old growth lifts you high, and when you finally pull yourself above the canopy layer, the world opens up like a door swinging wide. You can see ridgelines. A river glint. The darker mass of the forest's edge where it meets scrub land or field. You study it long enough to burn the picture into memory, then climb back down.
   @if check bushcraft hard {
-    The landmarks make sense from above. You pick your route to a watercourse you spotted, follow it, and after two hard hours pushing through undergrowth that grabs at everything you hit a timber scout's blaze line -- regular marks, a few weeks old, leading back toward the edge. The forest releases you at dusk.
+    The landmarks make sense from above. You pick your route to a watercourse you spotted, follow it, and after two hard hours pushing through undergrowth that grabs at everything you hit a timber scout's blaze line, regular marks a few weeks old, leading back toward the edge. The forest releases you at dusk.
     +remove_condition lost
     +advance_time 2
   } @else {
@@ -23,20 +23,20 @@ choices:
     +add_condition exhausted
   }
 
-* Check the moss and shadows = Navigate by the old methods -- light angle, moss growth, water flow
-  No single sign is reliable. But three signs agreeing is something. Moss grows thickest on the north face, but in deep shade it grows everywhere -- look for the difference in texture, not the presence. The stream flow should be consistent with the watershed from the ridge you crossed this morning. The light, when it comes through the canopy in shafts, angles from the south. You spend forty minutes crouched at different spots, reading, triangulating. You build a picture you can trust about sixty percent.
+* Check the moss and shadows = Navigate by the old methods: light angle, moss growth, water flow
+  No single sign is reliable. But three signs agreeing is something. Moss grows thickest on the north face, but in deep shade it grows everywhere; look for the difference in texture, not the presence. The stream flow should be consistent with the watershed from the ridge you crossed this morning. The light, when it comes through the canopy in shafts, angles from the south. You spend forty minutes crouched at different spots, reading, triangulating. You build a picture you can trust about sixty percent.
   @if check bushcraft medium {
-    Sixty percent is enough. You walk the direction your three signs agree on and trust your feet when the terrain doesn't match the theory. Two hours of hard walking, a scramble over a deadfall tangle that takes twenty minutes to cross thirty feet, and then suddenly the forest thins and there's a resin-tapper's line of collection cups on the trees ahead -- someone's working route, which leads to a camp, which leads to a track.
+    Sixty percent is enough. You walk the direction your three signs agree on and trust your feet when the terrain doesn't match the theory. Two hours of hard walking, a scramble over a deadfall tangle that takes twenty minutes to cross thirty feet, and then suddenly the forest thins and there's a resin-tapper's line of collection cups on the trees ahead, someone's working route that leads to a camp and then a track.
     +remove_condition lost
     +advance_time 3
   } @else {
-    The signs contradict each other more than you hoped. You commit to a direction anyway, but the watershed goes wrong -- the stream you follow curves back on itself in a long meander that adds hours to a route you thought was direct. You're still picking bark out of your clothes when you finally find a lean-to that marks a working route.
+    The signs contradict each other more than you hoped. You commit to a direction anyway, but the watershed goes wrong; the stream you follow curves back on itself in a long meander that adds hours to a route you thought was direct. You're still picking bark out of your clothes when you finally find a lean-to that marks a working route.
     +remove_condition lost
     +advance_time 5
     +damage_spirits 1
   }
 
 * Make noise and wait = Find a clearing, build a small fire, give anyone nearby something to find
-  It's not pride. It's calculation. This forest has workers in it -- timber scouts, dye-gatherers, resin-tappers -- and they know where the trails are. A column of smoke says someone is here. You clear a spot, build a small fire, gather green wood to produce smoke, and settle in to wait. It takes longer than you expected, and the light is well into afternoon before anyone comes, but they come: a dye-gatherer who found your smoke from two ridges over. She is not impressed but she is not unkind. She walks you out to the blaze line and points the rest of the way.
+  It's not pride. It's calculation. This forest has workers in it, timber scouts and dye-gatherers and resin-tappers, and they know where the trails are. A column of smoke says someone is here. You clear a spot, build a small fire, gather green wood to produce smoke, and settle in to wait. It takes longer than you expected, and the light is well into afternoon before anyone comes, but they come: a dye-gatherer who found your smoke from two ridges over. She is not impressed but she is not unkind. She walks you out to the blaze line and points the rest of the way.
   +remove_condition lost
   +advance_time 5

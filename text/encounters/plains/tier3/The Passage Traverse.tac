@@ -34,10 +34,6 @@ openings:
   * Risk cutting through a flooded passage: threat_to_progress
   * Push through exhaustion to stay ahead: spirits_to_momentum
 
-approaches:
-  * aggressive
-  * cautious
-
 success:
   You push open the final hatch and are blinded by daylight. You move swiftly, unsure if the monster is just behind you or lost deep in the maintenance tunnels. You are safe, for now.
   +add_item mountain_regiment_armor
