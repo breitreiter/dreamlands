@@ -1,5 +1,6 @@
 The Gauntlet
 [stat cunning]
+[vignette dungeons/the_city]
 
 The dome door grinds open and the air that hits you is warm, oily, and humming. This is not the entrance you expected.
 
@@ -40,12 +41,22 @@ approaches:
 success:
   You slip into the corridor beyond the bay. The humming fades behind you. Torben exhales, presses his back against the wall, and allows himself a grin. "Not bad. Not bad at all." He pulls out his notebook and begins sketching the bay from memory.
 
-  Ahead, the corridor opens into light and space.
+  The corridor opens into light and space. A plaza, broad and circular, roofed by the dome itself. The strange glass far overhead lets in a diffuse glow while bending and distorting the clouds overhead. The air is still and dry, tasting faintly of mineral and age.
+
+  The floor is tiled in colored glass, geometric patterns interlocking across the full width of the space. Triangles nesting into hexagons, hexagons into spirals, the colors muted by centuries of dust but still visible where boot-scuff has cleared a path. In the center, a statue rises from a low plinth: an angular form, abstract, all planes and facets. It could be a figure. It could be a compass rose. It doesn't resolve into anything familiar.
+
+  Around the edges, alcoves open into corridors that lead deeper into the city. Raised beds line two walls, long troughs of dry soil. Whatever grew here has been reduced to grey filament. A bench faces the statue, then two more face each other across the tiled floor.
   +open "The Plaza"
 
 failure:
   A drone pivots toward you mid-stride. No alarm, no sound — it simply adjusts course, extending a manipulator arm that crackles with the same energy it uses to cut metal. You throw yourself sideways. The arm catches your pack and the smell of scorched leather fills the bay. Torben hauls you through the far doorway by your collar.
 
-  You crouch in the corridor beyond, hearts hammering, while the drone returns to its route as though nothing happened.
+  You crouch in the corridor beyond, hearts hammering, while the drone returns to its route. After a long moment, you continue.
+
+  The corridor opens into light and space. A plaza, broad and circular, roofed by the dome itself. The strange glass far overhead lets in a diffuse glow while bending and distorting the clouds overhead. The air is still and dry, tasting faintly of mineral and age.
+
+  The floor is tiled in colored glass, geometric patterns interlocking across the full width of the space. Triangles nesting into hexagons, hexagons into spirals, the colors muted by centuries of dust but still visible where boot-scuff has cleared a path. In the center, a statue rises from a low plinth: an angular form, abstract, all planes and facets. It could be a figure. It could be a compass rose. It doesn't resolve into anything familiar.
+
+  Around the edges, alcoves open into corridors that lead deeper into the city. Raised beds line two walls, long troughs of dry soil. Whatever grew here has been reduced to grey filament. A bench faces the statue, then two more face each other across the tiled floor.
   +add_condition irradiated
   +open "The Plaza"

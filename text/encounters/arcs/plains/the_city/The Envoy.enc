@@ -37,7 +37,7 @@ choices:
 
   "The correspondence... is delivered. This office thanks... the delegation for its patience."
 
-  It reaches up and begins to remove its own armor. Plate by plate, with the same mechanical precision, setting each piece on the platform at its feet. The breastplate. The pauldrons. The greaves. Underneath, the frame is skeletal -- dark metal, articulated joints, no attempt at resemblance to anything living. It was dressing for the occasion, and the occasion is over.
+  It reaches up and begins to remove its own armor. Plate by plate, with the same mechanical precision, setting each piece on the platform at its feet. The breastplate. The pauldrons. The greaves. Underneath, the frame is skeletal: dark metal, articulated joints, no attempt at resemblance to anything living. It was dressing for the occasion, and the occasion is over.
 
   It kneels. Its head bows. It does not move again.
 
@@ -51,7 +51,7 @@ choices:
   Torben doesn't need convincing. He brings his sword into a low guard and moves left. You move right. The figure's head tracks between you, still holding the document, still waiting for an answer to a question you're not going to give it.
 
   @if check combat hard {
-    It's faster than it looks. The golden arm swings and you duck under it and hear the air split where your head was. It doesn't fight like a soldier. It fights like a door that's been told not to open -- mechanical, procedural, escalating force in measured increments. It is trying to complete its task, not win a battle. You are an obstacle to the delivery protocol, and it is removing you.
+    It's faster than it looks. The golden arm swings and you duck under it and hear the air split where your head was. It doesn't fight like a soldier. It fights like a door that's been told not to open: mechanical, procedural, escalating force in measured increments. It is trying to complete its task, not win a battle. You are an obstacle to the delivery protocol, and it is removing you.
 
     Torben gets behind it. His sword finds a joint in the frame, between the chased golden plates, and something inside the figure sparks and grinds. It staggers. You hit it again, harder, and it goes to one knee. The document falls from its hand and rolls across the floor.
 

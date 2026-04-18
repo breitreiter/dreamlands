@@ -2,9 +2,7 @@ The Exchange
 [trigger none]
 [vignette dungeons/the_city]
 
-The corridor widens before it ends, opening into a high-ceilinged hall divided by a long counter that runs most of its length. On one side, the side you entered from, the floor is open and bare, a waiting area, maybe, or a place where people queued. On the other side of the counter, the space is partitioned into work stations: small desks built into the wall at intervals, each with its own recessed shelf and a flat writing surface. Behind those, a doorway leads to a back room you can see from here. Deeper shelving, heavy and industrial, with a loading area at the far end where a wide door is sealed shut.
-
-The layout is very familiar, almost comforting.
+The layout of the exchange is very familiar, almost comforting.
 
 choices:
 
@@ -13,7 +11,7 @@ choices:
 
   The desks face the counter. The counter faces the open floor. The open floor faces the entrance.
 
-  You've stood at a desk like this. Not this desk, not in this city, not built by whatever built this place -- but a desk that faced a counter that faced a floor where people waited for their number to be called or their name to be shouted. You have haggled across a surface exactly like this one, and been haggled at, and pretended to be offended by terms you found perfectly reasonable.
+  You've stood at a desk like this. Not this desk, not in this city, not built by whatever built this place. But a desk that faced a counter that faced a floor where people waited for their number to be called or their name to be shouted. You have haggled across a surface exactly like this one, and been haggled at, and pretended to be offended by terms you found perfectly reasonable.
 
   The back room confirms it. Heavy shelving, industrial, spaced for crates. A loading area with tracks set into the floor: rails for carts, maybe, or rollers. Ingress on one side, egress on the other, with a choke point in the middle where someone would have stood with a manifest and checked things off. Inventory control. You've seen a dozen versions of this in a dozen trading houses and guild halls across the empire.
 
@@ -21,7 +19,7 @@ choices:
   +open "The Exchange"
 
 * Look at the back room = The loading area behind the work stations
-  The back room is larger than the hall. Shelving runs floor to ceiling along three walls, heavy-gauge, bolted into the structure. The shelves are mostly empty, but a few still hold containers -- uniform, stackable, made of something that isn't wood or metal or ceramic. They're light when you lift one. Dry packing material crumbles inside it, fine and fibrous, nothing you recognize.
+  The back room is larger than the hall. Shelving runs floor to ceiling along three walls, heavy-gauge, bolted into the structure. The shelves are mostly empty, but a few still hold containers, uniform and stackable, made of something that isn't wood or metal or ceramic. They're light when you lift one. Dry packing material crumbles inside it, fine and fibrous, nothing you recognize.
 
   The loading area at the far end has two wide doors, both sealed. Between them, a raised platform at cart height with grooves set into its surface. The grooves are worn smooth. Whatever moved through here moved through often and moved through heavy.
 
@@ -29,7 +27,7 @@ choices:
   +open "The Exchange"
 
 * Ask Torben what he sees = He's at the counter, examining the desk partitions
-  "Quartermaster's office. Classic layout -- service counter, clerks behind it, stores in the back. The loading bay confirms it. This is where they processed equipment requisitions, tracked munitions, managed the logistics of a garrison this size." He runs his hand along the counter. "Good design. Efficient. You could run a thousand-man operation out of a room like this."
+  "Quartermaster's office. Classic layout: service counter, clerks behind it, stores in the back. The loading bay confirms it. This is where they processed equipment requisitions, tracked munitions, managed the logistics of a garrison this size." He runs his hand along the counter. "Good design. Efficient. You could run a thousand-man operation out of a room like this."
 
   He pauses. Looks at you. You realize your expression has given something away.
   +add_tag the_city_exchange_can_challenge

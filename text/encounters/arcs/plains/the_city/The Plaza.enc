@@ -2,20 +2,14 @@ The Plaza
 [trigger none]
 [vignette dungeons/the_city]
 
-The corridor opens into light and space. A plaza, broad and circular, roofed by the dome itself. The strange glass far overhead letting in a diffuse, purplish glow that has no direction, no warmth, just illumination. The air is still and dry, tasting faintly of mineral and age.
-
-The floor is tiled in colored glass, geometric patterns interlocking across the full width of the space. Triangles nesting into hexagons, hexagons into spirals, the colors muted by centuries of dust but still visible where boot-scuff has cleared a path. In the center, a statue rises from a low plinth: an angular form, abstract, all planes and facets. It could be a figure. It could be a compass rose. It doesn't resolve into anything familiar.
-
-Around the edges, alcoves open into corridors that lead deeper into the city. Raised beds line two walls, long troughs of dry soil with the desiccated remains of root systems still visible, whatever grew here reduced to grey filament. A bench faces the statue. Two more face each other across the tiled floor, as though someone anticipated that people might want to sit here and look at things or talk to each other.
-
-Torben is already sketching the plaza layout in his notebook. He works quickly, measuring distances by pacing them out, marking corridors with shorthand you can't read. He doesn't narrate. He's working.
+The plaza is quiet and empty, save for Torben's sketching and occasional quiet mumbles.
 
 choices:
 
 * Ask Torben about the statue = What does he make of it?
-  He glances up from his notebook. Walks over and stands in front of it, hands on hips, studying it the way he studies everything -- with the expectation that it will yield to categorization.
+  He glances up from his notebook and walks over to the statue. 
 
-  "Revathi, I'd wager. Or something ancestral to them. Their temples use this kind of geometry. Planes, angles, no representational forms. Formless. I suspect this is devotional."
+  "Revathi, I'd wager. Or something ancestral to them. Their temples use this kind of geometry. Planes, angles, no representational forms. I suspect this is devotional."
 
   He taps the plinth with his knuckle. "Note how it's placed, at the entrance. Prominent position. It's clearly looking down on the soldiers who lived here, observing them, making sure they stay in line."
 
@@ -31,24 +25,35 @@ choices:
   +open "The Plaza"
 
 * The commons = A wide passage with faded decoration on the walls
+  The corridor turns twice and the dome-light thins to nothing. Torben strikes his lantern without comment, as though he'd been counting the steps until he'd need it. The flame catches and the walls appear close, smooth, the same seamless material as everywhere else, but here the ceiling is lower. The proportions tighten. You are inside the city now, not under the dome but *in* the structure.
+
+  The passage opens into a long room. Tables run its length in two rows, fixed to the floor on metal stems, benches on either side. The surfaces are empty. Dust sits undisturbed in an even film, and where Torben sets his lantern on the nearest table it leaves a circle of exposed surface, pale and featureless.
+
+  At the far end, a counter separates the room from what lies behind it: a preparation area. Flat surfaces at working height, recessed basins with drainage channels cut into the floor beneath them, a row of dark panels set into the wall that might be heating elements or might be something else. It reads as a kitchen, and everything is where you'd expect it. Nothing is a size or shape you'd expect it to be.
   +open "The Commons"
 
 * The exchange = A corridor of broad, glassed-in alcoves
+  The corridor widens before it ends, opening into a high-ceilinged hall divided by a long counter that runs most of its length. On one side, the side you entered from, the floor is open and bare, a waiting area, maybe, or a place where people queued. On the other side of the counter, the space is partitioned into work stations: small desks built into the wall at intervals, each with its own recessed shelf and a flat writing surface. Behind those, a doorway leads to a back room you can see from here. Deeper shelving, heavy and industrial, with a loading area at the far end where a wide door is sealed shut.
   +open "The Exchange"
 
 * The watchtower = A stairway climbing toward the upper levels
+  The stairway spirals upward through the interior of a narrow tower, each step shallow and wide, built for a stride longer than yours. Torben's lantern throws shadows across the curved walls as you climb. The air changes as you rise, drier, thinner, with a faint current that suggests ventilation from somewhere above.
+
+  The top is open to the dome. A circular platform, waist-high parapet, and the city laid out beneath you in every direction.
+
+  It is larger than you thought. Much larger. The radial streets extend from the plaza like spokes, cutting through blocks of close-built structures that stretch to the dome wall on all sides. The dome glass curves overhead, close enough up here that you could hit it with a thrown stone. You consider asking Torben for one of his bolts, but you imagine the old man would frown on the plan.
   +open "The Watchtower"
 
-* The central district = A reinforced corridor, wider than the others, leading deeper [requires tag city.hub_explored]
+* The archive = A reinforced corridor, wider than the others, leading deeper [requires tag city.hub_explored]
   The corridor narrows after the first turning, then widens again into something that isn't a street anymore. The walls on either side are solid, windowless, the surfaces polished smooth enough to catch the lantern light and throw it back as a dim second flame. Your footsteps echo from the high ceiling.
 
   Torben walks ahead, lantern raised, notebook in his other hand. He's quiet. Careful.
 
-  The corridor ends at a door. Not sealed -- open, or broken open, or never closed. Beyond it, a large room, and in the room a faint light that isn't the lantern.
+  The corridor ends at a door. Not sealed. Open, or broken open, or never closed. Beyond it, a large room, and in the room a faint light that isn't the lantern.
   +open "The Archive"
 
 * Depart = Leave the city
-  You retrace your steps through the entry corridor, past the security systems you've already learned to read, out through the dome door into the open air. The plains hit you like a wall of sound and smell and wind -- everything the city isn't.
+  You retrace your steps through the entry corridor, past the security systems you've already learned to read, out through the dome door into the open air. The plains hit you like a wall of sound and smell and wind, everything the city isn't.
 
   Torben follows, blinking. He doesn't argue. He packs his notebook away and settles against his slab of masonry to review his sketches. He'll be here when you come back. He's not going anywhere.
   +flee_dungeon
