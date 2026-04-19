@@ -3,6 +3,8 @@ import { useGame } from "../GameContext";
 import type { GameResponse, ItemInfo, BankResponse } from "../api/types";
 import * as api from "../api/client";
 import MaskedIcon, { itemTypeIcon, TabButton } from "../components/MaskedIcon";
+import WaxSeal from "../components/WaxSeal";
+import { getSealVariant, getSealSymbolIndex } from "../marketNaming";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
 
@@ -118,9 +120,16 @@ export default function BankScreen({
             ) : (
               bankData.items.map((item, i) => (
                 <div key={`bank-${i}`} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
-                  <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                    <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                  </div>
+                  {item.type === "haul" ? (
+                    <WaxSeal
+                      variant={getSealVariant(item.haulOfferId ?? item.defId)}
+                      symbolIndex={getSealSymbolIndex(item.haulOfferId ?? item.defId)}
+                    />
+                  ) : (
+                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                      <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="text-primary">{item.name}</div>
                     {item.description && (
@@ -157,9 +166,16 @@ export default function BankScreen({
                   className="flex items-start gap-3 p-3 rounded-lg"
                   style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
                 >
-                  <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                    <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                  </div>
+                  {item.type === "haul" ? (
+                    <WaxSeal
+                      variant={getSealVariant(item.haulOfferId ?? item.defId)}
+                      symbolIndex={getSealSymbolIndex(item.haulOfferId ?? item.defId)}
+                    />
+                  ) : (
+                    <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                      <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="text-primary">{item.name}</div>
                     {item.description && (

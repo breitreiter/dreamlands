@@ -3,6 +3,8 @@ import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo
 import { useGame } from "../GameContext";
 import MaskedIcon, { iconUrl, itemTypeIcon, TabButton } from "../components/MaskedIcon";
 import HaulItem from "../components/HaulItem";
+import WaxSeal from "../components/WaxSeal";
+import { getSealVariant, getSealSymbolIndex } from "../marketNaming";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -253,9 +255,16 @@ function ItemCard({
   const mods = itemModifierSummary(item);
   return (
     <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}>
-      <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
-        <MaskedIcon icon={itemTypeIcon(item.type)} className="w-6 h-6" color="#D0BD62" />
-      </div>
+      {item.type === "haul" ? (
+        <WaxSeal
+          variant={getSealVariant(item.haulOfferId ?? item.defId)}
+          symbolIndex={getSealSymbolIndex(item.haulOfferId ?? item.defId)}
+        />
+      ) : (
+        <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center">
+          <MaskedIcon icon={itemTypeIcon(item.type)} className="w-6 h-6" color="#D0BD62" />
+        </div>
+      )}
       <div className="flex-1 min-w-0">
         {item.type === "haul" ? (
           <HaulItem
