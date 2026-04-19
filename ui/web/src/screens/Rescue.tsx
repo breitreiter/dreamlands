@@ -47,7 +47,7 @@ export default function Rescue({ state }: { state: GameResponse }) {
               Your injuries were too severe to bear. Darkness took you on the road.
             </p>
             <p className="italic">
-              You remember only fragments — many hands, the creak of a cart, voices
+              You remember only fragments: many hands, the creak of a cart, voices
               speaking low. Somewhere along the way your belongings were taken as
               payment, though you can scarcely remember by whom.
             </p>
@@ -62,7 +62,7 @@ export default function Rescue({ state }: { state: GameResponse }) {
               <div className="text-negative font-bold">Lost</div>
               {rescue.lostItems.map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-primary/80">
-                  <span>— {item}</span>
+                  <span>· {item}</span>
                 </div>
               ))}
               {rescue.goldLost > 0 && (

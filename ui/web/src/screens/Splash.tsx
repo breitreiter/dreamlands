@@ -70,7 +70,7 @@ export default function Splash() {
                 <a href="https://game-icons.net/" target="_blank" rel="noopener noreferrer" className="text-action underline">
                   game-icons.net
                 </a>
-                {" — "}CC BY 3.0
+                {" · "}CC BY 3.0
               </div>
               <p className="text-dim font-bold tracking-wide mb-3 mt-4">
                 Third-party libraries
@@ -78,7 +78,7 @@ export default function Splash() {
               {credits.map((c) => (
                 <div key={c.name} className="text-muted">
                   <span className="text-primary/80">{c.name}</span>
-                  {" — "}
+                  {" · "}
                   {c.license} ({c.author})
                 </div>
               ))}

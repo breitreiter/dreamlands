@@ -506,7 +506,7 @@ export default function MarketScreen({
         <div className="flex-1 flex flex-col border-l border-edge min-w-0">
           <div className="p-3 pt-5">
             <h3 className="font-header text-accent text-[32px] leading-tight">Sell</h3>
-            <p className="text-muted mt-0.5">The factor will take things off your hands — click to stage.</p>
+            <p className="text-muted mt-0.5">The factor will take things off your hands. Click to stage.</p>
             <div className="flex gap-1 mt-2">
               <TabButton id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
               <TabButton id="haversack" active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabButton>

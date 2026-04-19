@@ -294,7 +294,7 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
               <span className="font-medium">{outcome.skillCheck.modifier}</span>
               {outcome.skillCheck.passed ? " meets " : " doesn't meet "}
               <span className="font-medium">{outcome.skillCheck.target}</span>
-              {" — "}
+              {" · "}
               <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
                 {outcome.skillCheck.passed ? "Qualified" : "Unqualified"}
               </span>
@@ -310,7 +310,7 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
               </span>
               {" vs "}
               <span className="font-medium">{outcome.skillCheck.target}</span>
-              {" — "}
+              {" · "}
               <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
                 {outcome.skillCheck.passed ? "Success" : "Failure"}
               </span>
@@ -359,7 +359,7 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
                 </span>
                 {" vs "}
                 <span className="font-medium">{m.resistCheck.target}</span>
-                {" — "}
+                {" · "}
                 <span className={m.resistCheck.passed ? "text-positive" : "text-negative"}>
                   {m.resistCheck.passed ? "Resisted" : "Afflicted"}
                 </span>

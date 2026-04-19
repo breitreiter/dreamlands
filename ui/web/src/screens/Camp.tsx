@@ -199,7 +199,7 @@ export default function Camp({ state }: { state: GameResponse }) {
                   <span className="text-negative font-bold">
                     {row.healthLost > 0 ? `−${row.healthLost}` : ""}
                     {row.spiritsLost > 0 ? `${row.healthLost > 0 ? ", " : ""}−${row.spiritsLost} spirits` : ""}
-                    {row.healthLost === 0 && row.spiritsLost === 0 ? "—" : ""}
+                    {row.healthLost === 0 && row.spiritsLost === 0 ? "·" : ""}
                   </span>
                 </div>
                 <div className="text-dim ml-7">

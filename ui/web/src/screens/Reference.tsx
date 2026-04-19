@@ -112,9 +112,9 @@ export default function Reference() {
 
           {/* YOUR CHARACTER */}
           <Section id="character" title="Your Character">
-            <p>You are a travelling merchant exploring the Dreamlands. Your survival depends on managing three core resources.</p>
+            <p>You are a travelling merchant exploring the imperial borderlands. Your survival depends on managing three core resources.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Stat label="Health" value="4" note="Lost to severe conditions and hazards. Reach 0 and you'll be rescued — but lose your gold and inventory." />
+              <Stat label="Health" value="4" note="Lost to severe conditions and hazards. Reach 0 and you'll be rescued, but lose your gold and inventory." />
               <Stat label="Spirits" value="20" note="Your morale and energy. Drained by hardship, restored by rest and food." />
               <Stat label="Gold" value="50" note="Spent at markets and inns. Earned through contracts, encounters, and selling goods." />
             </div>
@@ -126,12 +126,12 @@ export default function Reference() {
             <Table
               headers={["Skill", "Used For", "Equipment Bonus"]}
               rows={[
-                ["Combat", "Fighting — close encounters, hostile creatures, bandits", "Weapon bonus"],
+                ["Combat", "Fighting: close encounters, hostile creatures, bandits", "Weapon bonus"],
                 ["Negotiation", "Persuasion, deception, social cunning, bartering", "Tool bonus"],
                 ["Bushcraft", "Wilderness survival, navigation, travel, foraging", "Tool bonus"],
                 ["Cunning", "Trickery, awareness, staying one step ahead, traps", "Armor bonus"],
-                ["Luck", "A nudge on the odds — passive reroll chance on failures", "None (passive)"],
-                ["Mercantile", "An eye for value — improves contract payouts", "None (passive)"],
+                ["Luck", "A nudge on the odds: passive reroll chance on failures", "None (passive)"],
+                ["Mercantile", "An eye for value: improves contract payouts", "None (passive)"],
               ]}
             />
             <p className="text-muted">
@@ -198,11 +198,11 @@ export default function Reference() {
                 ["Weapons", "Pack", "Three archetypes: daggers (exploiting openings), axes (aggressive), swords (hybrid)"],
                 ["Armor", "Pack", "Light (cunning-focused), medium (balanced), heavy (injury resist)"],
                 ["Boots", "Pack", "Higher tier = more exhaustion resistance"],
-                ["Tools", "Pack", "Grant skill bonuses or condition resistance. Only unique items count — duplicates don't stack."],
+                ["Tools", "Pack", "Grant skill bonuses or condition resistance. Only unique items count; duplicates don't stack."],
                 ["Food", "Haversack", "Protein, grain, sweets. Auto-consumed at end of day. 3 gold each at market."],
                 ["Medicine", "Haversack", "Cures for specific conditions. Auto-consumed when needed at end of day."],
                 ["Tokens", "Haversack", "Minor gear granting +1 to a skill. Story items from encounters."],
-                ["Contracts", "Pack", "Delivery contracts — take up a pack slot until delivered."],
+                ["Contracts", "Pack", "Delivery contracts: take up a pack slot until delivered."],
               ]}
             />
           </Section>
@@ -250,7 +250,7 @@ export default function Reference() {
           <Section id="road" title="The Road">
             <p>
               Travel happens tile by tile across a grid map. Each night on the road, you roll resist checks
-              against ambient conditions. Some are biome-specific — freezing in the mountains, thirst in the scrub —
+              against ambient conditions. Some are biome-specific (freezing in the mountains, thirst in the scrub),
               while exhaustion and getting lost can happen anywhere. Serious conditions like poisoning, injury,
               and irradiation only come from encounters.
             </p>
@@ -268,7 +268,7 @@ export default function Reference() {
                 ["20", "3 food items"],
               ]}
             />
-            <p className="text-muted">You don't forage in settlements — buy food at the market instead.</p>
+            <p className="text-muted">You don't forage in settlements; buy food at the market instead.</p>
           </Section>
 
           {/* END OF DAY */}
@@ -276,29 +276,29 @@ export default function Reference() {
             <p>At the end of each day, several things happen automatically in this order:</p>
             <ol className="list-decimal list-inside space-y-2 ml-2">
               <li>
-                <strong className="text-dim">Resist checks</strong> — Roll against biome-specific conditions (freezing, thirsty, etc.).
+                <strong className="text-dim">Resist checks:</strong> Roll against biome-specific conditions (freezing, thirsty, etc.).
                 Equipment resist bonuses help.
               </li>
               <li>
-                <strong className="text-dim">Forage</strong> — On the road, roll Bushcraft to find food (skipped in settlements).
+                <strong className="text-dim">Forage:</strong> On the road, roll Bushcraft to find food (skipped in settlements).
               </li>
               <li>
-                <strong className="text-dim">Eat</strong> — Up to 3 food items are consumed from your haversack.
+                <strong className="text-dim">Eat:</strong> Up to 3 food items are consumed from your haversack.
                 A <em>balanced meal</em> (1 protein + 1 grain + 1 sweets) grants <span className="text-accent">+1 bonus spirits</span>.
-                No food means you go hungry — you won't recover spirits from resting that night.
+                No food means you go hungry; you won't recover spirits from resting that night.
               </li>
               <li>
-                <strong className="text-dim">Medicine</strong> — If you have a matching cure for a severe condition, one dose is consumed automatically, reducing stacks by 1.
+                <strong className="text-dim">Medicine:</strong> If you have a matching cure for a severe condition, one dose is consumed automatically, reducing stacks by 1.
               </li>
               <li>
-                <strong className="text-dim">Condition drain</strong> — Minor conditions drain <span className="text-accent">3 spirits</span> each.
+                <strong className="text-dim">Condition drain:</strong> Minor conditions drain <span className="text-accent">3 spirits</span> each.
                 Untreated severe conditions drain <span className="text-accent">1 health</span>.
               </li>
               <li>
-                <strong className="text-dim">Rescue</strong> — If health reaches 0, you're rescued. You lose your inventory and gold but keep your skills and are placed at the nearest settlement.
+                <strong className="text-dim">Rescue:</strong> If health reaches 0, you're rescued. You lose your inventory and gold but keep your skills and are placed at the nearest settlement.
               </li>
               <li>
-                <strong className="text-dim">Rest</strong> — If you ate and slept, recover <span className="text-accent">+1 spirits</span> (or +2 with a balanced meal).
+                <strong className="text-dim">Rest:</strong> If you ate and slept, recover <span className="text-accent">+1 spirits</span> (or +2 with a balanced meal).
               </li>
             </ol>
           </Section>
@@ -306,7 +306,7 @@ export default function Reference() {
           {/* SETTLEMENTS */}
           <Section id="settlements" title="Settlements">
             <p>
-              Settlements are safe havens — no biome threats, no foraging.
+              Settlements are safe havens: no biome threats, no foraging.
               They offer services depending on their size: camps, outposts, villages, towns, and cities.
             </p>
 
@@ -317,10 +317,10 @@ export default function Reference() {
               rows={[
                 ["Food", "Always stocked, unlimited. 3 gold each."],
                 ["Bandages", "Always stocked, unlimited. 3 gold each."],
-                ["Equipment", "Weapons, armor, boots — limited stock, never restocks once sold."],
-                ["Tools", "Skill and resist bonuses — limited stock."],
-                ["Specialty Medicine", "Cures for rare conditions — limited stock, restocks slowly."],
-                ["Contracts", "Delivery contracts — free to accept, 1 to 3 available per settlement."],
+                ["Equipment", "Weapons, armor, boots. Limited stock, never restocks once sold."],
+                ["Tools", "Skill and resist bonuses. Limited stock."],
+                ["Specialty Medicine", "Cures for rare conditions. Limited stock, restocks slowly."],
+                ["Contracts", "Delivery contracts. Free to accept, 1 to 3 available per settlement."],
               ]}
             />
 
@@ -337,13 +337,13 @@ export default function Reference() {
               Time advances by the number of nights stayed.
             </p>
             <p className="text-muted">
-              If you have severe conditions, you must have the matching medicine in your haversack — the inn
+              If you have severe conditions, you must have the matching medicine in your haversack; the inn
               will use it during your stay.
             </p>
 
             <h3 className="text-dim font-bold mt-6 mb-2">Chapterhouse</h3>
             <p>
-              Free full recovery — health, spirits, and <em>all</em> conditions cleared, no medicine required.
+              Free full recovery: health, spirits, and <em>all</em> conditions cleared, no medicine required.
               There is exactly one, in Aldgate.
             </p>
           </Section>
@@ -358,7 +358,7 @@ export default function Reference() {
               <p><strong className="text-dim">Cost:</strong> Free to accept.</p>
               <p><strong className="text-dim">Payout:</strong> Gold on delivery, boosted by Mercantile skill (+10% per level).</p>
               <p><strong className="text-dim">Storage:</strong> Each contract takes 1 pack slot until delivered.</p>
-              <p><strong className="text-dim">Delivery:</strong> Automatic — enter the destination settlement and the payout is collected.</p>
+              <p><strong className="text-dim">Delivery:</strong> Automatic; enter the destination settlement and the payout is collected.</p>
               <p><strong className="text-dim">Discard:</strong> You can drop a contract at any time without penalty.</p>
             </div>
           </Section>

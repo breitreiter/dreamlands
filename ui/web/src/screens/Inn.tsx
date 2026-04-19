@@ -158,7 +158,7 @@ export default function Inn({
             <>
               <div className="text-primary/80 leading-loose space-y-4">
                 <p>
-                  The hall unfolds before you — blue columns rising to a
+                  The hall unfolds before you: blue columns rising to a
                   vaulted ceiling, their surfaces traced with arabesque figures
                   that shift and resolve as you move past. The capitals are
                   gilded, warm against the stone. Lamps hang deep between the
@@ -254,7 +254,7 @@ function ServiceRow({
     >
       <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="currentColor" />
       <span>
-        {name} — {cost === 0 ? "free" : `${cost} gold`}, {spiritsLabel}
+        {name}: {cost === 0 ? "free" : `${cost} gold`}, {spiritsLabel}
         {!canAfford && " (can't afford)"}
       </span>
     </Button>

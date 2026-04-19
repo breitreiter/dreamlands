@@ -68,7 +68,7 @@ function describeOpening(o: TacticalOpeningInfo): string {
   const cost = costLabel(o.costKind, o.costAmount);
   const effect = effectLabel(o.effectKind, o.effectAmount);
 
-  if (o.costKind === "free") return `${cost} — ${effect}`;
+  if (o.costKind === "free") return `${cost}: ${effect}`;
   return `${cost}, ${effect}`;
 }
 
@@ -122,7 +122,7 @@ function MechanicLines({ results }: { results: MechanicResultInfo[] }) {
             </span>
             {" vs "}
             <span className="font-medium">{m.resistCheck.target}</span>
-            {" — "}
+            {" · "}
             <span className={m.resistCheck.passed ? "text-positive" : "text-negative"}>
               {m.resistCheck.passed ? "Resisted" : "Afflicted"}
             </span>
@@ -161,12 +161,12 @@ function FinishedSummary({ tactical, onContinue, loading }: { tactical: Tactical
       >
         <p className="font-bold">
           {tactical.finishReason === "resistancekill"
-            ? "Victory — Goal Reached"
+            ? "Victory: Goal Reached"
             : tactical.finishReason === "controlkill"
-              ? "Victory — Total Control"
+              ? "Victory: Total Control"
               : tactical.finishReason === "clockexpired"
-                ? "Defeated — Time Ran Out"
-                : "Defeated — Spirits Depleted"}
+                ? "Defeated: Time Ran Out"
+                : "Defeated: Spirits Depleted"}
         </p>
       </div>
 
