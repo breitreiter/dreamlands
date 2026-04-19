@@ -83,6 +83,12 @@ public static class PlainsPass
             if (node.Terrain != Terrain.Plains) continue;
             if ((node.Region?.Tier ?? 1) != tier) continue;
 
+            // T3 plains decals include building-like shapes; keep them clear
+            // of POI tiles and the tile directly south (tall decals there reach
+            // up into the POI tile and get clipped by the POI icon).
+            if (tier == 3 && (node.Poi != null ||
+                (tileY > 0 && map[tileX, tileY - 1].Poi != null))) continue;
+
             var decal = decals[rng.Next(decals.Count)];
             float w = decal.Width * scale;
             float h = decal.Height * scale;
