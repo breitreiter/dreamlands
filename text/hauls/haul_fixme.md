@@ -8,8 +8,8 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Name**: What the player sees in their inventory
 - **Origin biome**: Which biome's settlements offer this haul (plains, mountains, forest, scrub, swamp)
 - **Destination biome**: Which biome's settlements pay for this haul
-- **Origin flavor**: 1 sentence — why this item is moving right now (shown when claiming)
-- **Delivery flavor**: 1-3 sentences — what happens when you hand it over (shown on delivery)
+- **Origin flavor**: 1 sentence describing why this item is moving right now (shown when claiming)
+- **Delivery flavor**: 1-3 sentences describing what happens when you hand it over (shown on delivery)
 
 ## Good examples
 
@@ -28,7 +28,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: forest
 - **Destination biome**: scrub
 - **Origin flavor**: A hunter had it made as a gift but fell out badly with the man it was meant for; a gem trader passing through offered him half its value just to be rid of it.
-- **Delivery flavor**: The clan elder examines each tusk, holding them up to the light. He turns the necklace over to inspect how the cord is knotted — a different method than he's used to. He nods, apparently satisfied, and pays. He puts it around his own neck.
+- **Delivery flavor**: The clan elder examines each tusk, holding them up to the light. He turns the necklace over to inspect how the cord is knotted, a different method than he's used to. He nods, apparently satisfied, and pays. He puts it around his own neck.
 
 ### Bundle of Arrow Shafts
 - **Origin biome**: forest
@@ -112,7 +112,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: mountains
 - **Origin flavor**: A Stift delegate says the tin service in his dormitory is an embarrassment; he ordered a replacement through a trader who knows the mesa routes.
-- **Delivery flavor**: You deliver it to the dormitory corridor and a young delegate signs for it — clearly not the man who ordered it. Later someone brings payment to the gate. The next morning, walking through the Wandelgang, you hear the sound of a proper teapot through a door that is not quite closed.
+- **Delivery flavor**: You deliver it to the dormitory corridor and a young delegate signs for it, clearly not the man who ordered it. Later someone brings payment to the gate. The next morning, walking through the Wandelgang, you hear the sound of a proper teapot through a door that is not quite closed.
 
 ### Clay Incense Burner
 - **Origin biome**: scrub
@@ -124,7 +124,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: swamp
 - **Origin flavor**: A young Alwati man bought it off a Kesharat trader and wants it as a gift for a family he owes a favor; he says the old folks will appreciate it, even if it's not their tradition.
-- **Delivery flavor**: The elder unwraps it and sets it on the table. She studies it without touching it. She looks at the young man. "Where did you find this?" He explains. She looks at it again, then at the tilework on her wall, then back at the carving. She puts it away carefully. "Thank you," she says — to him, not to you.
+- **Delivery flavor**: The elder unwraps it and sets it on the table. She studies it without touching it. She looks at the young man. "Where did you find this?" He explains. She looks at it again, then at the tilework on her wall, then back at the carving. She puts it away carefully. "Thank you," she says, to him, not to you.
 
 
 ### Signal Mirrors

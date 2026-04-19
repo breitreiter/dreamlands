@@ -19,7 +19,7 @@ public sealed partial class HaulDef
             Name = @"Charcoal Bundle",
             OriginBiome = "mountains",
             DestBiome = "scrub",
-            OriginFlavor = @"The charcoal burner's daughter says her father spent three days on this batch and won't let her sell the rest — claims the mesa folk don't appreciate quality work, but the contract was already signed.",
+            OriginFlavor = @"The charcoal burner's daughter says her father spent three days on this batch and won't let her sell the rest; claims the mesa folk don't appreciate quality work, but the contract was already signed.",
             DeliveryFlavor = @"The clan metalsmith breaks open the bundle and selects a piece at random. He snaps it cleanly in half, studies the break, then touches his tongue to the fresh surface. He nods once, sets it with the rest, and counts out your payment without comment.",
         },
         new()
@@ -29,7 +29,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "mountains",
             OriginFlavor = @"A scholar at the academy is collecting evidence of labor practices in the valley mining companies. He's particularly interested in the denominations and circulation patterns.",
-            DeliveryFlavor = @"You hand over the stack and she spreads the scrip across her desk, sorting by issuing company and year. Her fingers move quickly, checking watermarks against lamplight. ""Redemption clauses here, here — both voided within eighteen months."" She makes a notation in her ledger, then counts out your payment in real coin.",
+            DeliveryFlavor = @"You hand over the stack and she spreads the scrip across her desk, sorting by issuing company and year. Her fingers move quickly, checking watermarks against lamplight. ""Redemption clauses here, here, both voided within eighteen months."" She makes a notation in her ledger, then counts out your payment in real coin.",
         },
         new()
         {
@@ -46,7 +46,7 @@ public sealed partial class HaulDef
             Name = @"Annotated Legal Codex",
             OriginBiome = "mountains",
             DestBiome = "swamp",
-            OriginFlavor = @"The local magistrate died without an heir, and his annotated codex — margin notes from forty years of rulings — is the only copy. A scholar arranged the sale rather than see it pulped.",
+            OriginFlavor = @"The local magistrate died without an heir, and his annotated codex (margin notes from forty years of rulings) is the only copy. A scholar arranged the sale rather than see it pulped.",
             DeliveryFlavor = @"The recipient meets you at the edge of the village, barefoot in the mud, and takes the codex without introduction. She flips through it methodically, pausing at certain pages, her lips moving slightly as though counting something. ""Good. Very good."" She pays you exact coin and walks into the deeper swamp, still reading.",
         },
         new()
@@ -64,7 +64,7 @@ public sealed partial class HaulDef
             Name = @"Printed Reform Pamphlets",
             OriginBiome = "mountains",
             DestBiome = "plains",
-            OriginFlavor = @"A reformist faction among the scholars is distributing their arguments in print—land reform, debt abolition, new voting structures. They're targeting the plains merchants who benefit most from the status quo.",
+            OriginFlavor = @"A reformist faction among the scholars is distributing their arguments in print: land reform, debt abolition, new voting structures. They're targeting the plains merchants who benefit most from the status quo.",
             DeliveryFlavor = @"You hand the stack to a clerk at the administrative hall. He flips through the first pamphlet, expression carefully neutral, then stamps a receiving form twice and files one copy in a cabinet already thick with similar documents. ""We'll review the content and determine distribution permissions within six weeks."" He slides your payment across the desk without looking up.",
         },
         new()
@@ -101,7 +101,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "scrub",
             OriginFlavor = @"The observatory director retired after thirty years and left the disc behind, but his successor prefers newer glass and won't mount it. The institution is selling it off rather than let it gather dust.",
-            DeliveryFlavor = @"The woman who takes delivery is maybe seventy, her hands shaking slightly as she unwraps the lens. She holds it up to the late afternoon light and her breath catches. ""This is from Kaspar's workshop. I knew him before—"" She stops, wipes the edge with her sleeve, and sets it carefully in a wooden frame already prepared on her table. She counts your payment twice, distracted, her eyes never leaving the glass.",
+            DeliveryFlavor = @"The woman who takes delivery is maybe seventy, her hands shaking slightly as she unwraps the lens. She holds it up to the late afternoon light and her breath catches. ""This is from Kaspar's workshop. I knew him before..."" She stops, wipes the edge with her sleeve, and sets it carefully in a wooden frame already prepared on her table. She counts your payment twice, distracted, her eyes never leaving the glass.",
         },
         new()
         {
@@ -118,7 +118,7 @@ public sealed partial class HaulDef
             Name = @"Binding Judgment Writ",
             OriginBiome = "mountains",
             DestBiome = "mountains",
-            OriginFlavor = @"The court clerk pushed the finalization through in two days instead of the usual two months — the binding takes effect at month's end and the property changes hands whether the document arrives or not.",
+            OriginFlavor = @"The court clerk pushed the finalization through in two days instead of the usual two months. The binding takes effect at month's end and the property changes hands whether the document arrives or not.",
             DeliveryFlavor = @"You hand the writ to a woman standing outside a stone cottage with her daughter beside her. She breaks the seal and reads in silence, her lips moving slightly. When she finishes, she folds it carefully and holds it against her chest. ""It's ours now,"" she says to the girl, who nods once, solemn. She pays you and goes inside without another word.",
         },
         new()
@@ -172,7 +172,7 @@ public sealed partial class HaulDef
             Name = @"Roll of Lead Sheeting",
             OriginBiome = "mountains",
             DestBiome = "plains",
-            OriginFlavor = @"The sheeting came off a church roof in one of the valley towns — replaced after forty years of weather, but still good enough to sell rather than scrap.",
+            OriginFlavor = @"The sheeting came off a church roof in one of the valley towns, replaced after forty years of weather but still good enough to sell rather than scrap.",
             DeliveryFlavor = @"The roofer unrolls it across two sawhorses and runs her hand over the surface, checking for soft spots where the metal's gone thin. She finds a crease, flexes it twice, nods. She's already climbing the ladder with it tucked under one arm when her apprentice comes over to pay you.",
         },
         new()
@@ -182,7 +182,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "scrub",
             OriginFlavor = @"The old smelter kept this tin aside for forty years, always said he'd need it someday. His widow decided someday never came.",
-            DeliveryFlavor = @"You arrive at the forge to find three smiths arguing over a cracked crucible, voices rising over the clang of hammering. The youngest takes your tin, pries it open with a blade, and sniffs it. ""This is mountain flux—twice the strength we use."" The eldest leans in, dips a finger in the gray powder, rubs it between his fingers. ""We'll cut it with local ash. It'll work."" He counts out your payment while the argument resumes.",
+            DeliveryFlavor = @"You arrive at the forge to find three smiths arguing over a cracked crucible, voices rising over the clang of hammering. The youngest takes your tin, pries it open with a blade, and sniffs it. ""This is mountain flux. Twice the strength we use."" The eldest leans in, dips a finger in the gray powder, rubs it between his fingers. ""We'll cut it with local ash. It'll work."" He counts out your payment while the argument resumes.",
         },
         new()
         {
@@ -199,7 +199,7 @@ public sealed partial class HaulDef
             Name = @"Box of Iron Nails",
             OriginBiome = "mountains",
             DestBiome = "scrub",
-            OriginFlavor = @"Someone ordered five boxes of nails but the blacksmith sent five *crates*—enough to roof half the mountain. The buyer paid for what he asked for and left the surplus for resale.",
+            OriginFlavor = @"Someone ordered five boxes of nails but the blacksmith sent five *crates*, enough to roof half the mountain. The buyer paid for what he asked for and left the surplus for resale.",
             DeliveryFlavor = @"You set the box on the carpenter's workbench. She opens it, takes out a single nail, and holds it to the light, checking the taper and the head. She tests the point against her thumbnail, then drops it back in and closes the lid. She counts out your payment in small coins and turns back to her work.",
         },
         new()
@@ -208,7 +208,7 @@ public sealed partial class HaulDef
             Name = @"Box of Slate Shingles",
             OriginBiome = "mountains",
             DestBiome = "scrub",
-            OriginFlavor = @"The slates came off an old mine office roof during repairs — worn gray rectangles with chips at the corners and nail holes that tell decades of weather.",
+            OriginFlavor = @"The slates came off an old mine office roof during repairs: worn gray rectangles with chips at the corners and nail holes that tell decades of weather.",
             DeliveryFlavor = @"You arrive at the plateau settlement during a roof repair, and three different relatives immediately cluster around to inspect your delivery. The eldest runs her finger along the worn surface and nods. ""Mountain slate. Better than the clay we've been using."" A younger man holds one up to the light, checking for cracks, while another taps it with his knuckle to test the ring. They argue briefly in their own dialect before handing over your payment.",
         },
         new()
@@ -218,7 +218,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "scrub",
             OriginFlavor = @"The old smelter's widow found it half-buried in the yard where her husband's workshop stood before the fire. She won't say why she's selling it, but she wrapped it three times before handing it over.",
-            DeliveryFlavor = @"The metalworker sets it on his anvil and taps it with a small hammer, listening to the ring. He turns it over, checking the thickness at the mounting points, then runs his finger along the interior curve where the casting shows its grain. ""Pre-Administration work. Maybe two hundred years old—they poured it hotter than we do now."" He pays you and sets it carefully aside from his other stock.",
+            DeliveryFlavor = @"The metalworker sets it on his anvil and taps it with a small hammer, listening to the ring. He turns it over, checking the thickness at the mounting points, then runs his finger along the interior curve where the casting shows its grain. ""Pre-Administration work. Maybe two hundred years old. They poured it hotter than we do now."" He pays you and sets it carefully aside from his other stock.",
         },
         new()
         {
@@ -262,8 +262,8 @@ public sealed partial class HaulDef
             Name = @"Bound Court Transcript",
             OriginBiome = "mountains",
             DestBiome = "swamp",
-            OriginFlavor = @"A mountain court case wrapped up after eight years of deliberation. The losing party requested a certified transcript—not for appeal, but to prove they exhausted every legal avenue before taking the matter elsewhere.",
-            DeliveryFlavor = @"The reader sits at a tilework table and cracks the seal without ceremony. She flips through sections, pausing at key passages, her finger tracking margin notes. ""The procedural arguments are competent. The substantive law is garbage."" She closes it and slides your payment across the table. ""Tell me—did they really think this would hold up anywhere that isn't a monastery?""",
+            OriginFlavor = @"A mountain court case wrapped up after eight years of deliberation. The losing party requested a certified transcript, not for appeal, but to prove they exhausted every legal avenue before taking the matter elsewhere.",
+            DeliveryFlavor = @"The reader sits at a tilework table and cracks the seal without ceremony. She flips through sections, pausing at key passages, her finger tracking margin notes. ""The procedural arguments are competent. The substantive law is garbage."" She closes it and slides your payment across the table. ""Tell me, did they really think this would hold up anywhere that isn't a monastery?""",
         },
         new()
         {
@@ -272,7 +272,7 @@ public sealed partial class HaulDef
             OriginBiome = "mountains",
             DestBiome = "mountains",
             OriginFlavor = @"Someone at the company store let these joints walk out the back door at cost. No paperwork, no questions about what happened to the inventory log.",
-            DeliveryFlavor = @"You hand the package to a woman in a mine foreman's coat who opens it in an alley behind the company offices. She counts each piece twice, her lips moving silently, then wraps them back up without testing the fit. She pays you in mixed coin—some scrip, some real money—and walks back inside through the main entrance like she's been there all along.",
+            DeliveryFlavor = @"You hand the package to a woman in a mine foreman's coat who opens it in an alley behind the company offices. She counts each piece twice, her lips moving silently, then wraps them back up without testing the fit. She pays you in mixed coin (some scrip, some real money) and walks back inside through the main entrance like she's been there all along.",
         },
         new()
         {

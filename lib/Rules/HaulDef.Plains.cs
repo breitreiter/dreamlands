@@ -56,7 +56,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "mountains",
             OriginFlavor = @"The garrison commander finally admitted the old signal network isn't coming back online. He's selling off the lanterns piece by piece rather than watch them rust in a warehouse.",
-            DeliveryFlavor = @"You arrive at the ridgeline watchtower to find three miners fiddling with a rusty lantern. It flickers to life for a moment before going out again. The foreman takes your lantern, oils the shutters, tests the mechanism. ""Imperial issue. Still good for a few years."" One of the miners leans in. ""Needs new oil, new wick—"" The foreman cuts him off. ""I know what it needs."" He counts out your payment while the minerscontinue their debate.",
+            DeliveryFlavor = @"You arrive at the ridgeline watchtower to find three miners fiddling with a rusty lantern. It flickers to life for a moment before going out again. The foreman takes your lantern, oils the shutters, tests the mechanism. ""Imperial issue. Still good for a few years."" One of the miners leans in. ""Needs new oil, new wick..."" The foreman cuts him off. ""I know what it needs."" He counts out your payment while the minerscontinue their debate.",
         },
         new()
         {
@@ -73,7 +73,7 @@ public sealed partial class HaulDef
             Name = @"Vitrified Stone Shards",
             OriginBiome = "plains",
             DestBiome = "mountains",
-            OriginFlavor = @"Someone found these fused to the ground near an old wildlands garrison — lightning strike, maybe, or something from the failed campaign. They've been sitting in a scavenger's collection for years.",
+            OriginFlavor = @"Someone found these fused to the ground near an old wildlands garrison: lightning strike, maybe, or something from the failed campaign. They've been sitting in a scavenger's collection for years.",
             DeliveryFlavor = @"You hand over the box at the assay office. The clerk opens it, examines one shard briefly, then fills out a requisition form in triplicate. He stamps each copy with practiced efficiency, hands you one along with your payment, and files the rest without looking at the shards again.",
         },
         new()
@@ -83,7 +83,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "forest",
             OriginFlavor = @"A scavenger turned up a depot mess kit in good condition, still stacked and wrapped. The buyer wanted it immediately and paid double the asking price without haggling.",
-            DeliveryFlavor = @"You hand over the kit to a forest woman outside a timber cabin. She opens it carefully, runs her thumb along the spoon's edge, then holds up the canteen and shakes it near her ear. A small crowd gathers—two men and a boy—murmuring about the markings stamped into the metal. One of them says something you don't catch. The woman closes the kit, nods once, and counts out your payment without looking at you again.",
+            DeliveryFlavor = @"You hand over the kit to a forest woman outside a timber cabin. She opens it carefully, runs her thumb along the spoon's edge, then holds up the canteen and shakes it near her ear. A small crowd gathers (two men and a boy) murmuring about the markings stamped into the metal. One of them says something you don't catch. The woman closes the kit, nods once, and counts out your payment without looking at you again.",
         },
         new()
         {
@@ -92,7 +92,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "plains",
             OriginFlavor = @"The bell was cast two centuries ago for a tower that fell in the last war. The town council voted to sell it rather than recast it, but the vote was narrow.",
-            DeliveryFlavor = @"You hand over the fragment. The buyer turns it in his hands, checking the maker's mark stamped into the bronze. He sets it on his desk with the others—five pieces, all different bells. He counts your payment without comment.",
+            DeliveryFlavor = @"You hand over the fragment. The buyer turns it in his hands, checking the maker's mark stamped into the bronze. He sets it on his desk with the others: five pieces, all different bells. He counts your payment without comment.",
         },
         new()
         {
@@ -109,7 +109,7 @@ public sealed partial class HaulDef
             Name = @"Grid Regulator Plate",
             OriginBiome = "plains",
             DestBiome = "scrub",
-            OriginFlavor = @"The salvagers recovered a crate of grid regulators from an old garrison depot, but only one buyer responded to the listing — some Kesharat clerk who needs it for rail maintenance.",
+            OriginFlavor = @"The salvagers recovered a crate of grid regulators from an old garrison depot, but only one buyer responded to the listing: some Kesharat clerk who needs it for rail maintenance.",
             DeliveryFlavor = @"You hand over the plate at the requisitions depot. The clerk compares the stamped serial number against his ledger, runs his finger down three columns of text, and marks a box with red ink. He slides a receipt across the counter. ""Sign here. And here."" He files the plate in a numbered drawer without looking at it again.",
         },
         new()
@@ -155,7 +155,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "forest",
             OriginFlavor = @"The sailcloth belonged to a trader's father, who never made it to the coast but kept it folded in his chest anyway. His son finally let it go to someone who might use it.",
-            DeliveryFlavor = @"The woodworker already has the canvas spread across his workbench before you've closed the door, running his hands along the weave to check for rot. ""Good. Tight enough."" He's measuring it against a half-built frame in the corner—some kind of pavilion or shade structure. He pays you without looking up, already marking cut lines with charcoal.",
+            DeliveryFlavor = @"The woodworker already has the canvas spread across his workbench before you've closed the door, running his hands along the weave to check for rot. ""Good. Tight enough."" He's measuring it against a half-built frame in the corner, some kind of pavilion or shade structure. He pays you without looking up, already marking cut lines with charcoal.",
         },
         new()
         {
@@ -190,7 +190,7 @@ public sealed partial class HaulDef
             Name = @"Glazed Terracotta Tiles",
             OriginBiome = "plains",
             DestBiome = "forest",
-            OriginFlavor = @"The tiles came from a manor house teardown — owner died without heirs, debts settled, everything sold off. The buyer specified these particular tiles, from the cellar room.",
+            OriginFlavor = @"The tiles came from a manor house teardown: owner died without heirs, debts settled, everything sold off. The buyer specified these particular tiles, from the cellar room.",
             DeliveryFlavor = @"The builder sets each tile face-down on his workbench and taps the back with a wooden mallet, listening. He flips them over, checks the glaze for hairline cracks with his thumbnail, holds one up to catch the light through the cabin door. ""Good fired clay. No spalting."" He stacks them carefully and counts out your payment without looking up.",
         },
         new()
@@ -217,7 +217,7 @@ public sealed partial class HaulDef
             Name = @"Exhaustive Land Deed Research",
             OriginBiome = "plains",
             DestBiome = "plains",
-            OriginFlavor = @"Someone at the land registry ordered the full deed history on a property — boundary disputes, every transfer, every annotation going back a century. When it arrived, they realized they'd requested the wrong parcel number entirely.",
+            OriginFlavor = @"Someone at the land registry ordered the full deed history on a property: boundary disputes, every transfer, every annotation going back a century. When it arrived, they realized they'd requested the wrong parcel number entirely.",
             DeliveryFlavor = @"You hand the research to a woman sitting alone at a table in the back of the grain exchange. She doesn't open it. She runs her finger along the sealed edge, then sets it flat on the table and rests both palms on top of it. She sits like that for a long moment. ""Good,"" she says finally, and pays you without looking up.",
         },
         new()
@@ -245,7 +245,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "plains",
             OriginFlavor = @"The dispatches were pulled from a courier's satchel after he disappeared near the frontier. No one opened them, but someone paid well to have them delivered anyway.",
-            DeliveryFlavor = @"You hand over the bundle and the clerk cuts the binding cord with a small knife. He checks each seal against a register, running his thumb along the wax to feel for tampering. One dispatch makes him pause — he holds it up to the window light, studying the paper grain. He sets them all in a locked drawer and counts out your payment without comment.",
+            DeliveryFlavor = @"You hand over the bundle and the clerk cuts the binding cord with a small knife. He checks each seal against a register, running his thumb along the wax to feel for tampering. One dispatch makes him pause; he holds it up to the window light, studying the paper grain. He sets them all in a locked drawer and counts out your payment without comment.",
         },
         new()
         {
@@ -263,7 +263,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "scrub",
             OriginFlavor = @"A garrison physician left the territory without filing transfer papers. His equipment sat in the quartermaster's lockbox until someone decided to sell it rather than let it gather dust.",
-            DeliveryFlavor = @"The clan healer unwraps the kit and examines each instrument in turn — probe, bone saw, extraction forceps. She tests the spring tension on a pair of clamps, holds a scalpel to the light to check the edge. ""Military issue. Good steel."" She sets aside three pieces that duplicate what she already owns, but keeps the rest. She pays without haggling.",
+            DeliveryFlavor = @"The clan healer unwraps the kit and examines each instrument in turn: probe, bone saw, extraction forceps. She tests the spring tension on a pair of clamps, holds a scalpel to the light to check the edge. ""Military issue. Good steel."" She sets aside three pieces that duplicate what she already owns, but keeps the rest. She pays without haggling.",
         },
         new()
         {
@@ -280,7 +280,7 @@ public sealed partial class HaulDef
             Name = @"History of the Empire Volume VI",
             OriginBiome = "plains",
             DestBiome = "scrub",
-            OriginFlavor = @"A local scribe purchased the volume from an estate sale, then changed his mind about keeping it—said he didn't like the way certain passages were annotated in the margins.",
+            OriginFlavor = @"A local scribe purchased the volume from an estate sale, then changed his mind about keeping it; said he didn't like the way certain passages were annotated in the margins.",
             DeliveryFlavor = @"The old woman takes the book with both hands and opens it to a page near the middle. Her finger traces a line of text, then stops. She closes her eyes for a long moment. ""My father's unit,"" she says quietly. ""They're listed here."" She wraps the book in cloth and pays you without another word.",
         },
         new()
@@ -308,7 +308,7 @@ public sealed partial class HaulDef
             OriginBiome = "plains",
             DestBiome = "swamp",
             OriginFlavor = @"A trader came through with the comb wrapped in plain linen, no questions about provenance. We found a buyer in the swamp who's willing to pay more than it's probably worth.",
-            DeliveryFlavor = @"The woman unwraps it slowly, turning it over in her hands. Her fingers trace the carved pattern — flowers that haven't grown in the lowlands for two generations. ""My grandmother had one like this,"" she says quietly. She sets it carefully on the table and pours you tea before she counts out your payment, insisting you finish the cup before you go.",
+            DeliveryFlavor = @"The woman unwraps it slowly, turning it over in her hands. Her fingers trace the carved pattern: flowers that haven't grown in the lowlands for two generations. ""My grandmother had one like this,"" she says quietly. She sets it carefully on the table and pours you tea before she counts out your payment, insisting you finish the cup before you go.",
         },
         new()
         {
@@ -316,7 +316,7 @@ public sealed partial class HaulDef
             Name = @"Spool of Hemp Twine",
             OriginBiome = "plains",
             DestBiome = "swamp",
-            OriginFlavor = @"A fisherman's order — he needs line that won't rot in swamp water. The hemp stock from the plains lasts twice as long as anything local.",
+            OriginFlavor = @"A fisherman's order: he needs line that won't rot in swamp water. The hemp stock from the plains lasts twice as long as anything local.",
             DeliveryFlavor = @"You hand over the spool and the man pulls several arm-lengths free, testing the lay of the twist between his fingers. He wets a short section with his tongue, watching how the fibers take moisture, then coils it back with practiced speed. ""Good,"" he says, and counts out your payment in small copper.",
         },
         new()
@@ -343,7 +343,7 @@ public sealed partial class HaulDef
             Name = @"An Atwali Family Crest",
             OriginBiome = "plains",
             DestBiome = "swamp",
-            OriginFlavor = @"The crest was pulled from a collapsed house in the old river valley—someone's grandfather wore it on formal occasions. His grandson thought it should go back to the people who made it, not sit in a box.",
+            OriginFlavor = @"The crest was pulled from a collapsed house in the old river valley. Someone's grandfather wore it on formal occasions. His grandson thought it should go back to the people who made it, not sit in a box.",
             DeliveryFlavor = @"The elder takes the crest and turns it over slowly, tracing the inscription with one finger. She calls to someone in the next room, and a younger woman appears, already holding a wooden frame half-assembled. They begin fitting the crest into place without looking at you. The elder counts out your payment while the daughter adjusts the backing.",
         },
         new()

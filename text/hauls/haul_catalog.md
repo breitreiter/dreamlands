@@ -6,8 +6,8 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Name**: What the player sees in their inventory
 - **Origin biome**: Which biome's settlements offer this haul (plains, mountains, forest, scrub, swamp)
 - **Destination biome**: Which biome's settlements pay for this haul
-- **Origin flavor**: 1 sentence — why this item is moving right now (shown when claiming)
-- **Delivery flavor**: 1-3 sentences — what happens when you hand it over (shown on delivery)
+- **Origin flavor**: 1 sentence describing why this item is moving right now (shown when claiming)
+- **Delivery flavor**: 1-3 sentences describing what happens when you hand it over (shown on delivery)
 
 ---
 
@@ -49,7 +49,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: mountains
 - **Origin flavor**: The garrison commander finally admitted the old signal network isn't coming back online. He's selling off the lanterns piece by piece rather than watch them rust in a warehouse.
-- **Delivery flavor**: You arrive at the ridgeline watchtower to find three trappers already there, arguing about whether the thing still works. The watch captain takes the lantern, oils the shutters, tests the mechanism. "Imperial issue. Good lens." One of the trappers leans in. "Needs new oil, new wick—" The captain cuts him off. "I know what it needs." He counts out your payment while the trappers continue their debate.
+- **Delivery flavor**: You arrive at the ridgeline watchtower to find three trappers already there, arguing about whether the thing still works. The watch captain takes the lantern, oils the shutters, tests the mechanism. "Imperial issue. Good lens." One of the trappers leans in. "Needs new oil, new wick..." The captain cuts him off. "I know what it needs." He counts out your payment while the trappers continue their debate.
 
 ### Cracked Surveyor's Transit
 - **Origin biome**: plains
@@ -60,20 +60,20 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Vitrified Stone Shards
 - **Origin biome**: plains
 - **Destination biome**: mountains
-- **Origin flavor**: Someone found these fused to the ground near an old wildlands garrison — lightning strike, maybe, or something from the failed campaign. They've been sitting in a scavenger's collection for years.
+- **Origin flavor**: Someone found these fused to the ground near an old wildlands garrison: lightning strike, maybe, or something from the failed campaign. They've been sitting in a scavenger's collection for years.
 - **Delivery flavor**: You hand over the box at the assay office. The clerk opens it, examines one shard briefly, then fills out a requisition form in triplicate. He stamps each copy with practiced efficiency, hands you one along with your payment, and files the rest without looking at the shards again.
 
 ### Depot Iron Mess Kit
 - **Origin biome**: plains
 - **Destination biome**: forest
 - **Origin flavor**: A scavenger turned up a depot mess kit in good condition, still stacked and wrapped. The buyer wanted it immediately and paid double the asking price without haggling.
-- **Delivery flavor**: You hand over the kit to a forest woman outside a timber cabin. She opens it carefully, runs her thumb along the spoon's edge, then holds up the canteen and shakes it near her ear. A small crowd gathers—two men and a boy—murmuring about the markings stamped into the metal. One of them says something you don't catch. The woman closes the kit, nods once, and counts out your payment without looking at you again.
+- **Delivery flavor**: You hand over the kit to a forest woman outside a timber cabin. She opens it carefully, runs her thumb along the spoon's edge, then holds up the canteen and shakes it near her ear. A small crowd gathers (two men and a boy) murmuring about the markings stamped into the metal. One of them says something you don't catch. The woman closes the kit, nods once, and counts out your payment without looking at you again.
 
 ### Collapsed Tower Bell Fragment
 - **Origin biome**: plains
 - **Destination biome**: plains
 - **Origin flavor**: The bell was cast two centuries ago for a tower that fell in the last war. The town council voted to sell it rather than recast it, but the vote was narrow.
-- **Delivery flavor**: You hand over the fragment. The buyer turns it in his hands, checking the maker's mark stamped into the bronze. He sets it on his desk with the others—five pieces, all different bells. He counts your payment without comment.
+- **Delivery flavor**: You hand over the fragment. The buyer turns it in his hands, checking the maker's mark stamped into the bronze. He sets it on his desk with the others: five pieces, all different bells. He counts your payment without comment.
 
 ### Imperial Road Marker Plaque
 - **Origin biome**: plains
@@ -84,7 +84,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Grid Regulator Plate
 - **Origin biome**: plains
 - **Destination biome**: scrub
-- **Origin flavor**: The salvagers recovered a crate of grid regulators from an old garrison depot, but only one buyer responded to the listing — some Kesharat clerk who needs it for rail maintenance.
+- **Origin flavor**: The salvagers recovered a crate of grid regulators from an old garrison depot, but only one buyer responded to the listing: some Kesharat clerk who needs it for rail maintenance.
 - **Delivery flavor**: You hand over the plate at the requisitions depot. The clerk compares the stamped serial number against his ledger, runs his finger down three columns of text, and marks a box with red ink. He slides a receipt across the counter. "Sign here. And here." He files the plate in a numbered drawer without looking at it again.
 
 ### Untouched Market Coin Chest
@@ -115,7 +115,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: forest
 - **Origin flavor**: The sailcloth belonged to a trader's father, who never made it to the coast but kept it folded in his chest anyway. His son finally let it go to someone who might use it.
-- **Delivery flavor**: The woodworker already has the canvas spread across his workbench before you've closed the door, running his hands along the weave to check for rot. "Good. Tight enough." He's measuring it against a half-built frame in the corner—some kind of pavilion or shade structure. He pays you without looking up, already marking cut lines with charcoal.
+- **Delivery flavor**: The woodworker already has the canvas spread across his workbench before you've closed the door, running his hands along the weave to check for rot. "Good. Tight enough." He's measuring it against a half-built frame in the corner, some kind of pavilion or shade structure. He pays you without looking up, already marking cut lines with charcoal.
 
 ### Crate of Tallow Candles
 - **Origin biome**: plains
@@ -138,7 +138,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Glazed Terracotta Tiles
 - **Origin biome**: plains
 - **Destination biome**: forest
-- **Origin flavor**: The tiles came from a manor house teardown — owner died without heirs, debts settled, everything sold off. The buyer specified these particular tiles, from the cellar room.
+- **Origin flavor**: The tiles came from a manor house teardown: owner died without heirs, debts settled, everything sold off. The buyer specified these particular tiles, from the cellar room.
 - **Delivery flavor**: The builder sets each tile face-down on his workbench and taps the back with a wooden mallet, listening. He flips them over, checks the glaze for hairline cracks with his thumbnail, holds one up to catch the light through the cabin door. "Good fired clay. No spalting." He stacks them carefully and counts out your payment without looking up.
 
 ### Tin of Rendered Tallow
@@ -156,7 +156,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Exhaustive Land Deed Research
 - **Origin biome**: plains
 - **Destination biome**: plains
-- **Origin flavor**: Someone at the land registry ordered the full deed history on a property — boundary disputes, every transfer, every annotation going back a century. When it arrived, they realized they'd requested the wrong parcel number entirely.
+- **Origin flavor**: Someone at the land registry ordered the full deed history on a property: boundary disputes, every transfer, every annotation going back a century. When it arrived, they realized they'd requested the wrong parcel number entirely.
 - **Delivery flavor**: You hand the research to a woman sitting alone at a table in the back of the grain exchange. She doesn't open it. She runs her finger along the sealed edge, then sets it flat on the table and rests both palms on top of it. She sits like that for a long moment. "Good," she says finally, and pays you without looking up.
 
 ### Notarized Land Survey
@@ -175,7 +175,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: plains
 - **Origin flavor**: The dispatches were pulled from a courier's satchel after he disappeared near the frontier. No one opened them, but someone paid well to have them delivered anyway.
-- **Delivery flavor**: You hand over the bundle and the clerk cuts the binding cord with a small knife. He checks each seal against a register, running his thumb along the wax to feel for tampering. One dispatch makes him pause — he holds it up to the window light, studying the paper grain. He sets them all in a locked drawer and counts out your payment without comment.
+- **Delivery flavor**: You hand over the bundle and the clerk cuts the binding cord with a small knife. He checks each seal against a register, running his thumb along the wax to feel for tampering. One dispatch makes him pause; he holds it up to the window light, studying the paper grain. He sets them all in a locked drawer and counts out your payment without comment.
 
 ### Brass Compass Housing
 - **Origin biome**: plains
@@ -187,7 +187,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: scrub
 - **Origin flavor**: A garrison physician left the territory without filing transfer papers. His equipment sat in the quartermaster's lockbox until someone decided to sell it rather than let it gather dust.
-- **Delivery flavor**: The clan healer unwraps the kit and examines each instrument in turn — probe, bone saw, extraction forceps. She tests the spring tension on a pair of clamps, holds a scalpel to the light to check the edge. "Military issue. Good steel." She sets aside three pieces that duplicate what she already owns, but keeps the rest. She pays without haggling.
+- **Delivery flavor**: The clan healer unwraps the kit and examines each instrument in turn: probe, bone saw, extraction forceps. She tests the spring tension on a pair of clamps, holds a scalpel to the light to check the edge. "Military issue. Good steel." She sets aside three pieces that duplicate what she already owns, but keeps the rest. She pays without haggling.
 
 ### Copper Still Parts
 - **Origin biome**: plains
@@ -198,7 +198,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### History of the Empire Volume VI
 - **Origin biome**: plains
 - **Destination biome**: scrub
-- **Origin flavor**: A local scribe purchased the volume from an estate sale, then changed his mind about keeping it—said he didn't like the way certain passages were annotated in the margins.
+- **Origin flavor**: A local scribe purchased the volume from an estate sale, then changed his mind about keeping it; said he didn't like the way certain passages were annotated in the margins.
 - **Delivery flavor**: The old woman takes the book with both hands and opens it to a page near the middle. Her finger traces a line of text, then stops. She closes her eyes for a long moment. "My father's unit," she says quietly. "They're listed here." She wraps the book in cloth and pays you without another word.
 
 ### Iron Bucket Set
@@ -217,12 +217,12 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: plains
 - **Destination biome**: swamp
 - **Origin flavor**: A trader came through with the comb wrapped in plain linen, no questions about provenance. We found a buyer in the swamp who's willing to pay more than it's probably worth.
-- **Delivery flavor**: The woman unwraps it slowly, turning it over in her hands. Her fingers trace the carved pattern — flowers that haven't grown in the lowlands for two generations. "My grandmother had one like this," she says quietly. She sets it carefully on the table and pours you tea before she counts out your payment, insisting you finish the cup before you go.
+- **Delivery flavor**: The woman unwraps it slowly, turning it over in her hands. Her fingers trace the carved pattern: flowers that haven't grown in the lowlands for two generations. "My grandmother had one like this," she says quietly. She sets it carefully on the table and pours you tea before she counts out your payment, insisting you finish the cup before you go.
 
 ### Spool of Hemp Twine
 - **Origin biome**: plains
 - **Destination biome**: swamp
-- **Origin flavor**: A fisherman's order — he needs line that won't rot in swamp water. The hemp stock from the plains lasts twice as long as anything local.
+- **Origin flavor**: A fisherman's order: he needs line that won't rot in swamp water. The hemp stock from the plains lasts twice as long as anything local.
 - **Delivery flavor**: You hand over the spool and the man pulls several arm-lengths free, testing the lay of the twist between his fingers. He wets a short section with his tongue, watching how the fibers take moisture, then coils it back with practiced speed. "Good," he says, and counts out your payment in small copper.
 
 ### Tin of Preservative Paste
@@ -240,7 +240,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### An Atwali Family Crest
 - **Origin biome**: plains
 - **Destination biome**: swamp
-- **Origin flavor**: The crest was pulled from a collapsed house in the old river valley—someone's grandfather wore it on formal occasions. His grandson thought it should go back to the people who made it, not sit in a box.
+- **Origin flavor**: The crest was pulled from a collapsed house in the old river valley; someone's grandfather wore it on formal occasions. His grandson thought it should go back to the people who made it, not sit in a box.
 - **Delivery flavor**: The elder takes the crest and turns it over slowly, tracing the inscription with one finger. She calls to someone in the next room, and a younger woman appears, already holding a wooden frame half-assembled. They begin fitting the crest into place without looking at you. The elder counts out your payment while the daughter adjusts the backing.
 
 ### Roll of Oilcloth
@@ -266,14 +266,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Charcoal Bundle
 - **Origin biome**: mountains
 - **Destination biome**: scrub
-- **Origin flavor**: The charcoal burner's daughter says her father spent three days on this batch and won't let her sell the rest — claims the mesa folk don't appreciate quality work, but the contract was already signed.
+- **Origin flavor**: The charcoal burner's daughter says her father spent three days on this batch and won't let her sell the rest; claims the mesa folk don't appreciate quality work, but the contract was already signed.
 - **Delivery flavor**: The clan metalsmith breaks open the bundle and selects a piece at random. He snaps it cleanly in half, studies the break, then touches his tongue to the fresh surface. He nods once, sets it with the rest, and counts out your payment without comment.
 
 ### Company Scrip Stack
 - **Origin biome**: mountains
 - **Destination biome**: mountains
 - **Origin flavor**: A scholar at the academy is collecting evidence of labor practices in the valley mining companies. He's particularly interested in the denominations and circulation patterns.
-- **Delivery flavor**: You hand over the stack and she spreads the scrip across her desk, sorting by issuing company and year. Her fingers move quickly, checking watermarks against lamplight. "Redemption clauses here, here — both voided within eighteen months." She makes a notation in her ledger, then counts out your payment in real coin.
+- **Delivery flavor**: You hand over the stack and she spreads the scrip across her desk, sorting by issuing company and year. Her fingers move quickly, checking watermarks against lamplight. "Redemption clauses here, here, both voided within eighteen months." She makes a notation in her ledger, then counts out your payment in real coin.
 
 ### Raw Silver Ore Chunk
 - **Origin biome**: mountains
@@ -284,7 +284,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Annotated Legal Codex
 - **Origin biome**: mountains
 - **Destination biome**: swamp
-- **Origin flavor**: The local magistrate died without an heir, and his annotated codex — margin notes from forty years of rulings — is the only copy. A scholar arranged the sale rather than see it pulped.
+- **Origin flavor**: The local magistrate died without an heir, and his annotated codex, margin notes from forty years of rulings, is the only copy. A scholar arranged the sale rather than see it pulped.
 - **Delivery flavor**: The recipient meets you at the edge of the village, barefoot in the mud, and takes the codex without introduction. She flips through it methodically, pausing at certain pages, her lips moving slightly as though counting something. "Good. Very good." She pays you exact coin and walks into the deeper swamp, still reading.
 
 ### Precision Astrolabe
@@ -296,7 +296,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Printed Reform Pamphlets
 - **Origin biome**: mountains
 - **Destination biome**: plains
-- **Origin flavor**: A reformist faction among the scholars is distributing their arguments in print—land reform, debt abolition, new voting structures. They're targeting the plains merchants who benefit most from the status quo.
+- **Origin flavor**: A reformist faction among the scholars is distributing their arguments in print: land reform, debt abolition, new voting structures. They're targeting the plains merchants who benefit most from the status quo.
 - **Delivery flavor**: You hand the stack to a clerk at the administrative hall. He flips through the first pamphlet, expression carefully neutral, then stamps a receiving form twice and files one copy in a cabinet already thick with similar documents. "We'll review the content and determine distribution permissions within six weeks." He slides your payment across the desk without looking up.
 
 ### Sealed Research Dossier
@@ -321,7 +321,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: mountains
 - **Destination biome**: scrub
 - **Origin flavor**: The observatory director retired after thirty years and left the disc behind, but his successor prefers newer glass and won't mount it. The institution is selling it off rather than let it gather dust.
-- **Delivery flavor**: The woman who takes delivery is maybe seventy, her hands shaking slightly as she unwraps the lens. She holds it up to the late afternoon light and her breath catches. "This is from Kaspar's workshop. I knew him before—" She stops, wipes the edge with her sleeve, and sets it carefully in a wooden frame already prepared on her table. She counts your payment twice, distracted, her eyes never leaving the glass.
+- **Delivery flavor**: The woman who takes delivery is maybe seventy, her hands shaking slightly as she unwraps the lens. She holds it up to the late afternoon light and her breath catches. "This is from Kaspar's workshop. I knew him before..." She stops, wipes the edge with her sleeve, and sets it carefully in a wooden frame already prepared on her table. She counts your payment twice, distracted, her eyes never leaving the glass.
 
 ### Filed Petition (Year 73)
 - **Origin biome**: mountains
@@ -332,7 +332,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Binding Judgment Writ
 - **Origin biome**: mountains
 - **Destination biome**: mountains
-- **Origin flavor**: The court clerk pushed the finalization through in two days instead of the usual two months — the binding takes effect at month's end and the property changes hands whether the document arrives or not.
+- **Origin flavor**: The court clerk pushed the finalization through in two days instead of the usual two months; the binding takes effect at month's end and the property changes hands whether the document arrives or not.
 - **Delivery flavor**: You hand the writ to a woman standing outside a stone cottage with her daughter beside her. She breaks the seal and reads in silence, her lips moving slightly. When she finishes, she folds it carefully and holds it against her chest. "It's ours now," she says to the girl, who nods once, solemn. She pays you and goes inside without another word.
 
 ### Wegtafel Fragment
@@ -368,14 +368,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Roll of Lead Sheeting
 - **Origin biome**: mountains
 - **Destination biome**: plains
-- **Origin flavor**: The sheeting came off a church roof in one of the valley towns — replaced after forty years of weather, but still good enough to sell rather than scrap.
+- **Origin flavor**: The sheeting came off a church roof in one of the valley towns, replaced after forty years of weather, but still good enough to sell rather than scrap.
 - **Delivery flavor**: The roofer unrolls it across two sawhorses and runs her hand over the surface, checking for soft spots where the metal's gone thin. She finds a crease, flexes it twice, nods. She's already climbing the ladder with it tucked under one arm when her apprentice comes over to pay you.
 
 ### Tin of Smelter's Flux
 - **Origin biome**: mountains
 - **Destination biome**: scrub
 - **Origin flavor**: The old smelter kept this tin aside for forty years, always said he'd need it someday. His widow decided someday never came.
-- **Delivery flavor**: You arrive at the forge to find three smiths arguing over a cracked crucible, voices rising over the clang of hammering. The youngest takes your tin, pries it open with a blade, and sniffs it. "This is mountain flux—twice the strength we use." The eldest leans in, dips a finger in the gray powder, rubs it between his fingers. "We'll cut it with local ash. It'll work." He counts out your payment while the argument resumes.
+- **Delivery flavor**: You arrive at the forge to find three smiths arguing over a cracked crucible, voices rising over the clang of hammering. The youngest takes your tin, pries it open with a blade, and sniffs it. "This is mountain flux, twice the strength we use." The eldest leans in, dips a finger in the gray powder, rubs it between his fingers. "We'll cut it with local ash. It'll work." He counts out your payment while the argument resumes.
 
 ### Copper Pipe Sections
 - **Origin biome**: mountains
@@ -386,20 +386,20 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Box of Iron Nails
 - **Origin biome**: mountains
 - **Destination biome**: scrub
-- **Origin flavor**: Someone ordered five boxes of nails but the blacksmith sent five *crates*—enough to roof half the mountain. The buyer paid for what he asked for and left the surplus for resale.
+- **Origin flavor**: Someone ordered five boxes of nails but the blacksmith sent five *crates*, enough to roof half the mountain. The buyer paid for what he asked for and left the surplus for resale.
 - **Delivery flavor**: You set the box on the carpenter's workbench. She opens it, takes out a single nail, and holds it to the light, checking the taper and the head. She tests the point against her thumbnail, then drops it back in and closes the lid. She counts out your payment in small coins and turns back to her work.
 
 ### Box of Slate Shingles
 - **Origin biome**: mountains
 - **Destination biome**: scrub
-- **Origin flavor**: The slates came off an old mine office roof during repairs — worn gray rectangles with chips at the corners and nail holes that tell decades of weather.
+- **Origin flavor**: The slates came off an old mine office roof during repairs: worn gray rectangles with chips at the corners and nail holes that tell decades of weather.
 - **Delivery flavor**: You arrive at the plateau settlement during a roof repair, and three different relatives immediately cluster around to inspect your delivery. The eldest runs her finger along the worn surface and nods. "Mountain slate. Better than the clay we've been using." A younger man holds one up to the light, checking for cracks, while another taps it with his knuckle to test the ring. They argue briefly in their own dialect before handing over your payment.
 
 ### Cast Bronze Door Pull
 - **Origin biome**: mountains
 - **Destination biome**: scrub
 - **Origin flavor**: The old smelter's widow found it half-buried in the yard where her husband's workshop stood before the fire. She won't say why she's selling it, but she wrapped it three times before handing it over.
-- **Delivery flavor**: The metalworker sets it on his anvil and taps it with a small hammer, listening to the ring. He turns it over, checking the thickness at the mounting points, then runs his finger along the interior curve where the casting shows its grain. "Pre-Administration work. Maybe two hundred years old—they poured it hotter than we do now." He pays you and sets it carefully aside from his other stock.
+- **Delivery flavor**: The metalworker sets it on his anvil and taps it with a small hammer, listening to the ring. He turns it over, checking the thickness at the mounting points, then runs his finger along the interior curve where the casting shows its grain. "Pre-Administration work. Maybe two hundred years old; they poured it hotter than we do now." He pays you and sets it carefully aside from his other stock.
 
 ### Pressed Edelweiss Collection
 - **Origin biome**: mountains
@@ -428,14 +428,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Bound Court Transcript
 - **Origin biome**: mountains
 - **Destination biome**: swamp
-- **Origin flavor**: A mountain court case wrapped up after eight years of deliberation. The losing party requested a certified transcript—not for appeal, but to prove they exhausted every legal avenue before taking the matter elsewhere.
-- **Delivery flavor**: The reader sits at a tilework table and cracks the seal without ceremony. She flips through sections, pausing at key passages, her finger tracking margin notes. "The procedural arguments are competent. The substantive law is garbage." She closes it and slides your payment across the table. "Tell me—did they really think this would hold up anywhere that isn't a monastery?"
+- **Origin flavor**: A mountain court case wrapped up after eight years of deliberation. The losing party requested a certified transcript, not for appeal, but to prove they exhausted every legal avenue before taking the matter elsewhere.
+- **Delivery flavor**: The reader sits at a tilework table and cracks the seal without ceremony. She flips through sections, pausing at key passages, her finger tracking margin notes. "The procedural arguments are competent. The substantive law is garbage." She closes it and slides your payment across the table. "Tell me, did they really think this would hold up anywhere that isn't a monastery?"
 
 ### Iron Brace Joints
 - **Origin biome**: mountains
 - **Destination biome**: mountains
 - **Origin flavor**: Someone at the company store let these joints walk out the back door at cost. No paperwork, no questions about what happened to the inventory log.
-- **Delivery flavor**: You hand the package to a woman in a mine foreman's coat who opens it in an alley behind the company offices. She counts each piece twice, her lips moving silently, then wraps them back up without testing the fit. She pays you in mixed coin—some scrip, some real money—and walks back inside through the main entrance like she's been there all along.
+- **Delivery flavor**: You hand the package to a woman in a mine foreman's coat who opens it in an alley behind the company offices. She counts each piece twice, her lips moving silently, then wraps them back up without testing the fit. She pays you in mixed coin (some scrip, some real money) and walks back inside through the main entrance like she's been there all along.
 
 ### Mine Cart Axle Pin
 - **Origin biome**: mountains
@@ -508,13 +508,13 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Tanned Deerhide
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: The tanner's been sitting on this hide for two seasons, unwilling to sell it — says the grain and color are too fine for most buyers. A mountain scholar finally offered enough to make him reconsider.
+- **Origin flavor**: The tanner's been sitting on this hide for two seasons, unwilling to sell it; says the grain and color are too fine for most buyers. A mountain scholar finally offered enough to make him reconsider.
 - **Delivery flavor**: You hand over the hide and the scholar unfolds it across his workbench. He examines it for a moment, then shakes his head. "This isn't deer. Elk, maybe. The grain's too coarse." He calls over two colleagues and they debate the matter in low voices, pointing at different sections of the leather. Eventually he sighs and counts out your payment. "It'll do for what we need."
 
 ### Charcoal Sack
 - **Origin biome**: forest
 - **Destination biome**: plains
-- **Origin flavor**: The charcoal burner's nephew ran a double batch through the kiln without telling anyone — good quality, but no buyer lined up and questions about where the timber came from.
+- **Origin flavor**: The charcoal burner's nephew ran a double batch through the kiln without telling anyone: good quality, but no buyer lined up and questions about where the timber came from.
 - **Delivery flavor**: The baker's already untying the sack before you've set it down. He scoops a handful, crushes it between his fingers, nods once. "Fine enough." He's pouring it into his bread oven while counting out your payment with his free hand, ash already dusting his knuckles.
 
 ### Pitch Resin Pot
@@ -532,14 +532,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Figured Heartwood Planks
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A woodwright's daughter is marrying into a mountain family, and her father cut planks from his best stock for her wedding gift — something that will last generations in her new home.
+- **Origin flavor**: A woodwright's daughter is marrying into a mountain family, and her father cut planks from his best stock for her wedding gift: something that will last generations in her new home.
 - **Delivery flavor**: The bride's father-in-law meets you at the workshop door. He lifts each plank, checking the grain in the afternoon light, running his fingertips across the figured patterns. He sets them down carefully, one by one, and nods once. He counts out your payment and turns back to his bench without another word.
 
 ### Luck Charms
 - **Origin biome**: forest
 - **Destination biome**: plains
 - **Origin flavor**: A well-known trapper died last winter, and his daughter is selling off the luck charms he kept strung above his door. She says they didn't work for him.
-- **Delivery flavor**: You hand over the bundle and the farmhand unwraps it on the fence post. He picks through them—carved wood, knotted cord, a few painted stones—then selects two and loops them over a nail by the barn door. "For the lambing season," he says. He counts out your payment and pockets the rest.
+- **Delivery flavor**: You hand over the bundle and the farmhand unwraps it on the fence post. He picks through them (carved wood, knotted cord, a few painted stones) then selects two and loops them over a nail by the barn door. "For the lambing season," he says. He counts out your payment and pockets the rest.
 
 ### Dryad's Knot Fungus
 - **Origin biome**: forest
@@ -557,12 +557,12 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: forest
 - **Destination biome**: mountains
 - **Origin flavor**: An exile scribe kept notebooks in a cipher only he understood. His widow thinks scholars might make something of them where she cannot.
-- **Delivery flavor**: The archivist pages through the notebooks slowly, pausing at certain marks. "Coastal script mixed with forest cant. And this—" She taps a margin note. "militia movement records, I think. Twenty years old at least." She sets them carefully in a cloth-lined box, then pours you tea without asking and pays you while it cools.
+- **Delivery flavor**: The archivist pages through the notebooks slowly, pausing at certain marks. "Coastal script mixed with forest cant. And this..." She taps a margin note. "militia movement records, I think. Twenty years old at least." She sets them carefully in a cloth-lined box, then pours you tea without asking and pays you while it cools.
 
 ### Caged Songbird
 - **Origin biome**: forest
 - **Destination biome**: mountains
-- **Origin flavor**: A woman from the exile camps is sending the bird to her sister — they haven't spoken in years, but the sister always loved its song.
+- **Origin flavor**: A woman from the exile camps is sending the bird to her sister; they haven't spoken in years, but the sister always loved its song.
 - **Delivery flavor**: The woman opens the cage door and lets the bird hop onto her finger. She watches how it moves, tilts her head to listen when it chirps twice. "Still healthy," she says, almost to herself. She closes her eyes when it begins to sing, just for a moment. She pays you and carries the cage inside without another word.
 
 ### Unsettling Wooden Doll
@@ -580,7 +580,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Intricate Snare Mechanism
 - **Origin biome**: forest
 - **Destination biome**: scrub
-- **Origin flavor**: A trapper's grandfather built the mechanism decades ago—delicate work, bronze and spring steel, precise as a clockmaker's hand. The old man is gone now, and the trapper says he'd rather it went to someone who'd use it than let it rust in a drawer.
+- **Origin flavor**: A trapper's grandfather built the mechanism decades ago: delicate work, bronze and spring steel, precise as a clockmaker's hand. The old man is gone now, and the trapper says he'd rather it went to someone who'd use it than let it rust in a drawer.
 - **Delivery flavor**: The clan hunter turns it over in her hands, testing each spring with her fingernail, watching how the trigger plate responds. "My uncle made traps like this," she says quietly. "Before the fever took him." She sets it down carefully and gestures for you to sit. She pours tea from a worn copper pot and counts out your payment while it steeps.
 
 ### Bundle of Willow Withies
@@ -622,14 +622,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Boar Tusk Necklace
 - **Origin biome**: forest
 - **Destination biome**: scrub
-- **Origin flavor**: A woodsman's daughter inherited the necklace but refuses to wear it — her father took the boar in his last hunt, and she'd rather have coin than memories.
+- **Origin flavor**: A woodsman's daughter inherited the necklace but refuses to wear it; her father took the boar in his last hunt, and she'd rather have coin than memories.
 - **Delivery flavor**: You hand over the necklace at the Kesharat import station. The clerk holds it against a printed diagram, counts the tusks twice, and marks something on a form in small, precise script. He slides the necklace into a numbered bin with three others like it. "Quota fulfilled," he says, and stamps your receipt without looking up from his ledger.
 
 ### Bundle of Arrow Shafts
 - **Origin biome**: forest
 - **Destination biome**: scrub
 - **Origin flavor**: A fletcher broke his lathe and has been waiting on metal parts from the plains. He's selling off what stock he has while the workshop sits idle.
-- **Delivery flavor**: The woman who meets you outside the compound doesn't look like an archer. She's dressed in loose desert robes, but her hands are wrong — too smooth, fingers too long. She counts the shafts twice, then snaps one in half to check the grain. "Good," she says, and pays you from a purse that seems heavier than it should be. As you leave, you see her carrying the bundle toward a structure half-buried in the hillside.
+- **Delivery flavor**: The woman who meets you outside the compound doesn't look like an archer. She's dressed in loose desert robes, but her hands are wrong: too smooth, fingers too long. She counts the shafts twice, then snaps one in half to check the grain. "Good," she says, and pays you from a purse that seems heavier than it should be. As you leave, you see her carrying the bundle toward a structure half-buried in the hillside.
 
 ### Fox Pelt
 - **Origin biome**: forest
@@ -641,13 +641,13 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: forest
 - **Destination biome**: scrub
 - **Origin flavor**: A woman in the exile camp sold us the flask. She said it came from a locked storehouse, and the less you knew about how she got in, the better for both of you.
-- **Delivery flavor**: The merchant unscrews the cap and sniffs cautiously, then tips a drop onto his palm and rubs it between his fingers. His face darkens. "This is pine resin, not cedar. Whoever sold you this didn't know the difference or didn't care." He argues for half the agreed price, citing the error. You argue back—a contract is a contract. He finally pays in full, muttering about forest thieves.
+- **Delivery flavor**: The merchant unscrews the cap and sniffs cautiously, then tips a drop onto his palm and rubs it between his fingers. His face darkens. "This is pine resin, not cedar. Whoever sold you this didn't know the difference or didn't care." He argues for half the agreed price, citing the error. You argue back; a contract is a contract. He finally pays in full, muttering about forest thieves.
 
 ### Birch Bark Scroll Case
 - **Origin biome**: forest
 - **Destination biome**: scrub
 - **Origin flavor**: A clerk at the exile camp says the case belonged to someone who left in a hurry. He won't say more, but he's eager to sell it and asks that you deliver it quickly.
-- **Delivery flavor**: The Kesharat official who receives it turns it over slowly, examining the birch bark with uncommon attention. He opens it, peers inside, closes it again. "Empty," he says quietly, as though confirming something. He sets it on his desk among identical scroll cases — seven, maybe eight of them, all birch bark. He pays precisely and dismisses you without looking up again.
+- **Delivery flavor**: The Kesharat official who receives it turns it over slowly, examining the birch bark with uncommon attention. He opens it, peers inside, closes it again. "Empty," he says quietly, as though confirming something. He sets it on his desk among identical scroll cases: seven, maybe eight of them, all birch bark. He pays precisely and dismisses you without looking up again.
 
 ### Forester's Marking Axe
 - **Origin biome**: forest
@@ -658,7 +658,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Dried Herb Bundle
 - **Origin biome**: forest
 - **Destination biome**: swamp
-- **Origin flavor**: A forester's widow bundled these herbs herself before she died — meadowsweet, yarrow, and something darker underneath. Her son sold them cheap and wouldn't meet your eyes when you asked what the third plant was.
+- **Origin flavor**: A forester's widow bundled these herbs herself before she died: meadowsweet, yarrow, and something darker underneath. Her son sold them cheap and wouldn't meet your eyes when you asked what the third plant was.
 - **Delivery flavor**: The herbalist takes the bundle and unwinds the cord slowly, spreading the dried stems across her workbench. She picks through them with practiced fingers, then pauses over something deep in the center. "This is kind work," she says quietly. "My grandmother suffered the same way at the end." She wraps a portion back up and presses it into your hands along with the payment. "Brew this if you can't sleep."
 
 ### Woven Bark Mat
@@ -676,7 +676,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Impressive Deer Antlers
 - **Origin biome**: forest
 - **Destination biome**: swamp
-- **Origin flavor**: A woodsman's trophy rack finally came down after his widow remarried. The antlers are wide and symmetrical — worth more as material than memory.
+- **Origin flavor**: A woodsman's trophy rack finally came down after his widow remarried. The antlers are wide and symmetrical, worth more as material than memory.
 - **Delivery flavor**: The knifemaker turns them over in his hands, checking the tines for cracks and the base for rot. He sets them on his workbench next to a stack of salvaged spearhead fragments. "Good stock. I can get eight handles from these." He counts out your payment and returns to his grinding wheel.
 
 ### Wooden Bowl Set
@@ -689,7 +689,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: forest
 - **Destination biome**: swamp
 - **Origin flavor**: The dye-maker's family has been using this concentrate for three generations of weddings and funerals. Her daughter convinced her to sell half the stock because they need grain more than tradition.
-- **Delivery flavor**: You arrive during a dye bath. A circle of Revathi women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. "Good enough," the buyer says, and counts out your payment while the others return to their work.
+- **Delivery flavor**: You arrive during a dye bath. A circle of Revathi women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth; the stain blooms dark and fast. "Good enough," the buyer says, and counts out your payment while the others return to their work.
 
 ### Decorated Hat
 - **Origin biome**: forest
@@ -719,7 +719,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: forest
 - **Destination biome**: forest
 - **Origin flavor**: A woodcarver made these as toys for his children, but the locals demanded he sell them. Lucky for him, we found a buyer.
-- **Delivery flavor**: You hand over the box and the hunter lifts the lid, counts quickly, then pulls one out and blows. The sound is wrong—too high, almost painful. "These aren't marsh loon calls," she says flatly. She closes the box and stares at you for a long moment before paying.
+- **Delivery flavor**: You hand over the box and the hunter lifts the lid, counts quickly, then pulls one out and blows. The sound is wrong: too high, almost painful. "These aren't marsh loon calls," she says flatly. She closes the box and stares at you for a long moment before paying.
 
 ### Bundle of Tanned Rabbit Pelts
 - **Origin biome**: forest
@@ -730,7 +730,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Creepy Bark Mask
 - **Origin biome**: forest
 - **Destination biome**: forest
-- **Origin flavor**: Someone wants this returned to the person who carved it years ago — a debt settled, or an apology they can't make in person.
+- **Origin flavor**: Someone wants this returned to the person who carved it years ago: a debt settled, or an apology they can't make in person.
 - **Delivery flavor**: The woman takes the mask and turns it over in her hands. She holds it up to her face briefly, then lowers it and looks at you. She sets coins on the table and wraps the mask in oilcloth without another word.
 
 ### Eighty Page List of Grievances
@@ -751,24 +751,24 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: swamp
 - **Origin flavor**: A researcher at the survey office acquired the armbands from a plateau burial site. She's arranged a sale to fund more digs, but wants them catalogued first by someone who might recognize the maker's style.
-- **Delivery flavor**: You hand over the armbands in the village square, where a circle of elders has already gathered. The oldest woman turns them over slowly, tracing the hammered patterns with her fingertip. "Pre-displacement work," she says. "The geometry is ours." The others murmur agreement, disagreement, uncertainty—no one is certain, but everyone has a theory. The woman pays you and sets the armbands on a cloth while the debate continues.
+- **Delivery flavor**: You hand over the armbands in the village square, where a circle of elders has already gathered. The oldest woman turns them over slowly, tracing the hammered patterns with her fingertip. "Pre-displacement work," she says. "The geometry is ours." The others murmur agreement, disagreement, uncertainty; no one is certain, but everyone has a theory. The woman pays you and sets the armbands on a cloth while the debate continues.
 
 ### Perfumed Resin Cakes
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A clan elder is sending the cakes to a territorial magistrate up in the peaks—there's a border dispute brewing, and nothing oils the wheels of adjudication like a gift that arrives before the formal petition.
+- **Origin flavor**: A clan elder is sending the cakes to a territorial magistrate up in the peaks. There's a border dispute brewing, and nothing oils the wheels of adjudication like a gift that arrives before the formal petition.
 - **Delivery flavor**: You hand over the wrapped cakes to the magistrate in his drafty chambers. He unwraps one carefully, breathes in the scent, and his shoulders drop. "Haven't smelled this since I was posted in the lowlands twenty years back," he says quietly. He offers you tea, which you accept, and he pays while the water boils.
 
 ### Exquisite Kaftan
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: The clan weaver who made this piece says it's cursed — her daughter died the week she finished it and no one local will touch it. A mountain merchant agreed to take it off her hands.
-- **Delivery flavor**: The tailor holds it up to the window light and examines the stitching at each seam, then flips it to study the interior joins. "Plateau work. Single-thread buttonholes, see? And the dye — safflower, I'd say, with madder for depth." She folds it carefully and sets coins on the table without comment.
+- **Origin flavor**: The clan weaver who made this piece says it's cursed; her daughter died the week she finished it and no one local will touch it. A mountain merchant agreed to take it off her hands.
+- **Delivery flavor**: The tailor holds it up to the window light and examines the stitching at each seam, then flips it to study the interior joins. "Plateau work. Single-thread buttonholes, see? And the dye, safflower, I'd say, with madder for depth." She folds it carefully and sets coins on the table without comment.
 
 ### Rail Line Survey
 - **Origin biome**: scrub
 - **Destination biome**: scrub
-- **Origin flavor**: A Kesharat surveyor quietly sold his notes before the official filing — the clans want to know where the rails are heading before construction starts.
+- **Origin flavor**: A Kesharat surveyor quietly sold his notes before the official filing; the clans want to know where the rails are heading before construction starts.
 - **Delivery flavor**: You hand over the survey and the clan elder spreads the folded pages across a low table, tracing the proposed route with one finger. He stops at a narrow pass, taps it twice, then looks up at his nephew. "Send word to Zarik. His wells are in the path." He folds the papers carefully and pays you from a leather pouch without another word.
 
 ### Jade Slab
@@ -798,7 +798,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Kesharat Robe
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A Kesharat archive curator acquired the robe from an estate sale — she says it predates the Lattice influence and wants to document pre-colonial administrative dress.
+- **Origin flavor**: A Kesharat archive curator acquired the robe from an estate sale; she says it predates the Lattice influence and wants to document pre-colonial administrative dress.
 - **Delivery flavor**: The scholar takes it from you and immediately unfolds it across her worktable, comparing the weave pattern against an open manuscript. She mutters something about dye fastness and pulls a magnifying lens from her pocket. Without looking up, she slides your payment across the table with two fingers.
 
 ### Confiscated Clan Banner
@@ -817,12 +817,12 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: plains
 - **Origin flavor**: A Kesharat surveyor requisitioned a set of alignment rods for the new rail expansion, but only needs three of the four. The spare is being sold to a plains engineering office.
-- **Delivery flavor**: You hand over the rod at the municipal works office. The clerk measures it against a standard bar mounted to the wall, checks the graduations with a magnifying lens, then enters the specifications into a ledger. He stamps your receipt twice—once for delivery, once for inventory—and counts out your payment while his assistant files the rod in a narrow cabinet with dozens of identical slots.
+- **Delivery flavor**: You hand over the rod at the municipal works office. The clerk measures it against a standard bar mounted to the wall, checks the graduations with a magnifying lens, then enters the specifications into a ledger. He stamps your receipt twice (once for delivery, once for inventory) and counts out your payment while his assistant files the rod in a narrow cabinet with dozens of identical slots.
 
 ### Colorless Crystal Node
 - **Origin biome**: scrub
 - **Destination biome**: mountains
-- **Origin flavor**: A Kesharat surveyor requisitioned the wrong kind of crystal for their instruments — the node arrived entirely clear instead of calibrated for spectral readings. They've resold it to a mountain institution that apparently has use for untuned specimens.
+- **Origin flavor**: A Kesharat surveyor requisitioned the wrong kind of crystal for their instruments; the node arrived entirely clear instead of calibrated for spectral readings. They've resold it to a mountain institution that apparently has use for untuned specimens.
 - **Delivery flavor**: The scholar holds the crystal up to the window light, rotating it slowly while squinting at the internal structure. She taps it twice with a brass rod, listening to the tone, then sets it into a velvet-lined case alongside three others. "Flawless lattice. No inclusions. Exactly what we need for the refraction series." She counts out your payment without looking away from the crystal.
 
 ### Worker Identification Band
@@ -840,13 +840,13 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Clan Genealogy Scroll
 - **Origin biome**: scrub
 - **Destination biome**: scrub
-- **Origin flavor**: A clan elder commissioned the scroll to settle a water rights dispute—three families claim descent from the well-keeper, and only documented lineage will hold in front of the council.
+- **Origin flavor**: A clan elder commissioned the scroll to settle a water rights dispute: three families claim descent from the well-keeper, and only documented lineage will hold in front of the council.
 - **Delivery flavor**: You hand over the scroll and the adjudicator unrolls it immediately, spreading it across the stone table with his palms. He traces one branch with his finger, mutters something to his clerk, then circles a name with charcoal. He pays you without looking up, already calling for the first claimant.
 
 ### Woven Saddlebag
 - **Origin biome**: scrub
 - **Destination biome**: scrub
-- **Origin flavor**: The bag's weave pattern marks it as clan work, but it was sold quietly—kinship obligations make outright sales complicated, and the weaver would rather avoid questions.
+- **Origin flavor**: The bag's weave pattern marks it as clan work, but it was sold quietly; kinship obligations make outright sales complicated, and the weaver would rather avoid questions.
 - **Delivery flavor**: The recipient turns the bag over in her hands, checking the reinforced corners and the double-stitched straps. She loops it over her shoulder to test the weight distribution, then nods. "My cousin's work. I thought so." She presses a cup of mint tea into your hands before she counts out your payment, insisting you drink before the dust takes you back on the road.
 
 ### Roll of Tanned Goatskins
@@ -865,7 +865,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: scrub
 - **Origin flavor**: A father is sending the repair kit to his son who left the clan three years back after a feud. It's the sort of gift that doesn't require words.
-- **Delivery flavor**: You hand over the kit and the young man opens it slowly, checking each tool against the light—awl, needles, waxed thread, a small leather punch. He tests the tension on a pair of pliers, then sets everything back in its slots. He pays you and tucks the kit under his arm without looking up.
+- **Delivery flavor**: You hand over the kit and the young man opens it slowly, checking each tool against the light: awl, needles, waxed thread, a small leather punch. He tests the tension on a pair of pliers, then sets everything back in its slots. He pays you and tucks the kit under his arm without looking up.
 
 ### Box of Mesa Ochre
 - **Origin biome**: scrub
@@ -877,7 +877,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: swamp
 - **Origin flavor**: The seller says the blanket belonged to someone who left in the night, and she'd rather see it gone than keep it around. She didn't offer more and we didn't ask.
-- **Delivery flavor**: The woman who receives it unfolds it across her lap, then stops. "This isn't camel hair. Feel the weave — it's goat, maybe sheep." She looks at you like you've tried something. You pull out the contract and she reads it twice, lips tight. Finally she pays, but folds the blanket with the kind of care that says she'll be writing someone a letter.
+- **Delivery flavor**: The woman who receives it unfolds it across her lap, then stops. "This isn't camel hair. Feel the weave; it's goat, maybe sheep." She looks at you like you've tried something. You pull out the contract and she reads it twice, lips tight. Finally she pays, but folds the blanket with the kind of care that says she'll be writing someone a letter.
 
 ### Bundle of Dried Sage
 - **Origin biome**: scrub
@@ -888,8 +888,8 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Carved Meerschaum Pipes
 - **Origin biome**: scrub
 - **Destination biome**: swamp
-- **Origin flavor**: A plateau merchant's stock of carved meerschaum pipes has been sitting too long in the dry air—the stone is starting to crack. He's arranged a sale to a swamp dealer who says the humidity will stabilize them.
-- **Delivery flavor**: The old Revathi opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern—geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: "My father made pipes like these. Different stone, same designs." He counts out your payment in small coins, never looking up from the box.
+- **Origin flavor**: A plateau merchant's stock of carved meerschaum pipes has been sitting too long in the dry air; the stone is starting to crack. He's arranged a sale to a swamp dealer who says the humidity will stabilize them.
+- **Delivery flavor**: The old Revathi opens the case and lifts one pipe with both hands, turning it slowly in the light. His thumb traces the carved pattern: geometric, intricate, nothing like the work here. He sets it down carefully and picks up another, then another, his breathing shallow. When he finally speaks, his voice is quiet: "My father made pipes like these. Different stone, same designs." He counts out your payment in small coins, never looking up from the box.
 
 ### 101 Kesharat Recipes
 - **Origin biome**: scrub
@@ -913,7 +913,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: scrub
 - **Destination biome**: swamp
 - **Origin flavor**: A plateau merchant is selling off temple goods with no explanation of how he acquired them. The incense burner still smells faintly of sandalwood.
-- **Delivery flavor**: You deliver the burner to a stilt-house where three Revathi elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you—they're still arguing when you leave.
+- **Delivery flavor**: You deliver the burner to a stilt-house where three Revathi elders are already waiting. The oldest turns it over in her hands, tracing the pattern with one fingertip, then shows it to the others. They murmur in a language you don't recognize. One nods. Another shakes his head. The eldest sets coins on the table without looking at you; they're still arguing when you leave.
 
 ### Sandstone Carving
 - **Origin biome**: scrub
@@ -930,7 +930,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Sun-Dried Brick Mold
 - **Origin biome**: scrub
 - **Destination biome**: swamp
-- **Origin flavor**: A mason's daughter is moving to the swamp to marry an Revathi man. Her father commissioned the mold—a gift so she can build in the old way, even where clay dries slow and strange.
+- **Origin flavor**: A mason's daughter is moving to the swamp to marry an Revathi man. Her father commissioned the mold, a gift so she can build in the old way, even where clay dries slow and strange.
 - **Delivery flavor**: The man who takes the mold from you is young, maybe her age. He turns it over in his hands, testing the weight, tracing the beveled edges with his thumb. He glances toward a stilt-house where someone is watching from the doorway. He sets coins in your palm without counting them aloud.
 
 ### Pouch of Mesa Saffron
@@ -948,7 +948,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Tin of Ground Cumin
 - **Origin biome**: scrub
 - **Destination biome**: forest
-- **Origin flavor**: Someone bought this in bulk and now needs it gone quickly — no story about where it came from, just a price too good to ask questions about.
+- **Origin flavor**: Someone bought this in bulk and now needs it gone quickly: no story about where it came from, just a price too good to ask questions about.
 - **Delivery flavor**: The exile takes the tin from your hand and twists the lid open. She tilts it toward her face, closes her eyes briefly, then seals it again. She counts out your payment in mixed coin and turns back to her fire without another word.
 
 ### Jar of Rendered Tallow
@@ -986,7 +986,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Bundled River Reeds
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A basket-weaver's sister is getting married. He cut the reeds himself and bundled them as a gift — she'll weave them into her own wedding basket, the way their mother taught them.
+- **Origin flavor**: A basket-weaver's sister is getting married. He cut the reeds himself and bundled them as a gift; she'll weave them into her own wedding basket, the way their mother taught them.
 - **Delivery flavor**: You hand the bundle to the bride and she unties the twine to inspect them. She holds one reed up to the light, bends it slightly to test the flex, then runs her fingers along its length checking for splits. "He cut these at the right time," she says. "Tell him I'll bring the basket when I visit." She pays you and sets the reeds in a basin of water to keep them supple.
 
 ### Peat Fuel Brick
@@ -999,7 +999,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 - **Origin biome**: swamp
 - **Destination biome**: mountains
 - **Origin flavor**: Request from one of the scholars up in the mountains. Most likely some sort of strange research project. Not our business to ask questions.
-- **Delivery flavor**: The woman who answers the door takes the jar and holds it up to the afternoon light. She unscrews the lid and peers inside, then dips two fingers into the water and lifts out a leech, watching it curl against her knuckle. "Good," she says, though she doesn't look at you when she says it. She sets the jar on a shelf already crowded with similar containers—dozens of them, all writhing. She pays and closes the door before you can ask.
+- **Delivery flavor**: The woman who answers the door takes the jar and holds it up to the afternoon light. She unscrews the lid and peers inside, then dips two fingers into the water and lifts out a leech, watching it curl against her knuckle. "Good," she says, though she doesn't look at you when she says it. She sets the jar on a shelf already crowded with similar containers: dozens of them, all writhing. She pays and closes the door before you can ask.
 
 ### Resin-Sealed Waterproof Satchel
 - **Origin biome**: swamp
@@ -1028,14 +1028,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Bog-Iron Ingot
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: The local smiths gave up bog-iron extraction years ago—too labor-intensive, too unpredictable—but a buyer up in the mountains specifically requested swamp stock, and coin is coin.
+- **Origin flavor**: The local smiths gave up bog-iron extraction years ago (too labor-intensive, too unpredictable) but a buyer up in the mountains specifically requested swamp stock, and coin is coin.
 - **Delivery flavor**: You present the ingot at the assay office window. The clerk weighs it on a balance scale, scratches a notation in his ledger, then taps the surface twice with a small hammer to check for air pockets. He slides a receipt across the counter along with your payment, already turning to call the next number in line.
 
 ### Preserved Lotus Resin
 - **Origin biome**: swamp
 - **Destination biome**: plains
 - **Origin flavor**: The resin merchant has a steady contract with a plains herbalist. Supply runs have been consistent for years.
-- **Delivery flavor**: You find the herbalist's house easily enough — the only building with every window shuttered at midday. She cracks the door, takes the wrapped resin without looking at you, and holds it to her nose. Her eyes are completely black, pupils swallowed by dilation. "Good," she says, and slides your payment through the gap before closing the door. You hear three locks slide into place.
+- **Delivery flavor**: You find the herbalist's house easily enough: the only building with every window shuttered at midday. She cracks the door, takes the wrapped resin without looking at you, and holds it to her nose. Her eyes are completely black, pupils swallowed by dilation. "Good," she says, and slides your payment through the gap before closing the door. You hear three locks slide into place.
 
 ### Witchfire Lamp
 - **Origin biome**: swamp
@@ -1052,7 +1052,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Marsh Pearl
 - **Origin biome**: swamp
 - **Destination biome**: plains
-- **Origin flavor**: A pearl merchant in the deeper swamp had this one rejected by an imperial buyer — insufficient luster. We found a buyer on the plains willing to take it at cost.
+- **Origin flavor**: A pearl merchant in the deeper swamp had this one rejected by an imperial buyer: insufficient luster. We found a buyer on the plains willing to take it at cost.
 - **Delivery flavor**: The woman opens the small cloth packet and goes completely still. She holds the pearl up to the window light, turning it slowly, and her mouth tightens. "My mother wore one like this," she says quietly. "Before the fever." She closes her hand around it, then straightens and counts out your payment with careful precision.
 
 ### Root Head
@@ -1082,8 +1082,8 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Unsettling Revathi Carving
 - **Origin biome**: swamp
 - **Destination biome**: scrub
-- **Origin flavor**: The carving was pulled from a collapsed stilt-house foundation — older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.
-- **Delivery flavor**: The Kesharat administrator unwraps the carving and sets it on her desk, then pauses. She turns it over twice, checking the base, then pulls out a different wooden figure from her drawer — nearly identical in style. "This isn't what was ordered. The iconography is inverted." She studies both pieces for a long moment before paying you, her fingers lingering on the swamp carving as you leave.
+- **Origin flavor**: The carving was pulled from a collapsed stilt-house foundation, older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.
+- **Delivery flavor**: The Kesharat administrator unwraps the carving and sets it on her desk, then pauses. She turns it over twice, checking the base, then pulls out a different wooden figure from her drawer, nearly identical in style. "This isn't what was ordered. The iconography is inverted." She studies both pieces for a long moment before paying you, her fingers lingering on the swamp carving as you leave.
 
 ### Jar of Wriggling Spawn
 - **Origin biome**: swamp
@@ -1100,14 +1100,14 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Treated Crocodile Hide
 - **Origin biome**: swamp
 - **Destination biome**: mountains
-- **Origin flavor**: A leatherworker in the mountains put in an order for swamp crocodile — the tanning makes it supple enough to work but keeps the scale texture intact.
+- **Origin flavor**: A leatherworker in the mountains put in an order for swamp crocodile; the tanning makes it supple enough to work but keeps the scale texture intact.
 - **Delivery flavor**: The woman sets it flat on her workbench and bends a corner between her fingers, testing the give. She holds it up to the light from the window, checking for thin spots or tears in the grain. "Good," she says, and folds it once before setting it with her other stock. She counts out your payment from a tin on the shelf.
 
 ### Water Levels Report
 - **Origin biome**: swamp
 - **Destination biome**: mountains
 - **Origin flavor**: A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Revathi who measure the swamp levels agreed to sell their records.
-- **Delivery flavor**: The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. "This is meticulous work. Please, sit — I'll make tea while I prepare your payment." She returns with both, the coins wrapped in paper inscribed with her thanks.
+- **Delivery flavor**: The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. "This is meticulous work. Please, sit; I'll make tea while I prepare your payment." She returns with both, the coins wrapped in paper inscribed with her thanks.
 
 ### Swamp Willow Bark Strips
 - **Origin biome**: swamp
@@ -1130,7 +1130,7 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Bundle of Dried Cattails
 - **Origin biome**: swamp
 - **Destination biome**: forest
-- **Origin flavor**: Someone in the forest placed an order for cattails—a full bundle, not a handful. They specified they needed them dried, not fresh, and paid in advance.
+- **Origin flavor**: Someone in the forest placed an order for cattails: a full bundle, not a handful. They specified they needed them dried, not fresh, and paid in advance.
 - **Delivery flavor**: The woman who receives them lays three stalks flat on her workbench and splits them lengthwise with a thin blade. She examines the pith, then bends a section until it nearly breaks. She nods once, satisfied with the fiber structure. "Good," she says, and counts your payment from a pouch at her belt.
 
 ### Jar of Peat Ash
@@ -1214,12 +1214,12 @@ Each haul needs four authored fields. Destination, hint, payout, and delivery fl
 ### Bag of Crayfish Seasoning
 - **Origin biome**: swamp
 - **Destination biome**: swamp
-- **Origin flavor**: A batch came out stronger than expected—enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.
-- **Delivery flavor**: You find the buyer already standing over a pot of boiling crawfish, and she opens the bag before you've set it down. She pinches some between her fingers, sniffs it, then tosses a handful into the water. The smell hits immediately—sharp ginger and something darker. She nods once and counts out your payment while stirring.
+- **Origin flavor**: A batch came out stronger than expected, enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.
+- **Delivery flavor**: You find the buyer already standing over a pot of boiling crawfish, and she opens the bag before you've set it down. She pinches some between her fingers, sniffs it, then tosses a handful into the water. The smell hits immediately: sharp ginger and something darker. She nods once and counts out your payment while stirring.
 
 ### Pot of Marsh Glue
 - **Origin biome**: swamp
 - **Destination biome**: swamp
-- **Origin flavor**: A batch came out stronger than expected—enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.
+- **Origin flavor**: A batch came out stronger than expected, enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.
 - **Delivery flavor**: You hand over the pot to a reed-worker who pries the lid off and dips a thin stick into the amber paste. She smears it between two scraps of bark and presses them flat, counting silently. After twenty breaths she tries to pry them apart, fails, then nods. "Good batch," she says, and pays you from a leather pouch at her hip.
 

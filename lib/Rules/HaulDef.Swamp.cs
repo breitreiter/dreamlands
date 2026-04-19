@@ -10,7 +10,7 @@ public sealed partial class HaulDef
             Name = @"Bundled River Reeds",
             OriginBiome = "swamp",
             DestBiome = "plains",
-            OriginFlavor = @"A basket-weaver's sister is getting married. He cut the reeds himself and bundled them as a gift — she'll weave them into her own wedding basket, the way their mother taught them.",
+            OriginFlavor = @"A basket-weaver's sister is getting married. He cut the reeds himself and bundled them as a gift; she'll weave them into her own wedding basket, the way their mother taught them.",
             DeliveryFlavor = @"You hand the bundle to the bride and she unties the twine to inspect them. She holds one reed up to the light, bends it slightly to test the flex, then runs her fingers along its length checking for splits. ""He cut these at the right time,"" she says. ""Tell him I'll bring the basket when I visit."" She pays you and sets the reeds in a basin of water to keep them supple.",
         },
         new()
@@ -29,7 +29,7 @@ public sealed partial class HaulDef
             OriginBiome = "swamp",
             DestBiome = "mountains",
             OriginFlavor = @"Request from one of the scholars up in the mountains. Most likely some sort of strange research project. Not our business to ask questions.",
-            DeliveryFlavor = @"The woman who answers the door takes the jar and holds it up to the afternoon light. She unscrews the lid and peers inside, then dips two fingers into the water and lifts out a leech, watching it curl against her knuckle. ""Good,"" she says, though she doesn't look at you when she says it. She sets the jar on a shelf already crowded with similar containers—dozens of them, all writhing. She pays and closes the door before you can ask.",
+            DeliveryFlavor = @"The woman who answers the door takes the jar and holds it up to the afternoon light. She unscrews the lid and peers inside, then dips two fingers into the water and lifts out a leech, watching it curl against her knuckle. ""Good,"" she says, though she doesn't look at you when she says it. She sets the jar on a shelf already crowded with similar containers: dozens of them, all writhing. She pays and closes the door before you can ask.",
         },
         new()
         {
@@ -73,7 +73,7 @@ public sealed partial class HaulDef
             Name = @"Bog-Iron Ingot",
             OriginBiome = "swamp",
             DestBiome = "mountains",
-            OriginFlavor = @"The local smiths gave up bog-iron extraction years ago—too labor-intensive, too unpredictable—but a buyer up in the mountains specifically requested swamp stock, and coin is coin.",
+            OriginFlavor = @"The local smiths gave up bog-iron extraction years ago (too labor-intensive, too unpredictable), but a buyer up in the mountains specifically requested swamp stock, and coin is coin.",
             DeliveryFlavor = @"You present the ingot at the assay office window. The clerk weighs it on a balance scale, scratches a notation in his ledger, then taps the surface twice with a small hammer to check for air pockets. He slides a receipt across the counter along with your payment, already turning to call the next number in line.",
         },
         new()
@@ -83,7 +83,7 @@ public sealed partial class HaulDef
             OriginBiome = "swamp",
             DestBiome = "plains",
             OriginFlavor = @"The resin merchant has a steady contract with a plains herbalist. Supply runs have been consistent for years.",
-            DeliveryFlavor = @"You find the herbalist's house easily enough — the only building with every window shuttered at midday. She cracks the door, takes the wrapped resin without looking at you, and holds it to her nose. Her eyes are completely black, pupils swallowed by dilation. ""Good,"" she says, and slides your payment through the gap before closing the door. You hear three locks slide into place.",
+            DeliveryFlavor = @"You find the herbalist's house easily enough: the only building with every window shuttered at midday. She cracks the door, takes the wrapped resin without looking at you, and holds it to her nose. Her eyes are completely black, pupils swallowed by dilation. ""Good,"" she says, and slides your payment through the gap before closing the door. You hear three locks slide into place.",
         },
         new()
         {
@@ -109,7 +109,7 @@ public sealed partial class HaulDef
             Name = @"Marsh Pearl",
             OriginBiome = "swamp",
             DestBiome = "plains",
-            OriginFlavor = @"A pearl merchant in the deeper swamp had this one rejected by an imperial buyer — insufficient luster. We found a buyer on the plains willing to take it at cost.",
+            OriginFlavor = @"A pearl merchant in the deeper swamp had this one rejected by an imperial buyer for insufficient luster. We found a buyer on the plains willing to take it at cost.",
             DeliveryFlavor = @"The woman opens the small cloth packet and goes completely still. She holds the pearl up to the window light, turning it slowly, and her mouth tightens. ""My mother wore one like this,"" she says quietly. ""Before the fever."" She closes her hand around it, then straightens and counts out your payment with careful precision.",
         },
         new()
@@ -154,8 +154,8 @@ public sealed partial class HaulDef
             Name = @"Unsettling Revathi Carving",
             OriginBiome = "swamp",
             DestBiome = "scrub",
-            OriginFlavor = @"The carving was pulled from a collapsed stilt-house foundation — older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.",
-            DeliveryFlavor = @"The Kesharat administrator unwraps the carving and sets it on her desk, then pauses. She turns it over twice, checking the base, then pulls out a different wooden figure from her drawer — nearly identical in style. ""This isn't what was ordered. The iconography is inverted."" She studies both pieces for a long moment before paying you, her fingers lingering on the swamp carving as you leave.",
+            OriginFlavor = @"The carving was pulled from a collapsed stilt-house foundation, older than anyone remembers, with marks that don't match any pattern the living use. The seller wouldn't say why he wanted it gone, only that someone in the scrub had asked for exactly this kind of thing.",
+            DeliveryFlavor = @"The Kesharat administrator unwraps the carving and sets it on her desk, then pauses. She turns it over twice, checking the base, then pulls out a different wooden figure from her drawer, nearly identical in style. ""This isn't what was ordered. The iconography is inverted."" She studies both pieces for a long moment before paying you, her fingers lingering on the swamp carving as you leave.",
         },
         new()
         {
@@ -181,7 +181,7 @@ public sealed partial class HaulDef
             Name = @"Treated Crocodile Hide",
             OriginBiome = "swamp",
             DestBiome = "mountains",
-            OriginFlavor = @"A leatherworker in the mountains put in an order for swamp crocodile — the tanning makes it supple enough to work but keeps the scale texture intact.",
+            OriginFlavor = @"A leatherworker in the mountains put in an order for swamp crocodile; the tanning makes it supple enough to work but keeps the scale texture intact.",
             DeliveryFlavor = @"The woman sets it flat on her workbench and bends a corner between her fingers, testing the give. She holds it up to the light from the window, checking for thin spots or tears in the grain. ""Good,"" she says, and folds it once before setting it with her other stock. She counts out your payment from a tin on the shelf.",
         },
         new()
@@ -191,7 +191,7 @@ public sealed partial class HaulDef
             OriginBiome = "swamp",
             DestBiome = "mountains",
             OriginFlavor = @"A scholar of hydrology is compiling seasonal runoff data from lowland watersheds. The Revathi who measure the swamp levels agreed to sell their records.",
-            DeliveryFlavor = @"The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. ""This is meticulous work. Please, sit — I'll make tea while I prepare your payment."" She returns with both, the coins wrapped in paper inscribed with her thanks.",
+            DeliveryFlavor = @"The hydrologist spreads the report flat on her desk, tracing the margin notes with one finger. She looks up at you, her expression softening. ""This is meticulous work. Please, sit. I'll make tea while I prepare your payment."" She returns with both, the coins wrapped in paper inscribed with her thanks.",
         },
         new()
         {
@@ -226,7 +226,7 @@ public sealed partial class HaulDef
             Name = @"Bundle of Dried Cattails",
             OriginBiome = "swamp",
             DestBiome = "forest",
-            OriginFlavor = @"Someone in the forest placed an order for cattails—a full bundle, not a handful. They specified they needed them dried, not fresh, and paid in advance.",
+            OriginFlavor = @"Someone in the forest placed an order for cattails: a full bundle, not a handful. They specified they needed them dried, not fresh, and paid in advance.",
             DeliveryFlavor = @"The woman who receives them lays three stalks flat on her workbench and splits them lengthwise with a thin blade. She examines the pith, then bends a section until it nearly breaks. She nods once, satisfied with the fiber structure. ""Good,"" she says, and counts your payment from a pouch at her belt.",
         },
         new()
@@ -352,8 +352,8 @@ public sealed partial class HaulDef
             Name = @"Bag of Crayfish Seasoning",
             OriginBiome = "swamp",
             DestBiome = "swamp",
-            OriginFlavor = @"A batch came out stronger than expected—enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.",
-            DeliveryFlavor = @"You find the buyer already standing over a pot of boiling crawfish, and she opens the bag before you've set it down. She pinches some between her fingers, sniffs it, then tosses a handful into the water. The smell hits immediately—sharp ginger and something darker. She nods once and counts out your payment while stirring.",
+            OriginFlavor = @"A batch came out stronger than expected: enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.",
+            DeliveryFlavor = @"You find the buyer already standing over a pot of boiling crawfish, and she opens the bag before you've set it down. She pinches some between her fingers, sniffs it, then tosses a handful into the water. The smell hits immediately: sharp ginger and something darker. She nods once and counts out your payment while stirring.",
         },
         new()
         {
@@ -361,7 +361,7 @@ public sealed partial class HaulDef
             Name = @"Pot of Marsh Glue",
             OriginBiome = "swamp",
             DestBiome = "swamp",
-            OriginFlavor = @"A batch came out stronger than expected—enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.",
+            OriginFlavor = @"A batch came out stronger than expected: enough heat to strip paint. The cook who blended it has no use for three bags' worth and arranged a sale upriver.",
             DeliveryFlavor = @"You hand over the pot to a reed-worker who pries the lid off and dips a thin stick into the amber paste. She smears it between two scraps of bark and presses them flat, counting silently. After twenty breaths she tries to pry them apart, fails, then nods. ""Good batch,"" she says, and pays you from a leather pouch at her hip.",
         },
     };

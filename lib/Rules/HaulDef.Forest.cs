@@ -19,7 +19,7 @@ public sealed partial class HaulDef
             Name = @"Tanned Deerhide",
             OriginBiome = "forest",
             DestBiome = "mountains",
-            OriginFlavor = @"The tanner's been sitting on this hide for two seasons, unwilling to sell it — says the grain and color are too fine for most buyers. A mountain scholar finally offered enough to make him reconsider.",
+            OriginFlavor = @"The tanner's been sitting on this hide for two seasons, unwilling to sell it; says the grain and color are too fine for most buyers. A mountain scholar finally offered enough to make him reconsider.",
             DeliveryFlavor = @"You hand over the hide and the scholar unfolds it across his workbench. He examines it for a moment, then shakes his head. ""This isn't deer. Elk, maybe. The grain's too coarse."" He calls over two colleagues and they debate the matter in low voices, pointing at different sections of the leather. Eventually he sighs and counts out your payment. ""It'll do for what we need.""",
         },
         new()
@@ -28,7 +28,7 @@ public sealed partial class HaulDef
             Name = @"Charcoal Sack",
             OriginBiome = "forest",
             DestBiome = "plains",
-            OriginFlavor = @"The charcoal burner's nephew ran a double batch through the kiln without telling anyone — good quality, but no buyer lined up and questions about where the timber came from.",
+            OriginFlavor = @"The charcoal burner's nephew ran a double batch through the kiln without telling anyone. Good quality, but no buyer lined up and questions about where the timber came from.",
             DeliveryFlavor = @"The baker's already untying the sack before you've set it down. He scoops a handful, crushes it between his fingers, nods once. ""Fine enough."" He's pouring it into his bread oven while counting out your payment with his free hand, ash already dusting his knuckles.",
         },
         new()
@@ -55,7 +55,7 @@ public sealed partial class HaulDef
             Name = @"Figured Heartwood Planks",
             OriginBiome = "forest",
             DestBiome = "mountains",
-            OriginFlavor = @"A woodwright's daughter is marrying into a mountain family, and her father cut planks from his best stock for her wedding gift — something that will last generations in her new home.",
+            OriginFlavor = @"A woodwright's daughter is marrying into a mountain family, and her father cut planks from his best stock for her wedding gift, something that will last generations in her new home.",
             DeliveryFlavor = @"The bride's father-in-law meets you at the workshop door. He lifts each plank, checking the grain in the afternoon light, running his fingertips across the figured patterns. He sets them down carefully, one by one, and nods once. He counts out your payment and turns back to his bench without another word.",
         },
         new()
@@ -65,7 +65,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "plains",
             OriginFlavor = @"A well-known trapper died last winter, and his daughter is selling off the luck charms he kept strung above his door. She says they didn't work for him.",
-            DeliveryFlavor = @"You hand over the bundle and the farmhand unwraps it on the fence post. He picks through them—carved wood, knotted cord, a few painted stones—then selects two and loops them over a nail by the barn door. ""For the lambing season,"" he says. He counts out your payment and pockets the rest.",
+            DeliveryFlavor = @"You hand over the bundle and the farmhand unwraps it on the fence post. He picks through them (carved wood, knotted cord, a few painted stones), then selects two and loops them over a nail by the barn door. ""For the lambing season,"" he says. He counts out your payment and pockets the rest.",
         },
         new()
         {
@@ -92,7 +92,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "mountains",
             OriginFlavor = @"An exile scribe kept notebooks in a cipher only he understood. His widow thinks scholars might make something of them where she cannot.",
-            DeliveryFlavor = @"The archivist pages through the notebooks slowly, pausing at certain marks. ""Coastal script mixed with forest cant. And this—"" She taps a margin note. ""militia movement records, I think. Twenty years old at least."" She sets them carefully in a cloth-lined box, then pours you tea without asking and pays you while it cools.",
+            DeliveryFlavor = @"The archivist pages through the notebooks slowly, pausing at certain marks. ""Coastal script mixed with forest cant. And this..."" She taps a margin note. ""militia movement records, I think. Twenty years old at least."" She sets them carefully in a cloth-lined box, then pours you tea without asking and pays you while it cools.",
         },
         new()
         {
@@ -100,7 +100,7 @@ public sealed partial class HaulDef
             Name = @"Caged Songbird",
             OriginBiome = "forest",
             DestBiome = "mountains",
-            OriginFlavor = @"A woman from the exile camps is sending the bird to her sister — they haven't spoken in years, but the sister always loved its song.",
+            OriginFlavor = @"A woman from the exile camps is sending the bird to her sister. They haven't spoken in years, but the sister always loved its song.",
             DeliveryFlavor = @"The woman opens the cage door and lets the bird hop onto her finger. She watches how it moves, tilts her head to listen when it chirps twice. ""Still healthy,"" she says, almost to herself. She closes her eyes when it begins to sing, just for a moment. She pays you and carries the cage inside without another word.",
         },
         new()
@@ -127,7 +127,7 @@ public sealed partial class HaulDef
             Name = @"Intricate Snare Mechanism",
             OriginBiome = "forest",
             DestBiome = "scrub",
-            OriginFlavor = @"A trapper's grandfather built the mechanism decades ago—delicate work, bronze and spring steel, precise as a clockmaker's hand. The old man is gone now, and the trapper says he'd rather it went to someone who'd use it than let it rust in a drawer.",
+            OriginFlavor = @"A trapper's grandfather built the mechanism decades ago: delicate work, bronze and spring steel, precise as a clockmaker's hand. The old man is gone now, and the trapper says he'd rather it went to someone who'd use it than let it rust in a drawer.",
             DeliveryFlavor = @"The clan hunter turns it over in her hands, testing each spring with her fingernail, watching how the trigger plate responds. ""My uncle made traps like this,"" she says quietly. ""Before the fever took him."" She sets it down carefully and gestures for you to sit. She pours tea from a worn copper pot and counts out your payment while it steeps.",
         },
         new()
@@ -190,7 +190,7 @@ public sealed partial class HaulDef
             Name = @"Boar Tusk Necklace",
             OriginBiome = "forest",
             DestBiome = "scrub",
-            OriginFlavor = @"A woodsman's daughter inherited the necklace but refuses to wear it — her father took the boar in his last hunt, and she'd rather have coin than memories.",
+            OriginFlavor = @"A woodsman's daughter inherited the necklace but refuses to wear it. Her father took the boar in his last hunt, and she'd rather have coin than memories.",
             DeliveryFlavor = @"You hand over the necklace at the Kesharat import station. The clerk holds it against a printed diagram, counts the tusks twice, and marks something on a form in small, precise script. He slides the necklace into a numbered bin with three others like it. ""Quota fulfilled,"" he says, and stamps your receipt without looking up from his ledger.",
         },
         new()
@@ -200,7 +200,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "scrub",
             OriginFlavor = @"A fletcher broke his lathe and has been waiting on metal parts from the plains. He's selling off what stock he has while the workshop sits idle.",
-            DeliveryFlavor = @"The woman who meets you outside the compound doesn't look like an archer. She's dressed in loose desert robes, but her hands are wrong — too smooth, fingers too long. She counts the shafts twice, then snaps one in half to check the grain. ""Good,"" she says, and pays you from a purse that seems heavier than it should be. As you leave, you see her carrying the bundle toward a structure half-buried in the hillside.",
+            DeliveryFlavor = @"The woman who meets you outside the compound doesn't look like an archer. She's dressed in loose desert robes, but her hands are wrong: too smooth, fingers too long. She counts the shafts twice, then snaps one in half to check the grain. ""Good,"" she says, and pays you from a purse that seems heavier than it should be. As you leave, you see her carrying the bundle toward a structure half-buried in the hillside.",
         },
         new()
         {
@@ -218,7 +218,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "scrub",
             OriginFlavor = @"A woman in the exile camp sold us the flask. She said it came from a locked storehouse, and the less you knew about how she got in, the better for both of you.",
-            DeliveryFlavor = @"The merchant unscrews the cap and sniffs cautiously, then tips a drop onto his palm and rubs it between his fingers. His face darkens. ""This is pine resin, not cedar. Whoever sold you this didn't know the difference or didn't care."" He argues for half the agreed price, citing the error. You argue back—a contract is a contract. He finally pays in full, muttering about forest thieves.",
+            DeliveryFlavor = @"The merchant unscrews the cap and sniffs cautiously, then tips a drop onto his palm and rubs it between his fingers. His face darkens. ""This is pine resin, not cedar. Whoever sold you this didn't know the difference or didn't care."" He argues for half the agreed price, citing the error. You argue back; a contract is a contract. He finally pays in full, muttering about forest thieves.",
         },
         new()
         {
@@ -227,7 +227,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "scrub",
             OriginFlavor = @"A clerk at the exile camp says the case belonged to someone who left in a hurry. He won't say more, but he's eager to sell it and asks that you deliver it quickly.",
-            DeliveryFlavor = @"The Kesharat official who receives it turns it over slowly, examining the birch bark with uncommon attention. He opens it, peers inside, closes it again. ""Empty,"" he says quietly, as though confirming something. He sets it on his desk among identical scroll cases — seven, maybe eight of them, all birch bark. He pays precisely and dismisses you without looking up again.",
+            DeliveryFlavor = @"The Kesharat official who receives it turns it over slowly, examining the birch bark with uncommon attention. He opens it, peers inside, closes it again. ""Empty,"" he says quietly, as though confirming something. He sets it on his desk among identical scroll cases: seven, maybe eight of them, all birch bark. He pays precisely and dismisses you without looking up again.",
         },
         new()
         {
@@ -244,7 +244,7 @@ public sealed partial class HaulDef
             Name = @"Dried Herb Bundle",
             OriginBiome = "forest",
             DestBiome = "swamp",
-            OriginFlavor = @"A forester's widow bundled these herbs herself before she died — meadowsweet, yarrow, and something darker underneath. Her son sold them cheap and wouldn't meet your eyes when you asked what the third plant was.",
+            OriginFlavor = @"A forester's widow bundled these herbs herself before she died: meadowsweet, yarrow, and something darker underneath. Her son sold them cheap and wouldn't meet your eyes when you asked what the third plant was.",
             DeliveryFlavor = @"The herbalist takes the bundle and unwinds the cord slowly, spreading the dried stems across her workbench. She picks through them with practiced fingers, then pauses over something deep in the center. ""This is kind work,"" she says quietly. ""My grandmother suffered the same way at the end."" She wraps a portion back up and presses it into your hands along with the payment. ""Brew this if you can't sleep.""",
         },
         new()
@@ -271,7 +271,7 @@ public sealed partial class HaulDef
             Name = @"Impressive Deer Antlers",
             OriginBiome = "forest",
             DestBiome = "swamp",
-            OriginFlavor = @"A woodsman's trophy rack finally came down after his widow remarried. The antlers are wide and symmetrical — worth more as material than memory.",
+            OriginFlavor = @"A woodsman's trophy rack finally came down after his widow remarried. The antlers are wide and symmetrical, worth more as material than memory.",
             DeliveryFlavor = @"The knifemaker turns them over in his hands, checking the tines for cracks and the base for rot. He sets them on his workbench next to a stack of salvaged spearhead fragments. ""Good stock. I can get eight handles from these."" He counts out your payment and returns to his grinding wheel.",
         },
         new()
@@ -290,7 +290,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "swamp",
             OriginFlavor = @"The dye-maker's family has been using this concentrate for three generations of weddings and funerals. Her daughter convinced her to sell half the stock because they need grain more than tradition.",
-            DeliveryFlavor = @"You arrive during a dye bath. A circle of Revathi women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth — the stain blooms dark and fast. ""Good enough,"" the buyer says, and counts out your payment while the others return to their work.",
+            DeliveryFlavor = @"You arrive during a dye bath. A circle of Revathi women are gathered around a vat of steaming fabric, arguing in low voices about whether the color has set. The buyer uncorks your bottle, sniffs it, and tilts it so the others can see the thickness. One woman dips a reed into the concentrate and touches it to wet cloth; the stain blooms dark and fast. ""Good enough,"" the buyer says, and counts out your payment while the others return to their work.",
         },
         new()
         {
@@ -335,7 +335,7 @@ public sealed partial class HaulDef
             OriginBiome = "forest",
             DestBiome = "forest",
             OriginFlavor = @"A woodcarver made these as toys for his children, but the locals demanded he sell them. Lucky for him, we found a buyer.",
-            DeliveryFlavor = @"You hand over the box and the hunter lifts the lid, counts quickly, then pulls one out and blows. The sound is wrong—too high, almost painful. ""These aren't marsh loon calls,"" she says flatly. She closes the box and stares at you for a long moment before paying.",
+            DeliveryFlavor = @"You hand over the box and the hunter lifts the lid, counts quickly, then pulls one out and blows. The sound is wrong: too high, almost painful. ""These aren't marsh loon calls,"" she says flatly. She closes the box and stares at you for a long moment before paying.",
         },
         new()
         {
@@ -352,7 +352,7 @@ public sealed partial class HaulDef
             Name = @"Creepy Bark Mask",
             OriginBiome = "forest",
             DestBiome = "forest",
-            OriginFlavor = @"Someone wants this returned to the person who carved it years ago — a debt settled, or an apology they can't make in person.",
+            OriginFlavor = @"Someone wants this returned to the person who carved it years ago: a debt settled, or an apology they can't make in person.",
             DeliveryFlavor = @"The woman takes the mask and turns it over in her hands. She holds it up to her face briefly, then lowers it and looks at you. She sets coins on the table and wraps the mask in oilcloth without another word.",
         },
         new()
