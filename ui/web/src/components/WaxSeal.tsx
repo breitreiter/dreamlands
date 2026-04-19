@@ -77,22 +77,30 @@ export default function WaxSeal({ variant = "merchant", symbolIndex = 0, compact
           WebkitMaskPosition: "center",
         }}
       />
-      {/* Impressed symbol */}
-      <div
-        style={{
-          position: "absolute",
-          inset: "22%",
-          backgroundColor: "rgba(0,0,0,0.6)",
-          maskImage: `url(${symbolUrl})`,
-          maskSize: "contain",
-          maskRepeat: "no-repeat",
-          maskPosition: "center",
-          WebkitMaskImage: `url(${symbolUrl})`,
-          WebkitMaskSize: "contain",
-          WebkitMaskRepeat: "no-repeat",
-          WebkitMaskPosition: "center",
-        }}
-      />
+      {/* Impressed symbol — beveled illusion: shadow upper-left, highlight lower-right, wax-color fill */}
+      {[
+        { dx: -1, dy: -1, color: "rgba(0,0,0,0.55)" },
+        { dx:  1, dy:  1, color: "rgba(255,255,255,0.45)" },
+        { dx:  0, dy:  0, color: c.mid },
+      ].map(({ dx, dy, color }, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            inset: "22%",
+            transform: `translate(${dx}px, ${dy}px)`,
+            backgroundColor: color,
+            maskImage: `url(${symbolUrl})`,
+            maskSize: "contain",
+            maskRepeat: "no-repeat",
+            maskPosition: "center",
+            WebkitMaskImage: `url(${symbolUrl})`,
+            WebkitMaskSize: "contain",
+            WebkitMaskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+          }}
+        />
+      ))}
     </div>
   );
 }
