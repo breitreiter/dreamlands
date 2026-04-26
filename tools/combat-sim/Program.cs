@@ -18,37 +18,25 @@ Console.WriteLine($"  Even-match fatality < 10%");
 Console.WriteLine($"  T1/T2 overmatched fatality 40-70%");
 Console.WriteLine($"  T3 tourist fatality ~91% (acceptable)");
 
-var profiles = new[]
+var matchups = new SimMatchup[]
 {
-    (Pc: Baselines.EvenMatch(1),   Monster: Baselines.T1),
-    (Pc: Baselines.EvenMatch(2),   Monster: Baselines.T2),
-    (Pc: Baselines.EvenMatch(3),   Monster: Baselines.T3),
-    (Pc: Baselines.Overmatched(1), Monster: Baselines.T1),
-    (Pc: Baselines.Overmatched(2), Monster: Baselines.T2),
-    (Pc: Baselines.Overmatched(3), Monster: Baselines.T3),
-    (Pc: Baselines.Tourist(),      Monster: Baselines.T3),
+    new(Baselines.EvenMatch(1),   Baselines.T1),
+    new(Baselines.EvenMatch(2),   Baselines.T2),
+    new(Baselines.EvenMatch(3),   Baselines.T3),
+    new(Baselines.Overmatched(1), Baselines.T1),
+    new(Baselines.Overmatched(2), Baselines.T2),
+    new(Baselines.Overmatched(3), Baselines.T3),
+    new(Baselines.Tourist(),      Baselines.T3),
 };
 
-// ── Reference: Sword stances ──
-var swordCells = profiles
-    .Select(p => Sim.Run(new SwordPolicy(), p.Pc, p.Monster, trials, seed))
-    .ToList();
-Report.PrintTable("Sword (reference — already validated)", swordCells);
+Report.RunOne("Sword (reference — already validated)",
+    new SwordPolicy(), matchups, trials, seed);
 
-// ── Axe sweep: Block now grants immunity. Vary momentum AC penalty + cap. ──
-var axeVariants = new[]
-{
-    new AxeParams(MomentumDamagePerStack: 1, MomentumAcPenaltyPerStack: 0, MomentumCap: 5),
-    new AxeParams(MomentumDamagePerStack: 1, MomentumAcPenaltyPerStack: 1, MomentumCap: 5),
-    new AxeParams(MomentumDamagePerStack: 1, MomentumAcPenaltyPerStack: 2, MomentumCap: 5),
-    new AxeParams(MomentumDamagePerStack: 1, MomentumAcPenaltyPerStack: 1, MomentumCap: 3),
-    new AxeParams(MomentumDamagePerStack: 1, MomentumAcPenaltyPerStack: 1, MomentumCap: 7),
-};
-
-foreach (var v in axeVariants)
-{
-    var cells = profiles
-        .Select(p => Sim.Run(new AxePolicy(v), p.Pc, p.Monster, trials, seed))
-        .ToList();
-    Report.PrintTable($"Axe variant: {v}", cells);
-}
+Report.RunSweep("Axe (locked: 2d4, +1 dmg/-1 AC per stack, immunity Block)",
+    new[]
+    {
+        new AxeParams(MomentumAcPenaltyPerStack: 0, MomentumCap: 5),
+        new AxeParams(MomentumAcPenaltyPerStack: 1, MomentumCap: 5),
+        new AxeParams(MomentumAcPenaltyPerStack: 2, MomentumCap: 5),
+    },
+    p => new AxePolicy(p), matchups, trials, seed);

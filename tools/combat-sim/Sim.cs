@@ -70,9 +70,13 @@ public static class Sim
             if (playerActsFirst)
             {
                 var intent = ChooseMonsterIntent(heavyCd);
-                int dmg = policy.ChooseAndExecute(intent, monster.Ac, monsterHp, spirits, health, rng);
+                var turn = new PolicyTurn(intent, monster.Ac, monsterHp, spirits, health);
+                int dmg = policy.ChooseAndExecute(turn, rng);
                 damageDealt += dmg;
                 monsterHp -= dmg;
+                if (monsterHp <= 0) break;
+
+                damageDealt += TickDotAndApply(policy, ref monsterHp, rng);
                 if (monsterHp <= 0) break;
 
                 ResolveMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
@@ -82,13 +86,17 @@ public static class Sim
             else
             {
                 var intent = ChooseMonsterIntent(heavyCd);
+                damageDealt += TickDotAndApply(policy, ref monsterHp, rng);
+                if (monsterHp <= 0) break;
+
                 ResolveMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
                     monster, policy, rng);
                 if (health <= 0) break;
 
                 // Player now sees the NEXT monster turn's intent (computed from the just-ticked cooldown).
                 var nextIntent = ChooseMonsterIntent(heavyCd);
-                int dmg = policy.ChooseAndExecute(nextIntent, monster.Ac, monsterHp, spirits, health, rng);
+                var turn = new PolicyTurn(nextIntent, monster.Ac, monsterHp, spirits, health);
+                int dmg = policy.ChooseAndExecute(turn, rng);
                 damageDealt += dmg;
                 monsterHp -= dmg;
                 if (monsterHp <= 0) break;
@@ -105,6 +113,14 @@ public static class Sim
 
     static IntentClass ChooseMonsterIntent(int heavyCooldown) =>
         heavyCooldown <= 0 ? IntentClass.HeavyAttack : IntentClass.Attack;
+
+    /// <summary>Apply any DOT damage from the policy at the start of a monster turn.</summary>
+    static int TickDotAndApply(WeaponPolicy policy, ref int monsterHp, Random rng)
+    {
+        int dot = policy.TickOngoingMonsterDamage(rng);
+        if (dot > 0) monsterHp = Math.Max(0, monsterHp - dot);
+        return dot;
+    }
 
     static void ResolveMonsterTurn(
         IntentClass intent, ref int heavyCd, ref int spirits, ref int health, ref int damageTaken,
@@ -139,6 +155,8 @@ public static class Sim
     }
 }
 
+public sealed record SimMatchup(PcProfile Pc, MonsterBaseline Monster);
+
 public static class Report
 {
     public static void PrintTable(string heading, IReadOnlyList<CellResult> cells)
@@ -152,6 +170,32 @@ public static class Report
             Console.WriteLine(
                 $"{c.Pc.Label,-22} {c.Trials,7} " +
                 $"{c.FatalityRate,9:P1} {c.AvgRounds,8:F1} {c.AvgDmgDealtPerRound,7:F2}");
+        }
+    }
+
+    /// <summary>
+    /// Run a single policy across the standard matchup matrix and print one table.
+    /// </summary>
+    public static List<CellResult> RunOne(
+        string heading, WeaponPolicy policy, IReadOnlyList<SimMatchup> matchups,
+        int trials, int seed)
+    {
+        var cells = matchups.Select(m => Sim.Run(policy, m.Pc, m.Monster, trials, seed)).ToList();
+        PrintTable(heading, cells);
+        return cells;
+    }
+
+    /// <summary>
+    /// Run a sweep of policy variants and print one table per variant.
+    /// </summary>
+    public static void RunSweep<TVariant>(
+        string heading, IEnumerable<TVariant> variants, Func<TVariant, WeaponPolicy> factoryFor,
+        IReadOnlyList<SimMatchup> matchups, int trials, int seed)
+    {
+        foreach (var v in variants)
+        {
+            var policy = factoryFor(v);
+            RunOne($"{heading}: {v}", policy, matchups, trials, seed);
         }
     }
 }

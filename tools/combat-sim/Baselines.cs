@@ -7,10 +7,11 @@ public sealed record MonsterBaseline(
     int Tier, int Hp, int Ac, int ToHit,
     DiceRoll BasicDamage, DiceRoll HeavyDamage, int HeavyTimer);
 
-/// <summary>Locked PC profile per the same doc, parameterized by tier and match condition.</summary>
+/// <summary>Locked PC profile per the same doc, parameterized by tier and match condition.
+/// Damage dice are owned by each <see cref="WeaponPolicy"/>, not by the PC profile.</summary>
 public sealed record PcProfile(
     string Label,
-    int AttackBonus, int DamageBonus, int DamageDie,
+    int AttackBonus, int DamageBonus,
     int Bushcraft, int Cunning, int BaseAc,
     bool ReadsIntent);
 
@@ -33,7 +34,6 @@ public static class Baselines
         Label: $"T{tier} even-match",
         AttackBonus: 2 + tier,
         DamageBonus: tier,
-        DamageDie: 8,                  // longsword reference
         Bushcraft: 2,
         Cunning: 2,
         BaseAc: ExpectedArmorAc(tier),
@@ -44,7 +44,6 @@ public static class Baselines
         Label: $"T{tier} overmatched",
         AttackBonus: 1,
         DamageBonus: 1,
-        DamageDie: 8,
         Bushcraft: 0,
         Cunning: 0,
         BaseAc: ExpectedArmorAc(1),    // tier-1 gear regardless of monster tier
@@ -55,7 +54,6 @@ public static class Baselines
         Label: "T3 tourist",
         AttackBonus: 0,
         DamageBonus: 0,
-        DamageDie: 8,
         Bushcraft: 0,
         Cunning: 0,
         BaseAc: 11,
