@@ -13,6 +13,7 @@ public class GameData
     public Map Map { get; }
     public EncounterBundle Bundle { get { lock (_bundleLock) return _bundle; } }
     public TacticalBundle? TacticalBundle { get; private set; }
+    public CombatBundle? CombatBundle { get; private set; }
     public BalanceData Balance { get; } = BalanceData.Default;
     public string ApiVersion { get; }
     public bool NoEncounters { get; }
@@ -67,6 +68,22 @@ public class GameData
             ?? Path.Combine(Path.GetDirectoryName(bundlePath)!, "tactical.bundle.json");
         if (File.Exists(tacticalPath))
             TacticalBundle = Dreamlands.Tactical.TacticalBundle.Load(tacticalPath);
+
+        // Combat bundle: directory of .cmb files. Phase 1 looks for a "combat" sibling
+        // of the encounter bundle, with a fallback to the prototype's monsters dir so
+        // gorzog runs without world surgery.
+        var combatDir = Environment.GetEnvironmentVariable("DREAMLANDS_COMBAT_DIR");
+        if (combatDir == null)
+        {
+            var bundleDir = Path.GetDirectoryName(bundlePath)!;
+            var inWorld = Path.Combine(bundleDir, "combat");
+            if (Directory.Exists(inWorld))
+                combatDir = inWorld;
+            else if (IsDev)
+                combatDir = Path.Combine(FindRepoRoot(), "tools/combat-prototype/Monsters");
+        }
+        if (combatDir != null && Directory.Exists(combatDir))
+            CombatBundle = Dreamlands.Encounter.CombatBundle.LoadDirectory(combatDir);
     }
 
     public void ReloadBundle()

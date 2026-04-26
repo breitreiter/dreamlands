@@ -1,0 +1,51 @@
+# Gorzog the Cleaver — sample combat encounter
+# Tier-1 set piece. Basic move plus heavy + pierce on timers.
+
++title Gorzog the Cleaver
++image monsters/gorzog.png
++repool false
++stats hp=24 ac=14 to_hit=+4 damage=1d8
+
++hitbox head    left=0.40 top=0.05 right=0.60 bottom=0.25
++hitbox torso   left=0.30 top=0.30 right=0.70 bottom=0.70
++hitbox legs    left=0.35 top=0.70 right=0.65 bottom=0.95
+
++move cleaver_swing
+  intent: attack
+  preview: "Gorzog raises his cleaver."
+  timer: 0
+  sprite: cleaver_swing
+  anchor: center
+  narration: "Gorzog hacks down with the cleaver."
+  > deal_damage 1d8
+
++move crushing_blow
+  intent: heavy_attack
+  preview: "Gorzog winds up for an overhead strike."
+  timer: 3
+  sprite: cleaver_overhead
+  anchor: top
+  narration: "Gorzog brings the cleaver down with both hands."
+  > deal_damage 2d8+2
+
++move gore
+  intent: pierce
+  preview: "Gorzog lowers his horns and paws at the ground."
+  timer: 5
+  sprite: gore_thrust
+  anchor: bottom
+  narration: "Gorzog charges, horns first."
+  > pierce 1d8 dc 14
+  > inflict_condition bleeding dc 14 25%
+
++intro
+You round the bend and Gorzog is there, cleaver already in hand.
+
++win
+> +give_gold 8
+> +add_tag killed_gorzog
+Gorzog falls. You loot the coins from his belt.
+
++lose
+> +damage_spirits 100
+Gorzog stands over you, cleaver dripping. Your story ends here.

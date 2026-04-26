@@ -1,0 +1,10 @@
+{
+  "ac": 16,
+  "attackBonus": 6,
+  "damageBonus": 1,
+  "damageDieSize": 8,
+  "bushcraft": 2,
+  "cunning": 0,
+  "startingSpirits": 20,
+  "startingHealth": 4
+}

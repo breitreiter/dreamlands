@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Encounter/Dreamlands.Encounter.csproj" />
+    <ProjectReference Include="../Game/Dreamlands.Game.csproj" />
+    <ProjectReference Include="../Rules/Dreamlands.Rules.csproj" />
+  </ItemGroup>
+
+</Project>

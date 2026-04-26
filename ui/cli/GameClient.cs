@@ -46,6 +46,21 @@ class GameClient(string baseUrl)
         return await ReadResponse(resp);
     }
 
+    public async Task<string> CombatBegin(string gameId, string encounterId)
+    {
+        var json = $$"""{"encounterId":"{{encounterId}}"}""";
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var resp = await _http.PostAsync($"/api/game/{gameId}/combat/begin", content);
+        return await ReadResponse(resp);
+    }
+
+    public async Task<string> CombatAction(string gameId, string actionJson)
+    {
+        var content = new StringContent(actionJson, Encoding.UTF8, "application/json");
+        var resp = await _http.PostAsync($"/api/game/{gameId}/combat/action", content);
+        return await ReadResponse(resp);
+    }
+
     public async Task<bool> IsReachable()
     {
         try

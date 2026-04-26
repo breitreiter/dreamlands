@@ -50,6 +50,10 @@ if (positional.Count == 0)
     Console.Error.WriteLine("  unequip <slot>       Unequip slot (weapon|armor|boots)");
     Console.Error.WriteLine("  discard <item_id>    Discard item from inventory");
     Console.Error.WriteLine("  inflict <condition>  Debug: add a condition to the player");
+    Console.Error.WriteLine("  combat begin <id>    Begin combat against the .cmb encounter id");
+    Console.Error.WriteLine("  combat attack        Attack the monster");
+    Console.Error.WriteLine("  combat stance <s>    Switch sword stance (aggressive|balanced|defensive)");
+    Console.Error.WriteLine("  combat flee          Attempt to flee combat");
     return 1;
 }
 
@@ -230,6 +234,41 @@ try
         {
             if (positional.Count < 2) { Console.Error.WriteLine("Usage: inflict <condition>"); return 1; }
             result = await client.DebugAddCondition(ResolveGameId(), positional[1]);
+            break;
+        }
+
+        case "combat":
+        {
+            if (positional.Count < 2)
+            {
+                Console.Error.WriteLine("Usage: combat <begin <id> | attack | stance <s> | flee>");
+                return 1;
+            }
+            switch (positional[1])
+            {
+                case "begin":
+                {
+                    if (positional.Count < 3) { Console.Error.WriteLine("Usage: combat begin <id>"); return 1; }
+                    result = await client.CombatBegin(ResolveGameId(), positional[2]);
+                    break;
+                }
+                case "attack":
+                    result = await client.CombatAction(ResolveGameId(), """{"action":"attack"}""");
+                    break;
+                case "stance":
+                {
+                    if (positional.Count < 3) { Console.Error.WriteLine("Usage: combat stance <aggressive|balanced|defensive>"); return 1; }
+                    var actionJson = JsonSerializer.Serialize(new { action = "stance", stance = positional[2] });
+                    result = await client.CombatAction(ResolveGameId(), actionJson);
+                    break;
+                }
+                case "flee":
+                    result = await client.CombatAction(ResolveGameId(), """{"action":"flee"}""");
+                    break;
+                default:
+                    Console.Error.WriteLine($"Unknown combat subcommand: {positional[1]}");
+                    return 1;
+            }
             break;
         }
 

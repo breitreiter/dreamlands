@@ -27,6 +27,10 @@ public class PlayerState
     public string? CurrentTacticalId { get; set; }
     public string? TacticalStateJson { get; set; }
 
+    /// <summary>In-progress combat (set by CombatRunner.Begin, cleared on resolution).
+    /// Persists in the Cosmos doc so a closed tab can resume mid-fight.</summary>
+    public CombatState? ActiveCombat { get; set; }
+
     // Vitals
     public int Health { get; set; }
     public int MaxHealth { get; set; }

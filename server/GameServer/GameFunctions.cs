@@ -101,6 +101,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             }
         }
 
+        if (session.Mode == SessionMode.InCombat && player.ActiveCombat is { } combat
+            && data.CombatBundle?.GetById(combat.EncounterId) is { } combatEnc)
+        {
+            // Resume mid-fight: render the current state with empty events (no new turn happened).
+            var resumeTurn = new Dreamlands.Orchestration.CombatOrchestrator.CombatTurn(
+                Array.Empty<Dreamlands.Combat.CombatEvent>(),
+                Array.Empty<MechanicResult>(),
+                Resolved: false,
+                PlayerDied: false);
+            return new OkObjectResult(BuildCombatResponse(session, resumeTurn));
+        }
+
         if (session.CurrentEncounter is { } enc)
         {
             var gated = Choices.GetAllWithLockState(enc, player, data.Balance);
@@ -161,7 +173,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 {
                     Mode = "exploring",
                     Status = BuildStatus(player),
-                    Node = BuildNodeInfo(innNode, player),
+                    Node = BuildNodeInfo(innNode, player, session),
                     Exits = BuildExits(session),
                     InnRecovery = new InnRecoveryInfo
                     {
@@ -397,7 +409,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             {
                                 Mode = "camp",
                                 Status = BuildStatus(player),
-                                Node = BuildNodeInfo(session.CurrentNode, player),
+                                Node = BuildNodeInfo(session.CurrentNode, player, session),
                                 Camp = BuildCampThreats(session),
                                 Inventory = BuildInventory(player),
                                 Mechanics = BuildMechanics(player),
@@ -451,7 +463,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                     LostItems = rescued.LostItems,
                                     GoldLost = rescued.GoldLost,
                                 },
-                                Node = BuildNodeInfo(session.CurrentNode, player),
+                                Node = BuildNodeInfo(session.CurrentNode, player, session),
                                 Exits = BuildExits(session),
                                 Inventory = BuildInventory(player),
                                 Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
@@ -477,7 +489,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 {
                                     Mode = "encounter",
                                     Status = BuildStatus(player),
-                                    Node = BuildNodeInfo(session.CurrentNode, player),
+                                    Node = BuildNodeInfo(session.CurrentNode, player, session),
                                     Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
                                     Inventory = BuildInventory(player),
                                     Mechanics = BuildMechanics(player),
@@ -516,7 +528,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 {
                                     Mode = "encounter",
                                     Status = BuildStatus(player),
-                                    Node = BuildNodeInfo(session.CurrentNode, player),
+                                    Node = BuildNodeInfo(session.CurrentNode, player, session),
                                     Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
                                     Inventory = BuildInventory(player),
                                     Mechanics = BuildMechanics(player),
@@ -635,7 +647,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                         LostItems = encRescue.LostItems,
                                         GoldLost = encRescue.GoldLost,
                                     },
-                                    Node = BuildNodeInfo(session.CurrentNode, player),
+                                    Node = BuildNodeInfo(session.CurrentNode, player, session),
                                     Exits = BuildExits(session),
                                     Inventory = BuildInventory(player),
                                 });
@@ -909,7 +921,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             LostItems = rescued.LostItems,
                             GoldLost = rescued.GoldLost,
                         },
-                        Node = BuildNodeInfo(session.CurrentNode, player),
+                        Node = BuildNodeInfo(session.CurrentNode, player, session),
                         Exits = BuildExits(session),
                         Inventory = BuildInventory(player),
                     });
@@ -921,7 +933,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 {
                     Mode = "camp_resolved",
                     Status = BuildStatus(player),
-                    Node = BuildNodeInfo(node, player),
+                    Node = BuildNodeInfo(node, player, session),
                     Exits = BuildExits(session),
                     Camp = campInfo,
                     Inventory = BuildInventory(player),
@@ -955,7 +967,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 {
                     Mode = "exploring",
                     Status = BuildStatus(player),
-                    Node = BuildNodeInfo(sNode, player),
+                    Node = BuildNodeInfo(sNode, player, session),
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),
                     MarketResult = new MarketOrderResultInfo
@@ -989,7 +1001,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 {
                     Mode = "exploring",
                     Status = BuildStatus(player),
-                    Node = BuildNodeInfo(rNode, player),
+                    Node = BuildNodeInfo(rNode, player, session),
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),
                 };
@@ -1018,7 +1030,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 {
                     Mode = "exploring",
                     Status = BuildStatus(player),
-                    Node = BuildNodeInfo(hNode, player),
+                    Node = BuildNodeInfo(hNode, player, session),
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),
                     MarketResult = new MarketOrderResultInfo
@@ -1381,11 +1393,21 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     + player.Day * 1009
                     + (int)player.Time * 17
                     + player.MoveCount * 7
-                    + player.ActiveConditions.Count;
+                    + player.ActiveConditions.Count
+                    // Mix in vitals + active-combat tick so each combat step gets a fresh
+                    // RNG. Without these, every attack request rolls identical dice.
+                    + player.Spirits * 11
+                    + player.Health * 13
+                    + (player.ActiveCombat?.Round * 23 ?? 0)
+                    + (player.ActiveCombat?.MonsterHp * 29 ?? 0);
         var rng = new Random(rngSeed);
-        var session = new GameSession(player, data.Map, data.Bundle, data.Balance, rng, data.TacticalBundle);
+        var session = new GameSession(player, data.Map, data.Bundle, data.Balance, rng, data.TacticalBundle, data.CombatBundle);
 
-        if (player.CurrentTacticalId is { } tacId)
+        if (player.ActiveCombat != null)
+        {
+            session.Mode = SessionMode.InCombat;
+        }
+        else if (player.CurrentTacticalId is { } tacId)
         {
             session.Mode = SessionMode.InTactical;
         }
@@ -1451,7 +1473,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }).ToList(),
     };
 
-    NodeInfo BuildNodeInfo(Node node, PlayerState p, GameSession? session = null)
+    NodeInfo BuildNodeInfo(Node node, PlayerState p, GameSession session)
     {
         List<string>? services = null;
         if (node.Poi?.Kind == PoiKind.Settlement)
@@ -1459,7 +1481,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             var isChapterhouse = node == data.Map.StartingCity;
             services = ["market", "bank", isChapterhouse ? "chapterhouse" : "inn"];
 
-            if (session != null && node.Poi.SettlementId != null
+            if (node.Poi.SettlementId != null
                 && session.Player.Settlements.TryGetValue(node.Poi.SettlementId, out var settlementInfo)
                 && settlementInfo.StoryletOffers.Count > 0)
                 services.Add("notices");
@@ -1643,7 +1665,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     {
         Mode = ModeString(s.Mode),
         Status = BuildStatus(p),
-        Node = BuildNodeInfo(s.CurrentNode, p),
+        Node = BuildNodeInfo(s.CurrentNode, p, s),
         Inventory = BuildInventory(p),
         Mechanics = BuildMechanics(p),
     };
@@ -1749,7 +1771,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     {
         Mode = "encounter",
         Status = BuildStatus(session.Player),
-        Node = BuildNodeInfo(session.CurrentNode, session.Player),
+        Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
         Encounter = BuildEncounterInfo(encounter, gated),
         Inventory = BuildInventory(session.Player),
         Mechanics = BuildMechanics(session.Player),
@@ -1786,7 +1808,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     {
         Mode = "camp",
         Status = BuildStatus(session.Player),
-        Node = BuildNodeInfo(session.CurrentNode, session.Player),
+        Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
         Camp = camp,
         Deliveries = deliveries,
         Inventory = BuildInventory(session.Player),
@@ -2009,7 +2031,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Mode = "tactical",
             Status = BuildStatus(session.Player),
             Tactical = info,
-            Node = BuildNodeInfo(session.CurrentNode, session.Player),
+            Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
             Inventory = BuildInventory(session.Player),
             Mechanics = BuildMechanics(session.Player),
         };
@@ -2036,4 +2058,232 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         player.TacticalStateJson != null
             ? JsonSerializer.Deserialize<TacticalState>(player.TacticalStateJson, TacJsonOpts)
             : null;
+
+    // ── Combat ──
+
+    [Function("CombatBegin")]
+    public async Task<IActionResult> CombatBegin(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/{id}/combat/begin")] HttpRequest req,
+        string id)
+    {
+        var beginReq = await req.ReadFromJsonAsync<CombatBeginRequest>();
+        if (beginReq == null || string.IsNullOrWhiteSpace(beginReq.EncounterId))
+            return new BadRequestObjectResult(new { error = "Missing encounterId" });
+
+        var player = await store.Load(id);
+        if (player == null) return new NotFoundObjectResult(new { error = "Game not found" });
+
+        var session = BuildSession(player);
+        if (data.CombatBundle == null)
+            return new BadRequestObjectResult(new { error = "Combat bundle not loaded" });
+
+        if (player.ActiveCombat != null)
+            return new BadRequestObjectResult(new { error = "Combat already in progress" });
+
+        Dreamlands.Orchestration.CombatOrchestrator.CombatTurn turn;
+        try
+        {
+            turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, beginReq.EncounterId);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return new BadRequestObjectResult(new { error = ex.Message });
+        }
+
+        await store.Save(player);
+        return new OkObjectResult(BuildCombatResponse(session, turn));
+    }
+
+    [Function("CombatAction")]
+    public async Task<IActionResult> CombatAction(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/{id}/combat/action")] HttpRequest req,
+        string id)
+    {
+        var actionReq = await req.ReadFromJsonAsync<CombatActionRequest>();
+        if (actionReq == null) return new BadRequestObjectResult(new { error = "Invalid request body" });
+
+        var player = await store.Load(id);
+        if (player == null) return new NotFoundObjectResult(new { error = "Game not found" });
+
+        var session = BuildSession(player);
+        if (player.ActiveCombat == null)
+            return new BadRequestObjectResult(new { error = "No active combat" });
+
+        Dreamlands.Combat.PlayerCombatAction action;
+        switch (actionReq.Action?.ToLowerInvariant())
+        {
+            case "attack":
+                action = new Dreamlands.Combat.PlayerCombatAction.Attack();
+                break;
+            case "flee":
+                action = new Dreamlands.Combat.PlayerCombatAction.Flee();
+                break;
+            case "stance":
+                if (!Enum.TryParse<Dreamlands.Game.SwordStance>(actionReq.Stance, true, out var stance))
+                    return new BadRequestObjectResult(new { error = $"Bad stance '{actionReq.Stance}'" });
+                action = new Dreamlands.Combat.PlayerCombatAction.SetStance(stance);
+                break;
+            default:
+                return new BadRequestObjectResult(new { error = $"Unknown combat action '{actionReq.Action}'" });
+        }
+
+        var turn = Dreamlands.Orchestration.CombatOrchestrator.Step(session, action);
+        await store.Save(player);
+        return new OkObjectResult(BuildCombatResponse(session, turn));
+    }
+
+    GameResponse BuildCombatResponse(GameSession session, Dreamlands.Orchestration.CombatOrchestrator.CombatTurn turn)
+    {
+        var info = BuildCombatInfo(session, turn);
+        return new GameResponse
+        {
+            Mode = info.Resolved ? "combat_resolved" : "combat",
+            Status = BuildStatus(session.Player),
+            Combat = info,
+            Inventory = BuildInventory(session.Player),
+            Mechanics = BuildMechanics(session.Player),
+        };
+    }
+
+    CombatInfo BuildCombatInfo(GameSession session, Dreamlands.Orchestration.CombatOrchestrator.CombatTurn turn)
+    {
+        // After Finalize, ActiveCombat is null on resolved combats — the events still
+        // carry the terminal state, so reconstruct what we can from them.
+        var state = session.Player.ActiveCombat;
+        Dreamlands.Encounter.CombatEncounter? encounter = null;
+        if (state != null)
+            encounter = data.CombatBundle?.GetById(state.EncounterId);
+        if (encounter == null && turn.Events.OfType<Dreamlands.Combat.CombatEvent.Intro>().FirstOrDefault() is { } intro)
+            encounter = data.CombatBundle?.GetById(intro.EncounterId);
+
+        var lines = turn.Events.Select(RenderCombatEvent).Where(s => s.Length > 0).ToList();
+        var outcome = turn.Events.OfType<Dreamlands.Combat.CombatEvent.Outcome>().FirstOrDefault();
+        var intentEvt = turn.Events.OfType<Dreamlands.Combat.CombatEvent.IntentPreviewed>().LastOrDefault();
+        var introEvt = turn.Events.OfType<Dreamlands.Combat.CombatEvent.Intro>().FirstOrDefault();
+
+        // Effective AC bonus from stance, computed against profile if state still present.
+        int effectiveAc = 0, attackBonus = 0;
+        string stance = state?.Stance.ToString().ToLowerInvariant() ?? "balanced";
+        string weaponClass = "", armorClass = "";
+        int monsterHp = state?.MonsterHp ?? 0;
+        int monsterMaxHp = state?.MonsterMaxHp ?? 0;
+        if (state != null)
+        {
+            effectiveAc = Dreamlands.Combat.StanceModifiers.PlayerEffectiveAc(state);
+            attackBonus = Dreamlands.Combat.StanceModifiers.PlayerAttackBonus(state);
+            weaponClass = state.Profile.Weapon?.ToString() ?? "Unarmed";
+            armorClass = state.Profile.Armor?.ToString() ?? "Unarmored";
+        }
+
+        return new CombatInfo
+        {
+            EncounterId = encounter?.Id ?? state?.EncounterId ?? "",
+            Title = encounter?.Title ?? "",
+            Image = string.IsNullOrEmpty(encounter?.Image) ? null : encounter.Image,
+            IntroText = introEvt?.Text ?? encounter?.Intro ?? "",
+
+            MonsterHp = monsterHp,
+            MonsterMaxHp = monsterMaxHp,
+            MonsterAc = encounter?.Stats.Ac ?? 0,
+
+            PlayerSpirits = session.Player.Spirits,
+            PlayerMaxSpirits = session.Player.MaxSpirits,
+            PlayerHealth = session.Player.Health,
+            PlayerMaxHealth = session.Player.MaxHealth,
+            PlayerEffectiveAc = effectiveAc,
+            PlayerAttackBonus = attackBonus,
+            PlayerWeaponClass = weaponClass,
+            PlayerArmorClass = armorClass,
+
+            Round = state?.Round ?? outcome?.Rounds ?? 0,
+            PlayerActsFirst = state?.PlayerActsFirst ?? false,
+            Stance = stance,
+
+            Intent = intentEvt is null ? null : new CombatIntentInfo
+            {
+                MoveId = intentEvt.MoveId,
+                Class = intentEvt.IntentClass.ToString(),
+                Text = intentEvt.IntentText,
+            },
+
+            Resolved = turn.Resolved,
+            PlayerWon = outcome?.PlayerWon ?? false,
+            PlayerLost = outcome?.PlayerLost ?? false,
+            PlayerFled = outcome?.PlayerFled ?? false,
+            MonsterFled = outcome?.MonsterFled ?? false,
+            OutcomeText = outcome?.Text,
+            OutcomeMechanics = turn.Resolved ? BuildMechanicResults(turn.OutcomeMechanics.ToList()) : null,
+
+            Lines = lines,
+        };
+    }
+
+    static string RenderCombatEvent(Dreamlands.Combat.CombatEvent evt) => evt switch
+    {
+        Dreamlands.Combat.CombatEvent.Intro x => x.Text,
+        Dreamlands.Combat.CombatEvent.SurpriseChecked x =>
+            $"Surprise: d20({x.Roll}){FmtSign(x.Bonus)} vs DC {x.Dc} → {(x.PlayerActsFirst ? "you act first" : "monster acts first")}",
+        Dreamlands.Combat.CombatEvent.RoundStarted x => $"— Round {x.Round} —",
+        Dreamlands.Combat.CombatEvent.IntentPreviewed x => $"Intent: {x.IntentClass} — \"{x.IntentText}\"",
+        Dreamlands.Combat.CombatEvent.StanceChanged x => $"Stance: {x.From} → {x.To}",
+        Dreamlands.Combat.CombatEvent.PlayerAttacked x => RenderPlayerAttack(x),
+        Dreamlands.Combat.CombatEvent.PlayerFleeAttempted x =>
+            $"Flee: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → {(x.Save.Success ? "ESCAPE" : "fail (free hit incoming)")}",
+        Dreamlands.Combat.CombatEvent.MonsterMoved x => $"Monster: {x.Narration}",
+        Dreamlands.Combat.CombatEvent.MonsterAttacked x => RenderMonsterAttack(x),
+        Dreamlands.Combat.CombatEvent.MonsterPierced x => RenderMonsterPierce(x),
+        Dreamlands.Combat.CombatEvent.MonsterConditioned x => RenderCondition(x),
+        Dreamlands.Combat.CombatEvent.MonsterDefended x => $"  Defended: AC +{x.AcBonus} (now {x.MonsterEffectiveAc}) this turn",
+        Dreamlands.Combat.CombatEvent.MonsterFledEvt x => $"  The monster disengages and flees.",
+        Dreamlands.Combat.CombatEvent.Outcome x => RenderOutcome(x),
+        _ => "",
+    };
+
+    static string RenderPlayerAttack(Dreamlands.Combat.CombatEvent.PlayerAttacked x)
+    {
+        if (x.Attack.Fumble) return "  Player attacks: fumble (nat-1).";
+        if (!x.Attack.Hit)
+            return $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → miss.";
+        var crit = x.Attack.Crit ? " CRIT" : "";
+        var dmg = x.Damage!;
+        return $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {dmg.Total}. Monster {x.MonsterHpAfter}/{x.MonsterMaxHp}.";
+    }
+
+    static string RenderMonsterAttack(Dreamlands.Combat.CombatEvent.MonsterAttacked x)
+    {
+        if (x.Attack.Fumble) return "  Monster attacks: fumble (nat-1).";
+        if (!x.Attack.Hit)
+            return $"  Monster attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → miss.";
+        var crit = x.Attack.Crit ? " CRIT" : "";
+        var d = x.Damage!;
+        var a = x.Absorbed!;
+        return $"  Monster attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {d.Total} ({a.OnSpirits}sp + {a.OnHealth}hp). Player {x.PlayerSpiritsAfter}sp / {x.PlayerHealthAfter}hp.";
+    }
+
+    static string RenderMonsterPierce(Dreamlands.Combat.CombatEvent.MonsterPierced x)
+    {
+        if (x.Save.Success)
+            return $"  Cunning save: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → evade.";
+        var d = x.Damage!;
+        var a = x.Absorbed!;
+        return $"  Cunning save: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → fail; pierced for {d.Total} ({a.OnSpirits}sp + {a.OnHealth}hp). Player {x.PlayerSpiritsAfter}sp / {x.PlayerHealthAfter}hp.";
+    }
+
+    static string RenderCondition(Dreamlands.Combat.CombatEvent.MonsterConditioned x)
+    {
+        if (!x.Procced) return $"  {x.ConditionId}: did not proc ({x.Chance:P0}).";
+        if (x.Save is null) return $"  {x.ConditionId}: applied.";
+        return x.Applied
+            ? $"  {x.ConditionId}: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → applied."
+            : $"  {x.ConditionId}: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → resisted.";
+    }
+
+    static string RenderOutcome(Dreamlands.Combat.CombatEvent.Outcome x)
+    {
+        var verdict = x.PlayerWon ? "VICTORY" : x.PlayerLost ? "DEFEAT" : x.PlayerFled ? "PLAYER FLED" : x.MonsterFled ? "MONSTER FLED" : "ENDED";
+        var line = $"=== {verdict} (after {x.Rounds} rounds) ===";
+        return string.IsNullOrEmpty(x.Text) ? line : $"{line}\n{x.Text}";
+    }
+
+    static string FmtSign(int n) => n >= 0 ? $"+{n}" : n.ToString();
 }

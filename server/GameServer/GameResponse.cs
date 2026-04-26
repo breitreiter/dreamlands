@@ -45,6 +45,9 @@ public class GameResponse
     // Tactical encounter
     public TacticalInfo? Tactical { get; init; }
 
+    // Combat encounter
+    public CombatInfo? Combat { get; init; }
+
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
 
@@ -428,4 +431,64 @@ public class MarketBuyLine
 public class MarketSellLine
 {
     public string ItemDefId { get; set; } = "";
+}
+
+// Combat
+
+public class CombatInfo
+{
+    public string EncounterId { get; init; } = "";
+    public string Title { get; init; } = "";
+    public string? Image { get; init; }
+    public string IntroText { get; init; } = "";
+
+    public int MonsterHp { get; init; }
+    public int MonsterMaxHp { get; init; }
+    public int MonsterAc { get; init; }
+
+    public int PlayerSpirits { get; init; }
+    public int PlayerMaxSpirits { get; init; }
+    public int PlayerHealth { get; init; }
+    public int PlayerMaxHealth { get; init; }
+    public int PlayerEffectiveAc { get; init; }
+    public int PlayerAttackBonus { get; init; }
+    public string PlayerWeaponClass { get; init; } = "";
+    public string PlayerArmorClass { get; init; } = "";
+
+    public int Round { get; init; }
+    public bool PlayerActsFirst { get; init; }
+    public string Stance { get; init; } = "";
+
+    public CombatIntentInfo? Intent { get; init; }
+
+    public bool Resolved { get; init; }
+    public bool PlayerWon { get; init; }
+    public bool PlayerLost { get; init; }
+    public bool PlayerFled { get; init; }
+    public bool MonsterFled { get; init; }
+    public string? OutcomeText { get; init; }
+    public List<MechanicResultInfo>? OutcomeMechanics { get; init; }
+
+    public List<string> Lines { get; init; } = [];
+}
+
+public class CombatIntentInfo
+{
+    public string MoveId { get; init; } = "";
+    public string Class { get; init; } = "";
+    public string Text { get; init; } = "";
+}
+
+public class CombatActionRequest
+{
+    /// <summary>"attack" | "stance" | "flee".</summary>
+    public string Action { get; set; } = "";
+
+    /// <summary>For action=stance: "aggressive" | "balanced" | "defensive".</summary>
+    public string? Stance { get; set; }
+}
+
+public class CombatBeginRequest
+{
+    public string EncounterId { get; set; } = "";
 }
