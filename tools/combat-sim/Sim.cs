@@ -66,10 +66,11 @@ public static class Sim
         while (monsterHp > 0 && health > 0 && round < MaxRounds)
         {
             round++;
+            var intent = ChooseMonsterIntent(heavyCd);
+            policy.OnRoundStart(intent, rng);
 
             if (playerActsFirst)
             {
-                var intent = ChooseMonsterIntent(heavyCd);
                 var turn = new PolicyTurn(intent, monster.Ac, monsterHp, spirits, health);
                 int dmg = policy.ChooseAndExecute(turn, rng);
                 damageDealt += dmg;
@@ -79,17 +80,16 @@ public static class Sim
                 damageDealt += TickDotAndApply(policy, ref monsterHp, rng);
                 if (monsterHp <= 0) break;
 
-                ResolveMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
+                ResolveOrSkipMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
                     monster, policy, rng);
                 if (health <= 0) break;
             }
             else
             {
-                var intent = ChooseMonsterIntent(heavyCd);
                 damageDealt += TickDotAndApply(policy, ref monsterHp, rng);
                 if (monsterHp <= 0) break;
 
-                ResolveMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
+                ResolveOrSkipMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
                     monster, policy, rng);
                 if (health <= 0) break;
 
@@ -113,6 +113,26 @@ public static class Sim
 
     static IntentClass ChooseMonsterIntent(int heavyCooldown) =>
         heavyCooldown <= 0 ? IntentClass.HeavyAttack : IntentClass.Attack;
+
+    /// <summary>
+    /// Resolve the monster's turn unless the policy queued a skip (e.g. dagger
+    /// super-crit). Skipped turns still tick the heavy cooldown — blanking a
+    /// basic costs the monster a swing; blanking a heavy resets the cooldown
+    /// without dealing damage.
+    /// </summary>
+    static void ResolveOrSkipMonsterTurn(
+        IntentClass intent, ref int heavyCd, ref int spirits, ref int health, ref int damageTaken,
+        MonsterBaseline monster, WeaponPolicy policy, Random rng)
+    {
+        if (policy.ConsumeMonsterTurnSkip())
+        {
+            if (intent == IntentClass.HeavyAttack) heavyCd = monster.HeavyTimer;
+            else heavyCd = Math.Max(0, heavyCd - 1);
+            return;
+        }
+        ResolveMonsterTurn(intent, ref heavyCd, ref spirits, ref health, ref damageTaken,
+            monster, policy, rng);
+    }
 
     /// <summary>Apply any DOT damage from the policy at the start of a monster turn.</summary>
     static int TickDotAndApply(WeaponPolicy policy, ref int monsterHp, Random rng)

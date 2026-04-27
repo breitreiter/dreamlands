@@ -111,3 +111,14 @@ export async function getInnServices(
 ): Promise<InnServicesResponse> {
   return get(`${BASE}/${id}/inn`);
 }
+
+export async function combatBegin(id: string, encounterId: string): Promise<GameResponse> {
+  return post(`${BASE}/${id}/combat/begin`, { encounterId });
+}
+
+export async function combatAction(
+  id: string,
+  body: { action: string; stance?: string; band?: string },
+): Promise<GameResponse> {
+  return post(`${BASE}/${id}/combat/action`, body);
+}

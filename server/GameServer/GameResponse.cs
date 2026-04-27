@@ -481,11 +481,14 @@ public class CombatIntentInfo
 
 public class CombatActionRequest
 {
-    /// <summary>"attack" | "stance" | "flee".</summary>
+    /// <summary>"attack" | "stance" | "flee" | "dagger_attack".</summary>
     public string Action { get; set; } = "";
 
     /// <summary>For action=stance: "aggressive" | "balanced" | "defensive".</summary>
     public string? Stance { get; set; }
+
+    /// <summary>For action=dagger_attack: "miss" | "hit" | "crit" | "super_crit". Client posts the timing band it landed in.</summary>
+    public string? Band { get; set; }
 }
 
 public class CombatBeginRequest

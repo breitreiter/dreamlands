@@ -26,6 +26,25 @@ public abstract record CombatEvent
         int MonsterHpAfter,
         int MonsterMaxHp) : CombatEvent;
 
+    /// <summary>
+    /// Dagger timing-window attack. No d20 roll — the client posts the band it
+    /// hit and the server resolves damage from there. <c>SuperCrit</c> indicates
+    /// the next monster turn will be cancelled (see <see cref="MonsterTurnSkipped"/>).
+    /// </summary>
+    public sealed record PlayerDaggerAttacked(
+        TimingBand Band,
+        Resolver.DamageResult? Damage,
+        int MonsterHpAfter,
+        int MonsterMaxHp,
+        bool SuperCrit) : CombatEvent;
+
+    /// <summary>
+    /// Emitted when a queued super-crit cancels the monster's next action. The
+    /// move that *would have* fired is named so the UI can render "you blanked
+    /// the heavy swing." Heavy cooldown still ticks normally.
+    /// </summary>
+    public sealed record MonsterTurnSkipped(string MoveId, IntentClass IntentClass) : CombatEvent;
+
     public sealed record PlayerFleeAttempted(Resolver.SaveOutcome Save) : CombatEvent;
 
     public sealed record MonsterMoved(string MoveId, IntentClass IntentClass, string Narration) : CombatEvent;

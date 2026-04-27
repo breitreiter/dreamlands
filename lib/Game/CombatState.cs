@@ -21,6 +21,13 @@ public sealed class CombatState
     /// <summary>Transient per-turn AC bump from a Defend move. Reset before each monster turn.</summary>
     public int MonsterAcBonusThisTurn { get; set; }
 
+    /// <summary>
+    /// Set by a dagger super-crit; consumed by the next monster turn (which is skipped).
+    /// Heavy cooldown still ticks per design — blanking a basic costs the monster a swing,
+    /// blanking a heavy resets the cooldown without dealing damage.
+    /// </summary>
+    public bool SkipNextMonsterTurn { get; set; }
+
     public int Round { get; set; }
     public bool PlayerActsFirst { get; set; }
     public SwordStance Stance { get; set; } = SwordStance.Balanced;

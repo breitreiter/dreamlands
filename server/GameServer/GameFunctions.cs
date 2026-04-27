@@ -2123,6 +2123,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     return new BadRequestObjectResult(new { error = $"Bad stance '{actionReq.Stance}'" });
                 action = new Dreamlands.Combat.PlayerCombatAction.SetStance(stance);
                 break;
+            case "dagger_attack":
+                // Accept "super_crit" or "supercrit" — JSON conventions vary.
+                var bandRaw = (actionReq.Band ?? "").Replace("_", "");
+                if (!Enum.TryParse<Dreamlands.Combat.TimingBand>(bandRaw, true, out var band))
+                    return new BadRequestObjectResult(new { error = $"Bad timing band '{actionReq.Band}'" });
+                action = new Dreamlands.Combat.PlayerCombatAction.DaggerAttack(band);
+                break;
             default:
                 return new BadRequestObjectResult(new { error = $"Unknown combat action '{actionReq.Action}'" });
         }
@@ -2227,6 +2234,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Dreamlands.Combat.CombatEvent.IntentPreviewed x => $"Intent: {x.IntentClass} — \"{x.IntentText}\"",
         Dreamlands.Combat.CombatEvent.StanceChanged x => $"Stance: {x.From} → {x.To}",
         Dreamlands.Combat.CombatEvent.PlayerAttacked x => RenderPlayerAttack(x),
+        Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x => RenderDaggerAttack(x),
+        Dreamlands.Combat.CombatEvent.MonsterTurnSkipped x => $"  The monster reels — its {x.IntentClass.ToString().ToLowerInvariant()} never lands.",
         Dreamlands.Combat.CombatEvent.PlayerFleeAttempted x =>
             $"Flee: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → {(x.Save.Success ? "ESCAPE" : "fail (free hit incoming)")}",
         Dreamlands.Combat.CombatEvent.MonsterMoved x => $"Monster: {x.Narration}",
@@ -2247,6 +2256,21 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var crit = x.Attack.Crit ? " CRIT" : "";
         var dmg = x.Damage!;
         return $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {dmg.Total}. Monster {x.MonsterHpAfter}/{x.MonsterMaxHp}.";
+    }
+
+    static string RenderDaggerAttack(Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x)
+    {
+        if (x.Band == Dreamlands.Combat.TimingBand.Miss)
+            return "  Player strikes: timing off — miss.";
+        var dmg = x.Damage!;
+        var label = x.Band switch
+        {
+            Dreamlands.Combat.TimingBand.SuperCrit => "SUPER-CRIT",
+            Dreamlands.Combat.TimingBand.Crit      => "crit",
+            _                                       => "hit",
+        };
+        var super = x.SuperCrit ? " — monster's next action is cancelled" : "";
+        return $"  Player strikes: {label} for {dmg.Total}{super}. Monster {x.MonsterHpAfter}/{x.MonsterMaxHp}.";
     }
 
     static string RenderMonsterAttack(Dreamlands.Combat.CombatEvent.MonsterAttacked x)

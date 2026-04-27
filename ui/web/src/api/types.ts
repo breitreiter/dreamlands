@@ -222,7 +222,7 @@ export interface RescueInfo {
 }
 
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical";
+  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical" | "combat" | "combat_resolved";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
@@ -237,7 +237,50 @@ export interface GameResponse {
   innRecovery?: InnRecoveryInfo;
   deliveries?: DeliveryInfo[];
   tactical?: TacticalInfo;
+  combat?: CombatInfo;
   travel?: TravelInfo;
+}
+
+export interface CombatIntentInfo {
+  moveId: string;
+  class: string;
+  text: string;
+}
+
+export interface CombatInfo {
+  encounterId: string;
+  title: string;
+  image: string | null;
+  introText: string;
+
+  monsterHp: number;
+  monsterMaxHp: number;
+  monsterAc: number;
+
+  playerSpirits: number;
+  playerMaxSpirits: number;
+  playerHealth: number;
+  playerMaxHealth: number;
+  playerEffectiveAc: number;
+  playerAttackBonus: number;
+  playerWeaponClass: string;
+  playerArmorClass: string;
+
+  round: number;
+  playerActsFirst: boolean;
+  stance: string;
+
+  intent: CombatIntentInfo | null;
+
+  resolved: boolean;
+  playerWon: boolean;
+  playerLost: boolean;
+  playerFled: boolean;
+  monsterFled: boolean;
+  outcomeText: string | null;
+  outcomeMechanics: MechanicResultInfo[] | null;
+
+  lines: string[];
 }
 
 export interface TravelInfo {

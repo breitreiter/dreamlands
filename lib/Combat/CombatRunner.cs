@@ -36,6 +36,7 @@ public static class CombatRunner
             if (!move.IsBasic) state.Cooldowns[move.Id] = move.Timer;
         state.Round = 1;
         state.MonsterAcBonusThisTurn = 0;
+        state.SkipNextMonsterTurn = false;
         state.Stance = SwordStance.Balanced;
 
         events.Add(new CombatEvent.Intro(encounter.Id, encounter.Title, encounter.Intro));
@@ -50,7 +51,7 @@ public static class CombatRunner
 
         if (!state.PlayerActsFirst)
         {
-            ResolveMonsterTurn(encounter, player, state, rng, events);
+            ResolveMonsterTurnOrSkip(encounter, player, state, rng, events);
             if (TryAddOutcome(encounter, state, events)) return events;
         }
 
@@ -83,6 +84,10 @@ public static class CombatRunner
                 ResolvePlayerAttack(encounter, state, rng, events);
                 break;
 
+            case PlayerCombatAction.DaggerAttack dagger:
+                ResolveDaggerAttack(state, dagger.Band, rng, events);
+                break;
+
             case PlayerCombatAction.Flee:
                 var save = Resolver.RollSave(rng, state.Profile.Cunning, FleeDc);
                 events.Add(new CombatEvent.PlayerFleeAttempted(save));
@@ -106,7 +111,7 @@ public static class CombatRunner
         // Player turn is done. If player acts first, the monster turn closes out this round.
         if (state.PlayerActsFirst)
         {
-            ResolveMonsterTurn(encounter, player, state, rng, events);
+            ResolveMonsterTurnOrSkip(encounter, player, state, rng, events);
             if (TryAddOutcome(encounter, state, events)) return events;
             state.Round++;
         }
@@ -114,7 +119,7 @@ public static class CombatRunner
         {
             // Monster acts first each round; player just finished round N, so monster opens round N+1.
             state.Round++;
-            ResolveMonsterTurn(encounter, player, state, rng, events);
+            ResolveMonsterTurnOrSkip(encounter, player, state, rng, events);
             if (TryAddOutcome(encounter, state, events)) return events;
         }
 
@@ -145,6 +150,43 @@ public static class CombatRunner
         if (state.MonsterHp <= 0) state.PlayerWon = true;
     }
 
+    static void ResolveDaggerAttack(CombatState state, TimingBand band, Random rng, List<CombatEvent> events)
+    {
+        // No d20 roll — band came from the client's timing minigame.
+        // Stance is sword-specific; dagger ignores it (see project/design/dagger_reflex_minigame.md).
+        Resolver.DamageResult? damage = null;
+        bool crit = band is TimingBand.Crit or TimingBand.SuperCrit;
+        bool superCrit = band == TimingBand.SuperCrit;
+
+        if (band != TimingBand.Miss)
+        {
+            var dmg = new DiceRoll(state.Profile.DamageDieCount, state.Profile.DamageDieSize, state.Profile.DamageBonus);
+            damage = Resolver.RollDamage(rng, dmg, crit);
+            state.MonsterHp = Math.Max(0, state.MonsterHp - damage.Total);
+        }
+
+        if (superCrit) state.SkipNextMonsterTurn = true;
+
+        events.Add(new CombatEvent.PlayerDaggerAttacked(band, damage, state.MonsterHp, state.MonsterMaxHp, superCrit));
+        if (state.MonsterHp <= 0) state.PlayerWon = true;
+    }
+
+    static void ResolveMonsterTurnOrSkip(CombatEncounter encounter, PlayerState player, CombatState state, Random rng, List<CombatEvent> events)
+    {
+        if (!state.SkipNextMonsterTurn)
+        {
+            ResolveMonsterTurn(encounter, player, state, rng, events);
+            return;
+        }
+
+        // Super-crit cancel: monster takes no action, but cooldowns still tick per design.
+        state.SkipNextMonsterTurn = false;
+        var move = MoveById(encounter, state.NextMoveId) ?? encounter.BasicMove;
+        events.Add(new CombatEvent.MonsterTurnSkipped(move.Id, move.IntentClass));
+        TickCooldowns(encounter, state, move);
+        state.NextMoveId = ChooseNextMove(encounter, state).Id;
+    }
+
     static void ResolveMonsterTurn(CombatEncounter encounter, PlayerState player, CombatState state, Random rng, List<CombatEvent> events)
     {
         // Defend bonus applies only to the turn it was used on.
@@ -152,18 +194,20 @@ public static class CombatRunner
 
         var move = MoveById(encounter, state.NextMoveId) ?? encounter.BasicMove;
         ExecuteMonsterMove(encounter, player, state, move, rng, events, freeHit: false);
+        TickCooldowns(encounter, state, move);
+        state.NextMoveId = ChooseNextMove(encounter, state).Id;
+    }
 
-        // Tick cooldowns: just-fired move resets to full; everything else ticks down.
+    static void TickCooldowns(CombatEncounter encounter, CombatState state, MonsterMove justFired)
+    {
         var ids = state.Cooldowns.Keys.ToList();
         foreach (var id in ids)
         {
-            if (id == move.Id)
+            if (id == justFired.Id)
                 state.Cooldowns[id] = encounter.Moves.First(m => m.Id == id).Timer;
             else
                 state.Cooldowns[id] = Math.Max(0, state.Cooldowns[id] - 1);
         }
-
-        state.NextMoveId = ChooseNextMove(encounter, state).Id;
     }
 
     static MonsterMove ChooseNextMove(CombatEncounter encounter, CombatState state)

@@ -6,6 +6,7 @@ import DungeonHub from "./screens/DungeonHub";
 import Rescue from "./screens/Rescue";
 import Camp from "./screens/Camp";
 import TacticalEncounter from "./screens/TacticalEncounter";
+import Combat from "./screens/Combat";
 
 function GameRouter() {
   const { response, error, clearError } = useGame();
@@ -29,6 +30,7 @@ function GameRouter() {
       )}
       {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
       {response.mode === "tactical" && response.tactical && <TacticalEncounter tactical={response.tactical} node={response.node} />}
+      {(response.mode === "combat" || response.mode === "combat_resolved") && <Combat state={response} />}
       {response.mode === "rescued" && <Rescue state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
     </>

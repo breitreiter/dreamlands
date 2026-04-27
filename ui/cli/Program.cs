@@ -51,7 +51,8 @@ if (positional.Count == 0)
     Console.Error.WriteLine("  discard <item_id>    Discard item from inventory");
     Console.Error.WriteLine("  inflict <condition>  Debug: add a condition to the player");
     Console.Error.WriteLine("  combat begin <id>    Begin combat against the .cmb encounter id");
-    Console.Error.WriteLine("  combat attack        Attack the monster");
+    Console.Error.WriteLine("  combat attack        Attack the monster (sword/axe — d20 to hit)");
+    Console.Error.WriteLine("  combat dagger <b>    Dagger timing-window attack: <miss|hit|crit|super>");
     Console.Error.WriteLine("  combat stance <s>    Switch sword stance (aggressive|balanced|defensive)");
     Console.Error.WriteLine("  combat flee          Attempt to flee combat");
     return 1;
@@ -241,7 +242,7 @@ try
         {
             if (positional.Count < 2)
             {
-                Console.Error.WriteLine("Usage: combat <begin <id> | attack | stance <s> | flee>");
+                Console.Error.WriteLine("Usage: combat <begin <id> | attack | dagger <band> | stance <s> | flee>");
                 return 1;
             }
             switch (positional[1])
@@ -255,6 +256,15 @@ try
                 case "attack":
                     result = await client.CombatAction(ResolveGameId(), """{"action":"attack"}""");
                     break;
+                case "dagger":
+                {
+                    if (positional.Count < 3) { Console.Error.WriteLine("Usage: combat dagger <miss|hit|crit|super>"); return 1; }
+                    // Accept "super" as shorthand for "super_crit".
+                    var band = positional[2] == "super" ? "super_crit" : positional[2];
+                    var actionJson = JsonSerializer.Serialize(new { action = "dagger_attack", band });
+                    result = await client.CombatAction(ResolveGameId(), actionJson);
+                    break;
+                }
                 case "stance":
                 {
                     if (positional.Count < 3) { Console.Error.WriteLine("Usage: combat stance <aggressive|balanced|defensive>"); return 1; }

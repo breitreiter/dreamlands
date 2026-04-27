@@ -36,6 +36,14 @@ public abstract class WeaponPolicy
 
     public virtual void Reset(PcProfile pc) { Pc = pc; }
 
+    /// <summary>
+    /// Called at the top of every round, before either turn fires. Lets reactive
+    /// policies (e.g. dagger parry) roll for their reaction with knowledge of the
+    /// monster's incoming intent — must happen before the monster turn so that
+    /// <see cref="ImmuneToIncomingDamage"/> can be set in the surprise case too.
+    /// </summary>
+    public virtual void OnRoundStart(IntentClass intent, Random rng) { }
+
     /// <summary>Resolve the player's turn. Returns damage dealt to the monster.</summary>
     public abstract int ChooseAndExecute(PolicyTurn turn, Random rng);
 
@@ -46,6 +54,15 @@ public abstract class WeaponPolicy
     public virtual int TickOngoingMonsterDamage(Random rng) => 0;
 
     public virtual void OnMonsterTurnComplete() { }
+
+    /// <summary>
+    /// Reactive policies (e.g. dagger super-crit) can queue a cancel on the
+    /// next monster turn. Sim calls this just before each monster turn fires;
+    /// if true, the monster takes no action this turn (heavy cooldown still
+    /// ticks per design — blanking a basic costs an action, blanking a heavy
+    /// resets the cooldown without dealing damage).
+    /// </summary>
+    public virtual bool ConsumeMonsterTurnSkip() => false;
 
     /// <summary>EV of a single attack swing — hit chance × average damage. For
     /// finishing-swing decisions like axe's "swing if EV ≥ monster HP".</summary>

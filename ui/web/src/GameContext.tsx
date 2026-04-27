@@ -46,6 +46,7 @@ interface GameContextValue extends GameState {
     openingIndex?: number;
     path?: { x: number; y: number }[];
   }) => Promise<GameResponse | null>;
+  doCombatAction: (body: { action: string; stance?: string; band?: string }) => Promise<GameResponse | null>;
   clearError: () => void;
   setCampReport: (report: CampReport) => void;
   clearCampReport: () => void;
@@ -71,6 +72,11 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
   if (result.mode === "tactical") {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
+  }
+  if (result.mode === "combat" || result.mode === "combat_resolved") {
+    cleared.encounter = undefined;
+    cleared.outcome = undefined;
+    cleared.tactical = undefined;
   }
   // One-shot fields — clear unless the response explicitly includes them
   if (!result.deliveries) cleared.deliveries = undefined;
@@ -191,6 +197,32 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [state.gameId]
   );
 
+  const doCombatAction = useCallback(
+    async (body: { action: string; stance?: string; band?: string }): Promise<GameResponse | null> => {
+      if (!state.gameId) return null;
+      setState((s) => ({ ...s, loading: true, error: null }));
+      try {
+        const result = await api.combatAction(state.gameId, body);
+        setState((s) => ({
+          ...s,
+          response: s.response
+            ? { ...s.response, ...clearStale(result), ...stripNulls(result) }
+            : result,
+          loading: false,
+        }));
+        return result;
+      } catch (e) {
+        setState((s) => ({
+          ...s,
+          loading: false,
+          error: e instanceof Error ? e.message : "Unknown error",
+        }));
+        return null;
+      }
+    },
+    [state.gameId],
+  );
+
   const clearError = useCallback(() => {
     setState((s) => ({ ...s, error: null }));
   }, []);
@@ -205,7 +237,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, clearError, setCampReport, clearCampReport }}
+      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, doCombatAction, clearError, setCampReport, clearCampReport }}
     >
       {children}
     </GameContext.Provider>
