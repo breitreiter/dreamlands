@@ -1,0 +1,63 @@
+Meilin Acts
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+You return to the tower. The common room is quiet. Osric is by the hearth now, a kettle steaming, two clay cups already set out on the low table. He looks up as you come in and gestures to the bench across from his.
+
+"Sit, friend. A minute and something hot. We both need it."
+
+You sit. He pours. The tea is bitter and woodsy and exactly what you needed.
+
+For a while neither of you says much. Osric asks a question here and there, the kind of question an old soldier asks when he is trying to find where the truth is without pressing anyone on it. You answer what you can. You do not answer what you cannot. He does not push.
+
+"I have had a hundred of these conversations in my life," he says, eventually, "and most of them come down to the same thing in the end. People want to be seen. They want their suffering to count. Whether they get that or not is the difference between the ones who let it go and the ones who do not."
+
+He refills your cup. You do not remember having finished the first one.
+
+You are about to answer when the outer door slams open.
+
+It is one of the younger devoted, a boy barely past twenty, breathing hard. His hands are shaking. He looks at Osric first, then at you, then back at Osric, and his mouth works for a moment before any words come out.
+
+"Brother. There has been a fight. In the barn."
+
+choices:
+
+* Follow Osric into the yard = See what has happened
+  Osric is on his feet before the boy has finished speaking, and you are on yours a moment later. You follow him out through the tower door.
+
+  It is full dark. A half-moon. The yard is lit in patches by the lanterns the devoted have brought out to make sense of the scene. The barn door is open. Nobody is standing near it.
+
+  Meilin is in the middle of the yard.
+
+  She is taller than you remembered, which is absurd, because she has been the tallest person in every room. She holds a sword in one hand, point-down, not quite touching the packed earth. Her other arm is around the body of a man you have seen at her shoulder a dozen times, one of her team. He is dead. You do not need to be told.
+
+  She is covered in blood. None of it is hers. The grin is gone. Her face is cold, unreadable.
+
+  Osric stops a respectful distance away and does not speak.
+
+  Meilin looks at him.
+
+  "The imperials are sorted." Her voice is flat. "Two of them ran. Three did not. You will find them in the barn and behind it. We cleaned what we could before we came out, but the straw will need to burn."
+
+  Osric nods once. He does not say anything yet.
+
+  "I'll need to bury my brother." She lifts the dead man a fraction, as if reminding herself that he is still here. "Corporal Darun Vasar, Fourth Stand, Third Platoon." She adjusts her hold on him. "We'll take him to the trees and give him back to the soil." 
+
+  "We can bring shovels," Osric says, finally.
+
+  "You will not. Thank you."
+
+  There is a pause. Meilin's eyes move across the yard and find yours, and stop there.
+
+  "Trader." Just that.
+
+  "We will not be back," she says. "You can tell anyone who asks."
+
+  She turns. The two others of her team come out of the dark at the edge of the yard and fall in at her shoulder without a word. Between the three of them they take Darun up, gently, and carry him out through the gate and into the trees. The lanterns watch them go. Nobody moves until they are gone.
+
+  Osric puts a hand on your shoulder.
+
+  "Come inside, friend. There is more tea."
+
+  You shake your head. You shoulder your pack. You follow the Kesharat out through the gate, not to catch them, just to be walking in the same direction they went, for a while, until the forest splits the road from the footpath they took, and you are alone on the road again with a long way yet to go.
+  +finish_dungeon

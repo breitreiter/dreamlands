@@ -10,6 +10,7 @@ import BankScreen from "./Bank";
 import Inn from "./Inn";
 import MaskedIcon from "../components/MaskedIcon";
 import DayNightComplication from "../components/DayNightComplication";
+import CombatPicker from "../components/CombatPicker";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -531,6 +532,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
   const [traveling, setTraveling] = useState(false);
   const [gridReady, setGridReady] = useState(false);
+  const [showCombatPicker, setShowCombatPicker] = useState(false);
 
   // Travel state
   const [travelPhase, setTravelPhase] = useState<TravelPhase>("idle");
@@ -798,6 +800,18 @@ export default function Explore({ state }: { state: GameResponse }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Dev-only: pick a fight. Hidden in production builds. */}
+      {import.meta.env.DEV && (
+        <button
+          onClick={() => setShowCombatPicker(true)}
+          className="fixed bottom-4 right-4 z-[1400] bg-action/90 text-contrast border border-white/20 rounded-md px-3 py-2 hover:bg-action transition shadow-lg"
+          title="Debug: pick any loaded combat encounter"
+        >
+          Pick a fight
+        </button>
+      )}
+      {showCombatPicker && <CombatPicker onClose={() => setShowCombatPicker(false)} />}
     </div>
   );
 }

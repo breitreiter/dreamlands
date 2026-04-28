@@ -2,6 +2,12 @@
 
 Three armor classes, each with a primary stat and different freezing tolerance.
 
+> **AC under the combat pivot.** Light AC 11–12, Medium AC 13–15, Heavy
+> AC 16–18 (matches D&D's plate ceiling). Tier-3 frontline combat
+> assumes plate; light-armor builds are deliberately worse in a
+> straight fight and earn their keep on out-of-combat checks. See
+> `combat_pivot.md` "Encounter Tuning Baseline" for the locked numbers.
+
 ## Stats
 
 Every armor piece has +0 to +5 in three areas:

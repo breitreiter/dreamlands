@@ -1,0 +1,45 @@
+# The Bog Stalker — swamp T2 (predatory flesh-mutant)
+
++title The Bog Stalker
++image monsters/swamp_beast_4.png
++repool false
++stats hp=30 ac=11 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.25 right=1.0 bottom=0.70
+
++move slash
+  intent: attack
+  preview: "It coils a fraction lower. The skin patterns shift across the shoulder."
+  timer: 0
+  sprite: stalker_slash
+  anchor: center
+  narration: "It opens up at you in a quick raking strike."
+  > deal_damage 1d4
+
++move ambush
+  intent: heavy_attack
+  preview: "It pulls back into the reeds. The patterns bleed into the dark."
+  timer: 3
+  sprite: stalker_ambush
+  anchor: bottom
+  narration: "It comes back out of cover at a longer angle than you'd expect, and lands."
+  > deal_damage 2d8
+  > inflict_condition poisoned dc 12 33%
+
++intro
+It has been watching you for some time. You realize this in the
+half-second before it comes out of the reeds — too low in the hip, too
+long in the shoulder, the wet skin patterned like nothing that ever
+lived. It does not roar. It does not posture. It crosses the open water
+between you in a single coiled stride and is on its second when you raise
+your weapon.
+
++win
+> +give_gold 10
+> +add_tag killed_bog_stalker
+The patterns across the wet skin slow, settle, and stop. The carcass
+sinks where it lies, the open water taking it back the way the open
+water takes most things on the deep paths.
+
++lose
+> +damage_spirits 100

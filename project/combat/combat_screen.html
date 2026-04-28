@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combat Encounter — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;700&family=Sorts+Mill+Goudy&family=Sue+Ellen+Francisco&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-page: #232d46;
+    --bg-panel: #262626;
+    --bg-panel-alt: #191919;
+    --bg-parchment: #d4c9a8;
+    --bg-btn: #0d0d0dcc;
+    --bg-btn-hover: #292929;
+
+    --text-primary: #f3f3f3;
+    --text-contrast: #1e1e1e;
+    --text-accent: #d0bd62;
+    --text-dim: #aca377;
+    --text-muted: #8b8b8b;
+
+    --action: #d0925d;
+    --action-hover: #daa878;
+    --action-dim: #b29073;
+
+    --negative: #ff6b6b;
+    --positive: #6bffae;
+    --health-start: #800000;
+    --spirits-start: #460AA7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 20px; }
+
+  body {
+    font-family: 'Alegreya Sans', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .font-header { font-family: 'Sorts Mill Goudy', serif; }
+  .font-hand { font-family: 'Sue Ellen Francisco', cursive; }
+
+  /* ───── Screen layout ───── */
+  .screen {
+    display: flex;
+    height: 100vh;
+  }
+
+  /* ───── Left panel: vignette + monster ───── */
+  .left {
+    position: relative;
+    width: 45%;
+    flex-shrink: 0;
+    background: var(--bg-parchment);
+    overflow: hidden;
+  }
+
+  .vignette {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.55) saturate(0.75);
+  }
+
+  .monster {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .monster .creature {
+    max-height: 82%;
+    max-width: 82%;
+    object-fit: contain;
+    object-position: bottom;
+    transform: translateY(6%);
+    filter:
+      drop-shadow(0 0 6px rgba(0,0,0,0.95))
+      drop-shadow(0 0 18px rgba(0,0,0,0.85))
+      drop-shadow(0 0 40px rgba(0,0,0,0.65))
+      drop-shadow(0 0 80px rgba(0,0,0,0.45))
+      drop-shadow(0 12px 24px rgba(0,0,0,0.6));
+  }
+
+  .monster .effect {
+    position: absolute;
+    left: 55%;
+    bottom: -13%;
+    width: 75%;
+    height: auto;
+    transform: translateX(-50%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Monster nameplate / HP bar */
+  .monster-plate {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    right: 24px;
+    background: rgba(13,13,13,0.78);
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .monster-plate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .monster-name {
+    font-family: 'Sorts Mill Goudy', serif;
+    font-size: 32px;
+    color: var(--text-accent);
+    line-height: 1;
+  }
+
+  .monster-meta {
+    color: var(--text-dim);
+  }
+
+  .hp-bar {
+    position: relative;
+    height: 18px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .hp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--health-start), #c44a4a);
+  }
+
+  .hp-bar-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    text-shadow: 0 0 4px rgba(0,0,0,0.9);
+    line-height: 1;
+  }
+
+  /* ───── Right panel ───── */
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-page);
+    min-width: 0;
+  }
+
+  .right-header {
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: var(--bg-panel-alt);
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .stat-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+  }
+
+  .stat-icon .icon {
+    width: 26px;
+    height: 26px;
+    background: currentColor;
+    -webkit-mask: center / contain no-repeat;
+            mask: center / contain no-repeat;
+    flex-shrink: 0;
+  }
+
+  .stat-icon.health { color: #d96565; }
+  .stat-icon.health .icon {
+    -webkit-mask-image: url('../../assets/icons/heart-plus.svg');
+            mask-image: url('../../assets/icons/heart-plus.svg');
+  }
+
+  .stat-icon.spirits { color: #9b75d6; }
+  .stat-icon.spirits .icon {
+    -webkit-mask-image: url('../../assets/icons/sensuousness.svg');
+            mask-image: url('../../assets/icons/sensuousness.svg');
+  }
+
+  .stat-icon .v { color: var(--text-primary); }
+
+  .header-spacer { flex: 1; }
+
+  /* Scene title (now lives at top of the log) */
+  .scene-header h2 {
+    font-family: 'Sorts Mill Goudy', serif;
+    font-size: 32px;
+    color: var(--text-accent);
+    line-height: 1;
+  }
+
+  .scene-header .sub {
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* Turn log (scrollable) */
+  .log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .round-marker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+  }
+
+  .round-marker::before,
+  .round-marker::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+
+  .log-entry .actor {
+    color: var(--text-dim);
+    width: 90px;
+    flex-shrink: 0;
+  }
+
+  .log-entry.player .actor { color: var(--text-accent); }
+  .log-entry.enemy .actor { color: var(--negative); }
+
+  .log-entry .body { color: var(--text-primary); flex: 1; }
+
+  .roll {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 1px 7px 1px 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-primary);
+    vertical-align: baseline;
+  }
+
+  .roll::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    -webkit-mask: url('../../assets/icons/dice-twenty-faces-twenty.svg') center / contain no-repeat;
+            mask: url('../../assets/icons/dice-twenty-faces-twenty.svg') center / contain no-repeat;
+    flex-shrink: 0;
+  }
+
+  .roll.hit { background: rgba(107,255,174,0.15); color: var(--positive); }
+  .roll.miss { background: rgba(255,107,107,0.15); color: var(--negative); }
+  .roll.crit { background: rgba(208,189,98,0.2); color: var(--text-accent); }
+
+  .pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: var(--text-dim);
+    line-height: 1.2;
+  }
+
+  .pill .v {
+    color: var(--text-primary);
+  }
+
+  /* Actions — chat composer-style, sits below the log */
+  .actions {
+    padding: 16px 40px 28px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stance-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .stance-row .stance-label {
+    color: var(--text-dim);
+  }
+
+  .stance-toggle {
+    display: flex;
+    background: var(--bg-btn);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .stance-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 18px;
+    color: var(--action);
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+    transition: background 0.15s;
+  }
+
+  .stance-btn:hover { background: var(--bg-btn-hover); color: var(--action-hover); }
+
+  .stance-btn.active {
+    background: var(--action);
+    color: var(--text-contrast);
+  }
+
+  .stance-btn.active:hover {
+    background: var(--action-hover);
+  }
+
+  .button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  .btn {
+    background: var(--bg-btn);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--action);
+    cursor: pointer;
+    font: inherit;
+    text-align: center;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn:hover {
+    background: var(--bg-btn-hover);
+    color: var(--action-hover);
+  }
+
+  .btn.primary {
+    background: var(--action);
+    color: var(--text-contrast);
+    grid-column: span 1;
+  }
+
+  .btn.primary:hover {
+    background: var(--action-hover);
+  }
+
+  .btn-sub {
+    display: block;
+    color: var(--action-dim);
+    font-size: 16px;
+    margin-top: 4px;
+    line-height: 1;
+  }
+
+  .btn.primary .btn-sub {
+    color: rgba(30,30,30,0.7);
+  }
+
+  .btn-icon {
+    width: 22px;
+    height: 22px;
+    background: currentColor;
+    -webkit-mask: center / contain no-repeat;
+            mask: center / contain no-repeat;
+  }
+
+  .btn-icon.attack { -webkit-mask-image: url('../../assets/icons/sword-brandish.svg'); mask-image: url('../../assets/icons/sword-brandish.svg'); }
+  .btn-icon.item   { -webkit-mask-image: url('../../assets/icons/pouch-with-beads.svg'); mask-image: url('../../assets/icons/pouch-with-beads.svg'); }
+  .btn-icon.flee   { -webkit-mask-image: url('../../assets/icons/walk.svg'); mask-image: url('../../assets/icons/walk.svg'); }
+
+  /* Scrollbar polish */
+  .log::-webkit-scrollbar { width: 8px; }
+  .log::-webkit-scrollbar-track { background: transparent; }
+  .log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+
+</style>
+</head>
+<body>
+<div class="screen">
+
+  <!-- ─────────────── LEFT: vignette + monster ─────────────── -->
+  <div class="left">
+    <img class="vignette" src="../../assets/vignettes/forest/forest_tier_2_1.png" alt="">
+    <div class="monster">
+      <img class="creature" src="../../assets/monsters/forest_ranger.png" alt="The Bowman">
+      <img class="effect" src="../../assets/effects/monster_attack/giant_slam.gif" alt="">
+    </div>
+
+    <!-- Monster plate -->
+    <div class="monster-plate">
+      <div class="monster-plate-row">
+        <div class="monster-name">The Bowman</div>
+      </div>
+      <div class="hp-bar">
+        <div class="hp-bar-fill" style="width: 73%"></div>
+        <div class="hp-bar-label">22 / 30</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─────────────── RIGHT: resolution panel ─────────────── -->
+  <div class="right">
+
+    <div class="right-header">
+      <div class="stat-icon health">
+        <div class="icon"></div>
+        <div><span class="v">4</span> / 4</div>
+      </div>
+      <div class="stat-icon spirits">
+        <div class="icon"></div>
+        <div><span class="v">16</span> / 20</div>
+      </div>
+      <div class="header-spacer"></div>
+      <div class="pill">AC <span class="v">14</span></div>
+      <div class="pill">Longsword <span class="v">1d8 + 1</span></div>
+    </div>
+
+    <div class="log">
+
+      <div class="scene-header">
+        <h2>An arrow at your throat</h2>
+        <div class="sub">He rises out of the ferns with the bow already drawn, and does not call you to halt.</div>
+      </div>
+
+      <div class="round-marker">Round 1 &middot; you struck first</div>
+
+      <div class="log-entry player">
+        <div class="actor">You</div>
+        <div class="body">
+          Longsword swing &middot; <span class="roll hit">17 vs AC 11</span> &middot; 6 damage.
+        </div>
+      </div>
+
+      <div class="log-entry enemy">
+        <div class="actor">Bowman</div>
+        <div class="body">
+          Looses an arrow &middot; <span class="roll miss">9 vs AC 14</span> &middot; the shaft sings past your ear.
+        </div>
+      </div>
+
+      <div class="round-marker">Round 2</div>
+
+      <div class="log-entry player">
+        <div class="actor">You</div>
+        <div class="body">
+          Longsword swing &middot; <span class="roll miss">8 vs AC 11</span> &middot; he turns inside the cut.
+        </div>
+      </div>
+
+      <div class="log-entry enemy">
+        <div class="actor">Bowman</div>
+        <div class="body">
+          Looses an arrow &middot; <span class="roll hit">19 vs AC 14</span> &middot; 4 damage.
+          <div style="color: var(--text-muted); margin-top: 4px;">Spirits ablate &minus;4.</div>
+        </div>
+      </div>
+
+      <div class="round-marker">Round 3</div>
+
+      <div class="log-entry player">
+        <div class="actor">You</div>
+        <div class="body">
+          Longsword swing &middot; <span class="roll crit">crit! 20 vs AC 11</span> &middot; 14 damage.
+          <div style="color: var(--text-muted); margin-top: 4px;">The blade catches him across the ribs. He keeps his feet.</div>
+        </div>
+      </div>
+
+      <div class="log-entry enemy">
+        <div class="actor">Bowman</div>
+        <div class="body">
+          Pulls back into the green, nocking another arrow as he goes.
+        </div>
+      </div>
+
+      <div class="round-marker">Round 4 &middot; your turn</div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+
+      <div class="stance-row">
+        <div class="stance-label">Stance</div>
+        <div class="stance-toggle">
+          <button class="stance-btn">Aggressive</button>
+          <button class="stance-btn active">Balanced</button>
+          <button class="stance-btn">Defensive</button>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button class="btn primary">
+          <div class="btn-icon attack"></div>
+          <div>
+            Attack
+            <span class="btn-sub">d20 + 4 vs AC 11</span>
+          </div>
+        </button>
+        <button class="btn">
+          <div class="btn-icon item"></div>
+          <div>
+            Use item
+            <span class="btn-sub">3 in pack</span>
+          </div>
+        </button>
+        <button class="btn">
+          <div class="btn-icon flee"></div>
+          <div>
+            Flee
+            <span class="btn-sub">Cunning vs DC 12</span>
+          </div>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

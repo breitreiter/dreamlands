@@ -116,6 +116,9 @@ Ship-readiness: hosting, testing, polish, cleanup.
       `SwampPass.cs`, `HillPass.cs`) still references the old flat dirs (`grass_tufts/`,
       `farm_stuff/`, `bogs/`, `trees/`). Migrate code to load from
       `assets/map/decals/{plains,swamp,forest}/` tier-aware structure, then delete old dirs.
+- [ ] Mountain settlement decals invisible in deep mountains — a couple of the settlement
+      decals get buried by the tallest mountain peaks. Figure out the minimum image height
+      they need to render above peak silhouettes, then resize/repaint the offending decals.
 
 ### Cleanup
 

@@ -7,6 +7,7 @@ import type {
   BankResponse,
   DiscoveryInfo,
   NoticesResponse,
+  CombatListResponse,
 } from "./types";
 
 declare const __API_VERSION__: string;
@@ -114,6 +115,10 @@ export async function getInnServices(
 
 export async function combatBegin(id: string, encounterId: string): Promise<GameResponse> {
   return post(`${BASE}/${id}/combat/begin`, { encounterId });
+}
+
+export async function combatList(id: string): Promise<CombatListResponse> {
+  return get(`${BASE}/${id}/combat/list`);
 }
 
 export async function combatAction(

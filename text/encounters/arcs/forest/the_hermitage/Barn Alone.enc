@@ -1,0 +1,80 @@
+Barn Alone
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+The barn is long and low, straw-smelling, lit in strips by the gaps between the boards. A firepit in the middle, a cooking tripod, bedrolls laid along the near wall in military arrangement. Two men sit at the fire playing a card game with pebbles for stakes. A third leans against the far wall near the hayloft ladder, whittling with the idle absorption of someone on his ninth hour of idle. A fourth, younger than the rest and thinner, sits with his back to a support post, watching the yard through a gap in the boards. He does not look up when you come in.
+
+Edric is at a small table near the door, cleaning a sword blade with a rag. He sees you before you see him. You realize he must have been watching you cross the yard though the slats.
+
+He sets the rag down. Does not set the sword down.
+
+"Honorable guild trader." He gestures at the stool across from him. His voice is warm, the sort of warmth that takes care to announce itself. "Sit, please. Can I offer you anything? We have water." A glance toward the door, toward the cart. "We have considerably more than water, in fact, but I understand there is some confusion in the yard about what's on offer and what isn't."
+
+choices:
+
+* Ask about the wagon = What happened with the merchant [requires !tag hermitage.edric_ambush]
+  "What happened is we resolved a supply problem." He speaks without heat. "A merchant caravan on the east trail. Grain, salted pork, hard cheese. Four guards, a wagoner. I watched them two days and took them at dusk, where the trail cuts through the fold of a hill. No one died. No one was hurt worse than a knock to the head. We took the wagon. We left them the horses and a fair share of their own water. They will walk home and tell the story and be stood rounds over it for the next year."
+
+  He wipes a thumb along the blade, inspecting the edge.
+
+  "Fair better deal than we gave defeated enemies in the legion, friend."
+
+  He sets the sword on the table. Not toward you. Just down.
+
+  "What I did not anticipate, I will admit, is that the people I brought it to would rather watch it rot in the yard than carry it twenty paces to a kitchen. Three days now. You can smell it from here." A tilt of his head toward the door. "You tell me which of us is being ridiculous."
+  +add_tag hermitage.edric_ambush
+  +open "Barn Alone"
+
+* Ask why they came here = How did a squad of imperials end up in a barn [requires !tag hermitage.edric_why]
+  "Deserted." No softening. "Five of us. Posted to the plains wildlands on rotation. You know the posting? No? Count yourself lucky. Half-ruined forts, no relief, no mail, officers who cycled through every six months and cared about their next placement more than ours. We were told we were holding a line. In fact we were holding nothing. Patrolling empty ground for the honor of a flag none of us had seen in a year."
+
+  A shrug. The work done in the shoulders, none of it in the face.
+
+  "We walked. East, then south, then here. Heard the forest had a place in it that took in broken men. Got the story slightly wrong, as it turns out." A small, private smile. "But close enough to get us through the winter."
+  +add_tag hermitage.edric_why
+  +open "Barn Alone"
+
+* Ask about the Kesharat living here = The other deserters [requires !tag hermitage.edric_kesharat]
+  "Ah." He sits back.
+
+  He looks at you directly. Not past you, at you.
+
+  "Four of them. Squad. You can tell by how they move. They finish each other's sentences. I've had my eye on them. Disciplined. Quiet. The big one was a great fucking terror on the field, I expect, and the other three would die on her signal." He turns to one the card-players.
+
+  "Georgey, would you die on my signal?"
+
+  "Yeah, sure boss, whatever you say."
+
+  He taps the table with one finger.
+
+  "You see what I'm working with here. I've thought about it, trader. Kesharat and imperial together, here in the trees. Together we could hold this patch of ground. Keep the old folks safe. The devoted tend the chapel and the gardens and whatever pieties they find necessary, and we handle the parts of the world they find distasteful. Everyone benefits."
+  +add_tag hermitage.edric_kesharat
+  +open "Barn Alone"
+
+* Ask what he wants for this place = The larger picture [requires tag hermitage.edric_kesharat && !tag hermitage.edric_pitch]
+  He smiles. Almost unguarded.
+
+  "What I want is for this to become what it could be. Look, trader. You walk the roads. You know what the forest is. Nothing between the city and the settlements but trees, trails, a handful of exile camps, and this. A tower. A barn. Cleared fields. Good water. Room to grow. Put the right people in charge, this is a waystation within the year and a trade hub within three. No more scraping in the dirt for our dinners. We build the thing, and the dinners come to us."
+
+  A pause. The practiced sort that a briefing officer uses.
+
+  "You are Trade Guild. You are exactly the sort of person who sees the sense in it. The devoted will not. They are owls. They cannot see sunlight." He tips his head toward you. "Tell me I am wrong."
+
+  You say nothing. He takes this for more agreement than it is.
+  +add_tag hermitage.edric_pitch
+  +open "Barn Alone"
+
+* Notice the quiet soldier = The young one at the post [requires !tag hermitage.quiet_soldier_seen]
+  You let your eyes drift while Edric talks. The others in the barn are of a piece. Older, harder, settled into this like it is just another posting. The one at the post is not of a piece. Early twenties at most. Thin where the others are thick. He is not playing cards. He is not whittling. He is sitting with his back to a support post and watching the yard through a gap in the boards, and what he is watching is the monks at their morning work: bending in the garden rows, sweeping the flagstones, carrying water.
+
+  He is doing it with the blank attention of a man who does not know he is doing it.
+
+  Edric does not notice. Edric is mid-sentence about something else.
+  +add_tag hermitage.quiet_soldier_seen
+  +open "Barn Alone"
+
+* Return to the tower
+  "Come back when you have thought on it, trader. I am not going anywhere."
+
+  You cross the yard back to the tower. The cart sits where it sat.
+  +open "Tower"

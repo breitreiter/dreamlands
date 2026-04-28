@@ -1,7 +1,7 @@
 namespace Dreamlands.Encounter;
 
 /// <summary>
-/// Parsed root model for a `.cmb` combat encounter (one named monster set piece).
+/// Parsed root model for a `.fight` combat encounter (one named monster set piece).
 /// Companion to <see cref="Encounter"/> for narrative encounters.
 /// </summary>
 public sealed class CombatEncounter

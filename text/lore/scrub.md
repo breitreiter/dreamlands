@@ -104,6 +104,26 @@ Kesharat settlements trade actively but bureaucratically. Merchants must registe
 
 ---
 
+### Kesharat Military
+
+The Kesharat military is a modern professional army, built in the Lattice's bureaucratic image. Ranks and command chains are standardized. An order of battle is maintained, updated, and audited. Every soldier has a serial number. Every unit has a registered banner, a muster roll, and a standing allocation of rations, ammunition, and promotion quotas.
+
+Active Kesharat service looks like what you would expect from any state army: uniforms, parade-ground drills, signal discipline, medical corps, engineers. Officers rotate postings on a schedule. Promotion is procedural. Paperwork is constant and precise. The forms feel morally weightless to outsiders, because for insiders the institution does the moral work, so the individual does not have to.
+
+**Ranks:** Standardized across the service. From the bottom: Private, Corporal, Sergeant, Lieutenant, Captain, Major, Colonel, General. Rank is strictly enforced and visibly displayed on the uniform (sashes, pins, shoulder insignia).
+
+**Stands:** The fundamental Kesharat military unit, numbered and banner-bearing. Roughly analogous to a regiment. Each Stand subdivides into Companies, Platoons, and Fire Teams. Meilin's squad, for example, was a fire team in the Fourth Stand.
+
+**Deserters:** Kesharat deserters carry their training, their rank, their unit identification, and their habits with them. They do not become different people when they walk out. They remain soldiers in their own self-understanding, often with continued command structure (a former team leader is still a sergeant; her surviving team are still under her). What they have rejected is the current Kesharat leadership and the Lattice-inflected mission, not soldiering as such. This makes them unusually effective as free agents and unusually dangerous as opponents: they have modern infantry training, a working chain of command, and no longer answer to anyone.
+
+**Casualty Recognition Form:** When a soldier dies, the formal recognition given by their commanding officer invokes rank, full name, unit, and command responsibility:
+
+> *"[Rank] [Given] [Family], [Stand], [Company/Platoon]. Killed in action. [He/She] was under my command."*
+
+This is the order of battle speaking. The officer is claiming the dead as theirs by naming the command relationship out loud, because in Kesharat military culture, an officer's dead are hers to bury.
+
+---
+
 ### The Mirror
 
 Every interaction between Kesharat and Tashkari is loaded with the unspoken recognition: *"You're us, but wrong."* Both directions.

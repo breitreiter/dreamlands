@@ -47,6 +47,7 @@ interface GameContextValue extends GameState {
     path?: { x: number; y: number }[];
   }) => Promise<GameResponse | null>;
   doCombatAction: (body: { action: string; stance?: string; band?: string }) => Promise<GameResponse | null>;
+  doCombatBegin: (encounterId: string) => Promise<GameResponse | null>;
   clearError: () => void;
   setCampReport: (report: CampReport) => void;
   clearCampReport: () => void;
@@ -223,6 +224,32 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [state.gameId],
   );
 
+  const doCombatBegin = useCallback(
+    async (encounterId: string): Promise<GameResponse | null> => {
+      if (!state.gameId) return null;
+      setState((s) => ({ ...s, loading: true, error: null }));
+      try {
+        const result = await api.combatBegin(state.gameId, encounterId);
+        setState((s) => ({
+          ...s,
+          response: s.response
+            ? { ...s.response, ...clearStale(result), ...stripNulls(result) }
+            : result,
+          loading: false,
+        }));
+        return result;
+      } catch (e) {
+        setState((s) => ({
+          ...s,
+          loading: false,
+          error: e instanceof Error ? e.message : "Unknown error",
+        }));
+        return null;
+      }
+    },
+    [state.gameId],
+  );
+
   const clearError = useCallback(() => {
     setState((s) => ({ ...s, error: null }));
   }, []);
@@ -237,7 +264,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   return (
     <GameContext.Provider
-      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, doCombatAction, clearError, setCampReport, clearCampReport }}
+      value={{ ...state, startNewGame, resumeGame, hasSavedGame: !!savedGameId, refreshState, doAction, doCombatAction, doCombatBegin, clearError, setCampReport, clearCampReport }}
     >
       {children}
     </GameContext.Provider>

@@ -1,0 +1,37 @@
+Aldus
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+He works the vine a while longer. You wonder if perhaps he didn't hear you.
+
+"Tell me something, while I have you. A man eats stolen bread. Another man starves beside the bread. Which of them is the thief?"
+
+choices:
+
+* "The one who ate it." = Culpability follows the act.
+    He nods once, as if you had answered a different question.
+
+    "And when the bread is gone," he says, "and only the starving remain. What then?"
+
+    He does not wait for an answer. His hand goes back to the soil.
+    +open Garden
+
+* "The one who let him eat." = The bystander is complicit.
+    He reaches into the dirt and sets a small pebble on the path between you.
+
+    "It was not here. Now it is. Soon it will be somewhere else."
+
+    He does not look up. His hand returns to the vines.
+    +open Garden
+
+* "Neither. The man who baked the bread." = The question presumes a world that did not feed them both.
+    Something at the corner of his mouth moves. It is not quite a smile.
+
+    "You are not the first to answer that way."
+    +open Garden
+
+* "I have no answer." = Decline the question.
+    He is quiet for a long time. You think he may have forgotten you.
+
+    "Good," he says at last, mildly. Whether you have passed a small test or failed one is not clear.
+    +open Garden

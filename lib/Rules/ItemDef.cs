@@ -436,9 +436,9 @@ public sealed class ItemDef
             ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 4 },
             Biome = "forest", ShopTier = 2, Cost = 80,
         },
-        ["windstriders"] = new()
+        ["scarecrow_boots"] = new()
         {
-            Id = "windstriders", Name = "Windstriders", Type = ItemType.Boots,
+            Id = "scarecrow_boots", Name = "Scarecrow Boots", Type = ItemType.Boots,
             ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 5 },
         },
 

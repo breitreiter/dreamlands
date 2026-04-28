@@ -1,0 +1,51 @@
+# The Hooded — swamp T2 (Revënakh-witch)
+
++title The Hooded
++image monsters/swamp_mage.png
++repool false
++stats hp=30 ac=11 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.50 right=1.0 bottom=0.78
+
++move press
+  intent: attack
+  preview: "The shape inside the hood resolves slightly. Your skull warms."
+  timer: 0
+  sprite: hooded_press
+  anchor: center
+  narration: "Behind your eyes, very gently, the bog pushes."
+  > deal_damage 1d4
+
++move remembering
+  intent: heavy_attack
+  preview: "The hood turns toward you and finds, at last, the right geometry."
+  timer: 3
+  sprite: hooded_remembering
+  anchor: top
+  narration: "Revënakh remembers a witch through her, and through her remembers you."
+  > deal_damage 2d8
+  > inflict_condition exhausted dc 12 33%
+
++intro
+You see it first as a darker patch in the bioluminescent moss along the
+stone — a robed shape, or what wants to be a robed shape, edges blurring
+into the wet light around it. Up close the impression does not resolve.
+It is the suggestion of a woman in a deep hood. It is the suggestion of
+a hand. It is the suggestion of a face turning toward you and not
+finding the geometry quite right and trying again. This is not the
+witch in the Shrine Quarter and her hedge-pharmacology. This is what
+Revënakh has been remembering, every time it has remembered a witch,
+all of them at once. Your skull goes warm. Behind your eyes, very
+gently, the bog begins to push. If you let it push long enough, you
+understand, you will be one more thing the swamp remembers.
+
++win
+> +give_gold 10
+> +add_tag killed_the_hooded
+The shape inside the hood loses interest in being a shape. The robe
+sinks, deflates, soaks dark into the moss. The pressure behind your
+eyes drains away in a single long beat. The bioluminescence in the
+nearby stones goes back to its usual indifference.
+
++lose
+> +damage_spirits 100

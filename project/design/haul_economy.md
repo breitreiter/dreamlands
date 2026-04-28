@@ -118,7 +118,7 @@ Armor occupies one pack slot. Three armor classes with different stat profiles:
 | Heavy Work Boots | Small | 15 | +2 | Mountains | 1 |
 | Riding Boots | Medium | 40 | +3 | Scrub | 2 |
 | Trail Boots | Large | 80 | +4 | Forest | 2 |
-| Windstriders | — | — | +5 | — | — |
+| Scarecrow Boots | — | — | +5 | — | — |
 
 ### Tools
 

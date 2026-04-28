@@ -37,7 +37,7 @@
 - reward: +2 pack size
 ### foresters_post — The Forester's Post (T2)
 - key: Bushcraft > 4
-- reward: windstriders — Windstriders (Exhaustion +5)
+- reward: scarecrow_boots — Scarecrow Boots (Exhaustion +5)
 ### the_lodge — The Lodge (T3)
 - key: hunters_journal — Hunter's Journal (arc key)
 - reward: the_old_tooth — Kopis (Dagger, Combat +1, Foraging +5)

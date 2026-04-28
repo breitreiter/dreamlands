@@ -1,0 +1,113 @@
+Barn Meilin
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+The three of you at the small table by the door. Meilin on one side, Edric on the other, you at the head. A clay cup of water in front of each. The sword that was on the table earlier is propped against the wall, within his reach but no longer between you. The other imperials have found reasons to be elsewhere.
+
+Both of them are waiting for you to begin.
+
+choices:
+
+* Propose an alliance = Imperials and Kesharat turn the hermitage into an armed camp
+  You do not waste words on preamble. You put the shape of it on the table plainly. Meilin's team and Edric's squad, under one banner, here. The hermitage as an armed camp. The devoted keep the chapel and the fields and the work they already do. The warriors hold the perimeter and handle the world when the world comes for this place. One compound. One future.
+
+  Meilin's eyebrows lift about a finger's width. Edric's do not move at all, which is how you know you have caught him flat. Neither of them expected this from you.
+
+  Edric recovers first. "That is an interesting proposal, trader."
+  @if check negotiation hard {
+    You turn to Meilin. "Your heart is divided. On the one hand, you want to set down your blade and leave your old life behind. On the other, you'd kill every man in here to protect Aldous. I respect that. I'd wager Edric respects the gravity of your conviction as well." Edric blanches, but doesn't speak to disagree.
+
+    "Tell me you haven't worried for the safety of this place. I know I'm asking a great deal, but you know this place would be safer for having the both you protecting it."
+
+    Meilin looks at her hands for a long while. Then at Edric. Then at you.
+
+    "Alright, Rattlecoin. I'll need to talk to my squad." But you know they will follow her, whatever she decides.
+
+    The three of you walk across the yard together. You find Osric in the tower common room. He hears you out without interrupting. When you have finished he exhales a long breath.
+
+    "I will tell the others," he says. "Come to the courtyard at sundown."
+
+    The afternoon is long. News travels through the compound. By the time the bell rings, the yard is already gathered, some by twos and threes at the edges, some closer in. The devoted, most of them. Edric's squad, all of them, including the young one who stands with his hands folded and his eyes on the flagstones. Meilin's team in a tight cluster, shoulders touching.
+
+    A few of the devoted are not here. Aldous is not here.
+
+    Osric stands on the chapel step and reads the arrangement in the plainest words available. He reads it twice, the second time more slowly. He reads the names of those who have left. Aldous first. He does not explain. No one asks.
+
+    "He wanted me to go with him," Osric says, quietly, near the end. "I wanted to go, once last journey with the old scarecrow." He looks at the gathered. "But I am staying. Someone has to speak the words, now that Aldous will not be here to say them."
+
+    He steps down. The gathering does not disperse so much as dissolve, by small clusters, into its new shape. Edric and Meilin shake hands once, properly this time. Meilin nods to Osric. Osric looks at you.
+
+    "Aldous left these behind," Osric says. He has the boots already folded across his forearms, as if he knew he would need them. Plain officer's make, the leather dark with years, the soles twice-resoled with care. "Last bit of his old uniform. I... I can't wear them, but perhaps you can find a use for them."
+
+    You take them.
+
+    You put them on. They fit perfectly. You walk out of the compound into the forest road with the evening light failing and the hermitage, newly an armed camp, quiet behind you.
+    +add_item scarecrow_boots
+    +finish_dungeon
+  } @else {
+    Meilin leans over the table like a storm cloud. She strikes the table and the clay cups hop briefly.
+
+    "Rattlecoin, are you mad? You want me to do what? Become this man's lieutenant? In the house Aldous built?"
+
+    Before you can answer, Edric is already waving the whole idea away, too quickly, too loudly.
+
+    "Gods, no. Trader, I am flattered, truly. But I have my own men. My own plans. We were riding out any week now, in truth. Hardly can imagine we'd tie ourselves down to a boring old place like this."
+
+    It is the worst performance of indifference you have seen in a while. You and Meilin both watch it without comment. Edric becomes aware, midsentence, that he is not fooling either of you, and finishes with a dignity-preserving cough.
+
+    "In any case. No. But thank you for the thought."
+    +open "Barn Meilin"
+  }
+
+* Let it run. She came for this. = Let Edric keep talking, let Meilin keep listening [requires tag hermitage.meilin_plan_known]
+  You step back from the conversation and let the two of them work. Edric takes your silence for interest and keeps going. He sketches a northern watch into the dust with his finger. He points at where he would put a quartermaster's tent if this were a garrison. He names the approaches through the trees that an experienced man would come up. Meilin asks a question here, a question there, each of them so harmless in isolation that Edric answers without hesitation. He is warming to her. He thinks he is building something.
+
+  Then she asks one that lands wrong.
+
+  "Any of your men archers?"
+
+  Edric's finger stops moving in the dust. His eyes come up off the map. Not alarm. Not yet. Just a soldier's pause, the moment before the instinct turns on.
+
+  "Why do you ask?"
+
+  You laugh. The kind of laugh you use when a client's child has just said something wildly inappropriate and you need everyone in the room to reset. You stand up and wave a hand at the two of them.
+
+  "Gods, this is boring. Meilin, honestly. We do not have all afternoon for you to inspect an imperial crossbow. I promised Osric we would be back for the bread and we are already late." To Edric, brightly: "Thank you for the water, truly. We will leave you to your drawing."
+
+  Meilin catches up a beat late, but she catches up. She drains her cup, sets it down with a nod, and follows you out.
+
+  You are across the yard before Edric has closed his mouth.
+
+  Halfway back to the tower Meilin puts her hand on your shoulder and leaves it there. Her grip is gentle and very deliberate.
+
+  "That," she says, "was impressive. I owe you one, Rattlecoin. Truly." The hand falls. "I got greedy. It will not happen again."
+
+  At the tower door she stops you.
+
+  "You still on for tonight?"
+
+  You nod.
+
+  "Good."
+
+  The rest of the day is very long and very short. You do not remember supper. You remember the walk to the back of the compound, and Meilin's team waiting, quiet and ready, their weapons out of their hiding places and strapped on properly for the first time in years. You remember the walk across the yard in the dark. You remember the oiled hinges of the barn door making a sound no hinges should make, too smooth, too ready. You remember going in.
+
+  You do not remember the minute itself. You remember your hands afterward. You remember walking out into the yard and the moon being smaller than you expected.
+
+  In the morning you and the four Kesharat leave together, packs shouldered, weapons sheathed. Aldous is on the porch with his face turned toward you. He does not speak. You step through the gate and keep walking. Meilin falls in beside you at the treeline. She does not say anything for a long time. Then, quietly, she says, "thank you for that."
+
+  You walk.
+  +finish_dungeon
+
+* Return to the tower = The conversation is not going the way you'd hoped
+  You push your cup into the middle of the table and stand abruptly. Meilin arches an eyebrow.
+
+  You gesture to the water, "We thank you for the hospitality, but we promised Osric we'd be back swiftly."
+
+  Edric shrugs, "Suit yourself. See if you can talk some sense into the old man about the wagon. Just take a sack of grain. A symbolic gesture. It'd go a long way."
+
+  You say you'll see what you can do, and you and Meilin make the trek back to the tower.
+
+  Meilin is silent on the walk back. She keeps stopping to look back at the barn; you wonder if something important was left unsaid.
+
+  +open "Meilin Acts"

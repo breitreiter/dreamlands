@@ -3,7 +3,7 @@ using System.Globalization;
 namespace Dreamlands.Encounter;
 
 /// <summary>
-/// Parses .cmb monster encounter files. Token-driven, .enc-adjacent. Lines starting
+/// Parses .fight monster encounter files. Token-driven, .enc-adjacent. Lines starting
 /// with '+' at column 0 are top-level directives; '#' is a comment; blank lines are
 /// ignored. Block directives (move/intro/win/lose) consume subsequent lines until the
 /// next column-0 '+'. Inside a block, lines starting with '>' are mechanic lines.

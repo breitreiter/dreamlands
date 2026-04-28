@@ -1,0 +1,45 @@
+# Old Redleaf — forest T2 (bear)
+
++title Old Redleaf
++image monsters/forest_bear.png
++repool false
++stats hp=30 ac=11 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.25 right=1.0 bottom=0.70
+
++move swipe
+  intent: attack
+  preview: "Old Redleaf rolls its shoulders and sets its weight."
+  timer: 0
+  sprite: bear_swipe
+  anchor: center
+  narration: "It swipes a forepaw at you, claws splayed."
+  > deal_damage 1d4
+
++move slam
+  intent: heavy_attack
+  preview: "It rears onto its hind legs and lifts both forepaws."
+  timer: 3
+  sprite: bear_slam
+  anchor: top
+  narration: "Old Redleaf comes down with both paws, claws raking."
+  > deal_damage 2d8
+  > inflict_condition injured dc 12 25%
+
++intro
+You hear it first — the snap of brush thirty paces upslope, then the wet
+huff of breath. It comes down through the trees without hurry. Massive,
+grizzled, the fur at its shoulders silvered. When it stops to look at you,
+its eyes catch the canopy-light wrong, an ember-glow that holds steady when
+it shouldn't. The forest has gone quiet around you both. It rolls its
+shoulders, lowers its head, and starts to move.
+
++win
+> +give_gold 10
+> +add_tag killed_old_redleaf
+The bear settles in the leaves and does not rise again. Whatever held the
+ember-glow behind its eyes has gone out. The forest, slow to remember it
+was a forest, begins to make small noises again.
+
++lose
+> +damage_spirits 100

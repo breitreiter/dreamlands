@@ -241,6 +241,19 @@ export interface GameResponse {
   travel?: TravelInfo;
 }
 
+export interface CombatEncounterSummary {
+  id: string;
+  title: string;
+  category: string;
+  tier: number | null;
+  hp: number;
+  ac: number;
+}
+
+export interface CombatListResponse {
+  encounters: CombatEncounterSummary[];
+}
+
 export interface CombatIntentInfo {
   moveId: string;
   class: string;
@@ -251,6 +264,7 @@ export interface CombatInfo {
   encounterId: string;
   title: string;
   image: string | null;
+  biomeImage: string | null;
   introText: string;
 
   monsterHp: number;

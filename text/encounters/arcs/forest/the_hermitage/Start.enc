@@ -1,0 +1,23 @@
+The Hermitage
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+A clearing opens in the forest and a tower rises out of it. White granite, rough-dressed, four stories, pointed shingled roof. The kind you see standing alone in the plains, imperial signal towers or observation posts. Whatever it was meant to signal is long gone. From the looks of it, someone else is living there now. Smoke curls from a chimney and laundry is hung out to dry. There's a barn nearby, surrounded by cleared fields. Beans and corn, looks like. You can see a few figures moving near the barn.
+
+Between the barn and the tower, in the middle of the clearing, sits a wooden cart. Roped bundles on it. At this distance you cannot tell what is in them, but they look like provisions. Two men are standing near it, they seem to be arguing, or perhaps haggling. One is pointing vigorously, the other standing defensively, arms crossed.
+
+Neither has noticed you yet. If you walked on now, no one would be any the wiser.
+
+choices:
+
+* Enter the compound = Step through the open gate.
+    Nobody challenges you. You cross the packed-earth yard. The smell reaches you before the cart does: something under the canvas is sweet and turning.
+
+    The two men break off their argument as you close the distance. The older is a monk in a plain grey robe, close-cropped greying hair, the easy stance of a man who has had this argument before. The younger is barrel-chested, in imperial field kit with no insignia, a sword on his hip. He moves to put the cart between the two of you.
+
+    The monk's eyes flick to your hand. Guild signet, gold, plain to see. He knows exactly what it means. The imperial follows his glance and now he is looking at you differently too, sizing you up, scanning the tree line behind you.
+    +open "The Cart"
+
+* Continue along your path = Leave the hermitage to its business.
+    You step back from the gate and keep walking. The wall is soon lost in the trees, and the hermitage falls away behind you, what little sound it made fading into bird-chatter and wind. Whatever is going on down there, for the moment, is not your problem.
+    +flee_dungeon

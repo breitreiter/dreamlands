@@ -29,7 +29,7 @@ for (int i = 0; i < args.Length; i++)
     }
 }
 
-monsterPath ??= Path.Combine(AppContext.BaseDirectory, "Monsters", "gorzog.cmb");
+monsterPath ??= Path.Combine(AppContext.BaseDirectory, "Monsters", "gorzog.fight");
 playerPath ??= Path.Combine(AppContext.BaseDirectory, "Player.json");
 
 if (!File.Exists(monsterPath))
@@ -55,6 +55,6 @@ static void PrintHelp()
 {
     Console.WriteLine("Usage: combat-prototype [--seed <n>] [--monster <path>] [--player <path>]");
     Console.WriteLine();
-    Console.WriteLine("Runs an interactive combat against the given .cmb file (default: Monsters/gorzog.cmb).");
+    Console.WriteLine("Runs an interactive combat against the given .fight file (default: Monsters/gorzog.fight).");
     Console.WriteLine("Player stats come from Player.json (default: bundled file alongside the binary).");
 }

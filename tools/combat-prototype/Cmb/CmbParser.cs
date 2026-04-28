@@ -3,7 +3,7 @@ using System.Globalization;
 namespace CombatPrototype.Cmb;
 
 /// <summary>
-/// Parses .cmb monster encounter files. Token-driven, .enc-style. Lines starting with
+/// Parses .fight monster encounter files. Token-driven, .enc-style. Lines starting with
 /// '+' are directives; '#' is a comment; blank lines are ignored. Block directives
 /// (move/intro/win/lose) consume subsequent lines until the next '+' at column 0.
 /// </summary>

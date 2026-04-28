@@ -1,0 +1,47 @@
+# Vessel IV-N — scrub T2 (Color factory escapee)
+
++title Vessel IV-N
++image monsters/scrub_giant.png
++repool false
++stats hp=30 ac=11 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.10 right=1.0 bottom=0.65
+
++move stamp
+  intent: attack
+  preview: "A vent on its flank opens. The Color slips out and curls."
+  timer: 0
+  sprite: vessel_stamp
+  anchor: center
+  narration: "It brings a blocky limb down at you, plates still hissing."
+  > deal_damage 1d4
+
++move discharge
+  intent: heavy_attack
+  preview: "Every vent on the unit opens at once. The administrator backs away."
+  timer: 3
+  sprite: vessel_discharge
+  anchor: top
+  narration: "The Color discharges in a sweep that takes the road and you with it."
+  > deal_damage 2d8
+  > inflict_condition lattice_sickness dc 12 33%
+
++intro
+You smell it first — hot metal and something sweeter, like fruit gone
+wrong. The thing comes around the rail-cut on three legs and one limb
+that is not quite a leg, taller than a guardhouse, plated in Kesharat
+industrial gray. The Color leaks from a vent on its side in pulses you
+cannot quite see directly. A small man in administrator's whites is
+jogging behind it with a tablet, shouting calmly: "Stand clear of the
+unit. Stand clear of the unit." The unit does not stand clear of you.
+
++win
+> +give_gold 12
+> +add_tag killed_vessel_iv_n
+The vents close one by one. The Color seals itself back behind the gray
+plates and the unit settles where it stands. The administrator is
+nowhere in sight. Far up the rail-cut, a tablet is bleating an alert
+nobody is listening to.
+
++lose
+> +damage_spirits 100

@@ -69,7 +69,7 @@ public class GameData
         if (File.Exists(tacticalPath))
             TacticalBundle = Dreamlands.Tactical.TacticalBundle.Load(tacticalPath);
 
-        // Combat bundle: directory of .cmb files. Phase 1 looks for a "combat" sibling
+        // Combat bundle: directory of .fight files. Phase 1 looks for a "combat" sibling
         // of the encounter bundle, with a fallback to the prototype's monsters dir so
         // gorzog runs without world surgery.
         var combatDir = Environment.GetEnvironmentVariable("DREAMLANDS_COMBAT_DIR");

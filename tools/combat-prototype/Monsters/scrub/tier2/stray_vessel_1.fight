@@ -1,0 +1,50 @@
+# Stray Vessel — scrub T2 (Color-saturated warrior, Tashkari blade)
+
++title Stray Vessel
++image monsters/scrub_warrior_1.png
++repool false
++stats hp=30 ac=11 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.50 right=1.0 bottom=0.78
+
++move blade
+  intent: attack
+  preview: "The Color across its skin slows, gathers around the grip."
+  timer: 0
+  sprite: vessel_blade
+  anchor: center
+  narration: "The Tashkari curve cuts at you in a remembered hand."
+  > deal_damage 1d4
+
++move saturate
+  intent: heavy_attack
+  preview: "It plants its feet. The violet across its body floods to white."
+  timer: 3
+  sprite: vessel_saturate
+  anchor: top
+  narration: "It commits — the blade and the Color through it, both at once."
+  > deal_damage 2d8
+  > inflict_condition lattice_sickness dc 12 33%
+
++intro
+You see it first as a wrong color on the hillside above the dry
+riverbed — a saturated violet the sun does not explain. As you watch,
+it stands. The shape is vaguely a man's shape, taller than a man,
+naked, the skin pulsing in slow waves the way a cuttlefish pulses, hues
+you cannot quite settle on rolling across it from one side of the body
+to the other. There are no eyes you can find. There is no expression to
+find them with. In one hand it is holding a curved Tashkari blade,
+gripped correctly, and that is the only thing about it that still
+remembers being human. It steps down off the slope toward you. It does
+not speak. Whatever walks out of the great factory does not speak.
+
++win
+> +give_gold 12
+> +add_tag killed_stray_vessel_1
+The Color drains out of the body in a long, slow exhale, and what is
+left in the dust is something that looks for a moment like a man, and
+then less like one, and then not very much like anything at all. The
+blade holds its shape. You leave it where it falls.
+
++lose
+> +damage_spirits 100

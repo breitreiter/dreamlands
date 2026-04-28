@@ -1,0 +1,56 @@
+Tower
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+The tower's common room. Wood smoke, the smell of bread, a few monks at quiet work. Osric is here, by the hearth.
+
+choices:
+
+* Ask Osric about the hermitage = How did this place come to be? [requires !tag hermitage.asked_history]
+    Osric leans back against the hearth. "Brother Aldous founded this place. He was an imperial officer on the plains line during the reconquest, back when we still thought the empire might take the borderlands back. One of the Iron's heat beam took his sight. Said he saw something then, a vision. Said he was done with the legion and had to follow a new path. Those of us who served under him walked out with him. I knew about an old legion tower, and led us here."
+
+    "That was near forty years ago. We've taken in others since. A small band of Kesharat came through the forest some years back, soldiers who had deserted their own service for reasons of their own. You should talk with Meilin, she's younger, might have a different perspective on things."
+    +add_tag hermitage.asked_history
+    +open "Tower"
+
+* Ask Osric about the men in the barn = What does he think happens next? [requires !tag hermitage.asked_conversion]
+    "I believe they can be reached, given time. We were something near to them once. It took us years to lay any of it down. These men are still soldiers in their heads, but they are here. They cling to their weapons because they're afraid, they don't know a better way. But we can teach them."
+
+    "I just... I wish they hadn't gotten involved with the wagon."
+    +add_tag hermitage.asked_conversion
+    +open "Tower"
+
+* Visit the garden = Walk out behind the tower. [requires !tag hermitage.met_aldous]
+    An old man kneels at a garden bed, trying to thread a bean vine onto a peeled stake. His hands shake. His fingers keep missing. The folded cloth beneath his knees has slipped sideways and he has not noticed. Empty sockets under white-scarred lids.
+
+    He stops when he hears you, cocks his head. "Hello?" His voice is thin, uncertain. "I don't recognize your boots, stranger."
+    +add_tag hermitage.met_aldous
+    +open "Garden"
+
+* Find Meilin = Talk to the Kesharat woman Osric mentioned [requires tag hermitage.asked_history]
+    You cross the yard to a low outbuilding at the back of the compound. Voices inside, the cadence Kesharat. You knock once and push the door.
+    +add_tag hermitage.met_meilin
+    +open "Meilin"
+
+* Go to the barn alone = Speak with the imperial deserters
+    You cross the yard. The cart sits between the tower and the barn, still untouched.
+    +add_tag hermitage.met_edric
+    +open "Barn Alone"
+
+* Ask Osric to come with you to the barn = Speak with the imperial deserters [requires tag hermitage.asked_history && !tag hermitage.edric_cracked]
+    You explain what you want. Osric hears you out, nods once, and sets aside the bowl he was eating from. "Alright. Let me pull on a cleaner robe." He is back within the minute. The two of you cross the yard together, unhurried, the way you would walk to a neighbor's house and not to a confrontation.
+    +add_tag hermitage.met_edric
+    +open "Barn with Osric"
+
+* Go to the barn with Meilin = Bring Meilin to meet Edric [requires tag hermitage.meilin_accompanies && !tag hermitage.edric_engaged]
+    You cross the yard together. Meilin is half a step behind your left shoulder, which is not where you would stand by choice but is apparently where she has decided you belong. She is humming something under her breath. You do not recognize the tune.
+
+    Edric sees you coming through the gaps in the barn boards and is already standing when you reach the door. He opens it himself, which is a courtesy, and which also lets him see both of you at once. His eyes settle on Meilin a beat longer than on you. Not surprise. He has watched her work in the yard for a month. But she has never stood this close before, nor looked him in the face.
+
+    "Please," he says. "I was wondering when we would meet properly."
+
+    "Likewise," Meilin says. She says it slowly, measured, the way you say the word "likewise" when you mean it. Then she steps past him into the barn.
+
+    The three of you settle at the small table by the door. Edric pours water into three clay cups. The other imperials retreat without being asked, the card game abandoned, the young soldier at the post drifting toward the back of the barn.
+    +add_tag hermitage.met_edric
+    +open "Barn Meilin"

@@ -1,0 +1,82 @@
+Meilin
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+The back of the compound: two low rooms sharing a thin wall. The first is a bunkroom, five cots made up with a soldier's economy. The second has a table, four stools, a kettle dark with soot on the coals, and Meilin.
+
+She is absurdly large, even seated. Shoulders like a draft animal's, forearms that strain the worn fabric of her sleeves. The low ceiling would have her ducking if she stood. She does not stand. She raises her clay cup in salute, grins, and with one boot-tip hooks the stool across from her out from under the table.
+
+"Well you're a fancy one. I can hear your coinpurse jingle from here, friend. Going to call you Rattlecoin."
+
+"Sit. Tea?"
+
+There is tea. You are sitting. You don't remember agreeing to either. She plants her elbows on the table and watches you over the rim of the cup, and you realize that under the grin, behind it, she has been reading you since you came through the door. Friendly. Steady. And doing arithmetic.
+
+choices:
+
+* "Who are you?" = How does a Kesharat end up in a hermitage? [requires !tag hermitage.meilin_whoami]
+  "Deserter. Same as them." She tilts her head toward the wall that faces the barn. "Different war. Four of us walked out of a posting we shouldn't have been sent on. Walked a long way after. Forest was where the walking ended. Osric found us. Aldous told us to put the swords down and see if our hands were good for anything else."
+
+  She looks at her hands. They are enormous.
+
+  "Turns out gardening. And bread. I make a decent bread." She shrugs with her whole frame. "He saved all four of us. You should know that about this place. Whatever else. It saves people."
+  +add_tag hermitage.meilin_whoami
+  +open "Meilin"
+
+* Ask about the deserters in the barn = What does she make of them? [requires !tag hermitage.meilin_deserters]
+  Something crosses her face. It is gone before you are certain it was there. She is smiling again.
+
+  "Edric's alright. I mean, he is not alright. But I've met worse. Soldier who can't stop being one. Got shit posting after shit posting until something in him broke, and now he's here with four men and no idea what to do next." A shrug. "I get it. Been him. Not exactly. Close enough."
+
+  She takes a sip. Sets the cup down with a care that doesn't match the rest of her.
+
+  "One to watch is the young one. Sits apart. Doesn't drink with the others. Mornings, I see him at the barn door watching the monks at their rounds. He thinks he's bored." She looks at you over the rim. "He isn't. That one's leaving them. He doesn't know it yet."
+  +add_tag hermitage.meilin_deserters
+  +open "Meilin"
+
+* Ask what she thinks happens next = How does this end? [requires !tag hermitage.meilin_next]
+  She laughs, loud enough to carry through the wall into the bunkroom. "Gods. Straight to it. I like you, Ring-hand."
+
+  The laugh stops. She doesn't.
+
+  "Honest answer, I don't know. The devoted have a plan, which is patience and ministry. Worked on me. I was already trying to leave. These men aren't. Osric thinks they can be converted, given time. Aldous doesn't say. Either way, robbing someone was pretty stupid. Puts a target on all of us."
+
+  She turns the cup a quarter-turn. Another.
+
+  "So something gives. I've been running it in my head every night for a month. Nothing comes out clean, Rattlecoin."
+
+  She looks up.
+
+  "If you've got an idea, I am very much listening."
+  +add_tag hermitage.meilin_next
+  +open "Meilin"
+
+* Ask her to come with you to the barn = Bring her to meet Edric [requires !tag hermitage.meilin_accompanies]
+  @if check negotiation medium {
+    She is quiet a moment. Then she nods, slow.
+
+    "Alright. But if I go, you go with eyes open." She pushes the cup aside and leans across the table, and the room is smaller than it was. Her voice stays even. "I've been thinking about this for a month, and the thinking has arrived somewhere. Me and mine, we can take them. Quietly. One night. Nobody in the yard knows until morning. I've offered to own it. I walk out after and don't come back. Aldous will be disappointed in me. He often is. But he keeps his tower and his garden."
+
+    She says it the way you'd say there's weather coming.
+
+    "I want to see how Edric's got patrols setup, his sightlines, where they sleep, how discipline is holding. You broker peace, brilliant. You don't, well, you know how it's going to go.""
+
+    She watches your face.
+
+    "Not asking your blessing, Rattlecoin. Telling you, because I think I can trust you." A small shrug. "You coming?"
+
+    You nod. She drains the cup and stands, and the room adjusts around her.
+    +add_tag hermitage.meilin_plan_known
+    +add_tag hermitage.meilin_accompanies
+  } @else {
+    "Sure." She is already standing before the word is out, stool scraping back. "Let's go say hello."
+
+    On her way past she claps you on the shoulder, and it is a serious blow. You are going to feel that tomorrow. She is at the door before you are on your feet, cheerful and unhurried, waiting.
+    +add_tag hermitage.meilin_plan_hidden
+    +add_tag hermitage.meilin_accompanies
+  }
+  +open "Tower"
+
+* Return to the tower
+  She waves you off with the cup. "Come back any time, Rattlecoin. Gets dull in here."
+  +open "Tower"

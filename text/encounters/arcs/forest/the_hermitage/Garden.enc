@@ -1,0 +1,41 @@
+Garden
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+The man seems small in the dirt. Puttering at work any of the younger brothers could do in a minute. Something to fill the hours while the rest carry the weight of the place.
+
+choices:
+
+* "Who are you?" [requires !tag hermitage.aldous_whoami]
+    The old man smiles, and gazes at you with sightless eyes.
+
+    "Just an old bag of sticks, here to keep the starlings away. Once a soldier, but you didn't ask that. But you must mean my name. I am called Aldous. Who are you stranger, and I don't mean your name."
+
+    You explain you are a guild trader, a wanderer walking a nearby road.
+
+    "And you still wear those fine rings?"
+
+    You assure him you do.
+    +add_tag hermitage.aldous_whoami
+    +open Garden
+
+* "Osric says you fought together" [requires !tag hermitage.aldous_fought && tag hermitage.aldous_whoami]
+    "Osric says a lot of things. I think, even after all this time, he's still a little proud of what we did back then. Tell me, guild trader, have you served? Have you seen war?"
+
+    You have not.
+
+    "And yet you carry a weapon, even here in the garden. Perhaps you mean to cut the high grass on the hill?"
+
+    You explain you were never asked to disarm.
+
+    "Of course. I forget the new rules."
+    +add_tag hermitage.aldous_fought
+    +open Garden
+
+* "What do you make of the deserters?" [requires !tag hermitage.aldous_deserters]
+    +add_tag hermitage.aldous_deserters
+    +open Aldus
+
+* Return to the tower
+    You walk back to the tower, uncertain whether you've gotten any answers.
+    +open Tower

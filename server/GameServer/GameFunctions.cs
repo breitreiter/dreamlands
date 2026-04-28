@@ -2061,6 +2061,32 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     // ── Combat ──
 
+    [Function("CombatList")]
+    public IActionResult CombatList(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "game/{id}/combat/list")] HttpRequest req,
+        string id)
+    {
+        // Debug-only affordance: lists all loaded .fight encounters so the picker
+        // overlay in Explore can let the developer fight any of them. Players
+        // never reach this endpoint via the normal play path.
+        if (data.CombatBundle == null)
+            return new OkObjectResult(new { encounters = Array.Empty<object>() });
+        var list = data.CombatBundle.Encounters
+            .Select(e => new CombatEncounterSummary {
+                Id = e.Id,
+                Title = e.Title,
+                Category = e.Category,
+                Tier = e.Tier,
+                Hp = e.Stats.Hp,
+                Ac = e.Stats.Ac,
+            })
+            .OrderBy(e => e.Tier ?? int.MaxValue)
+            .ThenBy(e => e.Category, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(e => e.Title, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        return new OkObjectResult(new CombatListResponse { Encounters = list });
+    }
+
     [Function("CombatBegin")]
     public async Task<IActionResult> CombatBegin(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/{id}/combat/begin")] HttpRequest req,
@@ -2089,6 +2115,9 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             return new BadRequestObjectResult(new { error = ex.Message });
         }
+
+        if (turn.PlayerDied)
+            return await CombatRescue(player, session);
 
         await store.Save(player);
         return new OkObjectResult(BuildCombatResponse(session, turn));
@@ -2135,8 +2164,43 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }
 
         var turn = Dreamlands.Orchestration.CombatOrchestrator.Step(session, action);
+
+        if (turn.PlayerDied)
+            return await CombatRescue(player, session);
+
         await store.Save(player);
         return new OkObjectResult(BuildCombatResponse(session, turn));
+    }
+
+    /// <summary>
+    /// Apply the standard rescue (strip purchasables, reset gold, teleport to chapterhouse,
+    /// full recovery, day++) when a combat resolves with the player dead. Returns a
+    /// "rescued" response so the client drops into the rescue screen instead of the
+    /// combat-resolved Defeat panel — the rescue surface IS the death screen per
+    /// project/combat/landing_plan.md.
+    /// </summary>
+    async Task<IActionResult> CombatRescue(Dreamlands.Game.PlayerState player, Dreamlands.Orchestration.GameSession session)
+    {
+        var sc = data.Map.StartingCity;
+        var rescue = Dreamlands.Game.Rescue.Apply(player, sc?.X ?? 0, sc?.Y ?? 0, data.Balance);
+        // Combat is over; clear lingering combat session state so the next request
+        // routes through normal exploring, not stuck in InCombat.
+        player.ActiveCombat = null;
+        session.Mode = Dreamlands.Orchestration.SessionMode.Exploring;
+        await store.Save(player);
+        return new OkObjectResult(new GameResponse
+        {
+            Mode = "rescued",
+            Status = BuildStatus(player),
+            Rescue = new RescueInfo
+            {
+                LostItems = rescue.LostItems,
+                GoldLost = rescue.GoldLost,
+            },
+            Node = BuildNodeInfo(session.CurrentNode, player, session),
+            Exits = BuildExits(session),
+            Inventory = BuildInventory(player),
+        });
     }
 
     GameResponse BuildCombatResponse(GameSession session, Dreamlands.Orchestration.CombatOrchestrator.CombatTurn turn)
@@ -2187,6 +2251,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             EncounterId = encounter?.Id ?? state?.EncounterId ?? "",
             Title = encounter?.Title ?? "",
             Image = string.IsNullOrEmpty(encounter?.Image) ? null : encounter.Image,
+            BiomeImage = BuildCombatBiomeImage(encounter),
             IntroText = introEvt?.Text ?? encounter?.Intro ?? "",
 
             MonsterHp = monsterHp,
@@ -2223,6 +2288,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
             Lines = lines,
         };
+    }
+
+    // Vignette path relative to assets/vignettes, derived from the encounter's
+    // category ("forest/tier2") + tier. Matches the convention used by Explore
+    // and Encounter screens: "{biome}/{biome}_tier_{n}_1".
+    static string? BuildCombatBiomeImage(Dreamlands.Encounter.CombatEncounter? encounter)
+    {
+        if (encounter is null || encounter.Tier is null) return null;
+        var biome = encounter.Category.Split('/').FirstOrDefault();
+        if (string.IsNullOrEmpty(biome)) return null;
+        return $"{biome}/{biome}_tier_{encounter.Tier}_1";
     }
 
     static string RenderCombatEvent(Dreamlands.Combat.CombatEvent evt) => evt switch

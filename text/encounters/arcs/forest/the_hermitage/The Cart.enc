@@ -1,0 +1,28 @@
+The Cart
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+"Friend," the monk says, hands going up low. "Before anything else. Are you here for the wagon? There's been a misunderstanding, and I'd like a chance to explain."
+
+The imperial has not moved from behind the cart. His weight is on his back foot.
+
+choices:
+
+* "I don't know anything about the wagon." = Clear the air before anyone does something stupid.
+    You hold your hands open. "I saw your tower from the road, but no settlement on the map. I came to have a look. I hope I haven't offended."
+
+    The imperial takes a long look, measuring, and comes to his own conclusion. He steps back from the cart.
+
+    "Right," he says, mostly to himself. "Edric will want to hear about this. He's not going to be happy." He makes his way across the yard to the barn without looking back.
+
+    The monk lets out a breath he has been holding for a while. "Apologies. I'm Brother Osric. We are in a bit of a pickle at the momment." He tips his head toward the tower. "Walk with me?" You nod.
+
+    "We're a small order, mostly former military folks. We take vows to leave that life behind. We help each other heal, find some measure of peace."
+
+    "The men in the barn are imperial deserters. Came in a month ago. We told them we didn't allow weapons. Their leader, Edric, asked us how we meant to stop them. We have no wish for violence here. He said they would quarter in our barn, and that's how it's been since then."
+
+    He gestures back at the cart without looking at it. "Yesterday they brought that. Smoked meat, grain. Robbed from a merchant on the road. Edric says they 'requisitioned' it." Osric sighs, "there will be consequences to pay for that. And our order will have nothing to do with banditry."
+
+    You have reached the tower door. He turns to you. "Come inside. There are others you should meet."
+    +add_tag hermitage.met_osric
+    +open "Tower"

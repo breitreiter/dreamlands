@@ -393,7 +393,7 @@ BOOTS
   heavy_work_boots    Heavy Work Boots    Exhausted +2   mountains T1  15g
   riding_boots        Riding Boots        Exhausted +3   scrub T2   40g
   trail_boots         Trail Boots         Exhausted +4   forest T2  80g
-  windstriders        Windstriders        Exhausted +5   (arc/reward only)
+  scarecrow_boots     Scarecrow Boots     Exhausted +5   (arc/reward only)
 
 TOOLS
 ------------------------------------

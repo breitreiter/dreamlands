@@ -440,6 +440,7 @@ public class CombatInfo
     public string EncounterId { get; init; } = "";
     public string Title { get; init; } = "";
     public string? Image { get; init; }
+    public string? BiomeImage { get; init; }
     public string IntroText { get; init; } = "";
 
     public int MonsterHp { get; init; }
@@ -477,6 +478,21 @@ public class CombatIntentInfo
     public string MoveId { get; init; } = "";
     public string Class { get; init; } = "";
     public string Text { get; init; } = "";
+}
+
+public class CombatEncounterSummary
+{
+    public string Id { get; init; } = "";
+    public string Title { get; init; } = "";
+    public string Category { get; init; } = "";
+    public int? Tier { get; init; }
+    public int Hp { get; init; }
+    public int Ac { get; init; }
+}
+
+public class CombatListResponse
+{
+    public List<CombatEncounterSummary> Encounters { get; init; } = new();
 }
 
 public class CombatActionRequest

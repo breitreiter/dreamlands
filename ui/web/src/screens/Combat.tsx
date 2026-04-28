@@ -18,7 +18,7 @@ import MaskedIcon from "../components/MaskedIcon";
  * the button row in a future polish pass.
  */
 export default function Combat({ state }: { state: GameResponse }) {
-  const { doCombatAction, doAction, loading } = useGame();
+  const { doCombatAction, refreshState, loading } = useGame();
   const { combat } = state;
   const logRef = useRef<HTMLDivElement>(null);
 
@@ -40,25 +40,23 @@ export default function Combat({ state }: { state: GameResponse }) {
     <div className="flex h-screen overflow-hidden bg-page text-primary">
       {/* ─── Left: vignette + monster ─── */}
       <div className="relative w-[45%] shrink-0 bg-parchment overflow-hidden">
-        {combat.image && (
+        {combat.biomeImage && (
           <img
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "brightness(0.55) saturate(0.75)" }}
-            src={`/world/assets/vignettes/${combat.image}`}
+            style={{ filter: "brightness(0.35) saturate(0.7)" }}
+            src={`/world/assets/vignettes/${combat.biomeImage}.webp`}
             alt=""
           />
         )}
-        <div className="absolute inset-0 flex items-end justify-center">
+        <div className="absolute inset-x-0 bottom-0 top-32 flex items-end justify-center">
           {combat.image && (
             <img
-              className="max-h-[82%] max-w-[82%] object-contain"
+              className="w-full h-full object-contain object-bottom"
               style={{
-                objectPosition: "bottom",
-                transform: "translateY(6%)",
                 filter:
                   "drop-shadow(0 0 6px rgba(0,0,0,0.95)) drop-shadow(0 0 18px rgba(0,0,0,0.85)) drop-shadow(0 0 40px rgba(0,0,0,0.65)) drop-shadow(0 12px 24px rgba(0,0,0,0.6))",
               }}
-              src={`/world/assets/monsters/${combat.image}`}
+              src={`/world/assets/${combat.image}`}
               alt={combat.title}
               onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
@@ -120,7 +118,7 @@ export default function Combat({ state }: { state: GameResponse }) {
           {combat.resolved ? (
             <Button
               size="lg"
-              onClick={() => doAction({ action: "continue" })}
+              onClick={() => refreshState()}
               disabled={loading}
               className="w-full"
             >

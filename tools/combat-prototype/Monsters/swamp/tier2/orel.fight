@@ -1,0 +1,47 @@
+# Orel-Who-Did-Not-Grow — swamp T2 (flesh-mutant child)
+
++title Orel-Who-Did-Not-Grow
++image monsters/swamp_child.png
++repool false
++stats hp=30 ac=11 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.55 right=1.0 bottom=0.85
+
++move bite
+  intent: attack
+  preview: "It tilts its head. The mouth opens further than it should."
+  timer: 0
+  sprite: orel_bite
+  anchor: center
+  narration: "It darts in low and bites down on whatever it reaches."
+  > deal_damage 1d4
+
++move latch
+  intent: heavy_attack
+  preview: "It crouches lower. The wet ribs flex."
+  timer: 3
+  sprite: orel_latch
+  anchor: bottom
+  narration: "It throws itself into you and clings, biting where it can hold."
+  > deal_damage 2d8
+  > inflict_condition poisoned dc 12 33%
+
++intro
+It is on the plank walkway ahead, crouched, watching. The shape is a
+child's shape, mostly. The ribs show through the wet skin in places they
+should not, and one arm ends a finger short. It does not move when you
+approach. It does not move when you stop. Then it stands — all wrong, the
+joints in the wrong order — and begins to come toward you in the gait of
+something that has never been told it is not a child. You remember, too
+late to matter now, hearing that you should offer it food.
+
++win
+> +give_gold 10
+> +add_tag killed_orel
+It folds on the planks with a small wet sound and does not get up. The
+walkway holds it the way the walkway holds anything else. You step
+around it carefully and keep moving, and try not to think about whose
+child it had once been, or whether anyone had told its mother.
+
++lose
+> +damage_spirits 100

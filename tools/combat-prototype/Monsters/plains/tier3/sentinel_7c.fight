@@ -1,0 +1,57 @@
+# Sentinel 7-C — plains T3 boss (Lattice city-keeper)
+
++title Sentinel 7-C
++image monsters/plains_boss.png
++repool false
++stats hp=40 ac=12 to_hit=+5 damage=1d4
+
++hitbox target left=0.0 top=0.05 right=1.0 bottom=0.65
+
++move arc_lance
+  intent: attack
+  preview: "One arm pivots up. The closer projector primes."
+  timer: 0
+  sprite: sentinel_arc
+  anchor: center
+  narration: "The arc-lance discharges in a clean wash of pale light."
+  > deal_damage 1d4
+
++move enforcement_volley
+  intent: heavy_attack
+  preview: "Both arms lock forward. Every projector lens wakes amber."
+  timer: 3
+  sprite: sentinel_volley
+  anchor: top
+  narration: "The full volley fires — geometry of light, perfectly intersecting on you."
+  > deal_damage 2d10
+  > inflict_condition lattice_sickness dc 14 33%
+
++move calibrated_beam
+  intent: pierce
+  preview: "The chest plate opens. Something deeper inside it begins to hum."
+  timer: 5
+  sprite: sentinel_calibrated
+  anchor: top
+  narration: "A single cold beam lances out of the chest cavity at calibrated focus."
+  > pierce 2d8 dc 14
+  > inflict_condition lattice_sickness dc 14 50%
+
++intro
+Past the gate, the abandoned city opens around you in clean imperial
+geometry — granaries closed, market stalls intact, doors shut on quiet
+rooms. Something larger than a wagon stands at the next intersection,
+beam projectors still warm. It raises one of its long arms toward you in
+something like a salute, or a scan. The voice from its chest plate is
+calm, conversational, addressed to no one in particular. "SENTINEL 7-C.
+INNER PERIMETER. UNAUTHORIZED PRESENCE NOTED. COMMENCING ENFORCEMENT."
+The Color in the projector lenses begins to wake.
+
++win
+> +give_gold 25
+> +add_tag killed_sentinel_7c
+The projector lenses dim, hold a moment of pale amber, and go out. The
+voice makes one last careful, conversational syllable, and the inner
+perimeter is no longer enforced. The city goes on being abandoned.
+
++lose
+> +damage_spirits 100
