@@ -470,7 +470,47 @@ public class CombatInfo
     public string? OutcomeText { get; init; }
     public List<MechanicResultInfo>? OutcomeMechanics { get; init; }
 
-    public List<string> Lines { get; init; } = [];
+    public List<CombatLogEntry> Events { get; init; } = [];
+}
+
+/// <summary>
+/// One line of combat narration. <see cref="Text"/> is the rendered form
+/// (used as-is for non-roll lines); <see cref="Roll"/>, when present, lets
+/// the UI render the line as the standard die-roll panel.
+/// </summary>
+public class CombatLogEntry
+{
+    public string Text { get; init; } = "";
+    public CombatRollInfo? Roll { get; init; }
+    public CombatNarrationInfo? Narration { get; init; }
+}
+
+/// <summary>
+/// Narrative form for a monster move that resolves into an attack: the
+/// move's flavor text is the lead, then a verdict word (hit/missed) and
+/// optional damage detail. UI renders verdict and detail in bold; the
+/// lead is plain prose.
+/// </summary>
+public class CombatNarrationInfo
+{
+    public string Lead { get; init; } = "";       // "He drives the butt of the staff at your ribs"
+    public string Verdict { get; init; } = "";    // "hit", "missed"
+    public bool Hit { get; init; }                 // colors the verdict
+    public string? Detail { get; init; }           // "2 damage", or null on miss
+}
+
+public class CombatRollInfo
+{
+    public string Label { get; init; } = "";          // "Player attack", "Cunning save"
+    public string Verb { get; init; } = "";           // "attack", "save", "resist"; "" suppresses verb
+    public string TargetPrefix { get; init; } = "";   // "AC ", "DC ", ""
+    public int Rolled { get; init; }                  // raw d20 face
+    public int Modifier { get; init; }                // total - rolled
+    public int Target { get; init; }                  // AC or DC
+    public bool Passed { get; init; }
+    public string PassLabel { get; init; } = "Success";
+    public string FailLabel { get; init; } = "Failure";
+    public string? Detail { get; init; }              // trailing tag, e.g. "9 damage", "crit"
 }
 
 public class CombatIntentInfo

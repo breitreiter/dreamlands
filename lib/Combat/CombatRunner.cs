@@ -78,6 +78,10 @@ public static class CombatRunner
                 var prev = state.Stance;
                 state.Stance = set.Stance;
                 events.Add(new CombatEvent.StanceChanged(prev, set.Stance));
+                // Re-emit the (unchanged) intent preview so the response carries
+                // it; without this the client's intent banner clears on stance
+                // changes since the round didn't advance.
+                EmitIntentPreview(encounter, state, events);
                 return events;
 
             case PlayerCombatAction.Attack:

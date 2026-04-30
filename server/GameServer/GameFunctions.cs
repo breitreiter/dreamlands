@@ -2227,7 +2227,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         if (encounter == null && turn.Events.OfType<Dreamlands.Combat.CombatEvent.Intro>().FirstOrDefault() is { } intro)
             encounter = data.CombatBundle?.GetById(intro.EncounterId);
 
-        var lines = turn.Events.Select(RenderCombatEvent).Where(s => s.Length > 0).ToList();
+        var events = BuildCombatEventLog(turn.Events);
         var outcome = turn.Events.OfType<Dreamlands.Combat.CombatEvent.Outcome>().FirstOrDefault();
         var intentEvt = turn.Events.OfType<Dreamlands.Combat.CombatEvent.IntentPreviewed>().LastOrDefault();
         var introEvt = turn.Events.OfType<Dreamlands.Combat.CombatEvent.Intro>().FirstOrDefault();
@@ -2286,7 +2286,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             OutcomeText = outcome?.Text,
             OutcomeMechanics = turn.Resolved ? BuildMechanicResults(turn.OutcomeMechanics.ToList()) : null,
 
-            Lines = lines,
+            Events = events,
         };
     }
 
@@ -2301,38 +2301,196 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         return $"{biome}/{biome}_tier_{encounter.Tier}_1";
     }
 
-    static string RenderCombatEvent(Dreamlands.Combat.CombatEvent evt) => evt switch
+    /// <summary>
+/// Walks the event stream and produces the log feed. Most events map 1:1 via
+/// <see cref="BuildCombatLogEntry"/>; the exception is MonsterMoved followed
+/// by MonsterAttacked, which fold into a single narrative entry so the move's
+/// flavor text and the hit/miss verdict read as one beat.
+/// </summary>
+    static List<CombatLogEntry> BuildCombatEventLog(IReadOnlyList<Dreamlands.Combat.CombatEvent> evts)
     {
-        Dreamlands.Combat.CombatEvent.Intro x => x.Text,
-        Dreamlands.Combat.CombatEvent.SurpriseChecked x =>
-            $"Surprise: d20({x.Roll}){FmtSign(x.Bonus)} vs DC {x.Dc} → {(x.PlayerActsFirst ? "you act first" : "monster acts first")}",
-        Dreamlands.Combat.CombatEvent.RoundStarted x => $"— Round {x.Round} —",
-        Dreamlands.Combat.CombatEvent.IntentPreviewed x => $"Intent: {x.IntentClass} — \"{x.IntentText}\"",
-        Dreamlands.Combat.CombatEvent.StanceChanged x => $"Stance: {x.From} → {x.To}",
-        Dreamlands.Combat.CombatEvent.PlayerAttacked x => RenderPlayerAttack(x),
-        Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x => RenderDaggerAttack(x),
-        Dreamlands.Combat.CombatEvent.MonsterTurnSkipped x => $"  The monster reels — its {x.IntentClass.ToString().ToLowerInvariant()} never lands.",
-        Dreamlands.Combat.CombatEvent.PlayerFleeAttempted x =>
-            $"Flee: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → {(x.Save.Success ? "ESCAPE" : "fail (free hit incoming)")}",
-        Dreamlands.Combat.CombatEvent.MonsterMoved x => $"Monster: {x.Narration}",
-        Dreamlands.Combat.CombatEvent.MonsterAttacked x => RenderMonsterAttack(x),
-        Dreamlands.Combat.CombatEvent.MonsterPierced x => RenderMonsterPierce(x),
-        Dreamlands.Combat.CombatEvent.MonsterConditioned x => RenderCondition(x),
-        Dreamlands.Combat.CombatEvent.MonsterDefended x => $"  Defended: AC +{x.AcBonus} (now {x.MonsterEffectiveAc}) this turn",
-        Dreamlands.Combat.CombatEvent.MonsterFledEvt x => $"  The monster disengages and flees.",
-        Dreamlands.Combat.CombatEvent.Outcome x => RenderOutcome(x),
-        _ => "",
+        var log = new List<CombatLogEntry>();
+        for (int i = 0; i < evts.Count; i++)
+        {
+            if (evts[i] is Dreamlands.Combat.CombatEvent.MonsterMoved moved
+                && i + 1 < evts.Count
+                && evts[i + 1] is Dreamlands.Combat.CombatEvent.MonsterAttacked attacked)
+            {
+                log.Add(BuildMonsterAttackNarrative(moved, attacked));
+                i++; // consumed both
+                continue;
+            }
+            var entry = BuildCombatLogEntry(evts[i]);
+            if (entry != null) log.Add(entry);
+        }
+        return log;
+    }
+
+    static CombatLogEntry BuildMonsterAttackNarrative(
+        Dreamlands.Combat.CombatEvent.MonsterMoved moved,
+        Dreamlands.Combat.CombatEvent.MonsterAttacked att)
+    {
+        // Strip a trailing period from the narration so we can append ": hit/missed" cleanly.
+        var lead = (moved.Narration ?? "").TrimEnd();
+        if (lead.EndsWith(".")) lead = lead[..^1];
+
+        var hit = att.Attack.Hit && !att.Attack.Fumble;
+        var verdict = att.Attack.Fumble ? "fumbled"
+                    : att.Attack.Crit   ? "crit"
+                    : hit               ? "hit"
+                                        : "missed";
+        string? detail = hit && att.Damage != null ? $"{att.Damage.Total} damage" : null;
+        var text = detail is null ? $"{lead}: {verdict}" : $"{lead}: {verdict} for {detail}";
+        return new CombatLogEntry
+        {
+            Text = text,
+            Narration = new CombatNarrationInfo
+            {
+                Lead = lead,
+                Verdict = verdict,
+                Hit = hit,
+                Detail = detail,
+            },
+        };
+    }
+
+    static CombatLogEntry? BuildCombatLogEntry(Dreamlands.Combat.CombatEvent evt) => evt switch
+    {
+        Dreamlands.Combat.CombatEvent.Intro x                => Plain(x.Text),
+        Dreamlands.Combat.CombatEvent.SurpriseChecked x      => BuildSurpriseCheck(x),
+        Dreamlands.Combat.CombatEvent.RoundStarted x         => Plain($"— Round {x.Round} —"),
+        Dreamlands.Combat.CombatEvent.IntentPreviewed _      => null, // shown in the intent banner under the log
+
+        Dreamlands.Combat.CombatEvent.StanceChanged _        => null, // current stance is shown in the header pill
+
+        Dreamlands.Combat.CombatEvent.PlayerAttacked x       => BuildPlayerAttack(x),
+        Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x => Plain(RenderDaggerAttack(x)),
+        Dreamlands.Combat.CombatEvent.MonsterTurnSkipped x   => Plain($"  The monster reels — its {x.IntentClass.ToString().ToLowerInvariant()} never lands."),
+        Dreamlands.Combat.CombatEvent.PlayerFleeAttempted x  => BuildFleeSave(x),
+        Dreamlands.Combat.CombatEvent.MonsterMoved x         => Plain($"Monster: {x.Narration}"),
+        Dreamlands.Combat.CombatEvent.MonsterAttacked x      => BuildMonsterAttack(x),
+        Dreamlands.Combat.CombatEvent.MonsterPierced x       => BuildMonsterPierce(x),
+        Dreamlands.Combat.CombatEvent.MonsterConditioned x   => BuildCondition(x),
+        Dreamlands.Combat.CombatEvent.MonsterDefended x      => Plain($"  Defended: AC +{x.AcBonus} (now {x.MonsterEffectiveAc}) this turn"),
+        Dreamlands.Combat.CombatEvent.MonsterFledEvt _       => Plain("  The monster disengages and flees."),
+        Dreamlands.Combat.CombatEvent.Outcome x              => Plain(RenderOutcome(x)),
+        _                                                     => null,
     };
 
-    static string RenderPlayerAttack(Dreamlands.Combat.CombatEvent.PlayerAttacked x)
+    static CombatLogEntry Plain(string text) => new() { Text = text };
+
+    static CombatLogEntry BuildSurpriseCheck(Dreamlands.Combat.CombatEvent.SurpriseChecked x) =>
+        new()
+        {
+            Text = $"Surprise: d20({x.Roll}){FmtSign(x.Bonus)} vs DC {x.Dc} → {(x.PlayerActsFirst ? "you act first" : "monster acts first")}",
+            Roll = new CombatRollInfo
+            {
+                Label = "Surprise", Verb = "check", TargetPrefix = "DC ",
+                Rolled = x.Roll, Modifier = x.Bonus, Target = x.Dc,
+                Passed = x.PlayerActsFirst,
+                PassLabel = "You act first", FailLabel = "Surprised",
+            },
+        };
+
+    static CombatLogEntry BuildPlayerAttack(Dreamlands.Combat.CombatEvent.PlayerAttacked x)
     {
-        if (x.Attack.Fumble) return "  Player attacks: fumble (nat-1).";
-        if (!x.Attack.Hit)
-            return $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → miss.";
+        if (x.Attack.Fumble) return Plain("  Player attacks: fumble (nat-1).");
         var crit = x.Attack.Crit ? " CRIT" : "";
-        var dmg = x.Damage!;
-        return $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {dmg.Total}. Monster {x.MonsterHpAfter}/{x.MonsterMaxHp}.";
+        var detail = x.Attack.Hit && x.Damage != null
+            ? $"{x.Damage.Total} damage{crit}"
+            : null;
+        var text = !x.Attack.Hit
+            ? $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → miss."
+            : $"  Player attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {x.Damage!.Total}. Monster {x.MonsterHpAfter}/{x.MonsterMaxHp}.";
+        return new CombatLogEntry
+        {
+            Text = text,
+            Roll = new CombatRollInfo
+            {
+                Label = "Player attack", Verb = "attack", TargetPrefix = "AC ",
+                Rolled = x.Attack.Roll, Modifier = x.Attack.Total - x.Attack.Roll,
+                Target = x.Attack.TargetAc,
+                Passed = x.Attack.Hit, PassLabel = "Hit", FailLabel = "Miss",
+                Detail = detail,
+            },
+        };
     }
+
+    static CombatLogEntry BuildMonsterAttack(Dreamlands.Combat.CombatEvent.MonsterAttacked x)
+    {
+        if (x.Attack.Fumble) return Plain("  Monster attacks: fumble (nat-1).");
+        var crit = x.Attack.Crit ? " CRIT" : "";
+        var detail = x.Attack.Hit && x.Damage != null && x.Absorbed != null
+            ? $"{x.Damage.Total} ({x.Absorbed.OnSpirits}sp + {x.Absorbed.OnHealth}hp){crit}"
+            : null;
+        var text = !x.Attack.Hit
+            ? $"  Monster attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → miss."
+            : $"  Monster attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {x.Damage!.Total} ({x.Absorbed!.OnSpirits}sp + {x.Absorbed.OnHealth}hp). Player {x.PlayerSpiritsAfter}sp / {x.PlayerHealthAfter}hp.";
+        // Flip Passed to player-perspective: monster missing = good (green panel).
+        return new CombatLogEntry
+        {
+            Text = text,
+            Roll = new CombatRollInfo
+            {
+                Label = "Monster attack", Verb = "attack", TargetPrefix = "AC ",
+                Rolled = x.Attack.Roll, Modifier = x.Attack.Total - x.Attack.Roll,
+                Target = x.Attack.TargetAc,
+                Passed = !x.Attack.Hit, PassLabel = "Dodged", FailLabel = "Hit",
+                Detail = detail,
+            },
+        };
+    }
+
+    static CombatLogEntry BuildFleeSave(Dreamlands.Combat.CombatEvent.PlayerFleeAttempted x) =>
+        new()
+        {
+            Text = $"Flee: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → {(x.Save.Success ? "ESCAPE" : "fail (free hit incoming)")}",
+            Roll = SaveRoll("Flee", x.Save, passLabel: "Escape", failLabel: "Caught"),
+        };
+
+    static CombatLogEntry BuildMonsterPierce(Dreamlands.Combat.CombatEvent.MonsterPierced x)
+    {
+        string? detail = null;
+        if (!x.Save.Success && x.Damage != null && x.Absorbed != null)
+            detail = $"{x.Damage.Total} ({x.Absorbed.OnSpirits}sp + {x.Absorbed.OnHealth}hp)";
+        var text = x.Save.Success
+            ? $"  Cunning save: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → evade."
+            : $"  Cunning save: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → fail; pierced for {x.Damage!.Total} ({x.Absorbed!.OnSpirits}sp + {x.Absorbed.OnHealth}hp). Player {x.PlayerSpiritsAfter}sp / {x.PlayerHealthAfter}hp.";
+        return new CombatLogEntry
+        {
+            Text = text,
+            Roll = SaveRoll("Cunning save", x.Save, passLabel: "Evade", failLabel: "Pierced", failDetail: detail),
+        };
+    }
+
+    static CombatLogEntry BuildCondition(Dreamlands.Combat.CombatEvent.MonsterConditioned x)
+    {
+        if (!x.Procced) return Plain($"  {x.ConditionId}: did not proc ({x.Chance:P0}).");
+        if (x.Save is null) return Plain($"  {x.ConditionId}: applied.");
+        var text = x.Applied
+            ? $"  {x.ConditionId}: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → applied."
+            : $"  {x.ConditionId}: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → resisted.";
+        return new CombatLogEntry
+        {
+            Text = text,
+            Roll = SaveRoll(x.ConditionId, x.Save, passLabel: "Resisted", failLabel: "Applied", verb: "save"),
+        };
+    }
+
+    static CombatRollInfo SaveRoll(string label, Dreamlands.Combat.Resolver.SaveOutcome s, string passLabel, string failLabel, string verb = "save", string? failDetail = null) =>
+        new()
+        {
+            Label = label,
+            Verb = verb,
+            TargetPrefix = "DC ",
+            Rolled = s.Roll,
+            Modifier = s.Total - s.Roll,
+            Target = s.Dc,
+            Passed = s.Success,
+            PassLabel = passLabel,
+            FailLabel = failLabel,
+            Detail = !s.Success ? failDetail : null,
+        };
 
     static string RenderDaggerAttack(Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x)
     {
@@ -2347,35 +2505,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         };
         var super = x.SuperCrit ? " — monster's next action is cancelled" : "";
         return $"  Player strikes: {label} for {dmg.Total}{super}. Monster {x.MonsterHpAfter}/{x.MonsterMaxHp}.";
-    }
-
-    static string RenderMonsterAttack(Dreamlands.Combat.CombatEvent.MonsterAttacked x)
-    {
-        if (x.Attack.Fumble) return "  Monster attacks: fumble (nat-1).";
-        if (!x.Attack.Hit)
-            return $"  Monster attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → miss.";
-        var crit = x.Attack.Crit ? " CRIT" : "";
-        var d = x.Damage!;
-        var a = x.Absorbed!;
-        return $"  Monster attacks: d20({x.Attack.Roll})={x.Attack.Total} vs AC {x.Attack.TargetAc} → hit{crit} for {d.Total} ({a.OnSpirits}sp + {a.OnHealth}hp). Player {x.PlayerSpiritsAfter}sp / {x.PlayerHealthAfter}hp.";
-    }
-
-    static string RenderMonsterPierce(Dreamlands.Combat.CombatEvent.MonsterPierced x)
-    {
-        if (x.Save.Success)
-            return $"  Cunning save: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → evade.";
-        var d = x.Damage!;
-        var a = x.Absorbed!;
-        return $"  Cunning save: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → fail; pierced for {d.Total} ({a.OnSpirits}sp + {a.OnHealth}hp). Player {x.PlayerSpiritsAfter}sp / {x.PlayerHealthAfter}hp.";
-    }
-
-    static string RenderCondition(Dreamlands.Combat.CombatEvent.MonsterConditioned x)
-    {
-        if (!x.Procced) return $"  {x.ConditionId}: did not proc ({x.Chance:P0}).";
-        if (x.Save is null) return $"  {x.ConditionId}: applied.";
-        return x.Applied
-            ? $"  {x.ConditionId}: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → applied."
-            : $"  {x.ConditionId}: d20({x.Save.Roll})={x.Save.Total} vs DC {x.Save.Dc} → resisted.";
     }
 
     static string RenderOutcome(Dreamlands.Combat.CombatEvent.Outcome x)

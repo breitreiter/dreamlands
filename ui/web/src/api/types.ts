@@ -294,7 +294,33 @@ export interface CombatInfo {
   outcomeText: string | null;
   outcomeMechanics: MechanicResultInfo[] | null;
 
-  lines: string[];
+  events: CombatLogEntry[];
+}
+
+export interface CombatLogEntry {
+  text: string;
+  roll?: CombatRollInfo;
+  narration?: CombatNarrationInfo;
+}
+
+export interface CombatNarrationInfo {
+  lead: string;
+  verdict: string;
+  hit: boolean;
+  detail?: string;
+}
+
+export interface CombatRollInfo {
+  label: string;
+  verb: string;
+  targetPrefix: string;
+  rolled: number;
+  modifier: number;
+  target: number;
+  passed: boolean;
+  passLabel: string;
+  failLabel: string;
+  detail?: string;
 }
 
 export interface TravelInfo {

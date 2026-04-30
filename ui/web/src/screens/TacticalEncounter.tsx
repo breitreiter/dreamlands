@@ -3,6 +3,7 @@ import type { TacticalInfo, TacticalOpeningInfo, TacticalApproachInfo, MechanicR
 import { useGame } from "../GameContext";
 import { formatProse } from "../prose";
 import MaskedIcon from "../components/MaskedIcon";
+import DieRoll from "../components/DieRoll";
 import parchment from "../assets/parchment.webp";
 
 const ICONS = {
@@ -98,43 +99,18 @@ function MechanicLines({ results }: { results: MechanicResultInfo[] }) {
     <div className="space-y-2">
       {results.map((m, i) =>
         m.resistCheck ? (
-          <div
+          <DieRoll
             key={i}
-            className={`p-3 border rounded-lg ${
-              m.resistCheck.passed
-                ? "border-positive bg-positive/15"
-                : "border-negative bg-negative/15"
-            }`}
-          >
-            <MaskedIcon
-              icon="dice-twenty-faces-twenty.svg"
-              className="w-5 h-5 inline-block align-text-bottom mr-1.5"
-              color={m.resistCheck.rollMode === "disadvantage" ? "#C45656"
-                : m.resistCheck.rollMode === "advantage" ? "#5B9F5B"
-                : "currentColor"}
-            />
-            <span className="capitalize">{m.resistCheck.conditionName}</span>
-            {" resist: "}
-            <span className="font-medium">
-              {m.resistCheck.rolled - m.resistCheck.modifier}
-              {m.resistCheck.modifier !== 0 &&
-                ` ${m.resistCheck.modifier >= 0 ? "+" : ""}${m.resistCheck.modifier}`}
-            </span>
-            {" vs "}
-            <span className="font-medium">{m.resistCheck.target}</span>
-            {" · "}
-            <span className={m.resistCheck.passed ? "text-positive" : "text-negative"}>
-              {m.resistCheck.passed ? "Resisted" : "Afflicted"}
-            </span>
-            {m.resistCheck.rollMode && (
-              <>
-                {" · "}
-                <span className={m.resistCheck.rollMode === "disadvantage" ? "text-negative" : "text-positive"}>
-                  {m.resistCheck.rollMode === "disadvantage" ? "Disadvantage" : "Advantage"}
-                </span>
-              </>
-            )}
-          </div>
+            label={m.resistCheck.conditionName}
+            verb="resist"
+            rolled={m.resistCheck.rolled}
+            modifier={m.resistCheck.modifier}
+            target={m.resistCheck.target}
+            passed={m.resistCheck.passed}
+            passLabel="Resisted"
+            failLabel="Afflicted"
+            rollMode={m.resistCheck.rollMode}
+          />
         ) : (
           <div key={i} className="text-dim">
             {m.description}

@@ -129,8 +129,11 @@ public class CombatRunnerTests
 
         var events = CombatRunner.Step(enc, player, state, new PlayerCombatAction.SetStance(SwordStance.Aggressive), rng);
         Assert.Equal(SwordStance.Aggressive, state.Stance);
-        Assert.Single(events);
+        // Stance change emits StanceChanged + a re-broadcast IntentPreviewed
+        // so the response always carries an intent for the client banner.
+        Assert.Equal(2, events.Count);
         Assert.IsType<CombatEvent.StanceChanged>(events[0]);
+        Assert.IsType<CombatEvent.IntentPreviewed>(events[1]);
         Assert.Equal(monsterHpBefore, state.MonsterHp); // no attack happened
         Assert.False(state.Resolved);
     }

@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGame } from "../GameContext";
-import type { CombatInfo, GameResponse } from "../api/types";
+import type { CombatInfo, CombatLogEntry, GameResponse } from "../api/types";
 import { Button } from "@/components/ui/button";
 import MaskedIcon from "../components/MaskedIcon";
+import DieRoll from "../components/DieRoll";
 
 /**
  * Combat screen.
@@ -22,9 +23,27 @@ export default function Combat({ state }: { state: GameResponse }) {
   const { combat } = state;
   const logRef = useRef<HTMLDivElement>(null);
 
+  // The server only returns the current turn's events; we accumulate them
+  // here for the lifetime of the combat session (reset on encounter change).
+  const [allEvents, setAllEvents] = useState<CombatLogEntry[]>([]);
+  const lastSeenRef = useRef<CombatLogEntry[] | null>(null);
+  const lastEncounterRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!combat) return;
+    if (combat.events === lastSeenRef.current) return;
+    if (combat.encounterId !== lastEncounterRef.current) {
+      setAllEvents(combat.events);
+      lastEncounterRef.current = combat.encounterId;
+    } else {
+      setAllEvents(prev => [...prev, ...combat.events]);
+    }
+    lastSeenRef.current = combat.events;
+  }, [combat]);
+
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
-  }, [combat?.lines.length]);
+  }, [allEvents.length]);
 
   if (!combat) return null;
 
@@ -97,7 +116,7 @@ export default function Combat({ state }: { state: GameResponse }) {
             {combat.introText && <div className="text-dim mt-1.5">{combat.introText}</div>}
           </div>
 
-          {combat.lines.map((line, i) => <LogLine key={i} line={line} />)}
+          {allEvents.map((entry, i) => <LogEntry key={i} entry={entry} />)}
 
           {combat.resolved && (
             <OutcomePanel combat={combat} />
@@ -106,10 +125,10 @@ export default function Combat({ state }: { state: GameResponse }) {
 
         {/* Intent preview — load-bearing per design (sword stance, axe block, dagger band choice all key off this) */}
         {!combat.resolved && combat.intent && (
-          <div className="px-10 py-3 border-t border-white/5 bg-panel-alt flex items-center gap-3 text-dim">
-            <span className="text-muted">Next:</span>
-            <span className="text-action">{combat.intent.class}</span>
-            <span className="text-primary">— {combat.intent.text}</span>
+          <div className="px-10 py-3 border-t border-white/5 bg-panel-alt text-primary">
+            {combat.title} intends to{" "}
+            <strong className="text-action">{intentVerb(combat.intent.class)}</strong>:{" "}
+            <em className="text-dim">{combat.intent.text}</em>
           </div>
         )}
 
@@ -158,7 +177,38 @@ function Pill({ label, value }: { label: string; value: string }) {
 
 // ── Log entries ───────────────────────────────────────────────────────────
 
-function LogLine({ line }: { line: string }) {
+function LogEntry({ entry }: { entry: CombatLogEntry }) {
+  // Monster move narration: prose lead + bolded verdict (and damage on a hit).
+  if (entry.narration) {
+    const n = entry.narration;
+    return (
+      <div className="leading-relaxed text-primary">
+        {n.lead}:{" "}
+        <strong className={n.hit ? "text-negative" : "text-positive"}>{n.verdict}</strong>
+        {n.detail && <> for <strong className="text-negative">{n.detail}</strong></>}
+      </div>
+    );
+  }
+
+  // Structured rolls render as the standard die-roll panel.
+  if (entry.roll) {
+    return (
+      <DieRoll
+        label={entry.roll.label}
+        verb={entry.roll.verb}
+        targetPrefix={entry.roll.targetPrefix}
+        rolled={entry.roll.rolled}
+        modifier={entry.roll.modifier}
+        target={entry.roll.target}
+        passed={entry.roll.passed}
+        passLabel={entry.roll.passLabel}
+        failLabel={entry.roll.failLabel}
+        detail={entry.roll.detail}
+      />
+    );
+  }
+
+  const line = entry.text;
   // Round markers and outcome banners get a horizontal-rule treatment.
   if (line.startsWith("— Round")) {
     return (
@@ -173,13 +223,11 @@ function LogLine({ line }: { line: string }) {
     return <div className="font-header text-accent text-center">{line.replace(/=/g, "").trim()}</div>;
   }
 
-  // Heuristic actor color: lines that begin with "  Player" or "  Monster" are turns.
-  // Strip the leading two-space indent the server renderer uses.
+  // Heuristic actor color for non-roll narration (intent, stance, monster move text).
   const trimmed = line.replace(/^ {2}/, "");
   let actorClass = "text-dim";
   if (trimmed.startsWith("Player")) actorClass = "text-action";
   else if (trimmed.startsWith("Monster")) actorClass = "text-negative";
-  else if (trimmed.startsWith("Cunning save")) actorClass = "text-dim";
   else if (trimmed.startsWith("Stance:") || trimmed.startsWith("Intent:") || trimmed.startsWith("Surprise:")) actorClass = "text-muted";
 
   return (
@@ -187,6 +235,11 @@ function LogLine({ line }: { line: string }) {
       <span className={actorClass}>{trimmed}</span>
     </div>
   );
+}
+
+// "HeavyAttack" → "heavy attack". Splits camelCase into spaced lowercase words.
+function intentVerb(cls: string): string {
+  return cls.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
 }
 
 // ── Outcome panel (rendered inline at the end of the log) ─────────────────

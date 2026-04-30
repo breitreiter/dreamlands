@@ -4,7 +4,7 @@ import { formatDateTime } from "../calendar";
 import type { GameResponse, OutcomeInfo } from "../api/types";
 import parchment from "../assets/parchment.webp";
 import { formatProse } from "../prose";
-import MaskedIcon from "../components/MaskedIcon";
+import DieRoll, { MeetsCheck } from "../components/DieRoll";
 
 type Segment =
   | { kind: "outcome"; data: OutcomeInfo }
@@ -273,58 +273,23 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
       )}
 
       {outcome.skillCheck && (
-        <div
-          className={`p-3 border ${
-            outcome.skillCheck.passed
-              ? "border-positive bg-positive/15"
-              : "border-negative bg-negative/15"
-          }`}
-        >
-          <MaskedIcon
-            icon="dice-twenty-faces-twenty.svg"
-            className="w-5 h-5 inline-block align-text-bottom mr-1.5"
-            color={outcome.skillCheck.rollMode === "disadvantage" ? "#C45656"
-              : outcome.skillCheck.rollMode === "advantage" ? "#5B9F5B"
-              : "currentColor"}
+        outcome.skillCheck.kind === "meets" ? (
+          <MeetsCheck
+            label={outcome.skillCheck.skill}
+            modifier={outcome.skillCheck.modifier}
+            target={outcome.skillCheck.target}
+            passed={outcome.skillCheck.passed}
           />
-          {outcome.skillCheck.kind === "meets" ? (
-            <>
-              <span className="capitalize">{outcome.skillCheck.skill}</span>
-              {" "}
-              <span className="font-medium">{outcome.skillCheck.modifier}</span>
-              {outcome.skillCheck.passed ? " meets " : " doesn't meet "}
-              <span className="font-medium">{outcome.skillCheck.target}</span>
-              {" · "}
-              <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
-                {outcome.skillCheck.passed ? "Qualified" : "Unqualified"}
-              </span>
-            </>
-          ) : (
-            <>
-              <span className="capitalize">{outcome.skillCheck.skill}</span>
-              {" check: "}
-              <span className="font-medium">
-                {outcome.skillCheck.rolled - outcome.skillCheck.modifier}
-                {outcome.skillCheck.modifier !== 0 &&
-                  ` ${outcome.skillCheck.modifier >= 0 ? "+" : ""}${outcome.skillCheck.modifier}`}
-              </span>
-              {" vs "}
-              <span className="font-medium">{outcome.skillCheck.target}</span>
-              {" · "}
-              <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
-                {outcome.skillCheck.passed ? "Success" : "Failure"}
-              </span>
-            </>
-          )}
-          {outcome.skillCheck.rollMode && (
-            <>
-              {" · "}
-              <span className={outcome.skillCheck.rollMode === "disadvantage" ? "text-negative" : "text-positive"}>
-                {outcome.skillCheck.rollMode === "disadvantage" ? "Disadvantage" : "Advantage"}
-              </span>
-            </>
-          )}
-        </div>
+        ) : (
+          <DieRoll
+            label={outcome.skillCheck.skill}
+            rolled={outcome.skillCheck.rolled}
+            modifier={outcome.skillCheck.modifier}
+            target={outcome.skillCheck.target}
+            passed={outcome.skillCheck.passed}
+            rollMode={outcome.skillCheck.rollMode}
+          />
+        )
       )}
 
       <div className="text-primary/80 leading-loose whitespace-pre-wrap">
@@ -335,43 +300,18 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
         <div className="space-y-2 border-t border-edge pt-3">
           {outcome.mechanics.map((m, i) =>
             m.resistCheck ? (
-              <div
+              <DieRoll
                 key={i}
-                className={`p-3 border ${
-                  m.resistCheck.passed
-                    ? "border-positive bg-positive/15"
-                    : "border-negative bg-negative/15"
-                }`}
-              >
-                <MaskedIcon
-                  icon="dice-twenty-faces-twenty.svg"
-                  className="w-5 h-5 inline-block align-text-bottom mr-1.5"
-                  color={m.resistCheck.rollMode === "disadvantage" ? "#C45656"
-                    : m.resistCheck.rollMode === "advantage" ? "#5B9F5B"
-                    : "currentColor"}
-                />
-                <span className="capitalize">{m.resistCheck.conditionName}</span>
-                {" resist: "}
-                <span className="font-medium">
-                  {m.resistCheck.rolled - m.resistCheck.modifier}
-                  {m.resistCheck.modifier !== 0 &&
-                    ` ${m.resistCheck.modifier >= 0 ? "+" : ""}${m.resistCheck.modifier}`}
-                </span>
-                {" vs "}
-                <span className="font-medium">{m.resistCheck.target}</span>
-                {" · "}
-                <span className={m.resistCheck.passed ? "text-positive" : "text-negative"}>
-                  {m.resistCheck.passed ? "Resisted" : "Afflicted"}
-                </span>
-                {m.resistCheck.rollMode && (
-                  <>
-                    {" · "}
-                    <span className={m.resistCheck.rollMode === "disadvantage" ? "text-negative" : "text-positive"}>
-                      {m.resistCheck.rollMode === "disadvantage" ? "Disadvantage" : "Advantage"}
-                    </span>
-                  </>
-                )}
-              </div>
+                label={m.resistCheck.conditionName}
+                verb="resist"
+                rolled={m.resistCheck.rolled}
+                modifier={m.resistCheck.modifier}
+                target={m.resistCheck.target}
+                passed={m.resistCheck.passed}
+                passLabel="Resisted"
+                failLabel="Afflicted"
+                rollMode={m.resistCheck.rollMode}
+              />
             ) : (
               <div key={i} className="text-xs text-dim">
                 {m.description}
