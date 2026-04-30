@@ -43,6 +43,7 @@ public static class CmbParser
             {
                 case "title":  enc.Title = args; i++; break;
                 case "image":  enc.Image = args; i++; break;
+                case "blood":  enc.BloodColor = args; i++; break;
                 case "repool": enc.Repool = ParseBool(args, source, i); i++; break;
                 case "stats":  enc.Stats = ParseStats(args, source, i); i++; break;
                 case "hitbox": enc.Hitboxes.Add(ParseHitbox(args, source, i)); i++; break;

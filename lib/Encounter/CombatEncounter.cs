@@ -18,6 +18,10 @@ public sealed class CombatEncounter
     public string Image { get; set; } = "";
     public bool Repool { get; set; } = false;
 
+    /// <summary>CSS color for blood-splat hit animations. Default mammalian
+    /// red; non-mammals (lattice, golem, etc.) override via `+blood &lt;hex&gt;`.</summary>
+    public string BloodColor { get; set; } = "#7a0a0a";
+
     public MonsterStats Stats { get; set; } = new(0, 0, 0, new DiceRoll(0, 0, 0));
     public List<Hitbox> Hitboxes { get; set; } = new();
     public List<MonsterMove> Moves { get; set; } = new();

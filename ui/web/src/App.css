@@ -35,6 +35,65 @@
   --font-inscription: 'STIX Two Text', serif;
 }
 
+.hit-lens {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation-name: hit-lens;
+  animation-timing-function: cubic-bezier(0.18, 0.7, 0.3, 1);
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 6px rgba(255, 240, 180, 0.45));
+}
+
+@keyframes hit-lens {
+  0%   { transform: rotate(var(--lens-angle, 0deg)) scale(0.35); opacity: 0; }
+  18%  { opacity: 1; }
+  100% { transform: rotate(var(--lens-angle, 0deg)) scale(var(--lens-grow, 2.6)); opacity: 0; }
+}
+
+.hit-splat {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  animation-name: hit-splat;
+  animation-timing-function: cubic-bezier(0.2, 0.6, 0.3, 1);
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes hit-splat {
+  0%   { transform: rotate(var(--splat-angle, 0deg)) scale(0.55); opacity: 0; }
+  15%  { transform: rotate(var(--splat-angle, 0deg)) scale(1.0);  opacity: 1; }
+  55%  { transform: rotate(var(--splat-angle, 0deg)) scale(1.05); opacity: 1; }
+  100% { transform: rotate(var(--splat-angle, 0deg)) scale(1.15); opacity: 0; }
+}
+
+.miss-moon {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation-name: miss-moon;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.55));
+}
+
+@keyframes miss-moon {
+  0%   { transform: rotate(var(--miss-angle, 0deg)) scale(0.6); opacity: 0; }
+  20%  { transform: rotate(var(--miss-angle, 0deg)) scale(1.0); opacity: 1; }
+  100% { transform: rotate(var(--miss-angle, 0deg)) scale(1.2); opacity: 0; }
+}
+
 .leaflet-container.leaflet-container {
   background: url("./assets/parchment.webp") repeat;
   cursor: pointer;

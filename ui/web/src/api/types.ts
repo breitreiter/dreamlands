@@ -265,6 +265,7 @@ export interface CombatInfo {
   title: string;
   image: string | null;
   biomeImage: string | null;
+  bloodColor: string;
   introText: string;
 
   monsterHp: number;
@@ -301,6 +302,12 @@ export interface CombatLogEntry {
   text: string;
   roll?: CombatRollInfo;
   narration?: CombatNarrationInfo;
+  playerAttack?: PlayerAttackInfo;
+}
+
+export interface PlayerAttackInfo {
+  outcome: "miss" | "hit" | "crit" | "super_crit";
+  damage?: number;
 }
 
 export interface CombatNarrationInfo {

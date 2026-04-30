@@ -441,6 +441,7 @@ public class CombatInfo
     public string Title { get; init; } = "";
     public string? Image { get; init; }
     public string? BiomeImage { get; init; }
+    public string BloodColor { get; init; } = "#7a0a0a";
     public string IntroText { get; init; } = "";
 
     public int MonsterHp { get; init; }
@@ -483,6 +484,18 @@ public class CombatLogEntry
     public string Text { get; init; } = "";
     public CombatRollInfo? Roll { get; init; }
     public CombatNarrationInfo? Narration { get; init; }
+    public PlayerAttackInfo? PlayerAttack { get; init; }
+}
+
+/// <summary>
+/// Structured outcome of a player attack, surfaced so the client can fire
+/// the appropriate hitbox animation without parsing prose. Outcome values
+/// are "miss" (incl. fumble), "hit", "crit", "super_crit" (dagger-only).
+/// </summary>
+public class PlayerAttackInfo
+{
+    public string Outcome { get; init; } = "miss";
+    public int? Damage { get; init; }
 }
 
 /// <summary>

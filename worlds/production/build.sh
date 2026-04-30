@@ -30,7 +30,7 @@ fi
 if [[ "$SKIP_ASSETS" == false ]]; then
     echo "==> Copying assets..."
 
-    for dir in icons portraits equipment vignettes monsters UI; do
+    for dir in icons portraits equipment vignettes monsters effects UI; do
         src="$REPO_ROOT/assets/$dir"
         # UI -> ui (lowercase in output)
         dest_name=$(echo "$dir" | tr '[:upper:]' '[:lower:]')

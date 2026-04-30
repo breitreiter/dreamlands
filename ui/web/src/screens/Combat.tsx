@@ -4,6 +4,21 @@ import type { CombatInfo, CombatLogEntry, GameResponse } from "../api/types";
 import { Button } from "@/components/ui/button";
 import MaskedIcon from "../components/MaskedIcon";
 import DieRoll from "../components/DieRoll";
+import HitLens from "../components/HitLens";
+import HitSplat from "../components/HitSplat";
+import MissMoon from "../components/MissMoon";
+
+type Hit = { id: number; x: number; y: number; angle: number; splat: number; miss: boolean };
+
+// Hit-animation anchor: roughly torso-height on a bottom-anchored monster
+// sprite, with random jitter so successive attacks don't stack on one pixel.
+function pickAnchor(rect: DOMRect): { x: number; y: number } {
+  const cx = rect.width / 2;
+  const cy = rect.height * 0.55;
+  const jx = (Math.random() - 0.5) * 100;
+  const jy = (Math.random() - 0.5) * 100;
+  return { x: cx + jx, y: cy + jy };
+}
 
 /**
  * Combat screen.
@@ -22,6 +37,7 @@ export default function Combat({ state }: { state: GameResponse }) {
   const { doCombatAction, refreshState, loading } = useGame();
   const { combat } = state;
   const logRef = useRef<HTMLDivElement>(null);
+  const hitboxRef = useRef<HTMLDivElement>(null);
 
   // The server only returns the current turn's events; we accumulate them
   // here for the lifetime of the combat session (reset on encounter change).
@@ -29,16 +45,43 @@ export default function Combat({ state }: { state: GameResponse }) {
   const lastSeenRef = useRef<CombatLogEntry[] | null>(null);
   const lastEncounterRef = useRef<string | null>(null);
 
+  const [hits, setHits] = useState<Hit[]>([]);
+  const hitIdRef = useRef(0);
+  const removeHit = (id: number) =>
+    setHits(prev => prev.filter(h => h.id !== id));
+
   useEffect(() => {
     if (!combat) return;
     if (combat.events === lastSeenRef.current) return;
-    if (combat.encounterId !== lastEncounterRef.current) {
+
+    const fresh = combat.encounterId !== lastEncounterRef.current;
+    if (fresh) {
       setAllEvents(combat.events);
       lastEncounterRef.current = combat.encounterId;
     } else {
       setAllEvents(prev => [...prev, ...combat.events]);
     }
     lastSeenRef.current = combat.events;
+
+    // Spawn a hitbox animation for each player-attack outcome in this batch.
+    // Skip the encounter-fresh batch: it only carries intro/surprise events,
+    // and even if a server quirk slipped one in, we shouldn't replay history.
+    if (!fresh && hitboxRef.current) {
+      const rect = hitboxRef.current.getBoundingClientRect();
+      const newHits: Hit[] = [];
+      for (const e of combat.events) {
+        if (!e.playerAttack) continue;
+        const { x, y } = pickAnchor(rect);
+        newHits.push({
+          id: ++hitIdRef.current,
+          x, y,
+          angle: Math.random() * 360,
+          splat: 1 + Math.floor(Math.random() * 8),
+          miss: e.playerAttack.outcome === "miss",
+        });
+      }
+      if (newHits.length) setHits(prev => [...prev, ...newHits]);
+    }
   }, [combat]);
 
   useEffect(() => {
@@ -67,10 +110,13 @@ export default function Combat({ state }: { state: GameResponse }) {
             alt=""
           />
         )}
-        <div className="absolute inset-x-0 bottom-0 top-32 flex items-end justify-center">
+        <div
+          ref={hitboxRef}
+          className="absolute inset-x-0 bottom-0 top-32 flex items-end justify-center"
+        >
           {combat.image && (
             <img
-              className="w-full h-full object-contain object-bottom"
+              className="w-full h-full object-contain object-bottom pointer-events-none"
               style={{
                 filter:
                   "drop-shadow(0 0 6px rgba(0,0,0,0.95)) drop-shadow(0 0 18px rgba(0,0,0,0.85)) drop-shadow(0 0 40px rgba(0,0,0,0.65)) drop-shadow(0 12px 24px rgba(0,0,0,0.6))",
@@ -80,6 +126,14 @@ export default function Combat({ state }: { state: GameResponse }) {
               onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
           )}
+          {hits.map(h => (
+            <span key={h.id}>
+              {h.miss
+                ? <MissMoon x={h.x} y={h.y} angle={h.angle} />
+                : <HitSplat x={h.x} y={h.y} angle={h.angle} variant={h.splat} color={combat.bloodColor} />}
+              <HitLens x={h.x} y={h.y} angle={h.angle} onDone={() => removeHit(h.id)} />
+            </span>
+          ))}
         </div>
 
         {/* Monster nameplate */}

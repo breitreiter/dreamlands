@@ -2252,6 +2252,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Title = encounter?.Title ?? "",
             Image = string.IsNullOrEmpty(encounter?.Image) ? null : encounter.Image,
             BiomeImage = BuildCombatBiomeImage(encounter),
+            BloodColor = encounter?.BloodColor ?? "#7a0a0a",
             IntroText = introEvt?.Text ?? encounter?.Intro ?? "",
 
             MonsterHp = monsterHp,
@@ -2364,7 +2365,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Dreamlands.Combat.CombatEvent.StanceChanged _        => null, // current stance is shown in the header pill
 
         Dreamlands.Combat.CombatEvent.PlayerAttacked x       => BuildPlayerAttack(x),
-        Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x => Plain(RenderDaggerAttack(x)),
+        Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x => BuildPlayerDaggerAttack(x),
         Dreamlands.Combat.CombatEvent.MonsterTurnSkipped x   => Plain($"  The monster reels — its {x.IntentClass.ToString().ToLowerInvariant()} never lands."),
         Dreamlands.Combat.CombatEvent.PlayerFleeAttempted x  => BuildFleeSave(x),
         Dreamlands.Combat.CombatEvent.MonsterMoved x         => Plain($"Monster: {x.Narration}"),
@@ -2394,7 +2395,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     static CombatLogEntry BuildPlayerAttack(Dreamlands.Combat.CombatEvent.PlayerAttacked x)
     {
-        if (x.Attack.Fumble) return Plain("  Player attacks: fumble (nat-1).");
+        var outcome = x.Attack.Fumble ? "miss"
+                    : x.Attack.Crit   ? "crit"
+                    : x.Attack.Hit    ? "hit"
+                                      : "miss";
+        var attack = new PlayerAttackInfo { Outcome = outcome, Damage = x.Damage?.Total };
+
+        if (x.Attack.Fumble)
+            return new CombatLogEntry { Text = "  Player attacks: fumble (nat-1).", PlayerAttack = attack };
+
         var crit = x.Attack.Crit ? " CRIT" : "";
         var detail = x.Attack.Hit && x.Damage != null
             ? $"{x.Damage.Total} damage{crit}"
@@ -2413,8 +2422,26 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 Passed = x.Attack.Hit, PassLabel = "Hit", FailLabel = "Miss",
                 Detail = detail,
             },
+            PlayerAttack = attack,
         };
     }
+
+    static CombatLogEntry BuildPlayerDaggerAttack(Dreamlands.Combat.CombatEvent.PlayerDaggerAttacked x) =>
+        new()
+        {
+            Text = RenderDaggerAttack(x),
+            PlayerAttack = new PlayerAttackInfo
+            {
+                Outcome = x.Band switch
+                {
+                    Dreamlands.Combat.TimingBand.Miss      => "miss",
+                    Dreamlands.Combat.TimingBand.Crit      => "crit",
+                    Dreamlands.Combat.TimingBand.SuperCrit => "super_crit",
+                    _                                       => "hit",
+                },
+                Damage = x.Damage?.Total,
+            },
+        };
 
     static CombatLogEntry BuildMonsterAttack(Dreamlands.Combat.CombatEvent.MonsterAttacked x)
     {
