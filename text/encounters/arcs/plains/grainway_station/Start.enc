@@ -17,7 +17,7 @@ The tattered company camps in the dust. Shabby uniforms, mismatched armor. A fad
 choices:
 
 * Approach the Imperial remnant = Talk to the soldiers
-    @if meets combat 5 {
+    @if meets combat 2 {
         A figure breaks from the camp's edge. His breastplate is dented, straps frayed where they hold the tarnished metal to his frame. He raises one hand as he nears, then halts, glances down at his palm as though seeing it for the first time. Dust and grime have worked into the creases. He wipes the hand hard against his thigh, smearing the filth into the wool, then offers it again.
 
         "Aldric. Captain, if rank matters to you." His grip is firm despite the dirt. "You have good timing. We could use another sword."
