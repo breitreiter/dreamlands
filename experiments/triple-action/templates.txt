@@ -1,0 +1,64 @@
+# triple-action encounter templates
+# format:
+#   === <id> | <display name>
+#   monster: <name> <hp>
+#     <move>            (one move per line, indentation optional)
+#     <move>
+#     ...
+#   player: <name> <hp>
+#     <move>
+#     ...
+# blank lines and lines starting with # are ignored.
+# moves are space-separated keywords; the last keyword is the base action.
+# valid bases: attack, defend, recover, read
+# valid mutators: see project/design/super_rps.md
+
+=== default | default
+monster: Goblin 18
+  Attack
+  Defend
+  Recover
+player: You 24
+  Attack
+  Defend
+  Recover
+  Read
+
+=== striker | striker — wolf vs basic
+monster: Wolf 18
+  Attack
+  Big Telegraphed Rare Attack
+  Defend
+  Recover
+player: You 24
+  Attack
+  Defend
+  Recover
+  Read
+
+=== duelist | duelist — knight vs swordfighter
+monster: Knight 24
+  Attack
+  Riposte Attack
+  Big Telegraphed Rare Attack
+  Defend
+  Recover
+player: You 24
+  Riposte Attack
+  Defend
+  Stunning Rare Defend
+  Recover
+  Read
+
+=== telegraphed | telegraphed — slow brute vs nimble
+monster: Ogre 28
+  Attack
+  Big Telegraphed Mythic Attack
+  Big Defend
+  Recover
+  Wary Recover
+player: You 24
+  Riposte Attack
+  Defend
+  Wary Recover
+  Read

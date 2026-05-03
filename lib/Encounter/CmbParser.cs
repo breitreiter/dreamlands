@@ -3,11 +3,39 @@ using System.Globalization;
 namespace Dreamlands.Encounter;
 
 /// <summary>
-/// Parses .fight monster encounter files. Token-driven, .enc-adjacent. Lines starting
-/// with '+' at column 0 are top-level directives; '#' is a comment; blank lines are
-/// ignored. Block directives (move/intro/win/lose) consume subsequent lines until the
-/// next column-0 '+'. Inside a block, lines starting with '>' are mechanic lines.
-/// Inside +intro/+win/+lose, anything else is prose.
+/// Parses .fight monster encounter files. Token-driven, .enc-adjacent. Lines
+/// starting with '+' at column 0 are top-level directives; '#' is a comment;
+/// blank lines are ignored. Block directives (move/intro/win/lose) consume
+/// subsequent lines until the next column-0 '+'.
+///
+/// New format (RPS-shaped):
+///
+///   +title Some Goblin
+///   +image foo/bar.webp
+///   +blood #7a0a0a
+///   +stats hp=18
+///
+///   +move Big Telegraphed Rare Attack
+///     narration: It winds back, hauling the maul over its head.
+///     narration: It snarls and lifts the spike to shoulder height.
+///
+///   +move Defend
+///     narration: It hunches behind its shield.
+///
+///   +intro
+///     A goblin steps from the brush.
+///
+///   +win
+///     The goblin slumps.
+///     > gold 8
+///     > tag killed_goblin
+///
+///   +lose
+///     Everything goes black.
+///
+/// `+move` is a Move encoding parsed by <see cref="Move.Parse"/> (last token is
+/// the base, preceding tokens are mutators). Multiple narration lines on one
+/// move = variants; the runner picks one randomly per use.
 /// </summary>
 public static class CmbParser
 {
@@ -46,7 +74,6 @@ public static class CmbParser
                 case "blood":  enc.BloodColor = args; i++; break;
                 case "repool": enc.Repool = ParseBool(args, source, i); i++; break;
                 case "stats":  enc.Stats = ParseStats(args, source, i); i++; break;
-                case "hitbox": enc.Hitboxes.Add(ParseHitbox(args, source, i)); i++; break;
                 case "move":   i = ParseMoveBlock(lines, i, args, enc, source); break;
                 case "intro":
                     i = ParseProseBlock(lines, i + 1, out string intro, out _);
@@ -70,68 +97,53 @@ public static class CmbParser
         return enc;
     }
 
-    private static (string directive, string args) SplitDirective(string line)
+    static (string directive, string args) SplitDirective(string line)
     {
         string body = line[1..];
         int sp = body.IndexOf(' ');
         return sp < 0 ? (body, "") : (body[..sp], body[(sp + 1)..].Trim());
     }
 
-    private static bool ParseBool(string s, string source, int line) => s.ToLowerInvariant() switch
+    static bool ParseBool(string s, string source, int line) => s.ToLowerInvariant() switch
     {
         "true" or "yes" or "1" => true,
         "false" or "no" or "0" or "" => false,
         _ => throw new FormatException($"{source}:{line + 1}: bad boolean '{s}'")
     };
 
-    private static MonsterStats ParseStats(string args, string source, int line)
+    static MonsterStats ParseStats(string args, string source, int line)
     {
-        int hp = 0, ac = 0, toHit = 0;
-        DiceRoll dmg = new(0, 0, 0);
+        int hp = 0;
         foreach (var pair in SplitKv(args))
         {
             switch (pair.Key)
             {
-                case "hp":     hp = int.Parse(pair.Value, CultureInfo.InvariantCulture); break;
-                case "ac":     ac = int.Parse(pair.Value, CultureInfo.InvariantCulture); break;
-                case "to_hit": toHit = ParseSignedInt(pair.Value); break;
-                case "damage": dmg = DiceParser.Parse(pair.Value); break;
+                case "hp": hp = int.Parse(pair.Value, CultureInfo.InvariantCulture); break;
                 default:
-                    throw new FormatException($"{source}:{line + 1}: unknown stats key '{pair.Key}'");
+                    throw new FormatException($"{source}:{line + 1}: unknown stats key '{pair.Key}' (only 'hp' is recognized)");
             }
         }
-        return new MonsterStats(hp, ac, toHit, dmg);
+        if (hp <= 0)
+            throw new FormatException($"{source}:{line + 1}: +stats needs hp=<n> with n > 0");
+        return new MonsterStats(hp);
     }
 
-    private static Hitbox ParseHitbox(string args, string source, int line)
+    static int ParseMoveBlock(IReadOnlyList<string> lines, int i, string moveEncoding, CombatEncounter enc, string source)
     {
-        int sp = args.IndexOf(' ');
-        if (sp < 0) throw new FormatException($"{source}:{line + 1}: hitbox needs id and bounds");
-        string id = args[..sp];
-        string rest = args[(sp + 1)..];
-        double l = 0, t = 0, r = 1, b = 1;
-        foreach (var pair in SplitKv(rest))
+        if (string.IsNullOrEmpty(moveEncoding))
+            throw new FormatException($"{source}:{i + 1}: '+move' needs a Move encoding (e.g. 'Big Attack')");
+
+        Move action;
+        try
         {
-            double v = double.Parse(pair.Value, CultureInfo.InvariantCulture);
-            switch (pair.Key)
-            {
-                case "left":   l = v; break;
-                case "top":    t = v; break;
-                case "right":  r = v; break;
-                case "bottom": b = v; break;
-                default:
-                    throw new FormatException($"{source}:{line + 1}: unknown hitbox key '{pair.Key}'");
-            }
+            action = Move.Parse(moveEncoding);
         }
-        return new Hitbox(id, l, t, r, b);
-    }
+        catch (Exception ex)
+        {
+            throw new FormatException($"{source}:{i + 1}: {ex.Message}");
+        }
 
-    private static int ParseMoveBlock(IReadOnlyList<string> lines, int i, string id, CombatEncounter enc, string source)
-    {
-        if (string.IsNullOrEmpty(id))
-            throw new FormatException($"{source}:{i + 1}: '+move' needs an id");
-
-        var move = new MonsterMove { Id = id };
+        var def = new MonsterMoveDef { Action = action };
         i++;
 
         while (i < lines.Count && !lines[i].TrimStart().StartsWith('+'))
@@ -139,42 +151,29 @@ public static class CmbParser
             string trimmed = lines[i].TrimEnd().TrimStart();
             if (trimmed.Length == 0 || trimmed.StartsWith('#')) { i++; continue; }
 
-            if (trimmed.StartsWith('>'))
-            {
-                string mech = trimmed[1..].Trim();
-                move.Mechanics.Add(ParseMoveMechanic(mech));
-            }
-            else
-            {
-                int colon = trimmed.IndexOf(':');
-                if (colon < 0)
-                    throw new FormatException($"{source}:{i + 1}: expected 'key: value' in move block, got: {trimmed}");
-                string key = trimmed[..colon].Trim();
-                string value = StripQuotes(trimmed[(colon + 1)..].Trim());
+            int colon = trimmed.IndexOf(':');
+            if (colon < 0)
+                throw new FormatException($"{source}:{i + 1}: expected 'narration: <text>' in move block, got: {trimmed}");
+            string key = trimmed[..colon].Trim();
+            string value = StripQuotes(trimmed[(colon + 1)..].Trim());
 
-                switch (key)
-                {
-                    case "intent":    move.IntentClass = ParseIntentClass(value, source, i); break;
-                    case "preview":   move.IntentText = value; break;
-                    case "timer":     move.Timer = int.Parse(value, CultureInfo.InvariantCulture); break;
-                    case "sprite":    move.Sprite = value; break;
-                    case "anchor":    move.Anchor = value; break;
-                    case "narration": move.Narration = value; break;
-                    default:
-                        throw new FormatException($"{source}:{i + 1}: unknown move key '{key}'");
-                }
+            switch (key)
+            {
+                case "narration": def.NarrationVariants.Add(value); break;
+                default:
+                    throw new FormatException($"{source}:{i + 1}: unknown move key '{key}' (only 'narration' is recognized)");
             }
             i++;
         }
 
-        if (move.Mechanics.Count == 0)
-            throw new FormatException($"{source}: move '{id}' has no mechanics");
+        if (def.NarrationVariants.Count == 0)
+            throw new FormatException($"{source}: move '{moveEncoding}' has no narration lines");
 
-        enc.Moves.Add(move);
+        enc.Moves.Add(def);
         return i;
     }
 
-    private static int ParseProseBlock(IReadOnlyList<string> lines, int i, out string text, out List<string> mechanics)
+    static int ParseProseBlock(IReadOnlyList<string> lines, int i, out string text, out List<string> mechanics)
     {
         var prose = new List<string>();
         mechanics = new List<string>();
@@ -203,32 +202,10 @@ public static class CmbParser
         return i;
     }
 
-    private static MoveMechanic ParseMoveMechanic(string s)
-    {
-        int sp = s.IndexOf(' ');
-        return sp < 0 ? new MoveMechanic(s, "") : new MoveMechanic(s[..sp], s[(sp + 1)..].Trim());
-    }
-
-    private static IntentClass ParseIntentClass(string s, string source, int line) => s switch
-    {
-        "attack"        => IntentClass.Attack,
-        "heavy_attack"  => IntentClass.HeavyAttack,
-        "defend"        => IntentClass.Defend,
-        "pierce"        => IntentClass.Pierce,
-        "condition"     => IntentClass.Condition,
-        "flee"          => IntentClass.Flee,
-        _ => throw new FormatException($"{source}:{line + 1}: unknown intent class '{s}'")
-    };
-
-    private static int ParseSignedInt(string s) =>
-        s.StartsWith('+')
-            ? int.Parse(s[1..], CultureInfo.InvariantCulture)
-            : int.Parse(s, CultureInfo.InvariantCulture);
-
-    private static string StripQuotes(string s) =>
+    static string StripQuotes(string s) =>
         s.Length >= 2 && s[0] == '"' && s[^1] == '"' ? s[1..^1] : s;
 
-    private static IEnumerable<KeyValuePair<string, string>> SplitKv(string args)
+    static IEnumerable<KeyValuePair<string, string>> SplitKv(string args)
     {
         foreach (var part in args.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
@@ -237,39 +214,4 @@ public static class CmbParser
             yield return new KeyValuePair<string, string>(part[..eq], part[(eq + 1)..]);
         }
     }
-}
-
-/// <summary>Parses dice expressions like "1d8", "2d8+2", "1d4-1", "+4", "-2", "5".</summary>
-public static class DiceParser
-{
-    public static DiceRoll Parse(string raw)
-    {
-        var s = raw.Trim();
-        if (s.Length == 0) throw new FormatException("empty dice expression");
-
-        int dIdx = s.IndexOf('d');
-        if (dIdx < 0)
-            return new DiceRoll(0, 0, ParseSignedInt(s));
-
-        int count = int.Parse(s[..dIdx], CultureInfo.InvariantCulture);
-        string rest = s[(dIdx + 1)..];
-
-        int sep = -1;
-        for (int i = 0; i < rest.Length; i++)
-        {
-            if (rest[i] == '+' || rest[i] == '-') { sep = i; break; }
-        }
-
-        if (sep < 0)
-            return new DiceRoll(count, int.Parse(rest, CultureInfo.InvariantCulture), 0);
-
-        int sides = int.Parse(rest[..sep], CultureInfo.InvariantCulture);
-        int mod = int.Parse(rest[sep..], CultureInfo.InvariantCulture);
-        return new DiceRoll(count, sides, mod);
-    }
-
-    private static int ParseSignedInt(string s) =>
-        s.StartsWith('+')
-            ? int.Parse(s[1..], CultureInfo.InvariantCulture)
-            : int.Parse(s, CultureInfo.InvariantCulture);
 }

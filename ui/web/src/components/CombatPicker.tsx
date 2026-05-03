@@ -75,7 +75,7 @@ export default function CombatPicker({ onClose }: { onClose: () => void }) {
                     <div className="text-dim text-[16px] flex gap-3 mt-0.5">
                       {enc.tier != null && <span>T{enc.tier}</span>}
                       {enc.category && <span className="truncate">{enc.category}</span>}
-                      <span className="ml-auto text-muted">HP {enc.hp} · AC {enc.ac}</span>
+                      <span className="ml-auto text-muted">HP {enc.hp}</span>
                     </div>
                   </div>
                 </button>

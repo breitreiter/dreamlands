@@ -247,17 +247,10 @@ export interface CombatEncounterSummary {
   category: string;
   tier: number | null;
   hp: number;
-  ac: number;
 }
 
 export interface CombatListResponse {
   encounters: CombatEncounterSummary[];
-}
-
-export interface CombatIntentInfo {
-  moveId: string;
-  class: string;
-  text: string;
 }
 
 export interface CombatInfo {
@@ -270,22 +263,25 @@ export interface CombatInfo {
 
   monsterHp: number;
   monsterMaxHp: number;
-  monsterAc: number;
 
   playerSpirits: number;
   playerMaxSpirits: number;
   playerHealth: number;
   playerMaxHealth: number;
-  playerEffectiveAc: number;
-  playerAttackBonus: number;
   playerWeaponClass: string;
   playerArmorClass: string;
 
-  round: number;
-  playerActsFirst: boolean;
-  stance: string;
+  /** Encoded form of every move the player can pick from. Cooldowns filtered client-side. */
+  playerMovePool: string[];
+  /** Per-slot lockout: if true, that slot is forced to Skipped (carry-stun). */
+  playerCarryStun: boolean[];
+  /** encoded move → turn number when last used. Lets us gate Rare/Mythic/Power/Slow. */
+  playerLastUsedTurn: Record<string, number>;
 
-  intent: CombatIntentInfo | null;
+  turn: number;
+  tell: string;
+  /** AI's three-slot commit, surfaced when the player committed Read on the prior turn. */
+  plan: string[] | null;
 
   resolved: boolean;
   playerWon: boolean;

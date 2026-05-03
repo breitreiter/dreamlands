@@ -46,7 +46,7 @@ interface GameContextValue extends GameState {
     openingIndex?: number;
     path?: { x: number; y: number }[];
   }) => Promise<GameResponse | null>;
-  doCombatAction: (body: { action: string; stance?: string; band?: string }) => Promise<GameResponse | null>;
+  doCombatAction: (body: { action: "commit"; slots: string[] } | { action: "flee" }) => Promise<GameResponse | null>;
   doCombatBegin: (encounterId: string) => Promise<GameResponse | null>;
   clearError: () => void;
   setCampReport: (report: CampReport) => void;
@@ -199,7 +199,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   );
 
   const doCombatAction = useCallback(
-    async (body: { action: string; stance?: string; band?: string }): Promise<GameResponse | null> => {
+    async (body: { action: "commit"; slots: string[] } | { action: "flee" }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;
       setState((s) => ({ ...s, loading: true, error: null }));
       try {

@@ -61,6 +61,12 @@ class GameClient(string baseUrl)
         return await ReadResponse(resp);
     }
 
+    public async Task<string> CombatList(string gameId)
+    {
+        var resp = await _http.GetAsync($"/api/game/{gameId}/combat/list");
+        return await ReadResponse(resp);
+    }
+
     public async Task<bool> IsReachable()
     {
         try

@@ -1,45 +1,38 @@
-# The Bog Stalker — swamp T2 (predatory flesh-mutant)
+# Bog Stalker — swamp T2 basic tank (HP 24, basic + limited powerful defend + limited powerful recover)
 
-+title The Bog Stalker
++title Bog Stalker
 +image monsters/swamp_beast_4.png
-+repool false
-+stats hp=30 ac=11 to_hit=+5 damage=1d4
++blood #2a4a3a
++stats hp=24
 
-+hitbox target left=0.0 top=0.25 right=1.0 bottom=0.70
++move Attack
+  narration: A thick-knuckled limb lashes out from the murk.
+  narration: It lunges low, jaw splitting wider than it should.
 
-+move slash
-  intent: attack
-  preview: "It coils a fraction lower. The skin patterns shift across the shoulder."
-  timer: 0
-  sprite: stalker_slash
-  anchor: center
-  narration: "It opens up at you in a quick raking strike."
-  > deal_damage 1d4
++move Defend
+  narration: It flattens against the bog, half-submerged, hide gone slick and stone-grey.
 
-+move ambush
-  intent: heavy_attack
-  preview: "It pulls back into the reeds. The patterns bleed into the dark."
-  timer: 3
-  sprite: stalker_ambush
-  anchor: bottom
-  narration: "It comes back out of cover at a longer angle than you'd expect, and lands."
-  > deal_damage 2d8
-  > inflict_condition poisoned dc 12 33%
++move Recover
+  narration: It sinks to the gill-line, drinking the rot back into itself.
+
++move Big Rare Defend
+  narration: It folds inward and lets the swamp rise around it — water, weed, bone-mat — armor of the place itself.
+
++move Big Rare Recover
+  narration: The water around it bubbles black and the wounds you've put in it close like seams pulled tight.
 
 +intro
-It has been watching you for some time. You realize this in the
-half-second before it comes out of the reeds — too low in the hip, too
-long in the shoulder, the wet skin patterned like nothing that ever
-lived. It does not roar. It does not posture. It crosses the open water
-between you in a single coiled stride and is on its second when you raise
-your weapon.
+The reeds part without anything visibly parting them. Then a ridge breaks
+the water, then a long flat head you mistook for a half-sunk log. The eyes
+are old — older than they have any right to be, in something this size.
+It does not hurry. The bog hurries for it.
 
 +win
-> +give_gold 10
-> +add_tag killed_bog_stalker
-The patterns across the wet skin slow, settle, and stop. The carcass
-sinks where it lies, the open water taking it back the way the open
-water takes most things on the deep paths.
+> gold 12
+> tag killed_bog_stalker
+It settles back into the water without a sound, going where it came from.
+The swamp closes up over it and after a moment you couldn't say where it
+had been.
 
 +lose
-> +damage_spirits 100
+You go down in the wet. The cold is the last thing you notice.

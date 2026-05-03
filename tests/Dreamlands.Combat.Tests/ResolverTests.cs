@@ -5,55 +5,132 @@ namespace Dreamlands.Combat.Tests;
 
 public class ResolverTests
 {
-    [Fact]
-    public void Crit_doubles_dice_not_modifier()
-    {
-        // Force a deterministic damage roll with seeded RNG.
-        var rng = new Random(7);
-        var dmg = Resolver.RollDamage(rng, new DiceRoll(2, 6, 3), crit: true);
-        Assert.Equal(4, dmg.Dice.Length); // 2d6 doubled to 4d6
-        Assert.Equal(3, dmg.Modifier);
-        Assert.Equal(dmg.Dice.Sum() + 3, dmg.Total);
-    }
+    static Move M(string s) => Move.Parse(s);
 
     [Fact]
-    public void Hit_damage_floors_at_one()
+    public void Attack_vs_defend_basic_damage_minus_prevention()
     {
         var rng = new Random(0);
-        // 1d4 - 10 → minimum die roll is 1, but result floored to 1, not negative.
-        var dmg = Resolver.RollDamage(rng, new DiceRoll(1, 4, -10), crit: false);
-        Assert.True(dmg.Total >= 1);
+        var r = Resolver.Resolve(M("attack"), M("defend"), rng);
+        // Attack 4 - Defend 2 = 2 damage to monster.
+        Assert.Equal(0, r.PlayerDelta);
+        Assert.Equal(-2, r.MonsterDelta);
     }
 
     [Fact]
-    public void Nat_one_is_fumble_and_misses()
+    public void Big_attack_pushes_through_basic_defend()
     {
-        // d20 always returns 1 if seeded carefully? Easier: assert the property holds across many rolls.
-        var rng = new Random(123);
-        for (int i = 0; i < 200; i++)
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("heavy attack"), M("defend"), rng);
+        // Wait — Attack mutators in super_rps use "Heavy" for +4. Confirm.
+        Assert.Equal(0, r.PlayerDelta);
+        Assert.Equal(-6, r.MonsterDelta); // 4 base + 4 heavy - 2 defend = 6
+    }
+
+    [Fact]
+    public void Perfect_defend_blocks_all_damage()
+    {
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("attack"), M("perfect defend"), rng);
+        Assert.Equal(0, r.MonsterDelta);
+    }
+
+    [Fact]
+    public void Attack_vs_recover_cancels_heal_and_stuns()
+    {
+        var rng = new Random(0);
+        // Player attacks; monster recovers. Recover gets cancelled (no heal),
+        // recoverer (monster) is stunned for next slot.
+        var r = Resolver.Resolve(M("attack"), M("recover"), rng);
+        Assert.Equal(0, r.MonsterDelta + r.PlayerDelta - (-4)); // monster takes 4, no heal
+        Assert.Equal(-4, r.MonsterDelta);
+        Assert.True(r.StunMonsterNext);
+    }
+
+    [Fact]
+    public void Riposte_vs_attack_prevents_two_and_adds_two()
+    {
+        var rng = new Random(0);
+        // Both swing; player has Riposte. Player takes 4 - 2 = 2; monster takes 4 + 2 = 6.
+        var r = Resolver.Resolve(M("riposte attack"), M("attack"), rng);
+        Assert.Equal(-2, r.PlayerDelta);
+        Assert.Equal(-6, r.MonsterDelta);
+    }
+
+    [Fact]
+    public void Wary_recover_vs_attack_converts_to_defend()
+    {
+        var rng = new Random(0);
+        // Wary Recover treated as basic Defend. Attack 4 - Defend 2 = 2 damage to player.
+        var r = Resolver.Resolve(M("wary recover"), M("attack"), rng);
+        Assert.Equal(-2, r.PlayerDelta);
+        Assert.Equal(0, r.MonsterDelta);
+        // No stun on the (converted-to-defend) target.
+        Assert.False(r.StunPlayerNext);
+    }
+
+    [Fact]
+    public void Recover_heals_when_unopposed()
+    {
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("recover"), M("defend"), rng);
+        Assert.Equal(4, r.PlayerDelta);
+    }
+
+    [Fact]
+    public void Big_recover_heals_six()
+    {
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("big recover"), M("defend"), rng);
+        Assert.Equal(6, r.PlayerDelta);
+    }
+
+    [Fact]
+    public void Exhausting_attack_self_stuns()
+    {
+        var rng = new Random(0);
+        // Player commits Exhausting Attack — gets stunned next slot regardless.
+        var r = Resolver.Resolve(M("exhausting attack"), M("defend"), rng);
+        Assert.True(r.StunPlayerNext);
+    }
+
+    [Fact]
+    public void Provoking_attack_berzerks_target_next_turn()
+    {
+        var rng = new Random(0);
+        // Player Provoking Attack hits monster. Monster gets Berzerk for next turn.
+        var r = Resolver.Resolve(M("provoking attack"), M("defend"), rng);
+        Assert.True(r.BerzerkMonsterNext);
+        Assert.False(r.BerzerkPlayerNext);
+    }
+
+    [Fact]
+    public void Terrifying_attack_fears_target_next_turn()
+    {
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("terrifying attack"), M("defend"), rng);
+        Assert.True(r.FearMonsterNext);
+        Assert.False(r.FearPlayerNext);
+    }
+
+    [Fact]
+    public void Shielding_defend_blocks_stun_proc()
+    {
+        // Stunning Attack against Shielding Defend: even if proc rolls true, Shielding clears it.
+        var rng = new Random(0);
+        for (int i = 0; i < 50; i++)
         {
-            var outcome = Resolver.RollAttack(rng, bonus: 100, targetAc: 5);
-            if (outcome.Roll == 1)
-            {
-                Assert.True(outcome.Fumble);
-                Assert.False(outcome.Hit);
-                Assert.False(outcome.Crit);
-            }
-            if (outcome.Roll == 20)
-            {
-                Assert.True(outcome.Crit);
-                Assert.True(outcome.Hit);
-                Assert.False(outcome.Fumble);
-            }
+            var r = Resolver.Resolve(M("stunning attack"), M("shielding defend"), rng);
+            Assert.False(r.StunMonsterNext);
         }
     }
 
     [Fact]
-    public void Save_succeeds_when_total_meets_dc()
+    public void Skipped_does_nothing()
     {
-        var rng = new Random(42);
-        var save = Resolver.RollSave(rng, bonus: 5, dc: 10);
-        Assert.Equal(save.Roll + 5, save.Total);
-        Assert.Equal(save.Total >= 10, save.Success);
+        var rng = new Random(0);
+        var r = Resolver.Resolve(Move.Skipped(), M("attack"), rng);
+        Assert.Equal(-4, r.PlayerDelta);
+        Assert.Equal(0, r.MonsterDelta);
     }
 }

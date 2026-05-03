@@ -446,22 +446,32 @@ public class CombatInfo
 
     public int MonsterHp { get; init; }
     public int MonsterMaxHp { get; init; }
-    public int MonsterAc { get; init; }
 
     public int PlayerSpirits { get; init; }
     public int PlayerMaxSpirits { get; init; }
     public int PlayerHealth { get; init; }
     public int PlayerMaxHealth { get; init; }
-    public int PlayerEffectiveAc { get; init; }
-    public int PlayerAttackBonus { get; init; }
     public string PlayerWeaponClass { get; init; } = "";
     public string PlayerArmorClass { get; init; } = "";
 
-    public int Round { get; init; }
-    public bool PlayerActsFirst { get; init; }
-    public string Stance { get; init; } = "";
+    /// <summary>The encoded forms of every move the player can pick from this turn.
+    /// Cooldown filtering is the client's job — pair with <see cref="PlayerLastUsedTurn"/>
+    /// and <see cref="Turn"/> to gate Rare/Mythic moves.</summary>
+    public List<string> PlayerMovePool { get; init; } = new();
 
-    public CombatIntentInfo? Intent { get; init; }
+    /// <summary>For each slot 1..3, true means it's locked to Skipped this turn (carry-stun).</summary>
+    public List<bool> PlayerCarryStun { get; init; } = new();
+
+    /// <summary>Encoded move → turn it was last used. Lets the client gate Rare ("== current turn")
+    /// and Mythic ("current - 1 == last used") moves.</summary>
+    public Dictionary<string, int> PlayerLastUsedTurn { get; init; } = new();
+
+    public int Turn { get; init; }
+    public string Tell { get; init; } = "";
+
+    /// <summary>The AI's three-slot plan, surfaced when the player committed Read on
+    /// the previous turn. Null otherwise.</summary>
+    public List<string>? Plan { get; init; }
 
     public bool Resolved { get; init; }
     public bool PlayerWon { get; init; }
@@ -540,7 +550,6 @@ public class CombatEncounterSummary
     public string Category { get; init; } = "";
     public int? Tier { get; init; }
     public int Hp { get; init; }
-    public int Ac { get; init; }
 }
 
 public class CombatListResponse
@@ -550,14 +559,11 @@ public class CombatListResponse
 
 public class CombatActionRequest
 {
-    /// <summary>"attack" | "stance" | "flee" | "dagger_attack".</summary>
+    /// <summary>"commit" | "flee".</summary>
     public string Action { get; set; } = "";
 
-    /// <summary>For action=stance: "aggressive" | "balanced" | "defensive".</summary>
-    public string? Stance { get; set; }
-
-    /// <summary>For action=dagger_attack: "miss" | "hit" | "crit" | "super_crit". Client posts the timing band it landed in.</summary>
-    public string? Band { get; set; }
+    /// <summary>For action=commit: exactly three move encodings, e.g. ["Big Attack", "Defend", "Read"].</summary>
+    public List<string>? Slots { get; set; }
 }
 
 public class CombatBeginRequest

@@ -1,9 +1,15 @@
+using Dreamlands.Encounter;
+
 namespace Dreamlands.Game;
 
 /// <summary>
 /// In-progress combat state, persisted on the player's Cosmos document. Pure data;
-/// resolution logic lives in <c>Dreamlands.Combat</c>. Lookups against the live
-/// <c>Dreamlands.Encounter.CombatEncounter</c> are by <see cref="EncounterId"/>.
+/// resolution logic lives in <see cref="Dreamlands.Combat.CombatRunner"/>.
+///
+/// Persistence model: at end-of-Step (or Begin) the state holds the AI's three-slot
+/// commitment for the *next* turn the player will play against, plus all carry-over
+/// state (cooldowns, carry-stuns, pending Berzerk/Fear, reveal-plan flag). The next
+/// HTTP request reads the same state and applies the player's commit against it.
 /// </summary>
 public sealed class CombatState
 {
@@ -12,25 +18,42 @@ public sealed class CombatState
     public int MonsterHp { get; set; }
     public int MonsterMaxHp { get; set; }
 
-    /// <summary>Cooldown remaining (in turns) per non-basic move id. Counts down to 0 = ready.</summary>
-    public Dictionary<string, int> Cooldowns { get; set; } = new();
-
-    /// <summary>Move the monster will execute on its next turn. Drives the intent preview.</summary>
-    public string? NextMoveId { get; set; }
-
-    /// <summary>Transient per-turn AC bump from a Defend move. Reset before each monster turn.</summary>
-    public int MonsterAcBonusThisTurn { get; set; }
+    /// <summary>1-indexed turn counter. Turn 1 begins after Begin emits the first Tell.</summary>
+    public int Turn { get; set; } = 1;
 
     /// <summary>
-    /// Set by a dagger super-crit; consumed by the next monster turn (which is skipped).
-    /// Heavy cooldown still ticks per design — blanking a basic costs the monster a swing,
-    /// blanking a heavy resets the cooldown without dealing damage.
+    /// AI's three-slot commitment for the upcoming turn. Set by Begin (turn 1) and at
+    /// the end of every Step. Length is always 3; Skipped slots are explicit.
     /// </summary>
-    public bool SkipNextMonsterTurn { get; set; }
+    public List<Move> MonsterCommit { get; set; } = new();
 
-    public int Round { get; set; }
-    public bool PlayerActsFirst { get; set; }
-    public SwordStance Stance { get; set; } = SwordStance.Balanced;
+    /// <summary>
+    /// Monster narration string selected per committed slot. Parallel to MonsterCommit;
+    /// preserved across the request boundary so the UI can display the monster's chosen
+    /// flavour even if the move pool has multiple narration variants.
+    /// </summary>
+    public List<string> MonsterCommitNarration { get; set; } = new();
+
+    /// <summary>Carry-stun: index N true means slot N+1 of the *next* turn is locked to Skipped.</summary>
+    public bool[] PlayerCarryStun { get; set; } = new bool[3];
+    public bool[] MonsterCarryStun { get; set; } = new bool[3];
+
+    /// <summary>Cooldown bookkeeping for Rare ("once per turn") / Mythic ("once every other turn").
+    /// Keyed by <c>Move.Encoded</c>; value is the turn number when the move was last used.</summary>
+    public Dictionary<string, int> PlayerLastUsedTurn { get; set; } = new();
+    public Dictionary<string, int> MonsterLastUsedTurn { get; set; } = new();
+
+    /// <summary>
+    /// True iff the player committed Read this turn — consumed at the start of the
+    /// next turn to reveal the AI's plan, then cleared.
+    /// </summary>
+    public bool RevealPlanNextTurn { get; set; }
+
+    /// <summary>Pool restrictions on the upcoming turn's commitment (per super_rps.md § Conditions).</summary>
+    public bool PlayerBerzerkNextTurn { get; set; }
+    public bool PlayerFearNextTurn { get; set; }
+    public bool MonsterBerzerkNextTurn { get; set; }
+    public bool MonsterFearNextTurn { get; set; }
 
     public CombatPlayerProfile Profile { get; set; } = new();
 

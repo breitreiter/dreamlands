@@ -1,47 +1,37 @@
-# Civil Priest Darun Velyr — scrub T2 (Color cleric)
+# Civil Priest Velyr — scrub T2 basic duelist (HP 18, basic + limited powerful attack + limited powerful defend)
 
-+title Civil Priest Darun Velyr
++title Civil Priest Velyr
 +image monsters/scrub_mage.png
-+repool false
-+stats hp=30 ac=11 to_hit=+5 damage=1d4
++stats hp=18
 
-+hitbox target left=0.0 top=0.50 right=1.0 bottom=0.78
++move Attack
+  narration: He drives the butt of the staff at your ribs.
+  narration: He sweeps the haft toward your knee.
 
-+move admonish
-  intent: attack
-  preview: "The polished disk turns. Color thickens behind it."
-  timer: 0
-  sprite: priest_admonish
-  anchor: center
-  narration: "A flick of Color from the disk catches you across the chest."
-  > deal_damage 1d4
++move Defend
+  narration: He plants the staff and bends his knees, blade-end angled at your throat.
 
-+move alignment
-  intent: heavy_attack
-  preview: "He spreads his hands. The disk goes opaque with violet weight."
-  timer: 3
-  sprite: priest_alignment
-  anchor: top
-  narration: "The Color pours out of the disk in a slow, sure fold around you."
-  > deal_damage 2d8
-  > inflict_condition lattice_sickness dc 12 33%
++move Recover
+  narration: He steps back, breathing through his nose, finding his line.
+
++move Heavy Slow Attack
+  narration: He sets his stance, takes a measured breath, and drives the staff in a hard descending arc.
+
++move Big Rare Defend
+  narration: He shifts his weight and brings the staff into a high guard, both hands locked.
 
 +intro
-He is several inches above the road. You notice this the way you notice
-something while you are noticing something else, and by then he is
-already speaking. His face is hidden behind a polished violet disk, and
-his voice is gentle, almost relieved. "I am so glad you stopped. There
-has been a misunderstanding about your function, and I am authorized to
-correct it. Please listen carefully." The disk turns toward you. The
-Color behind it begins to thicken. "We will begin with alignment."
+The priest steps onto the path with the same composure he carries in the
+courtyard. Plain robes, polished staff, that Kesharat formality. He inclines
+his head, as if this were a courtesy call. Then his grip on the staff
+changes, and you understand it isn't.
 
 +win
-> +give_gold 12
-> +add_tag killed_civil_priest_velyr
-The priest settles onto the road in the order he had been hovering above
-it. The disk falls last, slowly, and clatters once on the paving. The
-Color in it goes thin, and then ordinary, and then it is just a dish of
-polished glass in the dust.
+> gold 14
+> tag bested_velyr
+He goes to one knee, then his hands, then he is still. The road is very
+quiet. After a moment a desert lark starts up in the brush, and the world
+remembers itself.
 
 +lose
-> +damage_spirits 100
+The staff finds your temple. Light, then nothing.

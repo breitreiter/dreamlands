@@ -1,123 +1,148 @@
 using Dreamlands.Encounter;
+using System.IO;
 
 namespace Dreamlands.Combat.Tests;
 
 public class CmbParserTests
 {
-    const string Sample = """
-        +title Test Beast
-        +image monsters/test.png
-        +repool false
-        +stats hp=10 ac=12 to_hit=+3 damage=1d6
+    const string SampleEncounter = """
+        +title Test Goblin
+        +image foo/bar.webp
+        +blood #7a0a0a
+        +stats hp=18
 
-        +hitbox torso left=0.3 top=0.3 right=0.7 bottom=0.7
+        +move Attack
+          narration: It lunges with a stick.
 
-        +move basic_swing
-          intent: attack
-          preview: "It hefts its weapon."
-          timer: 0
-          sprite: swing
-          anchor: center
-          narration: "It swings."
-          > deal_damage 1d6
+        +move Heavy Telegraphed Slow Attack
+          narration: It hauls the maul over its head.
+          narration: It bellows and winds up the strike.
 
-        +move heavy
-          intent: heavy_attack
-          preview: "It rears back for a big strike."
-          timer: 3
-          sprite: heavy
-          narration: "It crashes down."
-          > deal_damage 2d6+1
+        +move Defend
+          narration: It hunches behind its shield.
 
         +intro
-        You meet the test beast.
+        A goblin steps from the brush.
 
         +win
-        > +give_gold 5
-        > +add_tag killed_test
-        It falls.
+        The goblin slumps.
+        > gold 8
+        > tag killed_goblin
 
         +lose
-        > +damage_spirits 100
-        It stands over you.
+        Everything goes black.
         """;
 
     [Fact]
-    public void Parses_basic_fields()
+    public void Parses_top_level_directives()
     {
-        var enc = CmbParser.ParseString(Sample);
-        Assert.Equal("Test Beast", enc.Title);
-        Assert.Equal("monsters/test.png", enc.Image);
-        Assert.False(enc.Repool);
-        Assert.Equal(10, enc.Stats.Hp);
-        Assert.Equal(12, enc.Stats.Ac);
-        Assert.Equal(3, enc.Stats.ToHit);
-        Assert.Equal(new DiceRoll(1, 6, 0), enc.Stats.Damage);
+        var enc = CmbParser.ParseString(SampleEncounter);
+        Assert.Equal("Test Goblin", enc.Title);
+        Assert.Equal("foo/bar.webp", enc.Image);
+        Assert.Equal("#7a0a0a", enc.BloodColor);
+        Assert.Equal(18, enc.Stats.Hp);
     }
 
     [Fact]
-    public void Parses_hitboxes_and_moves()
+    public void Parses_move_block_with_mutators_and_narration_variants()
     {
-        var enc = CmbParser.ParseString(Sample);
-        Assert.Single(enc.Hitboxes);
-        Assert.Equal("torso", enc.Hitboxes[0].Id);
-        Assert.Equal(2, enc.Moves.Count);
-
-        var basic = enc.Moves[0];
-        Assert.Equal("basic_swing", basic.Id);
-        Assert.True(basic.IsBasic);
-        Assert.Equal(IntentClass.Attack, basic.IntentClass);
-        Assert.Equal("It hefts its weapon.", basic.IntentText);
-        Assert.Single(basic.Mechanics);
-        Assert.Equal("deal_damage", basic.Mechanics[0].Verb);
-        Assert.Equal("1d6", basic.Mechanics[0].Args);
+        var enc = CmbParser.ParseString(SampleEncounter);
+        Assert.Equal(3, enc.Moves.Count);
 
         var heavy = enc.Moves[1];
-        Assert.Equal(3, heavy.Timer);
-        Assert.False(heavy.IsBasic);
-        Assert.Equal(IntentClass.HeavyAttack, heavy.IntentClass);
+        Assert.Equal("attack", heavy.Action.Base);
+        Assert.Contains("heavy", heavy.Action.Mutators);
+        Assert.Contains("slow", heavy.Action.Mutators);
+        Assert.Contains("telegraphed", heavy.Action.Mutators);
+        Assert.Equal(2, heavy.NarrationVariants.Count);
+
+        var def = enc.Moves[2];
+        Assert.Equal("defend", def.Action.Base);
+        Assert.Empty(def.Action.Mutators);
+        Assert.Single(def.NarrationVariants);
     }
 
     [Fact]
-    public void Strips_plus_prefix_from_outcome_mechanics()
+    public void Parses_intro_win_lose_blocks()
     {
-        var enc = CmbParser.ParseString(Sample);
-        Assert.Equal(new[] { "give_gold 5", "add_tag killed_test" }, enc.WinMechanics);
-        Assert.Equal(new[] { "damage_spirits 100" }, enc.LoseMechanics);
-        Assert.Contains("It falls.", enc.WinText);
-        Assert.Contains("It stands over you.", enc.LoseText);
+        var enc = CmbParser.ParseString(SampleEncounter);
+        Assert.Contains("goblin", enc.Intro);
+        Assert.Contains("slumps", enc.WinText);
+        Assert.Contains("gold 8", enc.WinMechanics);
+        Assert.Contains("tag killed_goblin", enc.WinMechanics);
+        Assert.Contains("black", enc.LoseText);
     }
 
     [Fact]
-    public void Basic_move_required()
+    public void Rejects_unknown_directive()
     {
-        var enc = CmbParser.ParseString(Sample);
-        var basic = enc.BasicMove;
-        Assert.Equal("basic_swing", basic.Id);
+        var bad = """
+            +title Foo
+            +stats hp=10
+            +bogus thing
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
     }
 
     [Fact]
-    public void Missing_basic_throws_on_access()
+    public void Rejects_unknown_mutator()
     {
-        var enc = CmbParser.ParseString("""
-            +title NoBasic
-            +stats hp=1 ac=10 to_hit=+0 damage=1d4
-            +move only
-              intent: attack
-              timer: 2
-              > deal_damage 1d4
-            """);
-        Assert.Throws<InvalidOperationException>(() => _ = enc.BasicMove);
+        var bad = """
+            +title Foo
+            +stats hp=10
+
+            +move Sparkly Attack
+              narration: shimmers.
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
     }
 
     [Fact]
-    public void Dice_parser_handles_forms()
+    public void Rejects_unknown_base()
     {
-        Assert.Equal(new DiceRoll(1, 8, 0), DiceParser.Parse("1d8"));
-        Assert.Equal(new DiceRoll(2, 8, 2), DiceParser.Parse("2d8+2"));
-        Assert.Equal(new DiceRoll(1, 4, -1), DiceParser.Parse("1d4-1"));
-        Assert.Equal(new DiceRoll(0, 0, 4), DiceParser.Parse("+4"));
-        Assert.Equal(new DiceRoll(0, 0, -2), DiceParser.Parse("-2"));
-        Assert.Equal(new DiceRoll(0, 0, 5), DiceParser.Parse("5"));
+        var bad = """
+            +title Foo
+            +stats hp=10
+
+            +move Sneeze
+              narration: gesundheit.
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
+    }
+
+    [Fact]
+    public void Loads_on_disk_monsters_directory()
+    {
+        // Smoke test that the bundled .fight files in tools/combat-prototype/Monsters
+        // parse as the new format. Walks up from the test bin dir to the repo root.
+        var dir = AppContext.BaseDirectory;
+        while (dir != null && !File.Exists(Path.Combine(dir, "Dreamlands.sln")))
+            dir = Path.GetDirectoryName(dir);
+        Assert.NotNull(dir);
+        var monsters = Path.Combine(dir!, "tools", "combat-prototype", "Monsters");
+        if (!Directory.Exists(monsters)) return; // skip if not present
+
+        var bundle = CombatBundle.LoadDirectory(monsters);
+        Assert.NotEmpty(bundle.Encounters);
+        foreach (var e in bundle.Encounters)
+        {
+            Assert.True(e.Stats.Hp > 0, $"{e.Id} has non-positive HP");
+            Assert.NotEmpty(e.Moves);
+        }
+    }
+
+    [Fact]
+    public void Requires_narration_on_move()
+    {
+        var bad = """
+            +title Foo
+            +stats hp=10
+
+            +move Attack
+
+            +intro
+            test
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
     }
 }

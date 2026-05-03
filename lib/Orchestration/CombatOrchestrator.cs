@@ -6,7 +6,7 @@ using Dreamlands.Rules;
 namespace Dreamlands.Orchestration;
 
 /// <summary>
-/// Bridges the stateless combat engine to <see cref="GameSession"/>: looks up the
+/// Bridges the stateless RPS combat engine to <see cref="GameSession"/>: looks up the
 /// encounter from the bundle, builds the player profile from current equipment + skills,
 /// owns <see cref="SessionMode"/> transitions, and applies win/lose mechanics through
 /// the regular <see cref="Mechanics.Apply"/> pipeline on resolution.
@@ -30,7 +30,7 @@ public static class CombatOrchestrator
             Profile = profile,
         };
 
-        var events = Dreamlands.Combat.CombatRunner.Begin(encounter, session.Player, state, session.Rng);
+        var events = CombatRunner.Begin(encounter, session.Player, state, session.Rng);
 
         session.Player.ActiveCombat = state;
         session.Mode = SessionMode.InCombat;
@@ -44,7 +44,7 @@ public static class CombatOrchestrator
             ?? throw new InvalidOperationException("No active combat to step.");
         var encounter = ResolveEncounter(session, state.EncounterId);
 
-        var events = Dreamlands.Combat.CombatRunner.Step(encounter, session.Player, state, action, session.Rng);
+        var events = CombatRunner.Step(encounter, session.Player, state, action, session.Rng);
         return Finalize(session, encounter, events);
     }
 
@@ -57,7 +57,8 @@ public static class CombatOrchestrator
         if (state.Resolved)
         {
             // Apply win/lose mechanics through the regular pipeline so they show up the
-            // same as encounter outcomes (gold, tags, conditions, etc.).
+            // same as encounter outcomes (gold, tags, conditions, etc.). Flee + monster-flee
+            // emit no mechanics today; revisit if encounter authors need flee-specific hooks.
             var mechanics = state.PlayerWon
                 ? encounter.WinMechanics
                 : state.PlayerLost
@@ -84,8 +85,9 @@ public static class CombatOrchestrator
     }
 
     /// <summary>
-    /// Snapshot the player's combat-relevant stats from current equipment and skills.
-    /// Phase 1: WeaponClass + ArmorClass drive die size and AC; tier bonuses come later.
+    /// Snapshot the player's combat-relevant kit from equipped weapon/armor. Phase 1
+    /// uses a hard-coded baseline pool inside <see cref="CombatPlayerProfile.From"/>;
+    /// Phase 6 will read RpsMoves directly from the itemdef.
     /// </summary>
     public static CombatPlayerProfile BuildProfile(PlayerState player)
     {
@@ -97,10 +99,6 @@ public static class CombatOrchestrator
         if (player.Equipment.Armor is { } a && ItemDef.All.TryGetValue(a.DefId, out var aDef))
             armor = aDef.ArmorClass;
 
-        int combat = player.Skills.GetValueOrDefault(Skill.Combat);
-        int bushcraft = player.Skills.GetValueOrDefault(Skill.Bushcraft);
-        int cunning = player.Skills.GetValueOrDefault(Skill.Cunning);
-
-        return CombatPlayerProfile.From(combat, bushcraft, cunning, weapon, armor);
+        return CombatPlayerProfile.From(weapon, armor);
     }
 }
