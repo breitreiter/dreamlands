@@ -1,0 +1,40 @@
+# Sentinel 7-C — plains T3 legendary striker (Lattice city-keeper)
+
++title Sentinel 7-C
++image monsters/plains_boss.png
++blood #b58a2e
++stats hp=24
+
++move Defend
+  narration: It folds its arms inward and the projector lenses dim across all of them at once.
+
++move Heavy Attack
+  narration: The arc-lance discharges in a clean wash of pale light across your line.
+  narration: One arm pivots up and a calibrated lance fires square into your front.
+
++move Glowing Heavy Slow Telegraphed Attack
+  narration: Both arms lock forward, every projector lens wakes amber, and the full volley fires — geometry of light, perfectly intersecting on you.
+
++move Big Rare Recover
+  narration: The chest plate seals, internal coils sing higher, and the visible damage closes itself in pale brightening light.
+
++intro
+Past the gate, the abandoned city opens around you in clean imperial
+geometry — granaries closed, market stalls intact, doors shut on quiet
+rooms. Something larger than a wagon stands at the next intersection,
+beam projectors still warm. It raises one of its long arms toward you in
+something like a salute, or a scan. The voice from its chest plate is
+calm, conversational, addressed to no one in particular. "SENTINEL 7-C.
+INNER PERIMETER. UNAUTHORIZED PRESENCE NOTED. COMMENCING ENFORCEMENT."
+The Color in the projector lenses begins to wake.
+
++win
+> gold 25
+> tag killed_sentinel_7c
+The projector lenses dim, hold a moment of pale amber, and go out. The
+voice makes one last careful, conversational syllable, and the inner
+perimeter is no longer enforced. The city goes on being abandoned.
+
++lose
+The geometry of light intersects exactly where it was meant to. The voice
+addresses no one in particular as the perimeter is, once again, enforced.

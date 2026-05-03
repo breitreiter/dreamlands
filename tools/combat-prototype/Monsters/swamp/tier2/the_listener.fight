@@ -1,0 +1,39 @@
+# The Listener — swamp T2 basic striker (eyeless quadruped, sound-hunter)
+
++title The Listener
++image monsters/swamp_beast_3.png
++blood #3a3024
++stats hp=18
+
++move Attack
+  narration: It snaps where you are with a precision that does not need eyes.
+  narration: The smooth ruin of the head tilts, finds you, and the jaws snap closed.
+
++move Defend
+  narration: It plants four feet very still and listens harder, the head tilted off-true.
+
++move Recover
+  narration: It pulls back into the planks, ribs flexing. Whatever it lost, the swamp returns.
+
++move Brutal Heavy Slow Telegraphed Attack
+  narration: The shoulders bunch, the four feet plant, and it crosses the planks in two strides and is on you.
+
++intro
+You hear yourself stop talking. Not a decision. The thing is already
+coming — four-legged, pale as wet bone, the head a smooth ruin where eyes
+should be. It moves toward sound the way iron moves toward a lodestone,
+and you have spent the last hour speaking. Your boot creaks on the plank.
+Its head snaps to you. Whatever proverb the Revathi have about silence on
+the deep paths, you understand it now.
+
++win
+> gold 10
+> tag killed_the_listener
+It folds onto the planks without making any sound. You wait a long
+breath in case there is another one. There is not, this time. The
+proverb the Revathi have about silence on the deep paths, you keep on
+understanding.
+
++lose
+It crosses the planks in two strides. The proverb the Revathi have about
+silence on the deep paths, you understood too late.

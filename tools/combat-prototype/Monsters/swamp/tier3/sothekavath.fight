@@ -1,0 +1,48 @@
+# Sothëkavath, the Compounded Soldier — swamp T3 legendary tank
+
++title Sothëkavath, the Compounded Soldier
++image monsters/swamp_boss.png
++blood #3a3024
++stats hp=28
+
++move Big Defend
+  narration: Sothëkavath sets the thousand-year guard. Steel from a dozen eras hardens at once.
+
++move Heavy Attack
+  narration: The blade moves in a hand that has held a blade longer than any one hand should.
+  narration: A thousand soldiers swing it in a single hand, and the blade comes around clean.
+
++move Defend
+  narration: It turns its mass a fraction sideways. The seams in its skin pull tighter.
+
++move Recover
+  narration: The voices inside it argue, agree, and the worn places re-knit themselves between layers.
+
++move Brutal Heavy Slow Stunning Attack
+  narration: All of the soldiers in it commit to the strike together, and you eat all of it together.
+
++move Big Mythic Recover
+  narration: Every layer settles back into place at once — the seams close, the blood re-routes, and a thousand years of standing here standing back up reasserts itself.
+
++intro
+The clearing was a battle once and is again. The thing in the middle of
+it is the size of two men and built from more — armor from a dozen eras
+layered into the skin, the seams of it healed and reopened a thousand
+times. It turns toward you, and its mouth moves, and many voices come
+out at once — all of them angry, none of them at you, all of them
+speaking your name. Not the name on your papers. The name your
+grandmother carried. It plants its feet in the mud where it has planted
+its feet for a thousand years, and it lifts the blade.
+
++win
+> gold 25
+> tag killed_sothekavath
+The seams in the layered armor open one last time and do not close. The
+voices come out of the mouth in twos and threes and finally singly, and
+finally none. The mud where it has planted its feet for a thousand
+years takes it back. The clearing was a battle and is, again, just a
+clearing.
+
++lose
+The voices speak your name in twos and threes and finally singly, and
+finally none. The clearing was a battle, and is, again.

@@ -1,0 +1,59 @@
+# Pylon Unit V-7 — plains T2 basic duelist (damaged Lattice automaton)
+
++title Pylon Unit V-7
++image monsters/plains_robot_2.png
++blood #b58a2e
++stats hp=18
+
++move Attack
+  narration: A misfiring beam scorches past you, flickering.
+  narration: It chatters off a shot from the broken emitter, half its energy.
+
++move Defend
+  narration: It folds its arms across the damaged chest plate, sparking.
+
++move Recover
+  narration: Internal coils whine into a higher pitch as the unit re-routes power.
+
++move Glowing Heavy Slow Attack
+  narration: The chest plate sparks and something inside it spools loud — it overdrives the lance, bigger than it should be, hotter than it should be.
+
++move Big Rare Defend
+  narration: It hunches and projects a stuttering field of pale light around itself.
+
++intro
+The Old Satara Road runs straight through scrub pine and blackened
+stumps, paving stones still fitted tight after centuries of neglect. Two
+men have a handcart blocking it — a sorry, mule-drawn affair, one wheel
+threatening to part company — and they are trying to lever something
+heavy onto it with a plank and a length of rope. The something is
+wrapped in canvas that's slipped loose at one end to reveal smooth dark
+iron and a row of antennae crushed flat against the bed. The shorter
+man sees you first and drops the rope. "Private enterprise. Salvage
+rights. We were here first, and I'll thank you to —" His partner's
+voice cuts him off, gone tight and careful. "Ged." Ged keeps talking.
+The canvas is moving.
+
+The thing stands up. Not the way a living creature stands; it lurches
+upright all at once, like a table flipped onto its legs, antennae
+snapping erect at the crown as the cart cracks and splinters beneath
+it. A row of indicator lights along the chest wakes amber, then red. A
+flat synthetic voice speaks in clean imperial Common: "PYLON UNIT V-7
+ACTIVE. PERIMETER VIOLATION ACKNOWLEDGED. ENGAGEMENT AUTHORIZED." There
+is a sound like a whip-crack and the smell of a forge, and Ged is on
+the ground and not moving and the front of his coat is on fire. Mickey
+runs. The recessed face-panel turns to you. One leg drags badly as it
+steps off the wreckage of the cart — something inside it is broken,
+maybe many things — but it is coming for you.
+
++win
+> gold 12
+> tag killed_pylon_v_7
+The chest indicators stutter, hold a long amber, and go dark. The unit
+settles where it stands and does not move again. Ged is still on the
+ground. Mickey has not come back.
+
++lose
+The overdriven lance hits true. There is a smell of forge-heat and the
+last thing you see is the antennae at the crown still turning, calmly,
+a perimeter being measured and held.

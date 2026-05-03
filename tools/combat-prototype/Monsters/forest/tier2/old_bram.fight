@@ -1,0 +1,44 @@
+# Old Bram — forest T2 basic striker (ranger, exile)
+
++title Old Bram
++image monsters/forest_ranger.png
++stats hp=18
+
++move Attack
+  narration: He drives the butt of the staff at your ribs.
+  narration: He sweeps the haft toward your knee.
+
++move Defend
+  narration: He plants the staff and bends his knees, blade-end angled at your throat.
+
++move Recover
+  narration: He steps back, breathing through his nose, finding his line.
+
++move Heavy Slow Telegraphed Attack
+  narration: Bram winds back wide, both hands tight on the staff, and brings it sweeping up under your guard.
+
++intro
+You took a shortcut off the marked trail and found his cabin in a hollow
+you would never have found on purpose — low timber, moss-weighted
+shingles, smoke curling out of the chimney. The old man at the door was
+congenial. Said he didn't get many visitors, and would you sit a while.
+You traded news for a bowl of stew and stories for another, and the
+afternoon went easier than you'd expected. Now you're on the threshold
+on your way out, pack settled, and you hear the floorboard behind you go
+quiet.
+
+"Sorry, friend." His voice is the same congenial voice it was an hour
+ago. The staff is in both hands now. "Can't let it get out where my
+cabin is. I've got enemies. Nothing personal, trader."
+
++win
+> gold 10
+> tag killed_old_bram
+Bram folds against the doorframe and slides down it. The cabin goes on
+being a cabin — kettle steaming, stew on the hob, the afternoon's fire
+still warm. You leave it the way he had it, and you leave the way you
+came.
+
++lose
+The staff comes around faster than a man his age has any right to swing
+it. The world tilts. The afternoon goes very quiet.

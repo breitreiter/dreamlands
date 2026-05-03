@@ -1,0 +1,42 @@
+# Stray Vessel — scrub T2 basic striker (Color-saturated warrior, Tashkari jambiya)
+
++title Stray Vessel
++image monsters/scrub_warrior_2.png
++blood #6b3aa0
++stats hp=18
+
++move Attack
+  narration: It cuts down with the jambiya, hand sure on the grip.
+  narration: The blade comes up point-first, the skin pulsing faster.
+
++move Defend
+  narration: The pulses across its skin slow, off-rhythm. It turns the blade flat.
+
++move Recover
+  narration: It stands very still. The Color it lost runs back into it from somewhere.
+
++move Tainted Heavy Slow Telegraphed Attack
+  narration: It steps in, the slow pulses across its skin go off-rhythm, and the Color floods out of it as it strikes — a violet that hurts to look at.
+
++intro
+The Tashkari camp at the bottom of the wash is empty. Not abandoned —
+the cookfire is still smoking and a goat is still tied — but empty, and
+the standing figure at the far side of the clearing is not Tashkari. It
+is naked, vaguely man-shaped, taller than a man, and the skin ripples
+in long slow pulses of a violet that hurts to look at directly,
+shading to colors you do not have the eyes for. A jambiya hangs in its
+grip, point down, blood not yet dry on the blade. The head turns toward
+you as you enter the clearing. It does not raise the blade. It does
+not need to. It begins to walk.
+
++win
+> gold 12
+> tag killed_stray_vessel_2
+The Color leaves it in pulses that get slower and slower until they
+stop. The jambiya falls last. Across the clearing the goat is still
+tied; the cookfire is still smoking; the Tashkari are still gone.
+
++lose
+The blade finds its line. Across the clearing the goat is still tied
+and the cookfire is still smoking, and you are not a problem the wash
+needs to remember anymore.
