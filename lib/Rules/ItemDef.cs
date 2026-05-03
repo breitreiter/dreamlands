@@ -30,7 +30,10 @@ public sealed class ItemDef
 
     /// <summary>RPS combat moves contributed when equipped, in encoded form (e.g.
     /// "Riposte Attack", "Big Rare Defend"). Parsed lazily by the combat profile
-    /// builder. See super_rps.md § Item Movesets.</summary>
+    /// builder. Prefix any move with the <c>Better</c> adjective (e.g.
+    /// <c>"Better Wary Read"</c>) to mark it as a strict improvement over its
+    /// base verb — the unmutated base is then dropped from the player's pool.
+    /// See super_rps.md § Item Movesets.</summary>
     public IReadOnlyList<string> RpsMoves { get; init; } = Array.Empty<string>();
 
     /// <summary>Minimum Combat skill required to wield/wear this item meaningfully.
@@ -75,7 +78,7 @@ public sealed class ItemDef
             Id = "seax", Name = "Fine Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
-            RpsMoves = ["Attack", "Riposte Attack"],
+            RpsMoves = ["Attack", "Better Riposte Attack"],
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
         ["the_old_tooth"] = new()

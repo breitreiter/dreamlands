@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "../GameContext";
 import type { CombatInfo, CombatLogEntry, GameResponse } from "../api/types";
 import { Button } from "@/components/ui/button";
@@ -53,15 +53,144 @@ function moveDisplayName(encoded: string): string {
   return joined.charAt(0).toUpperCase() + joined.slice(1).toLowerCase();
 }
 
-// Per Figma: Attack → knockout, Recover → nested-hearts, Defend → checked-shield,
-// Read → one-eyed (no Figma example, kept from prior pass).
+// Base-verb iconography. Stuns route through `knockout.svg` separately (see
+// SLOT_STUN_ICON / PREVIEW_STUN_ICON). Telegraphed enemy attacks override
+// the plain attack icon with `cross-flare.svg`.
 const BASE_ICON: Record<MoveBase, string | null> = {
-  attack: "knockout.svg",
+  attack: "sword-brandish.svg",
   defend: "checked-shield.svg",
   recover: "nested-hearts.svg",
   read: "one-eyed.svg",
   skipped: null,
 };
+
+const STUN_ICON = "knockout.svg";
+const TELEGRAPHED_ATTACK_ICON = "cross-flare.svg";
+const CLASH_ICON = "crossed-swords.svg";
+
+/**
+ * Pick the icon for a slot circle (top = monster intent, bottom = player choice).
+ * Stuns (carry-stun or forecast forward-rider) override the base icon with knockout.
+ * Telegraphed monster attacks override with cross-flare.
+ */
+/**
+ * Plain-English tooltip describing what a move does, derived from its
+ * base verb + mutators. Mirrors the Resolver.cs / Move.cs vocabulary so
+ * tuning changes there should be reflected here.
+ */
+function moveTooltip(encoded: string): string {
+  const tokens = encoded.split(" ").map(t => t.toLowerCase());
+  const base = moveBase(encoded);
+  const has = (t: string) => tokens.includes(t);
+  const parts: string[] = [];
+
+  switch (base) {
+    case "attack":   parts.push("Deal damage."); break;
+    case "defend":   parts.push("Block incoming damage in this slot."); break;
+    case "recover":  parts.push("Heal spirits."); break;
+    case "read":     parts.push("Reveal the enemy's plan for next turn."); break;
+    case "skipped":  parts.push("No action."); break;
+  }
+
+  if (has("heavy")) parts.push("+4 damage");
+  if (has("big")) {
+    if (base === "defend")  parts.push("+2 prevent");
+    if (base === "recover") parts.push("+2 heal");
+  }
+  if (has("shielding") && base === "defend") parts.push("Nullifies stuns and harmful conditions on you");
+  if (has("stunning"))   parts.push("Chance to stun");
+  if (has("brutal"))     parts.push("May inflict Injured");
+  if (has("tainted"))    parts.push("May inflict Lattice Sickness");
+  if (has("glowing"))    parts.push("May inflict Irradiated");
+  if (has("venomous"))   parts.push("May inflict Poisoned");
+  if (has("telegraphed")) parts.push("Heavy windup");
+  if (has("exhausting"))  parts.push("Self-stun next slot");
+  if (has("riposte"))     parts.push("Counters incoming attacks");
+  if (has("provoking"))   parts.push("Target Berzerks (its move pool narrows next turn)");
+  if (has("terrifying"))  parts.push("Target Fears (its move pool narrows next turn)");
+
+  if (has("rare") || has("power"))    parts.push("Once per turn");
+  if (has("mythic") || has("slow"))   parts.push("Once every other turn");
+
+  return parts.join(". ");
+}
+
+function slotIcon(move: string | null, isMonster: boolean, stunned: boolean): string | null {
+  if (stunned) return STUN_ICON;
+  if (move == null) return null;
+  const base = moveBase(move);
+  if (base === "attack" && isMonster) {
+    const tokens = move.split(" ").map(t => t.toLowerCase());
+    if (tokens.includes("telegraphed")) return TELEGRAPHED_ATTACK_ICON;
+  }
+  return BASE_ICON[base];
+}
+
+/**
+ * Walk slots 0–2, applying the deterministic forward-rider rules from
+ * Resolver.cs StunsTarget(): attack-vs-recover always stuns the recoverer
+ * next slot, and `exhausting` attacks self-stun. `shielding` Defend
+ * nullifies incoming stun. Probabilistic stuns (stunning mutator) are
+ * intentionally NOT predicted — surfacing a maybe-stun would mislead.
+ */
+type SlotSim = {
+  playerMove: string | null;
+  monsterMove: string | null;
+  playerStunned: boolean;
+  monsterStunned: boolean;
+  preview: "stun" | "clash" | null;
+};
+
+function simulateSlots(
+  combat: CombatInfo,
+  selections: (string | null)[],
+  planVisible: boolean,
+): SlotSim[] {
+  const sims: SlotSim[] = [];
+  let playerForwardStun = false;
+  let monsterForwardStun = false;
+
+  for (let i = 0; i < 3; i++) {
+    const playerStunned = combat.playerCarryStun[i] || playerForwardStun;
+    const monsterRaw = planVisible && combat.plan ? combat.plan[i] : null;
+    const monsterPreSkipped = monsterRaw != null && moveBase(monsterRaw) === "skipped";
+    const monsterStunned = monsterForwardStun || monsterPreSkipped;
+
+    const playerMove = playerStunned ? "Skipped" : selections[i];
+    const monsterMove = monsterStunned ? "Skipped" : monsterRaw;
+
+    playerForwardStun = false;
+    monsterForwardStun = false;
+
+    let preview: "stun" | "clash" | null = null;
+    if (playerMove && monsterMove) {
+      const pBase = moveBase(playerMove);
+      const mBase = moveBase(monsterMove);
+      const pTokens = playerMove.split(" ").map(t => t.toLowerCase());
+      const mTokens = monsterMove.split(" ").map(t => t.toLowerCase());
+      const pShielded = pBase === "defend" && pTokens.includes("shielding");
+      const mShielded = mBase === "defend" && mTokens.includes("shielding");
+
+      if (pBase === "attack" && mBase === "recover" && !mShielded) {
+        monsterForwardStun = true;
+        preview = "stun";
+      } else if (mBase === "attack" && pBase === "recover" && !pShielded) {
+        playerForwardStun = true;
+        preview = "stun";
+      }
+
+      if (pBase === "attack" && pTokens.includes("exhausting")) playerForwardStun = true;
+      if (mBase === "attack" && mTokens.includes("exhausting")) monsterForwardStun = true;
+
+      if (preview == null && pBase === "attack" && mBase === "attack") {
+        preview = "clash";
+      }
+    }
+
+    sims.push({ playerMove, monsterMove, playerStunned, monsterStunned, preview });
+  }
+  return sims;
+}
 
 function moveAvailability(move: string, combat: CombatInfo, selections: (string | null)[]): { disabled: boolean; reason: string | null } {
   const tokens = move.split(" ").map(s => s.toLowerCase());
@@ -307,12 +436,16 @@ export default function Combat({ state }: { state: GameResponse }) {
             <BannerLine text="Your plan" />
 
             {combat.playerMovePool.map((move, idx) => {
-              const { disabled } = moveAvailability(move, combat, selections);
+              const { disabled, reason } = moveAvailability(move, combat, selections);
+              const tooltip = disabled
+                ? `${moveTooltip(move)} (${reason})`
+                : moveTooltip(move);
               return (
                 <ActionButton
                   key={move}
                   number={idx + 1}
                   label={moveDisplayName(move)}
+                  tooltip={tooltip}
                   disabled={disabled}
                   onClick={() => handlePick(move)}
                 />
@@ -341,7 +474,9 @@ export default function Combat({ state }: { state: GameResponse }) {
             {combat.introText && <div className="text-dim mt-1.5">{combat.introText}</div>}
           </div>
 
-          {allEvents.map((entry, i) => <LogEntry key={i} entry={entry} />)}
+          {allEvents
+            .filter(e => e.text !== combat.introText)
+            .map((entry, i) => <LogEntry key={i} entry={entry} />)}
 
           {combat.resolved && <OutcomePanel combat={combat} />}
         </div>
@@ -390,7 +525,7 @@ function StatGroup({ value, max, label, damaged, splatKey, showSplat }: {
     >
       {showSplat && damaged && <DamageSplat key={splatKey} />}
       <span
-        className="relative font-header"
+        className="relative"
         style={{ fontSize: 64, lineHeight: "64px", color, zIndex: 1 }}
       >
         {value}
@@ -464,26 +599,47 @@ function SlotGrid({ combat, selections, planVisible }: {
   selections: (string | null)[];
   planVisible: boolean;
 }) {
+  const sims = useMemo(
+    () => simulateSlots(combat, selections, planVisible),
+    [combat, selections, planVisible],
+  );
+
   return (
     <div
       className="flex justify-between"
       style={{ height: 179, padding: "0 16px" }}
     >
-      {[0, 1, 2].map(i => {
-        const monsterMove = planVisible ? combat.plan![i] : null;
-        const monsterIcon = monsterMove ? BASE_ICON[moveBase(monsterMove)] : null;
-        const playerMove = selections[i];
-        const playerIcon = playerMove ? BASE_ICON[moveBase(playerMove)] : null;
-        const stunned = combat.playerCarryStun[i];
-        const playerFaded = playerMove == null && !stunned;
+      {sims.map((sim, i) => {
+        const monsterUnknown = !planVisible;
+        const monsterIcon = monsterUnknown
+          ? null
+          : slotIcon(sim.monsterMove, /* isMonster */ true, sim.monsterStunned);
+        const monsterTooltip = monsterUnknown
+          ? `Slot ${i + 1} — unknown (commit Read intent to reveal)`
+          : sim.monsterStunned
+            ? `Slot ${i + 1} — stunned`
+            : sim.monsterMove
+              ? `Slot ${i + 1} — ${moveDisplayName(sim.monsterMove)}`
+              : `Slot ${i + 1}`;
+
+        const playerFaded = sim.playerMove == null && !sim.playerStunned;
+        const playerIcon = slotIcon(sim.playerMove, /* isMonster */ false, sim.playerStunned);
+        const playerTooltip = sim.playerStunned
+          ? `Slot ${i + 1} — stunned`
+          : sim.playerMove
+            ? `Slot ${i + 1} — ${moveDisplayName(sim.playerMove)}`
+            : `Slot ${i + 1} — pending`;
+
         return (
           <SlotColumn
             key={i}
             monsterIcon={monsterIcon}
-            monsterUnknown={!planVisible}
+            monsterUnknown={monsterUnknown}
+            monsterTooltip={monsterTooltip}
             playerIcon={playerIcon}
             playerFaded={playerFaded}
-            stunned={stunned}
+            playerTooltip={playerTooltip}
+            preview={sim.preview}
           />
         );
       })}
@@ -491,37 +647,40 @@ function SlotGrid({ combat, selections, planVisible }: {
   );
 }
 
-function SlotColumn({ monsterIcon, monsterUnknown, playerIcon, playerFaded, stunned }: {
+function SlotColumn({ monsterIcon, monsterUnknown, monsterTooltip, playerIcon, playerFaded, playerTooltip, preview }: {
   monsterIcon: string | null;
   monsterUnknown: boolean;
+  monsterTooltip: string;
   playerIcon: string | null;
   playerFaded: boolean;
-  stunned: boolean;
+  playerTooltip: string;
+  preview: "stun" | "clash" | null;
 }) {
   return (
     <div
       className="flex flex-col items-center"
       style={{ width: 60, height: 179 }}
     >
-      <SlotCircle icon={monsterIcon} unknown={monsterUnknown} />
+      <SlotCircle icon={monsterIcon} unknown={monsterUnknown} tooltip={monsterTooltip} />
       <ConnectorLine />
       <div className="flex-1 flex items-center justify-center">
-        <PreviewGlyph monsterUnknown={monsterUnknown} playerFilled={!playerFaded} />
+        <PreviewGlyph monsterUnknown={monsterUnknown} playerFilled={!playerFaded} preview={preview} />
       </div>
       <ConnectorLine faded={playerFaded} />
-      <SlotCircle icon={playerIcon} faded={playerFaded} stunnedLabel={stunned ? "skip" : null} />
+      <SlotCircle icon={playerIcon} faded={playerFaded} tooltip={playerTooltip} />
     </div>
   );
 }
 
-function SlotCircle({ icon, faded, unknown, stunnedLabel }: {
+function SlotCircle({ icon, faded, unknown, tooltip }: {
   icon?: string | null;
   faded?: boolean;
   unknown?: boolean;
-  stunnedLabel?: string | null;
+  tooltip?: string;
 }) {
   return (
     <div
+      title={tooltip}
       className="flex items-center justify-center"
       style={{
         width: 60,
@@ -534,12 +693,7 @@ function SlotCircle({ icon, faded, unknown, stunnedLabel }: {
       }}
     >
       {unknown ? (
-        <span
-          className="font-header"
-          style={{ fontSize: 30, lineHeight: 1, color: "#F3F3F3" }}
-        >?</span>
-      ) : stunnedLabel ? (
-        <span style={{ fontSize: 16, color: DIM, lineHeight: 1 }}>{stunnedLabel}</span>
+        <span style={{ fontSize: 30, lineHeight: 1, color: "#F3F3F3" }}>?</span>
       ) : icon ? (
         <MaskedIcon icon={icon} color="#F3F3F3" className="w-[24px] h-[24px]" />
       ) : null}
@@ -561,20 +715,23 @@ function ConnectorLine({ faded }: { faded?: boolean }) {
   );
 }
 
-function PreviewGlyph({ monsterUnknown, playerFilled }: {
+function PreviewGlyph({ monsterUnknown, playerFilled, preview }: {
   monsterUnknown: boolean;
   playerFilled: boolean;
+  preview: "stun" | "clash" | null;
 }) {
   if (monsterUnknown) {
     return (
-      <span
-        className="font-header"
-        style={{ fontSize: 30, lineHeight: 1, color: DIM, opacity: playerFilled ? 1 : 0.6 }}
-      >?</span>
+      <span style={{ fontSize: 30, lineHeight: 1, color: DIM, opacity: playerFilled ? 1 : 0.6 }}>?</span>
     );
   }
-  // Both visible OR player-empty + monster-visible: show a small dot. Brighter
-  // when the slot is locked in, dim when still pending.
+  if (playerFilled && preview === "stun") {
+    return <MaskedIcon icon={STUN_ICON} color={DIM} className="w-[20px] h-[20px]" />;
+  }
+  if (playerFilled && preview === "clash") {
+    return <MaskedIcon icon={CLASH_ICON} color={DIM} className="w-[20px] h-[20px]" />;
+  }
+  // Pending or no special interaction: dim dot.
   return (
     <span
       style={{
@@ -594,13 +751,14 @@ function PreviewGlyph({ monsterUnknown, playerFilled }: {
 // 12 16, gap 10. Number badge 24×24 (1 px border #D0925D, rounded 6),
 // 20 px digit. Disabled: bg #292929, badge+label opacity 0.4.
 
-function ActionButton({ number, label, disabled, onClick }: {
-  number: number; label: string; disabled?: boolean; onClick: () => void;
+function ActionButton({ number, label, tooltip, disabled, onClick }: {
+  number: number; label: string; tooltip?: string; disabled?: boolean; onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
+      title={tooltip}
       style={{
         height: 48,
         padding: "12px 16px",
@@ -655,6 +813,7 @@ function FleeButton({ onClick, disabled }: { onClick: () => void; disabled: bool
     <button
       onClick={onClick}
       disabled={disabled}
+      title="End the encounter and escape. Burns this turn — the monster's full plan resolves against you while you flee."
       style={{
         height: 48,
         padding: "12px 16px",
@@ -708,7 +867,7 @@ function LogEntry({ entry }: { entry: CombatLogEntry }) {
     const [head, narration] = line.split("\n    ");
     return (
       <div className="leading-relaxed">
-        <div className="font-mono text-primary">{head.replace(/^ {2}/, "")}</div>
+        <div className="text-primary">{head.replace(/^ {2}/, "")}</div>
         {narration && <div className="text-dim ml-6 italic">{narration}</div>}
       </div>
     );

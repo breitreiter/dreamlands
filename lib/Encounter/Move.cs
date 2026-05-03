@@ -13,6 +13,13 @@ public sealed class Move
     public string Base { get; set; } = "";
     public HashSet<string> Mutators { get; set; } = new();
 
+    /// <summary>Authoring marker (the "Better" adjective in source form). When
+    /// true, this move is a strict improvement over its unmutated base verb,
+    /// and the player's pool drops that bare base when this move is in it.
+    /// Not a gameplay mutator — the resolver never reads it, and it does not
+    /// appear in <see cref="Encoded"/>.</summary>
+    public bool SupersedesBase { get; set; }
+
     public Move() { }
     public Move(string @base, HashSet<string> mutators)
     {
@@ -32,10 +39,16 @@ public sealed class Move
 
     public static Move Skipped() => new("skipped", new HashSet<string>());
 
+    /// <summary>Authoring adjective for <see cref="SupersedesBase"/>. Stripped
+    /// before mutator validation; never appears in canonical encoded form.</summary>
+    public const string BetterAdjective = "better";
+
     public static Move Parse(string s)
     {
-        var tokens = s.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                      .Select(t => t.ToLowerInvariant()).ToArray();
+        var raw = s.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                   .Select(t => t.ToLowerInvariant()).ToList();
+        bool supersedes = raw.Remove(BetterAdjective);
+        var tokens = raw.ToArray();
         if (tokens.Length == 0) throw new ArgumentException("empty move string");
         var basis = tokens[^1];
         if (!Bases.Contains(basis)) throw new ArgumentException($"unknown base action: '{basis}' in '{s}'");
@@ -43,7 +56,7 @@ public sealed class Move
         var allowed = MutatorsFor(basis);
         foreach (var m in muts)
             if (!allowed.Contains(m)) throw new ArgumentException($"invalid mutator '{m}' on {basis}: '{s}'");
-        return new Move(basis, muts);
+        return new Move(basis, muts) { SupersedesBase = supersedes };
     }
 
     public static readonly HashSet<string> Bases = new() { "attack", "defend", "recover", "read", "skipped" };

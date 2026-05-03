@@ -27,16 +27,25 @@ public sealed class CombatPlayerProfile
     public static CombatPlayerProfile From(ItemDef? weapon, ItemDef? armor)
     {
         var pool = new List<Move>();
+        var superseded = new HashSet<string>();
+
+        void Contribute(ItemDef? item)
+        {
+            if (item == null) return;
+            foreach (var encoded in item.RpsMoves)
+            {
+                var move = Move.Parse(encoded);
+                pool.Add(move);
+                if (move.SupersedesBase) superseded.Add(Move.Parse(move.Base).Encoded);
+            }
+        }
 
         // Weapon contribution. T-0 (no weapon equipped) = no Attack family at all.
-        if (weapon != null)
-            foreach (var encoded in weapon.RpsMoves)
-                pool.Add(Move.Parse(encoded));
+        Contribute(weapon);
 
         // Armor contribution. T-0 (no armor equipped) = basic Defend fallback.
         if (armor != null)
-            foreach (var encoded in armor.RpsMoves)
-                pool.Add(Move.Parse(encoded));
+            Contribute(armor);
         else
             pool.Add(Move.Parse("defend"));
 
@@ -44,6 +53,11 @@ public sealed class CombatPlayerProfile
         // (e.g. Wary Read, Big Wary Recover) come from gear.
         pool.Add(Move.Parse("recover"));
         pool.Add(Move.Parse("read"));
+
+        // Drop any move an equipped item flagged as redundant. Compared on
+        // canonical Encoded form so mutator order doesn't matter.
+        if (superseded.Count > 0)
+            pool.RemoveAll(m => superseded.Contains(m.Encoded));
 
         return new CombatPlayerProfile
         {

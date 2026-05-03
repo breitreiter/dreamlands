@@ -94,6 +94,33 @@ public class CombatRunnerTests
     }
 
     [Fact]
+    public void PlayerProfile_better_adjective_drops_unmutated_base()
+    {
+        // Per-move "Better" adjective marks "Wary Read" as a strict improvement
+        // over plain Read; equipping this hat drops universal Read from the pool.
+        // "Wary Read" (no Better) on a sibling item would NOT drop plain Read —
+        // the flag is per-move, not per-item.
+        var hat = new Rules.ItemDef
+        {
+            Id = "test_hat", Name = "Test Hat", Type = Rules.ItemType.Armor,
+            ArmorClass = Rules.ArmorClass.Light,
+            RpsMoves = ["Better Wary Read"],
+        };
+
+        var profile = CombatPlayerProfile.From(
+            weapon: Rules.ItemDef.All["hunting_knife"],
+            armor:  hat);
+
+        var encoded = profile.MovePool.Select(m => m.Encoded).ToList();
+        // "Better" is metadata; it never appears in canonical encoded form.
+        Assert.Contains("Wary Read", encoded);
+        Assert.DoesNotContain("Read", encoded);
+        Assert.DoesNotContain("Better Wary Read", encoded);
+        // Other universals are untouched.
+        Assert.Contains("Recover", encoded);
+    }
+
+    [Fact]
     public void PlayerProfile_legendary_kit_surfaces_full_moveset()
     {
         // The Old Tooth (T-4 dagger) + Robe of Twilight (T-4 light).
@@ -214,6 +241,46 @@ public class CombatRunnerTests
         var nextTurn = events.OfType<CombatEvent.TurnStarted>().Last();
         Assert.NotNull(nextTurn.Plan);
         Assert.Equal(3, nextTurn.Plan!.Count);
+    }
+
+    [Fact]
+    public void Stun_on_slot_3_carries_to_slot_1_of_next_turn()
+    {
+        // Encounter with only Recover in the pool — AI commits Recover/Recover/Recover
+        // every turn. Player attacks at slot 3 → Attack vs Recover always stuns the
+        // recoverer (monster). Slot 3 stun bleeds into slot 1 of next turn.
+        var enc = CmbParser.ParseString("""
+            +title Stationary Healer
+            +stats hp=999
+
+            +move Recover
+              narration: It catches its breath.
+
+            +intro
+            Test foe.
+
+            +win
+            Won.
+
+            +lose
+            Lost.
+            """);
+        enc.Id = "test/healer";
+        var player = MakePlayer(spirits: 999, health: 999);
+        var state = MakeState();
+
+        var rng = new Random(0);
+        CombatRunner.Begin(enc, player, state, rng);
+
+        CombatRunner.Step(enc, player, state,
+            new PlayerCombatAction.Commit(
+                Move.Parse("defend"),
+                Move.Parse("defend"),
+                Move.Parse("attack")),
+            rng);
+
+        Assert.True(state.MonsterCarryStun[0],
+            "Slot 3 Attack vs Recover should carry-stun the monster's slot 1 of next turn.");
     }
 
     [Fact]
