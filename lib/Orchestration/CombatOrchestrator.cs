@@ -85,19 +85,18 @@ public static class CombatOrchestrator
     }
 
     /// <summary>
-    /// Snapshot the player's combat-relevant kit from equipped weapon/armor. Phase 1
-    /// uses a hard-coded baseline pool inside <see cref="CombatPlayerProfile.From"/>;
-    /// Phase 6 will read RpsMoves directly from the itemdef.
+    /// Snapshot the player's combat-relevant kit from equipped weapon/armor. The
+    /// resulting move pool reads RpsMoves directly off the itemdef.
     /// </summary>
     public static CombatPlayerProfile BuildProfile(PlayerState player)
     {
-        WeaponClass? weapon = null;
-        ArmorClass? armor = null;
+        ItemDef? weapon = null;
+        ItemDef? armor = null;
 
         if (player.Equipment.Weapon is { } w && ItemDef.All.TryGetValue(w.DefId, out var wDef))
-            weapon = wDef.WeaponClass;
+            weapon = wDef;
         if (player.Equipment.Armor is { } a && ItemDef.All.TryGetValue(a.DefId, out var aDef))
-            armor = aDef.ArmorClass;
+            armor = aDef;
 
         return CombatPlayerProfile.From(weapon, armor);
     }

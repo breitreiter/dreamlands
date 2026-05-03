@@ -49,8 +49,67 @@ public class CombatRunnerTests
 
     static CombatState MakeState() => new()
     {
-        Profile = CombatPlayerProfile.From(weapon: Rules.WeaponClass.Sword, armor: Rules.ArmorClass.Medium),
+        // Falchion (T-1 sword) + Hide Armor (T-1 medium): basic Attack + Defend pool.
+        Profile = CombatPlayerProfile.From(
+            weapon: Rules.ItemDef.All["falchion"],
+            armor:  Rules.ItemDef.All["hide_armor"]),
     };
+
+    [Fact]
+    public void PlayerProfile_composes_pool_from_gear_plus_universals()
+    {
+        // Hunting Knife (T-1 dagger): just "Attack".
+        // Hide Armor (T-1 medium): just "Defend".
+        // Universal: Recover, Read.
+        var profile = CombatPlayerProfile.From(
+            weapon: Rules.ItemDef.All["hunting_knife"],
+            armor:  Rules.ItemDef.All["hide_armor"]);
+
+        var encoded = profile.MovePool.Select(m => m.Encoded).ToList();
+        Assert.Equal(new[] { "Attack", "Defend", "Recover", "Read" }, encoded);
+    }
+
+    [Fact]
+    public void PlayerProfile_no_weapon_drops_attack_family()
+    {
+        // No weapon → no Attack at all (T-0 weapon = "disable attack action").
+        var profile = CombatPlayerProfile.From(
+            weapon: null,
+            armor:  Rules.ItemDef.All["tunic"]);
+
+        Assert.DoesNotContain(profile.MovePool, m => m.Base == "attack");
+        Assert.Contains(profile.MovePool, m => m.Base == "defend");
+        Assert.Contains(profile.MovePool, m => m.Base == "recover");
+        Assert.Contains(profile.MovePool, m => m.Base == "read");
+    }
+
+    [Fact]
+    public void PlayerProfile_no_armor_falls_back_to_basic_defend()
+    {
+        var profile = CombatPlayerProfile.From(
+            weapon: Rules.ItemDef.All["falchion"],
+            armor:  null);
+
+        Assert.Contains(profile.MovePool, m => m.Base == "defend" && m.Mutators.Count == 0);
+    }
+
+    [Fact]
+    public void PlayerProfile_legendary_kit_surfaces_full_moveset()
+    {
+        // The Old Tooth (T-4 dagger) + Robe of Twilight (T-4 light).
+        var profile = CombatPlayerProfile.From(
+            weapon: Rules.ItemDef.All["the_old_tooth"],
+            armor:  Rules.ItemDef.All["robe_of_twilight"]);
+
+        // Mutators are sorted alphabetically in Move.Encoded — match canonical form.
+        var encoded = profile.MovePool.Select(m => m.Encoded).ToHashSet();
+        Assert.Contains("Riposte Attack", encoded);
+        Assert.Contains("Heavy Provoking Attack", encoded);
+        Assert.Contains("Big Rare Wary Recover", encoded);
+        Assert.Contains("Mythic Perfect Defend", encoded);
+        Assert.Contains("Recover", encoded);
+        Assert.Contains("Read", encoded);
+    }
 
     [Fact]
     public void Begin_emits_intro_and_first_turn_with_tell()

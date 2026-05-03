@@ -28,7 +28,18 @@ public sealed class ItemDef
     public IReadOnlyDictionary<Skill, int> SkillModifiers { get; init; } = new Dictionary<Skill, int>();
     public IReadOnlyDictionary<string, int> ResistModifiers { get; init; } = new Dictionary<string, int>();
 
-    /// <summary>Cards this item contributes to tactical encounter decks.</summary>
+    /// <summary>RPS combat moves contributed when equipped, in encoded form (e.g.
+    /// "Riposte Attack", "Big Rare Defend"). Parsed lazily by the combat profile
+    /// builder. See super_rps.md § Item Movesets.</summary>
+    public IReadOnlyList<string> RpsMoves { get; init; } = Array.Empty<string>();
+
+    /// <summary>Minimum Combat skill required to wield/wear this item meaningfully.
+    /// 0 = daggers/light, 2 = axes/medium, 4 = swords/heavy. Not enforced today —
+    /// players can equip above their level (TODO: gate at equip-time).</summary>
+    public int RequiredCombat { get; init; } = 0;
+
+    /// <summary>Cards this item contributes to tactical encounter decks.
+    /// Tactical encounters are slated for removal; new items leave this empty.</summary>
     public IReadOnlyList<TacticalCard> TacticalCards { get; init; } = [];
 
     /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
@@ -47,65 +58,32 @@ public sealed class ItemDef
         {
             Id = "hunting_knife", Name = "Hunting Knife", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            RequiredCombat = 0,
+            RpsMoves = ["Attack"],
             Biome = "plains", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Lunge forward and stab at their guard", "momentum_to_progress"),
-            ],
-        },
-        ["jambiya"] = new()
-        {
-            Id = "jambiya", Name = "Jambiya", Type = ItemType.Weapon,
-            WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
-            Biome = "scrub", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Lunge forward and stab at their guard", "momentum_to_progress"),
-                new("Find an opening", "momentum_to_cancel"),
-            ],
         },
         ["kukri"] = new()
         {
             Id = "kukri", Name = "Kukri", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
+            RequiredCombat = 0,
+            RpsMoves = ["Attack", "Stunning Power Attack"],
             Biome = "scrub", ShopTier = 2, Cost = 40,
-            TacticalCards =
-            [
-                new("Lunge forward and stab at their guard", "momentum_to_progress"),
-                new("Find an opening", "momentum_to_cancel"),
-                new("Circle your opponent, looking for a gap", "free_momentum"),
-            ],
         },
         ["seax"] = new()
         {
             Id = "seax", Name = "Fine Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
+            RequiredCombat = 0,
+            RpsMoves = ["Attack", "Riposte Attack"],
             Biome = "mountains", ShopTier = 2, Cost = 80,
-            TacticalCards =
-            [
-                new("Lunge forward and stab at their guard", "momentum_to_progress"),
-                new("Find an opening", "momentum_to_cancel"),
-                new("Circle your opponent, looking for a gap", "free_momentum"),
-                new("Go for the throat", "spirits_to_cancel"),
-            ],
         },
         ["the_old_tooth"] = new()
         {
             Id = "the_old_tooth", Name = "The Old Tooth", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
-            TacticalCards =
-            [
-                new("Lunge forward and stab at their guard", "momentum_to_progress"),
-                new("Find an opening", "momentum_to_cancel"),
-                new("Circle your opponent, looking for a gap", "free_momentum"),
-                new("Go for the throat", "spirits_to_cancel"),
-                new("The killing strike", "free_cancel"),
-            ],
+            RequiredCombat = 0,
+            RpsMoves = ["Riposte Attack", "Heavy Provoking Attack"],
         },
 
         // ── Weapons: Axes (Combat +1 to +5, aggro-focused, zero cancels) ──
@@ -115,65 +93,32 @@ public sealed class ItemDef
         {
             Id = "hatchet", Name = "Hatchet", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            RequiredCombat = 2,
+            RpsMoves = ["Attack"],
             Biome = "forest", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Swing your hatchet into their defense", "momentum_to_progress"),
-            ],
-        },
-        ["tomahawk"] = new()
-        {
-            Id = "tomahawk", Name = "Tomahawk", Type = ItemType.Weapon,
-            WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
-            Biome = "forest", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Swing your tomahawk axe into their defense", "momentum_to_progress"),
-                new("Shift your grip and ready a heavy swing", "free_momentum"),
-            ],
         },
         ["war_axe"] = new()
         {
             Id = "war_axe", Name = "War Axe", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
+            RequiredCombat = 2,
+            RpsMoves = ["Attack", "Heavy Power Attack"],
             Biome = "forest", ShopTier = 2, Cost = 40,
-            TacticalCards =
-            [
-                new("Swing your war axe into their defense", "momentum_to_progress"),
-                new("Shift your grip and ready a heavy swing", "free_momentum"),
-                new("Put your weight behind a brutal chop", "momentum_to_progress_large"),
-            ],
         },
         ["broadaxe"] = new()
         {
             Id = "broadaxe", Name = "Broadaxe", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
+            RequiredCombat = 2,
+            RpsMoves = ["Attack", "Brutal Heavy Power Attack"],
             Biome = "mountains", ShopTier = 2, Cost = 80,
-            TacticalCards =
-            [
-                new("Swing your broadaxe into their defense", "momentum_to_progress"),
-                new("Shift your grip and ready a heavy swing", "free_momentum"),
-                new("Put your weight behind a brutal chop", "momentum_to_progress_large"),
-                new("Charge forward swinging wildly", "threat_to_progress_large"),
-            ],
         },
         ["revathi_labrys"] = new()
         {
             Id = "revathi_labrys", Name = "Revathi Labrys", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
-            TacticalCards =
-            [
-                new("Swing the labrys into their defense", "momentum_to_progress"),
-                new("Shift your grip and ready a heavy swing", "free_momentum"),
-                new("Put your weight behind a brutal chop", "momentum_to_progress_large"),
-                new("Charge forward swinging wildly", "threat_to_progress_large"),
-                new("Bring your axe down with everything you have", "momentum_to_progress_huge"),
-            ],
+            RequiredCombat = 2,
+            RpsMoves = ["Heavy Attack", "Heavy Slow Terrifying Attack"],
         },
 
         // ── Weapons: Swords (Combat +1 to +5, hybrid) ──
@@ -183,65 +128,32 @@ public sealed class ItemDef
         {
             Id = "falchion", Name = "Falchion", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            RequiredCombat = 4,
+            RpsMoves = ["Attack"],
             Biome = "plains", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Test their guard with a quick cut", "momentum_to_progress"),
-            ],
         },
         ["short_sword"] = new()
         {
             Id = "short_sword", Name = "Short Sword", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
+            RequiredCombat = 4,
+            RpsMoves = ["Riposte Attack"],
             Biome = "plains", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Test their guard with a quick cut", "momentum_to_progress"),
-                new("Feint high and step back to recover", "free_momentum"),
-            ],
-        },
-        ["tulwar"] = new()
-        {
-            Id = "tulwar", Name = "Tulwar", Type = ItemType.Weapon,
-            WeaponClass = Rules.WeaponClass.Sword,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 3 },
-            Biome = "scrub", ShopTier = 2, Cost = 40,
-            TacticalCards =
-            [
-                new("Test their guard with a quick cut", "momentum_to_progress"),
-                new("Feint high and step back to recover", "free_momentum"),
-                new("Exploit their error", "momentum_to_cancel"),
-            ],
         },
         ["scimitar"] = new()
         {
             Id = "scimitar", Name = "Scimitar", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 4 },
+            RequiredCombat = 4,
+            RpsMoves = ["Attack", "Big Rare Defend"],
             Biome = "scrub", ShopTier = 2, Cost = 80,
-            TacticalCards =
-            [
-                new("Test their guard with a quick cut", "momentum_to_progress"),
-                new("Feint high and step back to recover", "free_momentum"),
-                new("Exploit their error", "momentum_to_cancel"),
-                new("Commit to a powerful driving thrust", "momentum_to_progress_large"),
-            ],
         },
         ["shimmering_blade"] = new()
         {
             Id = "shimmering_blade", Name = "Shimmering Blade", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 5 },
-            TacticalCards =
-            [
-                new("Test their guard with a quick cut", "momentum_to_progress"),
-                new("Feint high and step back to recover", "free_momentum"),
-                new("Exploit their error", "momentum_to_cancel"),
-                new("Commit to a powerful driving thrust", "momentum_to_progress_large"),
-                new("The perfect opening", "free_cancel"),
-            ],
+            RequiredCombat = 4,
+            RpsMoves = ["Riposte Attack", "Big Wary Recover"],
         },
 
         // ── Armor: Light (Cunning +0 to +5, Injury +0, Freezing +0 to +3) ──
@@ -250,127 +162,69 @@ public sealed class ItemDef
         {
             Id = "tunic", Name = "Tunic", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
+            RequiredCombat = 0,
+            RpsMoves = ["Defend"],
             Biome = "plains", ShopTier = 1,
         },
         ["silks"] = new()
         {
             Id = "silks", Name = "Silks", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
+            RequiredCombat = 0,
+            RpsMoves = ["Defend", "Wary Read"],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
             Biome = "scrub", ShopTier = 1, Cost = 15,
-            TacticalCards = [new("Tread softly", "free_momentum")],
-        },
-        ["hunters_gear"] = new()
-        {
-            Id = "hunters_gear", Name = "Hunter's Gear", Type = ItemType.Armor,
-            ArmorClass = Rules.ArmorClass.Light,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
-            ResistModifiers = new Dictionary<string, int> { ["freezing"] = 1 },
-            Biome = "swamp", ShopTier = 1, Cost = 15,
-            TacticalCards =
-            [
-                new("Blend with the terrain", "free_momentum"),
-                new("Move while they're not looking", "momentum_to_progress"),
-            ],
         },
         ["cartographers_cloak"] = new()
         {
             Id = "cartographers_cloak", Name = "Cartographer's Cloak", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
+            RequiredCombat = 0,
+            RpsMoves = ["Wary Read", "Rare Wary Recover"],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 3 },
             ResistModifiers = new Dictionary<string, int> { ["freezing"] = 2 },
             Biome = "mountains", ShopTier = 2, Cost = 40,
-            TacticalCards =
-            [
-                new("Move with conviction", "free_momentum"),
-                new("Inch forward cautiously", "spirits_to_progress"),
-                new("Slip by unnoticed", "momentum_to_cancel"),
-            ],
-        },
-        ["desert_scout_gear"] = new()
-        {
-            Id = "desert_scout_gear", Name = "Desert Scout Gear", Type = ItemType.Armor,
-            ArmorClass = Rules.ArmorClass.Light,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 4 },
-            ResistModifiers = new Dictionary<string, int> { ["freezing"] = 2 },
-            Biome = "scrub", ShopTier = 2, Cost = 80,
-            TacticalCards =
-            [
-                new("Blend with the terrain", "free_momentum"),
-                new("Hurl pocket sand", "momentum_to_progress"),
-                new("Slip by unnoticed", "momentum_to_cancel"),
-                new("Sprint to cover", "threat_to_progress_large"),
-            ],
         },
         ["robe_of_twilight"] = new()
         {
             Id = "robe_of_twilight", Name = "Robe of Twilight", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
+            RequiredCombat = 0,
+            RpsMoves = ["Big Rare Wary Recover", "Mythic Perfect Defend"],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 5 },
             ResistModifiers = new Dictionary<string, int> { ["freezing"] = 3 },
-            TacticalCards =
-            [
-                new("Gather shadows around you", "free_momentum"),
-                new("Glide forward silently", "momentum_to_progress"),
-                new("Cast terrifying shadows", "momentum_to_cancel"),
-                new("Step between shadows", "momentum_to_progress_large"),
-                new("Conjure a shadow beast", "free_cancel"),
-            ],
         },
 
         // ── Armor: Medium (Cunning +1 to +2, Injury +1 to +3, Freezing +1 to +5) ──
 
-        ["leather"] = new()
-        {
-            Id = "leather", Name = "Leather", Type = ItemType.Armor,
-            ArmorClass = Rules.ArmorClass.Medium,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 1, ["freezing"] = 1 },
-            Biome = "forest", ShopTier = 1, Cost = 15,
-            TacticalCards = [new("Tread softly", "free_momentum")],
-        },
         ["hide_armor"] = new()
         {
             Id = "hide_armor", Name = "Hide Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
+            RequiredCombat = 2,
+            RpsMoves = ["Defend"],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 1, ["freezing"] = 2 },
             Biome = "mountains", ShopTier = 1, Cost = 15,
-            TacticalCards = [new("Blend with the terrain", "free_momentum")],
-        },
-        ["buff_coat"] = new()
-        {
-            Id = "buff_coat", Name = "Buff Coat", Type = ItemType.Armor,
-            ArmorClass = Rules.ArmorClass.Medium,
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 3 },
-            Biome = "forest", ShopTier = 2, Cost = 40,
-            TacticalCards = [new("Tread softly", "free_momentum")],
         },
         ["lamellar"] = new()
         {
             Id = "lamellar", Name = "Lamellar", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
+            RequiredCombat = 2,
+            RpsMoves = ["Defend", "Big Rare Defend"],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
-            TacticalCards =
-            [
-                new("Move while they're not looking", "momentum_to_progress"),
-                new("Blend with the terrain", "free_momentum"),
-            ],
         },
         ["mountain_regiment_armor"] = new()
         {
             Id = "mountain_regiment_armor", Name = "17th Mountain Regiment Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
+            RequiredCombat = 2,
+            RpsMoves = ["Big Rare Defend", "Rare Wary Recover"],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 3, ["freezing"] = 5 },
-            TacticalCards =
-            [
-                new("Move with uncanny speed", "spirits_to_momentum"),
-                new("Put your faith in the armor", "threat_to_progress_large"),
-            ],
         },
 
         // ── Armor: Heavy (Injury +1 to +5, Cunning +0, Freezing +0 to +2) ──
@@ -379,20 +233,17 @@ public sealed class ItemDef
         {
             Id = "gambeson", Name = "Gambeson", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
+            RequiredCombat = 4,
+            RpsMoves = ["Defend"],
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 1, ["freezing"] = 1 },
             Biome = "mountains", ShopTier = 1, Cost = 15,
-        },
-        ["chainmail"] = new()
-        {
-            Id = "chainmail", Name = "Chainmail", Type = ItemType.Armor,
-            ArmorClass = Rules.ArmorClass.Heavy,
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2 },
-            Biome = "plains", ShopTier = 1, Cost = 15,
         },
         ["scale_armor"] = new()
         {
             Id = "scale_armor", Name = "Scale Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
+            RequiredCombat = 4,
+            RpsMoves = ["Big Defend"],
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 3 },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
@@ -400,6 +251,8 @@ public sealed class ItemDef
         {
             Id = "brigandine", Name = "Brigandine", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
+            RequiredCombat = 4,
+            RpsMoves = ["Defend", "Big Rare Shielding Defend"],
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 4, ["freezing"] = 1 },
             Biome = "plains", ShopTier = 2, Cost = 80,
         },
@@ -407,6 +260,8 @@ public sealed class ItemDef
         {
             Id = "golem_armor", Name = "Golem Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
+            RequiredCombat = 4,
+            RpsMoves = ["Big Defend", "Perfect Rare Defend"],
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 5, ["freezing"] = 2 },
         },
 
@@ -588,7 +443,7 @@ public sealed class ItemDef
         {
             Id = "lucky_buckle", Name = "Lucky Buckle", Type = ItemType.Token,
             Description = "A legionaire's brass buckle. Not so lucky for the previous owner, but you feel a strange attachment to it.",
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 1 },
+            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
             TacticalCards = [new("Trust your luck", "spirits_to_cancel")],
         },
 

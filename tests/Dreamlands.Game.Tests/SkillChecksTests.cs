@@ -107,20 +107,22 @@ public class SkillChecksTests
     // ── Gear sourcing tests ──
 
     [Fact]
-    public void GetItemBonus_Combat_UsesWeaponOnly()
+    public void GetItemBonus_Combat_WeaponContributesNothing()
     {
+        // Weapons no longer grant +Combat per the RPS pivot — Combat skill is now
+        // a gear-tier gate, not a roll modifier.
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
         state.Equipment.Armor = new ItemInstance("scale_armor", "Scale Armor");
 
-        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Combat, state, Balance));
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Combat, state, Balance));
     }
 
     [Fact]
     public void GetItemBonus_Cunning_UsesArmorOnly()
     {
         var state = Fresh();
-        state.Equipment.Armor = new ItemInstance("leather", "Leather"); // Cunning +1
+        state.Equipment.Armor = new ItemInstance("hide_armor", "Hide Armor"); // Cunning +1
         state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
 
         Assert.Equal(1, SkillChecks.GetItemBonus(Skill.Cunning, state, Balance));
@@ -157,7 +159,7 @@ public class SkillChecksTests
     {
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
-        state.Equipment.Armor = new ItemInstance("chainmail", "Chainmail");
+        state.Equipment.Armor = new ItemInstance("scale_armor", "Scale Armor");
 
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Luck, state, Balance));
     }
@@ -195,11 +197,13 @@ public class SkillChecksTests
     [Fact]
     public void GetItemBonus_TokenAddsOneToMatchingSkill()
     {
+        // Combat skill comes only from tokens now (Lucky Buckle = +2). Weapons
+        // contribute zero. This test exercises the negotiation-token path.
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar"); // +4 combat
+        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
         state.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb")); // +1 negotiation token
 
-        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Combat, state, Balance)); // no token for combat
+        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Combat, state, Balance)); // no contributions
         Assert.Equal(1, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // token only
     }
 
@@ -219,7 +223,7 @@ public class SkillChecksTests
     public void GetResistBonus_Injured_UsesArmor()
     {
         var state = Fresh();
-        state.Equipment.Armor = new ItemInstance("leather", "Leather"); // injured = Trivial → +1
+        state.Equipment.Armor = new ItemInstance("hide_armor", "Hide Armor"); // injured +1
 
         Assert.Equal(1, SkillChecks.GetResistBonus("injured", state, Balance));
     }

@@ -329,3 +329,10 @@ A clean three-PR cadence:
 1. New engine + new parser + new tests against the engine.
 2. Wire-through (orchestrator + server + web + CLI), rewrite all 19 `.fight` files.
 3. Player gear cull + Lucky Buckle + `.enc` DC sweep + cleanup.
+
+# Bugs
+
+- Monsters need a "stunned" action description in their .fight file so we can narrate that. Player probably needs one as well.
+- Not currently gating weapon equip on skill
+- "Big" still in move descs
+- Recover-based monsters remain severely unpowered
