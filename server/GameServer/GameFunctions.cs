@@ -106,6 +106,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             // Resume mid-fight: render the current state with empty events (no new turn happened).
             var resumeTurn = new Dreamlands.Orchestration.CombatOrchestrator.CombatTurn(
+                combat.EncounterId,
                 Array.Empty<Dreamlands.Combat.CombatEvent>(),
                 Array.Empty<MechanicResult>(),
                 Resolved: false,
@@ -2220,11 +2221,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         // After Finalize, ActiveCombat is null on resolved combats — the events still
         // carry the terminal state, so reconstruct what we can from them.
         var state = session.Player.ActiveCombat;
-        Dreamlands.Encounter.CombatEncounter? encounter = null;
-        if (state != null)
-            encounter = data.CombatBundle?.GetById(state.EncounterId);
-        if (encounter == null && turn.Events.OfType<Dreamlands.Combat.CombatEvent.Intro>().FirstOrDefault() is { } intro)
-            encounter = data.CombatBundle?.GetById(intro.EncounterId);
+        // After Finalize clears ActiveCombat, fall back to turn.EncounterId so the
+        // resolved-state response still has the encounter (vignette, title, blood).
+        var encounterId = state?.EncounterId ?? turn.EncounterId;
+        var encounter = string.IsNullOrEmpty(encounterId)
+            ? null
+            : data.CombatBundle?.GetById(encounterId);
 
         var events = BuildCombatEventLog(turn.Events);
         var outcome = turn.Events.OfType<Dreamlands.Combat.CombatEvent.Outcome>().FirstOrDefault();
@@ -2236,10 +2238,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         int monsterHp = state?.MonsterHp ?? 0;
         int monsterMaxHp = state?.MonsterMaxHp ?? 0;
 
-        // Player move pool: surface the encoded form so the CLI/UI can render
-        // selectors. Cooldown filtering happens client-side using PlayerLastUsedTurn
-        // (also surfaced) plus the current turn number.
-        var movePool = state?.Profile.MovePool.Select(m => m.Encoded).ToList() ?? new List<string>();
+        // Player move pool: surface encoding + authored display name so the CLI/UI
+        // can render selectors. Cooldown filtering happens client-side using
+        // PlayerLastUsedTurn (also surfaced) plus the current turn number.
+        var movePool = state?.Profile.MovePool
+            .Select(em => new MoveOption(em.Encoded, em.DisplayName))
+            .ToList()
+            ?? new List<MoveOption>();
 
         return new CombatInfo
         {
@@ -2313,7 +2318,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Dreamlands.Combat.CombatEvent.TurnStarted x         => RenderTurnStarted(x),
         Dreamlands.Combat.CombatEvent.SlotResolved x        => RenderSlotResolved(x),
         Dreamlands.Combat.CombatEvent.PlayerFleeAttempted _ => Plain("  You break and run."),
-        Dreamlands.Combat.CombatEvent.Outcome x             => Plain(RenderOutcome(x)),
+        // Outcome is rendered by the client's OutcomePanel — no inline log entry.
+        Dreamlands.Combat.CombatEvent.Outcome _              => null,
         _                                                    => null,
     };
 
@@ -2333,10 +2339,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     static CombatLogEntry RenderSlotResolved(Dreamlands.Combat.CombatEvent.SlotResolved x)
     {
-        // Compose a single line per slot: "Slot N: you Attack | them Defend → -2 / 0"
-        var pSign = FmtDelta(x.PlayerDelta);
-        var mSign = FmtDelta(x.MonsterDelta);
-        var line = $"  Slot {x.Slot}: you {x.PlayerMove.Encoded,-22} | them {x.MonsterMove.Encoded,-22} → {pSign} / {mSign}";
+        // Prosaic single line per slot: "You picked Read, they picked Defend • You take 2 damage, they take 0"
+        var moves = (x.PlayerMove.Base, x.MonsterMove.Base) switch
+        {
+            ("skipped", "skipped") => "Both stunned this slot",
+            ("skipped", _)         => $"You're stunned, they picked {VerbName(x.MonsterMove)}",
+            (_, "skipped")         => $"You picked {VerbName(x.PlayerMove)}, they're stunned",
+            _                      => $"You picked {VerbName(x.PlayerMove)}, they picked {VerbName(x.MonsterMove)}",
+        };
+        var effect = $"{DescribeDelta(x.PlayerDelta, "You")}, {DescribeDelta(x.MonsterDelta, "they")}";
+        var line = $"{moves} • {effect}";
         if (!string.IsNullOrEmpty(x.MonsterNarration))
             line += $"\n    {x.MonsterNarration}";
         return new CombatLogEntry
@@ -2349,22 +2361,20 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Damage = x.MonsterDelta < 0 ? -x.MonsterDelta : null,
                 }
                 : null,
+            Slot = x.Slot,
+            PlayerMove = x.PlayerMove.Encoded,
+            MonsterMove = x.MonsterMove.Encoded,
         };
     }
 
-    static string RenderOutcome(Dreamlands.Combat.CombatEvent.Outcome x)
-    {
-        var verdict = x.PlayerWon ? "VICTORY"
-                    : x.PlayerLost ? "DEFEAT"
-                    : x.PlayerFled ? "PLAYER FLED"
-                    : x.MonsterFled ? "MONSTER FLED"
-                    : "ENDED";
-        var line = $"=== {verdict} (after {x.Turns} turns) ===";
-        return string.IsNullOrEmpty(x.Text) ? line : $"{line}\n{x.Text}";
-    }
+    // Capitalized base verb for the slot log. Mutators are surfaced through icons
+    // and tooltips; the prose log just names what kind of action each side took.
+    static string VerbName(Dreamlands.Encounter.Move m) =>
+        m.Base.Length == 0 ? m.Base : char.ToUpper(m.Base[0]) + m.Base[1..];
 
-    static string FmtDelta(int n) =>
-        n == 0 ? "  0"
-        : n > 0 ? $"+{n}"
-        : n.ToString();
+    static string DescribeDelta(int delta, string subj) =>
+        delta < 0 ? $"{subj} take {-delta} damage"
+        : delta > 0 ? $"{subj} recover {delta}"
+        : $"{subj} take 0";
+
 }

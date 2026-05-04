@@ -30,27 +30,13 @@ function moveBase(encoded: string): MoveBase {
   return "skipped";
 }
 
-const COOLDOWN_MUTATORS = new Set(["mythic", "rare", "slow", "power"]);
-
-const DISPLAY_OVERRIDES: Record<string, string> = {
-  Defend: "Block",
-  Recover: "Recover",
-  Read: "Read intent",
-  "Big Defend": "Brace",
-  "Big Shielding Defend": "Shield wall",
-  "Big Rare Shielding Defend": "Shield wall",
-  "Big Recover": "Super recover",
-  "Big Mythic Recover": "Super recover",
-  "Big Rare Recover": "Super recover",
-  "Big Rare Defend": "Brace",
-};
-
-function moveDisplayName(encoded: string): string {
-  if (DISPLAY_OVERRIDES[encoded]) return DISPLAY_OVERRIDES[encoded];
-  const tokens = encoded.split(" ").filter(t => !COOLDOWN_MUTATORS.has(t.toLowerCase()));
-  if (tokens.length === 0) return encoded;
-  const joined = tokens.join(" ");
-  return joined.charAt(0).toUpperCase() + joined.slice(1).toLowerCase();
+// Player move labels come from the server-authored displayName on each MoveOption.
+// For slot tooltips reconstructed from a bare encoded string (selections, monster
+// commits), look up the player's pool by encoding; fall back to the encoded form
+// for moves not in the player pool (currently any monster move — monsters don't
+// author display names, and their slot icons already convey family).
+function lookupDisplayName(encoded: string, combat: CombatInfo): string {
+  return combat.playerMovePool.find(o => o.encoding === encoded)?.displayName ?? encoded;
 }
 
 // Base-verb iconography. Stuns route through `knockout.svg` separately (see
@@ -92,8 +78,8 @@ function moveTooltip(encoded: string): string {
     case "skipped":  parts.push("No action."); break;
   }
 
-  if (has("heavy")) parts.push("+4 damage");
-  if (has("big")) {
+  if (has("heavy")) {
+    if (base === "attack")  parts.push("+4 damage");
     if (base === "defend")  parts.push("+2 prevent");
     if (base === "recover") parts.push("+2 heal");
   }
@@ -109,8 +95,8 @@ function moveTooltip(encoded: string): string {
   if (has("provoking"))   parts.push("Target Berzerks (its move pool narrows next turn)");
   if (has("terrifying"))  parts.push("Target Fears (its move pool narrows next turn)");
 
-  if (has("rare") || has("power"))    parts.push("Once per turn");
-  if (has("mythic") || has("slow"))   parts.push("Once every other turn");
+  if (has("power")) parts.push("Once per turn");
+  if (has("slow"))  parts.push("Once every other turn");
 
   return parts.join(". ");
 }
@@ -144,7 +130,7 @@ type SlotSim = {
 function simulateSlots(
   combat: CombatInfo,
   selections: (string | null)[],
-  planVisible: boolean,
+  monsterMovesPerSlot: (string | null)[],
 ): SlotSim[] {
   const sims: SlotSim[] = [];
   let playerForwardStun = false;
@@ -152,7 +138,7 @@ function simulateSlots(
 
   for (let i = 0; i < 3; i++) {
     const playerStunned = combat.playerCarryStun[i] || playerForwardStun;
-    const monsterRaw = planVisible && combat.plan ? combat.plan[i] : null;
+    const monsterRaw = monsterMovesPerSlot[i];
     const monsterPreSkipped = monsterRaw != null && moveBase(monsterRaw) === "skipped";
     const monsterStunned = monsterForwardStun || monsterPreSkipped;
 
@@ -194,8 +180,8 @@ function simulateSlots(
 
 function moveAvailability(move: string, combat: CombatInfo, selections: (string | null)[]): { disabled: boolean; reason: string | null } {
   const tokens = move.split(" ").map(s => s.toLowerCase());
-  const isOncePer = tokens.includes("rare") || tokens.includes("power");
-  const isOnceEvery = tokens.includes("mythic") || tokens.includes("slow");
+  const isOncePer = tokens.includes("power");
+  const isOnceEvery = tokens.includes("slow");
   if (isOncePer && selections.includes(move)) return { disabled: true, reason: "used this turn" };
   if (isOnceEvery) {
     const last = combat.playerLastUsedTurn[move];
@@ -247,6 +233,18 @@ export default function Combat({ state }: { state: GameResponse }) {
   const prevHealthRef = useRef(combat?.playerHealth ?? 0);
   const prevSpiritsRef = useRef(combat?.playerSpirits ?? 0);
 
+  // Staged-reveal state. After the player commits a turn, we hold the
+  // committed selections + the per-slot resolution events and reveal them
+  // one slot at a time on a timer. Inputs are blocked while non-null.
+  const [playback, setPlayback] = useState<{
+    committedSelections: (string | null)[];
+    slotEvents: CombatLogEntry[];
+    revealedThrough: number;
+    trailingEvents: CombatLogEntry[];
+  } | null>(null);
+  const SLOT_REVEAL_MS = 350;
+  const PLAYBACK_TAIL_MS = 250;
+
   useEffect(() => {
     if (!combat) return;
     if (combat.events === lastSeenRef.current) return;
@@ -256,31 +254,81 @@ export default function Combat({ state }: { state: GameResponse }) {
       setAllEvents(combat.events);
       lastEncounterRef.current = combat.encounterId;
       setSelections([null, null, null]);
+      setPlayback(null);
       prevHealthRef.current = combat.playerHealth;
       prevSpiritsRef.current = combat.playerSpirits;
+      lastSeenRef.current = combat.events;
+      return;
+    }
+
+    const slotEvents = combat.events.filter(e => e.slot != null);
+    const trailingEvents = combat.events.filter(e => e.slot == null);
+
+    if (slotEvents.length > 0) {
+      // Hold log/splats/selections steady; the timer effect will drain them.
+      setPlayback({
+        committedSelections: selections,
+        slotEvents,
+        revealedThrough: 0,
+        trailingEvents,
+      });
     } else {
       setAllEvents(prev => [...prev, ...combat.events]);
       setSelections([null, null, null]);
-    }
-    lastSeenRef.current = combat.events;
 
-    if (!fresh && hitboxRef.current) {
-      const rect = hitboxRef.current.getBoundingClientRect();
-      const newHits: Hit[] = [];
-      for (const e of combat.events) {
-        if (!e.playerAttack) continue;
-        const { x, y } = pickAnchor(rect);
-        newHits.push({
-          id: ++hitIdRef.current,
-          x, y,
-          angle: Math.random() * 360,
-          splat: 1 + Math.floor(Math.random() * 8),
-          miss: e.playerAttack.outcome === "miss",
-        });
+      if (hitboxRef.current) {
+        const rect = hitboxRef.current.getBoundingClientRect();
+        const newHits: Hit[] = [];
+        for (const e of combat.events) {
+          if (!e.playerAttack) continue;
+          const { x, y } = pickAnchor(rect);
+          newHits.push({
+            id: ++hitIdRef.current,
+            x, y,
+            angle: Math.random() * 360,
+            splat: 1 + Math.floor(Math.random() * 8),
+            miss: e.playerAttack.outcome === "miss",
+          });
+        }
+        if (newHits.length) setHits(prev => [...prev, ...newHits]);
       }
-      if (newHits.length) setHits(prev => [...prev, ...newHits]);
     }
+
+    lastSeenRef.current = combat.events;
   }, [combat]);
+
+  useEffect(() => {
+    if (!playback) return;
+
+    if (playback.revealedThrough < playback.slotEvents.length) {
+      const t = setTimeout(() => {
+        const idx = playback.revealedThrough;
+        const evt = playback.slotEvents[idx];
+        setAllEvents(prev => [...prev, evt]);
+        const attack = evt.playerAttack;
+        if (attack && hitboxRef.current) {
+          const rect = hitboxRef.current.getBoundingClientRect();
+          const { x, y } = pickAnchor(rect);
+          setHits(prev => [...prev, {
+            id: ++hitIdRef.current,
+            x, y,
+            angle: Math.random() * 360,
+            splat: 1 + Math.floor(Math.random() * 8),
+            miss: attack.outcome === "miss",
+          }]);
+        }
+        setPlayback(p => p ? { ...p, revealedThrough: p.revealedThrough + 1 } : p);
+      }, SLOT_REVEAL_MS);
+      return () => clearTimeout(t);
+    }
+
+    const t = setTimeout(() => {
+      setAllEvents(prev => [...prev, ...playback.trailingEvents]);
+      setSelections([null, null, null]);
+      setPlayback(null);
+    }, PLAYBACK_TAIL_MS);
+    return () => clearTimeout(t);
+  }, [playback]);
 
   useEffect(() => {
     if (!combat) return;
@@ -299,7 +347,7 @@ export default function Combat({ state }: { state: GameResponse }) {
   }, [allEvents.length]);
 
   const handlePick = (move: string) => {
-    if (!combat || combat.resolved || loading) return;
+    if (!combat || combat.resolved || loading || playback) return;
     setSelections(prev => {
       if (moveAvailability(move, combat, prev).disabled) return prev;
 
@@ -324,20 +372,20 @@ export default function Combat({ state }: { state: GameResponse }) {
   useEffect(() => {
     if (!combat) return;
     function onKey(e: KeyboardEvent) {
-      if (!combat || combat.resolved) return;
+      if (!combat || combat.resolved || playback) return;
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       if (e.key >= "1" && e.key <= "9") {
         const idx = parseInt(e.key) - 1;
         const pool = combat.playerMovePool;
         if (idx >= pool.length) return;
-        const move = pool[idx];
-        if (moveAvailability(move, combat, selections).disabled) return;
-        handlePick(move);
+        const encoding = pool[idx].encoding;
+        if (moveAvailability(encoding, combat, selections).disabled) return;
+        handlePick(encoding);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [combat, selections]);
+  }, [combat, selections, playback]);
 
   if (!combat) return null;
 
@@ -374,6 +422,8 @@ export default function Combat({ state }: { state: GameResponse }) {
               style={{
                 filter:
                   "drop-shadow(0 0 6px rgba(0,0,0,0.95)) drop-shadow(0 0 18px rgba(0,0,0,0.85)) drop-shadow(0 0 40px rgba(0,0,0,0.65)) drop-shadow(0 12px 24px rgba(0,0,0,0.6))",
+                opacity: combat.playerWon && !playback ? 0 : 1,
+                transition: "opacity 900ms ease-out",
               }}
               src={`/world/assets/${combat.image}`}
               alt={combat.title}
@@ -427,27 +477,39 @@ export default function Combat({ state }: { state: GameResponse }) {
 
         <div style={{ flex: 1 }} />
 
-        {!combat.resolved && (
+        {(!combat.resolved || playback) && (
           <>
-            <BannerLine text={combat.tell} />
+            <BannerLine text={playback ? "Resolving…" : combat.tell} />
 
-            <SlotGrid combat={combat} selections={selections} planVisible={planVisible} />
+            <SlotGrid
+              combat={combat}
+              selections={playback ? playback.committedSelections : selections}
+              planVisible={planVisible}
+              playback={playback ? {
+                monsterMoves: playback.slotEvents.map(e => e.monsterMove ?? null),
+                revealedThrough: playback.revealedThrough,
+              } : undefined}
+            />
 
-            <BannerLine text="Your plan" />
+            <BannerLine text="Your plan this turn" />
 
-            {combat.playerMovePool.map((move, idx) => {
-              const { disabled, reason } = moveAvailability(move, combat, selections);
-              const tooltip = disabled
-                ? `${moveTooltip(move)} (${reason})`
-                : moveTooltip(move);
+            {combat.playerMovePool.map((option, idx) => {
+              const { disabled: gateDisabled, reason } = moveAvailability(option.encoding, combat, selections);
+              const disabled = gateDisabled || playback != null;
+              const tooltip = playback
+                ? "Resolving…"
+                : gateDisabled
+                  ? `${moveTooltip(option.encoding)} (${reason})`
+                  : moveTooltip(option.encoding);
               return (
                 <ActionButton
-                  key={move}
+                  key={option.encoding}
                   number={idx + 1}
-                  label={moveDisplayName(move)}
+                  label={option.displayName}
+                  encoding={option.encoding}
                   tooltip={tooltip}
                   disabled={disabled}
-                  onClick={() => handlePick(move)}
+                  onClick={() => handlePick(option.encoding)}
                 />
               );
             })}
@@ -456,10 +518,10 @@ export default function Combat({ state }: { state: GameResponse }) {
 
         <div style={{ flex: 1 }} />
 
-        {!combat.resolved && (
-          <FleeButton onClick={onFlee} disabled={loading} />
+        {(!combat.resolved || playback) && (
+          <FleeButton onClick={onFlee} disabled={loading || playback != null} />
         )}
-        {combat.resolved && (
+        {combat.resolved && !playback && (
           <Button size="lg" onClick={() => refreshState()} disabled={loading} className="w-full">
             Continue
           </Button>
@@ -478,7 +540,7 @@ export default function Combat({ state }: { state: GameResponse }) {
             .filter(e => e.text !== combat.introText)
             .map((entry, i) => <LogEntry key={i} entry={entry} />)}
 
-          {combat.resolved && <OutcomePanel combat={combat} />}
+          {combat.resolved && !playback && <OutcomePanel combat={combat} />}
         </div>
       </div>
     </div>
@@ -570,14 +632,14 @@ function DamageSplat() {
 }
 
 // ── Banner / "Your plan" header ───────────────────────────────────────────
-// Both are 20 px text, color #ACA377, line-height 40 px (= 40 px tall block).
+// Both are 20 px text, color #ACA377.
 
 function BannerLine({ text }: { text: string }) {
   return (
     <div
       style={{
         fontSize: 20,
-        lineHeight: "40px",
+        lineHeight: "24px",
         color: DIM,
         fontStyle: "italic",
       }}
@@ -594,14 +656,25 @@ function BannerLine({ text }: { text: string }) {
 // Player circle gets opacity 0.5 when no move is selected; the bottom
 // connector line fades to 0.5 to match.
 
-function SlotGrid({ combat, selections, planVisible }: {
+function SlotGrid({ combat, selections, planVisible, playback }: {
   combat: CombatInfo;
   selections: (string | null)[];
   planVisible: boolean;
+  /** When set, renders the post-commit reveal: monster moves are taken from
+   *  the resolved slot events, with slots ≥ revealedThrough still rendered as
+   *  unknown until the timer ticks them in. */
+  playback?: { monsterMoves: (string | null)[]; revealedThrough: number };
 }) {
+  const monsterMovesPerSlot = useMemo<(string | null)[]>(() => {
+    if (playback) {
+      return playback.monsterMoves.map((m, i) => i < playback.revealedThrough ? m : null);
+    }
+    return planVisible && combat.plan ? combat.plan : [null, null, null];
+  }, [combat.plan, planVisible, playback]);
+
   const sims = useMemo(
-    () => simulateSlots(combat, selections, planVisible),
-    [combat, selections, planVisible],
+    () => simulateSlots(combat, selections, monsterMovesPerSlot),
+    [combat, selections, monsterMovesPerSlot],
   );
 
   return (
@@ -610,16 +683,18 @@ function SlotGrid({ combat, selections, planVisible }: {
       style={{ height: 179, padding: "0 16px" }}
     >
       {sims.map((sim, i) => {
-        const monsterUnknown = !planVisible;
+        const monsterUnknown = monsterMovesPerSlot[i] == null && !sim.monsterStunned;
         const monsterIcon = monsterUnknown
           ? null
           : slotIcon(sim.monsterMove, /* isMonster */ true, sim.monsterStunned);
         const monsterTooltip = monsterUnknown
-          ? `Slot ${i + 1} — unknown (commit Read intent to reveal)`
+          ? playback
+            ? `Slot ${i + 1} — resolving…`
+            : `Slot ${i + 1} — unknown (commit Read intent to reveal)`
           : sim.monsterStunned
             ? `Slot ${i + 1} — stunned`
             : sim.monsterMove
-              ? `Slot ${i + 1} — ${moveDisplayName(sim.monsterMove)}`
+              ? `Slot ${i + 1} — ${sim.monsterMove}`
               : `Slot ${i + 1}`;
 
         const playerFaded = sim.playerMove == null && !sim.playerStunned;
@@ -627,7 +702,7 @@ function SlotGrid({ combat, selections, planVisible }: {
         const playerTooltip = sim.playerStunned
           ? `Slot ${i + 1} — stunned`
           : sim.playerMove
-            ? `Slot ${i + 1} — ${moveDisplayName(sim.playerMove)}`
+            ? `Slot ${i + 1} — ${lookupDisplayName(sim.playerMove, combat)}`
             : `Slot ${i + 1} — pending`;
 
         return (
@@ -751,9 +826,10 @@ function PreviewGlyph({ monsterUnknown, playerFilled, preview }: {
 // 12 16, gap 10. Number badge 24×24 (1 px border #D0925D, rounded 6),
 // 20 px digit. Disabled: bg #292929, badge+label opacity 0.4.
 
-function ActionButton({ number, label, tooltip, disabled, onClick }: {
-  number: number; label: string; tooltip?: string; disabled?: boolean; onClick: () => void;
+function ActionButton({ number, label, encoding, tooltip, disabled, onClick }: {
+  number: number; label: string; encoding: string; tooltip?: string; disabled?: boolean; onClick: () => void;
 }) {
+  const classIcon = BASE_ICON[moveBase(encoding)];
   return (
     <button
       onClick={onClick}
@@ -773,6 +849,27 @@ function ActionButton({ number, label, tooltip, disabled, onClick }: {
       }}
       className={disabled ? "cursor-not-allowed" : "hover:brightness-125"}
     >
+      {classIcon && (
+        <span style={{ opacity: disabled ? 0.4 : 1, display: "inline-flex", flex: "0 0 auto" }}>
+          <MaskedIcon
+            icon={classIcon}
+            color={ACTION}
+            className="w-[24px] h-[24px]"
+          />
+        </span>
+      )}
+      <span
+        style={{
+          flex: 1,
+          color: ACTION,
+          fontSize: 20,
+          lineHeight: "24px",
+          fontFamily: "var(--font-body)",
+          opacity: disabled ? 0.4 : 1,
+        }}
+      >
+        {label}
+      </span>
       <span
         style={{
           width: 24,
@@ -792,17 +889,6 @@ function ActionButton({ number, label, tooltip, disabled, onClick }: {
         }}
       >
         {number}
-      </span>
-      <span
-        style={{
-          color: ACTION,
-          fontSize: 20,
-          lineHeight: "24px",
-          fontFamily: "var(--font-body)",
-          opacity: disabled ? 0.4 : 1,
-        }}
-      >
-        {label}
       </span>
     </button>
   );
@@ -859,15 +945,11 @@ function LogEntry({ entry }: { entry: CombatLogEntry }) {
     );
   }
 
-  if (line.startsWith("===")) {
-    return <div className="font-header text-accent text-center mt-3">{line.replace(/=/g, "").trim()}</div>;
-  }
-
-  if (line.startsWith("  Slot ")) {
+  if (entry.slot != null) {
     const [head, narration] = line.split("\n    ");
     return (
       <div className="leading-relaxed">
-        <div className="text-primary">{head.replace(/^ {2}/, "")}</div>
+        <div className="text-primary">{head}</div>
         {narration && <div className="text-dim ml-6 italic">{narration}</div>}
       </div>
     );
@@ -885,10 +967,22 @@ function OutcomePanel({ combat }: { combat: CombatInfo }) {
     : combat.monsterFled ? "It Flees"
     : "Resolved";
 
+  // Outcome text in .fight files wraps at ~70 chars with hard newlines and uses
+  // blank lines between paragraphs. Render paragraphs as <p>s with normal flow
+  // so the body wraps to the card width instead of honoring the source wrap.
+  const paragraphs = (combat.outcomeText ?? "")
+    .split(/\n{2,}/)
+    .map(p => p.replace(/\s*\n\s*/g, " ").trim())
+    .filter(p => p.length > 0);
+
   return (
     <div className="mt-4 p-5 border border-white/10 rounded-lg bg-panel-alt">
       <div className="font-header text-[32px] text-accent leading-none mb-3">{verdict}</div>
-      {combat.outcomeText && <div className="text-primary leading-relaxed whitespace-pre-line">{combat.outcomeText}</div>}
+      {paragraphs.length > 0 && (
+        <div className="text-primary leading-relaxed space-y-2">
+          {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+      )}
       {combat.outcomeMechanics && combat.outcomeMechanics.length > 0 && (
         <ul className="mt-3 space-y-1 text-dim">
           {combat.outcomeMechanics.map((m, i) => (

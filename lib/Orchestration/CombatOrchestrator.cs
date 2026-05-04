@@ -14,6 +14,7 @@ namespace Dreamlands.Orchestration;
 public static class CombatOrchestrator
 {
     public sealed record CombatTurn(
+        string EncounterId,
         IReadOnlyList<CombatEvent> Events,
         IReadOnlyList<MechanicResult> OutcomeMechanics,
         bool Resolved,
@@ -73,7 +74,7 @@ public static class CombatOrchestrator
             session.Mode = SessionMode.Exploring;
         }
 
-        return new CombatTurn(events, outcomeMechanics, state.Resolved, playerDied);
+        return new CombatTurn(encounter.Id, events, outcomeMechanics, state.Resolved, playerDied);
     }
 
     static CombatEncounter ResolveEncounter(GameSession session, string id)
