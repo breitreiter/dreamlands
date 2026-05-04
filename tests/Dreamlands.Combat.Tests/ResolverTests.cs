@@ -78,10 +78,10 @@ public class ResolverTests
     }
 
     [Fact]
-    public void Big_recover_heals_six()
+    public void Heavy_recover_heals_six()
     {
         var rng = new Random(0);
-        var r = Resolver.Resolve(M("big recover"), M("defend"), rng);
+        var r = Resolver.Resolve(M("heavy recover"), M("defend"), rng);
         Assert.Equal(6, r.PlayerDelta);
     }
 
@@ -111,6 +111,22 @@ public class ResolverTests
         var r = Resolver.Resolve(M("terrifying attack"), M("defend"), rng);
         Assert.True(r.FearMonsterNext);
         Assert.False(r.FearPlayerNext);
+    }
+
+    [Fact]
+    public void Stunning_attack_can_proc_forward_stun_on_target()
+    {
+        // Stunning Attack has a chance to stun the target. The proc path should be
+        // reachable across seeds — we don't pin a specific seed, just assert that
+        // stun fires at least once across enough samples.
+        bool sawStun = false;
+        for (int seed = 0; seed < 50; seed++)
+        {
+            var rng = new Random(seed);
+            var r = Resolver.Resolve(M("stunning attack"), M("defend"), rng);
+            if (r.StunMonsterNext) { sawStun = true; break; }
+        }
+        Assert.True(sawStun, "Stunning Attack should be able to forward-stun the target.");
     }
 
     [Fact]

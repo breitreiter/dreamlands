@@ -91,7 +91,7 @@ public static class CombatRunner
             }
         }
 
-        // Track this turn's usage for Rare/Mythic next-turn cooldowns.
+        // Track this turn's usage for Power/Slow next-turn cooldowns.
         for (int i = 0; i < 3; i++)
         {
             var p = playerSlots[i];
@@ -191,7 +191,7 @@ public static class CombatRunner
 
     /// <summary>
     /// Choose three moves from the encounter pool for the upcoming turn. Honours
-    /// MonsterCarryStun (slots locked to Skipped), Rare/Mythic cooldowns from
+    /// MonsterCarryStun (slots locked to Skipped), Power/Slow cooldowns from
     /// MonsterLastUsedTurn, and Berzerk/Fear pool restrictions for the upcoming turn.
     /// Mutates state in place: writes <see cref="CombatState.MonsterCommit"/> and
     /// <see cref="CombatState.MonsterCommitNarration"/>.
@@ -201,8 +201,8 @@ public static class CombatRunner
         state.MonsterCommit = new List<Move>(3);
         state.MonsterCommitNarration = new List<string>(3);
 
-        // Used-this-turn tracker for in-turn Rare cooldowns (a move can't appear twice
-        // in the same three-slot commitment if it's Rare).
+        // Used-this-turn tracker for in-turn Power cooldowns (a move can't appear twice
+        // in the same three-slot commitment if it's Power).
         var usedThisCommit = new HashSet<string>();
 
         for (int slot = 0; slot < 3; slot++)
@@ -244,12 +244,11 @@ public static class CombatRunner
             // Fear: must pick Defend or Recover if available.
             if (state.MonsterFearNextTurn && move.Base != "defend" && move.Base != "recover") continue;
 
-            // Once-per-turn: Defend/Recover use "rare"; Attack uses "power".
-            if ((move.Has("rare") || move.Has("power"))
-                && usedThisCommit.Contains(move.Encoded)) continue;
+            // Once-per-turn cooldown.
+            if (move.Has("power") && usedThisCommit.Contains(move.Encoded)) continue;
 
-            // Once-every-other-turn: Defend/Recover use "mythic"; Attack uses "slow".
-            if ((move.Has("mythic") || move.Has("slow"))
+            // Once-every-other-turn cooldown.
+            if (move.Has("slow")
                 && state.MonsterLastUsedTurn.TryGetValue(move.Encoded, out int last)
                 && state.Turn - last < 2) continue;
 

@@ -271,11 +271,13 @@ export interface CombatInfo {
   playerWeaponClass: string;
   playerArmorClass: string;
 
-  /** Encoded form of every move the player can pick from. Cooldowns filtered client-side. */
-  playerMovePool: string[];
+  /** Every move the player can pick from. encoding is the canonical mechanical form
+   *  (used as the move identifier — selections, cooldown keys); displayName is the
+   *  authored label shown on the action button. Cooldowns filtered client-side. */
+  playerMovePool: { encoding: string; displayName: string }[];
   /** Per-slot lockout: if true, that slot is forced to Skipped (carry-stun). */
   playerCarryStun: boolean[];
-  /** encoded move → turn number when last used. Lets us gate Rare/Mythic/Power/Slow. */
+  /** encoded move → turn number when last used. Lets us gate Power/Slow. */
   playerLastUsedTurn: Record<string, number>;
 
   turn: number;
@@ -299,6 +301,10 @@ export interface CombatLogEntry {
   roll?: CombatRollInfo;
   narration?: CombatNarrationInfo;
   playerAttack?: PlayerAttackInfo;
+  /** 1-based slot index for SlotResolved entries; null for everything else. */
+  slot?: number;
+  playerMove?: string;
+  monsterMove?: string;
 }
 
 export interface PlayerAttackInfo {

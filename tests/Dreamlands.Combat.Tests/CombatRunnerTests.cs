@@ -77,10 +77,10 @@ public class CombatRunnerTests
             weapon: null,
             armor:  Rules.ItemDef.All["tunic"]);
 
-        Assert.DoesNotContain(profile.MovePool, m => m.Base == "attack");
-        Assert.Contains(profile.MovePool, m => m.Base == "defend");
-        Assert.Contains(profile.MovePool, m => m.Base == "recover");
-        Assert.Contains(profile.MovePool, m => m.Base == "read");
+        Assert.DoesNotContain(profile.MovePool, m => m.Move.Base == "attack");
+        Assert.Contains(profile.MovePool, m => m.Move.Base == "defend");
+        Assert.Contains(profile.MovePool, m => m.Move.Base == "recover");
+        Assert.Contains(profile.MovePool, m => m.Move.Base == "read");
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class CombatRunnerTests
             weapon: Rules.ItemDef.All["falchion"],
             armor:  null);
 
-        Assert.Contains(profile.MovePool, m => m.Base == "defend" && m.Mutators.Count == 0);
+        Assert.Contains(profile.MovePool, m => m.Move.Base == "defend" && m.Move.Mutators.Count == 0);
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class CombatRunnerTests
         {
             Id = "test_hat", Name = "Test Hat", Type = Rules.ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
-            RpsMoves = ["Better Wary Read"],
+            RpsMoves = [new("Better Wary Read", "Better Wary Read")],
         };
 
         var profile = CombatPlayerProfile.From(
@@ -132,8 +132,8 @@ public class CombatRunnerTests
         var encoded = profile.MovePool.Select(m => m.Encoded).ToHashSet();
         Assert.Contains("Riposte Attack", encoded);
         Assert.Contains("Heavy Provoking Attack", encoded);
-        Assert.Contains("Big Rare Wary Recover", encoded);
-        Assert.Contains("Mythic Perfect Defend", encoded);
+        Assert.Contains("Heavy Power Wary Recover", encoded);
+        Assert.Contains("Perfect Slow Defend", encoded);
         Assert.Contains("Recover", encoded);
         Assert.Contains("Read", encoded);
     }
@@ -216,7 +216,7 @@ public class CombatRunnerTests
         CombatRunner.Begin(enc, player, state, rng);
         // Three Recovers — they should heal up to the original 20 cap, no further.
         CombatRunner.Step(enc, player, state,
-            new PlayerCombatAction.Commit(Move.Parse("big recover"), Move.Parse("big recover"), Move.Parse("big recover")),
+            new PlayerCombatAction.Commit(Move.Parse("heavy recover"), Move.Parse("heavy recover"), Move.Parse("heavy recover")),
             rng);
 
         Assert.True(player.Spirits <= player.MaxSpirits);

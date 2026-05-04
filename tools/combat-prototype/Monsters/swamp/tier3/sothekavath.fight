@@ -5,7 +5,7 @@
 +blood #3a3024
 +stats hp=28
 
-+move Big Defend
++move Heavy Defend
   narration: Sothëkavath sets the thousand-year guard. Steel from a dozen eras hardens at once.
 
 +move Heavy Attack
@@ -21,7 +21,7 @@
 +move Brutal Heavy Slow Stunning Attack
   narration: All of the soldiers in it commit to the strike together, and you eat all of it together.
 
-+move Big Mythic Recover
++move Heavy Slow Recover
   narration: Every layer settles back into place at once — the seams close, the blood re-routes, and a thousand years of standing here standing back up reasserts itself.
 
 +intro

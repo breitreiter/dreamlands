@@ -15,7 +15,7 @@ namespace Dreamlands.Encounter;
 ///   +blood #7a0a0a
 ///   +stats hp=18
 ///
-///   +move Big Telegraphed Rare Attack
+///   +move Heavy Telegraphed Slow Attack
 ///     narration: It winds back, hauling the maul over its head.
 ///     narration: It snarls and lifts the spike to shoulder height.
 ///

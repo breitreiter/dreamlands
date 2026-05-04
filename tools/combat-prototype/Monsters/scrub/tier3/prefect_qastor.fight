@@ -14,10 +14,10 @@
 +move Tainted Heavy Slow Stunning Attack
   narration: He lowers his head fractionally, the walls of the hall brighten, and the Color folds out of him with administrative force, landing on you.
 
-+move Big Rare Shielding Defend
++move Heavy Power Shielding Defend
   narration: The hall aligns itself around him for a moment, geometry sharpening, and the Color settles on him like a robe.
 
-+move Big Rare Recover
++move Heavy Power Recover
   narration: He breathes in once, evenly. The Color in his eyes deepens, and what you took from him is no longer missing.
 
 +intro

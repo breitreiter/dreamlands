@@ -85,7 +85,7 @@ Mutators:
 - Heavy: Heal +2
 - Wary: If paired against an Attack, converts to basic Defend before resolution
 - Shielded: Prevent 2 damage
-- Rare: Only usable once per turn
+- Power: Only usable once per turn
 - Slow: Only usable once every other turn
 - Enraging: If paired against an Attack, inflicts Berzerk on self
 
@@ -206,7 +206,7 @@ Disable attack action
 
 ## Item Movesets (proposal)
 
-### Daggers — cancel/stun-focused, no Big
+### Daggers — cancel/stun-focused, no Heavy
 
 #### Hunting Knife (T-1)
 - Attack
@@ -216,7 +216,7 @@ Disable attack action
 
 #### Kukri (T-3)
 - Attack
-- Stunning Rare Attack
+- Stunning Power Attack
 
 #### Fine Seax (T-3 high)
 - Attack
@@ -224,9 +224,9 @@ Disable attack action
 
 #### The Old Tooth (T-4)
 - Riposte Attack
-- Provoking Big Attack — the killing strike (huge damage, self-stuns next turn)
+- Provoking Heavy Attack — the killing strike (huge damage, self-stuns next turn)
 
-### Axes — brutal/big-focused, no fine work
+### Axes — brutal/heavy-focused, no fine work
 
 #### Hatchet (T-1)
 - Attack
@@ -236,15 +236,15 @@ Disable attack action
 
 #### War Axe (T-3)
 - Attack
-- Big Rare Attack — the committal heavy swing
+- Heavy Power Attack — the committal heavy swing
 
 #### Broadaxe (T-3 high)
 - Attack
-- Big Brutal Rare Attack
+- Heavy Brutal Power Attack
 
 #### Revathi Labrys (T-4)
-- Big Attack
-- Big Terrifying Mythic Attack
+- Heavy Attack
+- Heavy Terrifying Slow Attack
 
 ### Swords — riposte/balanced
 
@@ -259,11 +259,11 @@ Disable attack action
 
 #### Scimitar (T-3 high)
 - Attack
-- Big Rare Defend
+- Heavy Power Defend
 
 #### Shimmering Blade (T-4)
 - Riposte Attack
-- Big Wary Recovery
+- Heavy Wary Recovery
 
 ### Light Armor — evasion, not absorption
 
@@ -279,14 +279,14 @@ Disable attack action
 
 #### Cartographer's Cloak (T-2)
 - Deep Wary Read
-- Rare Wary Recover
+- Power Wary Recover
 
 #### Desert Scout Gear (T-3)
 - drop item
 
 #### Robe of Twilight (T-4)
-- Rare Big Wary Recover
-- Perfect Mythic Defend
+- Power Heavy Wary Recover
+- Perfect Slow Defend
 
 ### Medium Armor — balanced
 
@@ -303,13 +303,13 @@ Disable attack action
 
 #### Lamellar (T-3)
 - Defend
-- Rare Big Defend
+- Power Heavy Defend
 - Resist freezing
 - Resist injury
 
 #### 17th Mountain Regiment Armor (T-4)
-- Rare Big Defend
-- Rare Wary Recover
+- Power Heavy Defend
+- Power Wary Recover
 - Resist freezing
 - Resist injury
 
@@ -323,16 +323,16 @@ Disable attack action
 - drop item
 
 #### Scale Armor (T-2)
-- Big Defend
+- Heavy Defend
 - Resist injury
 
 #### Brigandine (T-3)
 - Defend
-- Rare Big Shielding Defend
+- Power Heavy Shielding Defend
 - Resist injury
 
 #### Golem Armor (T-4)
-- Big Defend
-- Perfect Rare Defend
+- Heavy Defend
+- Perfect Power Defend
 - Resist injury
 

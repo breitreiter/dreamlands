@@ -38,7 +38,7 @@ public sealed class CombatState
     public bool[] PlayerCarryStun { get; set; } = new bool[3];
     public bool[] MonsterCarryStun { get; set; } = new bool[3];
 
-    /// <summary>Cooldown bookkeeping for Rare ("once per turn") / Mythic ("once every other turn").
+    /// <summary>Cooldown bookkeeping for Power ("once per turn") / Slow ("once every other turn").
     /// Keyed by <c>Move.Encoded</c>; value is the turn number when the move was last used.</summary>
     public Dictionary<string, int> PlayerLastUsedTurn { get; set; } = new();
     public Dictionary<string, int> MonsterLastUsedTurn { get; set; } = new();

@@ -454,16 +454,18 @@ public class CombatInfo
     public string PlayerWeaponClass { get; init; } = "";
     public string PlayerArmorClass { get; init; } = "";
 
-    /// <summary>The encoded forms of every move the player can pick from this turn.
-    /// Cooldown filtering is the client's job — pair with <see cref="PlayerLastUsedTurn"/>
-    /// and <see cref="Turn"/> to gate Rare/Mythic moves.</summary>
-    public List<string> PlayerMovePool { get; init; } = new();
+    /// <summary>Every move the player can pick from this turn. <c>encoding</c> is the
+    /// canonical mechanical form (used as the move identifier for cooldown gating and
+    /// commit submission); <c>displayName</c> is the player-facing label rendered on
+    /// the action button. Cooldown filtering is the client's job — pair with
+    /// <see cref="PlayerLastUsedTurn"/> and <see cref="Turn"/> to gate Power/Slow moves.</summary>
+    public List<MoveOption> PlayerMovePool { get; init; } = new();
 
     /// <summary>For each slot 1..3, true means it's locked to Skipped this turn (carry-stun).</summary>
     public List<bool> PlayerCarryStun { get; init; } = new();
 
-    /// <summary>Encoded move → turn it was last used. Lets the client gate Rare ("== current turn")
-    /// and Mythic ("current - 1 == last used") moves.</summary>
+    /// <summary>Encoded move → turn it was last used. Lets the client gate Power ("== current turn")
+    /// and Slow ("current - 1 == last used") moves.</summary>
     public Dictionary<string, int> PlayerLastUsedTurn { get; init; } = new();
 
     public int Turn { get; init; }
@@ -484,6 +486,11 @@ public class CombatInfo
     public List<CombatLogEntry> Events { get; init; } = [];
 }
 
+/// <summary>One option in the player's move pool: <c>Encoding</c> is the canonical
+/// mechanical form used as the move identifier (cooldown gating, commit submission);
+/// <c>DisplayName</c> is the authored label shown on the action button.</summary>
+public sealed record MoveOption(string Encoding, string DisplayName);
+
 /// <summary>
 /// One line of combat narration. <see cref="Text"/> is the rendered form
 /// (used as-is for non-roll lines); <see cref="Roll"/>, when present, lets
@@ -495,6 +502,16 @@ public class CombatLogEntry
     public CombatRollInfo? Roll { get; init; }
     public CombatNarrationInfo? Narration { get; init; }
     public PlayerAttackInfo? PlayerAttack { get; init; }
+
+    /// <summary>1-based slot index when this entry corresponds to a SlotResolved
+    /// event; null otherwise. Lets the client stage per-slot resolution playback.</summary>
+    public int? Slot { get; init; }
+
+    /// <summary>Encoded player + monster moves resolved in this slot. Populated
+    /// alongside <see cref="Slot"/> so the client can reveal monster intent
+    /// without re-parsing prose.</summary>
+    public string? PlayerMove { get; init; }
+    public string? MonsterMove { get; init; }
 }
 
 /// <summary>

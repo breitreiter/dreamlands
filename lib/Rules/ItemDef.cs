@@ -1,5 +1,15 @@
 namespace Dreamlands.Rules;
 
+/// <summary>One entry in an item's RPS combat moveset. <see cref="Encoding"/> is
+/// the mechanical move (parsed by <c>Move.Parse</c>); <see cref="DisplayName"/>
+/// is the player-facing label rendered on the action button. The encoding alone
+/// does not tell the player what family a move belongs to (the UI buttons carry
+/// no family icon), so the display name is expected to include the base verb —
+/// e.g. encoding <c>"Stunning Power Attack"</c>, display <c>"Stunning Pommel Attack"</c>.
+/// Plain bases display as the bare verb: <c>"Attack"</c>, <c>"Defend"</c>,
+/// <c>"Recover"</c>, <c>"Read"</c>.</summary>
+public sealed record RpsMove(string Encoding, string DisplayName);
+
 /// <summary>Type of equipment item.</summary>
 public enum ItemType { Tool, Consumable, Token, Weapon, Armor, Boots, Haul }
 
@@ -29,12 +39,34 @@ public sealed class ItemDef
     public IReadOnlyDictionary<string, int> ResistModifiers { get; init; } = new Dictionary<string, int>();
 
     /// <summary>RPS combat moves contributed when equipped, in encoded form (e.g.
-    /// "Riposte Attack", "Big Rare Defend"). Parsed lazily by the combat profile
+    /// "Riposte Attack", "Heavy Power Defend"). Parsed lazily by the combat profile
     /// builder. Prefix any move with the <c>Better</c> adjective (e.g.
     /// <c>"Better Wary Read"</c>) to mark it as a strict improvement over its
     /// base verb — the unmutated base is then dropped from the player's pool.
-    /// See super_rps.md § Item Movesets.</summary>
-    public IReadOnlyList<string> RpsMoves { get; init; } = Array.Empty<string>();
+    /// See super_rps.md § Item Movesets.
+    ///
+    /// AUTHORING GOTCHAS — read CombatPlayerProfile.From before changing gear:
+    ///
+    ///   Weapons: this list is the COMPLETE set of Attack-family moves the
+    ///     player gets. There is no implicit basic Attack added under the hood.
+    ///     A weapon with RpsMoves = ["Riposte Attack"] means the player can
+    ///     only Riposte Attack — they cannot throw a plain Attack. T-4 weapons
+    ///     (The Old Tooth, Revathi Labrys) intentionally omit "Attack" to
+    ///     enforce a specialist identity. T-1/T-2 typically declare "Attack"
+    ///     first plus any upgrades.
+    ///
+    ///   Armor: must declare at least one Defend-base move (plain or mutated).
+    ///     The basic-Defend fallback in CombatPlayerProfile only fires when no
+    ///     armor is equipped at all. Equipping armor whose RpsMoves contains
+    ///     no Defend variant leaves the player with ZERO Defend in the pool —
+    ///     strictly worse than fighting unarmored. Cooldown-gated Defends
+    ///     (Power/Slow) count, but mean the player has no Defend after
+    ///     the cooldown burns.
+    ///
+    ///   No-weapon = no Attack at all is the design (T-0 = "disable Attack").
+    ///   No-armor = basic Defend is the design (T-0 = "basic defense").
+    ///   The asymmetry is intentional but easy to forget.</summary>
+    public IReadOnlyList<RpsMove> RpsMoves { get; init; } = Array.Empty<RpsMove>();
 
     /// <summary>Minimum Combat skill required to wield/wear this item meaningfully.
     /// 0 = daggers/light, 2 = axes/medium, 4 = swords/heavy. Not enforced today —
@@ -62,7 +94,7 @@ public sealed class ItemDef
             Id = "hunting_knife", Name = "Hunting Knife", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
-            RpsMoves = ["Attack"],
+            RpsMoves = [new("Attack", "Attack")],
             Biome = "plains", ShopTier = 1, Cost = 15,
         },
         ["kukri"] = new()
@@ -70,7 +102,7 @@ public sealed class ItemDef
             Id = "kukri", Name = "Kukri", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
-            RpsMoves = ["Attack", "Stunning Power Attack"],
+            RpsMoves = [new("Attack", "Attack"), new("Stun Power Attack", "Pommel Stun ✦")],
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["seax"] = new()
@@ -78,7 +110,7 @@ public sealed class ItemDef
             Id = "seax", Name = "Fine Seax", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
-            RpsMoves = ["Attack", "Better Riposte Attack"],
+            RpsMoves = [new("Riposte Attack", "Riposte")],
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
         ["the_old_tooth"] = new()
@@ -86,7 +118,7 @@ public sealed class ItemDef
             Id = "the_old_tooth", Name = "The Old Tooth", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
-            RpsMoves = ["Riposte Attack", "Heavy Provoking Attack"],
+            RpsMoves = [new("Riposte Attack", "Riposte"), new("Heavy Power Provoking Attack", "Provoke ✦")],
         },
 
         // ── Weapons: Axes (Combat +1 to +5, aggro-focused, zero cancels) ──
@@ -97,7 +129,7 @@ public sealed class ItemDef
             Id = "hatchet", Name = "Hatchet", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
-            RpsMoves = ["Attack"],
+            RpsMoves = [new("Attack", "Attack"), new("Slow Power Attack", "Wild Chop ✦")],
             Biome = "forest", ShopTier = 1, Cost = 15,
         },
         ["war_axe"] = new()
@@ -105,7 +137,7 @@ public sealed class ItemDef
             Id = "war_axe", Name = "War Axe", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
-            RpsMoves = ["Attack", "Heavy Power Attack"],
+            RpsMoves = [new("Attack", "Attack"), new("Heavy Power Attack", "Heavy Chop ✦")],
             Biome = "forest", ShopTier = 2, Cost = 40,
         },
         ["broadaxe"] = new()
@@ -113,7 +145,7 @@ public sealed class ItemDef
             Id = "broadaxe", Name = "Broadaxe", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
-            RpsMoves = ["Attack", "Brutal Heavy Power Attack"],
+            RpsMoves = [new("Attack", "Attack"), new("Heavy Stunning Power Attack", "Brutal Stun ✦")],
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
         ["revathi_labrys"] = new()
@@ -121,7 +153,7 @@ public sealed class ItemDef
             Id = "revathi_labrys", Name = "Revathi Labrys", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
-            RpsMoves = ["Heavy Attack", "Heavy Slow Terrifying Attack"],
+            RpsMoves = [new("Heavy Attack", "Arcing Chop"), new("Slow Terrifying Attack", "Psychic Warp ✦")],
         },
 
         // ── Weapons: Swords (Combat +1 to +5, hybrid) ──
@@ -132,7 +164,7 @@ public sealed class ItemDef
             Id = "falchion", Name = "Falchion", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
-            RpsMoves = ["Attack"],
+            RpsMoves = [new("Attack", "Attack"), new("Exhausting Heavy Attack", "Wild Lunge ✦")],
             Biome = "plains", ShopTier = 1, Cost = 15,
         },
         ["short_sword"] = new()
@@ -140,7 +172,7 @@ public sealed class ItemDef
             Id = "short_sword", Name = "Short Sword", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
-            RpsMoves = ["Riposte Attack"],
+            RpsMoves = [new("Riposte Attack", "Riposte"), new("Stun Power Attack", "Pommel Stun ✦")],
             Biome = "plains", ShopTier = 1, Cost = 15,
         },
         ["scimitar"] = new()
@@ -148,7 +180,7 @@ public sealed class ItemDef
             Id = "scimitar", Name = "Scimitar", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
-            RpsMoves = ["Attack", "Big Rare Defend"],
+            RpsMoves = [new("Attack", "Attack"), new("Heavy Power Defend", "Whirling Blade ✦")],
             Biome = "scrub", ShopTier = 2, Cost = 80,
         },
         ["shimmering_blade"] = new()
@@ -156,7 +188,7 @@ public sealed class ItemDef
             Id = "shimmering_blade", Name = "Shimmering Blade", Type = ItemType.Weapon,
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
-            RpsMoves = ["Riposte Attack", "Big Wary Recover"],
+            RpsMoves = [new("Riposte Attack", "Riposte"), new("Heavy Wary Recover", "Lattice Mending")],
         },
 
         // ── Armor: Light (Cunning +0 to +5, Injury +0, Freezing +0 to +3) ──
@@ -166,7 +198,7 @@ public sealed class ItemDef
             Id = "tunic", Name = "Tunic", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
-            RpsMoves = ["Defend"],
+            RpsMoves = [new("Defend", "Defend")],
             Biome = "plains", ShopTier = 1,
         },
         ["silks"] = new()
@@ -174,7 +206,7 @@ public sealed class ItemDef
             Id = "silks", Name = "Silks", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
-            RpsMoves = ["Defend", "Wary Read"],
+            RpsMoves = [new("Defend", "Defend"), new("Wary Read", "Cautious Read")],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
             Biome = "scrub", ShopTier = 1, Cost = 15,
         },
@@ -183,7 +215,7 @@ public sealed class ItemDef
             Id = "cartographers_cloak", Name = "Cartographer's Cloak", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
-            RpsMoves = ["Wary Read", "Rare Wary Recover"],
+            RpsMoves = [new("Defend", "Defend"), new("Power Wary Recover", "Cartographer's Guile ✦")],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 3 },
             ResistModifiers = new Dictionary<string, int> { ["freezing"] = 2 },
             Biome = "mountains", ShopTier = 2, Cost = 40,
@@ -193,7 +225,7 @@ public sealed class ItemDef
             Id = "robe_of_twilight", Name = "Robe of Twilight", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
-            RpsMoves = ["Big Rare Wary Recover", "Mythic Perfect Defend"],
+            RpsMoves = [new("Shielding Defend", "Shadow Cloak"), new("Heavy Power Wary Recover", "Shadow Step ✦")],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 5 },
             ResistModifiers = new Dictionary<string, int> { ["freezing"] = 3 },
         },
@@ -205,7 +237,7 @@ public sealed class ItemDef
             Id = "hide_armor", Name = "Hide Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
             RequiredCombat = 2,
-            RpsMoves = ["Defend"],
+            RpsMoves = [new("Defend", "Defend")],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 1, ["freezing"] = 2 },
             Biome = "mountains", ShopTier = 1, Cost = 15,
@@ -215,7 +247,7 @@ public sealed class ItemDef
             Id = "lamellar", Name = "Lamellar", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
             RequiredCombat = 2,
-            RpsMoves = ["Defend", "Big Rare Defend"],
+            RpsMoves = [new("Defend", "Defend"), new("Shielding Power Defend", "Evade ✦")],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
@@ -225,7 +257,7 @@ public sealed class ItemDef
             Id = "mountain_regiment_armor", Name = "17th Mountain Regiment Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Medium,
             RequiredCombat = 2,
-            RpsMoves = ["Big Rare Defend", "Rare Wary Recover"],
+            RpsMoves = [new("Perfect Power Defend", "Perfect Block ✦"), new("Power Wary Recover", "Cautious ✦")],
             SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 2 },
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 3, ["freezing"] = 5 },
         },
@@ -237,8 +269,8 @@ public sealed class ItemDef
             Id = "gambeson", Name = "Gambeson", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
-            RpsMoves = ["Defend"],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 1, ["freezing"] = 1 },
+            RpsMoves = [new("Defend", "Defend")],
+            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 1 },
             Biome = "mountains", ShopTier = 1, Cost = 15,
         },
         ["scale_armor"] = new()
@@ -246,8 +278,8 @@ public sealed class ItemDef
             Id = "scale_armor", Name = "Scale Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
-            RpsMoves = ["Big Defend"],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 3 },
+            RpsMoves = [new("Heavy Defend", "Armored")],
+            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2 },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["brigandine"] = new()
@@ -255,7 +287,7 @@ public sealed class ItemDef
             Id = "brigandine", Name = "Brigandine", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
-            RpsMoves = ["Defend", "Big Rare Shielding Defend"],
+            RpsMoves = [new("Defend", "Defend"), new("Heavy Power Shielding Defend", "Unstoppable ✦")],
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 4, ["freezing"] = 1 },
             Biome = "plains", ShopTier = 2, Cost = 80,
         },
@@ -264,7 +296,7 @@ public sealed class ItemDef
             Id = "golem_armor", Name = "Golem Armor", Type = ItemType.Armor,
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
-            RpsMoves = ["Big Defend", "Perfect Rare Defend"],
+            RpsMoves = [new("Heavy Defend", "Defend: Armored"), new("Perfect Power Defend", "Perfect Block ✦")],
             ResistModifiers = new Dictionary<string, int> { ["injured"] = 5, ["freezing"] = 2 },
         },
 

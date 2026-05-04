@@ -38,6 +38,24 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [ ] ~~Playtest a bunch and tune~~ (ongoing)
 - [ ] Add custom intros per governing skill (right now everything shows "It's a fight" for tac encounters)
 
+### Combat Encounter Triggering
+
+- [ ] Wire .fight encounters into the road encounter pipeline. Today CombatBundle is
+      only reachable via the dev "Fight" picker overlay in Explore — `EncounterSelection.PickOverworld`
+      pulls exclusively from `session.Bundle` (.enc) filtered on `Trigger == "road"` and never
+      consults `session.CombatBundle`. Need a biome/tier-aware roll that mixes .fight
+      encounters into overworld triggers (or a `+combat <id>` mechanic so .enc encounters
+      can hand off into combat). Also relocate the .fight files: they currently live at
+      `tools/combat-prototype/Monsters/` and the GameServer only finds them via a dev-only
+      fallback in `GameData.cs` (worlds have no `combat/` dir, so deployed builds would have
+      no combat content). Move them under `text/combat/` (alongside `text/encounters/`) or
+      copy into `worlds/<name>/combat/` as part of the world build.
+- [ ] Update weapon/armor descriptions in inventory, market, and bank screens to explain
+      what they actually do in the RPS combat system — current copy is from the d20 era
+      ("+2 to attack rolls" etc.) and doesn't surface the moves the item contributes to
+      the player's pool, mutators (heavy/wary/shielding/etc.), or cooldowns. Players can't
+      make informed buy/equip decisions without this.
+
 ### Rules & Balancing
 
 - [ ] Playtest medicine vs. health drain in T3 areas — currently medicine reduces condition

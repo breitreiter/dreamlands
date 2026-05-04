@@ -118,7 +118,7 @@ public static class Resolver
         {
             if (defender.Has("perfect")) return 999;
             int p = 2;
-            if (defender.Has("big")) p += 2;
+            if (defender.Has("heavy")) p += 2;
             return p;
         }
         if (defender.Base == "attack" && defender.Has("riposte") && attacker.Base == "attack")
@@ -134,7 +134,7 @@ public static class Resolver
         // Attack cancels Recover — the recoverer gets nothing (and gets stunned via StunsTarget).
         if (opp.Base == "attack") return 0;
         int heal = 4;
-        if (m.Has("big")) heal += 2;
+        if (m.Has("heavy")) heal += 2;
         return heal;
     }
 

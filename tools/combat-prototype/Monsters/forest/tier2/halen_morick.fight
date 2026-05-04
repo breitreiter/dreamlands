@@ -17,7 +17,7 @@
 +move Heavy Slow Attack
   narration: Halen brings the sword down in a committed two-handed cut.
 
-+move Big Rare Defend
++move Heavy Power Defend
   narration: He raises the blade into a high hanging guard, both hands locked.
 
 +intro
@@ -34,8 +34,9 @@ we'll begin."
 > tag killed_halen_morick
 Halen goes down with the same composure he came on with. He tries to say
 something, and does not. You take a moment yourself, then keep walking.
-Whoever sent him will send another, but not today.
+Whoever sent him might send another, but not today.
 
 +lose
-The blade finds the seam below your jaw. Halen lowers his sword. He says
-something that may be an apology, or may be his own name. You don't catch it.
+Your legs give out and your weapon slips from your grasp. Somewhere, far
+away, Halen is telling you that you fought well, good form. A bit slow on
+the reverse, but the voice fades to silence.

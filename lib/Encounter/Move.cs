@@ -3,7 +3,7 @@ namespace Dreamlands.Encounter;
 /// <summary>
 /// One slot's chosen action. Always a base family (attack/defend/recover/read/skipped)
 /// plus zero or more mutators that adjust its behaviour. Encoded form is what the
-/// CLI/UI surface — e.g. "Big Telegraphed Rare Attack". Parse is the inverse.
+/// CLI/UI surface — e.g. "Heavy Telegraphed Slow Attack". Parse is the inverse.
 ///
 /// Mutator validity is enforced at parse time per family. The `Skipped` family takes
 /// no mutators; it's only ever produced by Stunned conversions or Flee.
@@ -72,11 +72,11 @@ public sealed class Move
     };
     public static readonly HashSet<string> DefendMutators = new()
     {
-        "big", "perfect", "shielding", "stunning", "rare", "mythic"
+        "heavy", "perfect", "shielding", "stunning", "power", "slow"
     };
     public static readonly HashSet<string> RecoverMutators = new()
     {
-        "big", "wary", "shielded", "rare", "mythic", "enraging"
+        "heavy", "wary", "shielded", "power", "slow", "enraging"
     };
     public static readonly HashSet<string> ReadMutators = new()
     {

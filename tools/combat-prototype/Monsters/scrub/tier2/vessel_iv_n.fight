@@ -15,10 +15,10 @@
 +move Recover
   narration: The Color cycles inside the gray plates, and what was venting goes back where it came from.
 
-+move Big Rare Defend
++move Heavy Power Defend
   narration: Every vent on the unit shuts at once and the Color folds back inward, sealing it behind itself.
 
-+move Big Rare Recover
++move Heavy Power Recover
   narration: The plates seal hot. The Color rolls back into the vents and the unit takes whatever it gives back from inside.
 
 +intro
