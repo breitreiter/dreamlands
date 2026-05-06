@@ -17,6 +17,21 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
       overlay not adapted for small screens, no touch-friendly target sizing
 - [ ] Rewrite any encounters that use single-spacing between paragraphs
+- [ ] Combat: cancel monster's later-slot actions when it dies on an early slot
+      (currently slots 2/3 still resolve against a corpse, producing nonsense narration
+      and zero-damage entries that get stripped client-side)
+- [ ] Combat: add the standard yellow status banner to the top of the combat screen
+      (same as Market/Inventory/etc. — duplicate of in-card vitals so the bar matches
+      the rest of the app and gives Flee a permanent home)
+- [ ] Combat: cap worksheet panel `max-width: 820px` so cards don't sprawl on wide
+      monitors (right column min-width is 420 today, but no upper bound)
+- [ ] Audit full-width buttons site-wide. Combat's Continue button is currently
+      full-width on the OutcomeCard — replace with a normal-sized button. Same
+      treatment for Flee once it moves to the top banner. House rule: buttons size
+      to their label, never full-width.
+- [ ] Combat: rotate the "What's the plan, merchant?" greeting through a small pool
+      of one-liners (e.g., "Eyes up.", "Make it count.", "What's it gonna be?"). Pick
+      randomly per turn so every fight doesn't open with the same line.
 
 ### Map Generation
 

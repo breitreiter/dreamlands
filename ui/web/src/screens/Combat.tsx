@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useGame } from "../GameContext";
 import type { CombatInfo, CombatLogEntry, GameResponse } from "../api/types";
-import { Button } from "@/components/ui/button";
 import MaskedIcon from "../components/MaskedIcon";
 import HitLens from "../components/HitLens";
 import HitSplat from "../components/HitSplat";
@@ -52,13 +51,7 @@ const BASE_ICON: Record<MoveBase, string | null> = {
 
 const STUN_ICON = "knockout.svg";
 const TELEGRAPHED_ATTACK_ICON = "cross-flare.svg";
-const CLASH_ICON = "crossed-swords.svg";
 
-/**
- * Pick the icon for a slot circle (top = monster intent, bottom = player choice).
- * Stuns (carry-stun or forecast forward-rider) override the base icon with knockout.
- * Telegraphed monster attacks override with cross-flare.
- */
 /**
  * Plain-English tooltip describing what a move does, derived from its
  * base verb + mutators. Mirrors the Resolver.cs / Move.cs vocabulary so
@@ -112,6 +105,38 @@ function slotIcon(move: string | null, isMonster: boolean, stunned: boolean): st
   return BASE_ICON[base];
 }
 
+/** Per-slot resolution outcome — what icon the third (rightmost) circle shows. */
+type Outcome = "stun" | "clash" | "block" | "recover" | "read" | null;
+
+const OUTCOME_ICON: Record<NonNullable<Outcome>, string> = {
+  stun:    "knockout.svg",
+  clash:   "crossed-swords.svg",
+  block:   "dodge.svg",
+  recover: "heart-plus.svg",
+  read:    "one-eyed.svg",
+};
+
+function deriveOutcome(playerMove: string | null, monsterMove: string | null): Outcome {
+  if (!playerMove || !monsterMove) return null;
+  const pBase = moveBase(playerMove);
+  const mBase = moveBase(monsterMove);
+  if (pBase === "skipped" && mBase === "skipped") return null;
+
+  const pTokens = playerMove.split(" ").map(t => t.toLowerCase());
+  const mTokens = monsterMove.split(" ").map(t => t.toLowerCase());
+  const pShielded = pBase === "defend" && pTokens.includes("shielding");
+  const mShielded = mBase === "defend" && mTokens.includes("shielding");
+
+  if (pBase === "attack" && mBase === "recover" && !mShielded) return "stun";
+  if (mBase === "attack" && pBase === "recover" && !pShielded) return "stun";
+  if (pBase === "attack" && mBase === "attack")  return "clash";
+  if (pBase === "attack" && mBase === "defend")  return "block";
+  if (mBase === "attack" && pBase === "defend")  return "block";
+  if (pBase === "read"   || mBase === "read")    return "read";
+  if (pBase === "recover" || mBase === "recover") return "recover";
+  return null;
+}
+
 /**
  * Walk slots 0–2, applying the deterministic forward-rider rules from
  * Resolver.cs StunsTarget(): attack-vs-recover always stuns the recoverer
@@ -124,7 +149,7 @@ type SlotSim = {
   monsterMove: string | null;
   playerStunned: boolean;
   monsterStunned: boolean;
-  preview: "stun" | "clash" | null;
+  outcome: Outcome;
 };
 
 function simulateSlots(
@@ -148,7 +173,6 @@ function simulateSlots(
     playerForwardStun = false;
     monsterForwardStun = false;
 
-    let preview: "stun" | "clash" | null = null;
     if (playerMove && monsterMove) {
       const pBase = moveBase(playerMove);
       const mBase = moveBase(monsterMove);
@@ -157,23 +181,20 @@ function simulateSlots(
       const pShielded = pBase === "defend" && pTokens.includes("shielding");
       const mShielded = mBase === "defend" && mTokens.includes("shielding");
 
-      if (pBase === "attack" && mBase === "recover" && !mShielded) {
-        monsterForwardStun = true;
-        preview = "stun";
-      } else if (mBase === "attack" && pBase === "recover" && !pShielded) {
-        playerForwardStun = true;
-        preview = "stun";
-      }
+      if (pBase === "attack" && mBase === "recover" && !mShielded) monsterForwardStun = true;
+      else if (mBase === "attack" && pBase === "recover" && !pShielded) playerForwardStun = true;
 
       if (pBase === "attack" && pTokens.includes("exhausting")) playerForwardStun = true;
       if (mBase === "attack" && mTokens.includes("exhausting")) monsterForwardStun = true;
-
-      if (preview == null && pBase === "attack" && mBase === "attack") {
-        preview = "clash";
-      }
     }
 
-    sims.push({ playerMove, monsterMove, playerStunned, monsterStunned, preview });
+    sims.push({
+      playerMove,
+      monsterMove,
+      playerStunned,
+      monsterStunned,
+      outcome: deriveOutcome(playerMove, monsterMove),
+    });
   }
   return sims;
 }
@@ -193,24 +214,103 @@ function moveAvailability(move: string, combat: CombatInfo, selections: (string 
 // ── Design tokens (from Figma export) ─────────────────────────────────────
 const DIM = "#ACA377";
 const ACTION = "#D0925D";
-const SPLAT_RED = "#AC0000";
+const PROMPT_YELLOW = "#D0BD62";
 const BTN_BG = "rgba(13, 13, 13, 0.8)";
 const BTN_BG_DISABLED = "#292929";
 
+// Roman numerals shown in empty player slot circles.
+const SLOT_NUMERALS = ["I", "II", "III"];
+
+// Match a full damage clause: "you took 5 damage" / "Tob Ashford took 0 damage".
+// Subject is "you/You" or a Capitalized name (one or more capitalized words).
+const DAMAGE_CLAUSE = /(?:[Yy]ou|[A-Z][\w'-]+(?:\s+[A-Z][\w'-]+)*)\s+(?:took|takes|take)\s+\d+\s+damage/;
+const DAMAGE_CLAUSE_G = new RegExp(DAMAGE_CLAUSE.source, "g");
+const ZERO_DAMAGE_CLAUSE = new RegExp(`^(?:${DAMAGE_CLAUSE.source.replace("\\d+", "0")})\\.?$`);
+const DAMAGE_RED = "#FF6B6B";
+
 /**
- * Combat screen — three-slot RPS.
+ * Drop "X took 0 damage" clauses (confusing — players read 0 as "I prevented
+ * damage", not "no attack happened") and color real damage clauses red.
  *
- *   ┌─ vignette + monster ─┬─ controls (280 px) ─┬─ log ─┐
+ * Strategy: split into sentences (by ". "), then each sentence into clauses
+ * (by ", "), filter out 0-damage clauses, rejoin. Far more robust than
+ * regex substitution on the raw string when 0-damage clauses can appear at
+ * the start, middle, or end of a sentence.
+ */
+function renderHead(text: string): ReactNode[] {
+  const sentences = text.split(/(?<=\.)\s+/);
+  const out: string[] = [];
+  for (const sent of sentences) {
+    const trimmed = sent.replace(/\.\s*$/, "").trim();
+    if (!trimmed) continue;
+    const kept = trimmed
+      .split(/,\s+/)
+      .map(c => c.trim())
+      .filter(c => c && !ZERO_DAMAGE_CLAUSE.test(c));
+    if (kept.length === 0) continue;
+    let joined = kept.join(", ");
+    // Capitalize a leading lowercase letter (e.g., "you" promoted to start of sentence)
+    if (/^[a-z]/.test(joined)) joined = joined[0].toUpperCase() + joined.slice(1);
+    out.push(joined + ".");
+  }
+  const cleaned = out.join(" ");
+
+  // Color "X took N damage" red.
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let key = 0;
+  let match: RegExpExecArray | null;
+  DAMAGE_CLAUSE_G.lastIndex = 0;
+  while ((match = DAMAGE_CLAUSE_G.exec(cleaned)) !== null) {
+    if (match.index > lastIndex) parts.push(cleaned.slice(lastIndex, match.index));
+    parts.push(<span key={key++} style={{ color: DAMAGE_RED }}>{match[0]}</span>);
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < cleaned.length) parts.push(cleaned.slice(lastIndex));
+  return parts;
+}
+
+// Group the cumulative event log into completed-turn chunks. Each turn is
+// a run of slot events 1/2/3 (slot field is 1-based, per CombatLogEntry)
+// plus any non-slot trailing events that follow it. Turn divider entries
+// ("— Turn N —") are dropped, and pre-combat intro events (non-slot events
+// that arrive before the first slot event) are ignored — the encounter's
+// `introText` is rendered separately above the card stream.
+type TurnGroup = { slots: CombatLogEntry[]; trailing: CombatLogEntry[] };
+
+function groupTurns(events: CombatLogEntry[]): TurnGroup[] {
+  const turns: TurnGroup[] = [];
+  let cur: TurnGroup | null = null;
+  for (const e of events) {
+    if (e.text.startsWith("— Turn")) continue;
+    if (e.slot != null) {
+      if (cur == null || e.slot === 1) {
+        if (cur) turns.push(cur);
+        cur = { slots: [], trailing: [] };
+      }
+      cur.slots.push(e);
+    } else if (cur != null) {
+      // Trailing non-slot events attach to the just-completed turn.
+      cur.trailing.push(e);
+    }
+    // Pre-slot non-slot events: ignored (covered by combat.introText).
+  }
+  if (cur) turns.push(cur);
+  return turns;
+}
+
+/**
+ * Combat screen — three-slot RPS, worksheet-stream layout.
  *
- * Each turn the player picks an action for slots 1/2/3; selections fill
- * left-to-right and auto-commit when the third lands. Number keys 1–9 map to
- * the action menu. Cooldowns and once-per-turn moves are shown disabled, not
- * hidden. The slot grid mirrors the AI's per-slot intent (revealed when the
- * player committed Read on the prior turn).
+ *   ┌─ vignette + monster ─┬─ worksheet stream ─┐
  *
- * Layout dimensions traced from Figma export at assets/UI/svg_export.txt and
- * css_export.txt — slot circles 60 px @ 119 px center spacing, action rows
- * 248×48 with rgba(13,13,13,.8) fill, etc.
+ * Each turn is a card. Prior turns scroll upward at opacity 0.8; the bottom
+ * card is the active worksheet (input → playback → prior). When combat
+ * resolves, the active card is replaced by an outcome card with Continue.
+ *
+ * Vitals (spirits/health) are inline in the prompt text so they're right
+ * where the player's eye is when planning the next turn. A persistent yellow
+ * banner with duplicated stats + flee button is planned for a later pass.
  */
 export default function Combat({ state }: { state: GameResponse }) {
   const { doCombatAction, refreshState, loading } = useGame();
@@ -228,22 +328,18 @@ export default function Combat({ state }: { state: GameResponse }) {
   const hitIdRef = useRef(0);
   const removeHit = (id: number) => setHits(prev => prev.filter(h => h.id !== id));
 
-  const [healthSplat, setHealthSplat] = useState(0);
-  const [spiritsSplat, setSpiritsSplat] = useState(0);
-  const prevHealthRef = useRef(combat?.playerHealth ?? 0);
-  const prevSpiritsRef = useRef(combat?.playerSpirits ?? 0);
-
-  // Staged-reveal state. After the player commits a turn, we hold the
-  // committed selections + the per-slot resolution events and reveal them
-  // one slot at a time on a timer. Inputs are blocked while non-null.
+  // Staged reveal: while playback is non-null, slot events are NOT yet in
+  // allEvents — they live in `playback.slotEvents` and stream into the
+  // active card one at a time. They flush into allEvents on the tail timer
+  // so the prior-turn list only ever shows fully-resolved turns.
   const [playback, setPlayback] = useState<{
     committedSelections: (string | null)[];
     slotEvents: CombatLogEntry[];
     revealedThrough: number;
     trailingEvents: CombatLogEntry[];
   } | null>(null);
-  const SLOT_REVEAL_MS = 350;
-  const PLAYBACK_TAIL_MS = 250;
+  const SLOT_REVEAL_MS = 550;
+  const PLAYBACK_TAIL_MS = 350;
 
   useEffect(() => {
     if (!combat) return;
@@ -255,8 +351,6 @@ export default function Combat({ state }: { state: GameResponse }) {
       lastEncounterRef.current = combat.encounterId;
       setSelections([null, null, null]);
       setPlayback(null);
-      prevHealthRef.current = combat.playerHealth;
-      prevSpiritsRef.current = combat.playerSpirits;
       lastSeenRef.current = combat.events;
       return;
     }
@@ -265,7 +359,8 @@ export default function Combat({ state }: { state: GameResponse }) {
     const trailingEvents = combat.events.filter(e => e.slot == null);
 
     if (slotEvents.length > 0) {
-      // Hold log/splats/selections steady; the timer effect will drain them.
+      // Hold the prior log/selections steady; the playback effect drains
+      // events into the active card on a timer, then flushes to allEvents.
       setPlayback({
         committedSelections: selections,
         slotEvents,
@@ -304,7 +399,6 @@ export default function Combat({ state }: { state: GameResponse }) {
       const t = setTimeout(() => {
         const idx = playback.revealedThrough;
         const evt = playback.slotEvents[idx];
-        setAllEvents(prev => [...prev, evt]);
         const attack = evt.playerAttack;
         if (attack && hitboxRef.current) {
           const rect = hitboxRef.current.getBoundingClientRect();
@@ -322,8 +416,11 @@ export default function Combat({ state }: { state: GameResponse }) {
       return () => clearTimeout(t);
     }
 
+    // All slots revealed — hold for a beat so the player can read the
+    // descriptions, then flush into allEvents (where they become a prior
+    // card) and spawn a fresh active worksheet.
     const t = setTimeout(() => {
-      setAllEvents(prev => [...prev, ...playback.trailingEvents]);
+      setAllEvents(prev => [...prev, ...playback.slotEvents, ...playback.trailingEvents]);
       setSelections([null, null, null]);
       setPlayback(null);
     }, PLAYBACK_TAIL_MS);
@@ -331,20 +428,8 @@ export default function Combat({ state }: { state: GameResponse }) {
   }, [playback]);
 
   useEffect(() => {
-    if (!combat) return;
-    if (combat.playerHealth < prevHealthRef.current) setHealthSplat(s => s + 1);
-    prevHealthRef.current = combat.playerHealth;
-  }, [combat?.playerHealth]);
-
-  useEffect(() => {
-    if (!combat) return;
-    if (combat.playerSpirits < prevSpiritsRef.current) setSpiritsSplat(s => s + 1);
-    prevSpiritsRef.current = combat.playerSpirits;
-  }, [combat?.playerSpirits]);
-
-  useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
-  }, [allEvents.length]);
+  }, [allEvents.length, playback?.revealedThrough, playback != null, combat?.resolved]);
 
   const handlePick = (move: string) => {
     if (!combat || combat.resolved || loading || playback) return;
@@ -386,6 +471,8 @@ export default function Combat({ state }: { state: GameResponse }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [combat, selections, playback]);
+
+  const priorTurns = useMemo(() => groupTurns(allEvents), [allEvents]);
 
   if (!combat) return null;
 
@@ -455,309 +542,249 @@ export default function Combat({ state }: { state: GameResponse }) {
         </div>
       </div>
 
-      {/* ─── CENTER: combat controls (Figma: 280 px, padding 16, gap 10, bg #191919) ─── */}
-      <div
-        className="shrink-0 flex flex-col"
-        style={{
-          width: 280,
-          padding: 16,
-          gap: 10,
-          background: "#191919",
-          boxShadow: "0 4px 4px 8px rgba(0,0,0,0.25)",
-        }}
-      >
-        <Vitals
-          spirits={combat.playerSpirits}
-          maxSpirits={combat.playerMaxSpirits}
-          health={combat.playerHealth}
-          maxHealth={combat.playerMaxHealth}
-          spiritsSplatKey={spiritsSplat}
-          healthSplatKey={healthSplat}
-        />
-
-        <div style={{ flex: 1 }} />
-
-        {(!combat.resolved || playback) && (
-          <>
-            <BannerLine text={playback ? "Resolving…" : combat.tell} />
-
-            <SlotGrid
-              combat={combat}
-              selections={playback ? playback.committedSelections : selections}
-              planVisible={planVisible}
-              playback={playback ? {
-                monsterMoves: playback.slotEvents.map(e => e.monsterMove ?? null),
-                revealedThrough: playback.revealedThrough,
-              } : undefined}
-            />
-
-            <BannerLine text="Your plan this turn" />
-
-            {combat.playerMovePool.map((option, idx) => {
-              const { disabled: gateDisabled, reason } = moveAvailability(option.encoding, combat, selections);
-              const disabled = gateDisabled || playback != null;
-              const tooltip = playback
-                ? "Resolving…"
-                : gateDisabled
-                  ? `${moveTooltip(option.encoding)} (${reason})`
-                  : moveTooltip(option.encoding);
-              return (
-                <ActionButton
-                  key={option.encoding}
-                  number={idx + 1}
-                  label={option.displayName}
-                  encoding={option.encoding}
-                  tooltip={tooltip}
-                  disabled={disabled}
-                  onClick={() => handlePick(option.encoding)}
-                />
-              );
-            })}
-          </>
-        )}
-
-        <div style={{ flex: 1 }} />
-
-        {(!combat.resolved || playback) && (
-          <FleeButton onClick={onFlee} disabled={loading || playback != null} />
-        )}
-        {combat.resolved && !playback && (
-          <Button size="lg" onClick={() => refreshState()} disabled={loading} className="w-full">
-            Continue
-          </Button>
-        )}
-      </div>
-
-      {/* ─── RIGHT: combat log ─── */}
-      <div className="flex-1 min-w-[320px] bg-page flex flex-col">
-        <div ref={logRef} className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-2">
-          <div className="mb-2">
+      {/* ─── RIGHT: worksheet stream ─── */}
+      <div className="flex-1 min-w-[420px] flex flex-col bg-page">
+        <div ref={logRef} className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4">
+          <div>
             <h2 className="font-header text-[32px] text-accent leading-none">{combat.title}</h2>
-            {combat.introText && <div className="text-dim mt-1.5">{combat.introText}</div>}
+            {combat.introText && (
+              <div style={{ fontSize: 20, lineHeight: "24px", color: DIM, marginTop: 6 }}>
+                {combat.introText}
+              </div>
+            )}
           </div>
 
-          {allEvents
-            .filter(e => e.text !== combat.introText)
-            .map((entry, i) => <LogEntry key={i} entry={entry} />)}
+          {priorTurns.map((turn, i) => (
+            <div key={i} className="flex flex-col gap-2">
+              <PriorTurnCard turn={turn} combat={combat} />
+              {turn.trailing.length > 0 && (
+                <div className="flex flex-col gap-1 px-2">
+                  {turn.trailing.map((e, j) => (
+                    <div key={j} style={{ fontSize: 20, lineHeight: "24px", color: DIM, fontStyle: "italic" }}>
+                      {e.text}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
 
-          {combat.resolved && !playback && <OutcomePanel combat={combat} />}
+          {!combat.resolved && !playback && (
+            <ActiveTurnCard
+              combat={combat}
+              selections={selections}
+              planVisible={planVisible}
+              onPick={handlePick}
+              onFlee={onFlee}
+              loading={loading}
+            />
+          )}
+
+          {playback && (
+            <PlaybackCard
+              combat={combat}
+              committedSelections={playback.committedSelections}
+              slotEvents={playback.slotEvents}
+              revealedThrough={playback.revealedThrough}
+            />
+          )}
+
+          {combat.resolved && !playback && (
+            <OutcomeCard combat={combat} onContinue={() => refreshState()} disabled={loading} />
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-// ── Vitals ────────────────────────────────────────────────────────────────
-// Figma: 248×114 row, padding 0 48px, two 60-wide stat groups via space-between.
-// Each stat group is 60×114, contains a 64 px Goudy numeral (#FF6B6B if ≤0
-// else #F3F3F3) and a two-line 20 px label (#ACA377). Damage splat is a ~118×
-// 112 #AC0000 blob positioned absolutely behind the health value, allowed to
-// spill out of the stat group's 60 px width.
+// ── Worksheet primitives ─────────────────────────────────────────────────
+// All three card variants share the same shell and the same per-slot row
+// (monster + player + outcome circles). Only the right side differs:
+//   - PriorTurn:   description text per row
+//   - ActiveTurn:  action buttons in a column
+//   - Playback:    description text per row, revealed progressively
 
-function Vitals({ spirits, maxSpirits, health, maxHealth, spiritsSplatKey, healthSplatKey }: {
-  spirits: number; maxSpirits: number;
-  health: number; maxHealth: number;
-  spiritsSplatKey: number;
-  healthSplatKey: number;
+function CardShell({ children, dim, greeting, status }: {
+  children: ReactNode;
+  /** Prior-turn cards render at 0.8 opacity with a thinner border. */
+  dim?: boolean;
+  /** First line — bold yellow ("What's the plan, merchant?"). */
+  greeting?: string;
+  /** Second line — regular white (intent + vitals readout). */
+  status?: string;
 }) {
-  return (
-    <div
-      className="flex justify-between items-start"
-      style={{ height: 114, padding: "0 48px" }}
-    >
-      <StatGroup value={spirits} max={maxSpirits} label="spirits" damaged={spirits < maxSpirits} splatKey={spiritsSplatKey} showSplat={false} />
-      <StatGroup value={health} max={maxHealth} label="health" damaged={health < maxHealth} splatKey={healthSplatKey} showSplat={true} />
-    </div>
-  );
-}
-
-function StatGroup({ value, max, label, damaged, splatKey, showSplat }: {
-  value: number;
-  max: number;
-  label: string;
-  damaged: boolean;
-  splatKey: number;
-  showSplat: boolean;
-}) {
-  const color = value <= 0 ? "#FF6B6B" : "#F3F3F3";
-  return (
-    <div
-      className="relative flex flex-col items-center justify-center"
-      style={{ width: 60, height: 114, gap: 10 }}
-    >
-      {showSplat && damaged && <DamageSplat key={splatKey} />}
-      <span
-        className="relative"
-        style={{ fontSize: 64, lineHeight: "64px", color, zIndex: 1 }}
-      >
-        {value}
-      </span>
-      <div
-        className="relative text-center"
-        style={{ fontSize: 20, lineHeight: "20px", color: DIM, zIndex: 1 }}
-      >
-        of {max}<br />{label}
-      </div>
-    </div>
-  );
-}
-
-function DamageSplat() {
-  // Variant + angle pinned at mount; remount via key change re-rolls them.
-  // Sized 118×112 per Figma, centered on the 60-wide stat group with
-  // negative offsets so the blob spills out of bounds.
-  const [variant] = useState(() => 1 + Math.floor(Math.random() * 8));
-  const [angle] = useState(() => Math.random() * 360);
-  return (
-    <div
-      className="absolute pointer-events-none"
-      style={{
-        width: 118,
-        height: 112,
-        left: (60 - 118) / 2,
-        top: -8,
-        backgroundColor: SPLAT_RED,
-        maskImage: `url(/world/assets/effects/splat/splat${variant}.svg)`,
-        WebkitMaskImage: `url(/world/assets/effects/splat/splat${variant}.svg)`,
-        maskSize: "contain",
-        WebkitMaskSize: "contain",
-        maskRepeat: "no-repeat",
-        WebkitMaskRepeat: "no-repeat",
-        maskPosition: "center",
-        WebkitMaskPosition: "center",
-        transform: `rotate(${angle}deg)`,
-      }}
-    />
-  );
-}
-
-// ── Banner / "Your plan" header ───────────────────────────────────────────
-// Both are 20 px text, color #ACA377.
-
-function BannerLine({ text }: { text: string }) {
   return (
     <div
       style={{
-        fontSize: 20,
-        lineHeight: "24px",
-        color: DIM,
-        fontStyle: "italic",
+        background: "#191919",
+        opacity: dim ? 0.8 : 1,
+        border: `${dim ? 1 : 2}px solid ${DIM}`,
+        borderRadius: 8,
+        boxShadow: "0 6px 8px rgba(0,0,0,0.5)",
+        padding: 16,
+        display: "flex",
+        flexDirection: "column",
+        gap: 12,
       }}
     >
-      {text}
+      {(greeting || status) && (
+        <div className="flex flex-col" style={{ gap: 2 }}>
+          {greeting && (
+            <div
+              style={{
+                fontSize: 20,
+                lineHeight: "24px",
+                color: PROMPT_YELLOW,
+                fontWeight: 700,
+              }}
+            >
+              {greeting}
+            </div>
+          )}
+          {status && (
+            <div style={{ fontSize: 20, lineHeight: "24px", color: "#F3F3F3" }}>
+              {status}
+            </div>
+          )}
+        </div>
+      )}
+      {children}
     </div>
   );
 }
 
-// ── Slot grid ─────────────────────────────────────────────────────────────
-// Figma: 248×179, three 60-wide columns via space-between (16 px L/R padding).
-// Each column has top circle (cy=30), connector lines at y=60-70 and
-// y=109-119, bottom circle (cy=149.5). Border 2 px solid #ACA377, fill #191919.
-// Player circle gets opacity 0.5 when no move is selected; the bottom
-// connector line fades to 0.5 to match.
-
-function SlotGrid({ combat, selections, planVisible, playback }: {
-  combat: CombatInfo;
-  selections: (string | null)[];
-  planVisible: boolean;
-  /** When set, renders the post-commit reveal: monster moves are taken from
-   *  the resolved slot events, with slots ≥ revealedThrough still rendered as
-   *  unknown until the timer ticks them in. */
-  playback?: { monsterMoves: (string | null)[]; revealedThrough: number };
-}) {
-  const monsterMovesPerSlot = useMemo<(string | null)[]>(() => {
-    if (playback) {
-      return playback.monsterMoves.map((m, i) => i < playback.revealedThrough ? m : null);
-    }
-    return planVisible && combat.plan ? combat.plan : [null, null, null];
-  }, [combat.plan, planVisible, playback]);
-
-  const sims = useMemo(
-    () => simulateSlots(combat, selections, monsterMovesPerSlot),
-    [combat, selections, monsterMovesPerSlot],
-  );
-
-  return (
-    <div
-      className="flex justify-between"
-      style={{ height: 179, padding: "0 16px" }}
-    >
-      {sims.map((sim, i) => {
-        const monsterUnknown = monsterMovesPerSlot[i] == null && !sim.monsterStunned;
-        const monsterIcon = monsterUnknown
-          ? null
-          : slotIcon(sim.monsterMove, /* isMonster */ true, sim.monsterStunned);
-        const monsterTooltip = monsterUnknown
-          ? playback
-            ? `Slot ${i + 1} — resolving…`
-            : `Slot ${i + 1} — unknown (commit Read intent to reveal)`
-          : sim.monsterStunned
-            ? `Slot ${i + 1} — stunned`
-            : sim.monsterMove
-              ? `Slot ${i + 1} — ${sim.monsterMove}`
-              : `Slot ${i + 1}`;
-
-        const playerFaded = sim.playerMove == null && !sim.playerStunned;
-        const playerIcon = slotIcon(sim.playerMove, /* isMonster */ false, sim.playerStunned);
-        const playerTooltip = sim.playerStunned
-          ? `Slot ${i + 1} — stunned`
-          : sim.playerMove
-            ? `Slot ${i + 1} — ${lookupDisplayName(sim.playerMove, combat)}`
-            : `Slot ${i + 1} — pending`;
-
-        return (
-          <SlotColumn
-            key={i}
-            monsterIcon={monsterIcon}
-            monsterUnknown={monsterUnknown}
-            monsterTooltip={monsterTooltip}
-            playerIcon={playerIcon}
-            playerFaded={playerFaded}
-            playerTooltip={playerTooltip}
-            preview={sim.preview}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-function SlotColumn({ monsterIcon, monsterUnknown, monsterTooltip, playerIcon, playerFaded, playerTooltip, preview }: {
+/**
+ * Per-slot row: [monster] + [player] = [outcome], optionally followed by a
+ * description on the right. Width-flexible — the circle group is fixed at
+ * 240 px and the description / action button sits in flex-1.
+ */
+function SlotRow({
+  index,
+  monsterIcon,
+  monsterUnknown,
+  monsterTooltip,
+  playerIcon,
+  playerEmpty,
+  playerStunned,
+  playerTooltip,
+  outcome,
+  outcomeUnknown,
+  description,
+  borderBottom,
+  rightSlot,
+}: {
+  index: number;
   monsterIcon: string | null;
   monsterUnknown: boolean;
   monsterTooltip: string;
   playerIcon: string | null;
-  playerFaded: boolean;
+  /** True when the player has not selected for this slot — shows a faded roman numeral. */
+  playerEmpty: boolean;
+  playerStunned: boolean;
   playerTooltip: string;
-  preview: "stun" | "clash" | null;
+  outcome: Outcome;
+  outcomeUnknown: boolean;
+  description?: { head: ReactNode; narration?: string };
+  borderBottom?: boolean;
+  /** Override the right-of-row content (used by ActiveTurnCard for a single shared button column). */
+  rightSlot?: ReactNode;
 }) {
   return (
     <div
-      className="flex flex-col items-center"
-      style={{ width: 60, height: 179 }}
+      className="flex items-center"
+      style={{
+        gap: 16,
+        paddingBottom: borderBottom ? 8 : 0,
+        paddingTop: index === 0 ? 0 : 8,
+        borderBottom: borderBottom ? `1px solid ${DIM}` : undefined,
+      }}
     >
-      <SlotCircle icon={monsterIcon} unknown={monsterUnknown} tooltip={monsterTooltip} />
-      <ConnectorLine />
-      <div className="flex-1 flex items-center justify-center">
-        <PreviewGlyph monsterUnknown={monsterUnknown} playerFilled={!playerFaded} preview={preview} />
+      <div
+        className="relative shrink-0"
+        style={{ width: 240, height: 60 }}
+      >
+        <Circle
+          left={0}
+          icon={monsterIcon}
+          unknown={monsterUnknown}
+          tooltip={monsterTooltip}
+        />
+        <Symbol left={67} char="+" />
+        <Circle
+          left={90}
+          icon={playerIcon}
+          stunned={playerStunned}
+          numeral={playerEmpty ? SLOT_NUMERALS[index] : undefined}
+          faded={playerEmpty}
+          tooltip={playerTooltip}
+        />
+        <Symbol left={158} char="=" />
+        <Circle
+          left={180}
+          icon={outcomeUnknown ? null : outcome ? OUTCOME_ICON[outcome] : null}
+          dot={!outcomeUnknown && outcome == null}
+          unknown={outcomeUnknown}
+          faded={outcomeUnknown}
+          tooltip={
+            outcomeUnknown
+              ? "Outcome unknown"
+              : outcome === "stun"    ? "Stun"
+              : outcome === "clash"   ? "Clash"
+              : outcome === "block"   ? "Blocked"
+              : outcome === "recover" ? "Recover"
+              : outcome === "read"    ? "Read"
+              : "Resolves"
+          }
+        />
       </div>
-      <ConnectorLine faded={playerFaded} />
-      <SlotCircle icon={playerIcon} faded={playerFaded} tooltip={playerTooltip} />
+
+      {rightSlot != null ? (
+        rightSlot
+      ) : description ? (
+        <div className="flex-1 min-w-0" style={{ fontSize: 20, lineHeight: "24px" }}>
+          <div style={{ color: "#F3F3F3" }}>{description.head}</div>
+          {description.narration && (
+            <div style={{ color: DIM, fontStyle: "italic", marginTop: 2 }}>
+              {description.narration}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex-1" />
+      )}
     </div>
   );
 }
 
-function SlotCircle({ icon, faded, unknown, tooltip }: {
-  icon?: string | null;
-  faded?: boolean;
+function Circle({
+  left,
+  icon,
+  unknown,
+  faded,
+  stunned,
+  numeral,
+  dot,
+  tooltip,
+}: {
+  left: number;
+  icon: string | null;
   unknown?: boolean;
+  faded?: boolean;
+  stunned?: boolean;
+  numeral?: string;
+  dot?: boolean;
   tooltip?: string;
 }) {
+  // Stun overrides everything (forced Skipped slot — show knockout icon).
+  const showIcon = stunned ? STUN_ICON : icon;
   return (
     <div
       title={tooltip}
-      className="flex items-center justify-center"
+      className="absolute flex items-center justify-center"
       style={{
+        left,
+        top: 0,
         width: 60,
         height: 60,
         boxSizing: "border-box",
@@ -767,64 +794,339 @@ function SlotCircle({ icon, faded, unknown, tooltip }: {
         opacity: faded ? 0.5 : 1,
       }}
     >
-      {unknown ? (
+      {unknown && !showIcon ? (
         <span style={{ fontSize: 30, lineHeight: 1, color: "#F3F3F3" }}>?</span>
-      ) : icon ? (
-        <MaskedIcon icon={icon} color="#F3F3F3" className="w-[24px] h-[24px]" />
+      ) : numeral ? (
+        <span
+          style={{
+            fontSize: 32,
+            lineHeight: 1,
+            color: "#F3F3F3",
+            fontWeight: 800,
+          }}
+        >
+          {numeral}
+        </span>
+      ) : showIcon ? (
+        <MaskedIcon icon={showIcon} color="#F3F3F3" className="w-[24px] h-[24px]" />
+      ) : dot ? (
+        <span
+          style={{
+            display: "block",
+            width: 12,
+            height: 12,
+            borderRadius: "50%",
+            background: DIM,
+          }}
+        />
       ) : null}
     </div>
   );
 }
 
-function ConnectorLine({ faded }: { faded?: boolean }) {
+function Symbol({ left, char }: { left: number; char: string }) {
   return (
     <span
       style={{
-        display: "block",
-        width: 2,
-        height: 10,
-        background: DIM,
-        opacity: faded ? 0.5 : 1,
+        position: "absolute",
+        left,
+        top: 10,
+        width: 16,
+        height: 38,
+        fontSize: 32,
+        lineHeight: "38px",
+        fontWeight: 700,
+        color: PROMPT_YELLOW,
+        textAlign: "center",
+        pointerEvents: "none",
       }}
-    />
+    >
+      {char}
+    </span>
   );
 }
 
-function PreviewGlyph({ monsterUnknown, playerFilled, preview }: {
-  monsterUnknown: boolean;
-  playerFilled: boolean;
-  preview: "stun" | "clash" | null;
+// ── Prior-turn card ───────────────────────────────────────────────────────
+// Three resolved rows + per-row description text. Faded (opacity 0.8).
+// Trailing non-slot events (condition ticks, stray narration) appended below.
+
+function PriorTurnCard({ turn, combat }: { turn: TurnGroup; combat: CombatInfo }) {
+  // Pad partial turns (unlikely outside of mid-flush races) so we always
+  // render 3 rows — empty rows render as "?" everywhere.
+  const slots = [...turn.slots];
+  while (slots.length < 3) slots.push({ text: "" } as CombatLogEntry);
+
+  return (
+    <CardShell dim>
+      <div className="flex flex-col">
+        {slots.map((evt, i) => {
+          const playerMove = evt.playerMove ?? null;
+          const monsterMove = evt.monsterMove ?? null;
+          const playerStunned = playerMove === "Skipped";
+          const monsterStunned = monsterMove === "Skipped";
+          const monsterUnknown = monsterMove == null && !monsterStunned;
+          const outcome = deriveOutcome(playerMove, monsterMove);
+          const outcomeUnknown = monsterMove == null;
+
+          const [headText, narration] = (evt.text ?? "").split("\n    ");
+
+          return (
+            <SlotRow
+              key={i}
+              index={i}
+              monsterIcon={monsterUnknown ? null : slotIcon(monsterMove, true, monsterStunned)}
+              monsterUnknown={monsterUnknown}
+              monsterTooltip={
+                monsterUnknown
+                  ? "Slot intent unknown"
+                  : monsterStunned
+                    ? "Stunned"
+                    : monsterMove ?? ""
+              }
+              playerIcon={slotIcon(playerMove, false, playerStunned)}
+              playerEmpty={playerMove == null && !playerStunned}
+              playerStunned={playerStunned}
+              playerTooltip={
+                playerStunned
+                  ? "Stunned"
+                  : playerMove
+                    ? lookupDisplayName(playerMove, combat)
+                    : ""
+              }
+              outcome={outcome}
+              outcomeUnknown={outcomeUnknown}
+              description={headText ? { head: renderHead(headText), narration } : undefined}
+              borderBottom={i < 2}
+            />
+          );
+        })}
+      </div>
+    </CardShell>
+  );
+}
+
+// ── Active-turn card (input phase) ───────────────────────────────────────
+// Yellow prompt with vitals inline + 3 empty rows + ActionButton column on
+// the right. All buttons share the column — they don't align row-by-row.
+
+function ActiveTurnCard({
+  combat,
+  selections,
+  planVisible,
+  onPick,
+  onFlee,
+  loading,
+}: {
+  combat: CombatInfo;
+  selections: (string | null)[];
+  planVisible: boolean;
+  onPick: (encoding: string) => void;
+  onFlee: () => void;
+  loading: boolean;
 }) {
-  if (monsterUnknown) {
-    return (
-      <span style={{ fontSize: 30, lineHeight: 1, color: DIM, opacity: playerFilled ? 1 : 0.6 }}>?</span>
-    );
-  }
-  if (playerFilled && preview === "stun") {
-    return <MaskedIcon icon={STUN_ICON} color={DIM} className="w-[20px] h-[20px]" />;
-  }
-  if (playerFilled && preview === "clash") {
-    return <MaskedIcon icon={CLASH_ICON} color={DIM} className="w-[20px] h-[20px]" />;
-  }
-  // Pending or no special interaction: dim dot.
+  const monsterMovesPerSlot = useMemo<(string | null)[]>(
+    () => (planVisible && combat.plan ? combat.plan : [null, null, null]),
+    [combat.plan, planVisible],
+  );
+
+  const sims = useMemo(
+    () => simulateSlots(combat, selections, monsterMovesPerSlot),
+    [combat, selections, monsterMovesPerSlot],
+  );
+
   return (
-    <span
-      style={{
-        display: "block",
-        width: 12,
-        height: 12,
-        borderRadius: "50%",
-        background: DIM,
-        opacity: playerFilled ? 1 : 0.5,
-      }}
-    />
+    <CardShell greeting={GREETING} status={buildStatus(combat)}>
+      <div className="flex items-start" style={{ gap: 18 }}>
+        <div className="flex flex-col shrink-0" style={{ gap: 8 }}>
+          {sims.map((sim, i) => {
+            const monsterUnknown = monsterMovesPerSlot[i] == null && !sim.monsterStunned;
+            const playerEmpty = sim.playerMove == null && !sim.playerStunned;
+
+            return (
+              <SlotRow
+                key={i}
+                index={i}
+                monsterIcon={
+                  monsterUnknown ? null : slotIcon(sim.monsterMove, true, sim.monsterStunned)
+                }
+                monsterUnknown={monsterUnknown}
+                monsterTooltip={
+                  monsterUnknown
+                    ? "Unknown — commit Read to reveal"
+                    : sim.monsterStunned
+                      ? "Stunned"
+                      : sim.monsterMove ?? ""
+                }
+                playerIcon={slotIcon(sim.playerMove, false, sim.playerStunned)}
+                playerEmpty={playerEmpty}
+                playerStunned={sim.playerStunned}
+                playerTooltip={
+                  sim.playerStunned
+                    ? "Stunned"
+                    : sim.playerMove
+                      ? lookupDisplayName(sim.playerMove, combat)
+                      : `Slot ${SLOT_NUMERALS[i]} — pending`
+                }
+                outcome={sim.outcome}
+                outcomeUnknown={monsterUnknown || playerEmpty}
+                rightSlot={<></>}
+              />
+            );
+          })}
+        </div>
+
+        <div className="flex-1 flex flex-col" style={{ gap: 10, minWidth: 0 }}>
+          <div
+            className="grid"
+            style={{ gridTemplateColumns: "1fr 1fr", gap: 10 }}
+          >
+            {combat.playerMovePool.map((option, idx) => {
+              const { disabled, reason } = moveAvailability(option.encoding, combat, selections);
+              const tooltip = disabled
+                ? `${moveTooltip(option.encoding)} (${reason})`
+                : moveTooltip(option.encoding);
+              return (
+                <ActionButton
+                  key={option.encoding}
+                  number={idx + 1}
+                  label={option.displayName}
+                  encoding={option.encoding}
+                  tooltip={tooltip}
+                  disabled={disabled}
+                  onClick={() => onPick(option.encoding)}
+                />
+              );
+            })}
+          </div>
+          <FleeButton onClick={onFlee} disabled={loading} />
+        </div>
+      </div>
+    </CardShell>
   );
 }
 
-// ── Action / Flee buttons ─────────────────────────────────────────────────
-// Figma .numberButton: 248×48, bg rgba(13,13,13,0.8), rounded 8, padding
-// 12 16, gap 10. Number badge 24×24 (1 px border #D0925D, rounded 6),
-// 20 px digit. Disabled: bg #292929, badge+label opacity 0.4.
+// ── Playback card (animation phase) ───────────────────────────────────────
+// Same card the player just committed into, but with each slot revealing
+// monster intent + outcome + description text on a 1.4 s timer. No buttons.
+
+function PlaybackCard({
+  combat,
+  committedSelections,
+  slotEvents,
+  revealedThrough,
+}: {
+  combat: CombatInfo;
+  committedSelections: (string | null)[];
+  slotEvents: CombatLogEntry[];
+  revealedThrough: number;
+}) {
+  return (
+    <CardShell greeting="Resolving…">
+      <div className="flex flex-col">
+        {[0, 1, 2].map(i => {
+          const evt = slotEvents[i];
+          const revealed = i < revealedThrough;
+
+          // Player's committed move is known from the start (we sent it).
+          // Monster move + outcome only appear once that slot has been revealed.
+          const playerMove = evt?.playerMove ?? committedSelections[i] ?? null;
+          const monsterMove = revealed ? (evt?.monsterMove ?? null) : null;
+          const playerStunned = playerMove === "Skipped";
+          const monsterStunned = revealed && monsterMove === "Skipped";
+          const monsterUnknown = !revealed;
+          const outcomeUnknown = !revealed;
+          const outcome = revealed ? deriveOutcome(playerMove, monsterMove) : null;
+
+          const [headText, narration] = revealed && evt?.text
+            ? evt.text.split("\n    ")
+            : [undefined, undefined];
+
+          return (
+            <SlotRow
+              key={i}
+              index={i}
+              monsterIcon={monsterUnknown ? null : slotIcon(monsterMove, true, monsterStunned)}
+              monsterUnknown={monsterUnknown}
+              monsterTooltip={monsterUnknown ? "Resolving…" : monsterMove ?? ""}
+              playerIcon={slotIcon(playerMove, false, playerStunned)}
+              playerEmpty={playerMove == null && !playerStunned}
+              playerStunned={playerStunned}
+              playerTooltip={
+                playerStunned
+                  ? "Stunned"
+                  : playerMove
+                    ? lookupDisplayName(playerMove, combat)
+                    : ""
+              }
+              outcome={outcome}
+              outcomeUnknown={outcomeUnknown}
+              description={headText ? { head: renderHead(headText), narration } : undefined}
+              borderBottom={i < 2}
+            />
+          );
+        })}
+      </div>
+    </CardShell>
+  );
+}
+
+// ── Outcome card ──────────────────────────────────────────────────────────
+// Replaces the active worksheet when combat resolves. Continue button takes
+// the action-buttons spot.
+
+function OutcomeCard({
+  combat,
+  onContinue,
+  disabled,
+}: {
+  combat: CombatInfo;
+  onContinue: () => void;
+  disabled: boolean;
+}) {
+  const verdict = combat.playerWon ? "Victory"
+    : combat.playerLost ? "Defeat"
+    : combat.playerFled ? "Escaped"
+    : combat.monsterFled ? "It Flees"
+    : "Resolved";
+
+  const paragraphs = (combat.outcomeText ?? "")
+    .split(/\n{2,}/)
+    .map(p => p.replace(/\s*\n\s*/g, " ").trim())
+    .filter(p => p.length > 0);
+
+  return (
+    <CardShell>
+      <div className="font-header text-[32px] text-accent leading-none">{verdict}</div>
+      {paragraphs.length > 0 && (
+        <div className="flex flex-col" style={{ gap: 8, fontSize: 20, lineHeight: "24px", color: "#F3F3F3" }}>
+          {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+      )}
+      {combat.outcomeMechanics && combat.outcomeMechanics.length > 0 && (
+        <ul className="flex flex-col" style={{ gap: 4, fontSize: 20, lineHeight: "24px", color: DIM }}>
+          {combat.outcomeMechanics.map((m, i) => (
+            <li key={i}>{m.description}</li>
+          ))}
+        </ul>
+      )}
+      <ContinueButton onClick={onContinue} disabled={disabled} />
+    </CardShell>
+  );
+}
+
+// ── Prompt assembly ───────────────────────────────────────────────────────
+// Two-line prompt. First line bold yellow, second line regular white.
+
+const GREETING = "What's the plan, merchant?";
+
+function buildStatus(combat: CombatInfo): string {
+  const tell = combat.tell?.trim() ?? "";
+  const tellPart = tell ? (tell.endsWith(".") ? tell : tell + ".") : "";
+  const stats = `You have ${combat.playerSpirits} spirits and ${combat.playerHealth} health left.`;
+  return [tellPart, stats].filter(Boolean).join(" ");
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────
 
 function ActionButton({ number, label, encoding, tooltip, disabled, onClick }: {
   number: number; label: string; encoding: string; tooltip?: string; disabled?: boolean; onClick: () => void;
@@ -846,16 +1148,13 @@ function ActionButton({ number, label, encoding, tooltip, disabled, onClick }: {
         alignItems: "center",
         textAlign: "left",
         boxSizing: "border-box",
+        width: "100%",
       }}
       className={disabled ? "cursor-not-allowed" : "hover:brightness-125"}
     >
       {classIcon && (
         <span style={{ opacity: disabled ? 0.4 : 1, display: "inline-flex", flex: "0 0 auto" }}>
-          <MaskedIcon
-            icon={classIcon}
-            color={ACTION}
-            className="w-[24px] h-[24px]"
-          />
+          <MaskedIcon icon={classIcon} color={ACTION} className="w-[24px] h-[24px]" />
         </span>
       )}
       <span
@@ -866,6 +1165,9 @@ function ActionButton({ number, label, encoding, tooltip, disabled, onClick }: {
           lineHeight: "24px",
           fontFamily: "var(--font-body)",
           opacity: disabled ? 0.4 : 1,
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {label}
@@ -912,84 +1214,42 @@ function FleeButton({ onClick, disabled }: { onClick: () => void; disabled: bool
         textAlign: "left",
         boxSizing: "border-box",
         opacity: disabled ? 0.5 : 1,
+        width: "100%",
       }}
       className={disabled ? "cursor-not-allowed" : "hover:brightness-125"}
     >
       <MaskedIcon icon="cancel.svg" color={ACTION} className="w-[24px] h-[24px]" />
-      <span
-        style={{
-          color: ACTION,
-          fontSize: 20,
-          lineHeight: "24px",
-          fontFamily: "var(--font-body)",
-        }}
-      >
+      <span style={{ color: ACTION, fontSize: 20, lineHeight: "24px", fontFamily: "var(--font-body)" }}>
         Flee
       </span>
     </button>
   );
 }
 
-// ── Log entries ───────────────────────────────────────────────────────────
-
-function LogEntry({ entry }: { entry: CombatLogEntry }) {
-  const line = entry.text;
-
-  if (line.startsWith("— Turn")) {
-    return (
-      <div className="flex items-center gap-3 text-muted mt-3">
-        <div className="flex-1 h-px bg-white/[0.08]" />
-        <span>{line.replace(/^—\s*|\s*—$/g, "").split(/\s+—\s+/)[0]}</span>
-        <div className="flex-1 h-px bg-white/[0.08]" />
-      </div>
-    );
-  }
-
-  if (entry.slot != null) {
-    const [head, narration] = line.split("\n    ");
-    return (
-      <div className="leading-relaxed">
-        <div className="text-primary">{head}</div>
-        {narration && <div className="text-dim ml-6 italic">{narration}</div>}
-      </div>
-    );
-  }
-
-  return <div className="leading-relaxed text-primary">{line}</div>;
-}
-
-// ── Outcome panel ─────────────────────────────────────────────────────────
-
-function OutcomePanel({ combat }: { combat: CombatInfo }) {
-  const verdict = combat.playerWon ? "Victory"
-    : combat.playerLost ? "Defeat"
-    : combat.playerFled ? "Escaped"
-    : combat.monsterFled ? "It Flees"
-    : "Resolved";
-
-  // Outcome text in .fight files wraps at ~70 chars with hard newlines and uses
-  // blank lines between paragraphs. Render paragraphs as <p>s with normal flow
-  // so the body wraps to the card width instead of honoring the source wrap.
-  const paragraphs = (combat.outcomeText ?? "")
-    .split(/\n{2,}/)
-    .map(p => p.replace(/\s*\n\s*/g, " ").trim())
-    .filter(p => p.length > 0);
-
+function ContinueButton({ onClick, disabled }: { onClick: () => void; disabled: boolean }) {
   return (
-    <div className="mt-4 p-5 border border-white/10 rounded-lg bg-panel-alt">
-      <div className="font-header text-[32px] text-accent leading-none mb-3">{verdict}</div>
-      {paragraphs.length > 0 && (
-        <div className="text-primary leading-relaxed space-y-2">
-          {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-        </div>
-      )}
-      {combat.outcomeMechanics && combat.outcomeMechanics.length > 0 && (
-        <ul className="mt-3 space-y-1 text-dim">
-          {combat.outcomeMechanics.map((m, i) => (
-            <li key={i}>{m.description}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        height: 48,
+        padding: "12px 16px",
+        background: BTN_BG,
+        borderRadius: 8,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        boxSizing: "border-box",
+        opacity: disabled ? 0.5 : 1,
+        width: "100%",
+        marginTop: 4,
+      }}
+      className={disabled ? "cursor-not-allowed" : "hover:brightness-125"}
+    >
+      <span style={{ color: ACTION, fontSize: 20, lineHeight: "24px", fontFamily: "var(--font-body)" }}>
+        Continue
+      </span>
+    </button>
   );
 }
