@@ -204,6 +204,66 @@ public class CombatRunnerTests
     }
 
     [Fact]
+    public void Death_converts_remaining_slots_to_skipped()
+    {
+        // 4-HP monster, only Attack in pool. One Heavy Attack from the player kills
+        // it on slot 1, but the runner should still emit slot-2 and slot-3 events
+        // with both moves zeroed out — analogous to stun, "being dead" replaces
+        // your subsequent actions.
+        var enc = CmbParser.ParseString("""
+            +title Frail Foe
+            +stats hp=4
+
+            +move Attack
+              narration: It strikes.
+
+            +intro
+            A frail foe appears.
+
+            +win
+            > gold 1
+            You win.
+
+            +lose
+            > tag died
+            You lose.
+            """);
+        enc.Id = "test/frail";
+
+        var player = MakePlayer(spirits: 20, health: 20);
+        var state = MakeState();
+
+        var rng = new Random(0);
+        CombatRunner.Begin(enc, player, state, rng);
+        var events = CombatRunner.Step(enc, player, state,
+            new PlayerCombatAction.Commit(
+                Move.Parse("heavy attack"),  // 8 dmg, kills monster outright
+                Move.Parse("heavy attack"),
+                Move.Parse("heavy attack")),
+            rng);
+
+        var slots = events.OfType<CombatEvent.SlotResolved>().ToList();
+        Assert.Equal(3, slots.Count);
+
+        // Slot 1: real kill. Move != Skipped.
+        Assert.NotEqual("skipped", slots[0].PlayerMove.Base);
+        Assert.True(slots[0].MonsterDelta < 0);
+
+        // Slots 2 and 3: both sides converted to Skipped, no damage either way.
+        for (int i = 1; i < 3; i++)
+        {
+            Assert.Equal("skipped", slots[i].PlayerMove.Base);
+            Assert.Equal("skipped", slots[i].MonsterMove.Base);
+            Assert.Equal(0, slots[i].PlayerDelta);
+            Assert.Equal(0, slots[i].MonsterDelta);
+            Assert.Equal(0, slots[i].MonsterHpAfter);
+        }
+
+        Assert.True(state.PlayerWon);
+        Assert.Equal(0, state.MonsterHp);
+    }
+
+    [Fact]
     public void Recover_heals_spirits_up_to_max_only()
     {
         var enc = MakeEncounter();

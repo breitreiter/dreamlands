@@ -104,6 +104,26 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         if (session.Mode == SessionMode.InCombat && player.ActiveCombat is { } combat
             && data.CombatBundle?.GetById(combat.EncounterId) is { } combatEnc)
         {
+            if (combat.Resolved)
+            {
+                // Reload during the post-defeat coda. Reconstruct the Outcome event so the
+                // OutcomeCard still has its coda text. Mechanics already ran in the original
+                // Step (in CombatOrchestrator.Finalize), so don't re-apply them.
+                var codaText = combat.PlayerWon ? combatEnc.WinText
+                            : combat.PlayerLost ? combatEnc.LoseText
+                            : "";
+                var coda = new Dreamlands.Combat.CombatEvent.Outcome(
+                    combat.PlayerWon, combat.PlayerLost, combat.PlayerFled, combat.MonsterFled,
+                    combat.Turn, codaText, Array.Empty<string>());
+                var resolvedTurn = new Dreamlands.Orchestration.CombatOrchestrator.CombatTurn(
+                    combat.EncounterId,
+                    new Dreamlands.Combat.CombatEvent[] { coda },
+                    Array.Empty<MechanicResult>(),
+                    Resolved: true,
+                    PlayerDied: combat.PlayerLost);
+                return new OkObjectResult(BuildCombatResponse(session, resolvedTurn));
+            }
+
             // Resume mid-fight: render the current state with empty events (no new turn happened).
             var resumeTurn = new Dreamlands.Orchestration.CombatOrchestrator.CombatTurn(
                 combat.EncounterId,
@@ -2159,25 +2179,30 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "flee":
                 action = new Dreamlands.Combat.PlayerCombatAction.Flee();
                 break;
+            case "continue":
+                // Player dismissed the defeat coda — chain to the rescue flow now.
+                if (player.ActiveCombat is not { Resolved: true, PlayerLost: true })
+                    return new BadRequestObjectResult(new { error = "continue is only valid from a defeat coda" });
+                return await CombatRescue(player, session);
             default:
                 return new BadRequestObjectResult(new { error = $"Unknown combat action '{actionReq.Action}'" });
         }
 
         var turn = Dreamlands.Orchestration.CombatOrchestrator.Step(session, action);
 
-        if (turn.PlayerDied)
-            return await CombatRescue(player, session);
-
+        // On player death, don't rescue immediately — leave the defeat coda visible
+        // and let Continue (action="continue", above) chain into CombatRescue.
         await store.Save(player);
         return new OkObjectResult(BuildCombatResponse(session, turn));
     }
 
     /// <summary>
     /// Apply the standard rescue (strip purchasables, reset gold, teleport to chapterhouse,
-    /// full recovery, day++) when a combat resolves with the player dead. Returns a
-    /// "rescued" response so the client drops into the rescue screen instead of the
-    /// combat-resolved Defeat panel — the rescue surface IS the death screen per
-    /// project/combat/landing_plan.md.
+    /// full recovery, day++) and return a "rescued" response. Triggered by the
+    /// action="continue" branch of CombatAction once the player has dismissed the
+    /// defeat coda — CombatOrchestrator leaves ActiveCombat in place on a loss
+    /// specifically so this can run after Continue, not at the moment of death.
+    /// The rescue surface IS the death screen per project/combat/landing_plan.md.
     /// </summary>
     async Task<IActionResult> CombatRescue(Dreamlands.Game.PlayerState player, Dreamlands.Orchestration.GameSession session)
     {
@@ -2339,6 +2364,22 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     static CombatLogEntry RenderSlotResolved(Dreamlands.Combat.CombatEvent.SlotResolved x)
     {
+        // Death-aftermath: a side's move is Skipped *and* their HP is 0. The slot
+        // where the death itself happened keeps the actual killing move on file
+        // (move != skipped), so this only catches the slots that ran against a corpse.
+        bool monsterDeadAftermath = x.MonsterMove.Base == "skipped" && x.MonsterHpAfter == 0;
+        bool playerDeadAftermath  = x.PlayerMove.Base  == "skipped" && x.PlayerHealthAfter == 0;
+        if (monsterDeadAftermath || playerDeadAftermath)
+        {
+            return new CombatLogEntry
+            {
+                Text = "",
+                Slot = x.Slot,
+                PlayerMove = x.PlayerMove.Encoded,
+                MonsterMove = x.MonsterMove.Encoded,
+            };
+        }
+
         // Prosaic single line per slot: "You picked Read, they picked Defend • You take 2 damage, they take 0"
         var moves = (x.PlayerMove.Base, x.MonsterMove.Base) switch
         {

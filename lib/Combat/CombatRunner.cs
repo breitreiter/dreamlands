@@ -106,10 +106,21 @@ public static class CombatRunner
         bool playerBerzerkNext = false, playerFearNext = false;
         bool monsterBerzerkNext = false, monsterFearNext = false;
 
+        // "Being dead" works like stun: once a side drops, all of their later slots
+        // this turn convert to Skipped. We force both sides to Skipped so the live
+        // side doesn't roll spurious stuns/conditions against a corpse — the slot
+        // where the death actually happened still resolves normally below.
+        bool playerDead = false, monsterDead = false;
+
         for (int i = 0; i < 3; i++)
         {
             var p = playerSlots[i];
             var m = monsterSlots[i];
+            if (playerDead || monsterDead)
+            {
+                p = Move.Skipped();
+                m = Move.Skipped();
+            }
             var r = Resolver.Resolve(p, m, rng);
 
             // Apply HP deltas.
@@ -140,7 +151,7 @@ public static class CombatRunner
                 Slot: i + 1,
                 PlayerMove: p,
                 MonsterMove: m,
-                MonsterNarration: monsterNarration[i] ?? "",
+                MonsterNarration: (playerDead || monsterDead) ? "" : monsterNarration[i] ?? "",
                 PlayerDelta: r.PlayerDelta,
                 MonsterDelta: monsterDeltaApplied,
                 PlayerDamageAbsorbed: absorbed,
@@ -151,9 +162,9 @@ public static class CombatRunner
                 StunMonsterNext: r.StunMonsterNext,
                 ConditionsAppliedToPlayer: r.ConditionsAppliedToPlayer));
 
-            // Terminal checks — break the slot loop on any side dropping.
-            if (player.Health <= 0) { state.PlayerLost = true; break; }
-            if (state.MonsterHp <= 0) { state.PlayerWon = true; break; }
+            // Death sets the dead flag for next slot, same shape as forward-rider stun.
+            if (player.Health <= 0) { playerDead = true; state.PlayerLost = true; }
+            if (state.MonsterHp <= 0) { monsterDead = true; state.PlayerWon = true; }
         }
 
         // End-of-turn flag updates. Read fires on commit; consumed at start of next turn.

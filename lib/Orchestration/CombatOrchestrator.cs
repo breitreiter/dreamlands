@@ -70,8 +70,15 @@ public static class CombatOrchestrator
 
             playerDied = state.PlayerLost || session.Player.Health <= 0;
 
-            session.Player.ActiveCombat = null;
-            session.Mode = SessionMode.Exploring;
+            if (!playerDied)
+            {
+                session.Player.ActiveCombat = null;
+                session.Mode = SessionMode.Exploring;
+            }
+            // Defeat path: keep ActiveCombat + InCombat mode so the client can render
+            // the defeat coda (and re-render on reload). Rescue is deferred to an
+            // explicit "continue" action on the OutcomeCard's Continue button — see
+            // CombatAction in GameFunctions.cs.
         }
 
         return new CombatTurn(encounter.Id, events, outcomeMechanics, state.Resolved, playerDied);

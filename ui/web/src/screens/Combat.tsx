@@ -5,6 +5,8 @@ import MaskedIcon from "../components/MaskedIcon";
 import HitLens from "../components/HitLens";
 import HitSplat from "../components/HitSplat";
 import MissMoon from "../components/MissMoon";
+import TopBar from "../components/TopBar";
+import { Button } from "@/components/ui/button";
 
 type Hit = { id: number; x: number; y: number; angle: number; splat: number; miss: boolean };
 
@@ -489,7 +491,7 @@ export default function Combat({ state }: { state: GameResponse }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-page text-primary">
-      {/* ─── LEFT: vignette + monster ─── */}
+      {/* ─── LEFT: vignette + monster (full height — TopBar lives in the right pane) ─── */}
       <div className="relative flex-1 min-w-[320px] bg-parchment overflow-hidden">
         {combat.biomeImage && (
           <img
@@ -542,8 +544,22 @@ export default function Combat({ state }: { state: GameResponse }) {
         </div>
       </div>
 
-      {/* ─── RIGHT: worksheet stream ─── */}
-      <div className="flex-1 min-w-[420px] flex flex-col bg-page">
+      {/* ─── RIGHT: top bar + worksheet stream (capped to keep cards from sprawling on wide monitors) ─── */}
+      <div className="flex-1 min-w-[420px] max-w-[820px] flex flex-col bg-page">
+        <TopBar status={state.status} onBack={onFlee}>
+          {!combat.resolved && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onFlee}
+              disabled={loading}
+              title="End the encounter and escape. Burns this turn — the monster's full plan resolves against you while you flee."
+            >
+              <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
+              Flee
+            </Button>
+          )}
+        </TopBar>
         <div ref={logRef} className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4">
           <div>
             <h2 className="font-header text-[32px] text-accent leading-none">{combat.title}</h2>
@@ -575,8 +591,6 @@ export default function Combat({ state }: { state: GameResponse }) {
               selections={selections}
               planVisible={planVisible}
               onPick={handlePick}
-              onFlee={onFlee}
-              loading={loading}
             />
           )}
 
@@ -590,7 +604,13 @@ export default function Combat({ state }: { state: GameResponse }) {
           )}
 
           {combat.resolved && !playback && (
-            <OutcomeCard combat={combat} onContinue={() => refreshState()} disabled={loading} />
+            <OutcomeCard
+              combat={combat}
+              onContinue={() => combat.playerLost
+                ? doCombatAction({ action: "continue" })  // chain into the rescue
+                : refreshState()}
+              disabled={loading}
+            />
           )}
         </div>
       </div>
@@ -742,12 +762,15 @@ function SlotRow({
       {rightSlot != null ? (
         rightSlot
       ) : description ? (
-        <div className="flex-1 min-w-0" style={{ fontSize: 20, lineHeight: "24px" }}>
-          <div style={{ color: "#F3F3F3" }}>{description.head}</div>
+        <div className="flex-1 min-w-0" style={{ fontSize: 20, lineHeight: "24px", color: "#F3F3F3" }}>
+          {description.head}
           {description.narration && (
-            <div style={{ color: DIM, fontStyle: "italic", marginTop: 2 }}>
-              {description.narration}
-            </div>
+            <>
+              {" "}
+              <span style={{ color: DIM, fontStyle: "italic" }}>
+                {description.narration}
+              </span>
+            </>
           )}
         </div>
       ) : (
@@ -914,15 +937,11 @@ function ActiveTurnCard({
   selections,
   planVisible,
   onPick,
-  onFlee,
-  loading,
 }: {
   combat: CombatInfo;
   selections: (string | null)[];
   planVisible: boolean;
   onPick: (encoding: string) => void;
-  onFlee: () => void;
-  loading: boolean;
 }) {
   const monsterMovesPerSlot = useMemo<(string | null)[]>(
     () => (planVisible && combat.plan ? combat.plan : [null, null, null]),
@@ -934,8 +953,14 @@ function ActiveTurnCard({
     [combat, selections, monsterMovesPerSlot],
   );
 
+  // Stable per turn (and per-encounter) so the greeting doesn't flicker, but rotates.
+  const greeting = useMemo(
+    () => GREETINGS[Math.floor(Math.random() * GREETINGS.length)],
+    [combat.turn, combat.encounterId],
+  );
+
   return (
-    <CardShell greeting={GREETING} status={buildStatus(combat)}>
+    <CardShell greeting={greeting} status={buildStatus(combat)}>
       <div className="flex items-start" style={{ gap: 18 }}>
         <div className="flex flex-col shrink-0" style={{ gap: 8 }}>
           {sims.map((sim, i) => {
@@ -998,7 +1023,6 @@ function ActiveTurnCard({
               );
             })}
           </div>
-          <FleeButton onClick={onFlee} disabled={loading} />
         </div>
       </div>
     </CardShell>
@@ -1116,8 +1140,17 @@ function OutcomeCard({
 
 // ── Prompt assembly ───────────────────────────────────────────────────────
 // Two-line prompt. First line bold yellow, second line regular white.
+// Greeting rotates per turn so every fight doesn't open with the same line.
 
-const GREETING = "What's the plan, merchant?";
+const GREETINGS = [
+  "What's the plan, merchant?",
+  "Eyes up.",
+  "Make it count.",
+  "What's it gonna be?",
+  "Steady now.",
+  "Pick your moves.",
+  "Your call.",
+];
 
 function buildStatus(combat: CombatInfo): string {
   const tell = combat.tell?.trim() ?? "";
@@ -1196,60 +1229,14 @@ function ActionButton({ number, label, encoding, tooltip, disabled, onClick }: {
   );
 }
 
-function FleeButton({ onClick, disabled }: { onClick: () => void; disabled: boolean }) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      title="End the encounter and escape. Burns this turn — the monster's full plan resolves against you while you flee."
-      style={{
-        height: 48,
-        padding: "12px 16px",
-        gap: 10,
-        background: BTN_BG,
-        borderRadius: 8,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        textAlign: "left",
-        boxSizing: "border-box",
-        opacity: disabled ? 0.5 : 1,
-        width: "100%",
-      }}
-      className={disabled ? "cursor-not-allowed" : "hover:brightness-125"}
-    >
-      <MaskedIcon icon="cancel.svg" color={ACTION} className="w-[24px] h-[24px]" />
-      <span style={{ color: ACTION, fontSize: 20, lineHeight: "24px", fontFamily: "var(--font-body)" }}>
-        Flee
-      </span>
-    </button>
-  );
-}
-
 function ContinueButton({ onClick, disabled }: { onClick: () => void; disabled: boolean }) {
+  // Sized to its label per the house rule (no full-width buttons). Aligned to
+  // the right edge of the OutcomeCard.
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      style={{
-        height: 48,
-        padding: "12px 16px",
-        background: BTN_BG,
-        borderRadius: 8,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        boxSizing: "border-box",
-        opacity: disabled ? 0.5 : 1,
-        width: "100%",
-        marginTop: 4,
-      }}
-      className={disabled ? "cursor-not-allowed" : "hover:brightness-125"}
-    >
-      <span style={{ color: ACTION, fontSize: 20, lineHeight: "24px", fontFamily: "var(--font-body)" }}>
+    <div className="flex justify-end" style={{ marginTop: 4 }}>
+      <Button onClick={onClick} disabled={disabled}>
         Continue
-      </span>
-    </button>
+      </Button>
+    </div>
   );
 }

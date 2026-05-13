@@ -123,7 +123,7 @@ export async function combatList(id: string): Promise<CombatListResponse> {
 
 export async function combatAction(
   id: string,
-  body: { action: "commit"; slots: string[] } | { action: "flee" },
+  body: { action: "commit"; slots: string[] } | { action: "flee" } | { action: "continue" },
 ): Promise<GameResponse> {
   return post(`${BASE}/${id}/combat/action`, body);
 }
