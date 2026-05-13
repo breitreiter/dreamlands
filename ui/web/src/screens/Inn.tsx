@@ -92,8 +92,13 @@ export default function Inn({
                   Gold spent: {recovery.goldSpent}
                 </div>
               )}
+              {recovery.conditionsCleared.map((c, i) => (
+                <div key={`c-${i}`} className="text-positive">
+                  {c} cleared
+                </div>
+              ))}
               {recovery.medicinesConsumed.map((m, i) => (
-                <div key={i} className="text-dim">
+                <div key={`m-${i}`} className="text-dim">
                   {m} consumed
                 </div>
               ))}

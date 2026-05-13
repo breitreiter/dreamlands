@@ -10,7 +10,8 @@ public record InnBookingResult(
     string ServiceId,
     int GoldSpent,
     int SpiritsRestored,
-    List<string> MedicinesConsumed);
+    List<string> MedicinesConsumed,
+    List<string> ConditionsCleared);
 
 public static class Inn
 {
@@ -34,19 +35,20 @@ public static class Inn
     /// <summary>
     /// Book a single inn service. Validates affordability, deducts gold, restores
     /// spirits per the tier, advances time by one night, and consumes any matching
-    /// serious-condition medicines.
+    /// serious-condition medicines. At the chapterhouse the stay is free and the
+    /// resident physician clears all severe conditions without consuming medicine.
     /// </summary>
     public static InnBookingResult BookService(
-        PlayerState state, BalanceData balance, string serviceId, bool free = false)
+        PlayerState state, BalanceData balance, string serviceId, bool chapterhouse = false)
     {
         var service = GetServiceOptions(balance).FirstOrDefault(s => s.Id == serviceId);
         if (service == null)
-            return new InnBookingResult(false, $"Unknown service '{serviceId}'", serviceId, 0, 0, []);
+            return new InnBookingResult(false, $"Unknown service '{serviceId}'", serviceId, 0, 0, [], []);
 
-        var cost = free ? 0 : service.Cost;
+        var cost = chapterhouse ? 0 : service.Cost;
 
         if (state.Gold < cost)
-            return new InnBookingResult(false, "Not enough gold", serviceId, 0, 0, []);
+            return new InnBookingResult(false, "Not enough gold", serviceId, 0, 0, [], []);
 
         state.Gold -= cost;
 
@@ -61,21 +63,36 @@ public static class Inn
         state.Day += 1;
 
         var medicinesConsumed = new List<string>();
-        ConsumeMedicines(state, balance, medicinesConsumed);
+        var conditionsCleared = new List<string>();
+        ClearSevereConditions(state, balance, medicinesConsumed, conditionsCleared, chapterhouse);
 
-        return new InnBookingResult(true, null, serviceId, cost, spiritsRestored, medicinesConsumed);
+        return new InnBookingResult(true, null, serviceId, cost, spiritsRestored, medicinesConsumed, conditionsCleared);
     }
 
     /// <summary>
-    /// Consume one matching medicine per active serious condition. Conditions are
-    /// binary, so one dose clears one condition.
+    /// Clear severe conditions. At the chapterhouse the physician handles every
+    /// severe condition for free. At a regular inn, each cleared condition consumes
+    /// one matching medicine from the haversack; conditions without a matching
+    /// medicine are left active.
     /// </summary>
-    static void ConsumeMedicines(PlayerState state, BalanceData balance, List<string> medicinesConsumed)
+    static void ClearSevereConditions(
+        PlayerState state,
+        BalanceData balance,
+        List<string> medicinesConsumed,
+        List<string> conditionsCleared,
+        bool chapterhouse)
     {
         foreach (var conditionId in state.ActiveConditions.ToList())
         {
             if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
             if (def.Severity != ConditionSeverity.Severe) continue;
+
+            if (chapterhouse)
+            {
+                state.ActiveConditions.Remove(conditionId);
+                conditionsCleared.Add(conditionId);
+                continue;
+            }
 
             var idx = state.Haversack.FindIndex(i =>
                 balance.Items.TryGetValue(i.DefId, out var itemDef)
@@ -86,6 +103,7 @@ public static class Inn
             medicinesConsumed.Add(state.Haversack[idx].DefId);
             state.Haversack.RemoveAt(idx);
             state.ActiveConditions.Remove(conditionId);
+            conditionsCleared.Add(conditionId);
         }
     }
 }

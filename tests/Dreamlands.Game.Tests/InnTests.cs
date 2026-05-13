@@ -160,6 +160,7 @@ public class InnTests
         Assert.DoesNotContain("injured", p.ActiveConditions);
         Assert.DoesNotContain(p.Haversack, i => i.DefId == "bandages");
         Assert.Contains("bandages", result.MedicinesConsumed);
+        Assert.Contains("injured", result.ConditionsCleared);
     }
 
     [Fact]
@@ -172,6 +173,42 @@ public class InnTests
 
         Assert.True(result.Success); // booking still succeeds
         Assert.Contains("injured", p.ActiveConditions);
+        Assert.Empty(result.MedicinesConsumed);
+        Assert.Empty(result.ConditionsCleared);
+    }
+
+    [Fact]
+    public void BookService_Chapterhouse_IsFreeAndClearsSevereWithoutMedicine()
+    {
+        var p = Fresh();
+        p.Gold = 0;
+        p.ActiveConditions.Add("injured");
+        p.ActiveConditions.Add("poisoned");
+
+        var result = Inn.BookService(p, Balance, Inn.FullServiceId, chapterhouse: true);
+
+        Assert.True(result.Success);
+        Assert.Equal(0, result.GoldSpent);
+        Assert.Equal(0, p.Gold);
+        Assert.DoesNotContain("injured", p.ActiveConditions);
+        Assert.DoesNotContain("poisoned", p.ActiveConditions);
+        Assert.Contains("injured", result.ConditionsCleared);
+        Assert.Contains("poisoned", result.ConditionsCleared);
+        Assert.Empty(result.MedicinesConsumed);
+    }
+
+    [Fact]
+    public void BookService_Chapterhouse_DoesNotConsumeHaversackMedicines()
+    {
+        var p = Fresh();
+        p.ActiveConditions.Add("injured");
+        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+
+        var result = Inn.BookService(p, Balance, Inn.FullServiceId, chapterhouse: true);
+
+        Assert.True(result.Success);
+        Assert.DoesNotContain("injured", p.ActiveConditions);
+        Assert.Contains(p.Haversack, i => i.DefId == "bandages");
         Assert.Empty(result.MedicinesConsumed);
     }
 }

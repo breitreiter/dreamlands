@@ -184,7 +184,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                 var serviceId = actionReq.InnService ?? Inn.BedServiceId;
                 var isChapterhouse = innNode == session.Map.StartingCity;
-                var bookResult = Inn.BookService(player, data.Balance, serviceId, free: isChapterhouse);
+                var bookResult = Inn.BookService(player, data.Balance, serviceId, chapterhouse: isChapterhouse);
                 if (!bookResult.Success)
                     return new BadRequestObjectResult(new { error = bookResult.Reason });
 
@@ -202,7 +202,9 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         GoldSpent = bookResult.GoldSpent,
                         HealthRecovered = 0,
                         SpiritsRecovered = bookResult.SpiritsRestored,
-                        ConditionsCleared = [],
+                        ConditionsCleared = bookResult.ConditionsCleared
+                            .Select(id => data.Balance.Conditions.TryGetValue(id, out var def) ? def.Name : id)
+                            .ToList(),
                         MedicinesConsumed = bookResult.MedicinesConsumed,
                     },
                     Inventory = BuildInventory(player),
