@@ -34,3 +34,10 @@ stock_characters_curated.md
 text/encounters/generation/v2/neutral_archetypes.md
 dreamlands.imp-proposals/
 .imp/
+
+# imp/note: capture surface; ephemeral, not worth tracking.
+# Keep dir scaffolding (.gitkeep already committed in each subdir).
+imp/note/inbox/*
+imp/note/processed/*
+imp/note/discarded/*
+!imp/note/*/.gitkeep
