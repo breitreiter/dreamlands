@@ -2,7 +2,7 @@
 kind: rule
 title: Encounter Mechanics & Game Commands
 created: 2026-02-21
-updated: 2026-04-27
+updated: 2026-05-16
 status: current
 touches:
   files:
@@ -11,10 +11,13 @@ touches:
     - lib/Rules/ItemDef.cs
     - lib/Rules/Skill.cs
     - lib/Rules/Difficulty.cs
-  features: [encounter-mechanics, vocabulary, items, factions]
+    - lib/Encounter/CmbParser.cs
+    - lib/Encounter/Move.cs
+    - lib/Encounter/CombatEncounter.cs
+  features: [encounter-mechanics, vocabulary, items, factions, combat-encounters]
 enforces:
   - text/encounters/**/*.enc
-  - text/encounters/**/*.tac
+  - text/encounters/**/*.fight
 provenance:
   author: migration:M-001
 ---
@@ -28,7 +31,7 @@ those C# definitions.
 
 ## Naming & identity
 
-Each .enc/.tac file has two distinct names. Don't confuse them.
+Each .enc file has two distinct names. Don't confuse them.
 
 Filename (without .ext)         Identity / ID — used for all lookups
   "Road Toll.enc"               → ShortId "Road Toll", fully qualified "plains/tier1/Road Toll"
@@ -41,11 +44,12 @@ Where each one is used:
   Storylet list / selection     Keyed by filename (ShortId), not the display title
   Encounter screen header       Shows the display title (first line of the file)
 
-+open resolution order (same for both .enc and .tac bundles):
++open resolution order:
   1. Short-name match within the current category (arc/directory) — case-insensitive
   2. Fall back to fully qualified id (e.g. "arcs/plains/grainway_station/Captain Aldric")
   Targets only need to be unique within the arc. Two arcs can both have "Start".
-  An .enc can +open a .tac target and vice versa — resolution checks both bundles.
+  Note: `.fight` combat encounters are not opened via `+open` — they are launched
+  by the combat mechanic separately.
 
 
 ## Front-matter
@@ -149,180 +153,121 @@ Dungeon             +finish_dungeon
 Return to pool      +repool
 
 
-## Tactical encounters (.tac format)
+## Combat encounters (.fight format)
 
-Tactical encounters are card-based encounters for combat and traversal. They
-live alongside .enc files in text/encounters/{biome}/tier{n}/ and use the
-.tac extension. A .tac file is either an **encounter** or a **group** (branch
-point), never both.
-
-NOTE: The tactical system is deprecated (RPS pivot, May 2026). The format
-still works but no new content uses it. See [[combat-pivot-rps]] for current
-combat design.
+Combat encounters use the `.fight` extension and drive the RPS combat screen.
+They are parsed by `CmbParser` (`lib/Encounter/CmbParser.cs`).
 
 ### File structure
 
-    Title                           First line, plain text
-    [stat <skill>]                  Governing skill (combat, cunning, negotiation, bushcraft)
-    [tier 1|2|3]                    Tier restriction
-    [requires <condition>]          Gate (same syntax as .enc requires)
+    +title Monster Name
+    +image monsters/biome_type.webp
+    +blood #7a0a0a                    (optional — default mammalian red)
+    +stats hp=18
+    +repool false                     (optional — default false)
 
-    Prose body text describing the scene. Everything between front-matter
-    and the first section marker.
+    +move Attack
+      narration: It lunges at you, claws raking forward.
+      narration: It darts in low and swipes at your legs.
 
-    timers:
-    openings:
-    approaches:                     Optional — if omitted, defaults to aggressive
-    success:                        Optional — prose + mechanics on victory
-    failure:
+    +move Heavy Slow Attack
+      narration: It winds back and throws its full weight into the blow.
 
-### Encounter sections
+    +intro
+    Prose shown before combat begins.
 
-#### timers:
+    +win
+    Prose shown on player victory.
+    > gold 12
+    > tag killed_name
 
-Two kinds of timers based on whether `resist` is present:
+    +lose
+    Prose shown on player defeat.
 
-  **Sequential** (resist > 0): one active at a time, player depletes
-  resistance to advance. These form the encounter's progression.
+### Directives
 
-  **Ambient** (resist omitted or 0): tick every turn, can't be directly
-  damaged, auto-cleared when all sequential timers are done.
+All directives start with `+` at column 0. `#` is a comment; blank lines are ignored.
 
-Syntax:
+    +title <text>       Display title
+    +image <path>       Image path (relative to assets/)
+    +blood <hex>        Blood-splat color; override for non-mammals (golems, lattice, etc.)
+    +stats hp=<n>       Monster HP — required, must be > 0
+    +repool <bool>      Return monster to pool after defeat (true/yes/1 or false/no/0)
+    +move <encoding>    One move in the pool (followed by narration: lines)
+    +intro              Block: opening prose
+    +win                Block: prose + mechanics on player victory
+    +lose               Block: prose on player defeat
 
-    * Name [counter Text]: <effect> <amount> every <countdown> [resist <N>]
+### Move encoding
 
-Effect types:
-  `spirits <N>`              Drain N spirits when the timer fires, resets
-  `resistance <N>`           Add N resistance to current timer, resets
-  `condition <id>`           Add a pending condition check, resets
-  `tick "<target>" <N>`      Decrement target timer's countdown by N, resets
-  `fatal`                    Encounter fails when countdown reaches 0 (no reset)
+Last token is the base family; preceding tokens are mutators. Tokens are
+case-insensitive. Each `+move` block must have at least one `narration:` line.
+Multiple narration lines give texture — the runner picks one variant per use.
 
-Counter text is what the UI shows when the player stops this timer. Example:
+Base families:
 
-    timers:
-      * Flanking Maneuver [counter Block the flank]: spirits 2 every 4 resist 5
-      * Pack Howl [counter Silence the alpha]: resistance 1 every 5 resist 6
-      * Jagged Terrain [counter Find safer footing]: condition injured every 4 resist 4
+    attack     Deals damage. Cancelled by Defend.
+    defend     Reduces incoming damage. Cancelled by Attack.
+    recover    Heals the monster. Cancelled by Attack.
+    read       Reveals the monster's next-turn commitment to the player.
+    skipped    Produced by stun only — never authored.
 
-Traverse example (ambient fatal master + sequential tick-timer waypoints):
+Attack mutators:
 
-    timers:
-      * They're gaining on you: fatal every 20
-      * Reach the creek [counter Slide down]: tick "They're gaining on you" 3 every 4 resist 6
-      * Climb the ledge [counter Find handholds]: tick "They're gaining on you" 2 every 3 resist 5
+    heavy         +2 damage
+    weak          -1 damage
+    riposte       Deals damage even when the player defends
+    brutal        Chance to inflict Injured on hit
+    tainted       Chance to inflict Poisoned on hit
+    glowing       Chance to inflict Irradiated on hit
+    venomous      Chance to inflict Lattice_sickness on hit
+    terrifying    Chance to inflict Fear on hit (restricts player to Defend/Recover next turn)
+    provoking     Chance to inflict Berzerk on hit (restricts player to Attack next turn)
+    stunning      Chance to stun the player's next slot
+    power         Once per turn only
+    slow          Once every two turns only
+    exhausting    Self-stuns the monster's next slot after use
+    telegraphed   Appears in the Tell ("preparing a heavy attack!")
 
-Win condition: all sequential timers cleared → ambient auto-cleared.
-Failure: spirits = 0 (SpiritsLoss) or fatal timer fires (TimerExpired).
+Defend mutators:
 
-Condition timers don't resolve immediately. Each firing adds one pending
-resist check. When the encounter ends (win or lose), all pending checks are
-rolled. Multiple firings of the same condition stack — 3 firings = 3 resist
-rolls. Any single failure applies the condition. Known condition IDs:
-freezing, thirsty, irradiated, lattice_sickness, exhausted, poisoned,
-lost, injured.
+    heavy         Blocks +2 additional damage
+    perfect       Blocks all damage from an Attack
+    shielding     Prevents status riders from landing while this slot is active
+    stunning      Chance to stun the attacker's next slot
+    power         Once per turn only
+    slow          Once every two turns only
 
-#### openings:
+Recover mutators:
 
-Filler cards drawn into the player's deck. These supplement the player's
-collection cards (from skill + equipment).
+    heavy         Heals +2 HP
+    wary          Converts to Defend if the opponent committed Attack
+    shielded      Prevents conditions landing during the recover
+    power         Once per turn only
+    slow          Once every two turns only
+    enraging      Inflicts Berzerk on self
 
-    * Card Name: <cost> -> <effect>
-    * Card Name: <cost> -> <effect> [requires <condition>]
+Read mutators:
 
-Cost types:      free | tick | momentum <N> | spirits <N>
-Effect types:    damage <N> | momentum <N> | stop_timer
+    wary          Converts to Defend if the opponent committed Attack
 
-Gated openings (with [requires]) are added first, then ungated. Example:
+Canonical encoded form sorts mutators alphabetically then appends the base
+capitalized (e.g. `"Heavy Slow Telegraphed Attack"`). Authoring order does
+not matter — the parser normalizes on load.
 
-    openings:
-      * Wade Carefully: free -> damage 1
-      * Brace and Push: momentum 1 -> damage 2
-      * Find Footing: free -> momentum 1
-      * Trap Line: free -> damage 4 [requires has bear_trap]
+### Win/lose mechanics
 
-With the default UI size, openings max out at around 60 characters.
+In `+win` and `+lose` blocks, `>` lines are mechanics run through the standard
+`Mechanics.Apply` pipeline after combat resolves. They use the same verb
+vocabulary as `.enc` action verbs with `>` instead of `+`:
 
-#### approaches: (optional)
+    > gold <n>                Award gold
+    > tag <tag_id>            Set a world-state tag
+    > add_item <item_id>      Give item
+    > damage_spirits <n>      Damage spirits
+    (full verb list in the Action verbs section above)
 
-If present, the player chooses an approach before the encounter starts.
-If omitted, the encounter defaults to aggressive.
-
-    * aggressive                    +2 momentum/turn, draw 1 card
-    * cautious                      +1 momentum/turn, draw 2 cards
-
-Example:
-
-    approaches:
-      * aggressive
-      * cautious
-
-#### success: (optional)
-
-Prose + mechanics applied when the player wins. Uses the same +verb syntax
-as .enc mechanics.
-
-    success:
-      You push through. The bandits scatter.
-      +give_gold 15
-
-#### failure:
-
-Prose + mechanics applied when the player loses. Uses the same +verb syntax
-as .enc mechanics.
-
-    failure:
-      The current takes your legs out. You wash up downstream, bruised.
-      +damage_spirits 2
-      +lose_random_item
-      +add_condition exhausted
-
-### Group files
-
-A group is a branch point that routes to other .tac encounters. It has
-`branches:` instead of encounter sections.
-
-    Title
-    [tier 2]
-
-    Prose body.
-
-    branches:
-      * Label [intent tag] -> path/to/Encounter Name
-      * Label [intent tag] -> path/to/Encounter Name [requires <condition>]
-
-Example:
-
-    Bandit Roadblock
-    [tier 2]
-
-    The road narrows between two rocky outcrops.
-
-    branches:
-      * Fight through [intent violence] -> plains/tier2/Bandit Roadblock Fight
-      * Sneak past [intent stealth] -> plains/tier2/Bandit Roadblock Stealth [requires has light_armor]
-      * Talk your way out [intent negotiation] -> plains/tier2/Bandit Roadblock Parley
-
-### Card archetypes (for openings)
-
-When authoring openings, use costs and effects that map to the standard
-archetypes. Common patterns:
-
-    free -> damage 1              free_progress_small
-    momentum 1 -> damage 2       momentum_to_progress
-    momentum 2 -> damage 3       momentum_to_progress_large
-    momentum 3 -> damage 5       momentum_to_progress_huge
-    spirits 1 -> damage 3        spirits_to_progress
-    free -> momentum 1            free_momentum_small
-    free -> momentum 2            free_momentum
-    momentum 2 -> stop_timer      momentum_to_cancel
-    spirits 1 -> stop_timer       spirits_to_cancel
-
-Note: `_to_cancel` openings don't need names. At draw time, the engine
-pairs each stop_timer card to the most urgent active timer and renames
-it to that timer's [counter] text automatically.
-    tick -> damage 2              threat_to_progress
+The leading `+` is optional: `> gold 8` and `> +gold 8` both parse.
 
 
 ## Factions

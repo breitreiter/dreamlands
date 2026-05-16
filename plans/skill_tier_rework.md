@@ -3,7 +3,12 @@ kind: plan
 title: Skill system rework — collapse to untrained/trained/expert tiers, retire d20, adopt RPS approach picker for encounter checks
 state: exploring
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-05-16
+related:
+  - inventory_consolidation.md
+  - inventory_slot_refactor.md
+  - arc_leveling.md
+  - picker_check_chain_semantics.md
 touches:
   files:
     - lib/Rules/ItemDef.cs
@@ -22,9 +27,6 @@ touches:
     - project/encounter-spec/format.md
     - project/encounter-spec/mechanics_reference.md
   features: [skills, encounters, balance, food, market]
-related:
-  - inventory_consolidation.md
-  - inventory_slot_refactor.md
 ---
 
 # Skill System Rework
@@ -138,6 +140,11 @@ Two attribute slots on the existing `check` predicate. No new block constructs.
 The new form is recognized by the presence of `:` in the args (`correct:X wrong:Y`). The
 parser learns one new arg-shape on one existing predicate; existing parse paths are unchanged.
 
+**Chain semantics.** A picker `check` must be the **terminal** branch of any
+`@if`/`@elif` chain it appears in, paired with `@else` as its fail body. See
+[[picker_check_chain_semantics]] for the rule, rationale, and parser-enforcement
+details.
+
 **Legacy `check` uses** (in `[requires]` blocks, compound conditions, etc.) are retired
 because the corresponding rolls no longer exist. The `[requires]` form retains `has` / `tag` /
 `quality` and `meets <skill> <tier>` (the latter replacing `check` for gate-style usage — see
@@ -155,11 +162,11 @@ standard. (Revisit if playtest reveals it feels too gamey.)
 | Skill | Verdict |
 |---|---|
 | Combat | Already tier-gated post-RPS pivot. Narrative `check combat` adopts new RPS approach picker. |
-| Bushcraft | Convert to passive unlocks per tier + RPS approach picker for `check bushcraft`. |
-| Cunning | RPS approach picker. |
-| Negotiation | RPS approach picker. |
-| Mercantile | Easy — remap price multipliers to fixed tiers. |
-| Luck | Possibly retained as Untrained-coinflip nudge. See Open Decisions. |
+| Bushcraft | RPS approach picker + Travel Condition resist (40%/80%). |
+| Cunning | RPS approach picker + Serious Condition resist (40%/80%). |
+| Negotiation | RPS approach picker + contract/price benefits. Absorbs Mercantile. |
+| Mercantile | Folded into Negotiation. Removed. |
+| Luck | Dropped. See Open Decisions #2. |
 
 ---
 
@@ -174,38 +181,38 @@ Tier gate for the RPS combat system is unchanged. Narrative `check combat` in .e
 uses the new approach picker (Rush / Strategize / Outlast).
 
 ### Bushcraft
+
+**Condition type — Travel Conditions**: exhausted, freezing, thirsty. All drain spirits daily.
+
 - Untrained: eat every night; biome conditions apply normally
-- Trained: eat every other night
-- Expert: immune to cold and thirst
+- Trained: eat every other night; correct approach always succeeds on a Bushcraft check; 40% chance to resist Travel Conditions
+- Expert: eat every other night; only the wrong approach fails on a Bushcraft check; 80% chance to resist Travel Conditions
 
 The d20 foraging check in `EndOfDay.cs` is removed. `check bushcraft` in .enc files uses the
 new approach picker (Push / Plan / Reroute).
 
-**Interaction with immunity gear** (`inventory_consolidation.md §7`): expert Bushcraft grants
-the same cold/thirst immunity as a coat and waterskin. Untrained/trained players can buy the
-benefit via gear.
+### Cunning
+
+**Condition type — Serious Conditions**: injured, poisoned, irradiated, lattice poisoned. All drain health daily.
+
+- Untrained: standard RPS approach resolution (coinflip on correct pick)
+- Trained: correct approach always succeeds on a Cunning check; 40% chance to resist Serious Conditions
+- Expert: only the wrong approach fails on a Cunning check; 80% chance to resist Serious Conditions
+
+### Negotiation
+
+- Untrained: standard RPS approach resolution (coinflip on correct pick); standard market and contract prices
+- Trained: correct approach always succeeds on a Negotiation check; contracts pay +20%; better market prices (absorbs Mercantile Trained benefit)
+- Expert: only the wrong approach fails on a Negotiation check; contracts pay +40%; better market prices + access to rare stock (absorbs Mercantile Expert benefit)
+
+Negotiation absorbs Mercantile. The numerical multipliers in `Market.cs` and haul delivery in
+`HaulDelivery.cs` become tier lookups on Negotiation.
 
 ### Mercantile
-- Untrained: standard buy/sell prices
-- Trained: ~15% better prices; possibly +1 extra item visible in market stock
-- Expert: ~25% better prices; access to rare/special stock tier
-
-Numerical multiplier in `Market.cs` becomes a tier lookup. Mercantile has no `check`
-encounter mechanic to convert.
+**Removed** — folded into Negotiation. Price and stock benefits reassigned to Negotiation tiers above.
 
 ### Luck
-**Probably retained** as the Untrained-correct coinflip modifier (only). Removed everywhere
-else — no luck encounter checks, no luck items beyond what nudges the coinflip. See Open
-Decisions for the alternative (remove entirely, leave coinflip flat).
-
-### Cunning and Negotiation
-Both adopt the RPS approach picker. No `check` skill is "different" anymore — they're all the
-same mechanic with different verb sets and connector phrasings.
-
-The narrative tension argument (a failed roll is a story beat) is preserved: at Untrained tier,
-even the correct approach can fail on the coinflip. At Trained tier, misreading the scene fails
-the check. At Expert tier, only the actively-wrong move fails. Tension scales with character
-investment; bad outcomes remain authored, not random.
+**Removed** — see Open Decisions #2.
 
 ---
 
@@ -299,16 +306,18 @@ review pass.
 
 | Area | Scope | Risk |
 |---|---|---|
-| `SkillTier` enum + `PlayerState.Skills` | Type change throughout | Medium — many read sites |
+| `SkillTier` enum + `PlayerState.Skills` | Type change throughout; Mercantile key removed | Medium — many read sites |
 | `SkillChecks.Roll()` deleted | Entire file gutted | Low — fewer callers post-removal |
-| `EndOfDay.cs` foraging + resist | Replace d20 paths with tier check + immunity | Medium |
-| `Market.cs` Mercantile pricing | Lookup table swap | Low |
+| `EndOfDay.cs` foraging + resist | Replace d20 paths with tier probability lookup (40%/80%) | Medium |
+| `HaulDelivery.cs` | `mercantile * 0.10` → `switch(negotiationTier)` lookup (+20%/+40%) | Low |
+| `Market.cs` | Mercantile tier lookup → Negotiation tier lookup | Low |
 | `lib/Encounter/` parser | New attribute syntax on `check` | Low — additive |
 | `lib/Orchestration/EncounterRunner.cs` | New approach-picker screen state | Medium |
 | `server/GameServer/GameResponse.cs` | New response shape | Low |
 | `.enc` files | ~20 files convert | Medium — authoring work, not code risk |
-| `Luck` semantics | Possibly retained as coinflip nudge only | Low |
-| Serialization / Cosmos docs | `Skills` dict value type changes | Medium — existing saves break |
+| `Luck` removed | Delete from `PlayerState.Skills`, items, encounter rewards | Low |
+| Boots equip slot removed | `PlayerState` boots field gone; equip/unequip verb retired; boots become a plain inventory item with exhaustion immunity; UI equipment panel loses boots slot | Medium — touches server, UI, saves |
+| Serialization / Cosmos docs | `Skills` dict value type changes; Mercantile key gone; boots slot gone | Medium — existing saves break |
 
 Existing saves will break when `Skills` changes from `Dictionary<string, int>` to
 `Dictionary<string, SkillTier>`. Decide: accept breakage (simple) or write a migration
@@ -349,20 +358,75 @@ Picker UI design lives in `project/screens/` (TBD which screen file).
 
 ---
 
+## Open Discussions (mini-todo)
+
+These are the topics that still need design conversation before code work begins.
+Each one is a live thread; not blocking the design philosophy but blocking some part
+of the implementation.
+
+### A. Skill advancement during play
+**Resolved (2026-05-16) — arc-completion leveling.** See [[arc_leveling]].
+Advancement happens via per-arc tableau picks, cap 2 per reward slot. Cap aligns
+cleanly with the tier model: 0 picks = Untrained, 1 pick = Trained, 2 picks = Expert.
+Background dilution concern is moot — backgrounds no longer grant skill points
+(see B), so progression is fully arc-driven.
+
+### B. Background → starting skill state
+**Resolved (2026-05-16) — start at zero.** Player begins with all skills at Untrained.
+- Rewrite the background picker so backgrounds grant identity-flavored starter
+  state (gear, items, flags, possibly a starting condition) instead of skill points.
+- Remove the final choice from the intro line (the +8-point allocation step).
+- All skill advancement flows through arc completion per A.
+
+### C. Cunning save mechanic
+**Resolved (2026-05-16).** Cunning grants a probabilistic resist against Serious Conditions
+(injured, poisoned, irradiated, lattice poisoned — all drain health daily): 40% at Trained,
+80% at Expert. Not a picker — a direct tier-to-probability lookup applied at the condition
+application site. Replaces the old "save against unavoidable damage" framing.
+
+### D. `@if`/`@elif` chain semantics with picker checks
+**Status: real syntax gap.**
+Today the chain works because `check` failure falls through to the next branch.
+Example today: `@if check negotiation 12 { let by } @elif tag bribed { let by } @else { fight }`.
+With the picker, silent fall-through to `@elif` after the player has already
+committed to an approach feels wrong — they invested in a choice, the engine should
+honor success/fail explicitly.
+Candidate resolutions:
+- Constrain picker `check` to terminal `@if`/`@else` only. No `@elif` after a check.
+- Or introduce a dedicated construct for picker checks, separate from `@if`.
+- Audit the existing corpus for how mixed/chained current usage is — guides which
+  resolution costs less authoring rework.
+- Also folds in: a single `.enc` can contain multiple choice paths each with their
+  own check, which is fine; the question is specifically about `@elif` chains within
+  one path.
+
+### E. Exhaustion model
+**Status: needs decision.**
+Exhaustion stays as a condition. The d20 resist roll is going away. Two candidate
+replacements:
+- **Auto-apply unless immune**: PC gains `exhausted` at end-of-day unless
+  gear/Bushcraft tier grants immunity. Simple, binary, aligns with d20 retirement.
+- **Fixed random chance**: PC has N% chance per day to gain `exhausted`; gear/skill
+  reduces the chance.
+Lean toward auto-unless-immune; preserves the design ethos ("randomness only where
+it's interactive") and matches the cold/thirst pattern. But worth a direct call.
+
+---
+
 ## Open Decisions
 
 1. **Untrained-correct coinflip %**: base 50%? Calibrate to feel right — too low makes
    Untrained pointless, too high makes the Trained tier feel flat. Suggest 50% as starting
    point, tune after playtest.
 
-2. **Luck's fate**: retain as ±N% nudge on the Untrained-correct coinflip, or remove entirely
-   and leave the coinflip flat at 50%? Retaining gives Luck a single clear job; removing
-   simplifies. Lean toward retain — the alternative is deleting Luck items / encounter rewards.
+2. **Luck's fate**: **Resolved (2026-05-16) — drop entirely.** Tried to save it but Luck
+   is hard to communicate in the current game structure. The Untrained-correct coinflip
+   stays flat at 50% (modulo the tuning in #1). Remove Luck items, Luck encounter rewards,
+   Luck from `PlayerState.Skills`.
 
-3. **`[requires]` semantics for skill gating**: the existing `[requires check <skill> <DC>]`
-   syntax can't survive (no DC). Replace with `[requires meets <skill> <tier>]` for hard
-   prerequisites (e.g. `[requires meets cunning trained]`). Confirm `meets` is the right verb
-   or pick a different one.
+3. **`[requires]` semantics for skill gating**: **Resolved (2026-05-16) — confirmed.**
+   Replace `[requires check <skill> <DC>]` with `[requires meets <skill> <tier>]`
+   (e.g. `[requires meets cunning trained]`).
 
 4. **Per-encounter approach prose**: the picker uses static verbs ("Flatter / Reason /
    Threaten"). Allowing custom prose per check is appealing but doubles authoring cost. Hold
@@ -383,13 +447,14 @@ Picker UI design lives in `project/screens/` (TBD which screen file).
    active development; write a deserializer (0→Untrained, 1-3→Trained, 4+→Expert) only when
    there are live players to protect.
 
-9. **`[requires]` UX — hidden vs greyed-out**: choices with unmet `[requires meets …]` —
-   hidden entirely or shown greyed-out? Greyed-out surfaces the skill system to new players
-   but reveals locked content. Decide before the UI work.
+9. **`[requires]` UX — hidden vs greyed-out**: **Resolved (2026-05-16) — hide.**
+   Tag-gated choices read weirdly when shown. Greyed-out is acceptable as a debug-only
+   affordance if simpler to implement, but the shipping behavior is hidden.
 
-10. **Negotiation benefits beyond price**: trained market unlock could be "+1 visible stock
-    item" or "access to the back catalogue." What's the interesting expert-tier Negotiation
-    benefit outside of market context?
+10. **Negotiation benefits beyond price**: **Resolved (2026-05-16).** Contract delivery payout
+    +20% at Trained, +40% at Expert (matches old Mercantile 2 and 4 feel). Market pricing
+    absorbs from Mercantile. Expert adds rare stock access.
 
-11. **Merge Cunning + Negotiation?** Low stakes — keep separate unless a corpus audit shows
-    they're used interchangeably. The engine cost is identical either way.
+11. **Merge Cunning + Negotiation?** **Resolved (2026-05-16) — keep separate.** Cunning resists
+    Serious Conditions; Negotiation improves prices and contract payouts. Distinct passive effects
+    give each a clear identity beyond the shared approach mechanic.

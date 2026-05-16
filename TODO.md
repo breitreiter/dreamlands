@@ -22,15 +22,11 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [ ] Combat: cancel monster's later-slot actions when it dies on an early slot
       (currently slots 2/3 still resolve against a corpse, producing nonsense narration
       and zero-damage entries that get stripped client-side)
-- [ ] Combat: add the standard yellow status banner to the top of the combat screen
+- [x] Combat: add the standard yellow status banner to the top of the combat screen
       (same as Market/Inventory/etc. — duplicate of in-card vitals so the bar matches
       the rest of the app and gives Flee a permanent home)
 - [ ] Combat: cap worksheet panel `max-width: 820px` so cards don't sprawl on wide
       monitors (right column min-width is 420 today, but no upper bound)
-- [ ] Audit full-width buttons site-wide. Combat's Continue button is currently
-      full-width on the OutcomeCard — replace with a normal-sized button. Same
-      treatment for Flee once it moves to the top banner. House rule: buttons size
-      to their label, never full-width.
 - [ ] Combat: rotate the "What's the plan, merchant?" greeting through a small pool
       of one-liners (e.g., "Eyes up.", "Make it count.", "What's it gonna be?"). Pick
       randomly per turn so every fight doesn't open with the same line.
@@ -53,7 +49,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [x] Finish out and test AI authoring tools for tac encounters
 - [ ] Sketch out single-paragraph intros for every biome/tier (50 total? 8x5+5x2)
 - [ ] ~~Playtest a bunch and tune~~ (ongoing)
-- [ ] Add custom intros per governing skill (right now everything shows "It's a fight" for tac encounters)
 
 ### Combat Encounter Triggering
 
@@ -75,6 +70,18 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Rules & Balancing
 
+- [ ] Pad out the Travel Conditions roster — exhausted/freezing/thirsty may be too thin.
+      Consider bringing back swamp fever (spirits-draining, Bushcraft-resistible). Review
+      whether each biome has at least one natural Travel Condition source. Each new condition
+      motivates a new immunity item (mosquito netting, etc.) — important since the skill-bonus
+      gear purge will gut the market; immunity gear is the replacement flavor.
+- [ ] Nuke equippable boots. Replace with a single non-equippable item (good boots, trail
+      boots, whatever) that sits in inventory, consumes a slot, and grants exhaustion immunity.
+      Fits the gear-purge ethos and keeps footwear meaningful without a dedicated equip slot.
+- [ ] Contemplate nuking Mercantile and folding it into Negotiation, leaving a clean
+      two-skill parity: Cunning (encounter checks + resists special attacks) and
+      Negotiation (encounter checks + better prices). Frees one tableau slot in the
+      arc leveling system. See [[arc_leveling]].
 - [ ] Playtest medicine vs. health drain in T3 areas — currently medicine reduces condition
       stacks but you still lose 1 HP if any severe condition remains. Could be too punishing
       in endgame where multi-stack injuries are common and one bandage per night isn't enough.
@@ -82,7 +89,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging
       players to try new branches and pick up fresh storylets.
-- [ ] Raise DCs for serious condition resist
 
 ### Quality of Life
 
@@ -102,11 +108,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 Everything else is a one-liner placeholder.
 
 - [x] Improve settlement and region names
-
-### Nice to Have
-
-- [ ] Investigate granting advantage on skill checks when spirits are at 20 (max) —
-      mirror of disheartened's disadvantage. Would reward keeping spirits high.
 
 ## 2. Deployment, Testing & Hardening
 
@@ -139,10 +140,9 @@ Ship-readiness: hosting, testing, polish, cleanup.
 
 ### Map Polish
 
-- [ ] Try different map seeds for production — current seed was the first one generated;
+- [x] Try different map seeds for production — current seed was the first one generated;
       explore a few alternatives and pick the most interesting layout
 - [ ] Replace lake sprite
-- [ ] Hand-drawn river decals — 800x800 tiles chained lake-to-edge. See [[river_decals]].
 - [ ] Improve settlement sprite variability — avoid placing identical decals near each other;
       may need more decals (recolored variants)
 - [ ] Migrate decal directories to tier-aware structure — rendering code (`PoiPass.cs`,
