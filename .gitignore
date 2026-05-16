@@ -32,6 +32,7 @@ saves/
 .session.json
 stock_characters_curated.md
 text/encounters/generation/v2/neutral_archetypes.md
+text/encounter-tool/EncounterCli/voices/
 dreamlands.imp-proposals/
 .imp/
 

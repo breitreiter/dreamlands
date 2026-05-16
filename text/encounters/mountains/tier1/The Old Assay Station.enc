@@ -46,6 +46,12 @@ choices:
   +damage_spirits 3
   +skip_time morning
 
+* Search the crates = Dig through the collapsed sample crates along the far wall
+  FIXME(dread): you sort through old assay records mixed with personal effects; a child's drawing, a dried wildflower, a letter that was never sent. the mineral stain on the bones has spread to the paper in faint crystalline patterns.
+  [check cunning easy]
+  FIXME(revelation): the assay records show the same sample, tested over and over across weeks; the weight keeps changing, always increasing, as if whatever the ore contains is still growing
+  +damage_spirits 1
+
 * Press on immediately = Take the detour despite the weather
   You turn your back on the station and its moss-thick walls. The detour trail climbs steeply from the junction, switchbacking across exposed slope where the wind cuts without mercy. Sleet turns to wet snow before you've gained a hundred feet of elevation. The route is marked by cairns, but the gaps between them grow longer as the visibility closes in.
 

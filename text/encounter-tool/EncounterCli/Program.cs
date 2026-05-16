@@ -36,6 +36,9 @@ class Program
         Console.WriteLine("  encounter check-tactical [<path>]");
         Console.WriteLine("  encounter bundle-tactical <path> [--out <dir>]");
         Console.WriteLine("  encounter fixme <file.enc> [--config <path>] [--prompts-only]");
+        Console.WriteLine("                  [--expand-url <url>] [--programs <dir>] [--author HPL|REH|CAS]");
+        Console.WriteLine("                  [--scene mundane|action|horror|dread|wonder|revelation] [--candidates N]");
+        Console.WriteLine("                  per-beat: FIXME(scene_type): e.g. FIXME(dread): or FIXME(horror):");
         Console.WriteLine("  encounter fixme-tactical <file.tac> [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
