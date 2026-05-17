@@ -7,7 +7,7 @@ static partial class GenerateCommand
 {
     const string GenerationDir = "/home/joseph/repos/dreamlands/text/encounters/generation/v2";
     const string LocaleGuideFilename = "locale_guide.txt";
-    const string SystemPrompt = "You are a narrative designer for a computer RPG. Follow instructions precisely. Output only the requested content.";
+    const string SystemPrompt = "You are a scene designer for a CRPG encounter. Follow the blueprint and locale guide exactly. Output only the requested content, nothing else.";
 
     record Archetype(string Name, string Description, List<ParticipantCombo> Combos);
     record Character(string Name, string Description);
