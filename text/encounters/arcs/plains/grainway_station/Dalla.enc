@@ -15,7 +15,7 @@ choices:
     +open Dalla
 
 * Help her crack the door = You're somewhat familiar with imperial lockwork
-    @if check cunning hard {
+    @if check cunning correct:scheme wrong:bluff {
         Some years back you read a book on imperial lock mechanisms in the city library. The diagrams had been clear, the principles sound: pin tumblers arranged in a cascade, each requiring pressure at a precise angle to disengage the bolt. You had found the topic mildly interesting at the time, though you never imagined you would have much use for it. How wrong you were.
 
         You kneel beside Dalla before the heavy iron door. The lock is a brutal thing, its face pitted with rust but its core still solid. You extend your hand, and she passes you a thin steel pick without hesitation. The metal is cold against your fingers. You insert it carefully, feeling for the first pin. The mechanism resists, then yields with a faint click. You move to the second pin, applying pressure at the angle you recall from those diagrams. Another click. The third pin proves stubborn; you adjust your grip, increase the tension, and feel it slide into place. The fourth and final pin gives way with a sound like breaking ice.

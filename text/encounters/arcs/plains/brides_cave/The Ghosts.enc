@@ -17,7 +17,7 @@ The figures drift closer. You can smell limestone and old cloth and something el
 choices:
 
 * Draw your weapon = Destroy this abomination and make this cave safe again
-  @if check combat hard {
+  @if check combat correct:strategize wrong:rush {
     You draw steel. The blade rings clear in the dark.
 
     You feel a probing presence in your mind. You do not recoil, but let it in. You show it the blood you have spilled, the men you have cut down. The ghosts are hungry, but your appetites are darker still.
@@ -78,6 +78,6 @@ choices:
   The cold has become almost comfortable now. One of them presses something into your palm - you feel its weight, though her fingers pass through yours like mist.
 
   "Remember us," they say together, then disperse, like mist in daylight.
-  +add_item ivory_comb
+  +give_gold 15
   +finish_dungeon
 

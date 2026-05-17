@@ -11,7 +11,7 @@ choices:
 
 * Ask the merchant to yield = Appeal to the merchant's sense of self-preservation
   You step into the gap between them. The words come measured, pitched for the crowd as much as the merchant. The Kesharat remembers insults like the plateau remembers water. Not here, not today, but someone will pay. A cousin's caravan stopped at a checkpoint. A clan's grazing rights questioned by men with ledgers and swords. The trader's eyes narrow, but you see the calculation there. You turn the signet ring so the mark catches light.
-  @if check negotiation medium {
+  @if check negotiation correct:reason wrong:flatter {
     The merchant lowers the case. Not a surrender, but a repositioning. He addresses the crowd, not the courier. Says he found property that wasn't his and returned it as clan law demands, insult or no insult. The case lands in the dust at the courier's feet. The courier snatches it up, clutching it like a child with a stolen cake. He nods once to you, stiff and graceless, and retreats toward his mount. The crowd disperses with the slow reluctance of a disappointed audience. The trader meets your eyes. No gratitude there, but recognition. You've given him the story he can tell tonight, the one where he's generous and the lowlander is a fool.
     +heal_spirits 1
     +quality faction.clans +1
@@ -23,7 +23,7 @@ choices:
 
 * Threaten the merchant = Use the weight of the Guild to make the man yield
   You don't raise your voice. Volume is for people without leverage. You show the signet ring, let the sun catch the mark that means every trading post between here and the coast. Ask the merchant which clans he sells to. Ask if he's considered how many of them hold Traders Guild letters of credit. The words land like stones in still water. The crowd shifts, uncertain now.
-  @if check cunning medium {
+  @if check cunning correct:scheme wrong:hide {
     The merchant's jaw works. He spits in the dust, but his hand opens. The case drops. He tells the courier to take his trash and his manners back where they came from. The courier grabs the case, cradles it against his chest. Mumbles something that might be thanks to you, might be a curse. The trader turns his back, loud conversation about anyone who needs outsiders to fight their battles. But the crowd is already losing interest, drifting back to their own transactions.
     +heal_spirits 1
     +quality faction.kesharat +1

@@ -7,8 +7,65 @@
 lost
 brides_cave_heard_harlan
 
+## Plains arcs
+grainway_assault_possible
+metal_beast.accepted_sabotage
+metal_beast.looking_for_package
+metal_beast.refused_sabotage
+the_city_envoy_approached
+the_city_envoy_can_fight
+the_city_exchange_can_challenge
+the_city_exchange_challenged
+city.hub_explored
+
+## Forest arcs
+fugitive.heard_mareen
+fugitive.knife_truth
+fugitive.loophole
+fugitive.maren_accepts
+fugitive.maren_defies
+fugitive.maren_engaged
+fugitive.maren_resolve
+fugitive.maren_self_marks
+fugitive.maren_steps_down
+fugitive.night_passed
+fugitive.rumor_corrected
+fugitive.saw_gault
+fugitive.talked_edda
+fugitive.talked_reska
+fugitive.talked_silla
+hermitage.aldous_deserters
+hermitage.aldous_fought
+hermitage.aldous_whoami
+hermitage.asked_conversion
+hermitage.asked_history
+hermitage.barn_with_osric
+hermitage.edric_ambush
+hermitage.edric_cracked
+hermitage.edric_engaged
+hermitage.edric_kesharat
+hermitage.edric_pitch
+hermitage.edric_why
+hermitage.meilin_accompanies
+hermitage.meilin_deserters
+hermitage.meilin_next
+hermitage.meilin_plan_hidden
+hermitage.meilin_plan_known
+hermitage.meilin_whoami
+hermitage.merchant_vouch
+hermitage.met_aldous
+hermitage.met_edric
+hermitage.met_meilin
+hermitage.met_osric
+hermitage.osric_story_heard
+hermitage.quiet_soldier_seen
+
 # ── Qualities (numeric, soft range -5 to +5) ───────────────────
 
+
+## Plains arcs
+wrenbury.tour_visits
+wrenbury.worker_visits
 
 ## Continental
 faction.empire

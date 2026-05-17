@@ -11,7 +11,7 @@ choices:
 
 * Follow the piton line = Someone climbed this and lived; find where they went
   The crack system climbs forty feet before traversing left across a slab of pale granite. You test each piton before you trust it; two are loose, pulling from the crack with unsettling ease, but the others hold. The traverse is exposed. You don't look down more than once.
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     Above the slab, the crack system widens into a gully choked with old snow. You kick steps up the snow and emerge onto a broad shoulder with a view that reorients everything. The piton line continues, a faint trail between old bolts, and you follow it down the far side into a hanging valley with a prospector's cache under a rock overhang, a claim scratched beside it. The route from the cache is obvious. You're late and wrung out, but you're found.
     +remove_condition lost
     +advance_time 2
@@ -25,7 +25,7 @@ choices:
 
 * Find the prospectors = They know this terrain; get directions
   You move south along the contour, calling out at intervals. The wind takes your voice and throws it sideways. The hammering doesn't resume. After twenty minutes of traversing rocky ground you find their camp: a tarp strung between two boulders, a pack frame, a small brazier still warm. The prospectors themselves are higher on the face, just visible as two slow-moving shapes against pale rock.
-  @if check negotiation medium {
+  @if check negotiation correct:reason wrong:flatter {
     You signal until one of them sees you. He descends slowly, with the methodical care of someone who's been on this mountain long enough to stop rushing, and gives you route directions with the economy of a man who talks mainly to himself and his partner. He points out three landmarks you can chain together back to the main cairn route. "Stay below the cloud line," he says, and goes back up without waiting for thanks.
 
     His landmarks are exact. Two hours later you're on ground you recognize.

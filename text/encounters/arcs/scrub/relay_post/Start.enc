@@ -6,9 +6,9 @@ A placeholder encounter for the Relay Post arc.
 choices:
 
 * Explore = Search the station [requires quality faction.kesharat 5]
-    @if check combat medium {
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
-        +add_item knotwork_seed
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -17,9 +17,9 @@ choices:
     }
 
 * Negotiate = Talk your way through [requires quality faction.kesharat 5]
-    @if check negotiation medium {
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
-        +add_item knotwork_seed
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.

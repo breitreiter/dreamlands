@@ -5,8 +5,8 @@ A placeholder encounter for The Revenakh arc.
 
 choices:
 
-* Explore = Search the depths [requires has revathi_tile]
-    @if check combat medium {
+* Explore = Search the depths
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
         +add_item revathi_labrys
         +finish_dungeon
@@ -16,8 +16,8 @@ choices:
         +finish_dungeon
     }
 
-* Negotiate = Talk your way through [requires has revathi_tile]
-    @if check negotiation medium {
+* Negotiate = Talk your way through
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
         +add_item revathi_labrys
         +finish_dungeon

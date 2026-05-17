@@ -6,7 +6,7 @@ A placeholder encounter for the Wellhead Station arc.
 choices:
 
 * Explore = Search the wellhead [requires quality faction.clans 5]
-    @if check combat medium {
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
         +upgrade_pack 2
         +finish_dungeon
@@ -17,7 +17,7 @@ choices:
     }
 
 * Negotiate = Talk your way through [requires quality faction.clans 5]
-    @if check negotiation medium {
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
         +upgrade_pack 2
         +finish_dungeon

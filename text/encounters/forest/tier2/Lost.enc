@@ -11,7 +11,7 @@ choices:
 
 * Climb for a vantage = Find the tallest accessible tree and get above the canopy
   You pick the largest tree with branches low enough to start on. The climb is ugly: bark that crumbles, a branch that holds and then suddenly doesn't, a moment fifteen feet up where your arms shake and you reconsider everything. But the old growth lifts you high, and when you finally pull yourself above the canopy layer, the world opens up like a door swinging wide. You can see ridgelines. A river glint. The darker mass of the forest's edge where it meets scrub land or field. You study it long enough to burn the picture into memory, then climb back down.
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     The landmarks make sense from above. You pick your route to a watercourse you spotted, follow it, and after two hard hours pushing through undergrowth that grabs at everything you hit a timber scout's blaze line, regular marks a few weeks old, leading back toward the edge. The forest releases you at dusk.
     +remove_condition lost
     +advance_time 2
@@ -25,7 +25,7 @@ choices:
 
 * Check the moss and shadows = Navigate by the old methods: light angle, moss growth, water flow
   No single sign is reliable. But three signs agreeing is something. Moss grows thickest on the north face, but in deep shade it grows everywhere; look for the difference in texture, not the presence. The stream flow should be consistent with the watershed from the ridge you crossed this morning. The light, when it comes through the canopy in shafts, angles from the south. You spend forty minutes crouched at different spots, reading, triangulating. You build a picture you can trust about sixty percent.
-  @if check bushcraft medium {
+  @if check bushcraft correct:plan wrong:push {
     Sixty percent is enough. You walk the direction your three signs agree on and trust your feet when the terrain doesn't match the theory. Two hours of hard walking, a scramble over a deadfall tangle that takes twenty minutes to cross thirty feet, and then suddenly the forest thins and there's a resin-tapper's line of collection cups on the trees ahead, someone's working route that leads to a camp and then a track.
     +remove_condition lost
     +advance_time 3

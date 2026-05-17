@@ -11,7 +11,7 @@ choices:
 
 * Work the watershed = Stop trusting direction and trust water instead: downhill until the streams converge
   Water doesn't lie. You stop navigating and start following the land. Off all ridges, down all slopes, moving without commitment to direction, letting gravity make the decisions. The going is brutal: ravines that don't appear until you're at the edge, deadfall over hollows that groans under your weight, undergrowth that requires forcing at every step. But the streams get wider. Tributaries join the main thread. Wide water means lower elevation. Lower elevation means the forest edge, eventually.
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     It takes everything you have. Your legs are dead weight by the time the trees thin enough to see a real sky. But thin they do. The stream leads out of the old growth and into younger scrub, and then into cleared land, and there is smoke from a chimney somewhere ahead, and you follow it.
     +remove_condition lost
     +advance_time 3
@@ -25,7 +25,7 @@ choices:
 
 * Read the canopy breaks = Find where trees have fallen and the light comes in: the gaps tell you where the edge is
   Old growth doesn't thin gradually. It ends, or it doesn't. But where trees have fallen and light breaks through, the understory grows dense and the younger growth angles toward that light; you can read the angle of young stems to orient toward open sky. You move from break to break, reading each one, triangulating. It is slow work. The forest offers breaks rarely and at random.
-  @if check cunning medium {
+  @if check cunning correct:scheme wrong:hide {
     The pattern holds. Not a straight line; the canopy breaks describe a rough arc, but consistent enough that you trust it, and trust is what you needed. You follow the arc for hours, stopping at each break to re-read the angle, until the breaks come more frequently and the young growth between them is shorter and then you are out of the old growth and into secondary forest and the trees are ordinary-sized again.
     +remove_condition lost
     +advance_time 4

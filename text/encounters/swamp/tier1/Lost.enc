@@ -11,7 +11,7 @@ choices:
 
 * Follow the marker posts = Find the next post in line, trust the local waymarking system
   The posts are older work than the raised paths, hammered in before the big dikes were built, meant for people in punts. You scan the reeds, read the angle of the first post's lean, and pick a direction. You find the second post. The third. It is slow going, shin-deep water and reed stems slapping your face, but the posts are there, spaced for someone poling a flat-bottomed boat through the channels, and you are following a route someone took the time to mark.
-  @if check bushcraft medium {
+  @if check bushcraft correct:plan wrong:push {
     The markers lead you to a drainage channel and the channel leads you to a dike path and the dike path leads you, muddy to the knee and deeply humble, back to the raised road. You can see a cluster of stilt-houses maybe a half-mile south. The frogs are deafening. You have, it turns out, not been as lost as you felt. This is a small comfort.
     +remove_condition lost
     +advance_time 2
@@ -24,7 +24,7 @@ choices:
 
 * Call out and wait = Someone will hear you. The fen is not empty.
   You pick a clear patch of ground, test it thoroughly before you stand on it, and shout. Not distress. Just volume. You ask for directions, same as you would in a town, because the fen is not a wilderness, it is a neighborhood, and there are people in it. This turns out to be correct. A reed-cutter materializes from the banks to your right, knife in hand, looking at you with the expression of someone who has seen this before. She listens to where you were going and points. She says three things, simply, about landmarks. She goes back to cutting reeds.
-  @if check negotiation easy {
+  @if check negotiation correct:reason wrong:flatter {
     You had not intended to negotiate, but something about asking someone to spend time on you requires a small exchange. A coin, a piece of news, a genuine compliment about the quality of the dike work. She nods once, gives you a fourth landmark she had not mentioned before, a corner post with two strips of cloth rather than one, and that landmark leads you directly to the raised road in twenty minutes. You arrive only a little late, with mud on your boots that will take days to fully shift.
     +remove_condition lost
     +advance_time 3

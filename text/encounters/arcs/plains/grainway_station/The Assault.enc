@@ -25,7 +25,7 @@ Both of them wait to see what you'll do.
 choices:
 
 * We go through the fence = Straight into the maw of the beast
-    @if check combat hard {
+    @if check combat correct:rush wrong:outlast {
     You nod toward the fenceline. The three of you start at a walk, slow and steady. The rover sentry has his back turned, waving at someone inside the camp.
 
     You sprint the last ten yards. The sentry catches movement too late. His mouth opens, a shout tearing free, more shock than alarm, but loud enough to alert the camp beyond. He plants his feet and raises what might once have been a hatchet. You do not give him the chance to use it. You drop low, driving forward beneath his guard, and strike into the joint of hip and thigh with all your weight behind it. The pelvis shatters like clay. The sound is wet and wrong. His mouth gapes wide, working soundlessly, eyes bulging as his leg folds beneath him. He crumples sideways, breath wheezing through clenched teeth.
@@ -61,7 +61,7 @@ choices:
     }
 
 * We hit them from the sides = Use the main attack as a distraction
-    @if check cunning medium {
+    @if check cunning correct:scheme wrong:hide {
     Several times you are certain every soul in a mile's radius must hear the great clomping boots of Matthis. Yet somehow you circle the squat keep, moving from stone to ragged cluster of bushes, the earth soft enough to muffle what discipline cannot. Tom moves like smoke ahead of you, pausing at each corner, each gap in the rubble, his knife hand never still. The scavengers' firelight flickers beyond the walls, voices rising in argument or jest, you cannot tell which. The stink of their camp grows stronger: burned fat, spoiled grain, the sour reek of bodies pressed too close. You crouch low, motioning the others to hold, and Matthis drops to one knee behind a collapsed cistern, his breath coming slow and measured. The moment stretches. Then, from the far side of the keep, Aldric's voice splits the dusk: "For the Old Gate!" The scavengers erupt in confusion, shouts overlapping, feet scrambling toward the sound. You rise and move.
     
     By the time you reach the far side of the fenceline, the scavengers are already locked in battle with Aldric's force. Shouts and the clash of iron carry through the dusk air. You move low along the old fence, Matthis a lumbering shadow at your shoulder, Tom a ghost somewhere to your left.

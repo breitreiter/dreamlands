@@ -11,7 +11,7 @@ choices:
 
 * Read the water = Navigate by flow direction, find the current that leads out
   Still water tells you nothing. Moving water tells you everything: where it came from, what it connects to, which way the land slopes underneath the swamp. You stop and look, really look, until you find it: a surface film of pollen tracking almost imperceptibly to the southeast. Current. Small, but real. You follow it.
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     Current downstream leads to a junction and the junction has two choices and you choose wrong and backtrack and choose right and then the current strengthens and within the hour you are in an actual channel, moving water, and the channel leads you out of the canopy into something like sky. You emerge onto a hummock of solid ground and sit on it and eat something and let your hands stop shaking. The hummock has someone's old fire ring on it. Other people have been here. Other people have been lost here and found their way out. You are one of those people now.
     +remove_condition lost
     +advance_time 2
@@ -25,7 +25,7 @@ choices:
 
 * Look for a camp = Someone lives out here, or passes through. Find their mark.
   The mosswater has people in it, trappers and herb-pickers and the occasional fugitive, and people leave traces. You start looking for them properly: broken stems, a pole impression in mud, a rope line tied between trees to mark a route. This is patient work. You move slowly and scan instead of pushing forward.
-  @if check cunning medium {
+  @if check cunning correct:scheme wrong:hide {
     You find a rope line. It is old, green with algae, tied at waist height between two trees, and it runs in a direction. You follow it. The line connects to a second line and the second line ends at a raised platform, a pole-and-plank shelf above the waterline where someone caches gear. There is a jar of rendered fat and a hand-scratched oilcloth map and nothing else. The map is mostly smeared but one route is traced twice, deeply, by someone who wanted to be sure they remembered it. You follow that route. It takes you out.
     +remove_condition lost
     +advance_time 3
@@ -38,7 +38,7 @@ choices:
 
 * Climb for a sightline = Find a tree worth climbing, get above the canopy
   Most of the trees are not worth climbing: too soft, too thin, rooted in mud that shifts when you put your weight on the trunk. But there, forty meters east, something thicker, something that looks like it has been standing here for a generation or two. You wade to it and test it with your full weight before you commit to the climb. The bark is wet. Your hands slip twice on the way up. But the canopy breaks above you and you get thirty seconds of sky.
-  @if check bushcraft medium {
+  @if check bushcraft correct:plan wrong:push {
     Thirty seconds is enough. You find the sun's position, find the line of slightly higher canopy that means higher ground that means a dry route, and fix it in your memory before you come back down. The descent is faster and more painful than the ascent. But you know where you are going now, roughly, and roughly is enough to get you out by late afternoon, muddy and stiff and deeply ready to stop moving through water.
     +remove_condition lost
     +advance_time 3

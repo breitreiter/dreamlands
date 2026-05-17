@@ -14,7 +14,7 @@ The pilgrim returns to the book, thumbing pages with shaking hands. The rocks cr
 choices:
 
 * Convince the pilgrim to help = Jorgo can wait
-  @if check negotiation medium {
+  @if check negotiation correct:reason wrong:threaten {
     You cross to the pilgrim and put your hand over the open page. "Close the book."
 
     He clutches it to his chest. "You don't understand. I've come all the way from Aldgate. I left my position at the customs office. I sold my writing desk. If I break the sixth step now, I have to start over from the beginning. Jorgo is very clear about this."

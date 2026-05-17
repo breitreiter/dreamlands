@@ -5,10 +5,10 @@ A placeholder encounter for The Foundry arc.
 
 choices:
 
-* Explore = Search the foundry [requires has color_lens]
-    @if check combat medium {
+* Explore = Search the foundry
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
-        +add_item shimmering_blade
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -16,10 +16,10 @@ choices:
         +finish_dungeon
     }
 
-* Negotiate = Talk your way through [requires has color_lens]
-    @if check negotiation medium {
+* Negotiate = Talk your way through
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
-        +add_item shimmering_blade
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.

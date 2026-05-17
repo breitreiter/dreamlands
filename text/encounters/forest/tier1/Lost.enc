@@ -13,7 +13,7 @@ choices:
   You stop moving and let the forest settle around you. The birdsong fills in. A woodpecker works somewhere up the slope. And there it is: the char-sweet weight of a burning mound, drifting left. You find the kiln in a small clearing, a domed mound of earth venting thin blue smoke from a dozen holes, tended by a woman who looks up without surprise. She listens to where you're trying to go, points southeast, describes three landmarks in a patient voice. "Forest road's an hour that way," she says, turning back to her work. "Stay on the high side of the stream."
 
   An hour later you step out of the trees onto packed dirt and recognize the road.
-  @if check bushcraft medium {
+  @if check bushcraft correct:plan wrong:push {
     +remove_condition lost
     +advance_time 2
   } @else {
@@ -25,7 +25,7 @@ choices:
 
 * Read the trail markers = Find the carved blazes on the old trees and figure out what they mean
   Foresters and woodcutters carve their own codes into the bark. A notch means a boundary. An X means something to avoid. A slash with an arrow might mean direction, or property, or distance to water, a system invented by people who already knew what it meant. You study the marks on three trees, try to fit them into a pattern, and set off in the direction that seems most consistent.
-  @if check cunning easy {
+  @if check cunning correct:scheme wrong:hide {
     It takes some doubling back, but the markers are telling a coherent story once you understand the grammar of them. They lead you from tree to tree, along a path that isn't visible but is real, until the canopy thins and you smell road dust and horse.
     +remove_condition lost
     +advance_time 3

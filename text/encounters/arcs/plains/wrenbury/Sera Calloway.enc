@@ -127,5 +127,5 @@ choices:
   It's lighter than you expected. Or maybe that's not the right word. It's less than you expected, a small thing, ordinary, slightly green with age. You put it in your haversack. By the time your done, Sera has left.
 
   You return to the waiting road.
-  +add_item lucky_buckle
+  +give_gold 15
   +finish_dungeon

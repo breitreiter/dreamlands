@@ -12,7 +12,7 @@ choices:
 
 * Navigate to the signal tower = Climb toward the half-built tower and get eyes on the land below
   If you can reach the scaffolding, you get height, and height gives you the whole plateau at once: the rail line, the depot road, the drainage channels that mark where settlements dig their wells. It's a hard push across open ground in the heat of the day, and the tower is further than it looks, but standing at the base of it you'll know where you are.
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     The ground between you and the tower is broken worse than it appeared, two dry washes cutting across your line, loose scree that wants to turn an ankle. You pick the route carefully and climb steadily. The scaffolding is rougher work up close, half-planked platforms and raw timber, but you find a ladder and go up until the plateau opens beneath you.
 
     There: the depot road, a brown scar running east-west. There: the settlement you're heading for, a cluster of low structures in a sheltered basin. You fix the angles in your mind, climb back down, and walk into the wind with actual purpose for the first time in hours.
@@ -30,7 +30,7 @@ choices:
 
 * Find the rail line and follow it = New track goes somewhere with people; walk it until you reach a depot
   The rail grading is a known quantity: Kesharat infrastructure runs to depots and depots have water and people who know the roads. Following it means moving through contested ground under Kesharat visibility, which has its own costs, but it gets you unlost without gambling on the terrain.
-  @if check negotiation medium {
+  @if check negotiation correct:reason wrong:flatter {
     You find the grading within the hour and follow it east. A Kesharat patrol comes up behind you faster than expected, two guards and a corporal who looks tired and hot and not particularly suspicious. You match their pace for a few minutes, present yourself as a traveling merchant, and by the time you reach the depot cutoff they've accepted your presence enough to point you at the right track without too much paperwork. You walk the rest of the way in late afternoon light.
 
     +remove_condition lost

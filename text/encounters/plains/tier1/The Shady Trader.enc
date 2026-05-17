@@ -37,13 +37,5 @@ choices:
   +add_item waterskin
   +add_item peoples_borderlands
   +add_item ornate_spyglass
-  +add_item ivory_comb
-  +add_item lucky_buckle
-  +add_item knotwork_seed
-  +add_item tarnished_key
-  +add_item hunters_journal
-  +add_item grid_cipher
-  +add_item color_lens
-  +add_item revathi_tile
 
 * Skip = Take nothing

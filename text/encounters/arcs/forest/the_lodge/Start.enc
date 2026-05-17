@@ -5,10 +5,10 @@ A placeholder encounter for The Lodge arc.
 
 choices:
 
-* Explore = Search the lodge [requires has hunters_journal]
-    @if check combat medium {
+* Explore = Search the lodge
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
-        +add_item the_old_tooth
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -16,10 +16,10 @@ choices:
         +finish_dungeon
     }
 
-* Negotiate = Talk your way through [requires has hunters_journal]
-    @if check negotiation medium {
+* Negotiate = Talk your way through
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
-        +add_item the_old_tooth
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.

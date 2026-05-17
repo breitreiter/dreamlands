@@ -50,7 +50,7 @@ choices:
 * Overpower it = Kill it before it can attack [requires tag the_city_envoy_can_fight]
   Torben doesn't need convincing. He brings his sword into a low guard and moves left. You move right. The figure's head tracks between you, still holding the document, still waiting for an answer to a question you're not going to give it.
 
-  @if check combat hard {
+  @if check combat correct:strategize wrong:rush {
     It's faster than it looks. The golden arm swings and you duck under it and hear the air split where your head was. It doesn't fight like a soldier. It fights like a door that's been told not to open: mechanical, procedural, escalating force in measured increments. It is trying to complete its task, not win a battle. You are an obstacle to the delivery protocol, and it is removing you.
 
     Torben gets behind it. His sword finds a joint in the frame, between the chased golden plates, and something inside the figure sparks and grinds. It staggers. You hit it again, harder, and it goes to one knee. The document falls from its hand and rolls across the floor.

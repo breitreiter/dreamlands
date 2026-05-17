@@ -12,7 +12,7 @@ choices:
 * Read the landscape = The campaign was systematic. Its logic is still out there.
   They built to a doctrine: roads run cardinal, supply lines run at forty-five degrees, outposts sit on ground that sees in four directions. If you can work out what kind of structure you're looking at, you can work out where you are relative to it. You pull out what passes for your map and start matching terrain features to what you know of how campaigns were laid out.
 
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     It takes time you don't love spending, but the logic holds. The earthwork to the north is positioned wrong for an outpost, too low with no clear sightlines, which makes it a supply depot, which means the road you want runs two hundred paces east of it. You find it where you predicted: a pale strip of compacted stone barely wider than a cart, half-buried in encroaching grass but solid underfoot. You're back on track before the light shifts.
     +remove_condition lost
     +advance_time 2
@@ -27,7 +27,7 @@ choices:
 * Find the salvage crew = They know this ground better than any map.
   You head east toward where you heard them working, moving along the edge of a silted ditch that might once have been a drainage channel or a defensive line, impossible to say now. The crew isn't where you expected. You range wider, angling toward a smudge of cookfire smoke you spotted from a rise.
 
-  @if check negotiation medium {
+  @if check negotiation correct:reason wrong:flatter {
     The crew is four people and a handcart loaded with corroded iron, working a collapsed wall section near a sealed depot. They are wary when you approach, people out here without obvious business being usually trouble, but you explain your situation plainly and offer something useful in trade: news from the road, a piece of information about road conditions ahead. The matriarch of the group considers this, then gives you the directions you need in the precise, confident language of someone who has memorized every landmark in a three-day radius. She even mentions the trick with the ford: take the southernmost channel, the others are soft.
     +remove_condition lost
     +advance_time 3

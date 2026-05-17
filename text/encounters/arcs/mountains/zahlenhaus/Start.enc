@@ -6,9 +6,9 @@ A placeholder encounter for the Zahlenhaus arc.
 choices:
 
 * Explore = Search the counting house [requires quality faction.scholars 5]
-    @if check combat medium {
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
-        +add_item sakharov_mask
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -17,9 +17,9 @@ choices:
     }
 
 * Negotiate = Talk your way through [requires quality faction.scholars 5]
-    @if check negotiation medium {
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
-        +add_item sakharov_mask
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.

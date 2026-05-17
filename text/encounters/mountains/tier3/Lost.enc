@@ -11,7 +11,7 @@ choices:
 
 * Navigate by the stars = Wait for dark, read the sky, move when you know your direction
   You wedge yourself into the fissure out of the wind, pull your coat tight, and wait. The cloud thins and thickens by turns. You drink carefully from your flask and eat nothing and watch the sky.
-  @if check bushcraft hard {
+  @if check bushcraft correct:plan wrong:push {
     By full dark the cloud has cleared enough. You find your fixed point, steady and certain, exactly where it should be. You take a bearing and hold it in your head as precisely as you can while you move, checking every gap in the cloud cover, building a picture of the landscape in the dark. The ground stays treacherous; once you stop yourself mid-step as your foot finds nothing. But you move with the deliberate care of someone who knows where they're going and is choosing each footfall.
 
     Dawn finds you at the edge of the karst, where the limestone gives way to scrub and the first proper trail in days crosses your path. You eat and keep moving.
@@ -29,7 +29,7 @@ choices:
 
 * Follow the clan markers = Someone placed these deliberately; they lead somewhere
   The stacked stones have a logic you can't quite articulate: certain arrangements, a consistent pattern in how the capstones are placed. You follow the line east, moving carefully over ground that sounds different in some places than it should.
-  @if check cunning medium {
+  @if check cunning correct:scheme wrong:hide {
     You read the markers right. The arrangement repeats with only one variation, and that variation turns out to mark a fork, one direction toward a known shelter, you realize, when the route opens onto a carved threshold in the limestone, a herder's seasonal cache with a fire-blackened ceiling and a stack of dry fuel. The cache tells you where you are. From here you can plot the route back to the road.
     +remove_condition lost
     +advance_time 4

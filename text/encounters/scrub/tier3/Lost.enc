@@ -12,7 +12,7 @@ choices:
 
 * Read the tombs = The tomb carvings follow a pattern; study it and find the edge of the plateau
   Whoever built these tombs knew where they were. The facades face a direction, follow a grammar, mark something: cardinal directions, astronomical alignments, routes. If there's a system here, a careful eye might catch it. It is a long reading in brutal sun, leaning close to carvings that seem to shift when approached directly.
-  @if check cunning hard {
+  @if check cunning correct:scheme wrong:hide {
     It takes longer than you have time to spend, but eventually the pattern emerges: the tomb mouths face the prevailing wind, and the prevailing wind on the Ghassuleth blows north-northwest from the high plateau edge. The carvings confirm it. Deeper faces, older, more deeply cut, orient differently, toward something that was probably magnetic north before whatever changed it. You triangulate clumsily between the two directions and pick a bearing that threads between them. Three hours across black rock in the afternoon heat, and the plateau edge appears as a drop in the darkness of the horizon.
 
     +remove_condition lost
@@ -28,7 +28,7 @@ choices:
 
 * Follow the wind = The guides navigate by smell and sense; trust the wind's direction and walk into it
   The caravan guides who cross the Ghassuleth talk about the dust tasting different near the plateau edge. They navigate by things they don't name. You cannot taste what they taste, but you can read the wind: its temperature, its load, where it comes from and what it carries. Cold air drains from high ground. Mineral taste concentrates near the central plateau. The trick is trusting the reading.
-  @if check bushcraft medium {
+  @if check bushcraft correct:plan wrong:push {
     The wind shifts twice while you're walking, and both times you adjust. The third time, the grit in it goes fine and pale, different from the black mineral dust of the deep plateau. You follow that change, into it, tracking the gradation. The temperature drops two degrees as the ground ahead begins to slope. The slope becomes a scree field, and the scree field becomes the plateau's broken edge, and below the edge, far below, is the brown thread of the caravan road.
 
     You sit on the edge for a full minute before starting down.

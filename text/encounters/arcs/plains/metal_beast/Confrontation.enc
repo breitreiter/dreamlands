@@ -33,7 +33,7 @@ A step forward.
 choices:
 
 * Fight your way out = Two engineers are no match for you
-    @if check combat easy {
+    @if check combat correct:rush wrong:outlast {
         You answer the question with violence, sudden and without hesitation. Your blade finds him before the accusation can fully settle in the air. The old man staggers, one hand rising as if to ward off what has already come to pass. He collapses against the instrument panel, metal shrieking beneath his weight, and slides to the deck in a heap of limbs and stained cloth.
 
         Only then does it occur to you: there will be no payment. You glance down at the sprawled figure, then at the console he died against. Among the gauges and switches, one ornament catches what meager light filters through the chamber. You seize it, fingers wrapping tight. It resists. You wrench harder, and with a sharp snap the housing gives way. The crystal comes free, warm in your palm.
@@ -49,7 +49,7 @@ choices:
         The sentence dies unfinished. Your stroke is clean. She crumples to the ground, the laughter still half-formed on her lips.
 
         Two bodies now. No one remains to carry word of what transpired here. You shoulder your pack and turn back toward the road.
-        +add_item grid_cipher
+        +give_gold 30
         +finish_dungeon
     } @else {
         Your answer comes not in words but in motion. Steel finds flesh before the old man can draw breath to shout. He crumples against the instrument panel, hand clutching at nothing. The silence that follows is absolute.
@@ -66,14 +66,13 @@ choices:
 
         When awareness returns, the woman is gone. Your body is a map of bruises. You force yourself upright, groaning, and shoulder your pack. The road beckons, and you are eager to answer.
         +add_condition injured
-        +add_item grid_cipher
         +quality faction.empire -5
         +quality faction.tradeguild -5
         +finish_dungeon
     }
 
 * Blame Pyke = Tell Sev that Pyke set you both up
-    @if check cunning medium {
+    @if check cunning correct:scheme wrong:bluff {
         You meet his gaze without flinching.
 
         "It was Pyke," you begin.
@@ -102,7 +101,7 @@ choices:
     }
 
 * Talk your way out = Try to explain the danger of the monster
-    @if check negotiation hard {
+    @if check negotiation correct:reason wrong:flatter {
         "You think this is a conspiracy?" you ask, level. "That Pyke sabotaged you, and I carried it in, and we're all playing some game against you?"
 
         Sev spits back, "What else would you call it?"
@@ -128,7 +127,6 @@ choices:
         You wind your way through the narrow interior passageways, each turn crowded with brass fittings and bundled conduit. The air grows warmer as you descend, thick with the smell of coal dust and old oil. At last you reach the rope ladder. It sways beneath your hands as you lower yourself rung by rung, the fibers rough against your palms.
 
         The engineer stationed at the creature's foot looks up from her work. She hands you your pack without a word. You sling it over your shoulder and turn toward the road, leaving the great hulk of the machine behind you.
-        +add_item grid_cipher
         +finish_dungeon
     } @else {
         "You've seen what this thing can do," you say, your voice low. "The men burned and broken. The land cracked and ruined. And you would unleash that on the people of the borderlands again. An inhuman monster painted up in imperial colors."

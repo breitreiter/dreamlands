@@ -39,7 +39,7 @@ choices:
   "He would have undone everything. Ended a lifetime of work right when I was on the cusp of solving this."
 
   "Still," Sev says, quieter now. "I wish it had ended better. For all his foolishness, he was one of ours."
-  +add_item grid_cipher
+  +give_gold 20
   +finish_dungeon
 
 * Return to other matters = Ask Sev about something else

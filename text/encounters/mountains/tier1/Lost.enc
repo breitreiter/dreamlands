@@ -11,7 +11,7 @@ choices:
 
 * Follow the stream downhill = Water runs to settlement; trace it to the valley road
   You pick your way down beside the stream, boots slipping on wet stone where the water spills across the trail. The channel narrows, then widens, then drops through a short cascade you have to scramble around on hands and knees. Below the cascade, the grade eases and the stream braids through gravel flats. You can hear the valley now: a mule somewhere, and the distant ringing of metal.
-  @if check bushcraft medium {
+  @if check bushcraft correct:plan wrong:push {
     The stream bends east around a shoulder of hill, and you trust it. Good call. The valley road emerges from the treeline a quarter mile ahead, and within the hour you've picked up your bearings and your pace. The detour cost you time but nothing worse. You drink from the stream before you leave it, cold and clean, tasting faintly of minerals, and mark the spot in case you need it again.
     +remove_condition lost
     +advance_time 2
@@ -24,7 +24,7 @@ choices:
 
 * Cross to the trail scar on the north shoulder = That's a maintained route; reach it before the light shifts
   You angle across the slope toward the trail scar, picking a diagonal line through loose scree. The footing is honest if unpleasant, gravel that shifts and crunches but doesn't give way beneath you. The shoulder is further than it looked.
-  @if check cunning easy {
+  @if check cunning correct:scheme wrong:hide {
     You read the slope right, cutting below a band of unstable rock and crossing where the scree compacts to solid ground. The trail scar proves to be a legitimate mule track, rutted and well-worn, descending in long switchbacks toward the valley road. An hour later you're back on familiar ground, the only cost a few scrapes on your palms and some wasted morning light.
     +remove_condition lost
     +advance_time 3

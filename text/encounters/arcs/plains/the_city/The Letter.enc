@@ -53,7 +53,7 @@ choices:
 
   Torben draws his sword. There is no bluster in it, no drama, just quiet professionalism.
 
-  @if check combat hard {
+  @if check combat correct:outlast wrong:rush {
     He's good. Decades of fieldwork have kept him hard, and he fights with the economy of a man who's been in enough scrapes to know that technique matters more than strength. But he's old and tired and fighting for something he's already lost.
 
     He yields on one knee, sword on the floor, breathing hard. He doesn't look at you. "Take it, then. Take the letter. See who believes you." He laughs, a short, ugly sound. "A stranger carrying a document from an alien city. Who's going to listen?"

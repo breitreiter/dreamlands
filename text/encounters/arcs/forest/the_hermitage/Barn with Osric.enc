@@ -113,6 +113,6 @@ choices:
   +add_tag hermitage.barn_with_osric
   +finish_dungeon
 
-* Return to the tower = Perhaps this was a mistake [requires !tag hermitage.osric_story_heard]
+* Return to the tower = Perhaps this was a mistake
   You cross the yard. The cart sits between the barn and the tower, untouched.
   +open "Tower"

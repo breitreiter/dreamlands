@@ -63,7 +63,7 @@ choices:
     He turns to you last. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
 
     "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
-    +add_item color_lens
+    +give_gold 20
 
     Then they are gone through the trees.
 
@@ -89,7 +89,7 @@ choices:
     He turns to you last. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
 
     "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
-    +add_item color_lens
+    +give_gold 20
 
     Then they are gone through the trees.
 
@@ -121,7 +121,7 @@ choices:
     Mareen watches the tree line a long time. The camp does not disperse. When she finally turns, there are hands on her shoulders, quiet, no ceremony. The work of the day begins.
 
     As you depart the camp, Mareen calls after you, "Trader. Thank you for your counsel last night. I hope I am making a good choice here." She fishes into a pocket and draws forth a small bundled wrapped in stained canvas. "It's a special lens. The Kesharat have done unnatural things to the land. My people make these to help us avoid these dangers. Take it, I won't be returning to those lands."
-    +add_item color_lens
+    +give_gold 20
     +finish_dungeon
   } @elif tag fugitive.maren_steps_down {
     The cabin door opens. Mareen steps out. She has washed her face. She walks to the center of the clearing and waits.
@@ -145,7 +145,7 @@ choices:
     Before they break camp, Daveth comes to you. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
 
     "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
-    +add_item color_lens
+    +give_gold 20
 
     The outlanders break camp. They leave at midmorning. Haneth looks back once. Daveth does not.
 
@@ -169,7 +169,7 @@ choices:
     Before they break camp, Daveth comes to you. He reaches up and lifts a cord from around his neck. The brass-framed glass disk on it has hung against his shirt since the trail. He closes your hand around it.
 
     "I'm done with roads. I am going home and staying there." He taps the disk with a knuckle. "There are stretches of the scrublands where the light goes wrong and a man walks off a path he can see plain. Hold this up and the colors separate. You'll know when you need it."
-    +add_item color_lens
+    +give_gold 20
 
     The outlanders break camp. They leave at midmorning. Haneth looks back once. Daveth does not.
 

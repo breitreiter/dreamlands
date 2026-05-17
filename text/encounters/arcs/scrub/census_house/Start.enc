@@ -5,10 +5,10 @@ A placeholder encounter for the Census House arc.
 
 choices:
 
-* Explore = Search the records [requires meets negotiation 5]
-    @if check combat medium {
+* Explore = Search the records
+    @if check combat correct:rush wrong:outlast {
         You find something valuable.
-        +add_item lattice_ward
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -16,10 +16,10 @@ choices:
         +finish_dungeon
     }
 
-* Negotiate = Talk your way through [requires meets negotiation 5]
-    @if check negotiation medium {
+* Negotiate = Talk your way through
+    @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
-        +add_item lattice_ward
+        +give_gold 25
         +finish_dungeon
     } @else {
         It doesn't go well.
