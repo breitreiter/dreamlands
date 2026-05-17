@@ -131,9 +131,9 @@ public class CombatRunnerTests
         // Mutators are sorted alphabetically in Move.Encoded — match canonical form.
         var encoded = profile.MovePool.Select(m => m.Encoded).ToHashSet();
         Assert.Contains("Riposte Attack", encoded);
-        Assert.Contains("Heavy Provoking Attack", encoded);
+        Assert.Contains("Heavy Power Provoking Attack", encoded);
         Assert.Contains("Heavy Power Wary Recover", encoded);
-        Assert.Contains("Perfect Slow Defend", encoded);
+        Assert.Contains("Shielding Defend", encoded);
         Assert.Contains("Recover", encoded);
         Assert.Contains("Read", encoded);
     }
