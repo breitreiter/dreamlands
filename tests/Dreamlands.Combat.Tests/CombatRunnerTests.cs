@@ -121,21 +121,26 @@ public class CombatRunnerTests
     }
 
     [Fact]
-    public void PlayerProfile_legendary_kit_surfaces_full_moveset()
+    public void PlayerProfile_merges_weapon_armor_and_universals()
     {
-        // The Old Tooth (T-4 dagger) + Robe of Twilight (T-4 light).
-        var profile = CombatPlayerProfile.From(
-            weapon: Rules.ItemDef.All["the_old_tooth"],
-            armor:  Rules.ItemDef.All["robe_of_twilight"]);
+        var weapon = Rules.ItemDef.All["the_old_tooth"];
+        var armor  = Rules.ItemDef.All["robe_of_twilight"];
 
-        // Mutators are sorted alphabetically in Move.Encoded — match canonical form.
-        var encoded = profile.MovePool.Select(m => m.Encoded).ToHashSet();
-        Assert.Contains("Riposte Attack", encoded);
-        Assert.Contains("Heavy Power Provoking Attack", encoded);
-        Assert.Contains("Heavy Power Wary Recover", encoded);
-        Assert.Contains("Shielding Defend", encoded);
-        Assert.Contains("Recover", encoded);
-        Assert.Contains("Read", encoded);
+        var profile = CombatPlayerProfile.From(weapon, armor);
+
+        // Every move declared by each item appears in the pool.
+        foreach (var m in weapon.RpsMoves)
+            Assert.Contains(profile.MovePool, p => p.Encoded == Move.Parse(m.Encoding).Encoded);
+        foreach (var m in armor.RpsMoves)
+            Assert.Contains(profile.MovePool, p => p.Encoded == Move.Parse(m.Encoding).Encoded);
+
+        // Universals always present.
+        Assert.Contains(profile.MovePool, m => m.Move.Base == "recover");
+        Assert.Contains(profile.MovePool, m => m.Move.Base == "read");
+
+        // Profile reflects equipped item classes.
+        Assert.Equal(weapon.WeaponClass, profile.Weapon);
+        Assert.Equal(armor.ArmorClass, profile.Armor);
     }
 
     [Fact]
