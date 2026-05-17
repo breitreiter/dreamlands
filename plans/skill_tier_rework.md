@@ -3,7 +3,7 @@ kind: plan
 title: Skill system rework — collapse to untrained/trained/expert tiers, retire d20, adopt RPS approach picker for encounter checks
 state: exploring
 created: 2026-05-15
-updated: 2026-05-16
+updated: 2026-05-17
 related:
   - inventory_consolidation.md
   - inventory_slot_refactor.md
@@ -83,6 +83,34 @@ multi-turn card game.
 
 The Untrained-on-correct coinflip is base 50%, nudged by Luck (see Open Decisions for whether
 Luck survives as a scalar for exactly this purpose).
+
+### Resolution UX — Untrained streamlining (2026-05-17)
+
+The table above describes the *mechanical* outcome distribution. The *experience* of
+resolution differs by tier:
+
+- **Expert / Trained**: the player picks one of three approaches. Their pick determines
+  outcome per the table.
+- **Untrained**: the engine pre-rolls the coinflip at the moment the player commits to
+  the top-level choice (before the picker UI renders).
+  - **Pre-roll fails** → skip the picker entirely; emit the connector + fail body
+    directly. The pick was never going to matter.
+  - **Pre-roll passes** → render the picker; the player gets the Trained-tier
+    experience (best-of-three; correct succeeds, neutral/wrong fail). Their pick is
+    consequential.
+
+This keeps the success rate identical (50% on correct from Untrained), but it spares
+the Untrained player from the "I picked the right thing and got told it didn't matter"
+moment. It also means a successful Untrained outcome is always paired with an actually-
+good pick — the lucky-but-bad-pick branch never plays.
+
+**Engine implication**: pre-roll happens in the runner when the picker `check` branch is
+entered, *before* emitting the picker payload to the client. The picker payload only
+fires on a passing pre-roll. On a failing pre-roll, the engine jumps straight to the
+fail body + `Direct` connector.
+
+**Authoring implication**: none. Authors still write success/fail bodies as if the pick
+mattered; the streamlining is invisible at the content layer.
 
 ### Difficulty by prose, not by number
 
