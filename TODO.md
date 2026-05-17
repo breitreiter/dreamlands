@@ -200,6 +200,33 @@ Time estimates: simple .enc ~30 min, .tac add-on ~20 min, arc ~5 hr, locale guid
       encounters, paths that never reach `+finish_dungeon`/`+flee_dungeon`, and cycles with
       no exit. Treats arcs as directed graphs, not individual files.
 
+### Post-picker-pivot rewrites (not urgent)
+
+Sites that survived the Phase 4 sweep but need real authoring attention. None
+block Phase 5+; revisit during content polish.
+
+- [ ] `arcs/plains/grainway_station/Dalla.enc` — rewrite
+- [ ] `arcs/plains/metal_beast/Belly of the Beast.enc` — rewrite
+- [ ] `arcs/plains/metal_beast/The Gauntlet.tac` — summarize into the arc's
+      Start.enc as an .enc check upstream (the .tac itself isn't worth keeping)
+- [ ] `forest/tier1/Lost.enc` — rewrite
+- [ ] `plains/tier1/Lost.enc` — rewrite
+- [ ] **Drop `Road Toll`**; fold the best beats into Tob's `.fight` encounter
+      and move Tob to tier 1 as the noob-zone menace
+- [ ] **Drop `Collapsed Earthworks`** — not worth rewriting into .enc
+- [ ] `The Conscripts` — remove the `.tac` line; work the fight into the
+      main .enc check
+- [ ] `The Courier` — same: scrub `.tac`, fold into .enc
+- [ ] `The Requisition Line` — replace check logic with a stack of static
+      `tag` checks against dungeon-completion flags
+- [ ] **Fold `The Scavengers` into one of the robot `.fight` encounters**
+- [ ] `The Gentle Giant` — scrub `.tac` line, fold beats into main .enc
+- [ ] `The Passage` — same: scrub `.tac`, fold into main .enc
+- [ ] `Unusual Cargo` — design note, not a rewrite: this encounter implies
+      the player should pick an approach **before** the preamble text renders.
+      Not a blocker; capture for the picker UX pass.
+- [ ] `swamp/tier2/The Hermit of Sallow Fen.enc` — rewrite
+
 ### Plains — ~13 hr (Week 1: Apr 5–11)
 
 - [x] Tier 1 — encounters
