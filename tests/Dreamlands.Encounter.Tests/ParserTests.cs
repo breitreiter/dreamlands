@@ -79,7 +79,7 @@ public class ParserTests
             Body.
             choices:
             * Fight the beast
-            @if check combat hard {
+            @if check combat correct:rush wrong:outlast {
             You strike true!
             +damage_spirits 2
             } @else {
@@ -97,7 +97,7 @@ public class ParserTests
 
         var cond = choice.Conditional!;
         Assert.Single(cond.Branches);
-        Assert.Equal("check combat hard", cond.Branches[0].Condition);
+        Assert.Equal("check combat correct:rush wrong:outlast", cond.Branches[0].Condition);
         Assert.Contains("strike true", cond.Branches[0].Outcome.Text);
         Assert.Single(cond.Branches[0].Outcome.Mechanics);
         Assert.Equal("damage_spirits 2", cond.Branches[0].Outcome.Mechanics[0]);
@@ -116,9 +116,9 @@ public class ParserTests
             Body.
             choices:
             * Investigate
-            @if check perception hard {
+            @if tag scouted {
             You spot the trap immediately.
-            } @elif check perception medium {
+            } @elif tag warned {
             You notice something off.
             } @elif has lantern {
             The lantern reveals a wire.
@@ -132,8 +132,8 @@ public class ParserTests
 
         var cond = result.Encounter!.Choices[0].Conditional!;
         Assert.Equal(3, cond.Branches.Count);
-        Assert.Equal("check perception hard", cond.Branches[0].Condition);
-        Assert.Equal("check perception medium", cond.Branches[1].Condition);
+        Assert.Equal("tag scouted", cond.Branches[0].Condition);
+        Assert.Equal("tag warned", cond.Branches[1].Condition);
         Assert.Equal("has lantern", cond.Branches[2].Condition);
         Assert.NotNull(cond.Fallback);
     }
@@ -171,7 +171,7 @@ public class ParserTests
             choices:
             * Try the lock
             You kneel before the ancient mechanism.
-            @if check stealth easy {
+            @if check cunning correct:hide wrong:bluff {
             It clicks open.
             } @else {
             The pick snaps.
@@ -206,7 +206,7 @@ public class ParserTests
             Body.
             choices:
             * Try it
-            @if check combat easy {
+            @if check combat correct:rush wrong:outlast {
             You succeed.
             """;
 
@@ -263,7 +263,7 @@ public class ParserTests
             Body.
             choices:
             * Try it
-            @if check combat easy {
+            @if check combat correct:rush wrong:outlast {
             You swing your blade.
 
             The beast falls.
@@ -290,7 +290,7 @@ public class ParserTests
             Body.
             choices:
             * Try it
-            @if check combat easy {
+            @if check combat correct:rush wrong:outlast {
             You succeed.
             } @else {
             You stumble badly.

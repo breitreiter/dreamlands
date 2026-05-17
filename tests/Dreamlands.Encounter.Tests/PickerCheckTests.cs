@@ -94,7 +94,7 @@ public class PickerCheckTests
     // ── Legacy DC check — deprecation diagnostic ─────────────────────────
 
     [Fact]
-    public void LegacyDcCheck_ParsesSuccessfully()
+    public void LegacyDcCheck_IsRejected()
     {
         var source = """
             Test
@@ -110,56 +110,8 @@ public class PickerCheckTests
             """;
 
         var result = EncounterParser.Parse(source);
-        // IsSuccess tolerates warnings
-        Assert.True(result.IsSuccess, string.Join("; ", result.Errors.Where(e => !e.IsWarning).Select(e => e.Message)));
-        Assert.Empty(result.Errors.Where(e => !e.IsWarning));
-    }
-
-    [Fact]
-    public void LegacyDcCheck_EmitsDeprecationWarning()
-    {
-        var source = """
-            Test
-            [trigger none]
-            Body.
-            choices:
-            * Fight
-            @if check combat hard {
-            You win.
-            } @else {
-            You lose.
-            }
-            """;
-
-        var result = EncounterParser.Parse(source);
-        Assert.True(result.IsSuccess);
-        Assert.Single(result.Warnings);
-        Assert.Contains("legacy DC check", result.Warnings[0].Message);
-        Assert.Contains("Phase 4", result.Warnings[0].Message);
-    }
-
-    [Fact]
-    public void LegacyDcCheck_IsExemptFromTerminalRule_MidChain_NoError()
-    {
-        // Legacy DC checks are not picker checks — they don't trigger terminal enforcement.
-        var source = """
-            Test
-            [trigger none]
-            Body.
-            choices:
-            * Try
-            @if check combat hard {
-            You win.
-            } @elif tag bribed {
-            They let you through.
-            } @else {
-            Nope.
-            }
-            """;
-
-        var result = EncounterParser.Parse(source);
-        // No hard errors from terminal-check rule (legacy is exempt)
-        Assert.Empty(result.Errors.Where(e => !e.IsWarning));
+        Assert.False(result.IsSuccess);
+        Assert.Contains(result.Errors, e => !e.IsWarning && e.Message.Contains("legacy DC check"));
     }
 
     // ── Terminal-check enforcement: four illegal shapes ──────────────────

@@ -2,9 +2,11 @@ A City Square
 [trigger none]
 [vignette intro/city_square]
 
-You stand inside Aldgate's walls at last. It is sprawling, filthy, and beautiful.
+A sharp voice cuts through your wandering thoughts. "Move it, merchant." You turn to find a teamster's weathered face, his oxen stamping impatiently in the dust. The caravan lurches forward once more, and you shuffle along with the press of bodies, carts groaning beneath their loads, the smell of animals and packed humanity rising thick in the afternoon heat. You pass through the gate with a crush of traders, pilgrims, and hangers-on; guards in faded imperial dress wave the caravan through without ceremony. Your feet carry you across the threshold into Aldgate at last.
 
-In the **market**, you'll find dispatches, sealed goods, and trade cargo bound for settlements across the frontier. Your guild ring gives you the right to claim a contract, carry the goods to their destination, and collect payment once the cargo arrives.
+The city sprawls before you in a fever of contradictions. Filth clings to everything; refuse chokes the gutters, and the reek of tanning yards mingles with the sharper stench of unwashed bodies and horse dung. Yet there is an undeniable beauty in it too. Sunlight glints off brass shop signs and the polished steel of armor. 
+
+The **market** opens before you, a vast tangle of cloth pavilions and wooden stalls, where merchants hawk sealed goods, trade cargo, and weathered dispatches bound for the scattered settlements of the borderlands. Your guild ring grants you the right to claim a contract from this chaos, to bear the goods across rough country to their destination, and to collect your payment once delivery is made. 
 
 The arrangement is simple, but the road is not. Aldgate sits at the edge of empire;  beyond its gates, the borderlands open up, and with them, long stretches of rough country between scattered settlements. There are bandits, to be sure, but few out here die by the sword. It is thirst, hunger, and fever that ends most journeys. It is carelessness, hubris, and ignorance. 
 
@@ -12,30 +14,4 @@ Aldgate is surrounding by rolling farmlands, patrolled by legion soldiers. If yo
 
 But the farther into the borderlands a contract takes you, the thinner the settlements become. You'll find strange folk, quiet roads, and things that move in the dark beyond your lantern's reach. You'll need to plan each trip with care, ensuring you're ready for what awaits you. 
 
-Taking stock, you have: your guild ring, your travelling clothes, a sturdy pack, a pouch of coins, and...
-
 choices:
-
-* A worn canteen = I'd heard the scrublands were harsh
-  You have sold most of your belongings along the route here, piece by piece, traded for passage or bread or a night's shelter from the rain. Yet this old canteen remains. An old woman from your village pressed it into your hands before you left. She told you she had wandered lost in the dry mesas for two days; thirst had nearly killed her. She would not let you refuse it.
-  +add_item canteen
-
-* A skinning knife = You can't be too careful in these lands
-  @if check bushcraft easy {
-    You rest your hand on the grip of the knife, its presence reassuring. You will need it to forage, to cut bark for kindling, to dress whatever game you can trap or kill. And perhaps to defend yourself, should it come to that.
-
-    It is no weapon of war, but out here it will serve.
-    +add_item hunting_knife
-    +equip hunting_knife
-  } @else {
-    Your father gave you the knife when you were still a child, small enough to carry on your hip like a tiny sword. You have never ventured far from the city walls, not truly, but you kept it with you all the same. It's mostly served to open letters and cut fruit.
-
-    The city crowds press close around you, alive with voices and coin and the smell of bread and sweat, but you think ahead to the quiet roads out in the borderlands. Perhaps you will find a use for the knife, or perhaps it will bring you luck.
-    +add_item hunting_knife
-    +equip hunting_knife
-  }
-
-* A fine pair of boots = A wanderer's companion
-  You spent your last coin on a pair of boots. The boot-seller was quite insistent that no one would take you seriously with the ragged sandals you'd been wearing, and you could find no fault in the man's argument. Whether the boots will endure the grit and mire of the borderlands remains to be seen, but here in the crowded market, beneath the eyes of merchants and imperial functionaries, they cut a sharp figure. You flex your toes within them, testing the seams, and find no complaint. A foolish purchase, perhaps, but a man may be judged by his boots as much as by his word.
-  +add_item fine_boots
-  +equip fine_boots

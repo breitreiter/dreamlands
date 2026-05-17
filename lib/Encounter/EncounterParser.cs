@@ -230,15 +230,14 @@ public static partial class EncounterParser
                         errors.Add(new ParseError { Line = currentOptionLine, Message = "picker check chain requires an @else fallback." });
                 }
 
-                // Emit deprecation diagnostic for legacy DC checks.
+                // Legacy DC checks are no longer accepted — they were removed in the Phase 4 sweep.
                 foreach (var branch in branches)
                 {
                     if (branch.Condition.StartsWith("check ", StringComparison.Ordinal) && !branch.IsPickerCheck)
                     {
                         var tokens = branch.Condition.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                        // Legacy form: "check <skill> <difficulty>" where difficulty is a known DC name
                         if (tokens.Length >= 3 && IsDifficultyName(tokens[2]))
-                            errors.Add(new ParseError { Line = currentOptionLine, Message = $"legacy DC check '{branch.Condition}'; will be removed after Phase 4 content sweep.", IsWarning = true });
+                            errors.Add(new ParseError { Line = currentOptionLine, Message = $"legacy DC check '{branch.Condition}'; use 'check <skill> correct:X wrong:Y' or '[requires meets <skill> <tier>]'." });
                     }
                 }
 
