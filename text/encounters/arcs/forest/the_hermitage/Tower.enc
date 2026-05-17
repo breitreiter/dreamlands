@@ -37,12 +37,12 @@ choices:
     +add_tag hermitage.met_edric
     +open "Barn Alone"
 
-* Ask Osric to come with you to the barn = Speak with the imperial deserters [requires tag hermitage.asked_history && !tag hermitage.edric_cracked]
+* Ask Osric to come with you to the barn = Speak with the imperial deserters [requires tag hermitage.asked_history && !tag hermitage.edric_cracked && !tag hermitage.barn_with_osric && !tag hermitage.meilin_accompanies]
     You explain what you want. Osric hears you out, nods once, and sets aside the bowl he was eating from. "Alright. Let me pull on a cleaner robe." He is back within the minute. The two of you cross the yard together, unhurried, the way you would walk to a neighbor's house and not to a confrontation.
     +add_tag hermitage.met_edric
     +open "Barn with Osric"
 
-* Go to the barn with Meilin = Bring Meilin to meet Edric [requires tag hermitage.meilin_accompanies && !tag hermitage.edric_engaged]
+* Go to the barn with Meilin = Bring Meilin to meet Edric [requires tag hermitage.meilin_accompanies && !tag hermitage.edric_engaged && !tag hermitage.barn_with_osric]
     You cross the yard together. Meilin is half a step behind your left shoulder, which is not where you would stand by choice but is apparently where she has decided you belong. She is humming something under her breath. You do not recognize the tune.
 
     Edric sees you coming through the gaps in the barn boards and is already standing when you reach the door. He opens it himself, which is a courtesy, and which also lets him see both of you at once. His eyes settle on Meilin a beat longer than on you. Not surprise. He has watched her work in the yard for a month. But she has never stood this close before, nor looked him in the face.

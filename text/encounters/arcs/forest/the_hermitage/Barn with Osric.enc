@@ -1,0 +1,118 @@
+Barn with Osric
+[trigger none]
+[vignette dungeons/the_hermitage]
+
+Edric is at the table, his sword resting in front of him. Osric on the stool across. Between them, three clay cups of water. The other men have found the back of the barn.
+
+choices:
+
+* Let Osric speak = Step back and give him the floor [requires !tag hermitage.osric_story_heard]
+  You settle onto the third stool and say nothing.
+
+  Edric has been watching Osric since you came through the door. He recognized a type the moment Osric stepped in: the place on his belt where a scabbard used to hang. He poured the water without being asked. Now he waits.
+
+  "I used to serve," Osric says. "Years back, on the plains line, during the reconquest. Under a man who went by the Scarecrow."
+
+  Edric's hand stops on the blade. "I know that name."
+
+  "Then you know something about what I am going to tell you." Osric turns his cup a quarter turn on the wood. "I was a corporal. Scout work, mostly. We were trying to take back a fort on the inner edge of the reconquest, scavengers dug in, walls patched the improvised way of people who do not expect to hold them forever. I went out three nights and came back with the whole thing mapped. North gate unguarded. No patrols on the north face. Watch at the main entrance, three fires, predictable spacing. I told him: third hour, in through the north, done before anyone sounds an alarm."
+
+  A pause. He looks at Edric.
+
+  "He told me to stop. Said, look again. Look at the ground around that north gate. Look where the scavengers walk and where they don't. There is a wide empty ring inside the wall, twenty paces across, that they have not built a fire within. That isn't a derelict. That's a sleeping Iron, and they have known where the edges of its notice begin for long enough to make a habit of it. We have not."
+
+  Edric has set down the rag.
+
+  "Worse, he said. Even if we rerouted, what stopped a scavenger from walking up and kicking the thing awake? The whole place was a trap. Every route in was a trap, because the defenders did not have to hold all of them. They had to hold one and detonate the rest."
+
+  Osric drinks. Sets the cup down.
+
+  "He walked in through the front door."
+
+  No one in the barn is moving now.
+
+  "Unarmed. Took two of us with him, also unarmed, at his request. We crossed the open ground at mid-morning in plain sight, knocked on the gate, and waited. He talked through the boards for an hour. Told them the Iron was a disaster waiting to happen. Told them he knew how to kill it. Told them if they helped him do it, they could keep the fort."
+
+  "So they let you in," Edric says. Not a question.
+
+  Osric nods. "They let us in. It was a hard fight after, the thing did not come down easy. Cost us two men, plus three of the scavengers. The Scarecrow honored the deal. The scavengers kept the fort. None of us understood; we figured it was a plot, divide and conquer, then we finish off the rovers. Take our fort back and file a memo to command."
+
+  Osric looks into the middle distance for a moment, then continues.
+
+  "That night I was on the wall. A woman came up to me. One of theirs. She said she had seen two other imperial companies come through that valley before us. Always moving toward the domed city. Never coming back. She begged us not to go. Said she knew of an old signal tower, deep in the forest. Said we could disappear into it. Live."
+
+  "I thanked her for the water and went to bed."
+
+  Edric does not move.
+
+  "I didn't place much stock in the woman's offer. It felt cowardly." Osric's voice has gone quieter, but no less steady. "But it got us talking, that night, and many more to come. About what we were fighting for. About whether there was anything out here worth dying for. Eventually, once enough of our men had died, we decided that no. There wasn't. We had seen enough death. So we came here. To live a quiet life. As brothers."
+
+  Edric is very still. His eyes drift to the window, toward the tower.
+
+  "I'd like that, I think. A quiet life. With brothers."
+
+  "It's possible," Osric says. "I'll not pretend it's easy. The first year is the worst of it, and the second is not much better. But it's possible. We did it. You can do it."
+
+  A long silence. Edric looks at his hands flat on the wood, then at the blade. He pushes it a few inches away from himself, almost without noticing.
+
+  "We've done you a disservice." A gesture toward the yard, toward the cart. "People will come looking for what we took. I've brought trouble to your doorstep." A small, careful correction. "Or to our doorstep, I suppose. If you mean for us to join you."
+
+  He waits.
+  +add_tag hermitage.osric_story_heard
+  +add_tag hermitage.edric_cracked
+  +open "Barn with Osric"
+
+* Notice the quiet soldier = The young one at the back post [requires !tag hermitage.quiet_soldier_seen]
+  @if tag hermitage.osric_story_heard {
+    He turned during the story. You noticed only when you realized he was no longer facing the gap in the boards. He is watching Osric now, hands loose at his sides, perfectly still. He is the only one in the barn who has not shifted or coughed or found somewhere else to look.
+  } @else {
+    The others in the barn are of a piece: older, settled, soldiers in another posting. The young one at the back post is not of a piece. Early twenties, thin where the others are thick. He sits with his back to a support beam and watches the yard through a gap in the boards: monks in the garden rows, a devoted sweeping flagstones. He watches all of this with the blank attention of a man who does not know he is watching.
+  }
+  +add_tag hermitage.quiet_soldier_seen
+  +open "Barn with Osric"
+
+* Offer to resolve the situation = Use your guild standing to make the merchant whole [requires tag hermitage.osric_story_heard]
+  "I'll sort the matter out. Guild privilege."
+
+  You're surprised to hear yourself say the words. Perhaps the old man's story has stirred something in your as well.
+
+  Edric nods, once. He does not thank you. The thanks would be too small for what has been agreed.
+
+  You walk back to the tower with Osric. He says little on the way. At the door he puts a hand on your shoulder briefly, then leaves you to it.
+
+  You spend the evening in a small upstairs room with a candle and a borrowed sheet of vellum. You draft a writ of guarantee; you'll vouch for the monastery, you'll see the merchant made whole, you'll file all the forms at the chapterhouse. You press the signet ring into the wax; the thing is official now. Then blow out the candle and head to sleep.
+
+  You wake before the dawn bell and find Osric downstairs, already busy with morning chores. You set the writ down on a table and tap it lightly. "Guild writ. If anyone comes about the wagon, show them this." As you turn to walk away, the old man calls after you.
+
+  "Aldous stopped by my room this morning," he says. "He said your boots were looking quite worn. Offered to give you his old pair. Last thing he had left from his old legion days." A small smile. "He says they were always good luck for him. Maybe they'll bring you luck as well."
+
+  You take the boots. They are exquisitely tooled leather, dark brown and weather-stained, but freshly re-soled and polished to a high shine.
+
+  You walk out of the compound into the morning, and behind you the hermitage settles, slowly, into the shape of what it is going to be next.
+  +add_tag hermitage.edric_cracked
+  +add_tag hermitage.merchant_vouch
+  +add_tag hermitage.barn_with_osric
+  +add_item scarecrow_boots
+  +finish_dungeon
+
+* Keep silent = You'll not spend your coin to mend their error [requires tag hermitage.osric_story_heard]
+  There is a moment where you could have spoken, but it passes.
+
+  Osric breaks the silence. He asks Edric about the posting on the plains line, the half-collapsed forts and the relief that never came. Edric answers slowly at first, then less slowly. He has a story about an officer who refused to issue boots. He has another about a winter where they boiled leather. Osric matches him with one of his own, then another. They are not commiserating, exactly. They are placing things on the table between them and recognizing the shape of each piece.
+
+  You sit with your water cup and listen. You contribute nothing. It becomes clear, by degrees, that neither of them is talking to you. After a while it becomes clear they have, very quietly, stopped noticing you are there.
+
+  When the light has moved a hand's width across the boards you set your cup down and stand. Osric glances up, nods once, and goes back to what Edric is saying. Edric does not look up at all.
+
+  You cross the yard to the tower. The cart is in its place. You take supper alone and turn in early.
+
+  In the morning Osric is at the hearth. He greets you by name, asks if you slept well, presses a small cloth bundle of bread and hard cheese into your hand for the road. He does not mention the barn. He does not ask you for anything.
+
+  You shoulder your pack and walk out under a grey sky. Behind you the hermitage carries on with its own business, which was never quite yours.
+  +add_tag hermitage.edric_cracked
+  +add_tag hermitage.barn_with_osric
+  +finish_dungeon
+
+* Return to the tower = Perhaps this was a mistake [requires !tag hermitage.osric_story_heard]
+  You cross the yard. The cart sits between the barn and the tower, untouched.
+  +open "Tower"

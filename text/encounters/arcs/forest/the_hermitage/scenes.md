@@ -126,6 +126,8 @@ Edric-Meilin summit reaches terms. Kesharat re-arm officially. Imperials absorbe
 
 Tags (boolean):
 - `met_osric`, `met_edric`, `met_aldous`, `met_meilin`
+- `barn_with_osric` (one-shot gate; set on all exits from Barn with Osric regardless of outcome)
+- `osric_story_heard` (phase gate within Barn with Osric; set after Osric finishes the fort story)
 - `meilin_plan_known`, `meilin_plan_hidden` (mutually exclusive)
 - `meilin_accompanies`, `meilin_stood_down`
 - `edric_cracked`, `edric_engaged`
