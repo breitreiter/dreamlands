@@ -18,7 +18,7 @@ public class EndOfDayTests
     static void AddRation(PlayerState p, int count = 1)
     {
         for (int i = 0; i < count; i++)
-            p.Haversack.Add(new ItemInstance(Rations.RationDefId, "Rations"));
+            p.Pack.Add(new ItemInstance(Rations.RationDefId, "Rations"));
     }
 
     [Fact]
@@ -50,8 +50,7 @@ public class EndOfDayTests
     public void Resolve_NoFood_EmitsStarving()
     {
         var p = Fresh();
-        // Make resists trivially pass and bushcraft trivially fail to skip foraging
-        p.PendingNoBiome = true; // skips both resists and foraging
+        p.PendingNoBiome = true; // skips resists; food cadence still applies
         var spiritsBefore = p.Spirits;
 
         var events = EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
@@ -61,22 +60,66 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_HasRation_ConsumesOne()
+    public void Resolve_HasRation_ConsumesOne_WhenUntrainedBushcraft()
     {
         var p = Fresh();
         p.PendingNoBiome = true;
+        p.Skills[Skill.Bushcraft] = SkillTier.Untrained; // eats every night
+        p.Day = 1; // odd day
         AddRation(p, 3);
 
         EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        Assert.Equal(2, p.Haversack.Count(i => i.DefId == Rations.RationDefId));
+        Assert.Equal(2, p.Pack.Count(i => i.DefId == Rations.RationDefId));
+    }
+
+    [Fact]
+    public void Resolve_TrainedBushcraft_EatsOnOddDays()
+    {
+        // Day 1 (odd) → should eat
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        p.Skills[Skill.Bushcraft] = SkillTier.Trained;
+        p.Day = 1;
+        AddRation(p, 3);
+
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+        Assert.Equal(2, p.Pack.Count(i => i.DefId == Rations.RationDefId));
+    }
+
+    [Fact]
+    public void Resolve_TrainedBushcraft_SkipsEatingOnEvenDays()
+    {
+        // Day 2 (even) → skips eating
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        p.Skills[Skill.Bushcraft] = SkillTier.Trained;
+        p.Day = 2;
+        AddRation(p, 3);
+
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+        Assert.Equal(3, p.Pack.Count(i => i.DefId == Rations.RationDefId)); // unchanged
+    }
+
+    [Fact]
+    public void Resolve_ExpertBushcraft_SameCadenceAsTrained()
+    {
+        // Expert: eat on odd days
+        var p = Fresh();
+        p.PendingNoBiome = true;
+        p.Skills[Skill.Bushcraft] = SkillTier.Expert;
+        p.Day = 3; // odd → eats
+        AddRation(p, 3);
+
+        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
+        Assert.Equal(2, p.Pack.Count(i => i.DefId == Rations.RationDefId));
     }
 
     [Fact]
     public void Resolve_CleanRestDay_NoSpiritsChange()
     {
         var p = Fresh();
-        p.PendingNoBiome = true; // no resist rolls, no foraging
+        p.PendingNoBiome = true;
         AddRation(p);
         var spiritsBefore = p.Spirits;
 
@@ -200,7 +243,7 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_CuredSerious_NoHealthLoss_AndRegens()
+    public void Resolve_MedicalKit_CuresInjured_WithoutConsuming()
     {
         var p = Fresh();
         p.MaxHealth = 4;
@@ -214,13 +257,15 @@ public class EndOfDayTests
 
         // Medical kit removes injured before the HP tick — regen kicks in same day
         Assert.DoesNotContain("injured", p.ActiveConditions);
-        Assert.DoesNotContain(p.Pack, i => i.DefId == "medical_kit");
+        // Kit is NOT consumed
+        Assert.Contains(p.Pack, i => i.DefId == "medical_kit");
         Assert.Equal(3, p.Health);
     }
 
     [Fact]
-    public void Resolve_BandageCuresInjured_HealsOverMultipleDays()
+    public void Resolve_MedicalKit_PersistsAcrossMultipleDays()
     {
+        // Verify kit still present and functional next night
         var p = Fresh();
         p.MaxHealth = 4;
         p.Health = 1;
@@ -229,13 +274,17 @@ public class EndOfDayTests
         p.Pack.Add(new ItemInstance("medical_kit", "Medical Kit"));
         AddRation(p, 5);
 
+        // Night 1: kit cures injured, HP regens
         EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
         Assert.DoesNotContain("injured", p.ActiveConditions);
         Assert.Equal(2, p.Health);
+        Assert.Contains(p.Pack, i => i.DefId == "medical_kit");
 
+        // Night 2: no condition, HP regens again
         p.PendingNoBiome = true;
         EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
         Assert.Equal(3, p.Health);
+        Assert.Contains(p.Pack, i => i.DefId == "medical_kit");
     }
 
     [Fact]
@@ -245,41 +294,12 @@ public class EndOfDayTests
         p.Spirits = 10;
         p.PendingNoBiome = true;
         p.ActiveConditions.Add("freezing");
-        // No ration
+        // No ration — and Untrained bushcraft eats every night
 
         EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
         // -1 missed meal, -1 freezing
         Assert.Equal(8, p.Spirits);
-    }
-
-    [Fact]
-    public void ExhaustionDC_ScalesWithConsecutiveWildernessNights()
-    {
-        // Verify the DC math by checking it produces different outcomes at different night counts
-        var seed = 7; // chosen so the d20 falls in the band where the scaling matters
-        bool resistedEarly = false, resistedLate = false;
-
-        for (int trial = 0; trial < 50; trial++)
-        {
-            var early = Fresh();
-            early.ConsecutiveWildernessNights = 0;
-            AddRation(early);
-            EndOfDay.Resolve(early, "plains", 1, Balance, new Random(seed + trial));
-            if (!early.ActiveConditions.Contains("exhausted")) resistedEarly = true;
-
-            var late = Fresh();
-            late.ConsecutiveWildernessNights = 10;
-            AddRation(late);
-            EndOfDay.Resolve(late, "plains", 1, Balance, new Random(seed + trial));
-            if (late.ActiveConditions.Contains("exhausted")) resistedLate = true;
-
-            if (resistedEarly && resistedLate) break;
-        }
-
-        // At 0 nights some seeds should resist; at 10 nights some should fail
-        Assert.True(resistedEarly, "Should resist exhaustion at least once with 0 nights");
-        Assert.True(resistedLate, "Should fail exhaustion at least once with 10 nights");
     }
 
     [Fact]
@@ -367,30 +387,20 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_ForageSuccess_SkipsRationConsumption()
+    public void BushcraftTrained_ResistsConditions_AtExpectedRate()
     {
-        // Stack the deck: max bushcraft so the d20+modifier reliably beats DC 20
-        var p = Fresh();
-        p.Skills[Skill.Bushcraft] = SkillTier.Expert;
-        AddRation(p, 3);
-
-        bool sawSkippedConsumption = false;
-        for (int seed = 0; seed < 50; seed++)
+        // Trained = 40% resist — over 100 trials should be well above 0%
+        var resistCount = 0;
+        for (int seed = 0; seed < 100; seed++)
         {
-            var fresh = Fresh();
-            fresh.Skills[Skill.Bushcraft] = SkillTier.Expert;
-            AddRation(fresh, 3);
-
-            var rationsBefore = fresh.Haversack.Count(i => i.DefId == Rations.RationDefId);
-            var events = EndOfDay.Resolve(fresh, "plains", 1, Balance, new Random(seed));
-            var foraged = events.OfType<EndOfDayEvent.Foraged>().FirstOrDefault();
-            if (foraged != null && foraged.Fed)
-            {
-                var rationsAfter = fresh.Haversack.Count(i => i.DefId == Rations.RationDefId);
-                if (rationsAfter == rationsBefore) sawSkippedConsumption = true;
-                break;
-            }
+            var p = Fresh();
+            p.Skills[Skill.Bushcraft] = SkillTier.Trained;
+            // Don't pre-add condition so resist can fire
+            AddRation(p);
+            var events = EndOfDay.Resolve(p, "plains", 1, Balance, new Random(seed));
+            if (events.Any(e => e is EndOfDayEvent.ResistPassed r && r.ConditionId == "exhausted"))
+                resistCount++;
         }
-        Assert.True(sawSkippedConsumption, "High bushcraft should occasionally feed the player");
+        Assert.True(resistCount > 10, $"Trained should resist exhausted sometimes; got {resistCount}/100");
     }
 }

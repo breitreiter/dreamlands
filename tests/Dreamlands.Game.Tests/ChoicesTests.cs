@@ -58,7 +58,7 @@ public class ChoicesTests
         };
         var encounter = MakeEncounter(choice);
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("torch", "Torch"));
+        state.Pack.Add(new ItemInstance("torch", "Torch"));
 
         var visible = Choices.GetVisible(encounter, state, Balance);
         Assert.Single(visible);
@@ -173,7 +173,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("rusted_key", "Rusted Key"));
+        state.Pack.Add(new ItemInstance("rusted_key", "Rusted Key"));
 
         var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
         Assert.Equal("You approach the chest.", resolved.Preamble);
@@ -207,8 +207,9 @@ public class ChoicesTests
     }
 
     [Fact]
-    public void Resolve_Conditional_SkillCheck_CapturesCheckResult()
+    public void Resolve_Conditional_MeetsCheck_CapturesCheckResult()
     {
+        // "check" (d20) removed; "meets" is the gate form
         var choice = new Choice
         {
             OptionText = "Sneak past",
@@ -218,7 +219,7 @@ public class ChoicesTests
                 [
                     new ConditionalBranch
                     {
-                        Condition = "check cunning medium",
+                        Condition = "meets cunning trained",
                         Outcome = new OutcomePart { Text = "You slip by unnoticed." }
                     }
                 ],
@@ -230,9 +231,10 @@ public class ChoicesTests
         state.Skills[Skill.Cunning] = SkillTier.Expert;
         var resolved = Choices.Resolve(choice, state, Balance, new Random(42));
 
-        // Either branch should have a check result
+        Assert.Equal("You slip by unnoticed.", resolved.Text);
         Assert.NotNull(resolved.CheckResult);
         Assert.Equal(Skill.Cunning, resolved.CheckResult!.Skill);
+        Assert.True(resolved.CheckResult.IsMeetsCheck);
     }
 
     [Fact]

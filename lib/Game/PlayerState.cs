@@ -62,17 +62,6 @@ public class PlayerState
     public ItemInstance? EquippedBoots =>
         Pack.FirstOrDefault(i => i.IsEquipped && ItemDef.All.TryGetValue(i.DefId, out var d) && d.Type == ItemType.Boots);
 
-    // Legacy shim: haversack is now pack for consumables.
-    // Phase 2 will consolidate; for now route to Pack to keep the build green.
-    [System.Text.Json.Serialization.JsonIgnore]
-    public List<ItemInstance> Haversack => Pack;
-
-    [System.Text.Json.Serialization.JsonIgnore]
-    public int HaversackCapacity => PackCapacity;
-
-    // Legacy shim: Equipment accessor wrapping IsEquipped flag. Phase 2 removes this.
-    [System.Text.Json.Serialization.JsonIgnore]
-    public EquipmentShim Equipment => new(this);
 
     // Time
     public TimePeriod Time { get; set; } = TimePeriod.Morning;

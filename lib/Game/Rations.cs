@@ -24,7 +24,7 @@ public static class Rations
     /// <c>() =&gt; FlavorText.RationName(biome, rng)</c>.</param>
     public static RationRefillResult Refill(PlayerState player, BalanceData balance, Func<string> displayNameFactory)
     {
-        var freeSlots = player.HaversackCapacity - player.Haversack.Count;
+        var freeSlots = player.PackCapacity - player.Pack.Count;
         if (freeSlots <= 0) return new RationRefillResult(0, 0);
 
         var pricePerRation = balance.Items[RationDefId].Cost ?? 0;
@@ -36,7 +36,7 @@ public static class Rations
         player.Gold -= goldSpent;
 
         for (int i = 0; i < toAdd; i++)
-            player.Haversack.Add(new ItemInstance(RationDefId, displayNameFactory()));
+            player.Pack.Add(new ItemInstance(RationDefId, displayNameFactory()));
 
         return new RationRefillResult(toAdd, goldSpent);
     }

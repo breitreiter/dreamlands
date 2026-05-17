@@ -35,9 +35,10 @@ public static class Mechanics
             "heal_spirits" => ApplyHealSpirits(args, state, balance),
             "give_gold" => ApplyGiveGold(args, state, balance),
             "rem_gold" => ApplyRemGold(args, state, balance),
-            "increase_skill" => ApplyIncreaseSkill(args, state, balance),
-            "decrease_skill" => ApplyDecreaseSkill(args, state, balance),
+            "increase_skill" or "inc_skill" => ApplyIncreaseSkill(args, state, balance),
+            "decrease_skill" or "dec_skill" => ApplyDecreaseSkill(args, state, balance),
             "set_skill" => ApplySetSkill(args, state, balance),
+            "set_skill_tier" => ApplySetSkillTier(args, state),
             "add_item" => ApplyAddItem(args, state, balance, rng),
             "add_random_items" => ApplyAddRandomItems(args, state, balance, rng),
             "lose_random_item" => ApplyLoseRandomItem(state, rng),
@@ -130,11 +131,42 @@ public static class Mechanics
         if (!int.TryParse(args[1], out var level)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
 
         var current = (int)state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = (SkillTier)Math.Clamp(level, (int)SkillTier.Untrained, (int)SkillTier.Expert);
+        // Map int to tier: 0 → Untrained, 1-3 → Trained, 4+ → Expert
+        var newLevel = level == 0 ? SkillTier.Untrained
+                     : level >= 4 ? SkillTier.Expert
+                     : SkillTier.Trained;
         var delta = (int)newLevel - current;
         state.Skills[skill.Value] = newLevel;
 
         return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
+    }
+
+    /// <summary>
+    /// Set a skill tier directly by name: untrained | trained | expert.
+    /// Clean authoring form — coexists with the int-based set_skill.
+    /// </summary>
+    static MechanicResult ApplySetSkillTier(List<string> args, PlayerState state)
+    {
+        if (args.Count < 2) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+
+        var skill = Skills.FromScriptName(args[0]);
+        if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+
+        var tierName = args[1].ToLowerInvariant();
+        var newLevel = tierName switch
+        {
+            "untrained" => SkillTier.Untrained,
+            "trained"   => SkillTier.Trained,
+            "expert"    => SkillTier.Expert,
+            _           => (SkillTier?)null,
+        };
+        if (newLevel == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+
+        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
+        var delta = (int)newLevel.Value - current;
+        state.Skills[skill.Value] = newLevel.Value;
+
+        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel.Value);
     }
 
     static MechanicResult ApplyAddItem(List<string> args, PlayerState state, BalanceData balance, Random rng)
@@ -313,15 +345,23 @@ public static class Mechanics
         var id = args[0];
         if (state.ActiveConditions.Contains(id)) return null;
 
-        balance.Conditions.TryGetValue(id, out var def);
-        var dc = def?.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
-        var check = SkillChecks.RollResist(id, dc, state, balance, rng);
+        // Passive resist: travel conditions → Bushcraft, serious → Cunning
+        var resistSkill = id switch
+        {
+            "exhausted" or "freezing" or "thirsty" or "lost" => Skill.Bushcraft,
+            "injured" or "poisoned" or "irradiated" or "lattice_sickness" => Skill.Cunning,
+            _ => (Skill?)null,
+        };
 
-        if (check.Passed)
-            return new MechanicResult.ConditionResisted(id, check);
+        var tier = resistSkill.HasValue
+            ? state.Skills.GetValueOrDefault(resistSkill.Value)
+            : SkillTier.Untrained;
+
+        if (SkillResolution.RollPassiveResist(tier, rng))
+            return new MechanicResult.ConditionResisted(id, null);
 
         state.ActiveConditions.Add(id);
-        return new MechanicResult.ConditionAdded(id, check);
+        return new MechanicResult.ConditionAdded(id, null);
     }
 
     static MechanicResult? ApplyRemoveCondition(List<string> args, PlayerState state)

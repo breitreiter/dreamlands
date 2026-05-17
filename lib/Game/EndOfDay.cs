@@ -3,16 +3,18 @@ using Dreamlands.Rules;
 namespace Dreamlands.Game;
 
 /// <summary>
-/// End-of-day resolution engine. Auto-consumes a single ration and any matching medicine,
-/// resolves ambient resists, condition drain, and HP regen.
+/// End-of-day resolution engine. Auto-consumes a single ration and applies medical_kit cure,
+/// resolves ambient condition resists, condition drain, and HP regen.
 ///
-/// New regime (haversack_refactor.md + spirits_economy.md):
-///   - Single food_ration item, 1 per day. No balanced-meal bonus.
-///   - Conditions are binary; minor conditions drain spirits, serious conditions tick HP.
+/// Tier-based regime (skill_tier_rework.md):
+///   - Bushcraft tier controls food cadence (Untrained: every night; Trained/Expert: every other
+///     night based on state.Day parity — consume when Day is odd).
+///   - Travel condition resists: Bushcraft tier → 0% / 40% / 80% passive resist.
+///   - Serious condition resists: Cunning tier → 0% / 40% / 80% passive resist.
+///   - medical_kit cures one serious condition per night without being consumed.
+///   - Minor conditions drain spirits (-2/night); severe conditions drain HP (-1/night).
 ///   - HP +1/day when no serious conditions, HP -1/day when any serious is active.
 ///   - No daily passive spirits regen on the road.
-///   - Exhaustion DC scales with ConsecutiveWildernessNights.
-///   - Foraging is binary (success skips the day's ration consumption).
 /// </summary>
 public static class EndOfDay
 {
@@ -21,6 +23,9 @@ public static class EndOfDay
 
     // Conditions that only come from encounters, never from ambient resist checks
     static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "irradiated", "lattice_sickness"];
+
+    // Travel conditions resist via Bushcraft; serious conditions resist via Cunning
+    static readonly HashSet<string> TravelConditionIds = ["exhausted", "freezing", "thirsty", "lost"];
 
     /// <summary>
     /// Returns ambient conditions that threaten the player tonight based on camping biome/tier.
@@ -75,17 +80,17 @@ public static class EndOfDay
         // Snapshot which conditions the player already has entering this rest
         var preExisting = new HashSet<string>(state.ActiveConditions);
 
-        // 1. Roll resists silently — record pass/fail, do NOT apply new conditions yet
+        // 1. Roll passive resists — record pass/fail, do NOT apply new conditions yet
         var resistResults = RollResists(state, biome, tier, noBiome, balance, rng, events);
 
-        // 2. Forage check — success skips the day's ration consumption
-        var foragedToday = ResolveForaging(state, noBiome, balance, rng, events);
+        // 2. Determine if player eats tonight based on Bushcraft tier
+        var eatsTonight = ShouldEatTonight(state);
 
-        // 3. Auto-consume one ration (unless foraged or noMeal)
-        if (!noMeal)
-            ResolveFood(state, foragedToday, events);
+        // 3. Auto-consume one ration (unless no food cadence tonight, or noMeal flag)
+        if (!noMeal && eatsTonight)
+            ResolveFood(state, events);
 
-        // 4. Auto-consume medicine for serious conditions
+        // 4. Auto-apply medical_kit for serious conditions (cure without consuming)
         var treatedConditions = ResolveMedicines(state, preExisting, balance, events);
 
         // 5. Apply new conditions from failed resists
@@ -106,7 +111,7 @@ public static class EndOfDay
             return events;
         }
 
-        // 9. Increment consecutive wilderness nights counter (feeds exhaustion DC)
+        // 9. Increment consecutive wilderness nights counter (feeds exhaustion scaling logic)
         if (!noBiome)
             state.ConsecutiveWildernessNights++;
 
@@ -135,9 +140,9 @@ public static class EndOfDay
     }
 
     /// <summary>
-    /// Roll resist checks for all ambient threats. Returns failed condition IDs.
-    /// Exhaustion uses a scaling DC tied to consecutive wilderness nights;
-    /// other conditions use their static ResistDifficulty.
+    /// Roll passive resists for all ambient threats using the tier model.
+    /// Travel conditions resist via Bushcraft; others use the default (0%).
+    /// Returns condition IDs that failed the resist check.
     /// </summary>
     static HashSet<string> RollResists(PlayerState state, string biome, int tier,
         bool noBiome, BalanceData balance, Random rng, List<EndOfDayEvent> events)
@@ -146,35 +151,26 @@ public static class EndOfDay
         if (noBiome) return failed;
 
         var threats = GetThreats(biome, tier, balance);
+        var bushcraftTier = state.Skills.GetValueOrDefault(Skill.Bushcraft);
 
         foreach (var threat in threats)
         {
             // Skip rolls for conditions the player already has — adding is a no-op
             if (state.ActiveConditions.Contains(threat.Id)) continue;
 
-            // Skip threats the player just cleared this turn — resolving an encounter that
-            // removes a condition shouldn't be immediately undone by the same end-of-day cycle.
+            // Skip threats the player just cleared this turn
             if (state.ConditionsClearedThisTurn.Contains(threat.Id)) continue;
 
-            SkillCheckResult check;
-            if (threat.Id == "exhausted")
-            {
-                var dc = balance.Character.ExhaustionBaseDC
-                       + balance.Character.ExhaustionDCPerNight * state.ConsecutiveWildernessNights;
-                check = SkillChecks.RollResist(threat.Id, dc, state, balance, rng);
-            }
-            else
-            {
-                var dc = threat.ResistDifficulty ?? balance.Character.AmbientResistDifficulty;
-                check = SkillChecks.RollResist(threat.Id, dc, state, balance, rng);
-            }
+            // Tier-based passive resist: travel conditions use Bushcraft
+            var tier_ = TravelConditionIds.Contains(threat.Id) ? bushcraftTier : SkillTier.Untrained;
+            var resisted = SkillResolution.RollPassiveResist(tier_, rng);
 
-            if (check.Passed)
-                events.Add(new EndOfDayEvent.ResistPassed(threat.Id, check));
+            if (resisted)
+                events.Add(new EndOfDayEvent.ResistPassed(threat.Id, null));
             else
             {
                 failed.Add(threat.Id);
-                events.Add(new EndOfDayEvent.ResistFailed(threat.Id, check));
+                events.Add(new EndOfDayEvent.ResistFailed(threat.Id, null));
             }
         }
 
@@ -182,41 +178,31 @@ public static class EndOfDay
     }
 
     /// <summary>
-    /// Binary foraging: d20 + bushcraft + bushcraft gear vs ForageDC. Success means
-    /// the player skips the day's ration consumption (eats from the land). Failure
-    /// is silent — they fall back on their pack rations. No items added either way.
+    /// Determine if the player should consume a ration tonight.
+    /// Untrained Bushcraft: eat every night.
+    /// Trained/Expert Bushcraft: eat every other night — consume on odd days.
+    /// No new state field needed; parity of Day drives the cadence.
     /// </summary>
-    static bool ResolveForaging(PlayerState state, bool noBiome,
-        BalanceData balance, Random rng, List<EndOfDayEvent> events)
+    static bool ShouldEatTonight(PlayerState state)
     {
-        if (noBiome) return false;
+        var tier = state.Skills.GetValueOrDefault(Skill.Bushcraft);
+        if (tier == SkillTier.Untrained)
+            return true;
 
-        var skillLevel = (int)state.Skills.GetValueOrDefault(Skill.Bushcraft);
-        var itemBonus = SkillChecks.GetItemBonus(Skill.Bushcraft, state, balance);
-        var modifier = skillLevel + itemBonus;
-
-        var natural = SkillChecks.RollD20(RollMode.Normal, rng);
-        var total = natural + modifier;
-        var fed = total >= balance.Character.ForageDC;
-
-        events.Add(new EndOfDayEvent.Foraged(total, modifier, fed));
-        return fed;
+        // Trained/Expert: consume on odd days (1, 3, 5…)
+        return state.Day % 2 != 0;
     }
 
     /// <summary>
-    /// Eat one ration from the haversack. If foraging fed the player, skip consumption.
-    /// If no ration is available, the day is hungry — caller checks the Starving event
-    /// and applies a spirits penalty.
+    /// Eat one ration from the pack. Emits FoodConsumed or Starving.
     /// </summary>
-    static void ResolveFood(PlayerState state, bool foragedToday, List<EndOfDayEvent> events)
+    static void ResolveFood(PlayerState state, List<EndOfDayEvent> events)
     {
-        if (foragedToday) return;
-
-        var idx = state.Haversack.FindIndex(i => i.DefId == Rations.RationDefId);
+        var idx = state.Pack.FindIndex(i => i.DefId == Rations.RationDefId);
         if (idx >= 0)
         {
-            var item = state.Haversack[idx];
-            state.Haversack.RemoveAt(idx);
+            var item = state.Pack[idx];
+            state.Pack.RemoveAt(idx);
             events.Add(new EndOfDayEvent.FoodConsumed([item.DisplayName]));
         }
         else
@@ -227,43 +213,35 @@ public static class EndOfDay
     }
 
     /// <summary>
-    /// Auto-consume medicine for pre-existing serious conditions. Conditions are binary —
-    /// one matching medicine clears one condition.
+    /// Apply medical_kit cure for pre-existing serious conditions.
+    /// The kit is NOT consumed — it persists in the pack for future nights.
+    /// Cures one condition per night (alphabetic order if multiple serious conditions active).
     /// </summary>
     static HashSet<string> ResolveMedicines(PlayerState state, HashSet<string> preExisting,
         BalanceData balance, List<EndOfDayEvent> events)
     {
-        var consumed = new List<(int Index, string DefId, string ConditionId)>();
-
-        foreach (var conditionId in state.ActiveConditions)
-        {
-            if (!preExisting.Contains(conditionId)) continue;
-
-            for (int i = 0; i < state.Haversack.Count; i++)
-            {
-                var item = state.Haversack[i];
-                if (!balance.Items.TryGetValue(item.DefId, out var itemDef)) continue;
-                if (!itemDef.Cures.Contains(conditionId)) continue;
-                if (consumed.Any(c => c.Index == i)) continue;
-
-                consumed.Add((i, item.DefId, conditionId));
-                break;
-            }
-        }
-
         var treated = new HashSet<string>();
 
-        foreach (var (idx, defId, conditionId) in consumed.OrderByDescending(c => c.Index))
-        {
-            state.Haversack.RemoveAt(idx);
-            treated.Add(conditionId);
+        // Find a medical_kit in pack
+        var kit = state.Pack.FirstOrDefault(i => i.DefId == "medical_kit");
+        if (kit == null) return treated;
 
-            if (state.ActiveConditions.Remove(conditionId))
-            {
-                events.Add(new EndOfDayEvent.CureApplied(defId, conditionId));
-                events.Add(new EndOfDayEvent.ConditionCured(conditionId));
-            }
-        }
+        // Find the first pre-existing serious condition (alphabetic for determinism)
+        var seriousConditions = state.ActiveConditions
+            .Where(id => preExisting.Contains(id)
+                && balance.Conditions.TryGetValue(id, out var def)
+                && def.Severity == ConditionSeverity.Severe)
+            .OrderBy(id => id)
+            .ToList();
+
+        if (seriousConditions.Count == 0) return treated;
+
+        var conditionId = seriousConditions[0];
+        // Cure without consuming the kit
+        state.ActiveConditions.Remove(conditionId);
+        treated.Add(conditionId);
+        events.Add(new EndOfDayEvent.CureApplied(kit.DefId, conditionId));
+        events.Add(new EndOfDayEvent.ConditionCured(conditionId));
 
         return treated;
     }
@@ -280,7 +258,7 @@ public static class EndOfDay
 
     /// <summary>
     /// Apply spirits drain from active minor conditions and from missed meals.
-    /// Drains stack — exhausted + thirsty in the desert costs 2 spirits/day.
+    /// Drains stack — exhausted + thirsty in the desert costs 4 spirits/night.
     /// </summary>
     static void ResolveSpiritsDrain(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
     {

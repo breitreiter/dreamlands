@@ -198,17 +198,17 @@ public class InnTests
     }
 
     [Fact]
-    public void BookService_Chapterhouse_DoesNotConsumeHaversackMedicines()
+    public void BookService_Chapterhouse_DoesNotConsumePackMedicines()
     {
         var p = Fresh();
         p.ActiveConditions.Add("injured");
-        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        p.Pack.Add(new ItemInstance("bandages", "Bandages"));
 
         var result = Inn.BookService(p, Balance, Inn.FullServiceId, chapterhouse: true);
 
         Assert.True(result.Success);
         Assert.DoesNotContain("injured", p.ActiveConditions);
-        Assert.Contains(p.Haversack, i => i.DefId == "bandages");
+        Assert.Contains(p.Pack, i => i.DefId == "bandages");
         Assert.Empty(result.MedicinesConsumed);
     }
 }

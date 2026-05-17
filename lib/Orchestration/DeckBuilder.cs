@@ -147,12 +147,11 @@ public static class DeckBuilder
 
     static IEnumerable<ItemDef> GetEquippedItems(PlayerState player, BalanceData balance, Skill? encounterSkill)
     {
-        var equipment = player.Equipment;
-        if (equipment.Weapon?.DefId is { } wid && balance.Items.TryGetValue(wid, out var w) && IsRelevant(w, encounterSkill))
+        if (player.EquippedWeapon?.DefId is { } wid && balance.Items.TryGetValue(wid, out var w) && IsRelevant(w, encounterSkill))
             yield return w;
-        if (equipment.Armor?.DefId is { } aid && balance.Items.TryGetValue(aid, out var a) && IsRelevant(a, encounterSkill))
+        if (player.EquippedArmor?.DefId is { } aid && balance.Items.TryGetValue(aid, out var a) && IsRelevant(a, encounterSkill))
             yield return a;
-        if (equipment.Boots?.DefId is { } bid && balance.Items.TryGetValue(bid, out var b) && IsRelevant(b, encounterSkill))
+        if (player.EquippedBoots?.DefId is { } bid && balance.Items.TryGetValue(bid, out var b) && IsRelevant(b, encounterSkill))
             yield return b;
 
         // Tokens and tools in Pack can also contribute cards

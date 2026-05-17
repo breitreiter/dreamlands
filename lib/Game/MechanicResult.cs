@@ -16,7 +16,7 @@ public abstract record MechanicResult
     public record TagRemoved(string TagId) : MechanicResult;
     public record QualityChanged(string QualityId, int Delta, int NewValue) : MechanicResult;
     public record ConditionAdded(string ConditionId, SkillCheckResult? Check = null) : MechanicResult;
-    public record ConditionResisted(string ConditionId, SkillCheckResult Check) : MechanicResult;
+    public record ConditionResisted(string ConditionId, SkillCheckResult? Check = null) : MechanicResult;
     public record ConditionRemoved(string ConditionId) : MechanicResult;
     public record TimeAdvanced(TimePeriod NewPeriod, int NewDay) : MechanicResult;
     public record Navigation(string EncounterId) : MechanicResult;

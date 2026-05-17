@@ -237,30 +237,16 @@ public static class Market
         if (price <= 0)
             return new MarketResult(false, "Item has no sell value");
 
-        // Search pack first, then haversack, then equipment
+        // Search pack (all items, equipped or not — haversack is an alias for pack)
         var packIdx = player.Pack.FindIndex(i => i.DefId == itemDefId);
         if (packIdx >= 0)
         {
+            var item = player.Pack[packIdx];
+            item.IsEquipped = false;
             player.Pack.RemoveAt(packIdx);
             player.Gold += price;
+            var verb = item.IsEquipped ? "Unequipped and sold" : "Sold";
             return new MarketResult(true, $"Sold {def.Name} for {price} gold");
-        }
-
-        var havIdx = player.Haversack.FindIndex(i => i.DefId == itemDefId);
-        if (havIdx >= 0)
-        {
-            player.Haversack.RemoveAt(havIdx);
-            player.Gold += price;
-            return new MarketResult(true, $"Sold {def.Name} for {price} gold");
-        }
-
-        // Check equipped items in pack
-        var equippedIdx = player.Pack.FindIndex(i => i.IsEquipped && i.DefId == itemDefId);
-        if (equippedIdx >= 0)
-        {
-            player.Pack.RemoveAt(equippedIdx);
-            player.Gold += price;
-            return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
         }
 
         return new MarketResult(false, $"You don't have {def.Name}");

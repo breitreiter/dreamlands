@@ -157,8 +157,8 @@ public class MarketTests
         var result = Market.Buy(state, "hunting_knife", settlement, Balance, new Random(1));
 
         Assert.True(result.Success);
-        Assert.NotNull(state.Equipment.Weapon);
-        Assert.Equal("hunting_knife", state.Equipment.Weapon.DefId);
+        Assert.NotNull(state.EquippedWeapon);
+        Assert.Equal("hunting_knife", state.EquippedWeapon.DefId);
     }
 
     [Fact]

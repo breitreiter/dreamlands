@@ -94,14 +94,14 @@ public static class Inn
                 continue;
             }
 
-            var idx = state.Haversack.FindIndex(i =>
+            var idx = state.Pack.FindIndex(i =>
                 balance.Items.TryGetValue(i.DefId, out var itemDef)
                 && itemDef.Cures.Contains(conditionId));
 
             if (idx < 0) continue;
 
-            medicinesConsumed.Add(state.Haversack[idx].DefId);
-            state.Haversack.RemoveAt(idx);
+            medicinesConsumed.Add(state.Pack[idx].DefId);
+            state.Pack.RemoveAt(idx);
             state.ActiveConditions.Remove(conditionId);
             conditionsCleared.Add(conditionId);
         }

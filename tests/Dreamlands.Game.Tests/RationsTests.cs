@@ -18,39 +18,39 @@ public class RationsTests
     static int RationCost => Balance.Items[Rations.RationDefId].Cost ?? 0;
 
     [Fact]
-    public void Refill_Empty_FillsHaversackToCapacityAndCharges()
+    public void Refill_Empty_FillsPackToCapacityAndCharges()
     {
         var p = Fresh();
         var goldBefore = p.Gold;
         var result = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(p.HaversackCapacity, result.Added);
-        Assert.Equal(p.HaversackCapacity * RationCost, result.GoldSpent);
+        Assert.Equal(p.PackCapacity, result.Added);
+        Assert.Equal(p.PackCapacity * RationCost, result.GoldSpent);
         Assert.Equal(goldBefore - result.GoldSpent, p.Gold);
-        Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
-        Assert.True(p.Haversack.All(i => i.DefId == Rations.RationDefId));
+        Assert.Equal(p.PackCapacity, p.Pack.Count);
+        Assert.True(p.Pack.All(i => i.DefId == Rations.RationDefId));
     }
 
     [Fact]
     public void Refill_PartiallyFilled_TopsUpRemainingSlots()
     {
         var p = Fresh();
-        // Pre-load with 3 non-rations (trinkets, keys, etc.)
+        // Pre-load with 3 non-rations
         for (int i = 0; i < 3; i++)
-            p.Haversack.Add(new ItemInstance("trinket", "Trinket"));
+            p.Pack.Add(new ItemInstance("trinket", "Trinket"));
 
         var result = Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Equal(p.HaversackCapacity - 3, result.Added);
-        Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
+        Assert.Equal(p.PackCapacity - 3, result.Added);
+        Assert.Equal(p.PackCapacity, p.Pack.Count);
     }
 
     [Fact]
     public void Refill_Full_AddsZero()
     {
         var p = Fresh();
-        for (int i = 0; i < p.HaversackCapacity; i++)
-            p.Haversack.Add(new ItemInstance("trinket", "Trinket"));
+        for (int i = 0; i < p.PackCapacity; i++)
+            p.Pack.Add(new ItemInstance("trinket", "Trinket"));
 
         var goldBefore = p.Gold;
         var result = Rations.Refill(p, Balance, () => RationName);
@@ -58,21 +58,21 @@ public class RationsTests
         Assert.Equal(0, result.Added);
         Assert.Equal(0, result.GoldSpent);
         Assert.Equal(goldBefore, p.Gold);
-        Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
-        Assert.True(p.Haversack.All(i => i.DefId == "trinket"));
+        Assert.Equal(p.PackCapacity, p.Pack.Count);
+        Assert.True(p.Pack.All(i => i.DefId == "trinket"));
     }
 
     [Fact]
     public void Refill_DoesNotDisplaceExistingItems()
     {
         var p = Fresh();
-        p.Haversack.Add(new ItemInstance("dungeon_key", "Brass Key"));
-        p.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb"));
+        p.Pack.Add(new ItemInstance("dungeon_key", "Brass Key"));
+        p.Pack.Add(new ItemInstance("ornate_spyglass", "Ornate Spyglass"));
 
         Rations.Refill(p, Balance, () => RationName);
 
-        Assert.Contains(p.Haversack, i => i.DefId == "dungeon_key");
-        Assert.Contains(p.Haversack, i => i.DefId == "ivory_comb");
+        Assert.Contains(p.Pack, i => i.DefId == "dungeon_key");
+        Assert.Contains(p.Pack, i => i.DefId == "ornate_spyglass");
     }
 
     [Fact]
@@ -94,12 +94,12 @@ public class RationsTests
 
         // Simulate eating 4 rations
         for (int i = 0; i < 4; i++)
-            p.Haversack.RemoveAt(p.Haversack.FindIndex(it => it.DefId == Rations.RationDefId));
+            p.Pack.RemoveAt(p.Pack.FindIndex(it => it.DefId == Rations.RationDefId));
 
         var result = Rations.Refill(p, Balance, () => RationName);
 
         Assert.Equal(4, result.Added);
-        Assert.Equal(p.HaversackCapacity, p.Haversack.Count);
+        Assert.Equal(p.PackCapacity, p.Pack.Count);
     }
 
     [Fact]
@@ -125,6 +125,6 @@ public class RationsTests
 
         Assert.Equal(0, result.Added);
         Assert.Equal(0, result.GoldSpent);
-        Assert.Empty(p.Haversack);
+        Assert.Empty(p.Pack);
     }
 }

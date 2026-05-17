@@ -101,9 +101,9 @@ public static class CombatOrchestrator
         ItemDef? weapon = null;
         ItemDef? armor = null;
 
-        if (player.Equipment.Weapon is { } w && ItemDef.All.TryGetValue(w.DefId, out var wDef))
+        if (player.EquippedWeapon is { } w && ItemDef.All.TryGetValue(w.DefId, out var wDef))
             weapon = wDef;
-        if (player.Equipment.Armor is { } a && ItemDef.All.TryGetValue(a.DefId, out var aDef))
+        if (player.EquippedArmor is { } a && ItemDef.All.TryGetValue(a.DefId, out var aDef))
             armor = aDef;
 
         return CombatPlayerProfile.From(weapon, armor);

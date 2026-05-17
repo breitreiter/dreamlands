@@ -13,6 +13,7 @@ public static class Choices
 {
     /// <summary>
     /// Filter an encounter's choices to only those whose Requires conditions are met.
+    /// Surviving condition forms in [requires]: has | tag | quality | meets
     /// </summary>
     public static List<Encounter.Choice> GetVisible(Encounter.Encounter encounter, PlayerState state, BalanceData balance)
     {
@@ -43,6 +44,9 @@ public static class Choices
     /// <summary>
     /// Resolve which branch of a choice applies. For conditional choices, evaluates branches
     /// top-to-bottom; first matching condition wins. For single choices, returns directly.
+    ///
+    /// Supported branch condition forms: has | tag | quality | meets
+    /// The old "check" form (d20 roll) is removed — picker resolution lands in Phase 5.
     /// </summary>
     public static ResolvedChoice Resolve(Encounter.Choice choice, PlayerState state, BalanceData balance, Random rng)
     {
@@ -62,38 +66,38 @@ public static class Choices
 
             foreach (var branch in choice.Conditional.Branches)
             {
-                // For check conditions, we need to capture the skill check result
-                SkillCheckResult? checkResult = null;
                 bool passed;
+                SkillCheckResult? checkResult = null;
 
                 var tokens = ActionVerb.Tokenize(branch.Condition);
-                if (tokens.Count >= 3 && tokens[0] == "check")
+                if (tokens.Count >= 3 && tokens[0] == "meets")
                 {
                     var skill = Skills.FromScriptName(tokens[1]);
-                    var difficulty = Difficulties.FromScriptName(tokens[2]);
-                    if (skill != null && difficulty != null)
+                    if (skill != null)
                     {
-                        checkResult = SkillChecks.Roll(skill.Value, difficulty.Value, state, balance, rng);
-                        lastCheckResult = checkResult;
-                        passed = checkResult.Passed;
-                    }
-                    else
-                    {
-                        passed = false;
-                    }
-                }
-                else if (tokens.Count >= 3 && tokens[0] == "meets")
-                {
-                    var skill = Skills.FromScriptName(tokens[1]);
-                    if (skill != null && int.TryParse(tokens[2], out var target))
-                    {
-                        var skillLevel = (int)state.Skills.GetValueOrDefault(skill.Value);
-                        var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
-                        var total = skillLevel + itemBonus;
-                        passed = total >= target;
-                        checkResult = new SkillCheckResult(passed, total, target, total, skillLevel, skill.Value,
-                            IsMeetsCheck: true);
-                        lastCheckResult = checkResult;
+                        var targetTier = tokens[2].ToLowerInvariant() switch
+                        {
+                            "untrained" => (SkillTier?)SkillTier.Untrained,
+                            "trained"   => SkillTier.Trained,
+                            "expert"    => SkillTier.Expert,
+                            var s when int.TryParse(s, out var n) => (SkillTier)Math.Clamp(n, 0, 2),
+                            _ => null,
+                        };
+
+                        if (targetTier != null)
+                        {
+                            var playerTier = state.Skills.GetValueOrDefault(skill.Value);
+                            passed = playerTier >= targetTier.Value;
+                            // Emit a meets-check result for the UI roll display (IsMeetsCheck = true)
+                            checkResult = new SkillCheckResult(
+                                passed, (int)playerTier, (int)targetTier.Value, (int)playerTier,
+                                (int)playerTier, skill.Value, IsMeetsCheck: true);
+                            lastCheckResult = checkResult;
+                        }
+                        else
+                        {
+                            passed = false;
+                        }
                     }
                     else
                     {
@@ -115,7 +119,7 @@ public static class Choices
                 }
             }
 
-            // No branch matched — use fallback (preserve last check result so player sees the failed roll)
+            // No branch matched — use fallback (preserve last check result so player sees the result)
             if (choice.Conditional.Fallback != null)
             {
                 return new ResolvedChoice(

@@ -4,8 +4,11 @@ namespace Dreamlands.Game;
 
 /// <summary>
 /// Evaluates condition expressions against player state.
-/// Supports compound expressions: &&, ||, and ! prefix negation on stateless conditions.
-/// check and meets cannot appear in compound expressions or be negated.
+/// Supports compound expressions: &amp;&amp;, ||, and ! prefix negation on stateless conditions.
+/// meets cannot appear in compound expressions or be negated.
+///
+/// Surviving condition forms: has | tag | quality | meets
+/// The old "check" predicate (d20 roll) is removed — Phase 5 will wire picker resolution.
 /// </summary>
 public static class Conditions
 {
@@ -52,24 +55,14 @@ public static class Conditions
 
         var result = verbName switch
         {
-            "check"   => EvaluateCheck(tokens, ref pos, state, balance, rng),
             "has"     => pos < tokens.Count ? EvaluateHas(tokens[pos++], state) : false,
             "tag"     => pos < tokens.Count ? EvaluateTag(tokens[pos++], state) : false,
-            "meets"   => EvaluateMeets(tokens, ref pos, state, balance),
+            "meets"   => EvaluateMeets(tokens, ref pos, state),
             "quality" => EvaluateQuality(tokens, ref pos, state),
             _         => false,
         };
 
         return negated ? !result : result;
-    }
-
-    static bool EvaluateCheck(List<string> tokens, ref int pos, PlayerState state, BalanceData balance, Random rng)
-    {
-        if (pos + 1 > tokens.Count) return false;
-        var skill = Skills.FromScriptName(tokens[pos++]);
-        var difficulty = Difficulties.FromScriptName(tokens[pos++]);
-        if (skill == null || difficulty == null) return false;
-        return SkillChecks.Roll(skill.Value, difficulty.Value, state, balance, rng).Passed;
     }
 
     static bool EvaluateHas(string itemId, PlayerState state) =>
@@ -78,14 +71,33 @@ public static class Conditions
     static bool EvaluateTag(string tagId, PlayerState state) =>
         state.Tags.Contains(tagId);
 
-    static bool EvaluateMeets(List<string> tokens, ref int pos, PlayerState state, BalanceData balance)
+    /// <summary>
+    /// Evaluate "meets &lt;skill&gt; &lt;tier&gt;" — tier is Untrained|Trained|Expert (case-insensitive).
+    /// True when the player's skill tier is >= the target tier.
+    /// </summary>
+    static bool EvaluateMeets(List<string> tokens, ref int pos, PlayerState state)
     {
-        if (pos + 1 > tokens.Count) return false;
-        var skill = Skills.FromScriptName(tokens[pos++]);
-        if (skill == null || !int.TryParse(tokens[pos++], out var target)) return false;
-        var skillLevel = (int)state.Skills.GetValueOrDefault(skill.Value);
-        var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
-        return skillLevel + itemBonus >= target;
+        if (pos + 1 >= tokens.Count) return false;
+        var skillToken = tokens[pos++];
+        var tierToken  = tokens[pos++];
+
+        var skill = Skills.FromScriptName(skillToken);
+        if (skill == null) return false;
+
+        var targetTier = tierToken.ToLowerInvariant() switch
+        {
+            "untrained" => (SkillTier?)SkillTier.Untrained,
+            "trained"   => SkillTier.Trained,
+            "expert"    => SkillTier.Expert,
+            // Legacy int form — accept for backward compat during Phase 4 sweep
+            var s when int.TryParse(s, out var n) => (SkillTier)Math.Clamp(n, 0, 2),
+            _ => null,
+        };
+
+        if (targetTier == null) return false;
+
+        var playerTier = state.Skills.GetValueOrDefault(skill.Value);
+        return playerTier >= targetTier.Value;
     }
 
     static bool EvaluateQuality(List<string> tokens, ref int pos, PlayerState state)

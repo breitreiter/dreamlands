@@ -1235,10 +1235,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             if (price > 0) sellPrices[item.DefId] = price;
         }
         foreach (var item in player.Pack) AddSellPrice(item);
-        foreach (var item in player.Haversack) AddSellPrice(item);
-        if (player.Equipment.Weapon != null) AddSellPrice(player.Equipment.Weapon);
-        if (player.Equipment.Armor != null) AddSellPrice(player.Equipment.Armor);
-        if (player.Equipment.Boots != null) AddSellPrice(player.Equipment.Boots);
 
         var rationCost = data.Balance.Items[Rations.RationDefId].Cost ?? 0;
 
@@ -1310,7 +1306,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             items = settlementState.Bank.Select(i => BuildItemInfo(i)).ToList(),
             capacity = data.Balance.Settlements.BankCapacity,
             packFull = player.Pack.Count >= player.PackCapacity,
-            haversackFull = player.Haversack.Count >= player.HaversackCapacity,
         });
     }
 
@@ -1582,13 +1577,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     {
         Pack = p.Pack.Select(i => BuildItemInfo(i, p.X, p.Y)).ToList(),
         PackCapacity = p.PackCapacity,
-        Haversack = p.Haversack.Select(i => BuildItemInfo(i, p.X, p.Y)).ToList(),
-        HaversackCapacity = p.HaversackCapacity,
         Equipment = new EquipmentInfo
         {
-            Weapon = p.Equipment.Weapon != null ? BuildItemInfo(p.Equipment.Weapon) : null,
-            Armor = p.Equipment.Armor != null ? BuildItemInfo(p.Equipment.Armor) : null,
-            Boots = p.Equipment.Boots != null ? BuildItemInfo(p.Equipment.Boots) : null,
+            Weapon = p.EquippedWeapon != null ? BuildItemInfo(p.EquippedWeapon) : null,
+            Armor = p.EquippedArmor != null ? BuildItemInfo(p.EquippedArmor) : null,
+            Boots = p.EquippedBoots != null ? BuildItemInfo(p.EquippedBoots) : null,
         },
     };
 
@@ -1744,7 +1737,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 MechanicResult.TagAdded t => $"Tag: {t.TagId}",
                 MechanicResult.TagRemoved t => $"Tag removed: {t.TagId}",
                 MechanicResult.ConditionAdded c => $"Condition: {c.ConditionId}",
-                MechanicResult.ConditionResisted cr => $"Resisted: {cr.ConditionId} (rolled {cr.Check.Rolled} vs DC {cr.Check.Target})",
+                MechanicResult.ConditionResisted cr => cr.Check != null ? $"Resisted: {cr.ConditionId} (rolled {cr.Check.Rolled} vs DC {cr.Check.Target})" : $"Resisted: {cr.ConditionId}",
                 MechanicResult.ConditionRemoved c => $"Condition removed: {c.ConditionId}",
                 MechanicResult.TimeAdvanced ta => $"Time: {ta.NewPeriod}, Day {ta.NewDay}",
                 MechanicResult.Navigation n => $"Navigate to: {n.EncounterId}",
@@ -1754,15 +1747,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             },
             ResistCheck = r switch
             {
-                MechanicResult.ConditionResisted cr2 => new ResistCheckInfo
+                MechanicResult.ConditionResisted { Check: { } ck2 } cr2 => new ResistCheckInfo
                 {
                     ConditionId = cr2.ConditionId,
                     ConditionName = data.Balance.Conditions.GetValueOrDefault(cr2.ConditionId)?.Name ?? cr2.ConditionId,
-                    Passed = cr2.Check.Passed,
-                    Rolled = cr2.Check.Rolled,
-                    Target = cr2.Check.Target,
-                    Modifier = cr2.Check.Modifier,
-                    RollMode = cr2.Check.RollMode != Dreamlands.Game.RollMode.Normal ? cr2.Check.RollMode.ToString().ToLowerInvariant() : null,
+                    Passed = ck2.Passed,
+                    Rolled = ck2.Rolled,
+                    Target = ck2.Target,
+                    Modifier = ck2.Modifier,
+                    RollMode = ck2.RollMode != Dreamlands.Game.RollMode.Normal ? ck2.RollMode.ToString().ToLowerInvariant() : null,
                 },
                 MechanicResult.ConditionAdded { Check: { } ck } ca => new ResistCheckInfo
                 {
@@ -1925,8 +1918,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 EndOfDayEvent.FoodConsumed f => $"Ate: {string.Join(", ", f.FoodEaten)}",
                 EndOfDayEvent.Starving => "No food!",
-                EndOfDayEvent.ResistPassed r => $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
-                EndOfDayEvent.ResistFailed r => $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})",
+                EndOfDayEvent.ResistPassed r => r.Check != null ? $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})" : $"Resisted {r.ConditionId}",
+                EndOfDayEvent.ResistFailed r => r.Check != null ? $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})" : $"Failed to resist {r.ConditionId}",
                 EndOfDayEvent.CureApplied c => $"{c.ItemDefId} cured {c.ConditionId}!",
                 EndOfDayEvent.ConditionAcquired a => $"Contracted {a.ConditionId}",
                 EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",

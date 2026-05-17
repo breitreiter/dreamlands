@@ -300,8 +300,6 @@ static class WalkCommand
             parts.Add($"qualities=[{string.Join(", ", state.Qualities.OrderBy(q => q.Key).Select(q => $"{q.Key}={q.Value}"))}]");
         if (state.Pack.Count > 0)
             parts.Add($"items=[{string.Join(", ", state.Pack.Select(i => i.DefId))}]");
-        if (state.Haversack.Count > 0)
-            parts.Add($"haversack=[{string.Join(", ", state.Haversack.Select(i => i.DefId))}]");
         if (state.ActiveConditions.Count > 0)
             parts.Add($"conditions=[{string.Join(", ", state.ActiveConditions.OrderBy(c => c))}]");
 
@@ -319,8 +317,6 @@ static class WalkCommand
             Console.WriteLine($"    Qualities: {string.Join(", ", state.Qualities.OrderBy(q => q.Key).Select(q => $"{q.Key}={q.Value}"))}");
         if (state.Pack.Count > 0)
             Console.WriteLine($"    Pack: {string.Join(", ", state.Pack.Select(i => i.DefId))}");
-        if (state.Haversack.Count > 0)
-            Console.WriteLine($"    Haversack: {string.Join(", ", state.Haversack.Select(i => i.DefId))}");
         if (state.ActiveConditions.Count > 0)
             Console.WriteLine($"    Conditions: {string.Join(", ", state.ActiveConditions.OrderBy(c => c))}");
 

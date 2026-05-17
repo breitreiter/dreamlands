@@ -53,7 +53,7 @@ public class TacticalRunnerTests
     {
         var session = Helpers.MakeSession();
         // Give the player a weapon so they have some collection cards
-        session.Player.Equipment.Weapon = new ItemInstance("short_sword", "Short Sword");
+        session.Player.Pack.Add(new ItemInstance("short_sword", "Short Sword") { IsEquipped = true });
         // Set bushcraft so traverse queue visibility works (base stat drives visible depth)
         session.Player.Skills[Skill.Bushcraft] = SkillTier.Expert;
         var state = new TacticalState();

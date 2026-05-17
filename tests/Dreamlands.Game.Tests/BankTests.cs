@@ -59,12 +59,12 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife") { IsEquipped = true });
 
         var error = Bank.Deposit(state, "hunting_knife", "weapon", settlement, Balance);
 
         Assert.Null(error);
-        Assert.Null(state.Equipment.Weapon);
+        Assert.Null(state.EquippedWeapon);
         Assert.Single(settlement.Bank);
     }
 
@@ -73,12 +73,12 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Equipment.Armor = new ItemInstance("leather_jerkin", "Leather Jerkin");
+        state.Pack.Add(new ItemInstance("leather_jerkin", "Leather Jerkin") { IsEquipped = true });
 
         var error = Bank.Deposit(state, "leather_jerkin", "armor", settlement, Balance);
 
         Assert.Null(error);
-        Assert.Null(state.Equipment.Armor);
+        Assert.Null(state.EquippedArmor);
         Assert.Single(settlement.Bank);
     }
 
@@ -87,12 +87,12 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Equipment.Boots = new ItemInstance("walking_boots", "Walking Boots");
+        state.Pack.Add(new ItemInstance("walking_boots", "Walking Boots") { IsEquipped = true });
 
         var error = Bank.Deposit(state, "walking_boots", "boots", settlement, Balance);
 
         Assert.Null(error);
-        Assert.Null(state.Equipment.Boots);
+        Assert.Null(state.EquippedBoots);
         Assert.Single(settlement.Bank);
     }
 
@@ -127,13 +127,13 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife") { IsEquipped = true });
 
         // Try to deposit "hatchet" from weapon slot, but equipped weapon is hunting_knife
         var error = Bank.Deposit(state, "hatchet", "weapon", settlement, Balance);
 
         Assert.Equal("Item not equipped in weapon slot", error);
-        Assert.NotNull(state.Equipment.Weapon); // hunting_knife still equipped
+        Assert.NotNull(state.EquippedWeapon); // hunting_knife still equipped
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class BankTests
     }
 
     [Fact]
-    public void Withdraw_Consumable_GoesToHaversack()
+    public void Withdraw_Consumable_GoesToPack()
     {
         var state = Fresh();
         var settlement = MakeSettlement();
@@ -172,7 +172,7 @@ public class BankTests
 
         Assert.Null(error);
         Assert.Empty(settlement.Bank);
-        Assert.Contains(state.Haversack, i => i.DefId == "food_ration");
+        Assert.Contains(state.Pack, i => i.DefId == "food_ration");
     }
 
     [Fact]

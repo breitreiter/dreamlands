@@ -1,3 +1,4 @@
+using Dreamlands.Game;
 using Dreamlands.Map;
 using Dreamlands.Orchestration;
 using Dreamlands.Rules;
@@ -77,11 +78,12 @@ public class SettlementRunnerTests
         // Players restock rations explicitly via the market's "Restock food and leave"
         // button, not as a side effect of settlement entry.
         var session = MakeSessionWithSettlement();
-        Assert.Empty(session.Player.Haversack);
+        // Pack starts empty (no rations pre-stocked)
+        Assert.Empty(session.Player.Pack.Where(i => i.DefId == Rations.RationDefId));
 
         SettlementRunner.EnsureSettlement(session);
 
-        Assert.Empty(session.Player.Haversack);
+        Assert.Empty(session.Player.Pack.Where(i => i.DefId == Rations.RationDefId));
     }
 
     [Fact]

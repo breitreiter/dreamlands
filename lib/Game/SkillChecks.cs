@@ -2,9 +2,11 @@ using Dreamlands.Rules;
 
 namespace Dreamlands.Game;
 
+// RollMode and SkillCheckResult retained for server/GameFunctions.cs compat — Phase 5 will remove them.
+
 public enum RollMode { Normal, Advantage, Disadvantage }
 
-/// <summary>Result of a skill check roll.</summary>
+/// <summary>Result of a skill check roll (retained for server compat; d20 roll path removed).</summary>
 public record SkillCheckResult(
     bool Passed, int Rolled, int Target, int Modifier,
     int SkillLevel, Skill Skill,
@@ -13,152 +15,35 @@ public record SkillCheckResult(
     bool WasLuckyReroll = false,
     bool IsMeetsCheck = false);
 
-/// <summary>Skill check dice rolling.</summary>
+/// <summary>
+/// Gear-bonus helpers retained for server/GameFunctions.cs display panel (Phase 5 cleans this up).
+/// The d20 Roll/RollResist/RollD20 paths are deleted — see SkillResolution.cs for the tier model.
+/// </summary>
 public static class SkillChecks
 {
     /// <summary>
-    /// Roll a skill check: d20 + skill level + equipment bonus >= DC.
-    /// Natural 1 always fails, natural 20 always passes. On failure, luck may trigger a reroll.
-    /// Teeth at zero spirits live in TacticalRunner (auto-fail on Spirits ≤ 0); skill checks
-    /// themselves have no spirits modifier.
-    /// </summary>
-    public static SkillCheckResult Roll(
-        Skill skill, Difficulty difficulty, PlayerState state, BalanceData balance, Random rng,
-        RollMode rollMode = RollMode.Normal)
-    {
-        var dc = difficulty.Target();
-        var skillLevel = (int)state.Skills.GetValueOrDefault(skill);
-        var itemBonus = GetItemBonus(skill, state, balance);
-        var modifier = skillLevel + itemBonus;
-
-        var result = RollOnce(dc, modifier, skillLevel, skill, rollMode, rng);
-
-        // Luck reroll on failure
-        if (!result.Passed)
-        {
-            var luckLevel = (int)state.Skills.GetValueOrDefault(Skill.Luck);
-            if (TryLuckReroll(luckLevel, balance, rng))
-            {
-                var reroll = RollOnce(dc, modifier, skillLevel, skill, rollMode, rng);
-                return reroll with { WasLuckyReroll = true };
-            }
-        }
-
-        return result;
-    }
-
-    static SkillCheckResult RollOnce(
-        int dc, int modifier, int skillLevel, Skill skill, RollMode rollMode, Random rng)
-    {
-        var natural = RollD20(rollMode, rng);
-
-        // Natural 1 always fails, natural 20 always passes
-        var passed = natural switch
-        {
-            1 => false,
-            20 => true,
-            _ => natural + modifier >= dc,
-        };
-
-        return new SkillCheckResult(passed, natural + modifier, dc, modifier, skillLevel, skill, rollMode, natural);
-    }
-
-    internal static int RollD20(RollMode mode, Random rng)
-    {
-        var first = rng.Next(1, 21);
-        if (mode == RollMode.Normal) return first;
-
-        var second = rng.Next(1, 21);
-        return mode == RollMode.Advantage ? Math.Max(first, second) : Math.Min(first, second);
-    }
-
-    static bool TryLuckReroll(int luckLevel, BalanceData balance, Random rng)
-    {
-        if (luckLevel <= 0) return false;
-
-        var chances = balance.Character.LuckRerollChance;
-        var index = Math.Min(luckLevel, chances.Count - 1);
-        var threshold = chances[index];
-        if (threshold <= 0) return false;
-
-        return rng.Next(100) < threshold;
-    }
-
-    /// <summary>
-    /// Roll a resist check for an ambient condition. Uses resist bonuses instead of skill bonuses,
-    /// and maps each condition to its resist skill (if any).
-    /// </summary>
-    public static SkillCheckResult RollResist(
-        string conditionId, Difficulty difficulty, PlayerState state, BalanceData balance, Random rng) =>
-        RollResist(conditionId, difficulty.Target(), state, balance, rng);
-
-    /// <summary>
-    /// Roll a resist check against a specific integer DC. Used for conditions whose
-    /// difficulty isn't a fixed Difficulty value (e.g. exhaustion's scaling DC tied to
-    /// consecutive wilderness nights).
-    /// </summary>
-    public static SkillCheckResult RollResist(
-        string conditionId, int dc, PlayerState state, BalanceData balance, Random rng)
-    {
-        // Map condition to skill (some conditions are gear-only, no skill bonus)
-        var skill = conditionId switch
-        {
-            "freezing" or "thirsty" or "lost" => (Skill?)Skill.Bushcraft,
-            "poisoned" => Skill.Bushcraft,
-            "injured" => Skill.Combat,
-            _ => null, // irradiated, lattice_sickness, exhausted — gear only
-        };
-
-        var skillLevel = skill != null ? (int)state.Skills.GetValueOrDefault(skill.Value) : 0;
-        var resistBonus = GetResistBonus(conditionId, state, balance);
-        var modifier = skillLevel + resistBonus;
-        var rollSkill = skill ?? Skill.Luck; // placeholder for result record
-
-        var result = RollOnce(dc, modifier, skillLevel, rollSkill, RollMode.Normal, rng);
-
-        // Luck reroll on failure
-        if (!result.Passed)
-        {
-            var luckLevel = (int)state.Skills.GetValueOrDefault(Skill.Luck);
-            if (TryLuckReroll(luckLevel, balance, rng))
-            {
-                var reroll = RollOnce(dc, modifier, skillLevel, rollSkill, RollMode.Normal, rng);
-                return reroll with { WasLuckyReroll = true };
-            }
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Get item bonus for an encounter skill check. Each skill draws from specific gear sources
-    /// (per dice_mechanics.md): Combat = weapon + token, Cunning = armor + token,
-    /// Negotiation/Bushcraft = two best tools + token, Luck/Mercantile = none (passive).
+    /// Get item bonus for an encounter skill check. Each skill draws from specific gear sources.
+    /// Retained for the server mechanics-display panel; not called by the engine internally.
     /// </summary>
     public static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
     {
-        var gearBonus = skill switch
+        return skill switch
         {
             Skill.Combat => GetEquippedMod(state.EquippedWeapon, Skill.Combat, balance),
             Skill.Cunning => GetEquippedMod(state.EquippedArmor, Skill.Cunning, balance),
             Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
             Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
-            _ => 0, // Luck and Mercantile get no gear bonus
+            _ => 0,
         };
-
-        return gearBonus + GetTokenBonus(skill, state, balance);
     }
 
     /// <summary>
-    /// Get resist bonus for a condition resist check. Gear sources per dice_mechanics.md:
-    /// Injury = armor(big) + token, Poison = armor(big) + token,
-    /// Exhausted = boots(big) + best equipment(small) + token,
-    /// Freezing/Thirsty = two best small gear + token,
-    /// Swamp Fever/Gut Worms/Irradiated = best equipment(small) + token.
+    /// Get resist bonus for a condition resist check.
+    /// Retained for the server mechanics-display panel; not called by EndOfDay internally.
     /// </summary>
     public static int GetResistBonus(string conditionId, PlayerState state, BalanceData balance)
     {
-        int bonus = conditionId switch
+        return conditionId switch
         {
             "injured" => GetEquippedResist(state.EquippedArmor, conditionId, balance),
             "poison" => GetEquippedResist(state.EquippedArmor, conditionId, balance),
@@ -171,8 +56,6 @@ public static class SkillChecks
                 GetBestPackResist(conditionId, state, balance, 1),
             _ => 0,
         };
-
-        return bonus + GetTokenResist(conditionId, state, balance);
     }
 
     static int GetEquippedMod(ItemInstance? slot, Skill skill, BalanceData balance)
@@ -193,7 +76,6 @@ public static class SkillChecks
         return 0;
     }
 
-
     static int GetBestToolBonuses(Skill skill, PlayerState state, BalanceData balance)
     {
         int best = 0, secondBest = 0;
@@ -213,13 +95,6 @@ public static class SkillChecks
         return best + secondBest;
     }
 
-    /// <summary>Token bonus — tokens removed in Phase 1; returns 0.</summary>
-    static int GetTokenBonus(Skill skill, PlayerState state, BalanceData balance) => 0;
-
-    /// <summary>Token resist bonus — tokens removed in Phase 1; returns 0.</summary>
-    static int GetTokenResist(string conditionId, PlayerState state, BalanceData balance) => 0;
-
-    /// <summary>Best N pack-held equipment (tools) resist bonuses for a condition.</summary>
     static int GetBestPackResist(string conditionId, PlayerState state, BalanceData balance, int count)
     {
         var bonuses = new List<int>();
@@ -236,5 +111,4 @@ public static class SkillChecks
             total += bonuses[i];
         return total;
     }
-
 }

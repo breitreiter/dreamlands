@@ -118,10 +118,11 @@ public class MechanicsTests
     }
 
     [Fact]
-    public void AddCondition_AppearsInActiveConditions()
+    public void AddCondition_AppearsInActiveConditions_WhenUntrained()
     {
         var state = Fresh();
-        // Seed 1 rolls 5 on d20 → resist fails (5 < DC 12) → condition applied
+        // Untrained Bushcraft → 0% passive resist → condition always applies
+        state.Skills[Skill.Bushcraft] = SkillTier.Untrained;
         var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
 
         var r = Assert.IsType<MechanicResult.ConditionAdded>(results[0]);
@@ -130,16 +131,27 @@ public class MechanicsTests
     }
 
     [Fact]
-    public void AddCondition_Resisted_WhenRollPasses()
+    public void AddCondition_Resisted_WhenExpertTier()
     {
+        // Expert Bushcraft → 80% resist → over 100 trials should see at least one resist
         var state = Fresh();
-        // Seed 0 rolls high on d20 → resist passes → condition not applied
-        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(0));
+        state.Skills[Skill.Bushcraft] = SkillTier.Expert;
 
-        var r = Assert.IsType<MechanicResult.ConditionResisted>(results[0]);
-        Assert.Equal("freezing", r.ConditionId);
-        Assert.True(r.Check.Passed);
-        Assert.False(state.ActiveConditions.Contains("freezing"));
+        bool resisted = false;
+        for (int seed = 0; seed < 20; seed++)
+        {
+            var s = PlayerState.NewGame("test", 99, Balance);
+            s.Skills[Skill.Bushcraft] = SkillTier.Expert;
+            var results = Mechanics.Apply(["add_condition freezing"], s, Balance, new Random(seed));
+            if (results.Count > 0 && results[0] is MechanicResult.ConditionResisted r)
+            {
+                Assert.Equal("freezing", r.ConditionId);
+                Assert.False(s.ActiveConditions.Contains("freezing"));
+                resisted = true;
+                break;
+            }
+        }
+        Assert.True(resisted, "Expert Bushcraft should resist freezing at least once in 20 tries");
     }
 
     [Fact]
@@ -162,8 +174,8 @@ public class MechanicsTests
         var results = Mechanics.Apply(["equip hunting_knife"], state, Balance, Rng);
         var r = Assert.IsType<MechanicResult.ItemEquipped>(results[0]);
         Assert.Equal("weapon", r.Slot);
-        Assert.NotNull(state.Equipment.Weapon);
-        Assert.Equal("hunting_knife", state.Equipment.Weapon!.DefId);
+        Assert.NotNull(state.EquippedWeapon);
+        Assert.Equal("hunting_knife", state.EquippedWeapon!.DefId);
         // Item remains in Pack with IsEquipped = true
         Assert.Contains(state.Pack, i => i.DefId == "hunting_knife" && i.IsEquipped);
     }
@@ -172,12 +184,12 @@ public class MechanicsTests
     public void Equip_SwapsOldItemBackToUnequipped()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
+        state.Pack.Add(new ItemInstance("scimitar", "Scimitar") { IsEquipped = true });
         state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
         Mechanics.Apply(["equip hunting_knife"], state, Balance, Rng);
 
-        Assert.Equal("hunting_knife", state.Equipment.Weapon!.DefId);
+        Assert.Equal("hunting_knife", state.EquippedWeapon!.DefId);
         // Old item stays in pack but unequipped
         Assert.Contains(state.Pack, i => i.DefId == "scimitar" && !i.IsEquipped);
     }
@@ -186,12 +198,12 @@ public class MechanicsTests
     public void Unequip_ClearsIsEquippedFlag()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife") { IsEquipped = true });
 
         var results = Mechanics.Apply(["unequip weapon"], state, Balance, Rng);
         var r = Assert.IsType<MechanicResult.ItemUnequipped>(results[0]);
         Assert.Equal("weapon", r.Slot);
-        Assert.Null(state.Equipment.Weapon);
+        Assert.Null(state.EquippedWeapon);
         Assert.Contains(state.Pack, i => i.DefId == "hunting_knife" && !i.IsEquipped);
     }
 
@@ -314,16 +326,16 @@ public class MechanicsTests
     }
 
     [Fact]
-    public void Discard_FromHaversack_RemovesItem()
+    public void Discard_FromPack_RemovesConsumable()
     {
         var state = Fresh();
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Pack.Add(new ItemInstance("bandages", "Bandages"));
 
         var results = Mechanics.Apply(["discard bandages"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.ItemLost>(results[0]);
         Assert.Equal("bandages", r.DefId);
-        Assert.DoesNotContain(state.Haversack, i => i.DefId == "bandages");
+        Assert.DoesNotContain(state.Pack, i => i.DefId == "bandages");
     }
 
     [Fact]
