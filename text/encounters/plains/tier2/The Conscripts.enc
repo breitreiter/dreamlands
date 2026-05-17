@@ -44,6 +44,23 @@ choices:
   +damage_spirits 2
 
 * Rescue the locals = Fight off these so-called soldiers
+  Four soldiers on the wall-walk, one officer in the yard. The officer hasn't drawn steel. You move before he does.
+  @if check combat correct:strategize wrong:rush {
+    You don't go for the officer. You go for the rope. One of the kneeling locals catches on fast and is up before the nearest soldier has finished shouting. The yard turns to chaos, which is what you needed. The officer tries to reestablish order and finds he can't, not with two of his men down and the rest tangled in something that isn't a clean fight anymore.
+    He calls it. Not loudly. A flat word, and the soldiers pull back.
+    "You're going to regret this," he says.
+    "Probably," you say.
+    The woman from before is already through the gate. She doesn't look back either, but there's something in the set of her shoulders that wasn't there before.
+    +advance_time 2
+    +add_condition exhausted
+    +heal_spirits 2
+  } @else {
+    Three of them at once is too many. You get one down before they overwhelm you, four sets of hands dragging you to the ground. The officer watches without expression until it's done, then crouches beside you.
+    "You should have walked on," he says. "Like a sensible person."
+    They put you back on the road. The prisoners are still bound. You hear the woman go quiet as you get to your feet and don't look back.
+    +damage_spirits 3
+    +add_condition injured
+  }
 
 * Walk on = This is no business of yours
   You turn from the depot without a word. The woman's voice rises behind you, sharp with protest, but you do not slow. The officer's reply comes flat and final, then silence settles save for the scrape of boots on stone.

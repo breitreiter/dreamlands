@@ -32,6 +32,19 @@ She rocks back on her heels, easy, unhurried.
 choices:
 
 * Talk your way out = Tell them a story
+  You angle the ring so it catches the light.
+  @if check negotiation correct:charm wrong:reason {
+    "Custom commission," you say, "from a smith in Aldgate. The Guild makes us wear them so every officer between here and the mountains knows to let us pass. They also make us keep a ledger. Names, units, incidents." You let the pause sit. "For the record."
+    The sergeant glances at Jory. He's already writing something in his book, though you're not sure what.
+    "Mm," she says. She steps back. "Safe travels, trader."
+    +advance_time 1
+  } @else {
+    You lay out your papers, your credentials, your affiliation, every word of it accurate. The sergeant listens with what might be genuine interest and when you finish she tilts her head.
+    "Fascinating," she says. "Jory, in the book: one trader, legal ring, probably fine. Also: twenty-five silver, road levy."
+    "We don't have a road levy," Jory says.
+    "We do now," the sergeant says. "Put it in the book."
+    +rem_gold 25
+  }
 
 * Threaten them = Ready your weapon and show you mean business
   The sergeant studies you carefully.

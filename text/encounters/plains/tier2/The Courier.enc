@@ -34,6 +34,20 @@ But she doesn't. Not yet.
 choices:
 
 * Talk her down = Convince her not to burn the letter
+  You sit down across from her. "He swore his oath to the Legion," you say, "the same as we swore ours. If he's as good as you say, he'll find a way through. Good officers usually do."
+  @if check negotiation correct:reason wrong:threaten {
+    She's quiet for a long time. The dispatch sits between you. When she reaches for it you think she's going to burn it anyway, but she folds it along its original crease and tucks it into the oilskin case.
+    "I'll deliver it," she says. She won't look at you.
+    You don't blame her. You stand and leave her to it. On the road you try to feel certain you did the right thing, and you can't quite manage it.
+    +quality faction.tradeguild 1
+    +damage_spirits 2
+  } @else {
+    You push harder than the situation calls for, and she sees it. She looks at you steadily for a moment.
+    "That's not an argument," she says. "That's a threat dressed up as logic."
+    She holds the dispatch to the fire. The paper takes.
+    "I'd have liked to hear what you actually thought," she says. "If you'd had the stomach for it."
+    +quality faction.tradeguild -1
+  }
 
 * Watch in silence = Wait for the deed to be done
   You will not be a part of this, but neither will you intervene. You stand witness as a fellow guild member breaks her oath.

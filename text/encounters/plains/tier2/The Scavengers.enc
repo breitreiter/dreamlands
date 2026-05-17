@@ -40,5 +40,26 @@ But it is coming for you.
 choices:
 
 * Stand your ground = Send this devil back to hell
+  The leg drags. The chest light pulses wrong. Something inside it is failing. If it takes a real hit in the right place it might not get up.
+  @if check combat correct:strategize wrong:rush {
+    You wait for it, which takes everything you have, and you pick your moment when the bad leg missteps on the cracked paving. One hard strike connects with something that matters. The grinding inside it worsens, becomes a stuttering grind, and then the leg stops cycling. It goes down sideways across the broken road with a crash you feel through your boots. The glass eye dims and does not brighten again.
+    You stand over it for a moment, breathing hard, then step around it and keep moving.
+    +advance_time 2
+    +damage_spirits 1
+  } @else {
+    You go at it before it's set, which is a mistake. The plating is thick and what hits it doesn't register. The arm that comes back at you is built for something heavier than a man, and when it connects you feel it in your spine. You hit the road and get up and run. Behind you the grinding worsens and the steps slow and eventually stop, but you don't find out why.
+    +add_condition injured
+    +advance_time 3
+  }
 
 * Make a run for it = It is slow, perhaps you can outrun it
+  You break before it has a proper bearing on you. The road ahead is clear.
+  @if check bushcraft correct:push wrong:reroute {
+    You set a pace you can hold and don't look back. The clank-whir-clank grows loud, then levels, then begins to fall behind. You round a bend and push harder through a stretch of open ground and when you finally slow, the thing is not behind you. You press your back against a wall and listen until you're certain.
+    +advance_time 3
+    +damage_spirits 1
+  } @else {
+    You pick the wrong road. The next junction opens onto a square with no exit on the far side, and by the time you've turned around the thing has already rounded the bend. You scramble over a wall, land badly, find an alley, go through it on instinct. When you emerge the sound is gone, or turned, or stalled somewhere behind you. You don't stop moving until the road looks normal again.
+    +add_condition exhausted
+    +advance_time 4
+  }

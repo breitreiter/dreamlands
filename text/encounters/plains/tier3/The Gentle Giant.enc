@@ -19,6 +19,26 @@ It's making a sound. Low, almost tonal, almost varied. Not mechanical. Not quite
 
 choices:
 
-* Sprint though the nearby streets = Perhaps you can escape before it catches you
+* Sprint through the nearby streets = Perhaps you can escape before it catches you
+  You don't look at the thing. Looking at it is how people die here. Head down, move fast, use the buildings.
+  @if check bushcraft correct:push wrong:reroute {
+    You go hard through two blocks of broken concrete and old glass, keeping walls between yourself and the sound. The clank-whir-clank doesn't change rhythm. It doesn't speed up. You reach the edge of the orchard, then the road, then keep going until the sound fades to nothing. You don't stop for an hour.
+    +advance_time 3
+    +damage_spirits 1
+  } @else {
+    You take a corner fast and skid on old glass and go down. When you're back up the ground is shaking again, slow and deep. You go to ground in a half-collapsed building and press into shadow while the vibration moves around you in a long arc. You aren't certain whether it's gone back to the orchard or simply stilled somewhere you can't see. You wait another hour before you move.
+    +add_condition exhausted
+    +advance_time 5
+    +damage_spirits 2
+  }
 
 * Sneak underneath the thing = A gamble, but if you can get behind it, you're home free
+  The safe path is not around it. The safe path is through the space it has already claimed.
+  @if check cunning correct:hide wrong:scheme {
+    You move into its shadow slowly, no sharp angles, no sudden shifts of weight. Up close the sound is enormous, a deep harmonic hum overlaid with something almost like breath. You don't try to understand it. You move heel-to-toe across the mosaic, one step at a time, until you're past the last leg and into open space. You put sixty meters between you and it before you breathe properly.
+    +advance_time 2
+  } @else {
+    You're halfway through when something shifts above you. Not toward you, some internal adjustment, a servo recalibrating, but the shadow swings and for one long second you are directly in its line of sight. You freeze. The glass eye is enormous from here and utterly unreadable. Then it swings back. The hum continues. You move, fast, no longer careful, through the open mosaic and away.
+    +advance_time 3
+    +damage_spirits 2
+  }
