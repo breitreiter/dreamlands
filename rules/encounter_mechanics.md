@@ -51,6 +51,13 @@ Where each one is used:
   Note: `.fight` combat encounters are not opened via `+open` — they are launched
   by the combat mechanic separately.
 
++open bypasses UsedEncounterIds — the used-encounter pool only gates the random
+pickers (road cadence, settlement stocking). Direct navigation always resolves,
+so +open works for road and settlement encounters, not just arcs. Self-reference
+(+open <same encounter>) is valid and loops back cleanly — useful for hub
+encounters that offer multiple choices across visits (see Meilin.enc in the
+hermitage arc as the canonical example).
+
 
 ## Front-matter
 
@@ -109,7 +116,7 @@ TIME PERIODS
 
 CONDITIONS
   freezing  thirsty  irradiated  lattice_sickness
-  exhausted  lost  injured  poisoned
+  exhausted  injured  poisoned
 
 
 ## Action verbs
@@ -424,7 +431,7 @@ Shopable:
   peoples_borderlands A Guide to the Borderlands  Negotiation +3   mountains T2  80g
   cartographers_diary Cartographer's Diary  Bushcraft +2           mountain T1  40g
   ornate_spyglass     Ornate Spyglass     Bushcraft +3             scrub T2   80g
-  cartographers_kit   Cartographer's Kit  Lost +5                  plains T1  80g
+  cartographers_kit   Cartographer's Kit  (gates Lost encounters)  plains T1  80g
   sleeping_kit        Sleeping Kit        Exhausted +4             forest T2  80g
   brass_lantern       Old Brass Lantern   (light source)           plains T1  15g
 

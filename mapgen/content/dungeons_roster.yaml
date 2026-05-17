@@ -12,18 +12,18 @@ dungeons:
   # FOREST (3 dungeons)
   # ============================================================================
 
-  - id: warrant_oak
-    name: The Warrant Oak
+  - id: the_fugitive
+    name: The Fugitive
     biome: forest
-    decal: warrant_oak.png
-    folder: warrant_oak
+    decal: the_fugitive.png
+    folder: the_fugitive
     tier_range: [2, 2]
 
-  - id: foresters_post
-    name: The Forester's Post
+  - id: the_hermitage
+    name: The Hermitage
     biome: forest
-    decal: foresters_post.png
-    folder: foresters_post
+    decal: the_hermitage.png
+    folder: the_hermitage
     tier_range: [2, 2]
 
   - id: the_lodge

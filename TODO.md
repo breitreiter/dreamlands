@@ -38,12 +38,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       mega-T1 region from making an entire biome feel safe.
 - [x] Auto-named regions (`MapGenerator.cs` TODO: generated region names for game UI)
 
-### Lost Condition
-
-- [x] Engine: force-select `Lost.enc` for current biome/tier when player has `lost` condition
-- [x] UI: auto-start Lost encounter on status check — no UI changes needed, encounter screen shows naturally
-- [ ] Review all 15 Lost.enc files for prose quality and mechanic balance
-
 ### Road Encounter System (Tableau)
 
 - [x] Finish out and test AI authoring tools for tac encounters
@@ -250,7 +244,7 @@ block Phase 5+; revisit during content polish.
 - [x] Tier 2 — locale guide
 - [x] Tier 3 — encounters
 - [x] Tier 3 — locale guide
-- [ ] Review Lost.enc (plains tiers 1–3)
+- [ ] Review Lost.enc files (plains tiers 1–3) — now pool encounters; check prose + mechanic balance
 - [ ] Settlement flavor encounters
 - [x] Arc — Bride's Cave
 - [x] Arc — Metal Beast
@@ -266,7 +260,7 @@ block Phase 5+; revisit during content polish.
 - [ ] Tier 2 — encounters (nearly done, 1–2 more)
 - [x] Tier 3 — locale guide
 - [ ] Tier 3 — encounters (~4 needed)
-- [ ] Review Lost.enc (scrub tiers 1–3)
+- [ ] Review Lost.enc files (scrub tiers 1–3) — now pool encounters; check prose + mechanic balance
 - [ ] Arc — The Census House (~5 hr)
 - [ ] Arc — The Foundry (~5 hr)
 - [ ] Arc — The Relay Post (~5 hr)
@@ -280,8 +274,7 @@ block Phase 5+; revisit during content polish.
 - [ ] Tier 2 — encounters (~4 needed)
 - [x] Tier 3 — locale guide
 - [ ] Tier 3 — encounters (~5 needed)
-- [ ] Review Lost.enc (swamp tiers 1–3)
-- [ ] Arc — The Drowning Post (~5 hr)
+- [ ] Review Lost.enc files (swamp tiers 1–3) — now pool encounters; check prose + mechanic balance
 - [ ] Arc — The Listening Blind (~5 hr)
 - [ ] Arc — The Revenakh (~5 hr)
 - [ ] Arc — The Tile House (~5 hr)
@@ -294,7 +287,7 @@ block Phase 5+; revisit during content polish.
 - [ ] Tier 2 — encounters (~4 needed)
 - [x] Tier 3 — locale guide
 - [ ] Tier 3 — encounters (~5 needed)
-- [ ] Review Lost.enc (mountains tiers 1–3)
+- [ ] Review Lost.enc files (mountains tiers 1–3) — now pool encounters; check prose + mechanic balance
 - [ ] Arc — The Halfway House (~5 hr)
 - [ ] Arc — The Ledgerhaus (~5 hr)
 - [ ] Arc — The Stift (~5 hr)
@@ -308,10 +301,10 @@ block Phase 5+; revisit during content polish.
 - [ ] Tier 2 — encounters (~5 needed)
 - [x] Tier 3 — locale guide
 - [ ] Tier 3 — encounters (~5 needed)
-- [ ] Review Lost.enc (forest tiers 1–3)
-- [ ] Arc — The Forester's Post (~5 hr)
+- [ ] Review Lost.enc files (forest tiers 1–3) — now pool encounters; check prose + mechanic balance
+- [x] Arc — The Fugitive
+- [x] Arc — The Hermitage
 - [ ] Arc — The Lodge (~5 hr)
-- [ ] Arc — The Warrant Oak (~5 hr)
 
 ### Art Assets
 
