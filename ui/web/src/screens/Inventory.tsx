@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
+import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo } from "../api/types";
 import { useGame } from "../GameContext";
 import MaskedIcon, { iconUrl, itemTypeIcon } from "../components/MaskedIcon";
 import HaulItem from "../components/HaulItem";
@@ -71,7 +71,7 @@ export default function Inventory({
     <div className="h-full flex flex-col bg-page text-primary">
       <TopBar status={status} onBack={onClose} />
 
-      {/* Three-column layout */}
+      {/* Two-column layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Character Panel */}
         <div className="flex-1 flex flex-col border-r border-edge overflow-y-auto">
@@ -82,21 +82,12 @@ export default function Inventory({
           />
         </div>
 
-        {/* Middle: Inventory */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden border-r border-edge">
+        {/* Right: Inventory */}
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {inventory ? (
             <InventoryPanel inventory={inventory} />
           ) : (
             <div className="p-4 text-muted">No inventory data</div>
-          )}
-        </div>
-
-        {/* Right: Mechanics — fixed 420px */}
-        <div className="w-[420px] flex flex-col overflow-y-auto flex-shrink-0">
-          {state.mechanics ? (
-            <MechanicsPanel mechanics={state.mechanics} />
-          ) : (
-            <div className="p-4 text-muted">No mechanics data</div>
           )}
         </div>
       </div>
@@ -164,51 +155,6 @@ function CharacterPanel({
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-function MechanicsPanel({ mechanics }: { mechanics: MechanicsInfo }) {
-  return (
-    <div className="p-4">
-      <h2 className="font-header text-accent text-[32px] leading-tight mb-4">
-        Mechanics
-      </h2>
-
-      {mechanics.resistances.length > 0 && (
-        <MechanicsSection title="Resistances" lines={mechanics.resistances} />
-      )}
-
-      {mechanics.encounterChecks.length > 0 && (
-        <MechanicsSection title="Encounter Checks" lines={mechanics.encounterChecks} />
-      )}
-
-      {mechanics.other.length > 0 && (
-        <MechanicsSection title="Other" lines={mechanics.other} />
-      )}
-    </div>
-  );
-}
-
-function MechanicsSection({ title, lines }: { title: string; lines: MechanicLine[] }) {
-  return (
-    <div className="mb-3">
-      <div className="font-bold mb-1 flex justify-between">
-        <span>{title}</span>
-        <span className="text-muted font-normal">Source</span>
-      </div>
-      <table className="w-full">
-        <tbody>
-          {lines.map((line, i) => (
-            <tr key={i}>
-              <td className="py-0.5 pr-2 whitespace-nowrap">
-                {line.label} <span className="font-bold text-accent">{line.value}</span>
-              </td>
-              <td className="py-0.5 pl-2 text-muted text-right">{line.source}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }
@@ -372,7 +318,7 @@ function DiscardButton({ item, doAction, loading }: { item: ItemInfo; doAction: 
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="secondary" size="icon" disabled={loading} title="Discard">
-          <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+          <MaskedIcon icon="trash-can.svg" className="w-5 h-5" color="currentColor" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
