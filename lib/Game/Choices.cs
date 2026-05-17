@@ -8,6 +8,16 @@ public record ResolvedChoice(string? Preamble, string Text, IReadOnlyList<string
 /// <summary>A choice with its original index and lock state for display.</summary>
 public record GatedChoice(Encounter.Choice Choice, int OriginalIndex, bool Locked);
 
+/// <summary>
+/// Signals that a picker check branch is pending; no further static resolution is possible.
+/// Carries the data the runner needs to emit AwaitApproach.
+/// </summary>
+public record PickerPending(
+    Skill Skill,
+    string CorrectId,
+    string WrongId,
+    string? Preamble);
+
 /// <summary>Choice filtering (requires-gating) and branch resolution.</summary>
 public static class Choices
 {
@@ -42,21 +52,27 @@ public static class Choices
     }
 
     /// <summary>
-    /// Resolve which branch of a choice applies. For conditional choices, evaluates branches
-    /// top-to-bottom; first matching condition wins. For single choices, returns directly.
+    /// Resolve which branch of a choice applies.
+    /// - For Single choices, returns the outcome directly.
+    /// - For Conditional choices, walks static branches first (tag/quality/has/meets).
+    ///   If a static branch passes, returns it. If the terminal branch is a picker check
+    ///   and no static branch passed, returns null (caller checks TryGetPicker for the pending info).
     ///
-    /// Supported branch condition forms: has | tag | quality | meets
-    /// The old "check" form (d20 roll) is removed — picker resolution lands in Phase 5.
+    /// Returns non-null when resolved. Returns null when a picker branch is pending.
+    /// Use <see cref="TryGetPickerPending"/> to distinguish null-for-picker from fallback.
     /// </summary>
-    public static ResolvedChoice Resolve(Encounter.Choice choice, PlayerState state, BalanceData balance, Random rng)
+    public static ResolvedChoice? Resolve(
+        Encounter.Choice choice,
+        PlayerState state,
+        BalanceData balance,
+        Random rng,
+        out PickerPending? pickerPending)
     {
+        pickerPending = null;
+
         if (choice.Single != null)
         {
-            return new ResolvedChoice(
-                null,
-                choice.Single.Part.Text,
-                choice.Single.Part.Mechanics,
-                null);
+            return new ResolvedChoice(null, choice.Single.Part.Text, choice.Single.Part.Mechanics, null);
         }
 
         if (choice.Conditional != null)
@@ -66,14 +82,32 @@ public static class Choices
 
             foreach (var branch in choice.Conditional.Branches)
             {
+                // Picker-check terminal branch — don't evaluate as a static predicate
+                if (branch.IsPickerCheck)
+                {
+                    // No static branch matched; this is the terminal picker check
+                    var skill = Skills.FromScriptName(branch.PickerSkill!);
+                    if (skill != null)
+                    {
+                        pickerPending = new PickerPending(
+                            skill.Value,
+                            branch.PickerCorrect!,
+                            branch.PickerWrong!,
+                            preamble);
+                        return null;
+                    }
+                    // Unknown skill — fall through to fallback
+                    break;
+                }
+
                 bool passed;
                 SkillCheckResult? checkResult = null;
 
                 var tokens = ActionVerb.Tokenize(branch.Condition);
                 if (tokens.Count >= 3 && tokens[0] == "meets")
                 {
-                    var skill = Skills.FromScriptName(tokens[1]);
-                    if (skill != null)
+                    var meetSkill = Skills.FromScriptName(tokens[1]);
+                    if (meetSkill != null)
                     {
                         var targetTier = tokens[2].ToLowerInvariant() switch
                         {
@@ -86,12 +120,11 @@ public static class Choices
 
                         if (targetTier != null)
                         {
-                            var playerTier = state.Skills.GetValueOrDefault(skill.Value);
+                            var playerTier = state.Skills.GetValueOrDefault(meetSkill.Value);
                             passed = playerTier >= targetTier.Value;
-                            // Emit a meets-check result for the UI roll display (IsMeetsCheck = true)
                             checkResult = new SkillCheckResult(
                                 passed, (int)playerTier, (int)targetTier.Value, (int)playerTier,
-                                (int)playerTier, skill.Value, IsMeetsCheck: true);
+                                (int)playerTier, meetSkill.Value, IsMeetsCheck: true);
                             lastCheckResult = checkResult;
                         }
                         else
@@ -119,7 +152,7 @@ public static class Choices
                 }
             }
 
-            // No branch matched — use fallback (preserve last check result so player sees the result)
+            // No branch matched; use fallback
             if (choice.Conditional.Fallback != null)
             {
                 return new ResolvedChoice(
@@ -129,10 +162,22 @@ public static class Choices
                     lastCheckResult);
             }
 
-            // No fallback either — empty result
             return new ResolvedChoice(preamble, "", [], lastCheckResult);
         }
 
         return new ResolvedChoice(null, "", [], null);
+    }
+
+    /// <summary>
+    /// Convenience overload that preserves the old call-site signature (pickerPending discarded).
+    /// Only safe when the caller is certain the choice has no picker branch (e.g. Single choices,
+    /// or after PickerPending has already been handled by the runner).
+    /// </summary>
+    public static ResolvedChoice Resolve(Encounter.Choice choice, PlayerState state, BalanceData balance, Random rng)
+    {
+        var resolved = Resolve(choice, state, balance, rng, out _);
+        // If resolved is null here, the caller passed a picker-check choice and discarded the pending.
+        // Fall back to an empty result so compile-time callers aren't forced to null-check.
+        return resolved ?? new ResolvedChoice(null, "", [], null);
     }
 }

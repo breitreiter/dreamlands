@@ -48,6 +48,9 @@ public class GameResponse
     // Combat encounter
     public CombatInfo? Combat { get; init; }
 
+    // Picker approach prompt (emitted when runner suspends on AwaitApproach)
+    public ApproachPromptInfo? ApproachPrompt { get; init; }
+
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
 
@@ -239,8 +242,6 @@ public class InventoryInfo
 {
     public List<ItemInfo> Pack { get; init; } = [];
     public int PackCapacity { get; init; }
-    public List<ItemInfo> Haversack { get; init; } = [];
-    public int HaversackCapacity { get; init; }
     public EquipmentInfo Equipment { get; init; } = new();
 }
 
@@ -255,6 +256,7 @@ public class ItemInfo
     public Dictionary<string, int> ResistModifiers { get; init; } = [];
     public List<string> Cures { get; init; } = [];
     public bool IsEquippable { get; init; }
+    public bool IsEquipped { get; init; }
     public string? DestinationName { get; init; }
     public string? DestinationHint { get; init; }
     public int? Payout { get; init; }
@@ -280,6 +282,34 @@ public class EquipmentInfo
     public ItemInfo? Weapon { get; init; }
     public ItemInfo? Armor { get; init; }
     public ItemInfo? Boots { get; init; }
+}
+
+// Approach picker prompt — emitted when the runner suspends on AwaitApproach.
+// The client renders the 3-approach picker UI; which approach is correct/wrong is
+// intentionally withheld (that's authored data the player shouldn't see).
+
+public class ApproachPromptInfo
+{
+    /// <summary>Lowercase skill id, e.g. "negotiation".</summary>
+    public string Skill { get; init; } = "";
+
+    /// <summary>Preamble prose already rendered before the picker (may be null).</summary>
+    public string? Preamble { get; init; }
+
+    /// <summary>The three approaches in their canonical roster order.</summary>
+    public List<ApproachInfo> Approaches { get; init; } = [];
+}
+
+public class ApproachInfo
+{
+    /// <summary>Lowercase token id used as the pick_approach request value, e.g. "flatter".</summary>
+    public string Id { get; init; } = "";
+
+    /// <summary>Player-facing label, e.g. "Flatter".</summary>
+    public string Label { get; init; } = "";
+
+    /// <summary>SVG file hint for the approach icon (Phase 6 renders this).</summary>
+    public string IconHint { get; init; } = "";
 }
 
 // Request DTOs

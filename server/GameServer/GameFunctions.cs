@@ -136,6 +136,21 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         if (session.CurrentEncounter is { } enc)
         {
+            // If there's an active picker check, resume the approach prompt screen
+            if (player.ActivePickerCheck is { } resumePicker
+                && Dreamlands.Rules.ApproachRoster.GetApproaches(resumePicker.Skill) is { } resumeApproaches)
+            {
+                var resumeStep = new EncounterStep.AwaitApproach(
+                    enc,
+                    resumePicker.ChoiceIndex,
+                    resumePicker.Skill,
+                    resumePicker.CorrectId,
+                    resumePicker.WrongId,
+                    resumePicker.Preamble,
+                    resumeApproaches);
+                return new OkObjectResult(BuildApproachPromptResponse(session, resumeStep));
+            }
+
             var gated = Choices.GetAllWithLockState(enc, player, data.Balance);
             return new OkObjectResult(BuildEncounterResponse(session, enc, gated));
         }
@@ -610,6 +625,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         response = BuildOutcomeResponse(session, outcome);
                         break;
 
+                    case EncounterStep.AwaitApproach awaitApproach:
+                        await store.Save(player);
+                        return new OkObjectResult(BuildApproachPromptResponse(session, awaitApproach));
+
                     case EncounterStep.Finished finished:
                         switch (finished.Reason)
                         {
@@ -677,6 +696,99 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             }
 
                             default: // Completed
+                                EncounterRunner.EndEncounter(session);
+                                await store.Save(player);
+                                if (player.PendingEndOfDay && !data.NoCamp)
+                                {
+                                    session.Mode = SessionMode.Camp;
+                                    return new OkObjectResult(BuildCampResponse(session, BuildCampThreats(session)));
+                                }
+                                if (data.NoCamp) player.PendingEndOfDay = false;
+                                return new OkObjectResult(BuildExploringResponse(session));
+                        }
+
+                    default:
+                        response = BuildExploringResponse(session);
+                        break;
+                }
+                break;
+            }
+
+            case "pick_approach":
+            {
+                if (session.CurrentEncounter == null || player.ActivePickerCheck == null)
+                    return new BadRequestObjectResult(new { error = "No active picker check" });
+
+                var approachId = actionReq.Approach;
+                if (string.IsNullOrEmpty(approachId))
+                    return new BadRequestObjectResult(new { error = "approach id required" });
+
+                // Validate the approach id is in the skill's roster
+                var pickerSkill = player.ActivePickerCheck.Skill;
+                if (Dreamlands.Rules.ApproachRoster.GetApproach(pickerSkill, approachId) == null)
+                    return new BadRequestObjectResult(new { error = $"Invalid approach '{approachId}' for skill '{pickerSkill}'" });
+
+                var pickResult = EncounterRunner.Pick(session, approachId);
+                switch (pickResult)
+                {
+                    case EncounterStep.ShowOutcome pickOutcome:
+                        response = BuildOutcomeResponse(session, pickOutcome);
+                        break;
+
+                    case EncounterStep.Finished pickFinished:
+                        switch (pickFinished.Reason)
+                        {
+                            case FinishReason.NavigatedTo:
+                                var pickNav = data.Bundle.GetById(pickFinished.NavigateToId!);
+                                if (pickNav != null)
+                                {
+                                    var step = EncounterRunner.Begin(session, pickNav);
+                                    await store.Save(player);
+                                    return new OkObjectResult(new GameResponse
+                                    {
+                                        Mode = "encounter",
+                                        Status = BuildStatus(player),
+                                        Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
+                                        Outcome = pickFinished.Outcome is { } o ? BuildOutcomeInfo(o) : null,
+                                        Inventory = BuildInventory(player),
+                                    });
+                                }
+                                EncounterRunner.EndEncounter(session);
+                                await store.Save(player);
+                                return new OkObjectResult(BuildExploringResponse(session));
+
+                            case FinishReason.DungeonFinished:
+                                player.CurrentDungeonId = null;
+                                await store.Save(player);
+                                return new OkObjectResult(BuildOutcomeResponse(session, pickFinished.Outcome!, "end_dungeon"));
+
+                            case FinishReason.DungeonFled:
+                                player.CurrentDungeonId = null;
+                                await store.Save(player);
+                                return new OkObjectResult(BuildOutcomeResponse(session, pickFinished.Outcome!, "end_dungeon"));
+
+                            case FinishReason.PlayerDied:
+                            {
+                                var sc = data.Map.StartingCity;
+                                var encRescue = Rescue.Apply(player, sc?.X ?? 0, sc?.Y ?? 0, data.Balance);
+                                await store.Save(player);
+                                return new OkObjectResult(new GameResponse
+                                {
+                                    Mode = "rescued",
+                                    Status = BuildStatus(player),
+                                    Outcome = BuildOutcomeInfo(pickFinished.Outcome!),
+                                    Rescue = new RescueInfo
+                                    {
+                                        LostItems = encRescue.LostItems,
+                                        GoldLost = encRescue.GoldLost,
+                                    },
+                                    Node = BuildNodeInfo(session.CurrentNode, player, session),
+                                    Exits = BuildExits(session),
+                                    Inventory = BuildInventory(player),
+                                });
+                            }
+
+                            default:
                                 EncounterRunner.EndEncounter(session);
                                 await store.Save(player);
                                 if (player.PendingEndOfDay && !data.NoCamp)
@@ -1564,6 +1676,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             ResistModifiers = def?.ResistModifiers.ToDictionary(kv => kv.Key, kv => kv.Value) ?? [],
             Cures = def?.Cures.ToList() ?? [],
             IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
+            IsEquipped = i.IsEquipped,
             DestinationName = i.DestinationName,
             DestinationHint = i.DestinationX != null && i.DestinationY != null
                 ? HaulGeneration.BuildRelativeHint(playerX, playerY, i.DestinationX.Value, i.DestinationY.Value)
@@ -1816,6 +1929,27 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Mode = "outcome",
         Status = BuildStatus(session.Player),
         Outcome = BuildOutcomeInfo(outcome, nextAction),
+        Inventory = BuildInventory(session.Player),
+        Mechanics = BuildMechanics(session.Player),
+    };
+
+    GameResponse BuildApproachPromptResponse(GameSession session, EncounterStep.AwaitApproach awaitApproach) => new()
+    {
+        Mode = "approach_prompt",
+        Status = BuildStatus(session.Player),
+        Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
+        Encounter = BuildEncounterInfo(awaitApproach.Encounter, Choices.GetAllWithLockState(awaitApproach.Encounter, session.Player, session.Balance)),
+        ApproachPrompt = new ApproachPromptInfo
+        {
+            Skill = awaitApproach.Skill.ScriptName(),
+            Preamble = awaitApproach.Preamble,
+            Approaches = awaitApproach.Approaches.Select(a => new ApproachInfo
+            {
+                Id = a.Id,
+                Label = a.DisplayLabel,
+                IconHint = a.IconHint,
+            }).ToList(),
+        },
         Inventory = BuildInventory(session.Player),
         Mechanics = BuildMechanics(session.Player),
     };
