@@ -19,8 +19,8 @@ public static class ArcRewards
         new("inventory",   "Pack Slots",  ArcRewardKind.Inventory, 2, null),
     ];
 
-    /// <summary>Max health gain per pick. Two picks = +10 total over starting 4 base.</summary>
-    public const int HealthPerPick = 5;
+    /// <summary>Max health gain per pick. Two picks = +2 total.</summary>
+    public const int HealthPerPick = 1;
 
     /// <summary>Pack capacity gain per pick. Two picks = +2 slots over starting 8.</summary>
     public const int InventoryPerPick = 1;

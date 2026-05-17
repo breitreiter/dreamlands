@@ -85,7 +85,9 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
     cleared.tactical = undefined;
   }
   if (result.mode === "tableau_prompt") {
-    cleared.encounter = undefined;
+    // Keep encounter/outcome in state so the Encounter screen renders behind
+    // the Tableau modal — the player should see the vignette and the final
+    // outcome prose underneath.
     cleared.tactical = undefined;
   }
   if (result.mode !== "approach_prompt") {
