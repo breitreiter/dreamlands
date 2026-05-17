@@ -2,10 +2,10 @@ namespace Dreamlands.Rules;
 
 /// <summary>One approach in a 3-way picker skill check.</summary>
 public sealed record Approach(
-    string Id,           // lowercase token matching encounter file usage (e.g. "flatter")
-    string DisplayLabel, // player-facing label (e.g. "Flatter")
-    string Noun,         // connector noun form (e.g. "flattery")
-    string Gerund,       // connector gerund form (e.g. "flattering")
+    string Id,           // lowercase token matching encounter file usage (e.g. "charm")
+    string DisplayLabel, // player-facing label (e.g. "Charm")
+    string Noun,         // connector noun form (e.g. "charm")
+    string Gerund,       // connector gerund form (e.g. "charming")
     string IconHint      // SVG file hint for UI (Phase 6)
 );
 
@@ -17,7 +17,7 @@ public static class ApproachRoster
 {
     // ── Negotiation ──────────────────────────────────────────────────────────
 
-    static readonly Approach NegFlatter  = new("flatter",  "Flatter",   "flattery",  "flattering",  "charm.svg");
+    static readonly Approach NegCharm    = new("charm",    "Charm",     "charm",     "charming",    "charm.svg");
     static readonly Approach NegReason   = new("reason",   "Reason",    "reasoning", "reasoning",   "brain.svg");
     static readonly Approach NegThreaten = new("threaten", "Threaten",  "threat",    "threatening", "barbute.svg");
 
@@ -42,7 +42,7 @@ public static class ApproachRoster
     // ── Rosters by skill ──────────────────────────────────────────────────────
 
     static readonly IReadOnlyList<Approach> NegotiationApproaches =
-        new[] { NegFlatter, NegReason, NegThreaten };
+        new[] { NegCharm, NegReason, NegThreaten };
 
     static readonly IReadOnlyList<Approach> CunningApproaches =
         new[] { CunHide, CunBluff, CunScheme };

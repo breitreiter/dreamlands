@@ -69,10 +69,10 @@ public class MarketTests
         var outpost = Market.InitializeSettlement("Outpost", "plains", 1, SettlementSize.Outpost, state, Balance, new Random(1));
 
         var campEquip = camp.Stock.Keys
-            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots)
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type is ItemType.Weapon or ItemType.Armor)
             .ToList();
         var outpostEquip = outpost.Stock.Keys
-            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots)
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type is ItemType.Weapon or ItemType.Armor)
             .ToList();
 
         Assert.Empty(campEquip);

@@ -88,7 +88,7 @@ choices:
     She's made her decision. She will defy Daveth.
   } @elif tag fugitive.maren_accepts {
     You try to pull her back toward defiance, but the moment is lost. She shakes her head.
-  } @elif check negotiation correct:threaten wrong:flatter {
+  } @elif check negotiation correct:reason wrong:charm {
     "Daveth's law is Tashkari. You left that world behind. Sever the final tie. Tell him no. The camp will back you."
 
     "What will he tell his village?"

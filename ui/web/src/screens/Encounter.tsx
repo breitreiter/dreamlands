@@ -287,14 +287,13 @@ function OutcomeSegment({ outcome }: { outcome: OutcomeInfo }) {
             passed={outcome.skillCheck.passed}
           />
         ) : (
-          <DieRoll
-            label={outcome.skillCheck.skill}
-            rolled={outcome.skillCheck.rolled}
-            modifier={outcome.skillCheck.modifier}
-            target={outcome.skillCheck.target}
-            passed={outcome.skillCheck.passed}
-            rollMode={outcome.skillCheck.rollMode}
-          />
+          <div className="flex items-center gap-2">
+            <span className="capitalize font-medium">{outcome.skillCheck.skill}</span>
+            {": "}
+            <span className={outcome.skillCheck.passed ? "text-positive" : "text-negative"}>
+              {outcome.skillCheck.passed ? "Success" : "Failure"}
+            </span>
+          </div>
         )
       )}
 

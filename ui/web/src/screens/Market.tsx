@@ -21,7 +21,7 @@ import {
 import { getMarketName, getProprietorName, getSealVariant, getSealSymbolIndex } from "../marketNaming";
 import { getMarketDayNote } from "../calendar";
 
-const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
+const PACK_TYPES = new Set(["weapon", "armor", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
 
 type BuyTab = "hauls" | "supplies" | "equipment";
@@ -31,7 +31,7 @@ function matchesBuyTab(item: MarketItem, tab: BuyTab): boolean {
   switch (tab) {
     case "hauls": return false; // hauls are not MarketItems
     case "supplies": return item.type === "consumable";
-    case "equipment": return item.type === "weapon" || item.type === "armor" || item.type === "boots" || item.type === "tool";
+    case "equipment": return item.type === "weapon" || item.type === "armor" || item.type === "tool";
   }
 }
 
@@ -139,7 +139,7 @@ export default function MarketScreen({
         // First unit may auto-equip (into an empty slot) — still consumes a pack slot
         packBuys += qty;
         // Track that this type is now "equipped" for capacity gating
-        if ((item.type === "weapon" || item.type === "armor" || item.type === "boots")
+        if ((item.type === "weapon" || item.type === "armor")
             && !projectedEquippedTypes.has(item.type)) {
           projectedEquippedTypes.add(item.type);
         }
@@ -153,7 +153,6 @@ export default function MarketScreen({
     const projectedEquipment = {
       weapon: remainingPack.find(i => i.type === "weapon" && i.isEquipped) ?? null,
       armor: remainingPack.find(i => i.type === "armor" && i.isEquipped) ?? null,
-      boots: remainingPack.find(i => i.type === "boots" && i.isEquipped) ?? null,
     };
 
     return { gold, projectedStock, packCount, packCapacity, buyCost, sellRevenue, projectedEquipment };

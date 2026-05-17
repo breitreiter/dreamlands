@@ -30,7 +30,7 @@ choices:
 
 * Find the rail line and follow it = New track goes somewhere with people; walk it until you reach a depot
   The rail grading is a known quantity: Kesharat infrastructure runs to depots and depots have water and people who know the roads. Following it means moving through contested ground under Kesharat visibility, which has its own costs, but it gets you unlost without gambling on the terrain.
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     You find the grading within the hour and follow it east. A Kesharat patrol comes up behind you faster than expected, two guards and a corporal who looks tired and hot and not particularly suspicious. You match their pace for a few minutes, present yourself as a traveling merchant, and by the time you reach the depot cutoff they've accepted your presence enough to point you at the right track without too much paperwork. You walk the rest of the way in late afternoon light.
 
     +remove_condition lost

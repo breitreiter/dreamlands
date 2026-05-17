@@ -30,7 +30,7 @@ public static class Market
             .ToList();
 
         var equipment = balance.Items.Values
-            .Where(i => i.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots
+            .Where(i => i.Type is ItemType.Weapon or ItemType.Armor
                         && i.ShopTier != null && i.ShopTier <= tier && i.Cost != null)
             .ToList();
 
@@ -82,7 +82,7 @@ public static class Market
             var def = balance.Items[itemId];
             state.Stock[itemId] = def switch
             {
-                { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
+                { Type: ItemType.Weapon or ItemType.Armor } => 1,
                 { Type: ItemType.Tool } => 1,
                 { Id: "medical_kit" } => maxStock, // medical kit always plentiful
                 { Cures.Count: > 0 } => 1, // specialty medicines are scarce
@@ -174,12 +174,6 @@ public static class Market
             autoEquipped = true;
         }
         else if (def.Type is ItemType.Armor && player.EquippedArmor == null)
-        {
-            instance.IsEquipped = true;
-            player.Pack.Add(instance);
-            autoEquipped = true;
-        }
-        else if (def.Type is ItemType.Boots && player.EquippedBoots == null)
         {
             instance.IsEquipped = true;
             player.Pack.Add(instance);

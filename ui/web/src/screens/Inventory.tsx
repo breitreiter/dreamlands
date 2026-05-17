@@ -30,9 +30,9 @@ const CONDITION_ICONS: Record<string, string> = {
   injured: "bloody-stash.svg",
 };
 
-// Gear types — weapon, armor, boots
-const GEAR_TYPES = new Set(["weapon", "armor", "boots"]);
-const GEAR_ORDER = ["weapon", "armor", "boots"];
+// Gear types — weapon, armor
+const GEAR_TYPES = new Set(["weapon", "armor"]);
+const GEAR_ORDER = ["weapon", "armor"];
 
 // Supply defIds — food and medical kit treated as supplies
 const SUPPLY_DEFS = new Set(["food_ration", "medical_kit"]);
@@ -126,11 +126,15 @@ function CharacterPanel({
           <div key={skill.id} className="flex items-start gap-3">
             <div
               className="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold flex-shrink-0 mt-0.5 text-accent border-accent"
+              title={skill.formatted}
             >
-              {skill.formatted}
+              {skill.formatted.charAt(0)}
             </div>
             <div className="min-w-0">
-              <div className="text-primary">{skill.name}</div>
+              <div className="text-primary">
+                {skill.name}
+                <span className="text-dim ml-2 font-normal">{skill.formatted}</span>
+              </div>
               {skill.flavor && (
                 <div className="text-dim leading-snug mt-0.5">{skill.flavor}</div>
               )}

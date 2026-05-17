@@ -52,7 +52,7 @@ choices:
   +open "Meilin"
 
 * Ask her to come with you to the barn = Bring her to meet Edric [requires !tag hermitage.meilin_accompanies]
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     She is quiet a moment. Then she nods, slow.
 
     "Alright. But if I go, you go with eyes open." She pushes the cup aside and leans across the table, and the room is smaller than it was. Her voice stays even. "I've been thinking about this for a month, and the thinking has arrived somewhere. Me and mine, we can take them. Quietly. One night. Nobody in the yard knows until morning. I've offered to own it. I walk out after and don't come back. Aldous will be disappointed in me. He often is. But he keeps his tower and his garden."

@@ -28,7 +28,7 @@ Something moves in the shack behind her. A scrape, a settling weight. She does n
 choices:
 
 * Accept her hospitality = Sit, eat, and trade what information you can, trusting that hunger and the rising water leave you little choice but faith.
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     You trade tales of the world beyond the fen for bowls of her root-stew, and something in your words, perhaps the honesty of exhaustion or the shape of distant roads in your voice, softens the pale amusement in her eyes. When you depart at dawn, she presses into your hands a small bundle wrapped in oilcloth: dried fish, hard travelers' bread, something that smells of smoke and keeping. "The fen takes," she says, "but I give what I can spare."
     +add_random_items 3 food
   } @else {

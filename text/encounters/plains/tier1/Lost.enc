@@ -14,7 +14,7 @@ choices:
 
   The old woman looks at you, then at the direction you came from, then at the horizon. She does not look surprised.
 
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     She hears you out, asks two pointed questions about where you started, and then gives you directions without hesitation: a particular barn, the angle of the road past the mill, landmarks you recognize. She mentions a shortcut through a neighbor's fallow field that saves a quarter-hour. When you thank her she waves it off. "You're not the first," she says, and goes back to her sheaves.
     +remove_condition lost
     +advance_time 2

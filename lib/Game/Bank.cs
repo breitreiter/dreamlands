@@ -36,13 +36,6 @@ public static class Bank
                 player.Pack.Remove(item);
                 break;
 
-            case "boots":
-                item = player.Pack.FirstOrDefault(i => i.IsEquipped && i.DefId == defId);
-                if (item == null) return "Item not equipped in boots slot";
-                item.IsEquipped = false;
-                player.Pack.Remove(item);
-                break;
-
             default:
                 return $"Invalid source: {source}";
         }

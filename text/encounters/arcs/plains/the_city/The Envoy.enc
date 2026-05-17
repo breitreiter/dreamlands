@@ -65,6 +65,8 @@ choices:
     +add_item golem_armor
     +open "The Letter"
   } @else {
+    You lunge forward, sweeping under the thing's guard.
+
     It's faster than it looks. The golden arm catches you across the chest and you hit the wall hard with a wet crunch. Torben is shouting now, but the words blur together. You try to scramble back to your feet, but your legs won't obey. 
 
     Somewhere, far away, someone is fighting. Metal on metal rings. Shouts. Not your concern.

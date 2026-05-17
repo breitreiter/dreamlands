@@ -70,7 +70,7 @@ choices:
     "I'll take the armor," you say. "Standard Traders Guild arbitration agreement. I'm sure you're both familiar with the terms."
 
     Dalla and Aldric stare, shocked for the moment at the proposal.
-    @if check cunning correct:scheme wrong:hide {
+    @if check cunning correct:scheme wrong:bluff {
         Neither speaks, so you continue, voice level and unhurried. You cite the protocols established in the third year of the Regency, the exceptions carved out for military salvage in disputed territories, the Guild's standing contracts with the legion itself, dating back to when the high passes were still held. You remind them that the borderlands were never formally relinquished by the empire, that all residents therefore fall under certain obligations, certain protections. Each clause leads to the next, a careful architecture of precedent and law.
 
         Aldric opens his mouth. You answer before the objection takes shape, pivoting smoothly to the matter of fair compensation for services rendered, the value of neutral mediation in preventing bloodshed, the cost such violence would exact from both parties. Dalla tries next, her voice sharp with suspicion. You meet her argument with equal care, acknowledging her people's claim while weaving it back into the same tangled web of agreements and exceptions.

@@ -91,15 +91,7 @@ public static class DeckBuilder
             }
         }
 
-        // Equipment cards — only from items relevant to the encounter's governing skill
-        foreach (var item in GetEquippedItems(player, balance, skill))
-        {
-            foreach (var card in item.TacticalCards)
-            {
-                if (tb.Archetypes.TryGetValue(card.Archetype, out var arch))
-                    cards.Add(SnapshotFromArchetype(arch, card.Name));
-            }
-        }
+        // Equipment cards: TacticalCards removed from ItemDef (slated for full removal)
 
         return cards;
     }
@@ -151,22 +143,13 @@ public static class DeckBuilder
             yield return w;
         if (player.EquippedArmor?.DefId is { } aid && balance.Items.TryGetValue(aid, out var a) && IsRelevant(a, encounterSkill))
             yield return a;
-        if (player.EquippedBoots?.DefId is { } bid && balance.Items.TryGetValue(bid, out var b) && IsRelevant(b, encounterSkill))
-            yield return b;
 
-        // Tokens and tools in Pack can also contribute cards
-        foreach (var item in player.Pack)
-        {
-            if (balance.Items.TryGetValue(item.DefId, out var def) && def.TacticalCards.Count > 0 && IsRelevant(def, encounterSkill))
-                yield return def;
-        }
+        // TacticalCards removed from ItemDef — no pack card contributions
     }
 
     /// <summary>
-    /// An item is relevant if it has no skill modifiers (generic gear) or
-    /// if it has a modifier for the encounter's governing skill.
+    /// An item is relevant to an encounter. Skill modifiers are retired; all items with
+    /// tactical cards are always relevant.
     /// </summary>
-    static bool IsRelevant(ItemDef item, Skill? encounterSkill) =>
-        item.SkillModifiers.Count == 0
-        || (encounterSkill.HasValue && item.SkillModifiers.ContainsKey(encounterSkill.Value));
+    static bool IsRelevant(ItemDef item, Skill? encounterSkill) => true;
 }

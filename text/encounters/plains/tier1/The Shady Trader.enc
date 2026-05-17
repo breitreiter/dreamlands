@@ -4,31 +4,31 @@ The Shady Trader
 
 *DEBUG ENCOUNTER* This encounter exists solely to help testers skip past early-game progression. It gives you a full gear loadout instantly so you can test mid- or late-game content without grinding through the starting area.
 
-Choose a loadout below. Each option gives you 500 gold, a weapon, armor, boots, and field gear appropriate for that archetype. The third option gives top-tier equipment for testing high-difficulty content.
+Choose a loadout below. Each option gives you 500 gold, a weapon, armor, and field gear appropriate for that archetype. The third option gives top-tier equipment for testing high-difficulty content.
 
 This encounter does not appear in production builds.
 
 choices:
 
-* Outdoorsman loadout = Knife, lamellar, trail boots, waterskin, guidebook, spyglass
+* Outdoorsman loadout = Knife, lamellar, sleeping kit, waterskin, guidebook, spyglass
   +give_gold 500
   +add_item hunting_knife
   +add_item lamellar
-  +add_item trail_boots
+  +add_item sleeping_kit
   +add_item waterskin
   +add_item peoples_borderlands
   +add_item ornate_spyglass
 
-* Combat loadout = Scimitar, brigandine, trail boots, waterskin, guidebook, spyglass
+* Combat loadout = Scimitar, brigandine, sleeping kit, waterskin, guidebook, spyglass
   +give_gold 500
   +add_item scimitar
   +add_item brigandine
-  +add_item trail_boots
+  +add_item sleeping_kit
   +add_item waterskin
   +add_item peoples_borderlands
   +add_item ornate_spyglass
 
-* Max loadout (high-difficulty testing) = Best-in-slot weapon/armor/boots + full pack upgrade + all field items
+* Max loadout (high-difficulty testing) = Best-in-slot weapon/armor + scarecrow boots + full pack upgrade + all field items
   +give_gold 500
   +upgrade_pack 4
   +add_item revathi_labrys

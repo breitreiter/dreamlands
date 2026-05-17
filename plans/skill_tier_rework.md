@@ -63,7 +63,7 @@ picks one of the three; resolution is deterministic given the player's tier.
 
 | Skill        | Approach 1            | Approach 2                   | Approach 3                |
 |--------------|-----------------------|------------------------------|---------------------------|
-| Negotiation  | **Flatter** (praise)  | **Reason** (facts, argument) | **Threaten** (highlight risk) |
+| Negotiation  | **Charm** (flatter, praise, or demur) | **Reason** (facts, argument) | **Threaten** (highlight risk) |
 | Cunning      | **Hide** (conceal)    | **Bluff** (pretend upper hand) | **Scheme** (trick, outwit) |
 | Bushcraft    | **Push** (grit through) | **Plan** (analyze first)   | **Reroute** (go around)   |
 | Combat       | **Rush** (head-on)    | **Strategize** (wait, observe) | **Outlast** (wear down)   |
@@ -179,7 +179,7 @@ because the corresponding rolls no longer exist. The `[requires]` form retains `
 §Open Decisions on requires/meets terminology).
 
 **Choice prose for the approach picker.** Static per skill. The picker UI shows the three
-verbs ("Flatter / Reason / Threaten") with icons. Per-check custom choice prose would be nice
+verbs ("Charm / Reason / Threaten") with icons. Per-check custom choice prose would be nice
 but is not in scope — encounters telegraph through the *preamble* prose, and the picker is
 standard. (Revisit if playtest reveals it feels too gamey.)
 
@@ -360,7 +360,7 @@ Three new icons per skill (4 skills × 3 approaches = 12 icons) for the approach
 
 Negotiation:
 They might be open to Negotiation. How do you want to play this?
-- charm.svg Charm - Flatter, praise, or demur
+- charm.svg Charm — Flatter, praise, or demur
 - brain.svg Reason - Present facts and careful arguments
 - barbute.svg Threaten - Highlight the danger of their position
 
@@ -456,7 +456,7 @@ it's interactive") and matches the cold/thirst pattern. But worth a direct call.
    Replace `[requires check <skill> <DC>]` with `[requires meets <skill> <tier>]`
    (e.g. `[requires meets cunning trained]`).
 
-4. **Per-encounter approach prose**: the picker uses static verbs ("Flatter / Reason /
+4. **Per-encounter approach prose**: the picker uses static verbs ("Charm / Reason /
    Threaten"). Allowing custom prose per check is appealing but doubles authoring cost. Hold
    off; revisit if playtest reveals the static picker feels gamey.
 

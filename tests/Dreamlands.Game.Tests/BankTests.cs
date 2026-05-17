@@ -83,20 +83,6 @@ public class BankTests
     }
 
     [Fact]
-    public void Deposit_FromBootsSlot_UnequipsAndBanks()
-    {
-        var state = Fresh();
-        var settlement = MakeSettlement();
-        state.Pack.Add(new ItemInstance("walking_boots", "Walking Boots") { IsEquipped = true });
-
-        var error = Bank.Deposit(state, "walking_boots", "boots", settlement, Balance);
-
-        Assert.Null(error);
-        Assert.Null(state.EquippedBoots);
-        Assert.Single(settlement.Bank);
-    }
-
-    [Fact]
     public void Deposit_BankFull_ReturnsError()
     {
         var state = Fresh();

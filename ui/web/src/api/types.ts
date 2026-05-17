@@ -24,6 +24,7 @@ export interface SkillInfoDto {
   id: string;
   name: string;
   level: number;
+  tier: string;
   formatted: string;
   flavor: string;
 }
@@ -123,7 +124,6 @@ export interface ItemInfo {
 export interface EquipmentInfo {
   weapon: ItemInfo | null;
   armor: ItemInfo | null;
-  boots: ItemInfo | null;
 }
 
 export interface InventoryInfo {

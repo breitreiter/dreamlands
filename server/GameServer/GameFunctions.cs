@@ -1259,7 +1259,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var slot = actionReq.Slot;
                 if (string.IsNullOrEmpty(slot))
-                    return new BadRequestObjectResult(new { error = "Slot is required (weapon, armor, boots)" });
+                    return new BadRequestObjectResult(new { error = "Slot is required (weapon, armor)" });
 
                 var results = Mechanics.Apply([$"unequip {slot}"], player, data.Balance, session.Rng);
                 if (results.Count == 0)
@@ -1318,8 +1318,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             type = entry.Item.Type.ToString().ToLowerInvariant(),
             buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance),
             quantity = entry.Quantity,
-            skillModifiers = entry.Item.SkillModifiers.ToDictionary(
-                kv => kv.Key.ScriptName(), kv => kv.Value),
+            skillModifiers = new Dictionary<string, int>(),
             resistModifiers = entry.Item.ResistModifiers,
             description = FormatItemDescription(entry.Item),
         }).ToList();
@@ -1591,13 +1590,27 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }).ToList(),
         Skills = Skills.All.Select(si =>
         {
-            var level = (int)p.Skills.GetValueOrDefault(si.Skill);
+            var tier = p.Skills.GetValueOrDefault(si.Skill);
+            var level = (int)tier;
+            var tierName = tier switch
+            {
+                SkillTier.Expert => "expert",
+                SkillTier.Trained => "trained",
+                _ => "untrained",
+            };
+            var tierFormatted = tier switch
+            {
+                SkillTier.Expert => "Expert",
+                SkillTier.Trained => "Trained",
+                _ => "Untrained",
+            };
             return new SkillInfoDto
             {
                 Id = si.ScriptName,
                 Name = si.DisplayName,
                 Level = level,
-                Formatted = FormatSkillLevel(level),
+                Tier = tierName,
+                Formatted = tierFormatted,
                 Flavor = SkillFlavor.Get(si.Skill, level),
             };
         }).ToList(),
@@ -1672,10 +1685,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Description = i.Description ?? (def != null ? FormatItemDescription(def) : null),
             Type = def?.Type.ToString().ToLowerInvariant() ?? "",
             Cost = def?.Cost,
-            SkillModifiers = def?.SkillModifiers.ToDictionary(kv => kv.Key.ScriptName(), kv => kv.Value) ?? [],
+            SkillModifiers = [],
             ResistModifiers = def?.ResistModifiers.ToDictionary(kv => kv.Key, kv => kv.Value) ?? [],
             Cures = def?.Cures.ToList() ?? [],
-            IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots,
+            IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor,
             IsEquipped = i.IsEquipped,
             DestinationName = i.DestinationName,
             DestinationHint = i.DestinationX != null && i.DestinationY != null
@@ -1694,7 +1707,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             Weapon = p.EquippedWeapon != null ? BuildItemInfo(p.EquippedWeapon) : null,
             Armor = p.EquippedArmor != null ? BuildItemInfo(p.EquippedArmor) : null,
-            Boots = p.EquippedBoots != null ? BuildItemInfo(p.EquippedBoots) : null,
         },
     };
 
@@ -2092,8 +2104,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     static string FormatItemDescription(ItemDef item)
     {
         var parts = new List<string>();
-        foreach (var (skill, mod) in item.SkillModifiers)
-            parts.Add($"{skill.GetInfo().DisplayName} {(mod >= 0 ? "+" : "")}{mod}");
         foreach (var (resist, mod) in item.ResistModifiers)
             parts.Add($"{resist} resist {(mod >= 0 ? "+" : "")}{mod}");
         if (item.Cures.Count > 0)

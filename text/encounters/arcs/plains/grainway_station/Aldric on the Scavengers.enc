@@ -13,7 +13,7 @@ Aldric on the Scavengers
 choices:
 
 * Propose an assault = Hit the scavengers hard and fast [requires tag grainway_assault_possible]
-    @if check negotiation correct:threaten wrong:flatter {
+    @if check negotiation correct:threaten wrong:charm {
     "They are rabble," you say, "Every hour you delay, you lose standing in your men's eyes. Strike them now, hard and fast, before they grow bold enough to believe themselves your equals."
 
     You step closer, close enough that Aldric must either meet your gaze or retreat. He does not retreat. "When word spreads of this," you continue, "when scavengers in camps and hovels learn what befell those who stood against the legion, they will think twice before such boldness finds them again. This is how authority endures in the borderlands, not through waiting and indecision."

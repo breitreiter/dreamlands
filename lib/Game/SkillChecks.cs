@@ -18,24 +18,15 @@ public record SkillCheckResult(
 /// <summary>
 /// Gear-bonus helpers retained for server/GameFunctions.cs display panel (Phase 5 cleans this up).
 /// The d20 Roll/RollResist/RollD20 paths are deleted — see SkillResolution.cs for the tier model.
+/// Skill item bonuses are removed (dead under the approach picker model); GetItemBonus now returns 0.
 /// </summary>
 public static class SkillChecks
 {
     /// <summary>
-    /// Get item bonus for an encounter skill check. Each skill draws from specific gear sources.
-    /// Retained for the server mechanics-display panel; not called by the engine internally.
+    /// Item bonus for encounter skill checks. Skill bonuses on gear are retired under the
+    /// approach-picker model; this returns 0 for all skills. Retained for API compat.
     /// </summary>
-    public static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance)
-    {
-        return skill switch
-        {
-            Skill.Combat => GetEquippedMod(state.EquippedWeapon, Skill.Combat, balance),
-            Skill.Cunning => GetEquippedMod(state.EquippedArmor, Skill.Cunning, balance),
-            Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
-            Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
-            _ => 0,
-        };
-    }
+    public static int GetItemBonus(Skill skill, PlayerState state, BalanceData balance) => 0;
 
     /// <summary>
     /// Get resist bonus for a condition resist check.
@@ -47,8 +38,7 @@ public static class SkillChecks
         {
             "injured" => GetEquippedResist(state.EquippedArmor, conditionId, balance),
             "poison" => GetEquippedResist(state.EquippedArmor, conditionId, balance),
-            "exhausted" => GetEquippedResist(state.EquippedBoots, conditionId, balance)
-                         + GetBestPackResist(conditionId, state, balance, 1),
+            "exhausted" => GetBestPackResist(conditionId, state, balance, 1),
             "freezing" or "thirsty" or "lost" =>
                 GetEquippedResist(state.EquippedArmor, conditionId, balance)
                 + GetBestPackResist(conditionId, state, balance, 2),
@@ -58,15 +48,6 @@ public static class SkillChecks
         };
     }
 
-    static int GetEquippedMod(ItemInstance? slot, Skill skill, BalanceData balance)
-    {
-        if (slot == null) return 0;
-        if (balance.Items.TryGetValue(slot.DefId, out var def)
-            && def.SkillModifiers.TryGetValue(skill, out var mod))
-            return mod;
-        return 0;
-    }
-
     static int GetEquippedResist(ItemInstance? slot, string conditionId, BalanceData balance)
     {
         if (slot == null) return 0;
@@ -74,25 +55,6 @@ public static class SkillChecks
             && def.ResistModifiers.TryGetValue(conditionId, out var bonus))
             return bonus;
         return 0;
-    }
-
-    static int GetBestToolBonuses(Skill skill, PlayerState state, BalanceData balance)
-    {
-        int best = 0, secondBest = 0;
-        var seen = new HashSet<string>();
-
-        foreach (var item in state.Pack)
-        {
-            if (!seen.Add(item.DefId)) continue;
-            if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
-            if (def.Type != ItemType.Tool) continue;
-            if (!def.SkillModifiers.TryGetValue(skill, out var mod) || mod <= 0) continue;
-
-            if (mod >= best) { secondBest = best; best = mod; }
-            else if (mod > secondBest) { secondBest = mod; }
-        }
-
-        return best + secondBest;
     }
 
     static int GetBestPackResist(string conditionId, PlayerState state, BalanceData balance, int count)

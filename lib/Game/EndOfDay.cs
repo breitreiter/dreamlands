@@ -161,6 +161,10 @@ public static class EndOfDay
             // Skip threats the player just cleared this turn
             if (state.ConditionsClearedThisTurn.Contains(threat.Id)) continue;
 
+            // Skip threats blocked by a passive immunity item in pack (e.g. scarecrow_boots vs exhausted)
+            if (balance.Items.Values.Any(def => def.PassiveImmunities.Contains(threat.Id)
+                    && state.Pack.Any(inst => inst.DefId == def.Id))) continue;
+
             // Tier-based passive resist: travel conditions use Bushcraft
             var tier_ = TravelConditionIds.Contains(threat.Id) ? bushcraftTier : SkillTier.Untrained;
             var resisted = SkillResolution.RollPassiveResist(tier_, rng);

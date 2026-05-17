@@ -228,13 +228,12 @@ public static class Mechanics
         var item = state.Pack.FirstOrDefault(i => i.DefId == itemId && !i.IsEquipped);
         if (item == null) return null;
         if (!balance.Items.TryGetValue(itemId, out var def)) return null;
-        if (def.Type is not (ItemType.Weapon or ItemType.Armor or ItemType.Boots)) return null;
+        if (def.Type is not (ItemType.Weapon or ItemType.Armor)) return null;
 
         var slot = def.Type switch
         {
             ItemType.Weapon => "weapon",
             ItemType.Armor => "armor",
-            ItemType.Boots => "boots",
             _ => ""
         };
 
@@ -259,7 +258,6 @@ public static class Mechanics
         {
             "weapon" => (ItemType?)ItemType.Weapon,
             "armor" => ItemType.Armor,
-            "boots" => ItemType.Boots,
             _ => null
         };
         if (itemType == null) return null;

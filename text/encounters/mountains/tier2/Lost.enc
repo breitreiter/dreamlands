@@ -25,7 +25,7 @@ choices:
 
 * Find the prospectors = They know this terrain; get directions
   You move south along the contour, calling out at intervals. The wind takes your voice and throws it sideways. The hammering doesn't resume. After twenty minutes of traversing rocky ground you find their camp: a tarp strung between two boulders, a pack frame, a small brazier still warm. The prospectors themselves are higher on the face, just visible as two slow-moving shapes against pale rock.
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     You signal until one of them sees you. He descends slowly, with the methodical care of someone who's been on this mountain long enough to stop rushing, and gives you route directions with the economy of a man who talks mainly to himself and his partner. He points out three landmarks you can chain together back to the main cairn route. "Stay below the cloud line," he says, and goes back up without waiting for thanks.
 
     His landmarks are exact. Two hours later you're on ground you recognize.

@@ -101,7 +101,7 @@ choices:
     }
 
 * Talk your way out = Try to explain the danger of the monster
-    @if check negotiation correct:reason wrong:flatter {
+    @if check negotiation correct:reason wrong:charm {
         "You think this is a conspiracy?" you ask, level. "That Pyke sabotaged you, and I carried it in, and we're all playing some game against you?"
 
         Sev spits back, "What else would you call it?"

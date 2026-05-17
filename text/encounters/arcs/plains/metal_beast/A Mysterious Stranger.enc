@@ -49,7 +49,7 @@ choices:
   You turn from him, voice level. "I am a Trade Guilder, friend. It is not our way to sabotage contracts. I will deliver the thing. If you have some quarrel with these folk, that's your concern, not mine."
 
   Two strides carry you past him. The scrape of boot on stone comes too fast. His hand clamps your shoulder, wrenching you about. Metal flashes in the weak light: a knife, his intent is murder.
-  @if check combat correct:strategize wrong:outlast {
+  @if check combat correct:rush wrong:outlast {
       You wrench yourself free from his grasp and let the pack slide from your shoulder. It strikes the ground with a dull thud as your hand finds the hilt at your side.
 
       Fear bleeds into Pyke's hollow eyes, white showing at their edges, but something within him will not break. He lunges forward, arms outstretched, fingers grasping. The movement is graceless, untrained. You turn on your heel, your body remembering what his never knew. Your weapon comes down hard against the base of his skull. A brief, animal grunt escapes him. Then nothing. He collapses forward, striking the earth with finality.

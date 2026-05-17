@@ -11,7 +11,7 @@ choices:
 
 * Ask the merchant to yield = Appeal to the merchant's sense of self-preservation
   You step into the gap between them. The words come measured, pitched for the crowd as much as the merchant. The Kesharat remembers insults like the plateau remembers water. Not here, not today, but someone will pay. A cousin's caravan stopped at a checkpoint. A clan's grazing rights questioned by men with ledgers and swords. The trader's eyes narrow, but you see the calculation there. You turn the signet ring so the mark catches light.
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     The merchant lowers the case. Not a surrender, but a repositioning. He addresses the crowd, not the courier. Says he found property that wasn't his and returned it as clan law demands, insult or no insult. The case lands in the dust at the courier's feet. The courier snatches it up, clutching it like a child with a stolen cake. He nods once to you, stiff and graceless, and retreats toward his mount. The crowd disperses with the slow reluctance of a disappointed audience. The trader meets your eyes. No gratitude there, but recognition. You've given him the story he can tell tonight, the one where he's generous and the lowlander is a fool.
     +heal_spirits 1
     +quality faction.clans +1

@@ -27,7 +27,7 @@ choices:
 
 * Ask the bells = Follow the sound of livestock and find whoever tends them
   Goat bells mean a herder, and a herder means someone who knows exactly where the settlement is. You angle toward the sound, picking your way across cracked earth and loose rock, keeping the bells in your ear as they shift with the wind. A lost traveler asking directions is a known quantity here. Someone will help you, though help tends to come with an obligation attached.
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     You find the herder, a girl of perhaps fourteen and completely unmoved by your presence, watching her animals pick at sparse brush along a sheltered ledge. She looks at your pack, your ring, and your expression of polite lost-ness, and sighs as though this is the fifth time this week. She waves you along behind her. Twenty minutes of walking in silence, and she points from a ridge toward a cluster of flat-roofed buildings. Then she turns back to her goats without a word.
 
     You call a thanks. She raises one hand without turning around.

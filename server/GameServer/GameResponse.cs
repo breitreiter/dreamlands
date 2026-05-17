@@ -150,6 +150,7 @@ public class SkillInfoDto
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
     public int Level { get; init; }
+    public string Tier { get; init; } = "";
     public string Formatted { get; init; } = "";
     public string Flavor { get; init; } = "";
 }
@@ -281,7 +282,6 @@ public class EquipmentInfo
 {
     public ItemInfo? Weapon { get; init; }
     public ItemInfo? Armor { get; init; }
-    public ItemInfo? Boots { get; init; }
 }
 
 // Approach picker prompt — emitted when the runner suspends on AwaitApproach.
@@ -302,10 +302,10 @@ public class ApproachPromptInfo
 
 public class ApproachInfo
 {
-    /// <summary>Lowercase token id used as the pick_approach request value, e.g. "flatter".</summary>
+    /// <summary>Lowercase token id used as the pick_approach request value, e.g. "charm".</summary>
     public string Id { get; init; } = "";
 
-    /// <summary>Player-facing label, e.g. "Flatter".</summary>
+    /// <summary>Player-facing label, e.g. "Charm".</summary>
     public string Label { get; init; } = "";
 
     /// <summary>SVG file hint for the approach icon (Phase 6 renders this).</summary>

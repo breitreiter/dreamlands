@@ -17,7 +17,7 @@ The figures drift closer. You can smell limestone and old cloth and something el
 choices:
 
 * Draw your weapon = Destroy this abomination and make this cave safe again
-  @if check combat correct:strategize wrong:rush {
+  @if check combat correct:rush wrong:outlast {
     You draw steel. The blade rings clear in the dark.
 
     You feel a probing presence in your mind. You do not recoil, but let it in. You show it the blood you have spilled, the men you have cut down. The ghosts are hungry, but your appetites are darker still.

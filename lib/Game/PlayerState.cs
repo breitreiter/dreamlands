@@ -62,11 +62,6 @@ public class PlayerState
     public ItemInstance? EquippedArmor =>
         Pack.FirstOrDefault(i => i.IsEquipped && ItemDef.All.TryGetValue(i.DefId, out var d) && d.Type == ItemType.Armor);
 
-    [System.Text.Json.Serialization.JsonIgnore]
-    public ItemInstance? EquippedBoots =>
-        Pack.FirstOrDefault(i => i.IsEquipped && ItemDef.All.TryGetValue(i.DefId, out var d) && d.Type == ItemType.Boots);
-
-
     // Time
     public TimePeriod Time { get; set; } = TimePeriod.Morning;
     public int Day { get; set; } = 1;

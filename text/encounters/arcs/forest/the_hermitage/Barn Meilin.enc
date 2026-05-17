@@ -14,7 +14,7 @@ choices:
   Meilin's eyebrows lift about a finger's width. Edric's do not move at all, which is how you know you have caught him flat. Neither of them expected this from you.
 
   Edric recovers first. "That is an interesting proposal, trader."
-  @if check negotiation correct:reason wrong:flatter {
+  @if check negotiation correct:reason wrong:charm {
     You turn to Meilin. "Your heart is divided. On the one hand, you want to set down your blade and leave your old life behind. On the other, you'd kill every man in here to protect Aldous. I respect that. I'd wager Edric respects the gravity of your conviction as well." Edric blanches, but doesn't speak to disagree.
 
     "Tell me you haven't worried for the safety of this place. I know I'm asking a great deal, but you know this place would be safer for having the both you protecting it."
@@ -45,6 +45,8 @@ choices:
     +add_item scarecrow_boots
     +finish_dungeon
   } @else {
+    You turn to Meilin. "I've watched your people. You still have the discipline and strength of a fighting force. Working together, you could keep this place safe."
+
     Meilin leans over the table like a storm cloud. She strikes the table and the clay cups hop briefly.
 
     "Rattlecoin, are you mad? You want me to do what? Become this man's lieutenant? In the house Aldous built?"
