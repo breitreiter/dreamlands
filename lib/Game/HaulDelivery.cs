@@ -13,7 +13,7 @@ public static class HaulDelivery
         Random rng,
         BalanceData? balance = null)
     {
-        var mercantile = player.Skills.GetValueOrDefault(Skill.Mercantile);
+        var mercantile = (int)player.Skills.GetValueOrDefault(Skill.Mercantile);
         var bonusRate = balance?.Trade.MercantileHaulBonusPerPoint ?? 0.0;
 
         var results = new List<DeliveryResult>();

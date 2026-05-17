@@ -11,7 +11,7 @@ namespace Dreamlands.Rules;
 public sealed record RpsMove(string Encoding, string DisplayName);
 
 /// <summary>Type of equipment item.</summary>
-public enum ItemType { Tool, Consumable, Token, Weapon, Armor, Boots, Haul }
+public enum ItemType { Tool, Consumable, Weapon, Armor, Boots, Haul }
 
 /// <summary>Weapon class for weapon-type items.</summary>
 public enum WeaponClass { Dagger, Axe, Sword }
@@ -77,7 +77,7 @@ public sealed class ItemDef
     /// Tactical encounters are slated for removal; new items leave this empty.</summary>
     public IReadOnlyList<TacticalCard> TacticalCards { get; init; } = [];
 
-    /// <summary>True for items that go in Pack (gear + trade goods). False for consumables that go in Haversack.</summary>
+    /// <summary>True for items that go in Pack.</summary>
     public bool IsPackItem => Type is ItemType.Weapon or ItemType.Armor or ItemType.Boots or ItemType.Tool or ItemType.Haul;
 
     public static IReadOnlyDictionary<string, ItemDef> All { get; } = BuildAll();
@@ -435,12 +435,12 @@ public sealed class ItemDef
 
         // ── Medicines ──
 
-        ["bandages"] = new()
+        ["medical_kit"] = new()
         {
-            Id = "bandages", Name = "Bandages", Type = ItemType.Consumable,
-            Description = "Clean linen strips treated with pine resin. Cures injured.",
+            Id = "medical_kit", Name = "Medical Kit", Type = ItemType.Tool,
+            Description = "A canvas roll of splints, linen bandages, and pine-resin salve. Cures injured without being consumed.",
             Cures = new HashSet<string> { "injured" },
-            Cost = 3,
+            Cost = 25,
         },
         ["siphon_glass"] = new()
         {
@@ -466,60 +466,6 @@ public sealed class ItemDef
             Biome = "swamp", ShopTier = 2, Cost = 15,
         },
 
-        ["ivory_comb"] = new()
-        {
-            Id = "ivory_comb", Name = "Ivory Comb", Type = ItemType.Token,
-            Description = "A delicate comb carved from yellowed bone, cold to the touch. Faint scratches on the spine might be letters in a language you don't recognize.",
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Negotiation] = 1 },
-            TacticalCards = [new("Listen to the ghostly whispers", "spirits_to_momentum")],
-        },
-
-        ["lucky_buckle"] = new()
-        {
-            Id = "lucky_buckle", Name = "Lucky Buckle", Type = ItemType.Token,
-            Description = "A legionaire's brass buckle. Not so lucky for the previous owner, but you feel a strange attachment to it.",
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Combat] = 2 },
-            TacticalCards = [new("Trust your luck", "spirits_to_cancel")],
-        },
-
-        ["knotwork_seed"] = new()
-        {
-            Id = "knotwork_seed", Name = "Knotwork Seed", Type = ItemType.Token,
-            Description = "An intricately braided seed gifted by the Revënakh. It glows faintly in the dark.",
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Bushcraft] = 1 },
-            TacticalCards = [new("Trust the seed", "momentum_to_progress_large")],
-        },
-
-        ["tarnished_key"] = new()
-        {
-            Id = "tarnished_key", Name = "Tarnished Key", Type = ItemType.Token,
-            Description = "A worn key to a door in the Halfway House. A reminder of the importance of discretion.",
-            SkillModifiers = new Dictionary<Skill, int> { [Skill.Cunning] = 1 },
-            TacticalCards = [new("Remember the key's lesson", "free_momentum")],
-        },
-
-        // ── Tokens (capstone arc keys) ──
-
-        ["hunters_journal"] = new()
-        {
-            Id = "hunters_journal", Name = "Hunter's Journal", Type = ItemType.Token,
-            Description = "A small leather-bound book of field observations — animal tracks, edible plants, trail markings in a hand that is meticulous and warm.",
-        },
-        ["grid_cipher"] = new()
-        {
-            Id = "grid_cipher", Name = "Grid Cipher", Type = ItemType.Token,
-            Description = "A corroded imperial device fitted with rotating discs of etched glass. When held to Grid markings, the symbols resolve into legible warnings.",
-        },
-        ["color_lens"] = new()
-        {
-            Id = "color_lens", Name = "Color Lens", Type = ItemType.Token,
-            Description = "A disc of treated glass in a brass frame. Looking through it, the Lattice's Colors separate into distinct bands the eye can tolerate.",
-        },
-        ["revathi_tile"] = new()
-        {
-            Id = "revathi_tile", Name = "Revathi Tile", Type = ItemType.Token,
-            Description = "A fragment of ancient tilework, faintly warm. The geometric pattern on its face shifts when you look away.",
-        },
         ["control_shaft"] = new()
         {
             Id = "control_shaft", Name = "Control Shaft", Type = ItemType.Tool,

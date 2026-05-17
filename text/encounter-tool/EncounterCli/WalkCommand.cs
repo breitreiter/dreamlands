@@ -84,7 +84,7 @@ static class WalkCommand
         foreach (var (name, level) in startSkills)
         {
             var skill = Skills.FromScriptName(name);
-            if (skill != null) state.Skills[skill.Value] = level;
+            if (skill != null) state.Skills[skill.Value] = (SkillTier)level;
             else Console.Error.WriteLine($"Unknown skill: {name}");
         }
         foreach (var tag in startTags) state.Tags.Add(tag);

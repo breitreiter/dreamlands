@@ -191,7 +191,7 @@ public static class EndOfDay
     {
         if (noBiome) return false;
 
-        var skillLevel = state.Skills.GetValueOrDefault(Skill.Bushcraft);
+        var skillLevel = (int)state.Skills.GetValueOrDefault(Skill.Bushcraft);
         var itemBonus = SkillChecks.GetItemBonus(Skill.Bushcraft, state, balance);
         var modifier = skillLevel + itemBonus;
 

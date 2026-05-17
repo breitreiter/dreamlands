@@ -152,14 +152,14 @@ public class InnTests
     {
         var p = Fresh();
         p.ActiveConditions.Add("injured");
-        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        p.Pack.Add(new ItemInstance("medical_kit", "Medical Kit"));
 
         var result = Inn.BookService(p, Balance, Inn.BedServiceId);
 
         Assert.True(result.Success);
         Assert.DoesNotContain("injured", p.ActiveConditions);
-        Assert.DoesNotContain(p.Haversack, i => i.DefId == "bandages");
-        Assert.Contains("bandages", result.MedicinesConsumed);
+        Assert.DoesNotContain(p.Pack, i => i.DefId == "medical_kit");
+        Assert.Contains("medical_kit", result.MedicinesConsumed);
         Assert.Contains("injured", result.ConditionsCleared);
     }
 

@@ -73,7 +73,7 @@ public static class Conditions
     }
 
     static bool EvaluateHas(string itemId, PlayerState state) =>
-        state.Pack.Any(i => i.DefId == itemId) || state.Haversack.Any(i => i.DefId == itemId);
+        state.Pack.Any(i => i.DefId == itemId);
 
     static bool EvaluateTag(string tagId, PlayerState state) =>
         state.Tags.Contains(tagId);
@@ -83,7 +83,7 @@ public static class Conditions
         if (pos + 1 > tokens.Count) return false;
         var skill = Skills.FromScriptName(tokens[pos++]);
         if (skill == null || !int.TryParse(tokens[pos++], out var target)) return false;
-        var skillLevel = state.Skills.GetValueOrDefault(skill.Value);
+        var skillLevel = (int)state.Skills.GetValueOrDefault(skill.Value);
         var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
         return skillLevel + itemBonus >= target;
     }

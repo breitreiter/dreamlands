@@ -1484,7 +1484,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         }).ToList(),
         Skills = Skills.All.Select(si =>
         {
-            var level = p.Skills.GetValueOrDefault(si.Skill);
+            var level = (int)p.Skills.GetValueOrDefault(si.Skill);
             return new SkillInfoDto
             {
                 Id = si.ScriptName,
@@ -1628,7 +1628,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         foreach (var si in Skills.All)
         {
             if (si.Skill is Skill.Luck or Skill.Mercantile) continue;
-            var skillLevel = p.Skills.GetValueOrDefault(si.Skill);
+            var skillLevel = (int)p.Skills.GetValueOrDefault(si.Skill);
             var itemBonus = SkillChecks.GetItemBonus(si.Skill, p, data.Balance);
             var total = skillLevel + itemBonus;
 
@@ -1640,7 +1640,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             });
         }
 
-        var mercantile = p.Skills.GetValueOrDefault(Skill.Mercantile);
+        var mercantile = (int)p.Skills.GetValueOrDefault(Skill.Mercantile);
         var haulBonus = (int)(mercantile * data.Balance.Trade.MercantileHaulBonusPerPoint * 100);
         other.Add(new MechanicLine
         {
@@ -1649,7 +1649,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Source = "Mercantile",
         });
 
-        var luckLevel = p.Skills.GetValueOrDefault(Skill.Luck);
+        var luckLevel = (int)p.Skills.GetValueOrDefault(Skill.Luck);
         var luckChances = data.Balance.Character.LuckRerollChance;
         var rerollChance = luckChances[Math.Min(Math.Max(luckLevel, 0), luckChances.Count - 1)];
         other.Add(new MechanicLine
@@ -1659,7 +1659,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Source = "Luck",
         });
 
-        var totalForaging = p.Skills.GetValueOrDefault(Skill.Bushcraft)
+        var totalForaging = (int)p.Skills.GetValueOrDefault(Skill.Bushcraft)
                           + SkillChecks.GetItemBonus(Skill.Bushcraft, p, data.Balance);
         other.Add(new MechanicLine
         {

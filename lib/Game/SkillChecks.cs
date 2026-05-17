@@ -27,7 +27,7 @@ public static class SkillChecks
         RollMode rollMode = RollMode.Normal)
     {
         var dc = difficulty.Target();
-        var skillLevel = state.Skills.GetValueOrDefault(skill);
+        var skillLevel = (int)state.Skills.GetValueOrDefault(skill);
         var itemBonus = GetItemBonus(skill, state, balance);
         var modifier = skillLevel + itemBonus;
 
@@ -36,7 +36,7 @@ public static class SkillChecks
         // Luck reroll on failure
         if (!result.Passed)
         {
-            var luckLevel = state.Skills.GetValueOrDefault(Skill.Luck);
+            var luckLevel = (int)state.Skills.GetValueOrDefault(Skill.Luck);
             if (TryLuckReroll(luckLevel, balance, rng))
             {
                 var reroll = RollOnce(dc, modifier, skillLevel, skill, rollMode, rng);
@@ -109,7 +109,7 @@ public static class SkillChecks
             _ => null, // irradiated, lattice_sickness, exhausted — gear only
         };
 
-        var skillLevel = skill != null ? state.Skills.GetValueOrDefault(skill.Value) : 0;
+        var skillLevel = skill != null ? (int)state.Skills.GetValueOrDefault(skill.Value) : 0;
         var resistBonus = GetResistBonus(conditionId, state, balance);
         var modifier = skillLevel + resistBonus;
         var rollSkill = skill ?? Skill.Luck; // placeholder for result record
@@ -119,7 +119,7 @@ public static class SkillChecks
         // Luck reroll on failure
         if (!result.Passed)
         {
-            var luckLevel = state.Skills.GetValueOrDefault(Skill.Luck);
+            var luckLevel = (int)state.Skills.GetValueOrDefault(Skill.Luck);
             if (TryLuckReroll(luckLevel, balance, rng))
             {
                 var reroll = RollOnce(dc, modifier, skillLevel, rollSkill, RollMode.Normal, rng);
@@ -139,8 +139,8 @@ public static class SkillChecks
     {
         var gearBonus = skill switch
         {
-            Skill.Combat => GetEquippedMod(state.Equipment.Weapon, Skill.Combat, balance),
-            Skill.Cunning => GetEquippedMod(state.Equipment.Armor, Skill.Cunning, balance),
+            Skill.Combat => GetEquippedMod(state.EquippedWeapon, Skill.Combat, balance),
+            Skill.Cunning => GetEquippedMod(state.EquippedArmor, Skill.Cunning, balance),
             Skill.Negotiation => GetBestToolBonuses(Skill.Negotiation, state, balance),
             Skill.Bushcraft => GetBestToolBonuses(Skill.Bushcraft, state, balance),
             _ => 0, // Luck and Mercantile get no gear bonus
@@ -160,12 +160,12 @@ public static class SkillChecks
     {
         int bonus = conditionId switch
         {
-            "injured" => GetEquippedResist(state.Equipment.Armor, conditionId, balance),
-            "poison" => GetEquippedResist(state.Equipment.Armor, conditionId, balance),
-            "exhausted" => GetEquippedResist(state.Equipment.Boots, conditionId, balance)
+            "injured" => GetEquippedResist(state.EquippedArmor, conditionId, balance),
+            "poison" => GetEquippedResist(state.EquippedArmor, conditionId, balance),
+            "exhausted" => GetEquippedResist(state.EquippedBoots, conditionId, balance)
                          + GetBestPackResist(conditionId, state, balance, 1),
             "freezing" or "thirsty" or "lost" =>
-                GetEquippedResist(state.Equipment.Armor, conditionId, balance)
+                GetEquippedResist(state.EquippedArmor, conditionId, balance)
                 + GetBestPackResist(conditionId, state, balance, 2),
             "irradiated" or "lattice_sickness" =>
                 GetBestPackResist(conditionId, state, balance, 1),
@@ -213,31 +213,11 @@ public static class SkillChecks
         return best + secondBest;
     }
 
-    /// <summary>Token bonus: best +1 from haversack tokens with a SkillModifier for this skill.</summary>
-    static int GetTokenBonus(Skill skill, PlayerState state, BalanceData balance)
-    {
-        foreach (var item in state.Haversack)
-        {
-            if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
-            if (def.Type != ItemType.Token) continue;
-            if (def.SkillModifiers.TryGetValue(skill, out var mod) && mod > 0)
-                return Math.Min(mod, 1); // tokens cap at +1
-        }
-        return 0;
-    }
+    /// <summary>Token bonus — tokens removed in Phase 1; returns 0.</summary>
+    static int GetTokenBonus(Skill skill, PlayerState state, BalanceData balance) => 0;
 
-    /// <summary>Token resist bonus: best +1 from haversack tokens with a ResistModifier for this condition.</summary>
-    static int GetTokenResist(string conditionId, PlayerState state, BalanceData balance)
-    {
-        foreach (var item in state.Haversack)
-        {
-            if (!balance.Items.TryGetValue(item.DefId, out var def)) continue;
-            if (def.Type != ItemType.Token) continue;
-            if (def.ResistModifiers.TryGetValue(conditionId, out var bonus) && bonus > 0)
-                return Math.Min(bonus, 1); // tokens cap at +1
-        }
-        return 0;
-    }
+    /// <summary>Token resist bonus — tokens removed in Phase 1; returns 0.</summary>
+    static int GetTokenResist(string conditionId, PlayerState state, BalanceData balance) => 0;
 
     /// <summary>Best N pack-held equipment (tools) resist bonuses for a condition.</summary>
     static int GetBestPackResist(string conditionId, PlayerState state, BalanceData balance, int count)

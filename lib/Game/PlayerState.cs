@@ -39,7 +39,7 @@ public class PlayerState
     public int Gold { get; set; }
 
     // Skills
-    public Dictionary<Skill, int> Skills { get; set; } = new();
+    public Dictionary<Skill, SkillTier> Skills { get; set; } = new();
 
     // Encounter cadence
     public int MoveCount { get; set; }
@@ -48,9 +48,31 @@ public class PlayerState
     // Inventory
     public List<ItemInstance> Pack { get; set; } = new();
     public int PackCapacity { get; set; } = 10;
-    public List<ItemInstance> Haversack { get; set; } = new();
-    public int HaversackCapacity { get; set; } = 10;
-    public EquippedGear Equipment { get; set; } = new();
+
+    // Computed equipment views (non-persisted) — scan Pack for IsEquipped items by type
+    [System.Text.Json.Serialization.JsonIgnore]
+    public ItemInstance? EquippedWeapon =>
+        Pack.FirstOrDefault(i => i.IsEquipped && ItemDef.All.TryGetValue(i.DefId, out var d) && d.Type == ItemType.Weapon);
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public ItemInstance? EquippedArmor =>
+        Pack.FirstOrDefault(i => i.IsEquipped && ItemDef.All.TryGetValue(i.DefId, out var d) && d.Type == ItemType.Armor);
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public ItemInstance? EquippedBoots =>
+        Pack.FirstOrDefault(i => i.IsEquipped && ItemDef.All.TryGetValue(i.DefId, out var d) && d.Type == ItemType.Boots);
+
+    // Legacy shim: haversack is now pack for consumables.
+    // Phase 2 will consolidate; for now route to Pack to keep the build green.
+    [System.Text.Json.Serialization.JsonIgnore]
+    public List<ItemInstance> Haversack => Pack;
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public int HaversackCapacity => PackCapacity;
+
+    // Legacy shim: Equipment accessor wrapping IsEquipped flag. Phase 2 removes this.
+    [System.Text.Json.Serialization.JsonIgnore]
+    public EquipmentShim Equipment => new(this);
 
     // Time
     public TimePeriod Time { get; set; } = TimePeriod.Morning;
@@ -98,15 +120,14 @@ public class PlayerState
             MaxSpirits = balance.Character.StartingSpirits,
             Gold = balance.Character.StartingGold,
             PackCapacity = balance.Character.StartingPackSlots,
-            HaversackCapacity = balance.Character.StartingHaversackSlots,
         };
 
         state.Name = "Wanderer";
         state.Bio = "A restless soul drawn to the Dreamlands by forces unknown.";
 
-        // All skills start at 0 — the intro encounter sets the actual skill profile
+        // All skills start at Untrained — the intro encounter sets the actual skill profile
         foreach (var skill in Rules.Skills.All)
-            state.Skills[skill.Skill] = 0;
+            state.Skills[skill.Skill] = SkillTier.Untrained;
 
         return state;
     }

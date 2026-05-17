@@ -19,15 +19,15 @@ public class SkillChecksTests
         Assert.Equal(Skill.Combat, result.Skill);
         Assert.Equal(8, result.Target); // Easy DC
         Assert.InRange(result.NaturalRoll, 1, 20);
-        Assert.Equal(state.Skills[Skill.Combat], result.SkillLevel);
+        Assert.Equal((int)state.Skills[Skill.Combat], result.SkillLevel);
     }
 
     [Fact]
     public void Roll_HighSkill_TrivialDifficulty_Passes()
     {
         var state = Fresh();
-        state.Skills[Skill.Combat] = 10;
-        // d20 (1-20) + 10 >= 5 always passes (except nat 1)
+        state.Skills[Skill.Combat] = SkillTier.Expert; // highest tier
+        // d20 (1-20) + 2 >= 5 usually passes (except nat 1)
         // Use a seed that won't roll natural 1
         var rng = new Random(1);
         var result = SkillChecks.Roll(Skill.Combat, Difficulty.Trivial, state, Balance, rng);
@@ -56,7 +56,7 @@ public class SkillChecksTests
     public void Natural1_AlwaysFails()
     {
         var state = Fresh();
-        state.Skills[Skill.Combat] = 10; // huge modifier
+        state.Skills[Skill.Combat] = SkillTier.Expert; // highest modifier
         state.Spirits = 20;
 
         // Find a seed that rolls natural 1
@@ -77,7 +77,7 @@ public class SkillChecksTests
     public void Natural20_AlwaysPasses()
     {
         var state = Fresh();
-        state.Skills[Skill.Combat] = -2; // lowest modifier
+        state.Skills[Skill.Combat] = SkillTier.Untrained; // lowest modifier
         state.Spirits = 20;
 
         // Find a seed that rolls natural 20
@@ -192,30 +192,7 @@ public class SkillChecksTests
         Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance));
     }
 
-    // ── Token bonus tests ──
-
-    [Fact]
-    public void GetItemBonus_TokenAddsOneToMatchingSkill()
-    {
-        // Combat skill comes only from tokens now (Lucky Buckle = +2). Weapons
-        // contribute zero. This test exercises the negotiation-token path.
-        var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
-        state.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb")); // +1 negotiation token
-
-        Assert.Equal(0, SkillChecks.GetItemBonus(Skill.Combat, state, Balance)); // no contributions
-        Assert.Equal(1, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // token only
-    }
-
-    [Fact]
-    public void GetItemBonus_TokenStacksWithGear()
-    {
-        var state = Fresh();
-        state.Pack.Add(new ItemInstance("peoples_borderlands", "Peoples of the Borderlands")); // +3 negotiation
-        state.Haversack.Add(new ItemInstance("ivory_comb", "Ivory Comb")); // +1 negotiation token
-
-        Assert.Equal(4, SkillChecks.GetItemBonus(Skill.Negotiation, state, Balance)); // 3 + 1
-    }
+    // Token items removed in Phase 1 — no token bonus tests
 
     // ── Resist bonus tests ──
 

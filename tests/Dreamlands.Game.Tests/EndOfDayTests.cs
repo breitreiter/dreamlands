@@ -207,14 +207,14 @@ public class EndOfDayTests
         p.Health = 2;
         p.PendingNoBiome = true;
         p.ActiveConditions.Add("injured");
-        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        p.Pack.Add(new ItemInstance("medical_kit", "Medical Kit"));
         AddRation(p);
 
         EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
 
-        // Bandage removes injured before the HP tick — regen kicks in same day
+        // Medical kit removes injured before the HP tick — regen kicks in same day
         Assert.DoesNotContain("injured", p.ActiveConditions);
-        Assert.DoesNotContain(p.Haversack, i => i.DefId == "bandages");
+        Assert.DoesNotContain(p.Pack, i => i.DefId == "medical_kit");
         Assert.Equal(3, p.Health);
     }
 
@@ -226,7 +226,7 @@ public class EndOfDayTests
         p.Health = 1;
         p.PendingNoBiome = true;
         p.ActiveConditions.Add("injured");
-        p.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        p.Pack.Add(new ItemInstance("medical_kit", "Medical Kit"));
         AddRation(p, 5);
 
         EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
@@ -371,14 +371,14 @@ public class EndOfDayTests
     {
         // Stack the deck: max bushcraft so the d20+modifier reliably beats DC 20
         var p = Fresh();
-        p.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+        p.Skills[Skill.Bushcraft] = SkillTier.Expert;
         AddRation(p, 3);
 
         bool sawSkippedConsumption = false;
         for (int seed = 0; seed < 50; seed++)
         {
             var fresh = Fresh();
-            fresh.Skills[Skill.Bushcraft] = Balance.Character.MaxSkillLevel;
+            fresh.Skills[Skill.Bushcraft] = SkillTier.Expert;
             AddRation(fresh, 3);
 
             var rationsBefore = fresh.Haversack.Count(i => i.DefId == Rations.RationDefId);

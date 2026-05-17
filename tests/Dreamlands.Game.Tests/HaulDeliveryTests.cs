@@ -187,7 +187,7 @@ public class HaulDeliveryTests
     {
         var balance = BalanceData.Default;
         var player = MakePlayer();
-        player.Skills[Skill.Mercantile] = 3;
+        player.Skills[Skill.Mercantile] = SkillTier.Expert;
         player.Gold = 0;
         player.Pack.Add(new ItemInstance("h", "Haul")
         {
@@ -199,7 +199,7 @@ public class HaulDeliveryTests
         var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42), balance);
 
         Assert.Single(results);
-        var expectedPayout = (int)Math.Round(100 * (1 + 3 * balance.Trade.MercantileHaulBonusPerPoint));
+        var expectedPayout = (int)Math.Round(100 * (1 + 2 * balance.Trade.MercantileHaulBonusPerPoint)); // Expert = 2
         Assert.Equal(expectedPayout, results[0].Payout);
         Assert.Equal(expectedPayout, player.Gold);
     }

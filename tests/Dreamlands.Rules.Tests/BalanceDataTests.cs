@@ -18,7 +18,7 @@ public class BalanceDataTests
         Assert.Equal(4, c.StartingHealth);
         Assert.Equal(20, c.StartingSpirits);
         Assert.Equal(50, c.StartingGold);
-        Assert.Equal(4, c.MaxSkillLevel);
+        Assert.Equal(2, (int)SkillTier.Expert);
     }
 
     [Fact]

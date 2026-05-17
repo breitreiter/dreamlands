@@ -18,13 +18,13 @@ public static class Market
         // button to refill the haversack for free. Rations dropped from encounters can
         // still be sold at the flat ration sell price (see GetSellPrice).
 
-        // Bandages — always stocked everywhere
-        catalog.Add("bandages");
+        // Medical kit — always stocked everywhere
+        catalog.Add("medical_kit");
 
         // Specialty medicines — rare, rolled like equipment
         var medicines = balance.Items.Values
-            .Where(i => i.Type == ItemType.Consumable && i.Cures.Count > 0
-                        && i.Id != "bandages"
+            .Where(i => i.Cures.Count > 0
+                        && i.Id != "medical_kit"
                         && (i.Biome == null || i.Biome == biome)
                         && (i.ShopTier == null || i.ShopTier <= tier))
             .ToList();
@@ -84,7 +84,7 @@ public static class Market
             {
                 { Type: ItemType.Weapon or ItemType.Armor or ItemType.Boots } => 1,
                 { Type: ItemType.Tool } => 1,
-                { Id: "bandages" } => maxStock, // bandages always plentiful
+                { Id: "medical_kit" } => maxStock, // medical kit always plentiful
                 { Cures.Count: > 0 } => 1, // specialty medicines are scarce
                 _ => maxStock,
             };
@@ -102,9 +102,10 @@ public static class Market
         int maxStock = balance.Trade.MaxStock[size];
         int perDay = balance.Trade.RestockPerDay[size];
 
-        // Medicines restock; food has unlimited stock, equipment never restocks
+        // Consumable medicines restock; tools and equipment never restock
         var restockIds = settlement.Stock.Keys
-            .Where(id => balance.Items.TryGetValue(id, out var def) && def.Cures.Count > 0)
+            .Where(id => balance.Items.TryGetValue(id, out var def)
+                         && def.Type == ItemType.Consumable && def.Cures.Count > 0)
             .ToList();
 
         if (restockIds.Count == 0)
@@ -166,23 +167,29 @@ public static class Market
 
         // Auto-equip weapon/armor/boots if the slot is empty (bypasses pack capacity)
         var autoEquipped = false;
-        if (def.Type is ItemType.Weapon && player.Equipment.Weapon == null)
-            { player.Equipment.Weapon = instance; autoEquipped = true; }
-        else if (def.Type is ItemType.Armor && player.Equipment.Armor == null)
-            { player.Equipment.Armor = instance; autoEquipped = true; }
-        else if (def.Type is ItemType.Boots && player.Equipment.Boots == null)
-            { player.Equipment.Boots = instance; autoEquipped = true; }
-        else if (def.IsPackItem)
+        if (def.Type is ItemType.Weapon && player.EquippedWeapon == null)
+        {
+            instance.IsEquipped = true;
+            player.Pack.Add(instance);
+            autoEquipped = true;
+        }
+        else if (def.Type is ItemType.Armor && player.EquippedArmor == null)
+        {
+            instance.IsEquipped = true;
+            player.Pack.Add(instance);
+            autoEquipped = true;
+        }
+        else if (def.Type is ItemType.Boots && player.EquippedBoots == null)
+        {
+            instance.IsEquipped = true;
+            player.Pack.Add(instance);
+            autoEquipped = true;
+        }
+        else
         {
             if (player.Pack.Count >= player.PackCapacity)
                 return new MarketResult(false, "Pack is full");
             player.Pack.Add(instance);
-        }
-        else
-        {
-            if (player.Haversack.Count >= player.HaversackCapacity)
-                return new MarketResult(false, "Haversack is full");
-            player.Haversack.Add(instance);
         }
 
         player.Gold -= price;
@@ -247,22 +254,11 @@ public static class Market
             return new MarketResult(true, $"Sold {def.Name} for {price} gold");
         }
 
-        // Check equipment slots
-        if (player.Equipment.Weapon?.DefId == itemDefId)
+        // Check equipped items in pack
+        var equippedIdx = player.Pack.FindIndex(i => i.IsEquipped && i.DefId == itemDefId);
+        if (equippedIdx >= 0)
         {
-            player.Equipment.Weapon = null;
-            player.Gold += price;
-            return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
-        }
-        if (player.Equipment.Armor?.DefId == itemDefId)
-        {
-            player.Equipment.Armor = null;
-            player.Gold += price;
-            return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
-        }
-        if (player.Equipment.Boots?.DefId == itemDefId)
-        {
-            player.Equipment.Boots = null;
+            player.Pack.RemoveAt(equippedIdx);
             player.Gold += price;
             return new MarketResult(true, $"Unequipped and sold {def.Name} for {price} gold");
         }

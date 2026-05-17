@@ -78,7 +78,7 @@ public static class DeckBuilder
         // Resolve governing skill
         var stat = encounter.Stat;
         Skill? skill = stat != null ? Skills.FromScriptName(stat) : null;
-        int skillLevel = skill.HasValue ? player.Skills.GetValueOrDefault(skill.Value) : 0;
+        int skillLevel = skill.HasValue ? (int)player.Skills.GetValueOrDefault(skill.Value) : 0;
 
         // Skill-intrinsic cards (cumulative, up to skill level)
         if (skill.HasValue && tb.SkillCards.TryGetValue(skill.Value, out var skillCards))

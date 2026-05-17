@@ -88,7 +88,7 @@ static class WalkTacticalCommand
         foreach (var (name, level) in startSkills)
         {
             var skill = Skills.FromScriptName(name);
-            if (skill != null) player.Skills[skill.Value] = level;
+            if (skill != null) player.Skills[skill.Value] = (SkillTier)level;
             else Console.Error.WriteLine($"Unknown skill: {name}");
         }
         foreach (var tag in startTags) player.Tags.Add(tag);

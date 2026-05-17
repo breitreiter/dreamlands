@@ -26,12 +26,12 @@ public class MarketTests
     }
 
     [Fact]
-    public void InitializeSettlement_AlwaysStocksBandages()
+    public void InitializeSettlement_AlwaysStocksMedicalKit()
     {
         var state = Fresh();
         var settlement = Market.InitializeSettlement("Camp", "forest", 2, SettlementSize.Camp, state, Balance, new Random(1));
 
-        Assert.True(settlement.Stock.ContainsKey("bandages"));
+        Assert.True(settlement.Stock.ContainsKey("medical_kit"));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class MarketTests
         var town = Market.InitializeSettlement("Town", "plains", 2, SettlementSize.Town, state, Balance, new Random(1));
 
         var specialtyMeds = town.Stock.Keys
-            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages")
+            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "medical_kit")
             .ToList();
 
         Assert.Empty(specialtyMeds);
@@ -55,7 +55,7 @@ public class MarketTests
         var found = Enumerable.Range(0, 20).Any(seed =>
         {
             var outpost = Market.InitializeSettlement("Outpost", "plains", 2, SettlementSize.Outpost, state, Balance, new Random(seed));
-            return outpost.Stock.Keys.Any(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "bandages");
+            return outpost.Stock.Keys.Any(id => Balance.Items.TryGetValue(id, out var d) && d.Cures.Count > 0 && id != "medical_kit");
         });
 
         Assert.True(found, "Expected at least one seed to stock a specialty medicine at an outpost");
@@ -86,11 +86,12 @@ public class MarketTests
         var camp = Market.InitializeSettlement("Camp", "plains", 1, SettlementSize.Camp, state, Balance, new Random(1));
         var outpost = Market.InitializeSettlement("Outpost", "plains", 1, SettlementSize.Outpost, state, Balance, new Random(1));
 
+        // Exclude medical_kit — it is always stocked at all settlement sizes separately
         var campTools = camp.Stock.Keys
-            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
+            .Where(id => id != "medical_kit" && Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
             .ToList();
         var outpostTools = outpost.Stock.Keys
-            .Where(id => Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
+            .Where(id => id != "medical_kit" && Balance.Items.TryGetValue(id, out var d) && d.Type == ItemType.Tool)
             .ToList();
 
         Assert.Empty(campTools);
@@ -165,13 +166,16 @@ public class MarketTests
     {
         var state = Fresh();
         state.Gold = 100;
-        state.PackCapacity = 0;
-        state.Equipment.Weapon = new ItemInstance("dagger", "Dagger");
+        // Fill pack to capacity then reduce capacity to zero to simulate full pack
+        state.PackCapacity = 1;
+        state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife") { IsEquipped = true });
+        state.PackCapacity = 1; // pack has 1 item, capacity 1 → full
         var settlement = MakeSettlement();
-        settlement.Prices["hunting_knife"] = 15;
-        settlement.Stock["hunting_knife"] = 1;
+        settlement.Prices["hatchet"] = 15;
+        settlement.Stock["hatchet"] = 1;
 
-        var result = Market.Buy(state, "hunting_knife", settlement, Balance, new Random(1));
+        // Hatchet is a weapon; EquippedWeapon is hunting_knife (already equipped), so no auto-equip
+        var result = Market.Buy(state, "hatchet", settlement, Balance, new Random(1));
         Assert.False(result.Success);
         Assert.Equal(100, state.Gold);
     }
@@ -266,13 +270,14 @@ public class MarketTests
     public void Restock_ReplenishesMedicine()
     {
         var settlement = MakeSettlement();
-        settlement.Stock["bandages"] = 0;
-        settlement.Prices["bandages"] = 5;
+        // shustov_tonic is a Consumable that cures irradiated — restocks normally
+        settlement.Stock["shustov_tonic"] = 0;
+        settlement.Prices["shustov_tonic"] = 40;
         settlement.LastRestockDay = 1;
 
         Market.Restock(settlement, SettlementSize.Town, currentDay: 10, Balance, new Random(1));
 
-        Assert.True(settlement.Stock["bandages"] > 0);
+        Assert.True(settlement.Stock["shustov_tonic"] > 0);
     }
 
     [Fact]

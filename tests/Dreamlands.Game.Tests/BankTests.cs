@@ -27,16 +27,16 @@ public class BankTests
     }
 
     [Fact]
-    public void Deposit_FromHaversack_MovesItemToBank()
+    public void Deposit_Consumable_FromPack_MovesItemToBank()
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Haversack.Add(new ItemInstance("bandages", "Bandages"));
+        state.Pack.Add(new ItemInstance("bandages", "Bandages"));
 
-        var error = Bank.Deposit(state, "bandages", "haversack", settlement, Balance);
+        var error = Bank.Deposit(state, "bandages", "pack", settlement, Balance);
 
         Assert.Null(error);
-        Assert.Empty(state.Haversack);
+        Assert.Empty(state.Pack);
         Assert.Single(settlement.Bank);
     }
 
@@ -45,12 +45,12 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Haversack.Add(new ItemInstance("food_ration", "Jerky"));
+        state.Pack.Add(new ItemInstance("food_ration", "Jerky"));
 
-        var error = Bank.Deposit(state, "food_ration", "haversack", settlement, Balance);
+        var error = Bank.Deposit(state, "food_ration", "pack", settlement, Balance);
 
         Assert.NotNull(error);
-        Assert.Single(state.Haversack);
+        Assert.Single(state.Pack);
         Assert.Empty(settlement.Bank);
     }
 
@@ -127,12 +127,13 @@ public class BankTests
     {
         var state = Fresh();
         var settlement = MakeSettlement();
-        state.Equipment.Weapon = new ItemInstance("dagger", "Dagger");
+        state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
 
-        var error = Bank.Deposit(state, "hunting_knife", "weapon", settlement, Balance);
+        // Try to deposit "hatchet" from weapon slot, but equipped weapon is hunting_knife
+        var error = Bank.Deposit(state, "hatchet", "weapon", settlement, Balance);
 
         Assert.Equal("Item not equipped in weapon slot", error);
-        Assert.NotNull(state.Equipment.Weapon); // weapon untouched
+        Assert.NotNull(state.Equipment.Weapon); // hunting_knife still equipped
     }
 
     [Fact]
@@ -188,19 +189,6 @@ public class BankTests
         Assert.Single(settlement.Bank); // item stays in bank
     }
 
-    [Fact]
-    public void Withdraw_HaversackFull_ReturnsError()
-    {
-        var state = Fresh();
-        state.HaversackCapacity = 0;
-        var settlement = MakeSettlement();
-        settlement.Bank.Add(new ItemInstance("food_ration", "Rations"));
-
-        var error = Bank.Withdraw(state, 0, settlement, Balance);
-
-        Assert.Equal("Haversack is full", error);
-        Assert.Single(settlement.Bank);
-    }
 
     [Fact]
     public void Withdraw_InvalidIndex_ReturnsError()

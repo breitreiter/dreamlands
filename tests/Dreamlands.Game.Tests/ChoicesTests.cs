@@ -227,7 +227,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Cunning] = 5;
+        state.Skills[Skill.Cunning] = SkillTier.Expert;
         var resolved = Choices.Resolve(choice, state, Balance, new Random(42));
 
         // Either branch should have a check result
@@ -247,7 +247,7 @@ public class ChoicesTests
                 [
                     new ConditionalBranch
                     {
-                        Condition = "meets mercantile 3",
+                        Condition = "meets mercantile 2",
                         Outcome = new OutcomePart { Text = "You drive a fair bargain." }
                     }
                 ],
@@ -256,7 +256,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Mercantile] = 3;
+        state.Skills[Skill.Mercantile] = SkillTier.Expert; // Expert = 2, meets condition "meets mercantile 2"
 
         var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
         Assert.Equal("You drive a fair bargain.", resolved.Text);
@@ -283,7 +283,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Mercantile] = 2;
+        state.Skills[Skill.Mercantile] = SkillTier.Trained; // Trained = 1, below target 5
 
         var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
         Assert.Equal("They won't budge on price.", resolved.Text);
@@ -310,7 +310,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Combat] = 5;
+        state.Skills[Skill.Combat] = SkillTier.Expert; // Expert = 2, meets "meets combat 2"
 
         var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
         Assert.NotNull(resolved.CheckResult);

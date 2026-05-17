@@ -97,12 +97,12 @@ public static class Mechanics
         if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
         if (!int.TryParse(args[1], out var amount)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
 
-        var current = state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = Math.Clamp(current + amount, balance.Character.MinSkillLevel, balance.Character.MaxSkillLevel);
-        var delta = newLevel - current;
+        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
+        var newLevel = (SkillTier)Math.Clamp(current + amount, (int)SkillTier.Untrained, (int)SkillTier.Expert);
+        var delta = (int)newLevel - current;
         state.Skills[skill.Value] = newLevel;
 
-        return new MechanicResult.SkillChanged(skill.Value, delta, newLevel);
+        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
     }
 
     static MechanicResult ApplyDecreaseSkill(List<string> args, PlayerState state, BalanceData balance)
@@ -113,12 +113,12 @@ public static class Mechanics
         if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
         if (!int.TryParse(args[1], out var amount)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
 
-        var current = state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = Math.Clamp(current - amount, balance.Character.MinSkillLevel, balance.Character.MaxSkillLevel);
-        var delta = newLevel - current;
+        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
+        var newLevel = (SkillTier)Math.Clamp(current - amount, (int)SkillTier.Untrained, (int)SkillTier.Expert);
+        var delta = (int)newLevel - current;
         state.Skills[skill.Value] = newLevel;
 
-        return new MechanicResult.SkillChanged(skill.Value, delta, newLevel);
+        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
     }
 
     static MechanicResult ApplySetSkill(List<string> args, PlayerState state, BalanceData balance)
@@ -129,12 +129,12 @@ public static class Mechanics
         if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
         if (!int.TryParse(args[1], out var level)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
 
-        var current = state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = Math.Clamp(level, balance.Character.MinSkillLevel, balance.Character.MaxSkillLevel);
-        var delta = newLevel - current;
+        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
+        var newLevel = (SkillTier)Math.Clamp(level, (int)SkillTier.Untrained, (int)SkillTier.Expert);
+        var delta = (int)newLevel - current;
         state.Skills[skill.Value] = newLevel;
 
-        return new MechanicResult.SkillChanged(skill.Value, delta, newLevel);
+        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
     }
 
     static MechanicResult ApplyAddItem(List<string> args, PlayerState state, BalanceData balance, Random rng)
@@ -193,15 +193,11 @@ public static class Mechanics
         if (args.Count < 1) return null;
         var itemId = args[0];
 
-        var index = state.Pack.FindIndex(i => i.DefId == itemId);
-        if (index < 0) return null;
+        var item = state.Pack.FirstOrDefault(i => i.DefId == itemId && !i.IsEquipped);
+        if (item == null) return null;
         if (!balance.Items.TryGetValue(itemId, out var def)) return null;
         if (def.Type is not (ItemType.Weapon or ItemType.Armor or ItemType.Boots)) return null;
 
-        var item = state.Pack[index];
-        state.Pack.RemoveAt(index);
-
-        // Swap: move currently equipped item back to Pack
         var slot = def.Type switch
         {
             ItemType.Weapon => "weapon",
@@ -210,24 +206,15 @@ public static class Mechanics
             _ => ""
         };
 
-        var old = def.Type switch
+        // Unequip any currently equipped item of this type
+        foreach (var existing in state.Pack)
         {
-            ItemType.Weapon => state.Equipment.Weapon,
-            ItemType.Armor => state.Equipment.Armor,
-            ItemType.Boots => state.Equipment.Boots,
-            _ => null
-        };
-
-        if (old != null)
-            state.Pack.Add(old);
-
-        switch (def.Type)
-        {
-            case ItemType.Weapon: state.Equipment.Weapon = item; break;
-            case ItemType.Armor: state.Equipment.Armor = item; break;
-            case ItemType.Boots: state.Equipment.Boots = item; break;
+            if (!existing.IsEquipped) continue;
+            if (balance.Items.TryGetValue(existing.DefId, out var existingDef) && existingDef.Type == def.Type)
+                existing.IsEquipped = false;
         }
 
+        item.IsEquipped = true;
         return new MechanicResult.ItemEquipped(itemId, def.Name, slot);
     }
 
@@ -236,31 +223,26 @@ public static class Mechanics
         if (args.Count < 1) return null;
         var slot = args[0].ToLowerInvariant();
 
-        ItemInstance? item = slot switch
+        var itemType = slot switch
         {
-            "weapon" => state.Equipment.Weapon,
-            "armor" => state.Equipment.Armor,
-            "boots" => state.Equipment.Boots,
+            "weapon" => (ItemType?)ItemType.Weapon,
+            "armor" => ItemType.Armor,
+            "boots" => ItemType.Boots,
             _ => null
         };
+        if (itemType == null) return null;
+
+        var item = state.Pack.FirstOrDefault(i => i.IsEquipped
+            && balance.Items.TryGetValue(i.DefId, out var d) && d.Type == itemType);
 
         if (item == null) return null;
+        item.IsEquipped = false;
 
-        switch (slot)
-        {
-            case "weapon": state.Equipment.Weapon = null; break;
-            case "armor": state.Equipment.Armor = null; break;
-            case "boots": state.Equipment.Boots = null; break;
-        }
-
-        state.Pack.Add(item);
-
-        var defId = item.DefId;
         var displayName = item.DisplayName;
-        if (balance.Items.TryGetValue(defId, out var def))
+        if (balance.Items.TryGetValue(item.DefId, out var def))
             displayName = def.Name;
 
-        return new MechanicResult.ItemUnequipped(defId, displayName, slot);
+        return new MechanicResult.ItemUnequipped(item.DefId, displayName, slot);
     }
 
     static MechanicResult? ApplyDiscard(List<string> args, PlayerState state)
@@ -268,20 +250,11 @@ public static class Mechanics
         if (args.Count < 1) return null;
         var itemId = args[0];
 
-        // Try Pack first, then Haversack
         var index = state.Pack.FindIndex(i => i.DefId == itemId);
         if (index >= 0)
         {
             var item = state.Pack[index];
             state.Pack.RemoveAt(index);
-            return new MechanicResult.ItemLost(item.DefId, item.DisplayName);
-        }
-
-        index = state.Haversack.FindIndex(i => i.DefId == itemId);
-        if (index >= 0)
-        {
-            var item = state.Haversack[index];
-            state.Haversack.RemoveAt(index);
             return new MechanicResult.ItemLost(item.DefId, item.DisplayName);
         }
 
@@ -295,13 +268,10 @@ public static class Mechanics
         return new MechanicResult.PackUpgraded(amount, state.PackCapacity);
     }
 
-    /// <summary>Route an item to Pack (equippable gear) or Haversack (tools, consumables).</summary>
+    /// <summary>Route an item to Pack. Haversack is now a view over Pack.</summary>
     static void AddItemToInventory(ItemDef? def, ItemInstance instance, PlayerState state)
     {
-        if (def != null && !def.IsPackItem)
-            state.Haversack.Add(instance);
-        else
-            state.Pack.Add(instance);
+        state.Pack.Add(instance);
     }
 
     static MechanicResult? ApplyQuality(List<string> args, PlayerState state)

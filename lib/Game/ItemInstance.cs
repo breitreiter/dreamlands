@@ -17,4 +17,8 @@ public record ItemInstance(string DefId, string DisplayName)
     public int? DestinationY { get; init; }
     public int? Payout { get; init; }
     public bool IsGeneric { get; init; }
+
+    /// <summary>True when this item is the active weapon, armor, or boots.
+    /// Mutable — flipped by Equip/Unequip without recreating the record.</summary>
+    public bool IsEquipped { get; set; }
 }

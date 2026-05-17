@@ -87,7 +87,7 @@ public static class Choices
                     var skill = Skills.FromScriptName(tokens[1]);
                     if (skill != null && int.TryParse(tokens[2], out var target))
                     {
-                        var skillLevel = state.Skills.GetValueOrDefault(skill.Value);
+                        var skillLevel = (int)state.Skills.GetValueOrDefault(skill.Value);
                         var itemBonus = SkillChecks.GetItemBonus(skill.Value, state, balance);
                         var total = skillLevel + itemBonus;
                         passed = total >= target;

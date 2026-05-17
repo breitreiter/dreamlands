@@ -8,14 +8,10 @@ public sealed class CharacterBalance
     public int StartingHealth { get; init; } = 4;
     public int StartingSpirits { get; init; } = 20;
     public int StartingGold { get; init; } = 50;
-    public int StartingPackSlots { get; init; } = 3;
-    public int StartingHaversackSlots { get; init; } = 10;
+    public int StartingPackSlots { get; init; } = 8;
 
     /// <summary>Luck reroll trigger chance by skill level (index = level, 0% for ≤0).</summary>
     public IReadOnlyList<int> LuckRerollChance { get; init; } = [0, 5, 10, 15, 20];
-
-    public int MinSkillLevel { get; init; } = -2;
-    public int MaxSkillLevel { get; init; } = 4;
 
     // Ambient resist check difficulty (single DC for all conditions except exhaustion,
     // which uses ExhaustionBaseDC + ExhaustionDCPerNight*ConsecutiveWildernessNights)

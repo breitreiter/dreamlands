@@ -53,31 +53,31 @@ public class MechanicsTests
     public void IncreaseSkill_CappedAtMaxLevel()
     {
         var state = Fresh();
-        state.Skills[Skill.Combat] = 3;
+        state.Skills[Skill.Combat] = SkillTier.Trained;
         var results = Mechanics.Apply(["increase_skill combat 5"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.SkillChanged>(results[0]);
-        Assert.Equal(Balance.Character.MaxSkillLevel, state.Skills[Skill.Combat]);
+        Assert.Equal(SkillTier.Expert, state.Skills[Skill.Combat]);
     }
 
     [Fact]
     public void DecreaseSkill_FloorsAtZero()
     {
         var state = Fresh();
-        state.Skills[Skill.Cunning] = 1;
+        state.Skills[Skill.Cunning] = SkillTier.Trained;
         Mechanics.Apply(["decrease_skill cunning 5"], state, Balance, Rng);
-        Assert.Equal(Balance.Character.MinSkillLevel, state.Skills[Skill.Cunning]);
+        Assert.Equal(SkillTier.Untrained, state.Skills[Skill.Cunning]);
     }
 
     [Fact]
-    public void AddItem_Consumable_GoesToHaversack()
+    public void AddItem_Consumable_GoesToPack()
     {
         var state = Fresh();
         var results = Mechanics.Apply(["add_item bandages"], state, Balance, Rng);
 
         var r = Assert.IsType<MechanicResult.ItemGained>(results[0]);
         Assert.Equal("bandages", r.DefId);
-        Assert.Contains(state.Haversack, i => i.DefId == "bandages");
+        Assert.Contains(state.Pack, i => i.DefId == "bandages");
     }
 
     [Fact]
@@ -154,7 +154,7 @@ public class MechanicsTests
     }
 
     [Fact]
-    public void Equip_MovesFromPackToEquipment()
+    public void Equip_SetsIsEquippedOnPackItem()
     {
         var state = Fresh();
         state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
@@ -164,24 +164,26 @@ public class MechanicsTests
         Assert.Equal("weapon", r.Slot);
         Assert.NotNull(state.Equipment.Weapon);
         Assert.Equal("hunting_knife", state.Equipment.Weapon!.DefId);
-        Assert.DoesNotContain(state.Pack, i => i.DefId == "hunting_knife");
+        // Item remains in Pack with IsEquipped = true
+        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife" && i.IsEquipped);
     }
 
     [Fact]
-    public void Equip_SwapsOldItemBackToPack()
+    public void Equip_SwapsOldItemBackToUnequipped()
     {
         var state = Fresh();
-        state.Equipment.Weapon = new ItemInstance("old_sword", "Old Sword");
+        state.Equipment.Weapon = new ItemInstance("scimitar", "Scimitar");
         state.Pack.Add(new ItemInstance("hunting_knife", "Hunting Knife"));
 
         Mechanics.Apply(["equip hunting_knife"], state, Balance, Rng);
 
         Assert.Equal("hunting_knife", state.Equipment.Weapon!.DefId);
-        Assert.Contains(state.Pack, i => i.DefId == "old_sword");
+        // Old item stays in pack but unequipped
+        Assert.Contains(state.Pack, i => i.DefId == "scimitar" && !i.IsEquipped);
     }
 
     [Fact]
-    public void Unequip_MovesFromEquipmentToPack()
+    public void Unequip_ClearsIsEquippedFlag()
     {
         var state = Fresh();
         state.Equipment.Weapon = new ItemInstance("hunting_knife", "Hunting Knife");
@@ -190,7 +192,7 @@ public class MechanicsTests
         var r = Assert.IsType<MechanicResult.ItemUnequipped>(results[0]);
         Assert.Equal("weapon", r.Slot);
         Assert.Null(state.Equipment.Weapon);
-        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife");
+        Assert.Contains(state.Pack, i => i.DefId == "hunting_knife" && !i.IsEquipped);
     }
 
     [Fact]
