@@ -8,9 +8,7 @@ import { getSealVariant, getSealSymbolIndex } from "../marketNaming";
 import TopBar from "../components/TopBar";
 import { Button } from "@/components/ui/button";
 
-const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "tradegood"]);
-
-type CarriedTab = "pack" | "haversack" | "equipped";
+type CarriedTab = "pack" | "equipped";
 
 export default function BankScreen({
   state,
@@ -49,22 +47,14 @@ export default function BankScreen({
     if (!inventory) return [];
     switch (carriedTab) {
       case "pack":
-        return inventory.pack.map((item) => ({ item, source: "pack" }));
-      case "haversack":
-        return inventory.haversack.map((item) => ({ item, source: "haversack" }));
-      case "equipped": {
-        const items: { item: ItemInfo; source: string }[] = [];
-        if (inventory.equipment.weapon) items.push({ item: inventory.equipment.weapon, source: "weapon" });
-        if (inventory.equipment.armor) items.push({ item: inventory.equipment.armor, source: "armor" });
-        if (inventory.equipment.boots) items.push({ item: inventory.equipment.boots, source: "boots" });
-        return items;
-      }
+        return inventory.pack.filter(i => !i.isEquipped).map((item) => ({ item, source: "pack" }));
+      case "equipped":
+        return inventory.pack.filter(i => i.isEquipped).map((item) => ({ item, source: item.type }));
     }
   }, [inventory, carriedTab]);
 
   const bankFull = (bankData?.items.length ?? 0) >= (bankData?.capacity ?? 10);
   const packFull = (inventory?.pack.length ?? 0) >= (inventory?.packCapacity ?? 0);
-  const haversackFull = (inventory?.haversack.length ?? 0) >= (inventory?.haversackCapacity ?? 0);
 
   async function deposit(defId: string, source: string) {
     if (!gameId) return;
@@ -86,9 +76,8 @@ export default function BankScreen({
     }
   }
 
-  function canWithdraw(item: ItemInfo): boolean {
-    const isPackItem = PACK_TYPES.has(item.type);
-    return isPackItem ? !packFull : !haversackFull;
+  function canWithdraw(_item: ItemInfo): boolean {
+    return !packFull;
   }
 
   return (
@@ -150,9 +139,13 @@ export default function BankScreen({
         <div className="flex-1 flex flex-col min-w-0">
           <div className="p-3">
             <h3 className="font-header text-accent text-[32px] leading-tight">Carried</h3>
+            {inventory && (
+              <div className="text-muted mt-1">
+                {inventory.pack.length}/{inventory.packCapacity} slots
+              </div>
+            )}
             <div className="flex gap-1 mt-2">
               <TabButton id="pack" active={carriedTab === "pack"} onClick={() => setCarriedTab("pack")}>Pack</TabButton>
-              <TabButton id="haversack" active={carriedTab === "haversack"} onClick={() => setCarriedTab("haversack")}>Haversack</TabButton>
               <TabButton id="equipped" active={carriedTab === "equipped"} onClick={() => setCarriedTab("equipped")}>Equipped</TabButton>
             </div>
           </div>

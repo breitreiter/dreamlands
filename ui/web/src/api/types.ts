@@ -113,6 +113,7 @@ export interface ItemInfo {
   resistModifiers: Record<string, number>;
   cures: string[];
   isEquippable: boolean;
+  isEquipped: boolean;
   destinationName: string | null;
   destinationHint: string | null;
   payout: number | null;
@@ -128,8 +129,6 @@ export interface EquipmentInfo {
 export interface InventoryInfo {
   pack: ItemInfo[];
   packCapacity: number;
-  haversack: ItemInfo[];
-  haversackCapacity: number;
   equipment: EquipmentInfo;
 }
 
@@ -221,8 +220,14 @@ export interface RescueInfo {
   goldLost: number;
 }
 
+export interface ApproachPromptInfo {
+  skill: string;
+  preamble: string | null;
+  approaches: Array<{ id: string; label: string; iconHint: string }>;
+}
+
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical" | "combat" | "combat_resolved";
+  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical" | "combat" | "combat_resolved" | "approach_prompt";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
@@ -239,6 +244,7 @@ export interface GameResponse {
   tactical?: TacticalInfo;
   combat?: CombatInfo;
   travel?: TravelInfo;
+  approachPrompt?: ApproachPromptInfo;
 }
 
 export interface CombatEncounterSummary {
@@ -388,7 +394,6 @@ export interface BankResponse {
   items: ItemInfo[];
   capacity: number;
   packFull: boolean;
-  haversackFull: boolean;
 }
 
 export interface MarketOrder {

@@ -28,7 +28,7 @@ function GameRouter() {
       {["exploring", "camp", "camp_resolved", "rescued"].includes(response.mode) && !response.dungeonHub && (
         <Explore state={response} />
       )}
-      {(response.mode === "encounter" || response.mode === "outcome") && <Encounter state={response} />}
+      {(response.mode === "encounter" || response.mode === "outcome" || response.mode === "approach_prompt") && <Encounter state={response} />}
       {response.mode === "tactical" && response.tactical && <TacticalEncounter tactical={response.tactical} node={response.node} />}
       {(response.mode === "combat" || response.mode === "combat_resolved") && <Combat state={response} />}
       {response.mode === "rescued" && <Rescue state={response} />}

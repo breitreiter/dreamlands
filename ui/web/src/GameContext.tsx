@@ -79,6 +79,13 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
     cleared.outcome = undefined;
     cleared.tactical = undefined;
   }
+  if (result.mode === "approach_prompt") {
+    cleared.outcome = undefined;
+    cleared.tactical = undefined;
+  }
+  if (result.mode !== "approach_prompt") {
+    cleared.approachPrompt = undefined;
+  }
   // One-shot fields — clear unless the response explicitly includes them
   if (!result.deliveries) cleared.deliveries = undefined;
   if (!result.travel) cleared.travel = undefined;
@@ -172,6 +179,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       bankIndex?: number;
       offerIndex?: number;
       offerId?: string;
+      approach?: string;
       path?: { x: number; y: number }[];
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;

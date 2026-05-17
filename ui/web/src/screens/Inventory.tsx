@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import type { GameResponse, SkillInfoDto, InventoryInfo, ItemInfo, MechanicsInfo, MechanicLine } from "../api/types";
 import { useGame } from "../GameContext";
-import MaskedIcon, { iconUrl, itemTypeIcon, TabButton } from "../components/MaskedIcon";
+import MaskedIcon, { iconUrl, itemTypeIcon } from "../components/MaskedIcon";
 import HaulItem from "../components/HaulItem";
 import WaxSeal from "../components/WaxSeal";
 import { getSealVariant, getSealSymbolIndex } from "../marketNaming";
@@ -30,6 +30,24 @@ const CONDITION_ICONS: Record<string, string> = {
   injured: "bloody-stash.svg",
 };
 
+// Gear types — weapon, armor, boots
+const GEAR_TYPES = new Set(["weapon", "armor", "boots"]);
+const GEAR_ORDER = ["weapon", "armor", "boots"];
+
+// Supply defIds — food and medical kit treated as supplies
+const SUPPLY_DEFS = new Set(["food_ration", "medical_kit"]);
+
+function classifyItem(item: ItemInfo): "equipped_gear" | "unequipped_gear" | "supplies" | "tools" | "hauls" {
+  if (item.type === "haul") return "hauls";
+  if (GEAR_TYPES.has(item.type)) return item.isEquipped ? "equipped_gear" : "unequipped_gear";
+  if (item.type === "tool") return SUPPLY_DEFS.has(item.defId) ? "supplies" : "tools";
+  // consumable or anything else defaults to supplies
+  return "supplies";
+}
+
+function gearSortOrder(type: string): number {
+  return GEAR_ORDER.indexOf(type) >= 0 ? GEAR_ORDER.indexOf(type) : 99;
+}
 
 export default function Inventory({
   state,
@@ -191,42 +209,84 @@ function MechanicsSection({ title, lines }: { title: string; lines: MechanicLine
   );
 }
 
-type InventoryTab = "pack" | "haversack" | "equipped";
-
 function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
   const { doAction, loading } = useGame();
-  const [tab, setTab] = useState<InventoryTab>("pack");
+  const pack = inventory.pack;
+
+  // Classify and sort items into groups
+  const groups: { label: string; key: string; items: ItemInfo[] }[] = [
+    { label: "Equipped Gear", key: "equipped_gear", items: [] },
+    { label: "Unequipped Gear", key: "unequipped_gear", items: [] },
+    { label: "Supplies", key: "supplies", items: [] },
+    { label: "Tools", key: "tools", items: [] },
+    { label: "Contracts", key: "hauls", items: [] },
+  ];
+
+  const groupMap = Object.fromEntries(groups.map(g => [g.key, g.items]));
+
+  for (const item of pack) {
+    const cat = classifyItem(item);
+    groupMap[cat].push(item);
+  }
+
+  // Sort equipped/unequipped gear by weapon→armor→boots
+  groupMap["equipped_gear"].sort((a, b) => gearSortOrder(a.type) - gearSortOrder(b.type));
+  groupMap["unequipped_gear"].sort((a, b) => gearSortOrder(a.type) - gearSortOrder(b.type));
+
+  const packCount = pack.length;
+  const packCapacity = inventory.packCapacity;
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header + tabs */}
-      <div className="p-4 pb-0">
-        <h2 className="font-header text-accent text-[32px] leading-tight mb-3">
+      <div className="p-4 pb-2">
+        <h2 className="font-header text-accent text-[32px] leading-tight">
           Inventory
         </h2>
-        <div className="flex gap-1">
-          <TabButton id="pack" active={tab === "pack"} onClick={() => setTab("pack")}>
-            Pack
-          </TabButton>
-          <TabButton id="haversack" active={tab === "haversack"} onClick={() => setTab("haversack")}>
-            Haversack
-          </TabButton>
-          <TabButton id="equipped" active={tab === "equipped"} onClick={() => setTab("equipped")}>
-            Equipped
-          </TabButton>
+        <div className="text-muted mt-1">
+          {packCount} / {packCapacity} slots
         </div>
       </div>
 
-      {/* Tab content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {tab === "pack" && (
-          <PackTab items={inventory.pack} capacity={inventory.packCapacity} doAction={doAction} loading={loading} />
-        )}
-        {tab === "haversack" && (
-          <HaversackTab items={inventory.haversack} capacity={inventory.haversackCapacity} doAction={doAction} loading={loading} />
-        )}
-        {tab === "equipped" && (
-          <EquippedTab equipment={inventory.equipment} doAction={doAction} loading={loading} />
+        {groups.map(({ label, key, items }) => {
+          if (items.length === 0) return null;
+          return (
+            <div key={key}>
+              {/* Sticky group header */}
+              <div className="sticky top-0 z-10 py-1 mb-1 text-muted font-bold text-[14px] uppercase tracking-wide bg-page/90 border-b border-edge/40">
+                {label}
+              </div>
+              <div className="space-y-2">
+                {items.map((item, i) => (
+                  <ItemCard
+                    key={`${key}-${item.defId}-${i}`}
+                    item={item}
+                    actions={
+                      <>
+                        {item.isEquipped && (
+                          <Button variant="secondary" size="icon" disabled={loading} title="Unequip"
+                            onClick={() => doAction({ action: "unequip", slot: item.type })}>
+                            <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+                          </Button>
+                        )}
+                        {!item.isEquipped && item.isEquippable && (
+                          <Button variant="secondary" size="icon" disabled={loading} title="Equip"
+                            onClick={() => doAction({ action: "equip", itemId: item.defId })}>
+                            <MaskedIcon icon="barbute.svg" className="w-5 h-5" color="currentColor" />
+                          </Button>
+                        )}
+                        <DiscardButton item={item} doAction={doAction} loading={loading} />
+                      </>
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        {pack.length === 0 && (
+          <div className="p-4 text-muted">Pack is empty.</div>
         )}
       </div>
     </div>
@@ -276,10 +336,15 @@ function ItemCard({
           />
         ) : (
           <>
-            <div className="text-primary">
+            <div className="text-primary flex items-center gap-2">
               {item.name}
+              {item.isEquipped && (
+                <span className="text-accent text-[12px] font-bold uppercase tracking-wide border border-accent/40 px-1 rounded">
+                  equipped
+                </span>
+              )}
               {item.cost != null && item.cost > 0 && (
-                <span className="text-accent ml-2">{item.cost}g</span>
+                <span className="text-accent ml-1">{item.cost}g</span>
               )}
             </div>
             {mods && (
@@ -323,101 +388,5 @@ function DiscardButton({ item, doAction, loading }: { item: ItemInfo; doAction: 
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
-}
-
-function PackTab({
-  items,
-  capacity,
-  doAction,
-  loading,
-}: {
-  items: ItemInfo[];
-  capacity: number;
-  doAction: (body: { action: string; itemId?: string }) => void;
-  loading: boolean;
-}) {
-  const emptySlots = capacity - items.length;
-  return (
-    <>
-      {items.map((item, i) => (
-        <ItemCard key={i} item={item} actions={
-          <>
-            {item.isEquippable && (
-              <Button variant="secondary" size="icon" disabled={loading} title="Equip"
-                onClick={() => doAction({ action: "equip", itemId: item.defId })}>
-                <MaskedIcon icon="barbute.svg" className="w-5 h-5" color="currentColor" />
-              </Button>
-            )}
-            <DiscardButton item={item} doAction={doAction} loading={loading} />
-          </>
-        } />
-      ))}
-      {Array.from({ length: emptySlots }, (_, i) => (
-        <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
-          Empty slot
-        </div>
-      ))}
-    </>
-  );
-}
-
-function HaversackTab({
-  items,
-  capacity,
-  doAction,
-  loading,
-}: {
-  items: ItemInfo[];
-  capacity: number;
-  doAction: (body: { action: string; itemId?: string }) => void;
-  loading: boolean;
-}) {
-  const emptySlots = capacity - items.length;
-  return (
-    <>
-      {[...items].sort((a, b) => a.name.localeCompare(b.name)).map((item, i) => (
-        <ItemCard key={i} item={item} actions={
-          <DiscardButton item={item} doAction={doAction} loading={loading} />
-        } />
-      ))}
-      {Array.from({ length: emptySlots }, (_, i) => (
-        <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
-          Empty slot
-        </div>
-      ))}
-    </>
-  );
-}
-
-const EQUIP_SLOTS = ["weapon", "armor", "boots"] as const;
-
-function EquippedTab({
-  equipment,
-  doAction,
-  loading,
-}: {
-  equipment: { weapon: ItemInfo | null; armor: ItemInfo | null; boots: ItemInfo | null };
-  doAction: (body: { action: string; slot?: string }) => void;
-  loading: boolean;
-}) {
-  return (
-    <>
-      {EQUIP_SLOTS.map((slot) => {
-        const item = equipment[slot];
-        return item ? (
-          <ItemCard key={slot} item={item} actions={
-            <Button variant="secondary" size="icon" disabled={loading} title="Unequip"
-              onClick={() => doAction({ action: "unequip", slot })}>
-              <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
-            </Button>
-          } />
-        ) : (
-          <div key={slot} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
-            Empty {slot} slot
-          </div>
-        );
-      })}
-    </>
   );
 }

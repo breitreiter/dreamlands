@@ -5,6 +5,7 @@ import type { GameResponse, OutcomeInfo } from "../api/types";
 import parchment from "../assets/parchment.webp";
 import { formatProse } from "../prose";
 import DieRoll, { MeetsCheck } from "../components/DieRoll";
+import ApproachPicker from "../components/ApproachPicker";
 
 type Segment =
   | { kind: "outcome"; data: OutcomeInfo }
@@ -174,8 +175,13 @@ export default function Encounter({ state }: { state: GameResponse }) {
             </div>
           ))}
 
+          {/* Approach picker — suspends normal choice list */}
+          {state.mode === "approach_prompt" && state.approachPrompt && (
+            <ApproachPicker prompt={state.approachPrompt} />
+          )}
+
           {/* Current choices (if not terminal) */}
-          {!isTerminalOutcome && encounter && (
+          {!isTerminalOutcome && encounter && state.mode !== "approach_prompt" && (
             <div className="space-y-4 pt-2">
               {encounter.choices.map((choice) => (
                 <button

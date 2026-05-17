@@ -25,7 +25,7 @@ const PACK_TYPES = new Set(["weapon", "armor", "boots", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
 
 type BuyTab = "hauls" | "supplies" | "equipment";
-type SellTab = "pack" | "haversack" | "equipped";
+type SellTab = "pack" | "equipped";
 
 function matchesBuyTab(item: MarketItem, tab: BuyTab): boolean {
   switch (tab) {
@@ -60,7 +60,7 @@ export default function MarketScreen({
 
   function switchBuyTab(tab: BuyTab) {
     setBuyTab(tab);
-    const linked: Record<BuyTab, SellTab> = { hauls: "pack", supplies: "haversack", equipment: "equipped" };
+    const linked: Record<BuyTab, SellTab> = { hauls: "pack", supplies: "pack", equipment: "equipped" };
     setSellTab(linked[tab]);
   }
 
@@ -93,7 +93,8 @@ export default function MarketScreen({
 
   const inventory = state.inventory;
 
-  // Projected state derived from pending order
+  // Projected state derived from pending order.
+  // Projection tracks pack items (with isEquipped flags) after applying pending sells/buys.
   const projected = useMemo(() => {
     let gold = state.status.gold;
 
@@ -118,66 +119,44 @@ export default function MarketScreen({
       projectedStock.set(item.id, item.quantity - (pendingBuys.get(item.id) ?? 0));
     }
 
-    const projectedEquipment = {
-      weapon: inventory?.equipment.weapon ?? null,
-      armor: inventory?.equipment.armor ?? null,
-      boots: inventory?.equipment.boots ?? null,
-    };
-
-    // Track which equipment slots are freed by sells
-    for (const defId of pendingSells) {
-      if (projectedEquipment.weapon?.defId === defId) projectedEquipment.weapon = null;
-      else if (projectedEquipment.armor?.defId === defId) projectedEquipment.armor = null;
-      else if (projectedEquipment.boots?.defId === defId) projectedEquipment.boots = null;
-    }
-
-    // Identify "floating" buys: equippable items that auto-equip into empty slots
-    const claimedSlots = new Set<string>();
-    const floatingBuys = new Set<string>();
-    for (const [itemId] of pendingBuys) {
-      const item = stock.find((s) => s.id === itemId);
-      if (!item) continue;
-      const slot = item.type as string;
-      if ((slot === "weapon" || slot === "armor" || slot === "boots")
-          && !claimedSlots.has(slot)
-          && projectedEquipment[slot] === null) {
-        claimedSlots.add(slot);
-        floatingBuys.add(itemId);
-      }
-    }
-
-    // Count sells from pack/haversack
+    // Start with current pack, simulate sells (removing items + clearing equipped flags)
+    const remainingPack = [...(inventory?.pack ?? [])].map(i => ({ ...i }));
     let packSells = 0;
-    let haversackSells = 0;
-    const remainingPack = [...(inventory?.pack ?? [])];
-    const remainingHaversack = [...(inventory?.haversack ?? [])];
     for (const defId of pendingSells) {
-      const packIdx = remainingPack.findIndex(i => i.defId === defId);
-      if (packIdx >= 0) { remainingPack.splice(packIdx, 1); packSells++; continue; }
-      const havIdx = remainingHaversack.findIndex(i => i.defId === defId);
-      if (havIdx >= 0) { remainingHaversack.splice(havIdx, 1); haversackSells++; }
+      const idx = remainingPack.findIndex(i => i.defId === defId);
+      if (idx >= 0) { remainingPack.splice(idx, 1); packSells++; }
     }
 
-    // Count buys going to pack vs haversack (subtract 1 for floating buys)
+    // For each buy, check if auto-equip would trigger (no existing equipped of that type)
+    // and count slots consumed
     let packBuys = 0;
-    let haversackBuys = 0;
+    const projectedEquippedTypes = new Set(remainingPack.filter(i => i.isEquipped).map(i => i.type));
+
     for (const [itemId, qty] of pendingBuys) {
       const item = stock.find((s) => s.id === itemId);
       if (!item) continue;
-      const floatCount = floatingBuys.has(itemId) ? 1 : 0;
       if (isPackType(item.type)) {
-        packBuys += qty - floatCount;
-      } else {
-        haversackBuys += qty;
+        // First unit may auto-equip (into an empty slot) — still consumes a pack slot
+        packBuys += qty;
+        // Track that this type is now "equipped" for capacity gating
+        if ((item.type === "weapon" || item.type === "armor" || item.type === "boots")
+            && !projectedEquippedTypes.has(item.type)) {
+          projectedEquippedTypes.add(item.type);
+        }
       }
     }
 
-    const packCount = (inventory?.pack ?? []).length - packSells + packBuys;
-    const haversackCount = (inventory?.haversack ?? []).length - haversackSells + haversackBuys;
+    const packCount = remainingPack.length + packBuys;
     const packCapacity = inventory?.packCapacity ?? 0;
-    const haversackCapacity = inventory?.haversackCapacity ?? 0;
 
-    return { gold, projectedStock, packCount, haversackCount, packCapacity, haversackCapacity, buyCost, sellRevenue, claimedSlots, projectedEquipment };
+    // Projected equipment: what's equipped after order
+    const projectedEquipment = {
+      weapon: remainingPack.find(i => i.type === "weapon" && i.isEquipped) ?? null,
+      armor: remainingPack.find(i => i.type === "armor" && i.isEquipped) ?? null,
+      boots: remainingPack.find(i => i.type === "boots" && i.isEquipped) ?? null,
+    };
+
+    return { gold, projectedStock, packCount, packCapacity, buyCost, sellRevenue, projectedEquipment };
   }, [state.status.gold, pendingBuys, pendingSells, stock, inventory, sellPrices]);
 
   function addBuy(itemId: string) {
@@ -216,17 +195,7 @@ export default function MarketScreen({
     const pendingQty = pendingBuys.get(item.id) ?? 0;
     if (pendingQty >= item.quantity) return false;
     if (projected.gold < item.buyPrice) return false;
-    if (isPackType(item.type) && projected.packCount >= projected.packCapacity) {
-      // Allow if this item would float (auto-equip into an empty, unclaimed slot)
-      const slot = item.type as string;
-      if ((slot === "weapon" || slot === "armor" || slot === "boots")
-          && !projected.claimedSlots.has(slot)
-          && projected.projectedEquipment[slot] === null) {
-        return true;
-      }
-      return false;
-    }
-    if (!isPackType(item.type) && projected.haversackCount >= projected.haversackCapacity) return false;
+    if (isPackType(item.type) && projected.packCount >= projected.packCapacity) return false;
     return true;
   }
 
@@ -238,11 +207,17 @@ export default function MarketScreen({
 
   const packFull = projected.packCount >= projected.packCapacity;
 
-  // Restock projection: fill empty haversack slots with rations, capped by gold.
-  const restockSlots = Math.max(0, projected.haversackCapacity - projected.haversackCount);
+  // Restock projection: fill empty pack slots with rations (up to packCapacity, capped by gold)
+  const currentRationCount = (inventory?.pack ?? []).filter(i => i.defId === "food_ration").length;
+  const pendingRationBuys = pendingBuys.get("food_ration") ?? 0;
+  const projectedRationCount = currentRationCount + pendingRationBuys;
+  const freePackSlots = Math.max(0, projected.packCapacity - projected.packCount);
+  const restockSlots = freePackSlots;
   const restockAffordable = rationCost > 0 ? Math.floor(projected.gold / rationCost) : restockSlots;
   const restockCount = Math.min(restockSlots, restockAffordable);
   const restockCost = restockCount * rationCost;
+  // Suppress restock if we already have plenty
+  const shouldRestock = restockCount > 0 && projectedRationCount < 4;
 
   async function restockAndLeave() {
     await doAction({ action: "restock_rations" });
@@ -266,7 +241,6 @@ export default function MarketScreen({
       setPendingSells([]);
       if (failures.length > 0) {
         setError(failures.map((f) => f.message).join("; "));
-        // Refresh stock to reflect partial order
         if (gameId) {
           api.getMarketStock(gameId).then((res) => {
             setStock(res.stock);
@@ -300,7 +274,6 @@ export default function MarketScreen({
   const sellItems = useMemo((): { item: ItemInfo; source: string }[] => {
     if (!inventory) return [];
 
-    // Track which pending sells have been "consumed" by earlier items
     const remainingSells = [...pendingSells];
 
     function consumeSell(defId: string): boolean {
@@ -313,29 +286,15 @@ export default function MarketScreen({
 
     switch (sellTab) {
       case "pack":
-        for (const item of inventory.pack) {
+        for (const item of inventory.pack.filter(i => !i.isEquipped)) {
           const sold = consumeSell(item.defId);
           items.push({ item, source: "pack", sold });
         }
         break;
-      case "haversack":
-        for (const item of [...inventory.haversack].sort((a, b) => a.name.localeCompare(b.name))) {
-          const sold = consumeSell(item.defId);
-          items.push({ item, source: "haversack", sold });
-        }
-        break;
       case "equipped":
-        if (inventory.equipment.weapon) {
-          const sold = consumeSell(inventory.equipment.weapon.defId);
-          items.push({ item: inventory.equipment.weapon, source: "weapon", sold });
-        }
-        if (inventory.equipment.armor) {
-          const sold = consumeSell(inventory.equipment.armor.defId);
-          items.push({ item: inventory.equipment.armor, source: "armor", sold });
-        }
-        if (inventory.equipment.boots) {
-          const sold = consumeSell(inventory.equipment.boots.defId);
-          items.push({ item: inventory.equipment.boots, source: "boots", sold });
+        for (const item of inventory.pack.filter(i => i.isEquipped)) {
+          const sold = consumeSell(item.defId);
+          items.push({ item, source: item.type, sold });
         }
         break;
     }
@@ -379,9 +338,9 @@ export default function MarketScreen({
           </div>
         ) : (
           <div className="flex gap-2">
-            <Button variant="secondary" size="sm" onClick={restockAndLeave} disabled={loading || restockCount === 0}>
+            <Button variant="secondary" size="sm" onClick={restockAndLeave} disabled={loading || !shouldRestock}>
               <MaskedIcon icon="knapsack.svg" className="w-4 h-4" color="currentColor" />
-              {restockCount > 0
+              {shouldRestock
                 ? `Restock Food and Leave (${restockCost}g)`
                 : "Restock Food and Leave"}
             </Button>
@@ -509,7 +468,6 @@ export default function MarketScreen({
             <p className="text-muted mt-0.5">The factor will take things off your hands. Click to stage.</p>
             <div className="flex gap-1 mt-2">
               <TabButton id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
-              <TabButton id="haversack" active={sellTab === "haversack"} onClick={() => setSellTab("haversack")}>Haversack</TabButton>
               <TabButton id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabButton>
             </div>
           </div>
@@ -518,19 +476,11 @@ export default function MarketScreen({
           {pendingSells.length > 0 && (
             <div className="px-3 pb-2 flex flex-wrap gap-1">
               {(() => {
-                // Group by defId for compact display
                 const counts = new Map<string, { name: string; count: number }>();
                 for (const defId of pendingSells) {
                   const existing = counts.get(defId);
                   if (existing) { existing.count++; continue; }
-                  // Find name from inventory
-                  const eq = inventory?.equipment;
-                  const item =
-                    inventory?.pack.find(i => i.defId === defId)
-                    ?? inventory?.haversack.find(i => i.defId === defId)
-                    ?? (eq?.weapon?.defId === defId ? eq.weapon : null)
-                    ?? (eq?.armor?.defId === defId ? eq.armor : null)
-                    ?? (eq?.boots?.defId === defId ? eq.boots : null);
+                  const item = inventory?.pack.find(i => i.defId === defId);
                   counts.set(defId, { name: item?.name ?? defId, count: 1 });
                 }
                 return [...counts.entries()].map(([defId, { name, count }]) => (
@@ -545,7 +495,7 @@ export default function MarketScreen({
           )}
 
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
-            {sellItems.length === 0 && sellTab === "equipped" ? (
+            {sellItems.length === 0 ? (
               <div className="p-4 text-muted">Nothing here</div>
             ) : (
               <>
@@ -625,15 +575,7 @@ export default function MarketScreen({
                   );
                 })}
                 {sellTab === "pack" && inventory && Array.from(
-                  { length: inventory.packCapacity - sellItems.length },
-                  (_, i) => (
-                    <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
-                      Empty slot
-                    </div>
-                  )
-                )}
-                {sellTab === "haversack" && inventory && Array.from(
-                  { length: inventory.haversackCapacity - sellItems.length },
+                  { length: Math.max(0, inventory.packCapacity - inventory.pack.filter(i => !i.isEquipped).length - sellItems.length) },
                   (_, i) => (
                     <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
                       Empty slot

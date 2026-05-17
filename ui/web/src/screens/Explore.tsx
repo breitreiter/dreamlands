@@ -79,8 +79,8 @@ function tripEstimate(tiles: number) {
   return { days: Math.ceil(tiles / TILES_PER_DAY), modifier: "nearly" };
 }
 
-function countFood(haversack: { defId: string }[]): number {
-  return haversack.filter(i => FOOD_IDS.includes(i.defId)).length;
+function countFood(pack: { defId: string }[]): number {
+  return pack.filter(i => FOOD_IDS.includes(i.defId)).length;
 }
 
 /** Freeze all Leaflet interactions. */
@@ -340,7 +340,7 @@ function InstrumentCluster({
 
   const healthLow = status.health < status.maxHealth * 0.5;
   const spiritsLow = status.spirits < status.maxSpirits * 0.5;
-  const foodCount = (state.inventory?.haversack ?? []).filter(i => i.defId.startsWith("food_")).length;
+  const foodCount = (state.inventory?.pack ?? []).filter(i => i.defId.startsWith("food_")).length;
 
   const vignetteSrc = node.terrain
     ? isSettlement
@@ -729,7 +729,7 @@ export default function Explore({ state }: { state: GameResponse }) {
       {travelPhase === "preview" && (() => {
         const tiles = previewPath.length - 1;
         const { days, modifier } = tripEstimate(tiles);
-        const foodOnHand = countFood(state.inventory?.haversack ?? []);
+        const foodOnHand = countFood(state.inventory?.pack ?? []);
         const foodNeeded = days * FOOD_PER_DAY;
         return (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-panel rounded-2xl px-6 py-4 flex flex-col items-center gap-3 min-w-[280px]">
