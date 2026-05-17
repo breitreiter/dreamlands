@@ -5,13 +5,13 @@ namespace Dreamlands.Rules.Tests;
 public class SkillFlavorTests
 {
     [Theory]
-    [InlineData(Skill.Combat, 0, "Violence is a tool for simpletons and savages")]
-    [InlineData(Skill.Combat, 2, "You know drills and forms, but have spilled little blood")]
-    [InlineData(Skill.Combat, 4, "You read intent in a shoulder twitch and end fights decisively")]
-    [InlineData(Skill.Negotiation, 0, "You speak plainly and without artifice")]
-    [InlineData(Skill.Bushcraft, 2, "You can find water, shelter, and a way through")]
-    [InlineData(Skill.Cunning, 4, "You are always three moves ahead")]
-public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
+    [InlineData(Skill.Combat, 0, "Daggers and light armor only. Encounter checks are punishing.")]
+    [InlineData(Skill.Combat, 2, "Adds axes and medium armor. Encounter checks are fair.")]
+    [InlineData(Skill.Combat, 4, "Adds swords and heavy armor. Encounter checks are generous.")]
+    [InlineData(Skill.Negotiation, 0, "No contract bonus. Encounter checks are punishing.")]
+    [InlineData(Skill.Bushcraft, 2, "30% chance to resist travel conditions. Encounter checks are fair.")]
+    [InlineData(Skill.Cunning, 4, "60% chance to resist serious conditions. Encounter checks are generous.")]
+    public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
     {
         Assert.Equal(expected, SkillFlavor.Get(skill, level));
     }
@@ -20,7 +20,7 @@ public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
     public void Get_NegativeLevel_ReturnsTierZero()
     {
         var result = SkillFlavor.Get(Skill.Combat, -2);
-        Assert.Equal("Violence is a tool for simpletons and savages", result);
+        Assert.Equal("Daggers and light armor only. Encounter checks are punishing.", result);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
     {
         // Level 1 should map to trained (tier 1), same as level 2
         var result = SkillFlavor.Get(Skill.Bushcraft, 1);
-        Assert.Equal("You can find water, shelter, and a way through", result);
+        Assert.Equal("30% chance to resist travel conditions. Encounter checks are fair.", result);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
     {
         // Level 3 should map to expert (tier 2), same as level 4
         var result = SkillFlavor.Get(Skill.Cunning, 3);
-        Assert.Equal("You are always three moves ahead", result);
+        Assert.Equal("60% chance to resist serious conditions. Encounter checks are generous.", result);
     }
 
     [Fact]

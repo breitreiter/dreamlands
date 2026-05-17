@@ -15,24 +15,25 @@ public static class SkillFlavor
         return Flavors.TryGetValue((skill, tier), out var text) ? text : "";
     }
 
-    // tier 0 = Unskilled (level ≤ 0), tier 1 = Trained (level 1-2), tier 2 = Expert (level 3+)
+    // Per-tier description text from project/design/skills.md "Character Sheet Text".
+    // Communicates both the passive benefit and the check-resolution behavior.
+    // tier 0 = Untrained, tier 1 = Trained, tier 2 = Expert.
     static readonly Dictionary<(Skill, int), string> Flavors = new()
     {
-        [(Skill.Combat, 0)] = "Violence is a tool for simpletons and savages",
-        [(Skill.Combat, 1)] = "You know drills and forms, but have spilled little blood",
-        [(Skill.Combat, 2)] = "You read intent in a shoulder twitch and end fights decisively",
+        [(Skill.Combat, 0)] = "Daggers and light armor only. Encounter checks are punishing.",
+        [(Skill.Combat, 1)] = "Adds axes and medium armor. Encounter checks are fair.",
+        [(Skill.Combat, 2)] = "Adds swords and heavy armor. Encounter checks are generous.",
 
-        [(Skill.Negotiation, 0)] = "You speak plainly and without artifice",
-        [(Skill.Negotiation, 1)] = "You recognize leverage and know when to press or yield",
-        [(Skill.Negotiation, 2)] = "You shape the discussion like an artisan",
+        [(Skill.Negotiation, 0)] = "No contract bonus. Encounter checks are punishing.",
+        [(Skill.Negotiation, 1)] = "+20% contract payout. Encounter checks are fair.",
+        [(Skill.Negotiation, 2)] = "+40% contract payout. Encounter checks are generous.",
 
-        [(Skill.Bushcraft, 0)] = "The outdoors is strange, hostile terrain",
-        [(Skill.Bushcraft, 1)] = "You can find water, shelter, and a way through",
-        [(Skill.Bushcraft, 2)] = "You read land and weather like scripture",
+        [(Skill.Bushcraft, 0)] = "No passive benefit. Encounter checks are punishing.",
+        [(Skill.Bushcraft, 1)] = "30% chance to resist travel conditions. Encounter checks are fair.",
+        [(Skill.Bushcraft, 2)] = "60% chance to resist travel conditions. Encounter checks are generous.",
 
-        [(Skill.Cunning, 0)] = "You prefer a straightforward approach",
-        [(Skill.Cunning, 1)] = "You notice angles and opportunities others overlook",
-        [(Skill.Cunning, 2)] = "You are always three moves ahead",
-
+        [(Skill.Cunning, 0)] = "No passive benefit. Encounter checks are punishing.",
+        [(Skill.Cunning, 1)] = "30% chance to resist serious conditions. Encounter checks are fair.",
+        [(Skill.Cunning, 2)] = "60% chance to resist serious conditions. Encounter checks are generous.",
     };
 }
