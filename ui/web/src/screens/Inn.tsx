@@ -99,9 +99,9 @@ export default function Inn({
                   {c} cleared
                 </div>
               ))}
-              {recovery.medicinesConsumed.map((m, i) => (
+              {recovery.medicinesApplied.map((m, i) => (
                 <div key={`m-${i}`} className="text-dim">
-                  {m} consumed
+                  {m} applied
                 </div>
               ))}
             </div>

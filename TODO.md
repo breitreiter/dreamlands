@@ -89,6 +89,12 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging
       players to try new branches and pick up fresh storylets.
+- [ ] Combat flee balance check. Post-picker, fleeing always succeeds but costs one
+      round of monster intent (player slots become Skipped, monster's committed slots
+      still resolve). Cunning no longer offers a numeric save. Might be fine — fixed-
+      cost flee is honest — but keep an eye on whether T3 monsters punish flee too
+      hard or too softly. Cunning-as-flee-modifier (e.g. skip monster carry-stun, or
+      skip one slot of monster intent at Trained/Expert) is a potential lever.
 
 ### Quality of Life
 

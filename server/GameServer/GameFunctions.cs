@@ -229,7 +229,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         ConditionsCleared = bookResult.ConditionsCleared
                             .Select(id => data.Balance.Conditions.TryGetValue(id, out var def) ? def.Name : id)
                             .ToList(),
-                        MedicinesConsumed = bookResult.MedicinesConsumed,
+                        MedicinesApplied = bookResult.MedicinesApplied,
                     },
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),

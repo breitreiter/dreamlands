@@ -164,7 +164,7 @@ export interface InnRecoveryInfo {
   healthRecovered: number;
   spiritsRecovered: number;
   conditionsCleared: string[];
-  medicinesConsumed: string[];
+  medicinesApplied: string[];
 }
 
 export interface InnServiceInfo {

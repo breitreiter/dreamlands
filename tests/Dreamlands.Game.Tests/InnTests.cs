@@ -158,8 +158,8 @@ public class InnTests
 
         Assert.True(result.Success);
         Assert.DoesNotContain("injured", p.ActiveConditions);
-        Assert.DoesNotContain(p.Pack, i => i.DefId == "medical_kit");
-        Assert.Contains("medical_kit", result.MedicinesConsumed);
+        Assert.Contains(p.Pack, i => i.DefId == "medical_kit"); // reusable; not consumed
+        Assert.Contains("medical_kit", result.MedicinesApplied);
         Assert.Contains("injured", result.ConditionsCleared);
     }
 
@@ -173,7 +173,7 @@ public class InnTests
 
         Assert.True(result.Success); // booking still succeeds
         Assert.Contains("injured", p.ActiveConditions);
-        Assert.Empty(result.MedicinesConsumed);
+        Assert.Empty(result.MedicinesApplied);
         Assert.Empty(result.ConditionsCleared);
     }
 
@@ -194,7 +194,7 @@ public class InnTests
         Assert.DoesNotContain("poisoned", p.ActiveConditions);
         Assert.Contains("injured", result.ConditionsCleared);
         Assert.Contains("poisoned", result.ConditionsCleared);
-        Assert.Empty(result.MedicinesConsumed);
+        Assert.Empty(result.MedicinesApplied);
     }
 
     [Fact]
@@ -209,6 +209,6 @@ public class InnTests
         Assert.True(result.Success);
         Assert.DoesNotContain("injured", p.ActiveConditions);
         Assert.Contains(p.Pack, i => i.DefId == "bandages");
-        Assert.Empty(result.MedicinesConsumed);
+        Assert.Empty(result.MedicinesApplied);
     }
 }

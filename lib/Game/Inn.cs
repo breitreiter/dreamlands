@@ -10,7 +10,7 @@ public record InnBookingResult(
     string ServiceId,
     int GoldSpent,
     int SpiritsRestored,
-    List<string> MedicinesConsumed,
+    List<string> MedicinesApplied,
     List<string> ConditionsCleared);
 
 public static class Inn
@@ -22,8 +22,9 @@ public static class Inn
     /// <summary>
     /// Returns the three inn service tiers from balance data. The bed/bath tiers
     /// add a fixed amount of spirits; the full tier restores spirits to max.
-    /// All tiers consume serious-condition medicine if carried (minor conditions
-    /// were already cleared by SettlementRunner.EnsureSettlement on entry).
+    /// All tiers clear severe conditions covered by carried medicine kits;
+    /// kits are reusable and never consumed (minor conditions were already
+    /// cleared by SettlementRunner.EnsureSettlement on entry).
     /// </summary>
     public static IReadOnlyList<InnService> GetServiceOptions(BalanceData balance) =>
     [
@@ -34,9 +35,10 @@ public static class Inn
 
     /// <summary>
     /// Book a single inn service. Validates affordability, deducts gold, restores
-    /// spirits per the tier, advances time by one night, and consumes any matching
-    /// serious-condition medicines. At the chapterhouse the stay is free and the
-    /// resident physician clears all severe conditions without consuming medicine.
+    /// spirits per the tier, advances time by one night, and applies any matching
+    /// serious-condition medicines from the pack (reusable; not consumed). At the
+    /// chapterhouse the stay is free and the resident physician clears all severe
+    /// conditions even without matching kits.
     /// </summary>
     public static InnBookingResult BookService(
         PlayerState state, BalanceData balance, string serviceId, bool chapterhouse = false)
@@ -62,23 +64,23 @@ public static class Inn
         // Advance one night (does not trigger EndOfDay — settlement nights bypass it)
         state.Day += 1;
 
-        var medicinesConsumed = new List<string>();
+        var medicinesApplied = new List<string>();
         var conditionsCleared = new List<string>();
-        ClearSevereConditions(state, balance, medicinesConsumed, conditionsCleared, chapterhouse);
+        ClearSevereConditions(state, balance, medicinesApplied, conditionsCleared, chapterhouse);
 
-        return new InnBookingResult(true, null, serviceId, cost, spiritsRestored, medicinesConsumed, conditionsCleared);
+        return new InnBookingResult(true, null, serviceId, cost, spiritsRestored, medicinesApplied, conditionsCleared);
     }
 
     /// <summary>
     /// Clear severe conditions. At the chapterhouse the physician handles every
-    /// severe condition for free. At a regular inn, each cleared condition consumes
-    /// one matching medicine from the haversack; conditions without a matching
-    /// medicine are left active.
+    /// severe condition for free. At a regular inn, each condition clears if the
+    /// player carries a matching medicine kit in the pack; kits are reusable and
+    /// stay in the pack. Conditions without a matching kit are left active.
     /// </summary>
     static void ClearSevereConditions(
         PlayerState state,
         BalanceData balance,
-        List<string> medicinesConsumed,
+        List<string> medicinesApplied,
         List<string> conditionsCleared,
         bool chapterhouse)
     {
@@ -100,8 +102,7 @@ public static class Inn
 
             if (idx < 0) continue;
 
-            medicinesConsumed.Add(state.Pack[idx].DefId);
-            state.Pack.RemoveAt(idx);
+            medicinesApplied.Add(state.Pack[idx].DefId);
             state.ActiveConditions.Remove(conditionId);
             conditionsCleared.Add(conditionId);
         }

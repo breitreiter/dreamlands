@@ -101,7 +101,7 @@ public class InnRecoveryInfo
     public int HealthRecovered { get; init; }
     public int SpiritsRecovered { get; init; }
     public List<string> ConditionsCleared { get; init; } = [];
-    public List<string> MedicinesConsumed { get; init; } = [];
+    public List<string> MedicinesApplied { get; init; } = [];
 }
 
 public class RescueInfo
