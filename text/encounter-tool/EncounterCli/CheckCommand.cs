@@ -89,25 +89,27 @@ static class CheckCommand
             var dashErrors = CheckForDashAffectations(text);
             vocabErrors.AddRange(dashErrors);
 
-            if (result.IsSuccess && vocabErrors.Count == 0 && markerWarnings.Count == 0 && idWarnings.Count == 0)
+            var parseWarnings = result.Errors.Where(e => e.IsWarning).ToList();
+            var parseErrors = result.Errors.Where(e => !e.IsWarning).ToList();
+            var allWarnings = parseWarnings.Select(w => w.ToString()).Concat(markerWarnings).Concat(idWarnings).ToList();
+
+            if (result.IsSuccess && vocabErrors.Count == 0 && allWarnings.Count == 0)
             {
                 Console.WriteLine($"  OK  {rel}");
             }
             else
             {
-                var hasErrors = !result.IsSuccess || vocabErrors.Count > 0;
+                var hasErrors = parseErrors.Count > 0 || vocabErrors.Count > 0;
                 if (hasErrors)
                     failed++;
                 else
                     warned++;
                 Console.WriteLine($"  {(hasErrors ? "ERR" : "WARN")} {rel}");
-                foreach (var err in result.Errors)
+                foreach (var err in parseErrors)
                     Console.WriteLine($"      {err}");
                 foreach (var err in vocabErrors)
                     Console.WriteLine($"      {err}");
-                foreach (var warn in idWarnings)
-                    Console.WriteLine($"      {warn}");
-                foreach (var warn in markerWarnings)
+                foreach (var warn in allWarnings)
                     Console.WriteLine($"      {warn}");
             }
         }

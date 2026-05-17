@@ -65,7 +65,8 @@ Conditions in [requires] use the same syntax as @if and choice-level [requires]:
   [requires has <item_id>]
   [requires tag <tag_id>]
   [requires quality <quality_id> <threshold>]
-  [requires check <skill> <difficulty>]
+  [requires meets <skill> <tier>]          (tier: untrained|trained|expert)
+  Note: check is NOT valid in [requires] — use meets for gate-style skill checks.
 
 Compound conditions with &&, ||, and ! prefix negation:
   [requires tag met_envoy && quality guild 2]
@@ -77,15 +78,22 @@ Operator precedence: ! (tightest) > && > ||
 Restriction: check and meets cannot be negated or used in compound expressions.
 
 
-## Skills, difficulty, time, conditions
+## Skills, tiers, time, conditions
 
-SKILLS                          DIFFICULTY        DC
-  combat       fighting            trivial         5
-  negotiation  persuasion/social   easy           10
-  bushcraft    survival/travel     medium         15
-  cunning      trickery/awareness  hard           20
-  luck         fortune             heroic         30
-  mercantile   trade/appraisal
+SKILLS                          TIERS (for meets/check)
+  combat       fighting            untrained
+  negotiation  persuasion/social   trained
+  bushcraft    survival/travel     expert
+  cunning      trickery/awareness
+
+LEGACY DIFFICULTY (deprecated — check command emits warning; removed after Phase 4 sweep)
+  trivial   easy   medium   hard   very_hard   epic
+
+APPROACH VERBS PER SKILL (used with check correct:/wrong:)
+  negotiation:  flatter  reason  threaten
+  cunning:      hide     bluff   scheme
+  bushcraft:    push     plan    reroute
+  combat:       rush     strategize  outlast
 
 TIME PERIODS
   morning
@@ -101,9 +109,14 @@ CONDITIONS
 
 ## Action verbs
 
-Flow control        @if check <skill> <difficulty> { ... } @else { ... }
-                    @if meets <skill> <target> { ... } @else { ... }
-                    @if has <item_id> { ... } @elif check <skill> <difficulty> { ... } @else { ... }
+Flow control        @if check <skill> correct:<approach> wrong:<approach> { ... } @else { ... }
+                      (picker check — terminal branch only, @else required)
+                    @if check <skill> <difficulty> { ... } @else { ... }
+                      (DEPRECATED legacy DC form — emits deprecation warning; not subject to terminal rule)
+                    @if meets <skill> <tier> { ... } @else { ... }
+                      (tier: untrained|trained|expert)
+                    @if has <item_id> { ... } @elif check <skill> correct:X wrong:Y { ... } @else { ... }
+                      (static conditions can precede a terminal picker check)
                     @if tag <tag_id> { ... } @else { ... }
                     @if quality <quality_id> <threshold> { ... } @else { ... }
                     @if tag a && quality guild 2 { ... }
@@ -112,6 +125,7 @@ Flow control        @if check <skill> <difficulty> { ... } @else { ... }
 Choice gating       * Option text [requires has <item_id>]
                     * Option text [requires tag <tag_id>]
                     * Option text [requires quality <quality_id> <threshold>]
+                    * Option text [requires meets <skill> <tier>]
                     * Option text [requires tag a && !tag b]
                     * Option text [requires tag a || tag b]
 

@@ -26,6 +26,8 @@ public enum ArgType
     SkillLevel,
     /// <summary>A signed integer (positive or negative).</summary>
     SignedInt,
+    /// <summary>Must be a valid <see cref="SkillTier"/> script name (untrained/trained/expert).</summary>
+    SkillTier,
     /// <summary>An item category name (e.g. "food"). Free-form for now.</summary>
     Category,
     /// <summary>A free-form text string (must be non-empty; use quotes for multi-word values).</summary>
@@ -74,9 +76,9 @@ public sealed class ActionVerb
         new ArgDef("tag_id", ArgType.Id));
 
     public static readonly ActionVerb Meets = new("meets",
-        VerbUsage.Condition, "Branch on whether total skill bonus meets a threshold",
+        VerbUsage.Condition, "Branch on whether the player's skill tier meets a minimum tier",
         new ArgDef("skill", ArgType.Skill),
-        new ArgDef("target", ArgType.Int));
+        new ArgDef("tier", ArgType.SkillTier));
 
     public static readonly ActionVerb Quality = new("quality",
         VerbUsage.Condition, "Branch on whether a quality meets a threshold",
@@ -345,6 +347,44 @@ public sealed class ActionVerb
 
             pos++; // consume verb token
 
+            // Special handling for `check`: accept both legacy DC form and picker form.
+            if (verbName == "check")
+            {
+                // Consume skill arg
+                if (pos >= tokens.Count || tokens[pos] is "&&" or "||")
+                    return "'check' expects a skill argument but got fewer tokens.";
+                var skillErr = ValidateArg(verb.Args[0], tokens[pos]);
+                if (skillErr != null)
+                    return $"'check' argument 'skill': {skillErr}";
+                pos++;
+
+                // Second token is either a difficulty name (legacy) or correct:/wrong: attrs (picker)
+                if (pos >= tokens.Count || tokens[pos] is "&&" or "||")
+                    return "'check' expects a difficulty or 'correct:<verb> wrong:<verb>' after the skill.";
+
+                var secondToken = tokens[pos];
+                if (secondToken.StartsWith("correct:", StringComparison.Ordinal) || secondToken.StartsWith("wrong:", StringComparison.Ordinal))
+                {
+                    // Picker form: consume correct:X and wrong:Y (in either order)
+                    pos++; // consume first attr
+                    if (pos >= tokens.Count || tokens[pos] is "&&" or "||")
+                        return "'check' picker form requires both 'correct:<verb>' and 'wrong:<verb>'.";
+                    var thirdToken = tokens[pos];
+                    if (!thirdToken.StartsWith("correct:", StringComparison.Ordinal) && !thirdToken.StartsWith("wrong:", StringComparison.Ordinal))
+                        return $"'check' picker form: unexpected token '{thirdToken}' — expected 'correct:<verb>' or 'wrong:<verb>'.";
+                    pos++; // consume second attr
+                }
+                else
+                {
+                    // Legacy DC form
+                    var diffErr = ValidateArg(verb.Args[1], secondToken);
+                    if (diffErr != null)
+                        return $"'check' argument 'difficulty': {diffErr}";
+                    pos++;
+                }
+                continue;
+            }
+
             for (int i = 0; i < verb.Args.Count; i++)
             {
                 if (pos >= tokens.Count || tokens[pos] is "&&" or "||")
@@ -417,6 +457,8 @@ public sealed class ActionVerb
                 ? null : $"'{value}' is not a valid integer.",
             ArgType.SignedInt => int.TryParse(value, out _)
                 ? null : $"'{value}' is not a valid integer.",
+            ArgType.SkillTier => value.ToLowerInvariant() is "untrained" or "trained" or "expert"
+                ? null : $"'{value}' is not a valid skill tier. Expected one of: untrained, trained, expert.",
             ArgType.Category => string.IsNullOrWhiteSpace(value)
                 ? "category must not be empty." : null,
             ArgType.Text => string.IsNullOrWhiteSpace(value)

@@ -58,6 +58,9 @@ public sealed class EncounterBundle
                     var branches = cond.Branches.Select(b => new ConditionalBranch
                     {
                         Condition = b.Condition,
+                        PickerSkill = b.PickerSkill,
+                        PickerCorrect = b.PickerCorrect,
+                        PickerWrong = b.PickerWrong,
                         Outcome = new OutcomePart { Text = b.Text, Mechanics = b.Mechanics }
                     }).ToList();
 
@@ -135,7 +138,7 @@ public sealed class EncounterBundle
     record ChoiceDto(string OptionText, string? OptionLink, string? OptionPreview, string? Requires,
         ConditionalDto? Conditional, SingleDto? Single);
     record ConditionalDto(string Preamble, List<BranchDto> Branches, OutcomePartDto? Fallback);
-    record BranchDto(string Condition, string Text, List<string> Mechanics);
+    record BranchDto(string Condition, string? BranchKind, string? PickerSkill, string? PickerCorrect, string? PickerWrong, string Text, List<string> Mechanics);
     record SingleDto(string Text, List<string> Mechanics);
     record OutcomePartDto(string Text, List<string> Mechanics);
 }

@@ -102,7 +102,7 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
 
 ```
 * Accept her hospitality = Sit, eat, and trade what information you can.
-  @if check negotiation medium {
+  @if check negotiation correct:reason wrong:threaten {
     You trade tales of the world beyond the fen...
     +add_random_items 3 food
   } @else {
@@ -112,14 +112,16 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
   }
 ```
 
-**C) Multi-branch conditional** — `@if` with `@elif` branches:
+**C) Multi-branch conditional** — `@if` with `@elif` branches. Static conditions (`tag`, `has`, `quality`, `meets`) stack freely. A picker `check` may only appear as the **terminal** branch, paired with `@else` as its fail body (see §3.3):
 
 ```
 * Pick the lock
   @if has rusted_key {
     The key turns with a click...
-  } @elif check cunning medium {
-    You work the tumblers...
+  } @elif meets cunning trained {
+    You work the tumblers with practiced ease...
+  } @elif check cunning correct:scheme wrong:hide {
+    You outthink the mechanism...
   } @else {
     The lock defeats you...
   }
@@ -147,8 +149,33 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
 - `}` alone closes the current block.
 - Braces must be matched. Unclosed `{` is an error.
 - Only one `@if` per choice.
-- `@elif` and `@else` are optional. A bare `@if ... { } ` with no else is valid.
+- `@elif` and `@else` are optional. A bare `@if ... { } ` with no else is valid for static conditions.
 - Branches are evaluated top-to-bottom at runtime. The first matching condition wins.
+
+#### Terminal-check rule (picker `check` only)
+
+A picker `check` condition (`check <skill> correct:X wrong:Y`) is **only legal as the terminal branch** of a chain, and that chain **must end with `@else`**. The `@else` body is the authored fail beat.
+
+Legal:
+```
+@if tag bribed {
+  ...
+} @elif check negotiation correct:reason wrong:threaten {
+  ...
+} @else {
+  ...
+}
+```
+
+Illegal — parse error:
+- `check` mid-chain (another `@elif` follows it)
+- `check` with no `@else` fallback
+- `@elif` appearing after a picker check
+- Lone `@if check ... {}` with no `@else`
+
+Static conditions (`tag`, `has`, `quality`, `meets`) are unaffected and may appear anywhere in a chain.
+
+**Why**: a picker check requires the player to commit to an approach (UI interaction). Silently falling through to the next `@elif` after the player has committed would ignore their choice. The `@else` body is the explicit fail path.
 
 ### 3.4 Game commands
 
@@ -195,8 +222,9 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 
 | Verb | Arguments | Description |
 |------|-----------|-------------|
-| `check <skill> <difficulty>` | skill, difficulty | Branch on a skill check (d20 roll) |
-| `meets <skill> <target>` | skill, int | Branch on whether total skill bonus (skill + gear) meets a threshold — deterministic, no dice |
+| `check <skill> correct:<approach> wrong:<approach>` | skill, two approach verbs | Picker check — renders the 3-approach picker UI, resolves by tier + player pick. Terminal-branch only; requires `@else`. |
+| `check <skill> <difficulty>` | skill, difficulty | **DEPRECATED** — legacy d20 roll. Parseable until Phase 4 sweep completes; emits a deprecation warning. |
+| `meets <skill> <tier>` | skill, tier name | Gate on whether the player's skill tier is ≥ the target. Tier names: `untrained`, `trained`, `expert`. Deterministic, no UI. |
 | `has <item_id>` | item id | Branch on whether player has an item |
 | `tag <tag_id>` | tag id | Branch on whether a world-state tag is set |
 | `quality <id> <threshold>` | quality id, signed int | Branch on a numeric quality. Positive threshold: value ≥ n. Negative threshold: value ≤ n. Unset qualities default to 0. |
@@ -229,8 +257,10 @@ No other block formatting (headers, code blocks, lists, tables) is defined.
 
 | Type | Valid values |
 |------|-------------|
-| **skill** | `combat`, `negotiation`, `bushcraft`, `cunning`, `luck`, `mercantile` |
-| **difficulty** | `trivial`, `easy`, `medium`, `hard`, `very_hard`, `heroic` |
+| **skill** | `combat`, `negotiation`, `bushcraft`, `cunning` |
+| **tier** | `untrained`, `trained`, `expert` (used with `meets`) |
+| **approach** | Lowercase identifier — one of the 3 approaches for the skill (e.g. `reason`, `threaten`, `flatter` for negotiation) |
+| **difficulty** | `trivial`, `easy`, `medium`, `hard`, `very_hard`, `epic` — **deprecated**, legacy DC form only |
 | **time period** | `morning`, `afternoon`, `evening`, `night` |
 | **id** | Free-form string (item, tag, encounter, or condition identifier) |
 | **int** | Positive integer |

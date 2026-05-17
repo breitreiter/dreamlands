@@ -25,8 +25,30 @@ public sealed class Choice
 /// <summary>One branch in a conditional: a condition string and its outcome.</summary>
 public sealed class ConditionalBranch
 {
-    /// <summary>Condition expression, e.g. "check cunning medium" or "has rusted_key".</summary>
+    /// <summary>Condition expression, e.g. "check negotiation correct:reason wrong:threaten" or "has rusted_key".</summary>
     public string Condition { get; init; } = "";
+
+    /// <summary>
+    /// For picker-check branches: the correct approach verb (e.g. "reason").
+    /// Null for static-condition branches and legacy DC checks.
+    /// When non-null, <see cref="IsPickerCheck"/> is true.
+    /// </summary>
+    public string? PickerSkill { get; init; }
+
+    /// <summary>
+    /// For picker-check branches: the correct approach verb (e.g. "reason").
+    /// Null for static-condition branches and legacy DC checks.
+    /// </summary>
+    public string? PickerCorrect { get; init; }
+
+    /// <summary>
+    /// For picker-check branches: the wrong approach verb (e.g. "threaten").
+    /// Null for static-condition branches and legacy DC checks.
+    /// </summary>
+    public string? PickerWrong { get; init; }
+
+    /// <summary>True when this branch uses the picker check form (correct:/wrong: attributes).</summary>
+    public bool IsPickerCheck => PickerCorrect != null;
 
     public OutcomePart Outcome { get; init; } = new();
 }

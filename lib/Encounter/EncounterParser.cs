@@ -138,6 +138,29 @@ public static partial class EncounterParser
         return (cleaned, match.Groups[1].Value.Trim());
     }
 
+    /// <summary>
+    /// Parse a picker-check condition string of the form "check &lt;skill&gt; correct:X wrong:Y"
+    /// (or wrong:Y correct:X). Returns null if not a picker check.
+    /// </summary>
+    private static (string skill, string correct, string wrong)? TryParsePickerCheck(string condition)
+    {
+        var tokens = condition.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (tokens.Length < 4 || tokens[0] != "check")
+            return null;
+        var skill = tokens[1];
+        string? correct = null, wrong = null;
+        for (int i = 2; i < tokens.Length; i++)
+        {
+            if (tokens[i].StartsWith("correct:", StringComparison.Ordinal))
+                correct = tokens[i]["correct:".Length..];
+            else if (tokens[i].StartsWith("wrong:", StringComparison.Ordinal))
+                wrong = tokens[i]["wrong:".Length..];
+        }
+        if (correct == null || wrong == null)
+            return null;
+        return (skill, correct, wrong);
+    }
+
     private static IReadOnlyList<Choice> ParseChoices(string[] lines, int start, List<ParseError> errors)
     {
         var choices = new List<Choice>();
@@ -147,6 +170,7 @@ public static partial class EncounterParser
         int currentOptionLine = 0;
         var branches = new List<ConditionalBranch>();
         string? currentCondition = null;
+        int currentConditionLine = 0;
         var branchText = new List<string>();
         var branchMechanics = new List<string>();
         var fallbackText = new List<string>();
@@ -161,9 +185,13 @@ public static partial class EncounterParser
         {
             if (currentCondition != null)
             {
+                var picker = TryParsePickerCheck(currentCondition);
                 branches.Add(new ConditionalBranch
                 {
                     Condition = currentCondition,
+                    PickerSkill = picker?.skill,
+                    PickerCorrect = picker?.correct,
+                    PickerWrong = picker?.wrong,
                     Outcome = new OutcomePart { Text = JoinProse(branchText), Mechanics = branchMechanics.ToList() }
                 });
                 currentCondition = null;
@@ -187,6 +215,32 @@ public static partial class EncounterParser
                 OutcomePart? fallback = null;
                 if (inFallback || fallbackText.Count > 0 || fallbackMechanics.Count > 0)
                     fallback = new OutcomePart { Text = JoinProse(fallbackText), Mechanics = fallbackMechanics.ToList() };
+
+                // Terminal-check enforcement: validate picker check placement.
+                // A picker check is legal only as the terminal (last) branch, and only when @else is present.
+                for (int bi = 0; bi < branches.Count; bi++)
+                {
+                    var branch = branches[bi];
+                    if (!branch.IsPickerCheck) continue;
+
+                    bool isTerminal = bi == branches.Count - 1;
+                    if (!isTerminal)
+                        errors.Add(new ParseError { Line = currentOptionLine, Message = "picker check must be the terminal branch of an @if/@elif chain — no @elif may follow it." });
+                    else if (fallback == null)
+                        errors.Add(new ParseError { Line = currentOptionLine, Message = "picker check chain requires an @else fallback." });
+                }
+
+                // Emit deprecation diagnostic for legacy DC checks.
+                foreach (var branch in branches)
+                {
+                    if (branch.Condition.StartsWith("check ", StringComparison.Ordinal) && !branch.IsPickerCheck)
+                    {
+                        var tokens = branch.Condition.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                        // Legacy form: "check <skill> <difficulty>" where difficulty is a known DC name
+                        if (tokens.Length >= 3 && IsDifficultyName(tokens[2]))
+                            errors.Add(new ParseError { Line = currentOptionLine, Message = $"legacy DC check '{branch.Condition}'; will be removed after Phase 4 content sweep.", IsWarning = true });
+                    }
+                }
 
                 choices.Add(new Choice
                 {
@@ -293,8 +347,12 @@ public static partial class EncounterParser
                     }
 
                     // Close the current branch, start a new one
+                    // Check: if the branch we're closing was a picker check, @elif after it is illegal.
+                    if (currentCondition != null && TryParsePickerCheck(currentCondition) != null)
+                        errors.Add(new ParseError { Line = lineNum, Message = "@elif after a picker check is not allowed — picker check must be the terminal branch." });
                     PushBranch();
                     currentCondition = rest[..^1].Trim();
+                    currentConditionLine = lineNum;
                     // braceDepth stays at 1
                     continue;
                 }
@@ -356,7 +414,11 @@ public static partial class EncounterParser
                     errors.Add(new ParseError { Line = lineNum, Message = "@elif line must end with '{'." });
                     continue;
                 }
+                // Check: if the last pushed branch was a picker check, @elif after it is illegal.
+                if (branches.Count > 0 && branches[^1].IsPickerCheck)
+                    errors.Add(new ParseError { Line = lineNum, Message = "@elif after a picker check is not allowed — picker check must be the terminal branch." });
                 currentCondition = rest[..^1].Trim();
+                currentConditionLine = lineNum;
                 braceDepth++;
                 inConditional = true;
                 continue;
@@ -379,6 +441,7 @@ public static partial class EncounterParser
                 }
 
                 currentCondition = content[..^1].Trim();
+                currentConditionLine = lineNum;
                 braceDepth++;
                 inConditional = true;
                 inFallback = false;
@@ -454,6 +517,12 @@ public static partial class EncounterParser
         if (string.IsNullOrEmpty(optionLink)) optionLink = null;
         if (string.IsNullOrEmpty(optionPreview)) optionPreview = null;
     }
+
+    // Known legacy DC difficulty names — kept inline to avoid a dependency on Dreamlands.Rules.
+    private static readonly HashSet<string> LegacyDifficultyNames =
+        new(StringComparer.OrdinalIgnoreCase) { "trivial", "easy", "medium", "hard", "very_hard", "heroic", "epic" };
+
+    private static bool IsDifficultyName(string token) => LegacyDifficultyNames.Contains(token);
 
     private static string JoinProse(List<string> lines)
     {

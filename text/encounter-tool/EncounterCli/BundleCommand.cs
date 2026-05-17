@@ -111,12 +111,27 @@ static class BundleCommand
         {
             if (c.Conditional != null)
             {
-                var branches = c.Conditional.Branches.Select(b => new
-                {
-                    condition = b.Condition,
-                    text = b.Outcome.Text,
-                    mechanics = b.Outcome.Mechanics
-                }).ToList();
+                var branches = c.Conditional.Branches.Select(b => b.IsPickerCheck
+                    ? (object)new
+                    {
+                        condition = b.Condition,
+                        branchKind = "picker",
+                        pickerSkill = b.PickerSkill,
+                        pickerCorrect = b.PickerCorrect,
+                        pickerWrong = b.PickerWrong,
+                        text = b.Outcome.Text,
+                        mechanics = b.Outcome.Mechanics
+                    }
+                    : new
+                    {
+                        condition = b.Condition,
+                        branchKind = "static",
+                        pickerSkill = (string?)null,
+                        pickerCorrect = (string?)null,
+                        pickerWrong = (string?)null,
+                        text = b.Outcome.Text,
+                        mechanics = b.Outcome.Mechanics
+                    }).ToList();
 
                 object? fallback = c.Conditional.Fallback is { } fb
                     ? new { text = fb.Text, mechanics = fb.Mechanics }

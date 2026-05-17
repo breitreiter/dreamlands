@@ -24,7 +24,7 @@ public class ActionVocabularyTests
     public void Atomic_Check_Valid() => Assert.Null(Ok("check combat hard"));
 
     [Fact]
-    public void Atomic_Meets_Valid() => Assert.Null(Ok("meets combat 3"));
+    public void Atomic_Meets_Valid() => Assert.Null(Ok("meets combat trained"));
 
     [Fact]
     public void Atomic_UnknownVerb_ReturnsError()
@@ -80,7 +80,7 @@ public class ActionVocabularyTests
     [Fact]
     public void Not_Meets_ReturnsError()
     {
-        var err = Ok("!meets combat 3");
+        var err = Ok("!meets combat trained");
         Assert.NotNull(err);
         Assert.Contains("meets", err);
     }
@@ -110,7 +110,7 @@ public class ActionVocabularyTests
     [Fact]
     public void And_MeetsProhibited_ReturnsError()
     {
-        var err = Ok("tag explored && meets combat 3");
+        var err = Ok("tag explored && meets combat trained");
         Assert.NotNull(err);
         Assert.Contains("meets", err);
     }
