@@ -591,6 +591,26 @@ export default function MarketScreen({
                 </div>
               ))
             )}
+
+            {projected.packCapacity > projected.packCount && (
+              <div>
+                <div className="sticky top-0 z-10 py-1 mb-1 text-muted font-bold text-[14px] uppercase tracking-wide bg-page/90 border-b border-edge/40">
+                  Free Slots
+                </div>
+                <div className="space-y-2">
+                  {Array.from({ length: projected.packCapacity - projected.packCount }, (_, i) => (
+                    <div
+                      key={`ghost-${i}`}
+                      className="flex items-center gap-3 p-3 rounded-lg border border-dashed border-edge/40 text-muted/40"
+                      style={{ minHeight: "3.5rem" }}
+                    >
+                      <div className="w-8 h-8 flex-shrink-0" />
+                      <span className="italic">empty</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

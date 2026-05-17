@@ -235,10 +235,31 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
           );
         })}
 
-        {pack.length === 0 && (
-          <div className="p-4 text-muted">Pack is empty.</div>
+        {packCapacity > packCount && (
+          <div>
+            <div className="sticky top-0 z-10 py-1 mb-1 text-muted font-bold text-[14px] uppercase tracking-wide bg-page/90 border-b border-edge/40">
+              Free Slots
+            </div>
+            <div className="space-y-2">
+              {Array.from({ length: packCapacity - packCount }, (_, i) => (
+                <GhostSlot key={`ghost-${i}`} />
+              ))}
+            </div>
+          </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function GhostSlot() {
+  return (
+    <div
+      className="flex items-center gap-3 p-3 rounded-lg border border-dashed border-edge/40 text-muted/40"
+      style={{ minHeight: "4rem" }}
+    >
+      <div className="w-10 h-10 flex-shrink-0" />
+      <span className="italic">empty</span>
     </div>
   );
 }
