@@ -213,20 +213,16 @@ public static class EndOfDay
     }
 
     /// <summary>
-    /// Apply medical_kit cure for pre-existing serious conditions.
-    /// The kit is NOT consumed — it persists in the pack for future nights.
-    /// Cures one condition per night (alphabetic order if multiple serious conditions active).
+    /// Apply pack-carried medicines (Tool items with a Cures set) to pre-existing
+    /// serious conditions. Medicines are reusable — never consumed. Each condition
+    /// is cured by the first matching tool in the pack; if the player carries the
+    /// right kit for several conditions, all of them clear in one night.
     /// </summary>
     static HashSet<string> ResolveMedicines(PlayerState state, HashSet<string> preExisting,
         BalanceData balance, List<EndOfDayEvent> events)
     {
         var treated = new HashSet<string>();
 
-        // Find a medical_kit in pack
-        var kit = state.Pack.FirstOrDefault(i => i.DefId == "medical_kit");
-        if (kit == null) return treated;
-
-        // Find the first pre-existing serious condition (alphabetic for determinism)
         var seriousConditions = state.ActiveConditions
             .Where(id => preExisting.Contains(id)
                 && balance.Conditions.TryGetValue(id, out var def)
@@ -236,12 +232,18 @@ public static class EndOfDay
 
         if (seriousConditions.Count == 0) return treated;
 
-        var conditionId = seriousConditions[0];
-        // Cure without consuming the kit
-        state.ActiveConditions.Remove(conditionId);
-        treated.Add(conditionId);
-        events.Add(new EndOfDayEvent.CureApplied(kit.DefId, conditionId));
-        events.Add(new EndOfDayEvent.ConditionCured(conditionId));
+        foreach (var conditionId in seriousConditions)
+        {
+            var kit = state.Pack.FirstOrDefault(i =>
+                ItemDef.All.TryGetValue(i.DefId, out var def)
+                && def.Cures.Contains(conditionId));
+            if (kit == null) continue;
+
+            state.ActiveConditions.Remove(conditionId);
+            treated.Add(conditionId);
+            events.Add(new EndOfDayEvent.CureApplied(kit.DefId, conditionId));
+            events.Add(new EndOfDayEvent.ConditionCured(conditionId));
+        }
 
         return treated;
     }

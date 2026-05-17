@@ -102,10 +102,9 @@ public static class Market
         int maxStock = balance.Trade.MaxStock[size];
         int perDay = balance.Trade.RestockPerDay[size];
 
-        // Consumable medicines restock; tools and equipment never restock
+        // Medicines (anything with Cures) restock; tools and equipment never restock
         var restockIds = settlement.Stock.Keys
-            .Where(id => balance.Items.TryGetValue(id, out var def)
-                         && def.Type == ItemType.Consumable && def.Cures.Count > 0)
+            .Where(id => balance.Items.TryGetValue(id, out var def) && def.Cures.Count > 0)
             .ToList();
 
         if (restockIds.Count == 0)

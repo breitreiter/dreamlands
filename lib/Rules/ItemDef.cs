@@ -383,24 +383,22 @@ public sealed class ItemDef
         },
         ["siphon_glass"] = new()
         {
-            Id = "siphon_glass", Name = "Siphon Glass", Type = ItemType.Consumable,
-            Description = "Strange crystalline fragments. It's said they draw out and capture unnatural colors.",
+            Id = "siphon_glass", Name = "Siphon Glass", Type = ItemType.Tool,
+            Description = "A bundle of crystalline fragments in a leather sheath. The shards draw out unnatural colors without dimming themselves.",
             Cures = new HashSet<string> { "lattice_sickness" },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
-        // Removed: pale_knot_berry cured exhausted, but exhaustion is now ClearedOnSettlement.
-        // Minor conditions no longer have item cures (haversack_refactor.md).
         ["shustov_tonic"] = new()
         {
-            Id = "shustov_tonic", Name = "Shustov Tonic", Type = ItemType.Consumable,
-            Description = "A smoky distillation of charcoal and salt-marsh herbs. Flushes radiation sickness over several nights.",
+            Id = "shustov_tonic", Name = "Shustov Apparatus", Type = ItemType.Tool,
+            Description = "A blackened still and a flask of mother-tincture. With salt-marsh herbs charcoal-distilled at need, the dose flushes radiation sickness over several nights.",
             Cures = new HashSet<string> { "irradiated" },
             Biome = "plains", ShopTier = 2, Cost = 40,
         },
         ["mudcap_fungus"] = new()
         {
-            Id = "mudcap_fungus", Name = "Mudcap Fungus", Type = ItemType.Consumable,
-            Description = "A squat brown mushroom with a gritty cap. Eaten raw, it draws poison from the blood.",
+            Id = "mudcap_fungus", Name = "Mudcap Spores", Type = ItemType.Tool,
+            Description = "A waxed clay jar of dried mudcap spores. A pinch in hot water draws poison from the blood; the jar lasts a journey.",
             Cures = new HashSet<string> { "poisoned" },
             Biome = "swamp", ShopTier = 2, Cost = 15,
         },

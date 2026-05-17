@@ -268,7 +268,7 @@ public class MarketTests
     public void Restock_ReplenishesMedicine()
     {
         var settlement = MakeSettlement();
-        // shustov_tonic is a Consumable that cures irradiated — restocks normally
+        // shustov_tonic is a reusable Tool that cures irradiated — restocks normally
         settlement.Stock["shustov_tonic"] = 0;
         settlement.Prices["shustov_tonic"] = 40;
         settlement.LastRestockDay = 1;
