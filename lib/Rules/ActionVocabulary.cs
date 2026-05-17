@@ -176,10 +176,8 @@ public sealed class ActionVerb
         new ArgDef("skill", ArgType.Skill),
         new ArgDef("amount", ArgType.Int));
 
-    public static readonly ActionVerb SetSkill = new("set_skill",
-        VerbUsage.Mechanic, "Set a skill to a specific level",
-        new ArgDef("skill", ArgType.Skill),
-        new ArgDef("level", ArgType.SkillLevel));
+    public static readonly ActionVerb AddLevel = new("add_level",
+        VerbUsage.Mechanic, "Grant one pending tableau level-up pick");
 
     // ── Conditions ──────────────────────────────────────────────
 
@@ -229,7 +227,7 @@ public sealed class ActionVerb
         Equip, Unequip, Discard, UpgradePack,
         GiveGold, RemGold,
         DamageSpirits, HealSpirits,
-        IncreaseSkill, DecreaseSkill, SetSkill,
+        IncreaseSkill, DecreaseSkill, AddLevel,
         AddCondition, RemoveCondition,
         SkipTime, AdvanceTime,
         Repool,

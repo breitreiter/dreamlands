@@ -1,5 +1,6 @@
 using Dreamlands.Game;
 using Dreamlands.Rules;
+using ArcRewardSlot = Dreamlands.Rules.ArcRewardSlot;
 
 namespace Dreamlands.Orchestration;
 
@@ -22,6 +23,16 @@ public abstract record EncounterStep
         string WrongId,
         string? Preamble,
         IReadOnlyList<Approach> Approaches
+    ) : EncounterStep;
+
+    /// <summary>
+    /// Emitted after mechanics resolve and PendingLevels > 0.
+    /// The client renders the tableau reward picker; the player calls PickReward().
+    /// </summary>
+    public record AwaitTableauPick(
+        IReadOnlyList<ArcRewardSlot> AvailableSlots,
+        int PendingLevels,
+        ShowOutcome? Outcome
     ) : EncounterStep;
 }
 
@@ -137,6 +148,53 @@ public static class EncounterRunner
         session.Player.CurrentEncounterId = null;
     }
 
+    /// <summary>
+    /// Resume a suspended tableau pick. Validates slotId, applies the reward, and returns the
+    /// next step. If PendingLevels is still > 0 after the pick, re-emits AwaitTableauPick.
+    /// Once drained, advances to the post-encounter state.
+    /// </summary>
+    public static EncounterStep PickReward(GameSession session, string slotId, EncounterStep.ShowOutcome? pendingOutcome)
+    {
+        var slot = Array.Find(ArcRewards.All, s => s.Id == slotId);
+        if (slot == null)
+            throw new InvalidOperationException($"Unknown reward slot '{slotId}'.");
+
+        var taken = session.Player.ArcRewardsTaken.GetValueOrDefault(slotId);
+        if (taken >= slot.Cap)
+            throw new InvalidOperationException($"Reward slot '{slotId}' is already at cap.");
+
+        var result = Mechanics.ApplyArcReward(session.Player, slotId);
+        if (result == null)
+            throw new InvalidOperationException($"ApplyArcReward returned null for '{slotId}'.");
+
+        // If more picks remain, keep the tableau open.
+        if (session.Player.PendingLevels > 0)
+        {
+            var stillAvailable = GetAvailableSlots(session.Player);
+            return new EncounterStep.AwaitTableauPick(stillAvailable, session.Player.PendingLevels, pendingOutcome);
+        }
+
+        // All picks used — clear tableau persistence and hand back the original outcome.
+        session.Player.PendingTableauReturn = null;
+
+        // If the encounter session is still open, end it.
+        if (session.CurrentEncounter != null)
+        {
+            session.Mode = SessionMode.Exploring;
+            session.CurrentEncounter = null;
+            session.Player.CurrentEncounterId = null;
+        }
+
+        return pendingOutcome is not null ? (EncounterStep)pendingOutcome : new EncounterStep.Finished(FinishReason.Completed);
+    }
+
+    /// <summary>Slots not yet at cap — what the player can still pick.</summary>
+    public static IReadOnlyList<ArcRewardSlot> GetAvailableSlots(PlayerState player) =>
+        ArcRewards.All
+            .Where(s => player.ArcRewardsTaken.GetValueOrDefault(s.Id) < s.Cap)
+            .ToList()
+            .AsReadOnly();
+
     // ── Private helpers ──────────────────────────────────────────────────────
 
     static EncounterStep EnterPicker(GameSession session, PickerPending pending, int choiceIndex, Encounter.Choice choice)
@@ -188,6 +246,10 @@ public static class EncounterRunner
         var results = Mechanics.Apply(resolved.Mechanics, session.Player, session.Balance, session.Rng);
         var outcome = new EncounterStep.ShowOutcome(resolved, results);
 
+        // Track whether dungeon-finished/fled fired so we can suspend the tableau
+        // *before* we return the finished step, keeping the dungeon exit clean.
+        EncounterStep.Finished? pendingFinished = null;
+
         foreach (var r in results)
         {
             if (r is MechanicResult.Repooled)
@@ -199,18 +261,20 @@ public static class EncounterRunner
                 session.Mode = SessionMode.Exploring;
                 session.CurrentEncounter = null;
                 session.Player.CurrentEncounterId = null;
-                return new EncounterStep.Finished(FinishReason.DungeonFinished, Outcome: outcome);
+                pendingFinished = new EncounterStep.Finished(FinishReason.DungeonFinished, Outcome: outcome);
+                break;
             }
             if (r is MechanicResult.DungeonFled)
             {
                 session.Mode = SessionMode.Exploring;
                 session.CurrentEncounter = null;
                 session.Player.CurrentEncounterId = null;
-                return new EncounterStep.Finished(FinishReason.DungeonFled, Outcome: outcome);
+                pendingFinished = new EncounterStep.Finished(FinishReason.DungeonFled, Outcome: outcome);
+                break;
             }
         }
 
-        if (session.Player.Health <= 0)
+        if (pendingFinished == null && session.Player.Health <= 0)
         {
             session.Mode = SessionMode.Exploring;
             session.CurrentEncounter = null;
@@ -218,6 +282,16 @@ public static class EncounterRunner
             return new EncounterStep.Finished(FinishReason.PlayerDied, Outcome: outcome);
         }
 
-        return outcome;
+        // If a +add_level fired this turn, suspend on the tableau before continuing.
+        if (session.Player.PendingLevels > 0)
+        {
+            session.Player.PendingTableauReturn = session.Player.CurrentEncounterId;
+            var available = GetAvailableSlots(session.Player);
+            // Wrap the pending finished step or outcome as the payload to hand back after picks.
+            var resumeOutcome = pendingFinished?.Outcome ?? outcome;
+            return new EncounterStep.AwaitTableauPick(available, session.Player.PendingLevels, resumeOutcome);
+        }
+
+        return pendingFinished ?? (EncounterStep)outcome;
     }
 }

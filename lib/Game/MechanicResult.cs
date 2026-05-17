@@ -26,4 +26,8 @@ public abstract record MechanicResult
     public record Repooled : MechanicResult;
     public record DungeonFinished : MechanicResult;
     public record DungeonFled : MechanicResult;
+    /// <summary>Emitted by +add_level: a tableau pick is now pending.</summary>
+    public record LevelAdded(int PendingLevels) : MechanicResult;
+    /// <summary>Emitted when the player picks a tableau reward slot.</summary>
+    public record ArcRewardTaken(string SlotId, string SlotLabel, int NewCount) : MechanicResult;
 }

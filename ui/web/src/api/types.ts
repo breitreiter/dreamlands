@@ -220,8 +220,22 @@ export interface ApproachPromptInfo {
   approaches: Array<{ id: string; label: string; iconHint: string }>;
 }
 
+export interface TableauSlotInfo {
+  id: string;
+  label: string;
+  kind: "skill" | "health" | "inventory";
+  currentCount: number;
+  cap: number;
+  pickEffect: string;
+}
+
+export interface TableauPromptInfo {
+  pendingLevels: number;
+  slots: TableauSlotInfo[];
+}
+
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical" | "combat" | "combat_resolved" | "approach_prompt";
+  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical" | "combat" | "combat_resolved" | "approach_prompt" | "tableau_prompt";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
@@ -239,6 +253,7 @@ export interface GameResponse {
   combat?: CombatInfo;
   travel?: TravelInfo;
   approachPrompt?: ApproachPromptInfo;
+  tableauPrompt?: TableauPromptInfo;
 }
 
 export interface CombatEncounterSummary {

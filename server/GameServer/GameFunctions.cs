@@ -134,6 +134,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return new OkObjectResult(BuildCombatResponse(session, resumeTurn));
         }
 
+        // Closed-tab resume for tableau: PendingLevels may be set without an active encounter
+        // (e.g., if the encounter session was already closed when +add_level fired).
+        if (player.PendingLevels > 0)
+        {
+            var available = EncounterRunner.GetAvailableSlots(player);
+            var resumeTableau = new EncounterStep.AwaitTableauPick(available, player.PendingLevels, null);
+            return new OkObjectResult(BuildTableauPromptResponse(session, resumeTableau));
+        }
+
         if (session.CurrentEncounter is { } enc)
         {
             // If there's an active picker check, resume the approach prompt screen
@@ -629,6 +638,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         await store.Save(player);
                         return new OkObjectResult(BuildApproachPromptResponse(session, awaitApproach));
 
+                    case EncounterStep.AwaitTableauPick awaitTableau:
+                        await store.Save(player);
+                        return new OkObjectResult(BuildTableauPromptResponse(session, awaitTableau));
+
                     case EncounterStep.Finished finished:
                         switch (finished.Reason)
                         {
@@ -735,6 +748,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         response = BuildOutcomeResponse(session, pickOutcome);
                         break;
 
+                    case EncounterStep.AwaitTableauPick pickTableau:
+                        await store.Save(player);
+                        return new OkObjectResult(BuildTableauPromptResponse(session, pickTableau));
+
                     case EncounterStep.Finished pickFinished:
                         switch (pickFinished.Reason)
                         {
@@ -805,6 +822,35 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         break;
                 }
                 break;
+            }
+
+            case "pick_reward":
+            {
+                var slotId = actionReq.RewardSlotId;
+                if (string.IsNullOrEmpty(slotId))
+                    return new BadRequestObjectResult(new { error = "rewardSlotId required" });
+
+                if (player.PendingLevels <= 0)
+                    return new BadRequestObjectResult(new { error = "No pending level picks" });
+
+                var slot = System.Array.Find(Dreamlands.Rules.ArcRewards.All, s => s.Id == slotId);
+                if (slot == null)
+                    return new BadRequestObjectResult(new { error = $"Unknown reward slot '{slotId}'" });
+
+                var takenCount = player.ArcRewardsTaken.GetValueOrDefault(slotId);
+                if (takenCount >= slot.Cap)
+                    return new BadRequestObjectResult(new { error = $"Slot '{slotId}' is at cap" });
+
+                // Reconstruct any pending outcome from CurrentEncounterId for closed-tab resilience
+                var pickStep = EncounterRunner.PickReward(session, slotId, null);
+
+                await store.Save(player);
+
+                if (pickStep is EncounterStep.AwaitTableauPick stillPending)
+                    return new OkObjectResult(BuildTableauPromptResponse(session, stillPending));
+
+                // All picks consumed — return exploring
+                return new OkObjectResult(BuildExploringResponse(session));
             }
 
             case "tactical_approach":
@@ -1939,6 +1985,29 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 Id = a.Id,
                 Label = a.DisplayLabel,
                 IconHint = a.IconHint,
+            }).ToList(),
+        },
+        Inventory = BuildInventory(session.Player),
+        Mechanics = BuildMechanics(session.Player),
+    };
+
+    GameResponse BuildTableauPromptResponse(GameSession session, EncounterStep.AwaitTableauPick awaitTableau) => new()
+    {
+        Mode = "tableau_prompt",
+        Status = BuildStatus(session.Player),
+        Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
+        Outcome = awaitTableau.Outcome != null ? BuildOutcomeInfo(awaitTableau.Outcome) : null,
+        TableauPrompt = new TableauPromptInfo
+        {
+            PendingLevels = awaitTableau.PendingLevels,
+            Slots = awaitTableau.AvailableSlots.Select(s => new TableauSlotInfo
+            {
+                Id = s.Id,
+                Label = s.Label,
+                Kind = s.Kind.ToString().ToLowerInvariant(),
+                CurrentCount = session.Player.ArcRewardsTaken.GetValueOrDefault(s.Id),
+                Cap = s.Cap,
+                PickEffect = Dreamlands.Rules.ArcRewards.PickEffect(s),
             }).ToList(),
         },
         Inventory = BuildInventory(session.Player),

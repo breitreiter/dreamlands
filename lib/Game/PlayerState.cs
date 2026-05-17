@@ -35,6 +35,15 @@ public class PlayerState
     /// Persists so a closed tab can resume mid-picker.</summary>
     public ActivePickerCheck? ActivePickerCheck { get; set; }
 
+    /// <summary>Unspent tableau level-up picks. Incremented by +add_level; decremented by each reward pick.</summary>
+    public int PendingLevels { get; set; }
+
+    /// <summary>Encounter id we were resolving when the tableau opened. Used to re-emit AwaitTableauPick on closed-tab resume.</summary>
+    public string? PendingTableauReturn { get; set; }
+
+    /// <summary>Tracks how many times each reward slot has been picked. Keys are slot ids; each capped at 2.</summary>
+    public Dictionary<string, int> ArcRewardsTaken { get; set; } = new();
+
     // Vitals
     public int Health { get; set; }
     public int MaxHealth { get; set; }

@@ -79,6 +79,8 @@ export async function action(
     offerId?: string;
     encounterId?: string;
     innService?: "bed" | "bath" | "full";
+    approach?: string;
+    rewardSlotId?: string;
     path?: { x: number; y: number }[];
   }
 ): Promise<GameResponse> {

@@ -42,6 +42,7 @@ interface GameContextValue extends GameState {
     encounterId?: string;
     innService?: "bed" | "bath" | "full";
     approach?: string;
+    rewardSlotId?: string;
     tacticalAction?: string;
     openingIndex?: number;
     path?: { x: number; y: number }[];
@@ -83,8 +84,15 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
     cleared.outcome = undefined;
     cleared.tactical = undefined;
   }
+  if (result.mode === "tableau_prompt") {
+    cleared.encounter = undefined;
+    cleared.tactical = undefined;
+  }
   if (result.mode !== "approach_prompt") {
     cleared.approachPrompt = undefined;
+  }
+  if (result.mode !== "tableau_prompt") {
+    cleared.tableauPrompt = undefined;
   }
   // One-shot fields — clear unless the response explicitly includes them
   if (!result.deliveries) cleared.deliveries = undefined;
@@ -180,6 +188,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       offerIndex?: number;
       offerId?: string;
       approach?: string;
+      rewardSlotId?: string;
       path?: { x: number; y: number }[];
     }): Promise<GameResponse | null> => {
       if (!state.gameId) return null;

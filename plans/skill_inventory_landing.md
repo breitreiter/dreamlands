@@ -1,7 +1,7 @@
 ---
 kind: plan
 title: Landing plan — skill tiers + inventory consolidation + .enc picker + arc leveling
-state: active
+state: shipped
 created: 2026-05-16
 updated: 2026-05-17
 related:

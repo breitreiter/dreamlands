@@ -51,6 +51,9 @@ public class GameResponse
     // Picker approach prompt (emitted when runner suspends on AwaitApproach)
     public ApproachPromptInfo? ApproachPrompt { get; init; }
 
+    // Tableau level-up prompt (emitted when runner suspends on AwaitTableauPick)
+    public TableauPromptInfo? TableauPrompt { get; init; }
+
     // Computed mechanics summary for inventory screen
     public MechanicsInfo? Mechanics { get; init; }
 
@@ -305,6 +308,26 @@ public class ApproachInfo
     public string IconHint { get; init; } = "";
 }
 
+// Tableau level-up prompt — emitted when the runner suspends on AwaitTableauPick.
+// The client renders the reward picker; correct/incorrect info is not applicable here.
+
+public class TableauPromptInfo
+{
+    public int PendingLevels { get; init; }
+    public List<TableauSlotInfo> Slots { get; init; } = [];
+}
+
+public class TableauSlotInfo
+{
+    public string Id { get; init; } = "";
+    public string Label { get; init; } = "";
+    public string Kind { get; init; } = "";
+    public int CurrentCount { get; init; }
+    public int Cap { get; init; }
+    /// <summary>Short player-facing effect string, e.g. "+1 tier", "+5 max health".</summary>
+    public string PickEffect { get; init; } = "";
+}
+
 // Request DTOs
 
 public class CampInfo
@@ -429,6 +452,7 @@ public class ActionRequest
     public int? OfferIndex { get; set; }
     public string? OfferId { get; set; }
     public string? Approach { get; set; }
+    public string? RewardSlotId { get; set; }
     public string? TacticalAction { get; set; }
     public int? OpeningIndex { get; set; }
     public List<TravelPoint>? Path { get; set; }

@@ -1,4 +1,5 @@
 using Dreamlands.Rules;
+using ArcRewardSlot = Dreamlands.Rules.ArcRewardSlot;
 
 namespace Dreamlands.Game;
 
@@ -37,8 +38,8 @@ public static class Mechanics
             "rem_gold" => ApplyRemGold(args, state, balance),
             "increase_skill" or "inc_skill" => ApplyIncreaseSkill(args, state, balance),
             "decrease_skill" or "dec_skill" => ApplyDecreaseSkill(args, state, balance),
-            "set_skill" => ApplySetSkill(args, state, balance),
             "set_skill_tier" => ApplySetSkillTier(args, state),
+            "add_level" => ApplyAddLevel(state),
             "add_item" => ApplyAddItem(args, state, balance, rng),
             "add_random_items" => ApplyAddRandomItems(args, state, balance, rng),
             "lose_random_item" => ApplyLoseRandomItem(state, rng),
@@ -122,23 +123,50 @@ public static class Mechanics
         return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
     }
 
-    static MechanicResult ApplySetSkill(List<string> args, PlayerState state, BalanceData balance)
+    static MechanicResult ApplyAddLevel(PlayerState state)
     {
-        if (args.Count < 2) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+        state.PendingLevels++;
+        return new MechanicResult.LevelAdded(state.PendingLevels);
+    }
 
-        var skill = Skills.FromScriptName(args[0]);
-        if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-        if (!int.TryParse(args[1], out var level)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
+    /// <summary>
+    /// Apply a tableau reward slot pick. Validates cap, applies effect, decrements PendingLevels.
+    /// Returns null if the slot id is invalid or already at cap.
+    /// </summary>
+    public static MechanicResult? ApplyArcReward(PlayerState state, string slotId)
+    {
+        var slot = Array.Find(ArcRewards.All, s => s.Id == slotId);
+        if (slot == null) return null;
 
-        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
-        // Map int to tier: 0 → Untrained, 1-3 → Trained, 4+ → Expert
-        var newLevel = level == 0 ? SkillTier.Untrained
-                     : level >= 4 ? SkillTier.Expert
-                     : SkillTier.Trained;
-        var delta = (int)newLevel - current;
-        state.Skills[skill.Value] = newLevel;
+        var taken = state.ArcRewardsTaken.GetValueOrDefault(slotId);
+        if (taken >= slot.Cap) return null;
 
-        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
+        switch (slot.Kind)
+        {
+            case ArcRewardKind.Skill:
+                if (slot.Skill.HasValue)
+                {
+                    var current = (int)state.Skills.GetValueOrDefault(slot.Skill.Value);
+                    var newTier = (SkillTier)Math.Min(current + 1, (int)SkillTier.Expert);
+                    state.Skills[slot.Skill.Value] = newTier;
+                }
+                break;
+
+            case ArcRewardKind.Health:
+                state.MaxHealth += ArcRewards.HealthPerPick;
+                state.Health += ArcRewards.HealthPerPick;
+                break;
+
+            case ArcRewardKind.Inventory:
+                state.PackCapacity += ArcRewards.InventoryPerPick;
+                break;
+        }
+
+        state.ArcRewardsTaken[slotId] = taken + 1;
+        if (state.PendingLevels > 0)
+            state.PendingLevels--;
+
+        return new MechanicResult.ArcRewardTaken(slotId, slot.Label, taken + 1);
     }
 
     /// <summary>
