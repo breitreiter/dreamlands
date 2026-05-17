@@ -78,6 +78,6 @@ choices:
   The cold has become almost comfortable now. One of them presses something into your palm - you feel its weight, though her fingers pass through yours like mist.
 
   "Remember us," they say together, then disperse, like mist in daylight.
-  +give_gold 15
+  +add_level
   +finish_dungeon
 

@@ -12,39 +12,30 @@ choices:
 
 * Murder = I took it by force
   The fat bastard bled more than you'd expected. You still feel the spray of it when you close your eyes, still see his hand twitching in that alley muck. The Guild will gut you for this theft if they catch you, but the borderlands are a lawless place. A land of blood, gold, and shadow, and you were born for all three.
-  +set_skill combat 4
-  +set_skill bushcraft 2
-  +set_skill cunning 2
+  +add_item hunting_knife
   +set_name "The Outlaw"
   +open Gameplay_Intro
 
 * Birthright = My mother once wore this, but it is now mine
   This was your mother's ring, and she wielded it like a hammer. Grim, dangerous men bent knee before her. You remember the smell of sea-salt in her hair, her litle rituals like turning the signet once before pressing wax to a contract. She said the ring would secure the family's future, and you mean to see that through.
-  +set_skill mercantile 4
-  +set_skill negotiation 4
+  +add_item silks
   +set_name "The Scion"
   +open Gameplay_Intro
 
 * Gambling = I won it in a game
   You still remember the trader's face when you called his bluff; the way his grin fell as you laid down your cards. The whole den had gone silent, eyes upon you and your impossible hand. The man had thought wagering a Guild signet would cow a room of dockside rabble, but you've always had the devil's luck. Now his ruin buys you a new life, and fortune willing, even greater rewards.
-  +set_skill negotiation 2
-  +set_skill cunning 2
-  +set_skill luck 4
+  +give_gold 50
   +set_name "The Gambler"
   +open Gameplay_Intro
 
 * A Gift = It was given to me
   The girl was nearly starved and half-mad when you found her, crouched beneath the roots of a storm-felled cedar. Her father's finest hunters gave up the search after the first week, but not you. You followed the broken language of the forest, the snapped twigs, the hush of disturbed birds, the faint drag-marks, and you found her. Later, in a hall heavy with song and gratitude, her father presented you with his ring. At home, he is the generous lord and you are a nameless hunter. But here, in this new land, you mean to write your own story.
-  +set_skill cunning 2
-  +set_skill bushcraft 4
-  +set_skill combat 2
+  +add_item medical_kit
   +set_name "The Huntsman"
   +open Gameplay_Intro
 
 * A Commission = The Guild sent me
   Twelve years in the Guild's cartography corps, charting coastlines and trade routes from the Pale Reach to the Saffron Delta. You've mapped countless leagues, fought off things in uncharted places, and decided that some places should appear on no map. When the Guild needed someone to survey the borderlands, you were the obvious choice. You asked for standard gear, a stipend, papers to requisition gear. They gave you a ring instead. 
-  +set_skill combat 4
-  +set_skill bushcraft 2
-  +set_skill cunning 2
+  +add_item cartographers_kit
   +set_name "The Cartographer"
   +open Gameplay_Intro

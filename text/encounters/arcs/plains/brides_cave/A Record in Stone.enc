@@ -26,7 +26,7 @@ choices:
   The passage narrows ahead. You slip through, and the inscribed wall falls behind you. Your breath comes easier. You leave the cave, and find the stack of boards you removed when you came in. You press the boards back into place behind you, lest another traveller make the same mistake as you.
   +flee_dungeon
 
-* Venture deeper into the cave = Pick a passage and see where it leads
+* Venture deeper into the cave = Try to discover where this leads
   @if check bushcraft correct:plan wrong:push {
     You choose a passage and press inward, ducking beneath a low overhang where moisture drips in slow rhythm. The stone walls close around you, ridged and uneven, forcing you to turn sideways in places where the path narrows to a fissure. Your boots scrape over grit and loose pebbles.
 
