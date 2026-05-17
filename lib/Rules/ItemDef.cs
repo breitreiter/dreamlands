@@ -323,30 +323,6 @@ public sealed class ItemDef
             PassiveImmunities = new HashSet<string> { "thirsty" },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
-        ["letters_of_introduction"] = new()
-        {
-            Id = "letters_of_introduction", Name = "Letters of Introduction", Type = ItemType.Tool,
-            Description = "Guild correspondence bearing official seals. Carried as credential; produces no mechanical bonus under the approach system.",
-            Biome = "scrub", ShopTier = 1, Cost = 40,
-        },
-        ["peoples_borderlands"] = new()
-        {
-            Id = "peoples_borderlands", Name = "A Guide to the Borderlands", Type = ItemType.Tool,
-            Description = "A dense compendium of Borderlands history and precedent. Carried as reference; produces no mechanical bonus under the approach system.",
-            Biome = "mountains", ShopTier = 2, Cost = 80,
-        },
-        ["cartographers_diary"] = new()
-        {
-            Id = "cartographers_diary", Name = "Cartographer's Diary", Type = ItemType.Tool,
-            Description = "A field notebook dense with routes, landmarks, and marginal notes. Carried as reference; produces no mechanical bonus under the approach system.",
-            Biome = "mountain", ShopTier = 1, Cost = 40,
-        },
-        ["ornate_spyglass"] = new()
-        {
-            Id = "ornate_spyglass", Name = "Ornate Spyglass", Type = ItemType.Tool,
-            Description = "A brass-fitted glass with exceptional optics. Carried for scouting; produces no mechanical bonus under the approach system.",
-            Biome = "scrub", ShopTier = 2, Cost = 80,
-        },
         ["cartographers_kit"] = new()
         {
             Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,

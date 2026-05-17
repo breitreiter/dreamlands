@@ -150,8 +150,6 @@ public static class FlavorText
         "heavy_work_boots" => "Simple but comfortable boots.",
         // Tools
         "waterskin" => "A large waterskin, well-stitched and treated against leaks.",
-        "letters_of_introduction" => "Sealed letters vouching for the bearer's good character.",
-        "peoples_borderlands" => "A remarkably complete guide to the cultures of the frontier.",
         "traders_ledger" => "A ledger of prices, weights, and measures across the borderlands.",
         "assayers_kit" => "Precision scales, acids, and touchstones for testing ore and coin.",
         "cartographers_kit" => "A guild cartographer's kit in excellent condition.",

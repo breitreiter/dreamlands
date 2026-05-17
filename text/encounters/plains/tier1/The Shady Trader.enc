@@ -10,23 +10,19 @@ This encounter does not appear in production builds.
 
 choices:
 
-* Outdoorsman loadout = Knife, lamellar, sleeping kit, waterskin, guidebook, spyglass
+* Outdoorsman loadout = Knife, lamellar, wool bedroll, waterskin
   +give_gold 500
   +add_item hunting_knife
   +add_item lamellar
   +add_item sleeping_kit
   +add_item waterskin
-  +add_item peoples_borderlands
-  +add_item ornate_spyglass
 
-* Combat loadout = Scimitar, brigandine, sleeping kit, waterskin, guidebook, spyglass
+* Combat loadout = Scimitar, brigandine, wool bedroll, waterskin
   +give_gold 500
   +add_item scimitar
   +add_item brigandine
   +add_item sleeping_kit
   +add_item waterskin
-  +add_item peoples_borderlands
-  +add_item ornate_spyglass
 
 * Max loadout (high-difficulty testing) = Best-in-slot weapon/armor + scarecrow boots + full pack upgrade + all field items
   +give_gold 500
@@ -35,7 +31,5 @@ choices:
   +add_item mountain_regiment_armor
   +add_item scarecrow_boots
   +add_item waterskin
-  +add_item peoples_borderlands
-  +add_item ornate_spyglass
 
 * Skip = Take nothing
