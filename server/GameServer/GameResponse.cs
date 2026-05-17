@@ -27,9 +27,6 @@ public class GameResponse
     // Market order results
     public MarketOrderResultInfo? MarketResult { get; init; }
 
-    // Dungeon hub
-    public DungeonHubInfo? DungeonHub { get; init; }
-
     // Camp
     public CampInfo? Camp { get; init; }
 
@@ -322,8 +319,9 @@ public class TableauSlotInfo
     public string Kind { get; init; } = "";
     public int CurrentCount { get; init; }
     public int Cap { get; init; }
-    /// <summary>Short player-facing effect string, e.g. "+1 tier", "+5 max health".</summary>
-    public string PickEffect { get; init; } = "";
+    public bool IsPickable { get; init; }
+    public string Tier1Description { get; init; } = "";
+    public string Tier2Description { get; init; } = "";
 }
 
 // Request DTOs
@@ -361,14 +359,6 @@ public class CampEventInfo
 {
     public string Type { get; init; } = "";
     public string Description { get; init; } = "";
-}
-
-public class DungeonHubInfo
-{
-    public string DungeonId { get; init; } = "";
-    public string Name { get; init; } = "";
-    public string? Vignette { get; init; }
-    public List<EncounterSummary> Encounters { get; init; } = [];
 }
 
 public class EncounterSummary

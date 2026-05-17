@@ -2,7 +2,6 @@ import { GameProvider, useGame } from "./GameContext";
 import Splash from "./screens/Splash";
 import Explore from "./screens/Explore";
 import Encounter from "./screens/Encounter";
-import DungeonHub from "./screens/DungeonHub";
 import Rescue from "./screens/Rescue";
 import Camp from "./screens/Camp";
 import Combat from "./screens/Combat";
@@ -23,9 +22,8 @@ function GameRouter() {
           </button>
         </div>
       )}
-      {response.mode === "exploring" && response.dungeonHub && <DungeonHub hub={response.dungeonHub} />}
       {/* Keep Explore mounted during camp/rescue so Leaflet map stays alive */}
-      {["exploring", "camp", "camp_resolved", "rescued"].includes(response.mode) && !response.dungeonHub && (
+      {["exploring", "camp", "camp_resolved", "rescued"].includes(response.mode) && (
         <Explore state={response} />
       )}
       {(response.mode === "encounter" || response.mode === "outcome" || response.mode === "approach_prompt" || response.mode === "tableau_prompt") && <Encounter state={response} />}

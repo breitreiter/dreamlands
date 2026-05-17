@@ -590,7 +590,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),
                     Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
-                    DungeonHub = BuildDungeonHubInfo(session, session.CurrentNode),
                     Travel = new TravelInfo
                     {
                         Path = proposedPath,
@@ -731,7 +730,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         switch (pickFinished.Reason)
                         {
                             case FinishReason.NavigatedTo:
-                                var pickNav = data.Bundle.GetById(pickFinished.NavigateToId!);
+                                var pickNav = EncounterSelection.ResolveNavigation(session, pickFinished.NavigateToId!, session.CurrentNode);
                                 if (pickNav != null)
                                 {
                                     var step = EncounterRunner.Begin(session, pickNav);
@@ -885,17 +884,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 var step = EncounterRunner.Begin(session, encTarget);
                 await store.Save(player);
                 response = BuildEncounterResponse(session, step.Encounter, step.GatedChoices);
-                break;
-            }
-
-            case "leave_dungeon":
-            {
-                if (player.CurrentDungeonId == null)
-                    return new BadRequestObjectResult(new { error = "Not in a dungeon" });
-
-                player.CurrentDungeonId = null;
-                await store.Save(player);
-                response = BuildExploringResponse(session);
                 break;
             }
 
@@ -1562,24 +1550,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         };
     }
 
-    DungeonHubInfo? BuildDungeonHubInfo(GameSession session, Node node)
-    {
-        if (session.Player.CurrentDungeonId == null) return null;
-
-        var available = EncounterSelection.GetAvailableAtPoi(session, node);
-        return new DungeonHubInfo
-        {
-            DungeonId = session.Player.CurrentDungeonId,
-            Name = node.Poi?.Name ?? session.Player.CurrentDungeonId,
-            Vignette = $"dungeons/{session.Player.CurrentDungeonId}",
-            Encounters = available.Select(e => new EncounterSummary
-            {
-                Id = e.Id,
-                Title = e.Title,
-            }).ToList(),
-        };
-    }
-
     List<ExitInfo> BuildExits(GameSession session) =>
         Movement.GetExits(session).Select(e => new ExitInfo
         {
@@ -1800,7 +1770,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Inventory = BuildInventory(session.Player),
         Mechanics = BuildMechanics(session.Player),
         Deliveries = deliveries,
-        DungeonHub = BuildDungeonHubInfo(session, session.CurrentNode),
     };
 
     GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<GatedChoice> gated) => new()
@@ -1870,14 +1839,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         TableauPrompt = new TableauPromptInfo
         {
             PendingLevels = awaitTableau.PendingLevels,
-            Slots = awaitTableau.AvailableSlots.Select(s => new TableauSlotInfo
+            Slots = Dreamlands.Rules.ArcRewards.All.Select(s => new TableauSlotInfo
             {
                 Id = s.Id,
                 Label = s.Label,
                 Kind = s.Kind.ToString().ToLowerInvariant(),
                 CurrentCount = session.Player.ArcRewardsTaken.GetValueOrDefault(s.Id),
                 Cap = s.Cap,
-                PickEffect = Dreamlands.Rules.ArcRewards.PickEffect(s),
+                IsPickable = awaitTableau.AvailableSlots.Any(a => a.Id == s.Id),
+                Tier1Description = s.Tier1Description,
+                Tier2Description = s.Tier2Description,
             }).ToList(),
         },
         Inventory = BuildInventory(session.Player),

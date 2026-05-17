@@ -2,7 +2,14 @@ namespace Dreamlands.Rules;
 
 public enum ArcRewardKind { Skill, Health, Inventory }
 
-public record ArcRewardSlot(string Id, string Label, ArcRewardKind Kind, int Cap, Skill? Skill);
+public record ArcRewardSlot(
+    string Id,
+    string Label,
+    ArcRewardKind Kind,
+    int Cap,
+    Skill? Skill,
+    string Tier1Description,
+    string Tier2Description);
 
 /// <summary>
 /// Static definition of the arc-completion tableau: what can be picked, caps, and magnitudes.
@@ -11,12 +18,24 @@ public static class ArcRewards
 {
     public static readonly ArcRewardSlot[] All =
     [
-        new("combat",      "Combat",      ArcRewardKind.Skill,     2, Rules.Skill.Combat),
-        new("negotiation", "Negotiation", ArcRewardKind.Skill,     2, Rules.Skill.Negotiation),
-        new("cunning",     "Cunning",     ArcRewardKind.Skill,     2, Rules.Skill.Cunning),
-        new("bushcraft",   "Bushcraft",   ArcRewardKind.Skill,     2, Rules.Skill.Bushcraft),
-        new("health",      "Max Health",  ArcRewardKind.Health,    2, null),
-        new("inventory",   "Pack Slots",  ArcRewardKind.Inventory, 2, null),
+        new("combat",      "Combat",       ArcRewardKind.Skill,     2, Rules.Skill.Combat,
+            "You can now equip axes and medium armor",
+            "You can now equip swords and heavy armor"),
+        new("negotiation", "Negotiation",  ArcRewardKind.Skill,     2, Rules.Skill.Negotiation,
+            "Contracts pay 20% more on delivery",
+            "Contracts pay 40% more on delivery"),
+        new("cunning",     "Cunning",      ArcRewardKind.Skill,     2, Rules.Skill.Cunning,
+            "30% chance to resist serious conditions (injured, etc)",
+            "60% chance to resist serious conditions (injured, etc)"),
+        new("bushcraft",   "Bushcraft",    ArcRewardKind.Skill,     2, Rules.Skill.Bushcraft,
+            "30% chance to resist travel conditions (exhausted, etc)",
+            "60% chance to resist travel conditions (exhausted, etc)"),
+        new("health",      "Constitution", ArcRewardKind.Health,    2, null,
+            "Gain +1 max health",
+            "Gain +1 max health"),
+        new("inventory",   "Packing",      ArcRewardKind.Inventory, 2, null,
+            "Gain +1 pack slot",
+            "Gain +1 pack slot"),
     ];
 
     /// <summary>Max health gain per pick. Two picks = +2 total.</summary>
@@ -24,13 +43,4 @@ public static class ArcRewards
 
     /// <summary>Pack capacity gain per pick. Two picks = +2 slots over starting 8.</summary>
     public const int InventoryPerPick = 1;
-
-    /// <summary>Display string for the pick effect shown in the tableau UI.</summary>
-    public static string PickEffect(ArcRewardSlot slot) => slot.Kind switch
-    {
-        ArcRewardKind.Skill     => "+1 tier",
-        ArcRewardKind.Health    => $"+{HealthPerPick} max health",
-        ArcRewardKind.Inventory => $"+{InventoryPerPick} pack slot",
-        _                       => "",
-    };
 }

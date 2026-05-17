@@ -195,13 +195,6 @@ export interface DeliveryInfo {
   flavor: string | null;
 }
 
-export interface DungeonHubInfo {
-  dungeonId: string;
-  name: string;
-  vignette?: string;
-  encounters: EncounterSummaryInfo[];
-}
-
 export interface EncounterSummaryInfo {
   id: string;
   title: string;
@@ -228,7 +221,9 @@ export interface TableauSlotInfo {
   kind: "skill" | "health" | "inventory";
   currentCount: number;
   cap: number;
-  pickEffect: string;
+  isPickable: boolean;
+  tier1Description: string;
+  tier2Description: string;
 }
 
 export interface TableauPromptInfo {
@@ -244,7 +239,6 @@ export interface GameResponse {
   encounter?: EncounterInfo;
   outcome?: OutcomeInfo;
   rescue?: RescueInfo;
-  dungeonHub?: DungeonHubInfo;
   camp?: CampInfo;
   inventory?: InventoryInfo;
   mechanics?: MechanicsInfo;

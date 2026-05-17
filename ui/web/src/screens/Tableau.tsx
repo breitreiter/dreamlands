@@ -1,7 +1,75 @@
 import { useGame } from "../GameContext";
 import type { GameResponse, TableauSlotInfo } from "../api/types";
 
-function SlotButton({
+type TierState = "pickable" | "owned" | "locked";
+
+function tierState(slot: TableauSlotInfo, tier: 1 | 2): TierState {
+  if (tier === 1) {
+    if (slot.currentCount >= 1) return "owned";
+    return slot.isPickable ? "pickable" : "locked";
+  } else {
+    if (slot.currentCount >= 2) return "owned";
+    if (slot.currentCount >= 1 && slot.isPickable) return "pickable";
+    return "locked";
+  }
+}
+
+function TierCard({
+  label,
+  description,
+  state,
+  onClick,
+}: {
+  label: string;
+  description: string;
+  state: TierState;
+  onClick?: () => void;
+}) {
+  const isClickable = state === "pickable" && onClick;
+
+  const borderClass =
+    state === "pickable"
+      ? "border-action-dim"
+      : state === "owned"
+      ? "border-accent opacity-50"
+      : "border-dim border-dashed opacity-50";
+
+  const labelClass =
+    state === "pickable" ? "text-action" : "text-accent";
+
+  return (
+    <button
+      onClick={isClickable ? onClick : undefined}
+      disabled={!isClickable}
+      className={`flex flex-col gap-1.5 p-2 w-[240px] min-h-[94px] rounded border-2 text-left transition-colors ${borderClass} ${
+        isClickable ? "cursor-pointer hover:border-action" : "cursor-default"
+      }`}
+    >
+      <span className={`text-base leading-6 font-body ${labelClass}`}>
+        {label}
+      </span>
+      <span className="text-primary text-base leading-6 font-body">
+        {description}
+      </span>
+    </button>
+  );
+}
+
+function ConnectorLine({ active, dashed }: { active: boolean; dashed?: boolean }) {
+  return (
+    <div
+      className={`w-[30px] h-0 border-t-2 shrink-0 ${
+        active
+          ? "border-accent"
+          : dashed
+          ? "border-dim border-dashed opacity-50"
+          : "border-dim opacity-50"
+      }`}
+    />
+  );
+}
+
+function SlotRow({
   slot,
   onPick,
   disabled,
@@ -10,22 +78,43 @@ function SlotButton({
   onPick: (id: string) => void;
   disabled: boolean;
 }) {
+  const t1 = tierState(slot, 1);
+  const t2 = tierState(slot, 2);
+
+  const tier1Label = t1 === "owned" ? "✓ Trained" : `Train ${slot.label}`;
+  const tier2Label = t2 === "owned" ? "✓ Mastered" : `Master ${slot.label}`;
+
+  const leftLineActive = slot.isPickable;
+  const rightLineActive = t2 === "pickable" || t2 === "owned";
+  const rightLineDashed = t2 === "locked";
+
   return (
-    <button
-      onClick={() => onPick(slot.id)}
-      disabled={disabled}
-      className="flex items-center justify-between gap-4 w-full text-left transition-colors group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      <div className="flex flex-col gap-0.5">
-        <span className="font-bold text-action group-hover:text-action-hover transition-colors">
-          {slot.label}
+    <div className="flex items-center gap-0">
+      {/* Skill icon */}
+      <div className="w-[60px] h-[60px] rounded-full bg-panel-alt border-2 border-accent shrink-0 flex items-center justify-center">
+        <span className="text-accent font-body text-base">
+          {slot.label.charAt(0)}
         </span>
-        <span className="text-primary/70">{slot.pickEffect}</span>
       </div>
-      <span className="text-primary/50 shrink-0">
-        {slot.currentCount}/{slot.cap}
-      </span>
-    </button>
+
+      <ConnectorLine active={leftLineActive} />
+
+      <TierCard
+        label={tier1Label}
+        description={slot.tier1Description}
+        state={t1}
+        onClick={t1 === "pickable" && !disabled ? () => onPick(slot.id) : undefined}
+      />
+
+      <ConnectorLine active={rightLineActive} dashed={rightLineDashed} />
+
+      <TierCard
+        label={tier2Label}
+        description={slot.tier2Description}
+        state={t2}
+        onClick={t2 === "pickable" && !disabled ? () => onPick(slot.id) : undefined}
+      />
+    </div>
   );
 }
 
@@ -41,21 +130,21 @@ export default function Tableau({ state }: { state: GameResponse }) {
 
   return (
     <div className="absolute inset-0 z-[1200] flex items-center justify-center bg-black/60 p-6">
-      <div className="bg-page border border-edge rounded-lg shadow-xl max-w-md w-full p-8 space-y-5">
+      <div className="bg-page border border-edge rounded-lg shadow-xl p-8 space-y-6 max-w-[700px] w-full">
         <div className="space-y-1">
           <h2 className="font-header text-accent text-[32px] leading-tight">
-            You have gained a level
+            You have leveled up.
           </h2>
           {tableau.pendingLevels > 1 && (
-            <p className="text-primary/60">
-              {tableau.pendingLevels} picks remaining
+            <p className="text-dim text-base">
+              {tableau.pendingLevels} picks remaining — choose one
             </p>
           )}
         </div>
 
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           {tableau.slots.map((slot) => (
-            <SlotButton
+            <SlotRow
               key={slot.id}
               slot={slot}
               onPick={handlePick}
@@ -63,12 +152,6 @@ export default function Tableau({ state }: { state: GameResponse }) {
             />
           ))}
         </div>
-
-        {tableau.slots.length === 0 && (
-          <p className="text-primary/50 italic">
-            No upgrade slots available — all rewards have been taken.
-          </p>
-        )}
       </div>
     </div>
   );
