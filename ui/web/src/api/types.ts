@@ -236,7 +236,7 @@ export interface TableauPromptInfo {
 }
 
 export interface GameResponse {
-  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "tactical" | "combat" | "combat_resolved" | "approach_prompt" | "tableau_prompt";
+  mode: "exploring" | "encounter" | "outcome" | "camp" | "camp_resolved" | "rescued" | "combat" | "combat_resolved" | "approach_prompt" | "tableau_prompt";
   status: StatusInfo;
   node?: NodeInfo;
   exits?: ExitInfo[];
@@ -250,7 +250,6 @@ export interface GameResponse {
   marketResult?: MarketOrderResult;
   innRecovery?: InnRecoveryInfo;
   deliveries?: DeliveryInfo[];
-  tactical?: TacticalInfo;
   combat?: CombatInfo;
   travel?: TravelInfo;
   approachPrompt?: ApproachPromptInfo;
@@ -351,7 +350,7 @@ export interface CombatRollInfo {
 export interface TravelInfo {
   path: { x: number; y: number }[];
   stepsCompleted: number;
-  stopReason: "arrived" | "encounter" | "tactical" | "rescued";
+  stopReason: "arrived" | "encounter" | "rescued";
 }
 
 export interface MechanicsInfo {
@@ -378,6 +377,7 @@ export interface MarketItem {
   buyPrice: number;
   quantity: number;
   skillModifiers: Record<string, number>;
+  requiredCombat: number;
   description: string;
 }
 
@@ -415,50 +415,3 @@ export interface MarketOrderResult {
   results: { action: string; itemId: string; success: boolean; message: string }[];
 }
 
-// ── Tactical encounters ────────────────────────────────
-
-export interface TacticalInfo {
-  phase: "approach" | "turn" | "finished";
-  title: string;
-  body: string;
-  stat?: string;
-  approaches?: TacticalApproachInfo[];
-  turn?: TacticalTurnInfo;
-  finishReason?: string;
-  failureText?: string;
-  successText?: string;
-  failureMechanics?: MechanicResultInfo[];
-  successMechanics?: MechanicResultInfo[];
-}
-
-export interface TacticalApproachInfo {
-  kind: string;
-}
-
-export interface TacticalTurnInfo {
-  turn: number;
-  clock: number;
-  momentum: number;
-  spirits: number;
-  digUsed: boolean;
-  currentChallengeIndex: number;
-  challenges: TacticalChallengeInfo[];
-  openings: TacticalOpeningInfo[];
-}
-
-export interface TacticalChallengeInfo {
-  name: string;
-  counterName?: string;
-  resistance: number;
-  maxResistance: number;
-  cleared: boolean;
-}
-
-export interface TacticalOpeningInfo {
-  name: string;
-  costKind: string;
-  costAmount: number;
-  effectKind: string;
-  effectAmount: number;
-  stopsTimerIndex?: number;
-}

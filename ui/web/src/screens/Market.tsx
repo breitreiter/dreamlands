@@ -311,6 +311,8 @@ export default function MarketScreen({
       .filter(g => g.items.length > 0);
   }, [inventory, pendingSells]);
 
+  const playerCombatLevel = state.status.skills.find(s => s.id === "combat")?.level ?? 0;
+
   const settlementName = state.node?.poi?.name ?? "Market";
   const terrain = state.node?.terrain ?? null;
   const marketName = getMarketName(settlementName, terrain);
@@ -441,9 +443,14 @@ export default function MarketScreen({
                         <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-primary">
+                        <div className="text-primary flex items-center gap-2 flex-wrap">
                           {item.name}
-                          <span className="text-muted ml-1">({projQty} available)</span>
+                          {item.requiredCombat > 0 && playerCombatLevel * 2 < item.requiredCombat && (
+                            <span className="text-negative text-[11px] font-bold uppercase tracking-wide border border-negative/40 px-1 rounded flex-shrink-0">
+                              {item.requiredCombat <= 2 ? "Trained" : "Expert"} Combat
+                            </span>
+                          )}
+                          <span className="text-muted">({projQty} available)</span>
                         </div>
                         {item.description && (
                           <div className="text-muted mt-0.5 truncate">{item.description}</div>

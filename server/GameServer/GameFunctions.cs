@@ -5,7 +5,6 @@ using Dreamlands.Game;
 using Dreamlands.Map;
 using Dreamlands.Orchestration;
 using Dreamlands.Rules;
-using Dreamlands.Tactical;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -89,17 +88,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         if (player.PendingEndOfDay && data.NoCamp)
             player.PendingEndOfDay = false;
-
-        if (session.Mode == SessionMode.InTactical && player.CurrentTacticalId is { } tacId)
-        {
-            var tacEnc = data.TacticalBundle?.GetEncounterById(tacId);
-            var tacState = tacEnc != null ? DeserializeTacticalState(player) : null;
-            if (tacEnc != null && tacState != null)
-            {
-                var step = TacticalRunner.Resume(session, tacEnc, tacState);
-                return new OkObjectResult(BuildTacticalResponse(session, tacEnc, step, tacState));
-            }
-        }
 
         if (session.Mode == SessionMode.InCombat && player.ActiveCombat is { } combat
             && data.CombatBundle?.GetById(combat.EncounterId) is { } combatEnc)
@@ -646,19 +634,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         switch (finished.Reason)
                         {
                             case FinishReason.NavigatedTo:
-                                // Check tactical bundle first
-                                var tacTarget = data.TacticalBundle?.ResolveNavigation(
-                                    finished.NavigateToId!, session.CurrentEncounter?.Category);
-                                if (tacTarget != null)
-                                {
-                                    EncounterRunner.EndEncounter(session);
-                                    var tacResponse = BeginTacticalEncounter(session, player, tacTarget);
-                                    if (finished.Outcome is { } oo)
-                                        tacResponse.Outcome = BuildOutcomeInfo(oo);
-                                    await store.Save(player);
-                                    return new OkObjectResult(tacResponse);
-                                }
-
                                 var next = EncounterSelection.ResolveNavigation(session, finished.NavigateToId!, session.CurrentNode);
                                 if (next != null)
                                 {
@@ -851,111 +826,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                 // All picks consumed — return exploring
                 return new OkObjectResult(BuildExploringResponse(session));
-            }
-
-            case "tactical_approach":
-            {
-                if (session.Mode != SessionMode.InTactical)
-                    return new BadRequestObjectResult(new { error = "Not in a tactical encounter" });
-                var tacEnc = data.TacticalBundle?.GetEncounterById(player.CurrentTacticalId!);
-                if (tacEnc == null)
-                    return new BadRequestObjectResult(new { error = "Tactical encounter not found" });
-                var tacState = DeserializeTacticalState(player);
-                if (tacState == null)
-                    return new BadRequestObjectResult(new { error = "No tactical state" });
-
-                if (!Enum.TryParse<ApproachKind>(actionReq.Approach, ignoreCase: true, out var approachKind))
-                    return new BadRequestObjectResult(new { error = $"Invalid approach: {actionReq.Approach}" });
-
-                var tacStep = TacticalRunner.ApplyApproach(session, tacEnc, tacState, approachKind);
-                SerializeTacticalState(player, tacState);
-                await store.Save(player);
-                response = BuildTacticalResponse(session, tacEnc, tacStep, tacState);
-                break;
-            }
-
-            case "tactical_act":
-            {
-                if (session.Mode != SessionMode.InTactical)
-                    return new BadRequestObjectResult(new { error = "Not in a tactical encounter" });
-                var tacEnc2 = data.TacticalBundle?.GetEncounterById(player.CurrentTacticalId!);
-                if (tacEnc2 == null)
-                    return new BadRequestObjectResult(new { error = "Tactical encounter not found" });
-                var tacState2 = DeserializeTacticalState(player);
-                if (tacState2 == null)
-                    return new BadRequestObjectResult(new { error = "No tactical state" });
-
-                if (!Enum.TryParse<TacticalAction>(actionReq.TacticalAction, ignoreCase: true, out var tacAction))
-                    return new BadRequestObjectResult(new { error = $"Invalid tactical action: {actionReq.TacticalAction}" });
-
-                var tacStep2 = TacticalRunner.Act(session, tacEnc2, tacState2, tacAction, actionReq.OpeningIndex ?? 0);
-
-                if (tacStep2 is TacticalStep.Finished fin2)
-                {
-                    // Clear tactical state
-                    player.CurrentTacticalId = null;
-                    player.TacticalStateJson = null;
-                    session.Mode = SessionMode.Exploring;
-
-                    // Check for navigation in success/failure results
-                    var navResult = fin2.SuccessResults?.OfType<MechanicResult.Navigation>().FirstOrDefault()
-                        ?? fin2.FailureResults?.OfType<MechanicResult.Navigation>().FirstOrDefault();
-
-                    if (navResult != null)
-                    {
-                        bool won = fin2.SuccessResults != null;
-                        var outcomeText = won ? tacEnc2.Success?.Text : tacEnc2.Failure?.Text;
-                        var outcomeResults = won ? fin2.SuccessResults : fin2.FailureResults;
-                        var outcome = new OutcomeInfo
-                        {
-                            Text = outcomeText ?? "",
-                            Mechanics = outcomeResults != null ? BuildMechanicResults(outcomeResults) : [],
-                        };
-
-                        // Try tactical bundle first
-                        var navTac = data.TacticalBundle?.ResolveNavigation(navResult.EncounterId, tacEnc2.Category);
-                        if (navTac != null)
-                        {
-                            var navResponse = BeginTacticalEncounter(session, player, navTac);
-                            navResponse.Outcome = outcome;
-                            await store.Save(player);
-                            return new OkObjectResult(navResponse);
-                        }
-
-                        // Try regular encounter bundle
-                        var navEnc = EncounterSelection.ResolveNavigation(session, navResult.EncounterId, session.CurrentNode);
-                        if (navEnc != null)
-                        {
-                            var encStep = EncounterRunner.Begin(session, navEnc);
-                            await store.Save(player);
-                            return new OkObjectResult(new GameResponse
-                            {
-                                Mode = "encounter",
-                                Status = BuildStatus(player),
-                                Encounter = BuildEncounterInfo(encStep.Encounter, encStep.GatedChoices),
-                                Outcome = outcome,
-                                Inventory = BuildInventory(player),
-                            });
-                        }
-                    }
-                }
-                else
-                {
-                    SerializeTacticalState(player, tacState2);
-                }
-                await store.Save(player);
-                response = BuildTacticalResponse(session, tacEnc2, tacStep2, tacState2);
-                break;
-            }
-
-            case "end_tactical":
-            {
-                player.CurrentTacticalId = null;
-                player.TacticalStateJson = null;
-                session.Mode = SessionMode.Exploring;
-                await store.Save(player);
-                response = BuildExploringResponse(session);
-                break;
             }
 
             case "enter_dungeon":
@@ -1365,6 +1235,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance),
             quantity = entry.Quantity,
             skillModifiers = new Dictionary<string, int>(),
+            requiredCombat = entry.Item.RequiredCombat,
             description = entry.Item.Description ?? "",
         }).ToList();
 
@@ -1575,15 +1446,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     + (player.ActiveCombat?.Turn * 23 ?? 0)
                     + (player.ActiveCombat?.MonsterHp * 29 ?? 0);
         var rng = new Random(rngSeed);
-        var session = new GameSession(player, data.Map, data.Bundle, data.Balance, rng, data.TacticalBundle, data.CombatBundle);
+        var session = new GameSession(player, data.Map, data.Bundle, data.Balance, rng, data.CombatBundle);
 
         if (player.ActiveCombat != null)
         {
             session.Mode = SessionMode.InCombat;
-        }
-        else if (player.CurrentTacticalId is { } tacId)
-        {
-            session.Mode = SessionMode.InTactical;
         }
         else if (player.CurrentEncounterId is { } encId)
         {
@@ -2154,114 +2021,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return $"Cures: {string.Join(", ", item.Cures)}";
         return "";
     }
-
-    // ── Tactical helpers ─────────────────────────────────────
-
-    static readonly JsonSerializerOptions TacJsonOpts = new() { PropertyNameCaseInsensitive = true };
-
-    GameResponse BeginTacticalEncounter(GameSession session, PlayerState player, TacticalEncounter tacEnc)
-    {
-        var tacState = new TacticalState();
-        var step = TacticalRunner.Begin(session, tacEnc, tacState);
-        player.CurrentTacticalId = tacEnc.Id;
-        player.CurrentEncounterId = null;
-        session.Mode = SessionMode.InTactical;
-        SerializeTacticalState(player, tacState);
-        return BuildTacticalResponse(session, tacEnc, step, tacState);
-    }
-
-    GameResponse BuildTacticalResponse(GameSession session, TacticalEncounter tacEnc, TacticalStep step, TacticalState tacState)
-    {
-        var info = new TacticalInfo
-        {
-            Title = tacEnc.Title,
-            Body = tacEnc.Body,
-            Stat = tacEnc.Stat?.ToLowerInvariant(),
-        };
-
-        switch (step)
-        {
-            case TacticalStep.ChooseApproach ca:
-                info = info with
-                {
-                    Phase = "approach",
-                    Approaches = ca.Approaches.Select(a => new TacticalApproachInfo
-                    {
-                        Kind = a.Kind.ToString().ToLowerInvariant(),
-                    }).ToList(),
-                };
-                break;
-
-            case TacticalStep.ShowTurn st:
-                info = info with
-                {
-                    Phase = "turn",
-                    Turn = new TacticalTurnInfo
-                    {
-                        Turn = st.Data.Turn,
-                        Clock = st.Data.Clock,
-                        Momentum = st.Data.Momentum,
-                        Spirits = st.Data.PlayerSpirits,
-                        DigUsed = st.Data.DigUsed,
-                        CurrentChallengeIndex = st.Data.CurrentChallengeIndex,
-                        Challenges = st.Data.Challenges.Select(c => new TacticalChallengeInfo
-                        {
-                            Name = c.Name,
-                            CounterName = c.CounterName,
-                            Resistance = c.Resistance,
-                            MaxResistance = c.MaxResistance,
-                            Cleared = c.Cleared,
-                        }).ToList(),
-                        Openings = st.Data.Openings.Select(BuildOpeningInfo).ToList(),
-                    },
-                };
-                break;
-
-            case TacticalStep.Finished fin:
-                info = info with
-                {
-                    Phase = "finished",
-                    FinishReason = fin.Reason.ToString().ToLowerInvariant(),
-                    FailureText = tacEnc.Failure?.Text,
-                    SuccessText = tacEnc.Success?.Text,
-                    FailureMechanics = fin.FailureResults != null ? BuildMechanicResults(fin.FailureResults) : null,
-                    SuccessMechanics = fin.SuccessResults != null ? BuildMechanicResults(fin.SuccessResults) : null,
-                };
-                break;
-        }
-
-        return new GameResponse
-        {
-            Mode = "tactical",
-            Status = BuildStatus(session.Player),
-            Tactical = info,
-            Node = BuildNodeInfo(session.CurrentNode, session.Player, session),
-            Inventory = BuildInventory(session.Player),
-            Mechanics = BuildMechanics(session.Player),
-        };
-    }
-
-    static TacticalOpeningInfo BuildOpeningInfo(OpeningSnapshot o) => new()
-    {
-        Name = o.Name,
-        CostKind = ToSnakeCase(o.CostKind.ToString()),
-        CostAmount = o.CostAmount,
-        EffectKind = ToSnakeCase(o.EffectKind.ToString()),
-        EffectAmount = o.EffectAmount,
-        StopsTimerIndex = o.StopsTimerIndex,
-    };
-
-    static string ToSnakeCase(string pascalCase) =>
-        string.Concat(pascalCase.Select((c, i) =>
-            i > 0 && char.IsUpper(c) ? "_" + char.ToLowerInvariant(c) : char.ToLowerInvariant(c).ToString()));
-
-    static void SerializeTacticalState(PlayerState player, TacticalState state) =>
-        player.TacticalStateJson = JsonSerializer.Serialize(state, TacJsonOpts);
-
-    static TacticalState? DeserializeTacticalState(PlayerState player) =>
-        player.TacticalStateJson != null
-            ? JsonSerializer.Deserialize<TacticalState>(player.TacticalStateJson, TacJsonOpts)
-            : null;
 
     // ── Combat ──
 
