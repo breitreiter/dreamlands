@@ -34,12 +34,5 @@ public static class SkillFlavor
         [(Skill.Cunning, 1)] = "You notice angles and opportunities others overlook",
         [(Skill.Cunning, 2)] = "You are always three moves ahead",
 
-        [(Skill.Luck, 0)] = "You've learned to rely on skill, never chance",
-        [(Skill.Luck, 1)] = "Fortune sometimes favors you",
-        [(Skill.Luck, 2)] = "You live a charmed life",
-
-        [(Skill.Mercantile, 0)] = "You have enthusiasm, but little sense of margins or risk",
-        [(Skill.Mercantile, 1)] = "You understand trade and the cost of tying up coin",
-        [(Skill.Mercantile, 2)] = "You walk markets like a lion, hungry and calculating",
     };
 }

@@ -11,9 +11,7 @@ public class SkillFlavorTests
     [InlineData(Skill.Negotiation, 0, "You speak plainly and without artifice")]
     [InlineData(Skill.Bushcraft, 2, "You can find water, shelter, and a way through")]
     [InlineData(Skill.Cunning, 4, "You are always three moves ahead")]
-    [InlineData(Skill.Luck, 0, "You've learned to rely on skill, never chance")]
-    [InlineData(Skill.Mercantile, 4, "You walk markets like a lion, hungry and calculating")]
-    public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
+public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
     {
         Assert.Equal(expected, SkillFlavor.Get(skill, level));
     }
@@ -37,8 +35,8 @@ public class SkillFlavorTests
     public void Get_Level3_ReturnsExpert()
     {
         // Level 3 should map to expert (tier 2), same as level 4
-        var result = SkillFlavor.Get(Skill.Luck, 3);
-        Assert.Equal("You live a charmed life", result);
+        var result = SkillFlavor.Get(Skill.Cunning, 3);
+        Assert.Equal("You are always three moves ahead", result);
     }
 
     [Fact]

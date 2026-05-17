@@ -1,7 +1,7 @@
 ---
 kind: plan
 title: Skill system rework — collapse to untrained/trained/expert tiers, retire d20, adopt RPS approach picker for encounter checks
-state: exploring
+state: shipped
 created: 2026-05-15
 updated: 2026-05-17
 related:

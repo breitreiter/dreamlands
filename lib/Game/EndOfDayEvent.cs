@@ -13,7 +13,6 @@ public abstract record EndOfDayEvent
     public record ConditionDrain(string ConditionId, int HealthLost, int SpiritsLost) : EndOfDayEvent;
     public record SpecialEffect(string ConditionId, string Effect) : EndOfDayEvent;
     public record HealthRegen(int HealthGained) : EndOfDayEvent;
-    public record Foraged(int Rolled, int Modifier, bool Fed) : EndOfDayEvent;
-    public record PlayerDied(string? ConditionId) : EndOfDayEvent;
+public record PlayerDied(string? ConditionId) : EndOfDayEvent;
     public record PlayerRescued(List<string> LostItems, int GoldLost) : EndOfDayEvent;
 }

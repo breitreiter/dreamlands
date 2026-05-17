@@ -249,7 +249,7 @@ public class ChoicesTests
                 [
                     new ConditionalBranch
                     {
-                        Condition = "meets mercantile 2",
+                        Condition = "meets negotiation 2",
                         Outcome = new OutcomePart { Text = "You drive a fair bargain." }
                     }
                 ],
@@ -258,7 +258,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Mercantile] = SkillTier.Expert; // Expert = 2, meets condition "meets mercantile 2"
+        state.Skills[Skill.Negotiation] = SkillTier.Expert; // Expert = 2, meets condition "meets negotiation 2"
 
         var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
         Assert.Equal("You drive a fair bargain.", resolved.Text);
@@ -276,7 +276,7 @@ public class ChoicesTests
                 [
                     new ConditionalBranch
                     {
-                        Condition = "meets mercantile 5",
+                        Condition = "meets negotiation 5",
                         Outcome = new OutcomePart { Text = "You drive a fair bargain." }
                     }
                 ],
@@ -285,7 +285,7 @@ public class ChoicesTests
         };
 
         var state = Fresh();
-        state.Skills[Skill.Mercantile] = SkillTier.Trained; // Trained = 1, below target 5
+        state.Skills[Skill.Negotiation] = SkillTier.Trained; // Trained = 1, below target 5
 
         var resolved = Choices.Resolve(choice, state, Balance, new Random(1));
         Assert.Equal("They won't budge on price.", resolved.Text);

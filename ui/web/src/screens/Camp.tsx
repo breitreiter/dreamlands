@@ -50,7 +50,7 @@ function buildCampReport(events: CampEventInfo[]): CampReport {
 /** Minor events: food, foraging, rest recovery — not condition-related */
 function getMinorEvents(events: CampEventInfo[]): CampEventInfo[] {
   const minorTypes = new Set([
-    "FoodConsumed", "Starving", "Foraged", "RestRecovery",
+    "FoodConsumed", "Starving", "RestRecovery",
     "ResistPassed", "ResistFailed", "ConditionAcquired",
   ]);
   return events.filter(e => minorTypes.has(e.type));

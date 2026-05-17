@@ -13,8 +13,9 @@ public static class HaulDelivery
         Random rng,
         BalanceData? balance = null)
     {
-        var mercantile = (int)player.Skills.GetValueOrDefault(Skill.Mercantile);
-        var bonusRate = balance?.Trade.MercantileHaulBonusPerPoint ?? 0.0;
+        var negotiationTier = (int)player.Skills.GetValueOrDefault(Skill.Negotiation);
+        // Untrained=0 → 1.0×, Trained=1 → 1.2×, Expert=2 → 1.4×
+        var payoutMultiplier = 1.0 + 0.2 * negotiationTier;
 
         var results = new List<DeliveryResult>();
         for (int i = player.Pack.Count - 1; i >= 0; i--)
@@ -24,7 +25,7 @@ public static class HaulDelivery
             {
                 player.Pack.RemoveAt(i);
                 var basePayout = item.Payout ?? 0;
-                var payout = (int)Math.Round(basePayout * (1 + mercantile * bonusRate));
+                var payout = (int)Math.Round(basePayout * payoutMultiplier);
                 player.Gold += payout;
 
                 string? deliveryFlavor = null;

@@ -33,8 +33,6 @@ public static class SettlementRunner
                 session.Player.ActiveConditions.Remove(conditionId);
             }
         }
-        session.Player.ConsecutiveWildernessNights = 0;
-
         // Initialize settlement state on first visit
         if (!session.Player.Settlements.ContainsKey(node.Poi.SettlementId))
         {

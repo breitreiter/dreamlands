@@ -88,9 +88,7 @@ public class BalanceDataTests
     [InlineData("negotiation", Skill.Negotiation)]
     [InlineData("bushcraft", Skill.Bushcraft)]
     [InlineData("cunning", Skill.Cunning)]
-    [InlineData("luck", Skill.Luck)]
-    [InlineData("mercantile", Skill.Mercantile)]
-    public void Skills_FromScriptName_RoundTrips(string name, Skill expected)
+public void Skills_FromScriptName_RoundTrips(string name, Skill expected)
     {
         var skill = Skills.FromScriptName(name);
         Assert.NotNull(skill);

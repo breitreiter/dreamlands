@@ -303,32 +303,6 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_IncrementsConsecutiveWildernessNights()
-    {
-        var p = Fresh();
-        p.PendingNoBiome = false;
-        p.ConsecutiveWildernessNights = 3;
-        AddRation(p);
-
-        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
-
-        Assert.Equal(4, p.ConsecutiveWildernessNights);
-    }
-
-    [Fact]
-    public void Resolve_NoBiome_DoesNotIncrementCounter()
-    {
-        var p = Fresh();
-        p.PendingNoBiome = true;
-        p.ConsecutiveWildernessNights = 3;
-        AddRation(p);
-
-        EndOfDay.Resolve(p, "plains", 1, Balance, new Random(42));
-
-        Assert.Equal(3, p.ConsecutiveWildernessNights);
-    }
-
-    [Fact]
     public void Resolve_PendingNoMeal_NoStarvingPenalty()
     {
         var p = Fresh();

@@ -76,9 +76,6 @@ public class PlayerState
     // so resolving a Lost encounter (or similar) can't immediately re-add the same condition.
     public HashSet<string> ConditionsClearedThisTurn { get; set; } = new();
 
-    // Consecutive wilderness nights since last settlement entry — feeds exhaustion DC
-    public int ConsecutiveWildernessNights { get; set; }
-
     // World state
     public HashSet<string> Tags { get; set; } = new();
     public Dictionary<string, int> Qualities { get; set; } = new();

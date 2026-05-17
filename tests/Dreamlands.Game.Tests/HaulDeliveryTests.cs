@@ -183,11 +183,10 @@ public class HaulDeliveryTests
     }
 
     [Fact]
-    public void Mercantile_bonus_increases_payout()
+    public void Negotiation_bonus_increases_payout()
     {
-        var balance = BalanceData.Default;
         var player = MakePlayer();
-        player.Skills[Skill.Mercantile] = SkillTier.Expert;
+        player.Skills[Skill.Negotiation] = SkillTier.Expert;
         player.Gold = 0;
         player.Pack.Add(new ItemInstance("h", "Haul")
         {
@@ -196,16 +195,17 @@ public class HaulDeliveryTests
             Payout = 100,
         });
 
-        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42), balance);
+        var results = HaulDelivery.Deliver(player, "town_a", TestHauls, new Random(42));
 
         Assert.Single(results);
-        var expectedPayout = (int)Math.Round(100 * (1 + 2 * balance.Trade.MercantileHaulBonusPerPoint)); // Expert = 2
+        // Expert = tier 2 → 1.4× multiplier
+        var expectedPayout = (int)Math.Round(100 * 1.4);
         Assert.Equal(expectedPayout, results[0].Payout);
         Assert.Equal(expectedPayout, player.Gold);
     }
 
     [Fact]
-    public void No_mercantile_no_bonus()
+    public void No_negotiation_no_bonus()
     {
         var balance = BalanceData.Default;
         var player = MakePlayer();

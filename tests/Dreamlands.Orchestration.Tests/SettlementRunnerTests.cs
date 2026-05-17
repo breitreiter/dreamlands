@@ -62,17 +62,6 @@ public class SettlementRunnerTests
     }
 
     [Fact]
-    public void EnsureSettlement_ResetsConsecutiveWildernessNights()
-    {
-        var session = MakeSessionWithSettlement();
-        session.Player.ConsecutiveWildernessNights = 7;
-
-        SettlementRunner.EnsureSettlement(session);
-
-        Assert.Equal(0, session.Player.ConsecutiveWildernessNights);
-    }
-
-    [Fact]
     public void EnsureSettlement_DoesNotAutoRefillRations()
     {
         // Players restock rations explicitly via the market's "Restock food and leave"

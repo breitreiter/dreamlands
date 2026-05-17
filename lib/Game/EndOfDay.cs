@@ -111,11 +111,7 @@ public static class EndOfDay
             return events;
         }
 
-        // 9. Increment consecutive wilderness nights counter (feeds exhaustion scaling logic)
-        if (!noBiome)
-            state.ConsecutiveWildernessNights++;
-
-        // 10. Clear the per-turn condition-immunity set now that the day has resolved
+        // 9. Clear the per-turn condition-immunity set now that the day has resolved
         state.ConditionsClearedThisTurn.Clear();
 
         return events;

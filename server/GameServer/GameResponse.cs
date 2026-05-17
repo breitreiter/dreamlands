@@ -243,7 +243,6 @@ public class InventoryInfo
 {
     public List<ItemInfo> Pack { get; init; } = [];
     public int PackCapacity { get; init; }
-    public EquipmentInfo Equipment { get; init; } = new();
 }
 
 public class ItemInfo
@@ -276,12 +275,6 @@ public class MechanicLine
     public string Label { get; init; } = "";
     public string Value { get; init; } = "";
     public string Source { get; init; } = "";
-}
-
-public class EquipmentInfo
-{
-    public ItemInfo? Weapon { get; init; }
-    public ItemInfo? Armor { get; init; }
 }
 
 // Approach picker prompt — emitted when the runner suspends on AwaitApproach.

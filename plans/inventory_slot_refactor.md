@@ -1,9 +1,9 @@
 ---
 kind: plan
 title: Inventory slot refactor — equipped-as-flag, 5 pack slots
-state: exploring
+state: shipped
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-05-17
 related:
   - inventory_consolidation.md
 touches:

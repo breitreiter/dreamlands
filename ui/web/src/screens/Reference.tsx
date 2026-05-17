@@ -283,7 +283,7 @@ export default function Reference() {
                 <strong className="text-dim">Forage:</strong> On the road, roll Bushcraft to find food (skipped in settlements).
               </li>
               <li>
-                <strong className="text-dim">Eat:</strong> Up to 3 food items are consumed from your haversack.
+                <strong className="text-dim">Eat:</strong> Up to 3 food items are consumed from your pack.
                 A <em>balanced meal</em> (1 protein + 1 grain + 1 sweets) grants <span className="text-accent">+1 bonus spirits</span>.
                 No food means you go hungry; you won't recover spirits from resting that night.
               </li>
@@ -337,7 +337,7 @@ export default function Reference() {
               Time advances by the number of nights stayed.
             </p>
             <p className="text-muted">
-              If you have severe conditions, you must have the matching medicine in your haversack; the inn
+              If you have severe conditions, you must have the matching medicine in your pack; the inn
               will use it during your stay.
             </p>
 

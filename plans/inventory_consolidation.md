@@ -1,9 +1,9 @@
 ---
 kind: plan
 title: Inventory Consolidation — remove haversack, reusable supplies, token removal
-state: exploring
+state: shipped
 created: 2026-05-15
-updated: 2026-05-15
+updated: 2026-05-17
 supersedes: haversack_refactor.md
 touches:
   files:

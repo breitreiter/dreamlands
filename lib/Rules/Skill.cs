@@ -7,8 +7,6 @@ public enum Skill
     Negotiation,
     Bushcraft,
     Cunning,
-    Luck,
-    Mercantile
 }
 
 /// <summary>Display and script metadata for a single <see cref="Skill"/>.</summary>
@@ -24,8 +22,6 @@ public static class Skills
         new(Skill.Negotiation, "negotiation", "Negotiation", "Persuasion, deception, and social cunning"),
         new(Skill.Bushcraft,   "bushcraft",   "Bushcraft",   "Wilderness survival and travel know-how"),
         new(Skill.Cunning,     "cunning",     "Cunning",     "Trickery, awareness, and staying one step ahead"),
-        new(Skill.Luck,        "luck",        "Luck",        "A slight nudge on the odds"),
-        new(Skill.Mercantile,  "mercantile",  "Mercantile",  "An eye for value and a tongue for prices"),
     };
 
     private static readonly Dictionary<string, Skill> ByScriptName =

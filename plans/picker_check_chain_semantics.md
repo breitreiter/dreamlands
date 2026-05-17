@@ -1,9 +1,9 @@
 ---
 kind: plan
 title: Picker check semantics inside @if/@elif chains
-state: ready
+state: shipped
 created: 2026-05-16
-updated: 2026-05-16
+updated: 2026-05-17
 related:
   - skill_tier_rework.md
   - arc_leveling.md

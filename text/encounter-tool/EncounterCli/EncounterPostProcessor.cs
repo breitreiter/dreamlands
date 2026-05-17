@@ -30,7 +30,7 @@ static partial class EncounterPostProcessor
         ["USE_TOOL"]         = "cunning",
         ["ACCEPT"]           = "negotiation",
         ["REJECT"]           = "negotiation",
-        ["IGNORE"]           = "luck",
+        ["IGNORE"]           = "cunning",
     };
 
     [GeneratedRegex(@"^[A-Z][A-Z_ ]+$")]
@@ -252,7 +252,7 @@ static partial class EncounterPostProcessor
                 sb.Append($"  {line}\n");
 
             // @if check block
-            var skillName = !string.IsNullOrEmpty(skill) ? skill : "luck";
+            var skillName = !string.IsNullOrEmpty(skill) ? skill : "cunning";
             sb.Append($"  @if check {skillName} {difficulty} {{\n");
 
             foreach (var line in TrimBlankEnds(successLines))

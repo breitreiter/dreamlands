@@ -3,7 +3,7 @@ kind: plan
 title: Arc-completion leveling system
 state: exploring
 created: 2026-05-16
-updated: 2026-05-16 (Mercantile folded into Negotiation; boots arc added)
+updated: 2026-05-17 (skill mechanics documented; see project/design/skills.md)
 touches:
   files: []
   features: [arcs, leveling, skills, progression]
@@ -35,6 +35,9 @@ Equipment arcs grant their item directly — no tableau pick.
 The two carry-capacity arcs are fixed rewards, not tableau choices.
 
 ## Tableau Rewards
+
+For what each skill tier unlocks (gear, passives, encounter check behavior), see
+[`project/design/skills.md`](../project/design/skills.md).
 
 Each tableau arc offers a pick from:
 

@@ -121,15 +121,9 @@ export interface ItemInfo {
   haulOfferId: string | null;
 }
 
-export interface EquipmentInfo {
-  weapon: ItemInfo | null;
-  armor: ItemInfo | null;
-}
-
 export interface InventoryInfo {
   pack: ItemInfo[];
   packCapacity: number;
-  equipment: EquipmentInfo;
 }
 
 export interface CampThreatInfo {

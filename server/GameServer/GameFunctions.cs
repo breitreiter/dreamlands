@@ -1703,11 +1703,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     {
         Pack = p.Pack.Select(i => BuildItemInfo(i, p.X, p.Y)).ToList(),
         PackCapacity = p.PackCapacity,
-        Equipment = new EquipmentInfo
-        {
-            Weapon = p.EquippedWeapon != null ? BuildItemInfo(p.EquippedWeapon) : null,
-            Armor = p.EquippedArmor != null ? BuildItemInfo(p.EquippedArmor) : null,
-        },
     };
 
     MechanicsInfo BuildMechanics(PlayerState p)
@@ -1725,65 +1720,49 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 _ => null,
             };
 
-            var skillBonus = resistSkill != null ? p.Skills.GetValueOrDefault(resistSkill.Value) : 0;
-            var gearBonus = SkillChecks.GetResistBonus(condId, p, data.Balance);
-            var total = skillBonus + gearBonus;
+            var skillBonus = resistSkill != null ? (int)p.Skills.GetValueOrDefault(resistSkill.Value) : 0;
 
             var source = resistSkill switch
             {
-                { } s => $"{s.GetInfo().DisplayName} + gear",
-                null => "Gear",
+                { } s => s.GetInfo().DisplayName,
+                null => "None",
             };
 
             resistances.Add(new MechanicLine
             {
                 Label = condDef.Name,
-                Value = $"+{total}",
+                Value = $"+{skillBonus}",
                 Source = source,
             });
         }
 
         foreach (var si in Skills.All)
         {
-            if (si.Skill is Skill.Luck or Skill.Mercantile) continue;
             var skillLevel = (int)p.Skills.GetValueOrDefault(si.Skill);
-            var itemBonus = SkillChecks.GetItemBonus(si.Skill, p, data.Balance);
-            var total = skillLevel + itemBonus;
 
             encounterChecks.Add(new MechanicLine
             {
                 Label = si.DisplayName,
-                Value = FormatSkillLevel(total),
-                Source = $"{si.DisplayName} + gear",
+                Value = FormatSkillLevel(skillLevel),
+                Source = si.DisplayName,
             });
         }
 
-        var mercantile = (int)p.Skills.GetValueOrDefault(Skill.Mercantile);
-        var haulBonus = (int)(mercantile * data.Balance.Trade.MercantileHaulBonusPerPoint * 100);
+        var negotiationTier = (int)p.Skills.GetValueOrDefault(Skill.Negotiation);
+        var haulBonus = (int)(negotiationTier * 0.2 * 100);
         other.Add(new MechanicLine
         {
             Label = "Contract bonus",
             Value = $"+{haulBonus}%",
-            Source = "Mercantile",
+            Source = "Negotiation",
         });
 
-        var luckLevel = (int)p.Skills.GetValueOrDefault(Skill.Luck);
-        var luckChances = data.Balance.Character.LuckRerollChance;
-        var rerollChance = luckChances[Math.Min(Math.Max(luckLevel, 0), luckChances.Count - 1)];
-        other.Add(new MechanicLine
-        {
-            Label = "Reroll any failure",
-            Value = $"{rerollChance}%",
-            Source = "Luck",
-        });
-
-        var totalForaging = (int)p.Skills.GetValueOrDefault(Skill.Bushcraft)
-                          + SkillChecks.GetItemBonus(Skill.Bushcraft, p, data.Balance);
+        var bushcraftTier = (int)p.Skills.GetValueOrDefault(Skill.Bushcraft);
         other.Add(new MechanicLine
         {
             Label = "Foraging checks",
-            Value = FormatSkillLevel(totalForaging),
-            Source = "Bushcraft + gear",
+            Value = FormatSkillLevel(bushcraftTier),
+            Source = "Bushcraft",
         });
 
         return new MechanicsInfo
@@ -2071,9 +2050,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",
                 EndOfDayEvent.ConditionDrain d => $"{d.ConditionId}: -{d.HealthLost} health, -{d.SpiritsLost} spirits",
                 EndOfDayEvent.SpecialEffect s => $"{s.ConditionId}: {s.Effect}",
-                EndOfDayEvent.Foraged f => f.Fed
-                    ? $"Foraged enough to skip rations (rolled {f.Rolled})"
-                    : $"Found nothing while foraging (rolled {f.Rolled})",
                 EndOfDayEvent.HealthRegen h => $"Rest: +{h.HealthGained} health",
                 EndOfDayEvent.PlayerDied d => d.ConditionId != null
                     ? $"Perished from {d.ConditionId}."

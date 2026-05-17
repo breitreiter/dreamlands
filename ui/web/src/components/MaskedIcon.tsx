@@ -20,7 +20,6 @@ const TAB_ICONS: Record<string, string> = {
   equipment: "barbute.svg",
   hauls: "wooden-crate.svg",
   pack: "backpack.svg",
-  haversack: "knapsack.svg",
   equipped: "barbute.svg",
 };
 

@@ -78,19 +78,5 @@ public sealed class TacticalBalance
             new("Find your footing", "momentum_to_progress_large"),
             new("Push through it", "momentum_to_progress_huge"),
         },
-        [Skill.Luck] = new TacticalCard[]
-        {
-            new("A fortunate stumble", "free_progress_small"),
-            new("Something catches your eye", "free_momentum"),
-            new("Unlikely timing", "momentum_to_cancel"),
-            new("Against all odds", "spirits_to_progress_large"),
-        },
-        [Skill.Mercantile] = new TacticalCard[]
-        {
-            new("Name your price", "momentum_to_progress"),
-            new("Sweeten the deal", "free_momentum"),
-            new("Call in a favour", "threat_to_progress"),
-            new("Make an offer they can't refuse", "momentum_to_progress_huge"),
-        },
     };
 }
