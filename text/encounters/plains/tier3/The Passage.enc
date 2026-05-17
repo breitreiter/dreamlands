@@ -24,10 +24,7 @@ Behind you, from the direction of the stairs, a sound. Metal on concrete. A grin
 choices:
 
 * Stand and fight = There's no way you can outrun the monster
-  +open "The Passage Combat"
 
 * Figure out the door = Try to puzzle out the lock
-  +open "The Passage Door"
 
 * Find another way = There are passages you didn't explore
-  +open "The Passage Traverse"

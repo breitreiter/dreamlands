@@ -20,7 +20,5 @@ It's making a sound. Low, almost tonal, almost varied. Not mechanical. Not quite
 choices:
 
 * Sprint though the nearby streets = Perhaps you can escape before it catches you
-  +open "The Gentle Giant Escape"
 
 * Sneak underneath the thing = A gamble, but if you can get behind it, you're home free
-  +open "The Gentle Giant Sneak"

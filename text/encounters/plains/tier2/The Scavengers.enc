@@ -40,7 +40,5 @@ But it is coming for you.
 choices:
 
 * Stand your ground = Send this devil back to hell
-  +open "The Scavengers Fight"
 
 * Make a run for it = It is slow, perhaps you can outrun it
-  +open "The Scavengers Chase"

@@ -43,8 +43,6 @@ interface GameContextValue extends GameState {
     innService?: "bed" | "bath" | "full";
     approach?: string;
     rewardSlotId?: string;
-    tacticalAction?: string;
-    openingIndex?: number;
     path?: { x: number; y: number }[];
   }) => Promise<GameResponse | null>;
   doCombatAction: (body: { action: "commit"; slots: string[] } | { action: "flee" } | { action: "continue" }) => Promise<GameResponse | null>;
@@ -69,26 +67,13 @@ function clearStale(result: GameResponse): Partial<GameResponse> {
   if (result.mode === "exploring") {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
-    cleared.tactical = undefined;
-  }
-  if (result.mode === "tactical") {
-    cleared.encounter = undefined;
-    cleared.outcome = undefined;
   }
   if (result.mode === "combat" || result.mode === "combat_resolved") {
     cleared.encounter = undefined;
     cleared.outcome = undefined;
-    cleared.tactical = undefined;
   }
   if (result.mode === "approach_prompt") {
     cleared.outcome = undefined;
-    cleared.tactical = undefined;
-  }
-  if (result.mode === "tableau_prompt") {
-    // Keep encounter/outcome in state so the Encounter screen renders behind
-    // the Tableau modal — the player should see the vignette and the final
-    // outcome prose underneath.
-    cleared.tactical = undefined;
   }
   if (result.mode !== "approach_prompt") {
     cleared.approachPrompt = undefined;
@@ -189,6 +174,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       bankIndex?: number;
       offerIndex?: number;
       offerId?: string;
+      encounterId?: string;
+      innService?: "bed" | "bath" | "full";
       approach?: string;
       rewardSlotId?: string;
       path?: { x: number; y: number }[];

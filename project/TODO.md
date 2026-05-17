@@ -46,12 +46,10 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 - [x] UI: auto-start Lost encounter on status check — no UI changes needed, encounter screen shows naturally
 - [ ] Review all 15 Lost.enc files for prose quality and mechanic balance
 
-### Road Encounter System (Tableau)
+### Road Encounter System
 
-- [x] Finish out and test AI authoring tools for tac encounters
 - [ ] Sketch out single-paragraph intros for every biome/tier (50 total? 8x5+5x2)
 - [ ] ~~Playtest a bunch and tune~~ (ongoing)
-- [ ] Add custom intros per governing skill (right now everything shows "It's a fight" for tac encounters)
 
 ### Combat Encounter Triggering
 
@@ -185,7 +183,9 @@ None are obviously aged-out — keep for now, revisit when their parent systems 
 Content authoring — encounters, lore, art. ~163 hours remaining.
 Pace: ~24 hr/week (Mon–Thu 2hr, Sat–Sun 8hr, Fri off). Target: late May 2026.
 
-Time estimates: simple .enc ~30 min, .tac add-on ~20 min, arc ~5 hr, locale guide ~1 hr.
+Time estimates: simple .enc ~30 min, arc ~5 hr, locale guide ~1 hr.
+
+Note: 8 plains .enc files (Road Toll, The Conscripts, The Courier, The Requisition Line, The Scavengers, Collapsed Earthwork, The Gentle Giant, The Passage) previously chained to tactical .tac files. The .tac system is retired; those chains are stripped. The choice stubs exist in each .enc but have no outcome prose yet. Authoring those beats is the remaining work.
 
 ### World Building
 

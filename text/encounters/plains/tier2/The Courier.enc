@@ -34,7 +34,6 @@ But she doesn't. Not yet.
 choices:
 
 * Talk her down = Convince her not to burn the letter
-  +open "The Courier Conflict"
 
 * Watch in silence = Wait for the deed to be done
   You will not be a part of this, but neither will you intervene. You stand witness as a fellow guild member breaks her oath.

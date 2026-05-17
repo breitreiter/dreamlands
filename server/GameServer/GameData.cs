@@ -1,7 +1,6 @@
 using Dreamlands.Encounter;
 using Dreamlands.Map;
 using Dreamlands.Rules;
-using Dreamlands.Tactical;
 
 namespace GameServer;
 
@@ -12,7 +11,6 @@ public class GameData
 {
     public Map Map { get; }
     public EncounterBundle Bundle { get { lock (_bundleLock) return _bundle; } }
-    public TacticalBundle? TacticalBundle { get; private set; }
     public CombatBundle? CombatBundle { get; private set; }
     public BalanceData Balance { get; } = BalanceData.Default;
     public string ApiVersion { get; }
@@ -63,12 +61,6 @@ public class GameData
         Map = MapSerializer.Load(mapPath);
         _bundle = EncounterBundle.Load(bundlePath);
 
-        // Tactical bundle is optional — look alongside the encounter bundle
-        var tacticalPath = Environment.GetEnvironmentVariable("DREAMLANDS_TACTICAL_BUNDLE")
-            ?? Path.Combine(Path.GetDirectoryName(bundlePath)!, "tactical.bundle.json");
-        if (File.Exists(tacticalPath))
-            TacticalBundle = Dreamlands.Tactical.TacticalBundle.Load(tacticalPath);
-
         // Combat bundle: directory of .fight files. Phase 1 looks for a "combat" sibling
         // of the encounter bundle, with a fallback to the prototype's monsters dir so
         // gorzog runs without world surgery.
@@ -90,11 +82,6 @@ public class GameData
     {
         var fresh = EncounterBundle.Load(_bundlePath);
         lock (_bundleLock) _bundle = fresh;
-
-        var tacticalPath = Environment.GetEnvironmentVariable("DREAMLANDS_TACTICAL_BUNDLE")
-            ?? Path.Combine(Path.GetDirectoryName(_bundlePath)!, "tactical.bundle.json");
-        if (File.Exists(tacticalPath))
-            TacticalBundle = Dreamlands.Tactical.TacticalBundle.Load(tacticalPath);
     }
 
     static string FindRepoRoot()

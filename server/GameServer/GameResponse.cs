@@ -42,9 +42,6 @@ public class GameResponse
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
 
-    // Tactical encounter
-    public TacticalInfo? Tactical { get; init; }
-
     // Combat encounter
     public CombatInfo? Combat { get; init; }
 
@@ -69,7 +66,7 @@ public class TravelInfo
     /// <summary>How many tiles of the path were actually traversed (1-based, includes start).</summary>
     public int StepsCompleted { get; init; }
 
-    /// <summary>Why the journey ended: "arrived", "encounter", "tactical", "rescued".</summary>
+    /// <summary>Why the journey ended: "arrived", "encounter", "rescued".</summary>
     public string StopReason { get; init; } = "arrived";
 }
 
@@ -379,64 +376,6 @@ public class EncounterSummary
     public string Title { get; init; } = "";
 }
 
-// ── Tactical encounter DTOs ──────────────────────────────────
-
-public record TacticalInfo
-{
-    public string Phase { get; init; } = "";  // approach, turn, finished
-    public string Title { get; init; } = "";
-    public string Body { get; init; } = "";
-    public string? Stat { get; init; }  // governing skill: "combat", "negotiation", etc.
-    // approach phase
-    public List<TacticalApproachInfo>? Approaches { get; init; }
-
-    // turn phase
-    public TacticalTurnInfo? Turn { get; init; }
-
-    // finished phase
-    public string? FinishReason { get; init; }
-    public string? FailureText { get; init; }
-    public string? SuccessText { get; init; }
-    public List<MechanicResultInfo>? FailureMechanics { get; init; }
-    public List<MechanicResultInfo>? SuccessMechanics { get; init; }
-}
-
-public class TacticalApproachInfo
-{
-    public string Kind { get; init; } = "";
-}
-
-public class TacticalTurnInfo
-{
-    public int Turn { get; init; }
-    public int Clock { get; init; }
-    public int Momentum { get; init; }
-    public int Spirits { get; init; }
-    public bool DigUsed { get; init; }
-    public int CurrentChallengeIndex { get; init; }
-    public List<TacticalChallengeInfo> Challenges { get; init; } = [];
-    public List<TacticalOpeningInfo> Openings { get; init; } = [];
-}
-
-public class TacticalChallengeInfo
-{
-    public string Name { get; init; } = "";
-    public string? CounterName { get; init; }
-    public int Resistance { get; init; }
-    public int MaxResistance { get; init; }
-    public bool Cleared { get; init; }
-}
-
-public class TacticalOpeningInfo
-{
-    public string Name { get; init; } = "";
-    public string CostKind { get; init; } = "";
-    public int CostAmount { get; init; }
-    public string EffectKind { get; init; } = "";
-    public int EffectAmount { get; init; }
-    public int? StopsTimerIndex { get; init; }
-}
-
 public class ActionRequest
 {
     public string Action { get; set; } = "";
@@ -454,8 +393,6 @@ public class ActionRequest
     public string? OfferId { get; set; }
     public string? Approach { get; set; }
     public string? RewardSlotId { get; set; }
-    public string? TacticalAction { get; set; }
-    public int? OpeningIndex { get; set; }
     public List<TravelPoint>? Path { get; set; }
 }
 

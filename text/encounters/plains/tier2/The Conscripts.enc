@@ -44,7 +44,6 @@ choices:
   +damage_spirits 2
 
 * Rescue the locals = Fight off these so-called soldiers
-  +open "The Conscripts Combat"
 
 * Walk on = This is no business of yours
   You turn from the depot without a word. The woman's voice rises behind you, sharp with protest, but you do not slow. The officer's reply comes flat and final, then silence settles save for the scrape of boots on stone.

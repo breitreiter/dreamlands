@@ -30,7 +30,6 @@ choices:
     Torben is already through.
 
     "Stay close. Do exactly what I tell you. This will get dicey."
-    +open "The Gauntlet"
 
 * Depart = This place is beyond you
     You look at the scorched bolt on the ground, and the door, and the man who's spent three years trying to open it, and you decide that whatever is in there can stay in there.

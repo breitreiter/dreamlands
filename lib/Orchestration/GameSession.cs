@@ -1,18 +1,16 @@
 using Dreamlands.Encounter;
 using Dreamlands.Game;
 using Dreamlands.Rules;
-using Dreamlands.Tactical;
 
 namespace Dreamlands.Orchestration;
 
-public enum SessionMode { Exploring, InEncounter, InTactical, InCombat, Camp }
+public enum SessionMode { Exploring, InEncounter, InCombat, Camp }
 
 public class GameSession
 {
     public PlayerState Player { get; }
     public Dreamlands.Map.Map Map { get; }
     public EncounterBundle Bundle { get; }
-    public TacticalBundle? TacticalBundle { get; }
     public CombatBundle? CombatBundle { get; }
     public BalanceData Balance { get; }
     public Random Rng { get; }
@@ -21,12 +19,11 @@ public class GameSession
     public Encounter.Encounter? CurrentEncounter { get; set; }
 
     public GameSession(PlayerState player, Dreamlands.Map.Map map, EncounterBundle bundle,
-        BalanceData balance, Random rng, TacticalBundle? tacticalBundle = null, CombatBundle? combatBundle = null)
+        BalanceData balance, Random rng, CombatBundle? combatBundle = null)
     {
         Player = player;
         Map = map;
         Bundle = bundle;
-        TacticalBundle = tacticalBundle;
         CombatBundle = combatBundle;
         Balance = balance;
         Rng = rng;

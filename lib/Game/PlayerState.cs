@@ -24,8 +24,6 @@ public class PlayerState
     public string? CurrentDungeonId { get; set; }
 
     public string? CurrentEncounterId { get; set; }
-    public string? CurrentTacticalId { get; set; }
-    public string? TacticalStateJson { get; set; }
 
     /// <summary>In-progress combat (set by CombatRunner.Begin, cleared on resolution).
     /// Persists in the Cosmos doc so a closed tab can resume mid-fight.</summary>

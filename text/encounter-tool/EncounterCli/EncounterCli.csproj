@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\lib\Encounter\Dreamlands.Encounter.csproj" />
-    <ProjectReference Include="..\..\..\lib\Tactical\Dreamlands.Tactical.csproj" />
     <ProjectReference Include="..\..\..\lib\Game\Dreamlands.Game.csproj" />
     <ProjectReference Include="..\..\..\lib\Orchestration\Dreamlands.Orchestration.csproj" />
     <ProjectReference Include="..\..\..\lib\Rules\Dreamlands.Rules.csproj" />

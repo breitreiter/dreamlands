@@ -10,7 +10,6 @@ const sections = [
   { id: "endofday", label: "End of Day" },
   { id: "settlements", label: "Settlements" },
   { id: "contracts", label: "Contracts" },
-  { id: "tactical", label: "Tactical Encounters" },
 ];
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
@@ -361,59 +360,6 @@ export default function Reference() {
               <p><strong className="text-dim">Delivery:</strong> Automatic; enter the destination settlement and the payout is collected.</p>
               <p><strong className="text-dim">Discard:</strong> You can drop a contract at any time without penalty.</p>
             </div>
-          </Section>
-
-          {/* TACTICAL ENCOUNTERS */}
-          <Section id="tactical" title="Tactical Encounters">
-            <p>
-              Some encounters on the road use a card-based tactical system instead of simple skill checks.
-            </p>
-            <p>
-              You have a deck of <span className="text-accent">15 cards</span> drawn from your skills and equipment.
-              Each card costs resources to play (momentum or spirits) and contributes progress, momentum, or cancellation.
-              Your weapon archetype shapes your tactical style: daggers favor cancellation,
-              axes favor raw aggression, and swords offer a hybrid approach.
-              Each skill contributes unique intrinsic cards as you level up.
-            </p>
-
-            <h3 className="text-dim font-bold mt-6 mb-2">Progress Cards</h3>
-            <p className="text-muted mb-2">Deal damage to overcome the challenge. Your main win condition.</p>
-            <Table
-              headers={["Card", "Cost", "Effect"]}
-              rows={[
-                ["Free Jab", "Free", "1 progress"],
-                ["Momentum Strike", "1 momentum", "2 progress"],
-                ["Heavy Strike", "2 momentum", "4 progress"],
-                ["Devastating Blow", "3 momentum", "6 progress"],
-                ["Spirit Surge", "1 spirit", "3 progress"],
-                ["Desperate Surge", "3 spirits", "6 progress"],
-                ["Risky Strike", "1 threat tick", "2 progress"],
-                ["Reckless Strike", "2 threat ticks", "4 progress"],
-              ]}
-            />
-
-            <h3 className="text-dim font-bold mt-6 mb-2">Momentum Cards</h3>
-            <p className="text-muted mb-2">Build up momentum to fuel stronger plays.</p>
-            <Table
-              headers={["Card", "Cost", "Effect"]}
-              rows={[
-                ["Small Opening", "Free", "1 momentum"],
-                ["Opening", "Free", "2 momentum"],
-                ["Risky Opening", "1 threat tick", "3 momentum"],
-                ["Spirit Opening", "1 spirit", "3 momentum"],
-              ]}
-            />
-
-            <h3 className="text-dim font-bold mt-6 mb-2">Cancel Cards</h3>
-            <p className="text-muted mb-2">Counter enemy threats before they hit you.</p>
-            <Table
-              headers={["Card", "Cost", "Effect"]}
-              rows={[
-                ["Momentum Cancel", "3 momentum", "Stop threat"],
-                ["Spirit Cancel", "4 spirits", "Stop threat"],
-                ["Free Cancel", "Free", "Stop threat"],
-              ]}
-            />
           </Section>
 
           {/* Footer */}
