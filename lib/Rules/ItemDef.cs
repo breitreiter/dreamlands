@@ -326,8 +326,7 @@ public sealed class ItemDef
         ["cartographers_kit"] = new()
         {
             Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,
-            Description = "Compass, sighting rod, and folded survey sheets.",
-            PassiveImmunities = new HashSet<string> { "lost" },
+            Description = "Compass, sighting rod, and folded survey sheets. You won't get lost carrying this.",
             Biome = "plains", ShopTier = 1, Cost = 80,
         },
         ["sleeping_kit"] = new()

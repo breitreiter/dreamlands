@@ -1,5 +1,6 @@
 Lost
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 You took what looked like a shortcut and now you aren't sure what you took.
 

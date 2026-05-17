@@ -1,5 +1,6 @@
 Lost
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 Your return blazes are gone. Not obscured. Gone. The bark you marked two hours ago is clean, and you don't know if weather stripped them or animals or your own memory is simply wrong about where you left them.
 

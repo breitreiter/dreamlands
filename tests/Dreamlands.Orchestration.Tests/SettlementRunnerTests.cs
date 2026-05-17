@@ -49,7 +49,6 @@ public class SettlementRunnerTests
         session.Player.ActiveConditions.Add("freezing");
         session.Player.ActiveConditions.Add("thirsty");
         session.Player.ActiveConditions.Add("exhausted");
-        session.Player.ActiveConditions.Add("lost");
         session.Player.ActiveConditions.Add("injured"); // serious — should NOT clear
 
         SettlementRunner.EnsureSettlement(session);
@@ -57,7 +56,6 @@ public class SettlementRunnerTests
         Assert.DoesNotContain("freezing", session.Player.ActiveConditions);
         Assert.DoesNotContain("thirsty", session.Player.ActiveConditions);
         Assert.DoesNotContain("exhausted", session.Player.ActiveConditions);
-        Assert.DoesNotContain("lost", session.Player.ActiveConditions);
         Assert.Contains("injured", session.Player.ActiveConditions);
     }
 

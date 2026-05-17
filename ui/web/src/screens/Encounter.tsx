@@ -6,6 +6,7 @@ import parchment from "../assets/parchment.webp";
 import { formatProse } from "../prose";
 import DieRoll, { MeetsCheck } from "../components/DieRoll";
 import ApproachPicker from "../components/ApproachPicker";
+import Tableau from "./Tableau";
 
 type Segment =
   | { kind: "outcome"; data: OutcomeInfo }
@@ -180,8 +181,13 @@ export default function Encounter({ state }: { state: GameResponse }) {
             <ApproachPicker prompt={state.approachPrompt} />
           )}
 
+          {/* Inline level-up tableau — replaces choices when an arc rewards a level */}
+          {state.mode === "tableau_prompt" && state.tableauPrompt && (
+            <Tableau tableau={state.tableauPrompt} />
+          )}
+
           {/* Current choices (if not terminal) */}
-          {!isTerminalOutcome && encounter && state.mode !== "approach_prompt" && (
+          {!isTerminalOutcome && encounter && state.mode !== "approach_prompt" && state.mode !== "tableau_prompt" && (
             <div className="space-y-4 pt-2">
               {encounter.choices.map((choice) => (
                 <button

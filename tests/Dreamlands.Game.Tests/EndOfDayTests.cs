@@ -26,7 +26,6 @@ public class EndOfDayTests
     {
         var threats = EndOfDay.GetThreats("plains", 1, Balance);
         Assert.Contains(threats, t => t.Id == "exhausted");
-        Assert.Contains(threats, t => t.Id == "lost");
     }
 
     [Fact]

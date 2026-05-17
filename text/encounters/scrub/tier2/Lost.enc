@@ -1,6 +1,6 @@
 Lost in the Occupied Mesa
-[trigger none]
-[requires tag lost]
+[trigger road]
+[requires !has cartographers_kit]
 
 The scratched-stone map you were given at the last settlement described a track past a signal tower and down through a boulder field to the depot road. The signal tower is somewhere ahead; you can see a scaffolded shape on the horizon, but the land between keeps offering different routes and each one looks wrong from the moment you commit to it. Your water skin is lighter than it should be. The mineral crust underfoot crunches with each step, white and unfamiliar.
 

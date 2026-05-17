@@ -75,16 +75,6 @@ public sealed class ConditionFlavor
             HealComplete = "The wound closes clean at last. Whatever was in your blood has been driven out.",
             Death = "The fever takes your thoughts first, then your limbs, then everything. The venom finishes what the bite began.",
         },
-        ["lost"] = new()
-        {
-            Ongoing = "Every track looks like the last one. Every hill the same hill. You are still lost.",
-            Resist = "You scratch landmarks into your notes before they blur together. The way holds, for now.",
-            Succumb = "You look back the way you came and see only wilderness. The path that brought you here is gone.",
-            HealProgress = "A landmark clicks into place. The wilderness is not quite so featureless as it was.",
-            HealFailure = "Your map is a lie. The landmarks refuse to answer to what you\u2019ve drawn. You are still turned around.",
-            HealComplete = "The country makes sense again. You know where you\u2019ve been, and where you\u2019re going.",
-            Death = "The wilderness does not yield your body to searchers.",
-        },
         ["injured"] = new()
         {
             Ongoing = "Your injuries worsen. You\u2019ll need healing soon.",

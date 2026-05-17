@@ -1,5 +1,6 @@
 Lost in the Far Ranges
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 The cairn route ended three hours ago at a ledge too exposed to cross, and the traverse you took to get around it has deposited you somewhere the map, if you still trust the map, does not account for. The trail infrastructure of the Near Ranges is a memory. Up here, routes are scratched on oilcloth by prospectors who navigate by landmark and instinct and the color of certain rocks, and you have none of their fluency.
 

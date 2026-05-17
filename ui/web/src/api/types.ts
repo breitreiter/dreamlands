@@ -195,6 +195,21 @@ export interface DeliveryInfo {
   flavor: string | null;
 }
 
+export interface ClearedConditionInfo {
+  id: string;
+  name: string;
+}
+
+export interface ArrivalInfo {
+  settlementName: string;
+  daysElapsed: number;
+  conditionsCleared: ClearedConditionInfo[];
+  healthBefore: number;
+  healthAfter: number;
+  spiritsBefore: number;
+  spiritsAfter: number;
+}
+
 export interface EncounterSummaryInfo {
   id: string;
   title: string;
@@ -245,6 +260,7 @@ export interface GameResponse {
   marketResult?: MarketOrderResult;
   innRecovery?: InnRecoveryInfo;
   deliveries?: DeliveryInfo[];
+  arrival?: ArrivalInfo;
   combat?: CombatInfo;
   travel?: TravelInfo;
   approachPrompt?: ApproachPromptInfo;

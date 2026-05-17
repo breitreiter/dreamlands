@@ -19,13 +19,13 @@ namespace Dreamlands.Game;
 public static class EndOfDay
 {
     // Conditions that are always checked regardless of biome
-    static readonly string[] UniversalAmbientIds = ["exhausted", "lost"];
+    static readonly string[] UniversalAmbientIds = ["exhausted"];
 
     // Conditions that only come from encounters, never from ambient resist checks
     static readonly HashSet<string> EncounterOnlyIds = ["poisoned", "injured", "irradiated", "lattice_sickness"];
 
     // Travel conditions resist via Bushcraft; serious conditions resist via Cunning
-    static readonly HashSet<string> TravelConditionIds = ["exhausted", "freezing", "thirsty", "lost"];
+    static readonly HashSet<string> TravelConditionIds = ["exhausted", "freezing", "thirsty"];
 
     /// <summary>
     /// Returns ambient conditions that threaten the player tonight based on camping biome/tier.

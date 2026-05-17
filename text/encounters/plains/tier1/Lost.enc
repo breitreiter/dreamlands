@@ -1,5 +1,6 @@
 Lost
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 The road was here a moment ago. You are certain of it. But the wheat is tall on all sides now, each row identical to the last, and the track you were following has softened into nothing more than a suggestion of flattened grass that could have been made by an animal, a cart, or your own imagination. Somewhere in the last half-hour the Aldgate bells stopped being audible and you failed to notice until just now.
 

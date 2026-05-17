@@ -1,5 +1,6 @@
 Lost in the Near Ranges
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 The trail was clear an hour ago. You're certain of it. But the switchbacks have multiplied somehow, and the cairn you've been following for the last mile has no successor that you can find. The sky is still bright, the air still thin and cool, but the familiar clang of pick-work and mule bells has faded below the ridge, and the slope ahead of you looks wrong in a way you can't name.
 

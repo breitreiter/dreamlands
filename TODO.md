@@ -89,6 +89,15 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       (1) 1-2 steps deeper on the trade graph, pushing exploration forward, and
       (2) way back toward root (Aldgate), rewarding long return trips and encouraging
       players to try new branches and pick up fresh storylets.
+- [ ] Quality-gated chapterhouses — scatter additional chapterhouses across the map, each
+      unlocked by a faction-standing or arc-completion quality. Solves two problems at once:
+      (a) deep-wild settlements currently have no recovery option for severe conditions
+      (untreatable poisoned/injured/lattice_sickness stacks force a long retreat), and
+      (b) makes faction-friendly outcomes mechanically relevant beyond flavor. Probably plugs
+      cleanly into mapgen (roster + placement pass), and into SettlementRunner via a
+      `quality >= n`-style gate on the chapterhouse service. Downside: introduces the first
+      **canonical qualities** — qualities leaking out of the .enc system into engine code is a
+      precedent worth weighing carefully. Worth it, probably.
 - [ ] Combat flee balance check. Post-picker, fleeing always succeeds but costs one
       round of monster intent (player slots become Skipped, monster's committed slots
       still resolve). Cunning no longer offers a numeric save. Might be fine — fixed-

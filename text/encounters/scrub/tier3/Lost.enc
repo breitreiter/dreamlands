@@ -1,6 +1,6 @@
 Lost in the Ghassuleth
-[trigger none]
-[requires tag lost]
+[trigger road]
+[requires !has cartographers_kit]
 
 The track you followed into the plateau is gone. Not diverged, not obscured. Gone, as though it was never here. The black rock of the Ghassuleth extends in every direction, fractured and glassy, and the wind moves through it making a sound that is almost words and is never quite silence. The sky is wrong, or your sense of where the sun should sit is wrong. Either possibility is unwelcome.
 

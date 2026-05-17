@@ -8,7 +8,7 @@ import Inventory from "./Inventory";
 import MarketScreen from "./Market";
 import BankScreen from "./Bank";
 import Inn from "./Inn";
-import MaskedIcon from "../components/MaskedIcon";
+import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
 import DayNightComplication from "../components/DayNightComplication";
 import CombatPicker from "../components/CombatPicker";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,27 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { getDiscoveries, getNotices } from "../api/client";
-import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo } from "../api/types";
+import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo, ArrivalInfo } from "../api/types";
+
+function StatDelta({ icon, label, before, after }: { icon: string; label: string; before: number; after: number }) {
+  const delta = after - before;
+  const changed = delta !== 0;
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <MaskedIcon icon={icon} className="w-5 h-5" color="currentColor" />
+        <span>{label}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-dim">{before}</span>
+        <span className="text-dim">{"→"}</span>
+        <span className={changed && delta < 0 ? "text-negative" : changed ? "text-positive" : ""}>
+          {after}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -528,7 +548,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   const { doAction, loading, gameId, clearCampReport } = useGame();
   const [showInventory, setShowInventory] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
-  const [pendingDeliveries, setPendingDeliveries] = useState<DeliveryInfo[]>([]);
+  const [pendingArrival, setPendingArrival] = useState<{ arrival: ArrivalInfo | null; deliveries: DeliveryInfo[] } | null>(null);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
   const [traveling, setTraveling] = useState(false);
   const [gridReady, setGridReady] = useState(false);
@@ -576,6 +596,7 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
 
     const deferredDeliveries = result.deliveries?.length ? result.deliveries : null;
+    const deferredArrival = result.arrival ?? null;
 
     const effectiveLen = Math.min(result.travel.stepsCompleted + 1, pathSnapshot.length);
     const rawPts = pathSnapshot.slice(0, effectiveLen).map(
@@ -593,7 +614,9 @@ export default function Explore({ state }: { state: GameResponse }) {
 
     setTravelPhase("idle");
     setAnimSpline([]);
-    if (deferredDeliveries) setPendingDeliveries(deferredDeliveries);
+    if (deferredDeliveries || deferredArrival) {
+      setPendingArrival({ arrival: deferredArrival, deliveries: deferredDeliveries ?? [] });
+    }
     // MapFollower will remount and flyTo; its onFlyEnd clears traveling.
   }, [traveling, doAction, clearCampReport]);
 
@@ -635,7 +658,7 @@ export default function Explore({ state }: { state: GameResponse }) {
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (activeService != null || pendingDeliveries.length > 0) return;
+      if (activeService != null || pendingArrival != null) return;
       const target = e.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
 
@@ -654,7 +677,7 @@ export default function Explore({ state }: { state: GameResponse }) {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [loading, traveling, activeService, pendingDeliveries.length, travelPhase, cancelTravel]);
+  }, [loading, traveling, activeService, pendingArrival, travelPhase, cancelTravel]);
 
   if (!state.node || !state.exits) return null;
 
@@ -766,38 +789,100 @@ export default function Explore({ state }: { state: GameResponse }) {
         onEnterDungeon={() => doAction({ action: "enter_dungeon" })}
       />
 
-      {/* Haul delivery dialog */}
-      <AlertDialog open={pendingDeliveries.length > 0}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="font-header text-accent text-[32px]">
-              Delivery Complete
-            </AlertDialogTitle>
-          </AlertDialogHeader>
-          <div className="flex flex-col gap-4">
-            {pendingDeliveries.map((d, i) => (
-              <div key={i} className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <MaskedIcon icon="wooden-crate.svg" className="w-6 h-6" color="#D0BD62" />
-                  <span className="text-accent font-bold">{d.name}</span>
+      {/* Settlement arrival dialog — journey summary + deliveries */}
+      <AlertDialog open={pendingArrival != null}>
+        <AlertDialogContent className="max-w-3xl">
+          {pendingArrival && (() => {
+            const { arrival, deliveries } = pendingArrival;
+            const headerSubtitle = arrival
+              ? `${arrival.daysElapsed} day${arrival.daysElapsed !== 1 ? "s" : ""} on the road`
+              : null;
+            const settlementName = arrival?.settlementName
+              ?? state.node?.poi?.name
+              ?? "Settlement";
+            const hasJourney = arrival != null;
+            const hasDeliveries = deliveries.length > 0;
+            return (
+              <>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="font-header text-accent text-[32px]">
+                    Arrived at {settlementName}
+                  </AlertDialogTitle>
+                  {headerSubtitle && (
+                    <AlertDialogDescription className="text-dim">
+                      {headerSubtitle}
+                    </AlertDialogDescription>
+                  )}
+                </AlertDialogHeader>
+
+                <div className={`grid gap-6 ${hasJourney && hasDeliveries ? "md:grid-cols-2" : "grid-cols-1"}`}>
+                  {hasJourney && (
+                    <div className="flex flex-col gap-3">
+                      <div className="text-accent font-bold tracking-wide">The Journey</div>
+                      {arrival!.conditionsCleared.length > 0 && (
+                        <div className="flex flex-col gap-1.5">
+                          {arrival!.conditionsCleared.map((c) => (
+                            <div key={c.id} className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={iconUrl(CONDITION_ICONS[c.id] || "sun.svg")}
+                                  alt=""
+                                  className="w-5 h-5"
+                                />
+                                <span>{c.name}</span>
+                              </div>
+                              <span className="text-positive">cleared</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-1.5 border-t border-edge pt-3">
+                        <StatDelta
+                          icon="heart-plus.svg"
+                          label="Health"
+                          before={arrival!.healthBefore}
+                          after={arrival!.healthAfter}
+                        />
+                        <StatDelta
+                          icon="sensuousness.svg"
+                          label="Spirits"
+                          before={arrival!.spiritsBefore}
+                          after={arrival!.spiritsAfter}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {hasDeliveries && (
+                    <div className="flex flex-col gap-3">
+                      <div className="text-accent font-bold tracking-wide">Deliveries</div>
+                      {deliveries.map((d, i) => (
+                        <div key={i} className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
+                            <span className="text-accent font-bold">{d.name}</span>
+                          </div>
+                          {d.flavor && (
+                            <div className="text-primary/80 leading-relaxed ml-7">{d.flavor}</div>
+                          )}
+                          <div className="flex items-center gap-2 ml-7">
+                            <MaskedIcon icon="two-coins.svg" className="w-4 h-4" color="#D0BD62" />
+                            <span>+{d.payout} gold</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {d.flavor && (
-                  <AlertDialogDescription className="text-primary leading-relaxed">
-                    {d.flavor}
-                  </AlertDialogDescription>
-                )}
-                <div className="flex items-center gap-2 text-accent">
-                  <MaskedIcon icon="two-coins.svg" className="w-5 h-5" color="#D0BD62" />
-                  <span>+{d.payout} gold</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setPendingDeliveries([])}>
-              Close
-            </AlertDialogAction>
-          </AlertDialogFooter>
+
+                <AlertDialogFooter>
+                  <AlertDialogAction onClick={() => setPendingArrival(null)}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </>
+            );
+          })()}
         </AlertDialogContent>
       </AlertDialog>
 

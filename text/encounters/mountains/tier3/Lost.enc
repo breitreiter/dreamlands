@@ -1,5 +1,6 @@
 Lost in the Hollow Karst
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 The karst doesn't have trails. It has routes, paths worn by herder clans who know this place well enough to name it in ways they won't say aloud to outsiders. What you have are tracks in old mud, cairns that may mark something or may mark nothing, and the creeping suspicion that the ground is not as solid as it presents itself. The limestone beneath your feet is honeycombed. Twice today you've stepped on what looked like solid ground and felt it shift, felt the hollow resonance of empty space below.
 

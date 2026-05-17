@@ -1,5 +1,6 @@
 Lost in the Mire
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 There was a direction. There was a heading, a plan, a sequence of landmarks you were watching for. And then the ground did something unexpected and you adjusted, and then you adjusted again, and at some point the adjustments became the journey and the journey became this: standing on a surface that is neither land nor water, in a swamp that looks the same in every direction, aware that you have no reliable information about where you are or how far you have come.
 

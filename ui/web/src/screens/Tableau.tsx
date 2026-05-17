@@ -1,5 +1,5 @@
 import { useGame } from "../GameContext";
-import type { GameResponse, TableauSlotInfo } from "../api/types";
+import type { TableauPromptInfo, TableauSlotInfo } from "../api/types";
 
 type TierState = "pickable" | "owned" | "locked";
 
@@ -25,7 +25,7 @@ function TierCard({
   state: TierState;
   onClick?: () => void;
 }) {
-  const isClickable = state === "pickable" && onClick;
+  const isClickable = state === "pickable" && !!onClick;
 
   const borderClass =
     state === "pickable"
@@ -34,8 +34,7 @@ function TierCard({
       ? "border-accent opacity-50"
       : "border-dim border-dashed opacity-50";
 
-  const labelClass =
-    state === "pickable" ? "text-action" : "text-accent";
+  const labelClass = state === "pickable" ? "text-action" : "text-accent";
 
   return (
     <button
@@ -45,12 +44,8 @@ function TierCard({
         isClickable ? "cursor-pointer hover:border-action" : "cursor-default"
       }`}
     >
-      <span className={`text-base leading-6 font-body ${labelClass}`}>
-        {label}
-      </span>
-      <span className="text-primary text-base leading-6 font-body">
-        {description}
-      </span>
+      <span className={`text-base leading-6 font-body ${labelClass}`}>{label}</span>
+      <span className="text-primary text-base leading-6 font-body">{description}</span>
     </button>
   );
 }
@@ -85,29 +80,22 @@ function SlotRow({
   const tier2Label = t2 === "owned" ? "✓ Mastered" : `Master ${slot.label}`;
 
   const leftLineActive = slot.isPickable;
-  const rightLineActive = t2 === "pickable" || t2 === "owned";
   const rightLineDashed = t2 === "locked";
+  const rightLineActive = t2 === "pickable" || t2 === "owned";
 
   return (
-    <div className="flex items-center gap-0">
-      {/* Skill icon */}
+    <div className="flex items-center">
       <div className="w-[60px] h-[60px] rounded-full bg-panel-alt border-2 border-accent shrink-0 flex items-center justify-center">
-        <span className="text-accent font-body text-base">
-          {slot.label.charAt(0)}
-        </span>
+        <span className="text-accent font-body text-base">{slot.label.charAt(0)}</span>
       </div>
-
       <ConnectorLine active={leftLineActive} />
-
       <TierCard
         label={tier1Label}
         description={slot.tier1Description}
         state={t1}
         onClick={t1 === "pickable" && !disabled ? () => onPick(slot.id) : undefined}
       />
-
       <ConnectorLine active={rightLineActive} dashed={rightLineDashed} />
-
       <TierCard
         label={tier2Label}
         description={slot.tier2Description}
@@ -118,40 +106,25 @@ function SlotRow({
   );
 }
 
-export default function Tableau({ state }: { state: GameResponse }) {
+export default function Tableau({ tableau }: { tableau: TableauPromptInfo }) {
   const { doAction, loading } = useGame();
-  const tableau = state.tableauPrompt;
-
-  if (!tableau) return null;
 
   const handlePick = (slotId: string) => {
     doAction({ action: "pick_reward", rewardSlotId: slotId } as Parameters<typeof doAction>[0]);
   };
 
   return (
-    <div className="absolute inset-0 z-[1200] flex items-center justify-center bg-black/60 p-6">
-      <div className="bg-page border border-edge rounded-lg shadow-xl p-8 space-y-6 max-w-[700px] w-full">
-        <div className="space-y-1">
-          <h2 className="font-header text-accent text-[32px] leading-tight">
-            You have leveled up.
-          </h2>
-          {tableau.pendingLevels > 1 && (
-            <p className="text-dim text-base">
-              {tableau.pendingLevels} picks remaining — choose one
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {tableau.slots.map((slot) => (
-            <SlotRow
-              key={slot.id}
-              slot={slot}
-              onPick={handlePick}
-              disabled={loading}
-            />
-          ))}
-        </div>
+    <div className="space-y-5 pt-2">
+      <div className="space-y-1">
+        <h2 className="font-header text-accent text-[32px] leading-tight">You have leveled up.</h2>
+        {tableau.pendingLevels > 1 && (
+          <p className="text-dim text-base">{tableau.pendingLevels} picks remaining — choose one</p>
+        )}
+      </div>
+      <div className="flex flex-col gap-3 overflow-x-auto">
+        {tableau.slots.map((slot) => (
+          <SlotRow key={slot.id} slot={slot} onPick={handlePick} disabled={loading} />
+        ))}
       </div>
     </div>
   );

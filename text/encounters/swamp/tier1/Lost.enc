@@ -1,5 +1,6 @@
 Lost in the Fens
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 Somewhere in the last hour you left the raised path and trusted your own sense of direction. That was the mistake. The channels all look the same, brown water threading between walls of reeds taller than your head, and the ground that looked solid underfoot has become something you probe with each step before you trust it.
 

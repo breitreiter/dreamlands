@@ -14,7 +14,11 @@ public static class SettlementRunner
     /// Does NOT change session mode.
     /// </summary>
     public static SettlementData? EnsureSettlement(GameSession session)
+        => EnsureSettlement(session, out _);
+
+    public static SettlementData? EnsureSettlement(GameSession session, out List<string> clearedConditionIds)
     {
+        clearedConditionIds = [];
         var node = session.CurrentNode;
         if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.SettlementId == null)
             return null;
@@ -31,6 +35,7 @@ public static class SettlementRunner
                 && def.ClearedOnSettlement)
             {
                 session.Player.ActiveConditions.Remove(conditionId);
+                clearedConditionIds.Add(conditionId);
             }
         }
         // Initialize settlement state on first visit

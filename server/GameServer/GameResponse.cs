@@ -36,6 +36,10 @@ public class GameResponse
     // Haul deliveries (populated on move when arriving at a settlement)
     public List<DeliveryInfo>? Deliveries { get; init; }
 
+    // Settlement arrival summary (populated when travel ends at a settlement
+    // with cleared conditions, lost health, or lost spirits to report)
+    public ArrivalInfo? Arrival { get; init; }
+
     // Always include inventory for client state
     public InventoryInfo? Inventory { get; init; }
 
@@ -86,6 +90,23 @@ public class DeliveryInfo
     public string Name { get; init; } = "";
     public int Payout { get; init; }
     public string? Flavor { get; init; }
+}
+
+public class ArrivalInfo
+{
+    public string SettlementName { get; init; } = "";
+    public int DaysElapsed { get; init; }
+    public List<ClearedConditionInfo> ConditionsCleared { get; init; } = [];
+    public int HealthBefore { get; init; }
+    public int HealthAfter { get; init; }
+    public int SpiritsBefore { get; init; }
+    public int SpiritsAfter { get; init; }
+}
+
+public class ClearedConditionInfo
+{
+    public string Id { get; init; } = "";
+    public string Name { get; init; } = "";
 }
 
 public class InnRecoveryInfo

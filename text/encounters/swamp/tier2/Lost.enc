@@ -1,5 +1,6 @@
 Lost in the Mosswater
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 The channel you were following stopped being a channel somewhere in the last hour. It did not end; it widened and slowed and became a series of shallow pools connected by thin strings of current, and then the current disappeared into the moss, and now there is no current and every direction looks like every other direction. The canopy is dense enough that the sky is a green suggestion above you. The sun might as well be a rumor.
 

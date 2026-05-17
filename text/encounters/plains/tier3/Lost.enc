@@ -1,5 +1,6 @@
 Lost
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 You know you are lost because the dome is in the wrong place.
 

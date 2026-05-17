@@ -1,6 +1,6 @@
 Lost in the Mesa Borderlands
-[trigger none]
-[requires tag lost]
+[trigger road]
+[requires !has cartographers_kit]
 
 The road you were following has dissolved into three possible roads, or perhaps none of them was a road to begin with. Clan-cut paths across the plateau look indistinguishable from dry watercourses. The stone markers that clan travelers read like script mean nothing to you. The sun is high and unhelpful. Somewhere over the next ridge is the settlement you were aiming for, but the next ridge looks exactly like the last three.
 

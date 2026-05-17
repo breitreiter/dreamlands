@@ -5,7 +5,6 @@ import Encounter from "./screens/Encounter";
 import Rescue from "./screens/Rescue";
 import Camp from "./screens/Camp";
 import Combat from "./screens/Combat";
-import Tableau from "./screens/Tableau";
 
 function GameRouter() {
   const { response, error, clearError } = useGame();
@@ -30,7 +29,6 @@ function GameRouter() {
       {(response.mode === "combat" || response.mode === "combat_resolved") && <Combat state={response} />}
       {response.mode === "rescued" && <Rescue state={response} />}
       {(response.mode === "camp" || response.mode === "camp_resolved") && <Camp state={response} />}
-      {response.mode === "tableau_prompt" && <Tableau state={response} />}
     </>
   );
 }

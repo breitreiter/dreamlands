@@ -59,13 +59,6 @@ public sealed class ConditionDef
             Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
             Stacks = 3, Severity = ConditionSeverity.Severe,
         },
-        ["lost"] = new()
-        {
-            Id = "lost", Name = "Lost", Biome = "none", Tier = "none",
-            Stacks = 1, ResistDifficulty = Difficulty.Easy,
-            ClearedOnSettlement = true,
-            SpecialEffect = "You must resolve a Lost encounter.",
-        },
         ["injured"] = new()
         {
             Id = "injured", Name = "Injured", Biome = "none", Tier = "none",

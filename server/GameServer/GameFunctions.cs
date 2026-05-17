@@ -152,19 +152,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return new OkObjectResult(BuildEncounterResponse(session, enc, gated));
         }
 
-        // Auto-start Lost encounter when player has the lost condition
-        if (player.ActiveConditions.Contains("lost"))
-        {
-            var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
-            if (lostEnc != null)
-            {
-                ResetEncounterCadence(player, session);
-                var step = EncounterRunner.Begin(session, lostEnc);
-                await store.Save(player);
-                return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
-            }
-        }
-
         return new OkObjectResult(BuildExploringResponse(session));
     }
 
@@ -232,19 +219,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                 if (player.CurrentDungeonId != null)
                     return new BadRequestObjectResult(new { error = "Cannot move while in a dungeon — leave the dungeon first" });
-
-                // Auto-start Lost encounter when player has the lost condition
-                if (player.ActiveConditions.Contains("lost"))
-                {
-                    var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
-                    if (lostEnc != null)
-                    {
-                        ResetEncounterCadence(player, session);
-                        var step = EncounterRunner.Begin(session, lostEnc);
-                        await store.Save(player);
-                        return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
-                    }
-                }
 
                 if (!Enum.TryParse<Direction>(actionReq.Direction, true, out var dir))
                     return new BadRequestObjectResult(new { error = $"Invalid direction: {actionReq.Direction}" });
@@ -346,19 +320,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (player.CurrentDungeonId != null)
                     return new BadRequestObjectResult(new { error = "Cannot travel while in a dungeon" });
 
-                // Auto-start Lost encounter when player has the lost condition
-                if (player.ActiveConditions.Contains("lost"))
-                {
-                    var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
-                    if (lostEnc != null)
-                    {
-                        ResetEncounterCadence(player, session);
-                        var step = EncounterRunner.Begin(session, lostEnc);
-                        await store.Save(player);
-                        return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
-                    }
-                }
-
                 if (actionReq.Path is not { Count: >= 2 } proposedPath)
                     return new BadRequestObjectResult(new { error = "Path is required (at least 2 points)" });
 
@@ -369,6 +330,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 var stepsCompleted = 0;
                 string stopReason = "arrived";
                 List<DeliveryInfo> allDeliveries = [];
+                List<ClearedConditionInfo> allClearedConditions = [];
+                var journeyHealthBefore = player.Health;
+                var journeySpiritsBefore = player.Spirits;
+                var journeyDayBefore = player.Day;
 
                 for (var i = 1; i < proposedPath.Count; i++)
                 {
@@ -397,7 +362,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
                     {
                         player.PendingNoBiome = true;
-                        SettlementRunner.EnsureSettlement(session);
+                        SettlementRunner.EnsureSettlement(session, out var clearedHere);
+                        foreach (var cid in clearedHere)
+                        {
+                            if (data.Balance.Conditions.TryGetValue(cid, out var cdef))
+                                allClearedConditions.Add(new ClearedConditionInfo { Id = cid, Name = cdef.Name });
+                            else
+                                allClearedConditions.Add(new ClearedConditionInfo { Id = cid, Name = cid });
+                        }
 
                         if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
                         {
@@ -511,33 +483,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             });
                         }
 
-                        // If player became lost overnight, interrupt travel with Lost encounter
-                        if (player.ActiveConditions.Contains("lost"))
-                        {
-                            var lostEnc = EncounterSelection.PickLostEncounter(session, session.CurrentNode);
-                            if (lostEnc != null)
-                            {
-                                ResetEncounterCadence(player, session);
-                                var step = EncounterRunner.Begin(session, lostEnc);
-                                await store.Save(player);
-                                return new OkObjectResult(new GameResponse
-                                {
-                                    Mode = "encounter",
-                                    Status = BuildStatus(player),
-                                    Node = BuildNodeInfo(session.CurrentNode, player, session),
-                                    Encounter = BuildEncounterInfo(step.Encounter, step.GatedChoices),
-                                    Inventory = BuildInventory(player),
-                                    Mechanics = BuildMechanics(player),
-                                    Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
-                                    Travel = new TravelInfo
-                                    {
-                                        Path = proposedPath,
-                                        StepsCompleted = stepsCompleted,
-                                        StopReason = "lost",
-                                    },
-                                });
-                            }
-                        }
                     }
 
                     // Encounter check
@@ -581,6 +526,29 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 }
 
                 await store.Save(player);
+
+                ArrivalInfo? arrival = null;
+                var finalNode = session.CurrentNode;
+                if (finalNode.Poi?.Kind == PoiKind.Settlement)
+                {
+                    var healthDropped = player.Health < journeyHealthBefore;
+                    var spiritsDropped = player.Spirits < journeySpiritsBefore;
+                    var notable = allClearedConditions.Count > 0 || healthDropped || spiritsDropped;
+                    if (notable)
+                    {
+                        arrival = new ArrivalInfo
+                        {
+                            SettlementName = finalNode.Poi.Name ?? finalNode.Poi.SettlementId ?? "Settlement",
+                            DaysElapsed = player.Day - journeyDayBefore,
+                            ConditionsCleared = allClearedConditions,
+                            HealthBefore = journeyHealthBefore,
+                            HealthAfter = player.Health,
+                            SpiritsBefore = journeySpiritsBefore,
+                            SpiritsAfter = player.Spirits,
+                        };
+                    }
+                }
+
                 response = new GameResponse
                 {
                     Mode = "exploring",
@@ -590,6 +558,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Inventory = BuildInventory(player),
                     Mechanics = BuildMechanics(player),
                     Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                    Arrival = arrival,
                     Travel = new TravelInfo
                     {
                         Path = proposedPath,
@@ -1405,22 +1374,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     // ── Builder helpers ──
 
-    // Reset the road-encounter cadence so the next overworld encounter is rolled
-    // fresh from "now" rather than firing immediately on the next move. Used after
-    // system encounters (like Lost) to keep the cadence from feeling too dense.
-    void ResetEncounterCadence(PlayerState player, GameSession session)
-    {
-        player.NextEncounterMove = player.MoveCount
-            + session.Rng.Next(data.Balance.Character.EncounterCadenceMin,
-                               data.Balance.Character.EncounterCadenceMax + 1);
-    }
-
     GameSession BuildSession(PlayerState player)
     {
         // Mix in Day, Time, MoveCount and condition count alongside Seed + visited count so the
         // RNG advances between API calls even when the player is stationary. Without this, a
-        // stuck player keeps re-rolling the exact same outcome and can lock into a bad state
-        // (e.g. an unresisted "lost" looping a Lost encounter forever).
+        // stuck player keeps re-rolling the exact same outcome and can lock into a bad state.
         var rngSeed = player.Seed
                     + player.VisitedNodes.Count * 31
                     + player.Day * 1009
@@ -1601,7 +1559,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             var resistSkill = condId switch
             {
-                "freezing" or "thirsty" or "lost" or "poisoned" => (Skill?)Skill.Bushcraft,
+                "freezing" or "thirsty" or "poisoned" => (Skill?)Skill.Bushcraft,
                 "injured" => Skill.Combat,
                 _ => null,
             };

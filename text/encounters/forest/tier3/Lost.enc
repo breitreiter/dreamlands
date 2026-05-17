@@ -1,5 +1,6 @@
 Lost
-[trigger none]
+[trigger road]
+[requires !has cartographers_kit]
 
 You have been walking for what your body says is four hours. Your map says you should be at the ridge by now.
 
