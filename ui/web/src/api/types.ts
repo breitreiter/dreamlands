@@ -198,6 +198,7 @@ export interface DeliveryInfo {
 export interface DungeonHubInfo {
   dungeonId: string;
   name: string;
+  vignette?: string;
   encounters: EncounterSummaryInfo[];
 }
 

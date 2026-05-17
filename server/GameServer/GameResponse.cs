@@ -367,6 +367,7 @@ public class DungeonHubInfo
 {
     public string DungeonId { get; init; } = "";
     public string Name { get; init; } = "";
+    public string? Vignette { get; init; }
     public List<EncounterSummary> Encounters { get; init; } = [];
 }
 

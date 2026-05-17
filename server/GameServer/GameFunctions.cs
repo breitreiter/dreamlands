@@ -1571,6 +1571,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             DungeonId = session.Player.CurrentDungeonId,
             Name = node.Poi?.Name ?? session.Player.CurrentDungeonId,
+            Vignette = $"dungeons/{session.Player.CurrentDungeonId}",
             Encounters = available.Select(e => new EncounterSummary
             {
                 Id = e.Id,
