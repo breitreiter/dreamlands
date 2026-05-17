@@ -112,6 +112,7 @@ export interface ItemInfo {
   cost: number | null;
   skillModifiers: Record<string, number>;
   cures: string[];
+  immunities: string[];
   moves: string[];
   isEquippable: boolean;
   isEquipped: boolean;

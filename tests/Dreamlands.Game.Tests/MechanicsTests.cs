@@ -50,26 +50,6 @@ public class MechanicsTests
     }
 
     [Fact]
-    public void IncreaseSkill_CappedAtMaxLevel()
-    {
-        var state = Fresh();
-        state.Skills[Skill.Combat] = SkillTier.Trained;
-        var results = Mechanics.Apply(["increase_skill combat 5"], state, Balance, Rng);
-
-        var r = Assert.IsType<MechanicResult.SkillChanged>(results[0]);
-        Assert.Equal(SkillTier.Expert, state.Skills[Skill.Combat]);
-    }
-
-    [Fact]
-    public void DecreaseSkill_FloorsAtZero()
-    {
-        var state = Fresh();
-        state.Skills[Skill.Cunning] = SkillTier.Trained;
-        Mechanics.Apply(["decrease_skill cunning 5"], state, Balance, Rng);
-        Assert.Equal(SkillTier.Untrained, state.Skills[Skill.Cunning]);
-    }
-
-    [Fact]
     public void AddItem_Consumable_GoesToPack()
     {
         var state = Fresh();

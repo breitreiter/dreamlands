@@ -1365,7 +1365,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance),
             quantity = entry.Quantity,
             skillModifiers = new Dictionary<string, int>(),
-            description = FormatItemDescription(entry.Item),
+            description = entry.Item.Description ?? "",
         }).ToList();
 
         var hauls = settlementState.HaulOffers.Select(h => new
@@ -1727,11 +1727,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         {
             DefId = i.DefId,
             Name = i.DisplayName,
-            Description = i.Description ?? (def != null ? FormatItemDescription(def) : null),
+            Description = i.Description ?? def?.Description,
             Type = def?.Type.ToString().ToLowerInvariant() ?? "",
             Cost = def?.Cost,
             SkillModifiers = [],
             Cures = def?.Cures.ToList() ?? [],
+            Immunities = def?.PassiveImmunities.ToList() ?? [],
             Moves = def?.Type is ItemType.Weapon or ItemType.Armor
                 ? def.RpsMoves.Select(m => m.DisplayName).ToList()
                 : [],

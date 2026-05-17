@@ -305,6 +305,11 @@ function ItemCard({
                 Moves: {item.moves.join(" · ")}
               </div>
             )}
+            {item.immunities.length > 0 && (
+              <div className="text-dim mt-0.5">
+                Immune to: {item.immunities.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(", ")}
+              </div>
+            )}
           </>
         )}
       </div>

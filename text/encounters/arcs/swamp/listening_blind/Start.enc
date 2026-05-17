@@ -8,7 +8,7 @@ choices:
 * Explore = Search the blind [requires quality faction.revivalists 5]
     @if check combat correct:rush wrong:outlast {
         You find something valuable.
-        +add_item antivenom_kit
+        +give_gold 40
         +finish_dungeon
     } @else {
         It doesn't go well.
@@ -19,7 +19,7 @@ choices:
 * Negotiate = Talk your way through [requires quality faction.revivalists 5]
     @if check negotiation correct:reason wrong:threaten {
         You find something valuable.
-        +add_item antivenom_kit
+        +give_gold 40
         +finish_dungeon
     } @else {
         It doesn't go well.

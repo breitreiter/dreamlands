@@ -149,18 +149,16 @@ public static class FlavorText
         "riding_boots" => "Kesharat officer's boots.",
         "heavy_work_boots" => "Simple but comfortable boots.",
         // Tools
-        "canteen" => "A stout canteen with a wooden stopper.",
         "waterskin" => "A large waterskin, well-stitched and treated against leaks.",
         "letters_of_introduction" => "Sealed letters vouching for the bearer's good character.",
         "peoples_borderlands" => "A remarkably complete guide to the cultures of the frontier.",
         "traders_ledger" => "A ledger of prices, weights, and measures across the borderlands.",
         "assayers_kit" => "Precision scales, acids, and touchstones for testing ore and coin.",
         "cartographers_kit" => "A guild cartographer's kit in excellent condition.",
-        "sleeping_kit" => "A bedroll and sturdy waxed canvas tent.",
+        "sleeping_kit" => "Thick wool bedroll, sized to keep a traveler warm through the deepest cold.",
         "fever_ward" => "A poultice bag of rare swamp herbs that ward off fever.",
         "bilestone" => "A smooth dark stone said to draw poison from the gut.",
         "lead_lined_case" => "A heavy case lined with lead sheeting.",
-        "antivenom_kit" => "Vials of antivenom and a scarification lancet.",
         _ => "",
     };
 

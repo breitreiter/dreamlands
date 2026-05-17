@@ -119,15 +119,13 @@ public class MarketTests
     }
 
     [Fact]
-    public void InitializeSettlement_Tools_ExcludesDungeonOnly()
+    public void InitializeSettlement_Tools_ExcludesNoCostItems()
     {
         var state = Fresh();
-        // lattice_ward, lead_lined_case, antivenom_kit have no Cost — should never appear
+        // lead_lined_case has no Cost — should never appear
         var settlement = Market.InitializeSettlement("City", "forest", 3, SettlementSize.City, state, Balance, new Random(1));
 
-        Assert.False(settlement.Stock.ContainsKey("lattice_ward"));
         Assert.False(settlement.Stock.ContainsKey("lead_lined_case"));
-        Assert.False(settlement.Stock.ContainsKey("antivenom_kit"));
     }
 
     [Fact]

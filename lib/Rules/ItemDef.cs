@@ -316,16 +316,11 @@ public sealed class ItemDef
 
         // ── Tools: Shopable ──
 
-        ["canteen"] = new()
-        {
-            Id = "canteen", Name = "Canteen", Type = ItemType.Tool,
-            Description = "A sealed tin flask that keeps water cool.",
-            Biome = "forest", ShopTier = 1, Cost = 15,
-        },
         ["waterskin"] = new()
         {
             Id = "waterskin", Name = "Waterskin", Type = ItemType.Tool,
             Description = "A treated hide bag holding two days of water.",
+            PassiveImmunities = new HashSet<string> { "thirsty" },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["letters_of_introduction"] = new()
@@ -356,31 +351,15 @@ public sealed class ItemDef
         {
             Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,
             Description = "Compass, sighting rod, and folded survey sheets.",
+            PassiveImmunities = new HashSet<string> { "lost" },
             Biome = "plains", ShopTier = 1, Cost = 80,
         },
         ["sleeping_kit"] = new()
         {
-            Id = "sleeping_kit", Name = "Sleeping Kit", Type = ItemType.Tool,
-            Description = "A wool blanket, oilskin ground sheet, and cordage.",
+            Id = "sleeping_kit", Name = "Wool Bedroll", Type = ItemType.Tool,
+            Description = "Thick wool bedroll. Sized to keep a traveler warm through the deepest cold.",
+            PassiveImmunities = new HashSet<string> { "freezing" },
             Biome = "forest", ShopTier = 2, Cost = 80,
-        },
-
-        // ── Tools: Dungeon-only ──
-
-        ["lattice_ward"] = new()
-        {
-            Id = "lattice_ward", Name = "Lattice Ward", Type = ItemType.Tool,
-            Description = "A ceramic disc etched with suppression glyphs.",
-        },
-        ["sakharov_mask"] = new()
-        {
-            Id = "sakharov_mask", Name = "Sakharov's Mask", Type = ItemType.Tool,
-            Description = "A fitted respirator from the old irradiation surveys.",
-        },
-        ["antivenom_kit"] = new()
-        {
-            Id = "antivenom_kit", Name = "Antivenom Kit", Type = ItemType.Tool,
-            Description = "Vials of broad-spectrum antivenom packed in a padded case.",
         },
 
         // ── Food ──

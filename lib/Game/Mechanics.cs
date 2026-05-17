@@ -36,9 +36,6 @@ public static class Mechanics
             "heal_spirits" => ApplyHealSpirits(args, state, balance),
             "give_gold" => ApplyGiveGold(args, state, balance),
             "rem_gold" => ApplyRemGold(args, state, balance),
-            "increase_skill" or "inc_skill" => ApplyIncreaseSkill(args, state, balance),
-            "decrease_skill" or "dec_skill" => ApplyDecreaseSkill(args, state, balance),
-            "set_skill_tier" => ApplySetSkillTier(args, state),
             "add_level" => ApplyAddLevel(state),
             "add_item" => ApplyAddItem(args, state, balance, rng),
             "add_random_items" => ApplyAddRandomItems(args, state, balance, rng),
@@ -91,38 +88,6 @@ public static class Mechanics
         return new MechanicResult.GoldChanged(-amount, state.Gold);
     }
 
-    static MechanicResult ApplyIncreaseSkill(List<string> args, PlayerState state, BalanceData balance)
-    {
-        if (args.Count < 2) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var skill = Skills.FromScriptName(args[0]);
-        if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-        if (!int.TryParse(args[1], out var amount)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = (SkillTier)Math.Clamp(current + amount, (int)SkillTier.Untrained, (int)SkillTier.Expert);
-        var delta = (int)newLevel - current;
-        state.Skills[skill.Value] = newLevel;
-
-        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
-    }
-
-    static MechanicResult ApplyDecreaseSkill(List<string> args, PlayerState state, BalanceData balance)
-    {
-        if (args.Count < 2) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var skill = Skills.FromScriptName(args[0]);
-        if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-        if (!int.TryParse(args[1], out var amount)) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
-        var newLevel = (SkillTier)Math.Clamp(current - amount, (int)SkillTier.Untrained, (int)SkillTier.Expert);
-        var delta = (int)newLevel - current;
-        state.Skills[skill.Value] = newLevel;
-
-        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel);
-    }
-
     static MechanicResult ApplyAddLevel(PlayerState state)
     {
         state.PendingLevels++;
@@ -167,34 +132,6 @@ public static class Mechanics
             state.PendingLevels--;
 
         return new MechanicResult.ArcRewardTaken(slotId, slot.Label, taken + 1);
-    }
-
-    /// <summary>
-    /// Set a skill tier directly by name: untrained | trained | expert.
-    /// Clean authoring form — coexists with the int-based set_skill.
-    /// </summary>
-    static MechanicResult ApplySetSkillTier(List<string> args, PlayerState state)
-    {
-        if (args.Count < 2) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var skill = Skills.FromScriptName(args[0]);
-        if (skill == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var tierName = args[1].ToLowerInvariant();
-        var newLevel = tierName switch
-        {
-            "untrained" => SkillTier.Untrained,
-            "trained"   => SkillTier.Trained,
-            "expert"    => SkillTier.Expert,
-            _           => (SkillTier?)null,
-        };
-        if (newLevel == null) return new MechanicResult.SkillChanged(Skill.Combat, 0, 0);
-
-        var current = (int)state.Skills.GetValueOrDefault(skill.Value);
-        var delta = (int)newLevel.Value - current;
-        state.Skills[skill.Value] = newLevel.Value;
-
-        return new MechanicResult.SkillChanged(skill.Value, delta, (int)newLevel.Value);
     }
 
     static MechanicResult ApplyAddItem(List<string> args, PlayerState state, BalanceData balance, Random rng)
