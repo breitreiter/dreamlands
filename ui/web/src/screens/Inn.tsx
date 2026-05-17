@@ -7,6 +7,7 @@ import MaskedIcon from "@/components/MaskedIcon";
 import parchment from "../assets/parchment.webp";
 
 export default function Inn({
+  state,
   isChapterhouse,
   onBack,
 }: {
@@ -15,6 +16,7 @@ export default function Inn({
   onBack: () => void;
 }) {
   const { doAction, loading, gameId } = useGame();
+  const { spirits, maxSpirits, gold } = state.status;
   const [services, setServices] = useState<InnServicesResponse | null>(null);
   const [servicesError, setServicesError] = useState<string | null>(null);
   const [recovery, setRecovery] = useState<InnRecoveryInfo | null>(null);
@@ -157,6 +159,21 @@ export default function Inn({
 
           {!services && !servicesError && (
             <div className="text-dim">Loading...</div>
+          )}
+
+          {/* Current spirits and gold — visible in both inn and chapterhouse */}
+          {services && (
+            <div className="flex gap-4 text-parchment-text bg-parchment/60 rounded px-3 py-2 self-start">
+              <div className="flex items-center gap-1.5">
+                <MaskedIcon icon="sensuousness.svg" className="w-4 h-4" color="#3a3520" />
+                <span className="font-bold">{spirits}/{maxSpirits}</span>
+                <span className="text-contrast/70">spirits</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <MaskedIcon icon="two-coins.svg" className="w-4 h-4" color="#3a3520" />
+                <span className="font-bold">{gold}g</span>
+              </div>
+            </div>
           )}
 
           {services && isChapterhouse && (

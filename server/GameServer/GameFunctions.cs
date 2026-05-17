@@ -1365,7 +1365,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance),
             quantity = entry.Quantity,
             skillModifiers = new Dictionary<string, int>(),
-            resistModifiers = entry.Item.ResistModifiers,
             description = FormatItemDescription(entry.Item),
         }).ToList();
 
@@ -1732,8 +1731,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Type = def?.Type.ToString().ToLowerInvariant() ?? "",
             Cost = def?.Cost,
             SkillModifiers = [],
-            ResistModifiers = def?.ResistModifiers.ToDictionary(kv => kv.Key, kv => kv.Value) ?? [],
             Cures = def?.Cures.ToList() ?? [],
+            Moves = def?.Type is ItemType.Weapon or ItemType.Armor
+                ? def.RpsMoves.Select(m => m.DisplayName).ToList()
+                : [],
             IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor,
             IsEquipped = i.IsEquipped,
             DestinationName = i.DestinationName,
@@ -2148,12 +2149,9 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     static string FormatItemDescription(ItemDef item)
     {
-        var parts = new List<string>();
-        foreach (var (resist, mod) in item.ResistModifiers)
-            parts.Add($"{resist} resist {(mod >= 0 ? "+" : "")}{mod}");
         if (item.Cures.Count > 0)
-            parts.Add($"Cures: {string.Join(", ", item.Cures)}");
-        return string.Join(", ", parts);
+            return $"Cures: {string.Join(", ", item.Cures)}";
+        return "";
     }
 
     // ── Tactical helpers ─────────────────────────────────────

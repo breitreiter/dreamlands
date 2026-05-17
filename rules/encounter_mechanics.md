@@ -2,7 +2,7 @@
 kind: rule
 title: Encounter Mechanics & Game Commands
 created: 2026-02-21
-updated: 2026-05-16
+updated: 2026-05-17
 status: current
 touches:
   files:
@@ -80,20 +80,25 @@ Restriction: check and meets cannot be negated or used in compound expressions.
 
 ## Skills, tiers, time, conditions
 
-SKILLS                          TIERS (for meets/check)
-  combat       fighting            untrained
-  negotiation  persuasion/social   trained
-  bushcraft    survival/travel     expert
+SKILLS                          TIERS (for meets/set_skill_tier)
+  combat       fighting            untrained  (tier 0)
+  negotiation  persuasion/social   trained    (tier 1)
+  bushcraft    survival/travel     expert     (tier 2)
   cunning      trickery/awareness
 
-LEGACY DIFFICULTY (deprecated — check command emits warning; removed after Phase 4 sweep)
-  trivial   easy   medium   hard   very_hard   epic
+  Gear unlocks by Combat tier:
+    untrained  no weapons or armor equipped
+    trained    T1 weapons + light/medium armor
+    expert     T2 weapons + all armor tiers
 
 APPROACH VERBS PER SKILL (used with check correct:/wrong:)
-  negotiation:  flatter  reason  threaten
-  cunning:      hide     bluff   scheme
-  bushcraft:    push     plan    reroute
+  negotiation:  charm    reason   threaten
+  cunning:      hide     bluff    scheme
+  bushcraft:    push     plan     reroute
   combat:       rush     strategize  outlast
+
+LEGACY DIFFICULTY (parseable, emits deprecation warning — not subject to terminal-check rule)
+  trivial   easy   medium   hard   very_hard   epic
 
 TIME PERIODS
   morning
@@ -140,8 +145,8 @@ Items               +add_item <item_id>
                     +lose_random_item
                     +discard <item_id>                  (remove a specific item from inventory)
 
-Equipment           +equip <item_id>                    (equip from Pack)
-                    +unequip <slot>                     (slot: weapon|armor|boots)
+Equipment           +equip <item_id>                    (equip from Pack; sets IsEquipped flag)
+                    +unequip <slot>                     (slot: weapon|armor)
 
 Pack                +upgrade_pack <amount>              (permanently increase pack capacity)
 
@@ -153,7 +158,8 @@ Spirits             +damage_spirits <amount>
 
 Skills              +increase_skill <skill> <amount>
                     +decrease_skill <skill> <amount>
-                    +set_skill <skill> <level>
+                    +set_skill_tier <skill> <tier>       (tier: untrained|trained|expert)
+                    +add_level                            (grant one pending tableau level-up pick)
 
 Conditions          +add_condition <condition_id>
                     +remove_condition <condition_id>
@@ -165,6 +171,36 @@ Dungeon             +finish_dungeon
                     +flee_dungeon
 
 Return to pool      +repool
+
+Identity            +set_name <name>                     (set player display name; intro only)
+
+
+## Inventory model
+
+All items live in a single Pack. There is no haversack or separate boots slot.
+Equipment (weapon, armor) is tracked via an `IsEquipped` flag on the pack item —
+no item leaves the pack when equipped. The only slots are `weapon` and `armor`
+for `+unequip`; boots were removed as a gear slot (scarecrow_boots is a Tool).
+
+PassiveImmunities: some Tools (e.g. `scarecrow_boots`, `lattice_ward`) passively
+prevent a condition for as long as the item is in the pack. They are never consumed.
+
+Medical kit: `medical_kit` cures any condition without being consumed.
+
+Food cadence: one food item consumed per day. Cadence intervals vary by Bushcraft tier.
+
+
+## Arc rewards and leveling
+
++add_level          Grants one pending tableau level-up pick. Arcs award this at
+                    completion and at key mid-arc beats. The player picks from a
+                    tableau on their next visit to a settlement or chapterhouse.
+                    There is no XP bar; advancement is entirely through arc beats.
+
++set_skill_tier     Used by arc intro encounters to set starting skill tiers based
+                    on character background (e.g. a soldier background sets
+                    combat to trained). Authors: prefer set_skill_tier over
+                    increase_skill for absolute initialization.
 
 
 ## Combat encounters (.fight format)
@@ -379,14 +415,6 @@ Heavy (Injury resist scaling, no Cunning):
   brigandine          Brigandine          Injured +4  Freezing +1  plains T2  80g
   golem_armor         Golem Armor         Injured +5  Freezing +2  (arc/reward only)
 
-### Boots
-
-  fine_boots          Fine Boots          Exhausted +1   plains T1  15g
-  heavy_work_boots    Heavy Work Boots    Exhausted +2   mountains T1  15g
-  riding_boots        Riding Boots        Exhausted +3   scrub T2   40g
-  trail_boots         Trail Boots         Exhausted +4   forest T2  80g
-  scarecrow_boots     Scarecrow Boots     Exhausted +5   (arc/reward only)
-
 ### Tools
 
 Shopable:
@@ -401,6 +429,7 @@ Shopable:
   brass_lantern       Old Brass Lantern   (light source)           plains T1  15g
 
 Arc/dungeon-only:
+  scarecrow_boots     Scarecrow Boots     PassiveImmunity:exhausted  (Tool, not Boots type)
   lattice_ward        Lattice Ward        Lattice_sickness +5
   sakharov_mask       Sakharov's Mask     Irradiated +5
   antivenom_kit       Antivenom Kit       Poison +5
@@ -419,14 +448,6 @@ Arc/dungeon-only:
   pale_knot_berry     Pale Knot Berry     Cures exhausted         plains T2  15g
   shustov_tonic       Shustov Tonic       Cures irradiated        plains T2  40g
   mudcap_fungus       Mudcap Fungus       Cures poisoned          swamp T2  15g
-
-### Tokens
-
-Skill tokens (+1 to a skill, found in encounters):
-  ivory_comb          Ivory Comb          Negotiation +1
-  lucky_buckle        Lucky Buckle        Combat +1
-  knotwork_seed       Knotwork Seed       Bushcraft +1
-  tarnished_key       Tarnished Key       Cunning +1
 
 Capstone arc keys (no stats, unlock arc progression):
   hunters_journal     Hunter's Journal

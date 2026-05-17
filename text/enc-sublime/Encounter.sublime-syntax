@@ -56,6 +56,12 @@ contexts:
         2: markup.changed.review.enc
 
   # --- Flow control (@if/@elif/@else/}) ---
+  #
+  # Picker check rule: @if check <skill> correct:X wrong:Y { ... }
+  # may ONLY appear as the terminal branch of a chain (last @elif or sole @if),
+  # and that chain MUST end with @else { ... }. Static conditions (tag, has,
+  # quality, meets) may precede it freely. This is an authoring constraint —
+  # the parser enforces it at check time.
 
   flow-control:
     - include: if-block
@@ -64,13 +70,15 @@ contexts:
     - include: brace-close
 
   if-block:
-    - match: '(@if)\s+(check)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(trivial|easy|medium|hard|very_hard|heroic)\s*(\{)'
+    # Picker check: @if check <skill> correct:<approach> wrong:<approach> {
+    - match: '(@if)\s+(check)\s+(combat|negotiation|bushcraft|cunning)\s+(correct:\w+)\s+(wrong:\w+)\s*(\{)'
       captures:
         1: keyword.control.if.enc
         2: keyword.other.condition.enc
         3: entity.name.type.skill.enc
-        4: constant.numeric.difficulty.enc
-        5: punctuation.definition.block.open.enc
+        4: variable.parameter.approach-correct.enc
+        5: variable.parameter.approach-wrong.enc
+        6: punctuation.definition.block.open.enc
     - match: '(@if)\s+(has)\s+(\S+)\s*(\{)'
       captures:
         1: keyword.control.if.enc
@@ -90,12 +98,12 @@ contexts:
         3: string.unquoted.id.enc
         4: constant.numeric.threshold.enc
         5: punctuation.definition.block.open.enc
-    - match: '(@if)\s+(meets)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(\d+)\s*(\{)'
+    - match: '(@if)\s+(meets)\s+(combat|negotiation|bushcraft|cunning)\s+(untrained|trained|expert)\s*(\{)'
       captures:
         1: keyword.control.if.enc
         2: keyword.other.condition.enc
         3: entity.name.type.skill.enc
-        4: constant.numeric.threshold.enc
+        4: constant.language.tier.enc
         5: punctuation.definition.block.open.enc
     # Compound conditions: @if tag a && quality guild 2 { ... }
     - match: '(@if)\s+(.+?)\s*(\{)'
@@ -105,14 +113,16 @@ contexts:
         3: punctuation.definition.block.open.enc
 
   elif-block:
-    - match: '(\})?\s*(@elif)\s+(check)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(trivial|easy|medium|hard|very_hard|heroic)\s*(\{)'
+    # Picker check: } @elif check <skill> correct:<approach> wrong:<approach> {
+    - match: '(\})?\s*(@elif)\s+(check)\s+(combat|negotiation|bushcraft|cunning)\s+(correct:\w+)\s+(wrong:\w+)\s*(\{)'
       captures:
         1: punctuation.definition.block.close.enc
         2: keyword.control.elif.enc
         3: keyword.other.condition.enc
         4: entity.name.type.skill.enc
-        5: constant.numeric.difficulty.enc
-        6: punctuation.definition.block.open.enc
+        5: variable.parameter.approach-correct.enc
+        6: variable.parameter.approach-wrong.enc
+        7: punctuation.definition.block.open.enc
     - match: '(\})?\s*(@elif)\s+(has)\s+(\S+)\s*(\{)'
       captures:
         1: punctuation.definition.block.close.enc
@@ -135,13 +145,13 @@ contexts:
         4: string.unquoted.id.enc
         5: constant.numeric.threshold.enc
         6: punctuation.definition.block.open.enc
-    - match: '(\})?\s*(@elif)\s+(meets)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(\d+)\s*(\{)'
+    - match: '(\})?\s*(@elif)\s+(meets)\s+(combat|negotiation|bushcraft|cunning)\s+(untrained|trained|expert)\s*(\{)'
       captures:
         1: punctuation.definition.block.close.enc
         2: keyword.control.elif.enc
         3: keyword.other.condition.enc
         4: entity.name.type.skill.enc
-        5: constant.numeric.threshold.enc
+        5: constant.language.tier.enc
         6: punctuation.definition.block.open.enc
     # Compound conditions: } @elif tag a && !tag b { ... }
     - match: '(\})?\s*(@elif)\s+(.+?)\s*(\{)'
@@ -186,8 +196,8 @@ contexts:
 
   verb-command:
     - include: verb-amount
+    - include: verb-skill-tier
     - include: verb-skill-magnitude
-    - include: verb-set-skill
     - include: verb-quality
     - include: verb-skip-time
     - include: verb-advance-time
@@ -203,21 +213,21 @@ contexts:
         2: support.function.verb.enc
         3: constant.numeric.amount.enc
 
+  verb-skill-tier:
+    - match: '(\+)(set_skill_tier)\s+(combat|negotiation|bushcraft|cunning)\s+(untrained|trained|expert)\s*$'
+      captures:
+        1: punctuation.definition.verb.enc
+        2: support.function.verb.enc
+        3: entity.name.type.skill.enc
+        4: constant.language.tier.enc
+
   verb-skill-magnitude:
-    - match: '(\+)(increase_skill|decrease_skill)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(\d+)\s*$'
+    - match: '(\+)(increase_skill|decrease_skill)\s+(combat|negotiation|bushcraft|cunning)\s+(\d+)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
         3: entity.name.type.skill.enc
         4: constant.numeric.amount.enc
-
-  verb-set-skill:
-    - match: '(\+)(set_skill)\s+(combat|negotiation|bushcraft|cunning|luck|mercantile)\s+(-?\d+)\s*$'
-      captures:
-        1: punctuation.definition.verb.enc
-        2: support.function.verb.enc
-        3: entity.name.type.skill.enc
-        4: constant.numeric.level.enc
 
   verb-quality:
     - match: '(\+)(quality)\s+(\S+)\s+(-?\d+)\s*$'
@@ -252,21 +262,21 @@ contexts:
         4: string.unquoted.category.enc
 
   verb-unequip:
-    - match: '(\+)(unequip)\s+(weapon|armor|boots)\s*$'
+    - match: '(\+)(unequip)\s+(weapon|armor)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
         3: constant.language.slot.enc
 
   verb-id:
-    - match: '(\+)(open|add_tag|remove_tag|add_item|discard|equip|add_condition|remove_condition)\s+(\S+)\s*$'
+    - match: '(\+)(open|add_tag|remove_tag|add_item|discard|equip|add_condition|remove_condition|set_name)\s+(\S+)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc
         3: string.unquoted.id.enc
 
   verb-noarg:
-    - match: '(\+)(lose_random_item|finish_dungeon|flee_dungeon|repool)\s*$'
+    - match: '(\+)(lose_random_item|finish_dungeon|flee_dungeon|repool|add_level)\s*$'
       captures:
         1: punctuation.definition.verb.enc
         2: support.function.verb.enc

@@ -24,14 +24,33 @@ import { getMarketDayNote } from "../calendar";
 const PACK_TYPES = new Set(["weapon", "armor", "tool", "haul"]);
 function isPackType(type: string) { return PACK_TYPES.has(type); }
 
-type BuyTab = "hauls" | "supplies" | "equipment";
-type SellTab = "pack" | "equipped";
+const GEAR_TYPES = new Set(["weapon", "armor"]);
+const SUPPLY_DEFS = new Set(["food_ration", "medical_kit"]);
 
-function matchesBuyTab(item: MarketItem, tab: BuyTab): boolean {
+type SellGroup = "equipped_gear" | "unequipped_gear" | "supplies" | "tools" | "hauls";
+
+function classifySellItem(item: ItemInfo): SellGroup {
+  if (item.type === "haul") return "hauls";
+  if (GEAR_TYPES.has(item.type)) return item.isEquipped ? "equipped_gear" : "unequipped_gear";
+  if (item.type === "tool") return SUPPLY_DEFS.has(item.defId) ? "supplies" : "tools";
+  return "supplies";
+}
+
+const SELL_GROUP_LABELS: Record<SellGroup, string> = {
+  equipped_gear: "Equipped Gear",
+  unequipped_gear: "Unequipped Gear",
+  supplies: "Supplies",
+  tools: "Tools",
+  hauls: "Contracts",
+};
+const SELL_GROUP_ORDER: SellGroup[] = ["equipped_gear", "unequipped_gear", "supplies", "tools", "hauls"];
+
+type BuyTab = "hauls" | "gear";
+
+function matchesBuyTab(_item: MarketItem, tab: BuyTab): boolean {
   switch (tab) {
     case "hauls": return false; // hauls are not MarketItems
-    case "supplies": return item.type === "consumable";
-    case "equipment": return item.type === "weapon" || item.type === "armor" || item.type === "tool";
+    case "gear": return true; // everything non-haul in stock is gear
   }
 }
 
@@ -56,13 +75,8 @@ export default function MarketScreen({
 
   // Tab state
   const [buyTab, setBuyTab] = useState<BuyTab>("hauls");
-  const [sellTab, setSellTab] = useState<SellTab>("pack");
 
-  function switchBuyTab(tab: BuyTab) {
-    setBuyTab(tab);
-    const linked: Record<BuyTab, SellTab> = { hauls: "pack", supplies: "pack", equipment: "equipped" };
-    setSellTab(linked[tab]);
-  }
+  function switchBuyTab(tab: BuyTab) { setBuyTab(tab); }
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -269,8 +283,8 @@ export default function MarketScreen({
 
   const filteredStock = stock.filter((item) => matchesBuyTab(item, buyTab));
 
-  // Sell items for right panel — subtract items already staged for sell
-  const sellItems = useMemo((): { item: ItemInfo; source: string }[] => {
+  // Sell items for right panel — subtract items already staged for sell, grouped
+  const sellGroups = useMemo((): { group: SellGroup; label: string; items: { item: ItemInfo; source: string }[] }[] => {
     if (!inventory) return [];
 
     const remainingSells = [...pendingSells];
@@ -281,25 +295,21 @@ export default function MarketScreen({
       return false;
     }
 
-    const items: { item: ItemInfo; source: string; sold: boolean }[] = [];
+    const grouped = new Map<SellGroup, { item: ItemInfo; source: string }[]>();
+    for (const g of SELL_GROUP_ORDER) grouped.set(g, []);
 
-    switch (sellTab) {
-      case "pack":
-        for (const item of inventory.pack.filter(i => !i.isEquipped)) {
-          const sold = consumeSell(item.defId);
-          items.push({ item, source: "pack", sold });
-        }
-        break;
-      case "equipped":
-        for (const item of inventory.pack.filter(i => i.isEquipped)) {
-          const sold = consumeSell(item.defId);
-          items.push({ item, source: item.type, sold });
-        }
-        break;
+    for (const item of inventory.pack) {
+      const sold = consumeSell(item.defId);
+      if (!sold) {
+        const g = classifySellItem(item);
+        grouped.get(g)!.push({ item, source: item.isEquipped ? item.type : "pack" });
+      }
     }
 
-    return items.filter(i => !i.sold);
-  }, [inventory, sellTab, pendingSells]);
+    return SELL_GROUP_ORDER
+      .map(g => ({ group: g, label: SELL_GROUP_LABELS[g], items: grouped.get(g)! }))
+      .filter(g => g.items.length > 0);
+  }, [inventory, pendingSells]);
 
   const settlementName = state.node?.poi?.name ?? "Market";
   const terrain = state.node?.terrain ?? null;
@@ -389,8 +399,7 @@ export default function MarketScreen({
             </div>
             <div className="flex gap-1">
               <TabButton id="hauls" active={buyTab === "hauls"} onClick={() => switchBuyTab("hauls")}>Contracts</TabButton>
-              <TabButton id="supplies" active={buyTab === "supplies"} onClick={() => switchBuyTab("supplies")}>Supplies</TabButton>
-              <TabButton id="equipment" active={buyTab === "equipment"} onClick={() => switchBuyTab("equipment")}>Equipment</TabButton>
+              <TabButton id="gear" active={buyTab === "gear"} onClick={() => switchBuyTab("gear")}>Gear</TabButton>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
@@ -465,10 +474,6 @@ export default function MarketScreen({
           <div className="p-3 pt-5">
             <h3 className="font-header text-accent text-[32px] leading-tight">Sell</h3>
             <p className="text-muted mt-0.5">The factor will take things off your hands. Click to stage.</p>
-            <div className="flex gap-1 mt-2">
-              <TabButton id="pack" active={sellTab === "pack"} onClick={() => setSellTab("pack")}>Pack</TabButton>
-              <TabButton id="equipped" active={sellTab === "equipped"} onClick={() => setSellTab("equipped")}>Equipped</TabButton>
-            </div>
           </div>
 
           {/* Staged sells chip bar */}
@@ -494,94 +499,97 @@ export default function MarketScreen({
           )}
 
           <div className="flex-1 overflow-y-auto p-2 space-y-2">
-            {sellItems.length === 0 ? (
+            {sellGroups.length === 0 ? (
               <div className="p-4 text-muted">Nothing here</div>
             ) : (
-              <>
-                {sellItems.map(({ item, source }, i) => {
-                  const price = sellPrices[item.defId];
-                  const sellable = canSell(item);
-                  return (
-                    <div
-                      key={`${source}-${item.defId}-${i}`}
-                      className="flex items-start gap-3 p-3 rounded-lg"
-                      style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
-                    >
-                      {item.type === "haul" ? (
-                        <WaxSeal
-                          variant={getSealVariant(item.haulOfferId ?? item.defId)}
-                          symbolIndex={getSealSymbolIndex(item.haulOfferId ?? item.defId)}
-                        />
-                      ) : (
-                        <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
-                          <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        {item.type === "haul" ? (
-                          <HaulItem
-                            name={item.name}
-                            destinationName={item.destinationName}
-                            destinationHint={item.destinationHint}
-                            payout={item.payout}
-                            flavor={item.description}
-                          />
-                        ) : (
-                          <>
-                            <div className="text-primary">{item.name}</div>
-                            {item.description && (
-                              <div className="text-muted mt-0.5 truncate">{item.description}</div>
+              sellGroups.map(({ group, label, items }) => (
+                <div key={group}>
+                  <div className="sticky top-0 z-10 py-1 mb-1 text-muted font-bold text-[14px] uppercase tracking-wide bg-page/90 border-b border-edge/40">
+                    {label}
+                  </div>
+                  <div className="space-y-2">
+                    {items.map(({ item, source }, i) => {
+                      const price = sellPrices[item.defId];
+                      const sellable = canSell(item);
+                      return (
+                        <div
+                          key={`${source}-${item.defId}-${i}`}
+                          className="flex items-start gap-3 p-3 rounded-lg"
+                          style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
+                        >
+                          {item.type === "haul" ? (
+                            <WaxSeal
+                              variant={getSealVariant(item.haulOfferId ?? item.defId)}
+                              symbolIndex={getSealSymbolIndex(item.haulOfferId ?? item.defId)}
+                            />
+                          ) : (
+                            <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+                              <MaskedIcon icon={itemTypeIcon(item.type)} className="w-5 h-5" color="#D0BD62" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            {item.type === "haul" ? (
+                              <HaulItem
+                                name={item.name}
+                                destinationName={item.destinationName}
+                                destinationHint={item.destinationHint}
+                                payout={item.payout}
+                                flavor={item.description}
+                              />
+                            ) : (
+                              <>
+                                <div className="text-primary flex items-center gap-2">
+                                  {item.name}
+                                  {item.isEquipped && (
+                                    <span className="text-accent text-[12px] font-bold uppercase tracking-wide border border-accent/40 px-1 rounded">
+                                      equipped
+                                    </span>
+                                  )}
+                                </div>
+                                {item.description && (
+                                  <div className="text-muted mt-0.5 truncate">{item.description}</div>
+                                )}
+                              </>
                             )}
-                            {sellTab === "equipped" && (
-                              <div className="text-dim mt-0.5">equipped ({source})</div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                      {sellable && (
-                        <Button variant="secondary" size="sm" onClick={() => addSell(item.defId)} className="flex-shrink-0">
-                          <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
-                          Sell
-                          <span className="text-positive">+{price}g</span>
-                        </Button>
-                      )}
-                      {item.type === "haul" && item.haulOfferId && (
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="secondary" size="icon" disabled={loading} title="Abandon" className="flex-shrink-0">
-                              <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+                          </div>
+                          {sellable && (
+                            <Button variant="secondary" size="sm" onClick={() => addSell(item.defId)} className="flex-shrink-0">
+                              <MaskedIcon icon="pay-money.svg" className="w-4 h-4" color="currentColor" />
+                              Sell
+                              <span className="text-positive">+{price}g</span>
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent size="sm">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Abandon {item.name}?</AlertDialogTitle>
-                              <AlertDialogDescription>This contract will be lost. It will not be returned to the market.</AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>
-                                <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
-                                Keep
-                              </AlertDialogCancel>
-                              <AlertDialogAction variant="destructive" onClick={() => doAction({ action: "abandon_haul", offerId: item.haulOfferId!})}>
-                                <MaskedIcon icon="trash-can.svg" className="w-4 h-4" color="currentColor" />
-                                Abandon
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      )}
-                    </div>
-                  );
-                })}
-                {sellTab === "pack" && inventory && Array.from(
-                  { length: Math.max(0, inventory.packCapacity - inventory.pack.filter(i => !i.isEquipped).length - sellItems.length) },
-                  (_, i) => (
-                    <div key={`empty-${i}`} className="flex items-center justify-center bg-btn/50 p-4 border border-dashed border-edge text-muted">
-                      Empty slot
-                    </div>
-                  )
-                )}
-              </>
+                          )}
+                          {item.type === "haul" && item.haulOfferId && (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="secondary" size="icon" disabled={loading} title="Abandon" className="flex-shrink-0">
+                                  <MaskedIcon icon="cancel.svg" className="w-5 h-5" color="currentColor" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent size="sm">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Abandon {item.name}?</AlertDialogTitle>
+                                  <AlertDialogDescription>This contract will be lost. It will not be returned to the market.</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>
+                                    <MaskedIcon icon="cancel.svg" className="w-4 h-4" color="currentColor" />
+                                    Keep
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction variant="destructive" onClick={() => doAction({ action: "abandon_haul", offerId: item.haulOfferId! })}>
+                                    <MaskedIcon icon="trash-can.svg" className="w-4 h-4" color="currentColor" />
+                                    Abandon
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>

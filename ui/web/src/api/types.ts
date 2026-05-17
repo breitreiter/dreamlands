@@ -111,8 +111,8 @@ export interface ItemInfo {
   type: string;
   cost: number | null;
   skillModifiers: Record<string, number>;
-  resistModifiers: Record<string, number>;
   cures: string[];
+  moves: string[];
   isEquippable: boolean;
   isEquipped: boolean;
   destinationName: string | null;
@@ -377,7 +377,6 @@ export interface MarketItem {
   buyPrice: number;
   quantity: number;
   skillModifiers: Record<string, number>;
-  resistModifiers: Record<string, number>;
   description: string;
 }
 

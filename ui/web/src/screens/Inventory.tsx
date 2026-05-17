@@ -248,9 +248,6 @@ function itemModifierSummary(item: ItemInfo): string {
   for (const [skill, val] of Object.entries(item.skillModifiers)) {
     if (val !== 0) parts.push(`${val > 0 ? "+" : ""}${val} ${skill}`);
   }
-  for (const [cond, val] of Object.entries(item.resistModifiers)) {
-    if (val !== 0) parts.push(`${val > 0 ? "+" : ""}${val} resist ${cond}`);
-  }
   if (item.cures.length > 0) parts.push(`cures ${item.cures.join(", ")}`);
   return parts.join(", ");
 }
@@ -300,8 +297,13 @@ function ItemCard({
             {mods && (
               <div className="text-dim mt-0.5 truncate" title={mods}>{mods}</div>
             )}
-            {item.description && !mods && (
+            {item.description && (
               <div className="text-muted mt-0.5 truncate" title={item.description}>{item.description}</div>
+            )}
+            {item.moves.length > 0 && (
+              <div className="text-dim mt-0.5">
+                Moves: {item.moves.join(" · ")}
+              </div>
             )}
           </>
         )}

@@ -27,7 +27,6 @@ public sealed class ItemDef
     public string? Description { get; init; }
     public ItemType Type { get; init; }
     public int Slots { get; init; } = 1;
-    public int CapacityBonus { get; init; }
     public IReadOnlySet<string> Cures { get; init; } = new HashSet<string>();
 
     /// <summary>Conditions this item passively prevents while present in the pack
@@ -39,7 +38,6 @@ public sealed class ItemDef
     public int? Cost { get; init; }
     public string? Biome { get; init; }
     public int? ShopTier { get; init; }
-    public IReadOnlyDictionary<string, int> ResistModifiers { get; init; } = new Dictionary<string, int>();
 
     /// <summary>RPS combat moves contributed when equipped, in encoded form (e.g.
     /// "Riposte Attack", "Heavy Power Defend"). Parsed lazily by the combat profile
@@ -130,7 +128,7 @@ public sealed class ItemDef
         ["hatchet"] = new()
         {
             Id = "hatchet", Name = "Hatchet", Type = ItemType.Weapon,
-            Description = "A wood-camp tool pressed into service. Requires Trained Combat. Hits hard; the wild chop is slow but punishing.",
+            Description = "A wood-camp tool pressed into service. Axe, Trained Combat. Hits hard.",
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
             RpsMoves = [new("Attack", "Attack"), new("Slow Power Attack", "Wild Chop ✦")],
@@ -139,7 +137,7 @@ public sealed class ItemDef
         ["war_axe"] = new()
         {
             Id = "war_axe", Name = "War Axe", Type = ItemType.Weapon,
-            Description = "A proper fighting axe, balanced for the follow-through. Requires Trained Combat. The heavy chop trades timing for raw force.",
+            Description = "A proper fighting axe, balanced for the follow-through. Axe, Trained Combat.",
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
             RpsMoves = [new("Attack", "Attack"), new("Heavy Power Attack", "Heavy Chop ✦")],
@@ -148,7 +146,7 @@ public sealed class ItemDef
         ["broadaxe"] = new()
         {
             Id = "broadaxe", Name = "Broadaxe", Type = ItemType.Weapon,
-            Description = "A two-handed mountain campaign weapon. Requires Trained Combat. The brutal stun is once-per-turn but staggers anything it touches.",
+            Description = "A two-handed mountain campaign weapon. Axe, Trained Combat. Staggers anything it touches.",
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
             RpsMoves = [new("Attack", "Attack"), new("Heavy Stunning Power Attack", "Brutal Stun ✦")],
@@ -157,7 +155,7 @@ public sealed class ItemDef
         ["revathi_labrys"] = new()
         {
             Id = "revathi_labrys", Name = "Revathi Labrys", Type = ItemType.Weapon,
-            Description = "A Revathi ceremonial axe that has seen real use. Requires Trained Combat. Has no plain attack — only the arcing chop and the psychic warp.",
+            Description = "A Revathi ceremonial axe that has seen real use. Axe, Trained Combat. No plain attack.",
             WeaponClass = Rules.WeaponClass.Axe,
             RequiredCombat = 2,
             RpsMoves = [new("Heavy Attack", "Arcing Chop"), new("Slow Terrifying Attack", "Psychic Warp ✦")],
@@ -169,7 +167,7 @@ public sealed class ItemDef
         ["falchion"] = new()
         {
             Id = "falchion", Name = "Falchion", Type = ItemType.Weapon,
-            Description = "A heavy single-edge blade for cavalry or desperate work. Requires Expert Combat. The wild lunge is exhausting but devastating.",
+            Description = "A heavy single-edge blade for cavalry or desperate work. Sword, Expert Combat.",
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
             RpsMoves = [new("Attack", "Attack"), new("Exhausting Heavy Attack", "Wild Lunge ✦")],
@@ -178,7 +176,7 @@ public sealed class ItemDef
         ["short_sword"] = new()
         {
             Id = "short_sword", Name = "Short Sword", Type = ItemType.Weapon,
-            Description = "Versatile and fast. Requires Expert Combat. Combines the riposte with a once-per-turn pommel stun.",
+            Description = "Versatile and fast. Sword, Expert Combat.",
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
             RpsMoves = [new("Riposte Attack", "Riposte"), new("Stun Power Attack", "Pommel Stun ✦")],
@@ -187,7 +185,7 @@ public sealed class ItemDef
         ["scimitar"] = new()
         {
             Id = "scimitar", Name = "Scimitar", Type = ItemType.Weapon,
-            Description = "A curved blade from the scrub trade routes. Requires Expert Combat. The whirling blade turns a defense into an attack.",
+            Description = "A curved blade from the scrub trade routes. Sword, Expert Combat.",
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
             RpsMoves = [new("Attack", "Attack"), new("Heavy Power Defend", "Whirling Blade ✦")],
@@ -196,7 +194,7 @@ public sealed class ItemDef
         ["shimmering_blade"] = new()
         {
             Id = "shimmering_blade", Name = "Shimmering Blade", Type = ItemType.Weapon,
-            Description = "A Lattice-touched sword that mends as it cuts. Requires Expert Combat. The Lattice Mending recover is heavy but thorough.",
+            Description = "A Lattice-touched sword that mends as it cuts. Sword, Expert Combat.",
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
             RpsMoves = [new("Riposte Attack", "Riposte"), new("Heavy Wary Recover", "Lattice Mending")],
@@ -207,7 +205,7 @@ public sealed class ItemDef
         ["tunic"] = new()
         {
             Id = "tunic", Name = "Tunic", Type = ItemType.Armor,
-            Description = "Padded cloth. Light armor, no Combat requirement. A basic Defend — better than nothing.",
+            Description = "Padded cloth. Light armor, no Combat requirement.",
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
             RpsMoves = [new("Defend", "Defend")],
@@ -216,7 +214,7 @@ public sealed class ItemDef
         ["silks"] = new()
         {
             Id = "silks", Name = "Silks", Type = ItemType.Armor,
-            Description = "Layered silk from the scrub trade. Light armor, no Combat requirement. Adds a cautious read to the move pool.",
+            Description = "Layered silk from the scrub trade. Light armor, no Combat requirement.",
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
             RpsMoves = [new("Defend", "Defend"), new("Wary Read", "Cautious Read")],
@@ -225,21 +223,19 @@ public sealed class ItemDef
         ["cartographers_cloak"] = new()
         {
             Id = "cartographers_cloak", Name = "Cartographer's Cloak", Type = ItemType.Armor,
-            Description = "A traveler's outer garment stitched with hidden compartments. Light armor, no Combat requirement. Resists freezing. The guile recover is once-per-turn.",
+            Description = "A traveler's outer garment stitched with hidden compartments. Light armor, no Combat requirement.",
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
             RpsMoves = [new("Defend", "Defend"), new("Power Wary Recover", "Cartographer's Guile ✦")],
-            ResistModifiers = new Dictionary<string, int> { ["freezing"] = 2 },
             Biome = "mountains", ShopTier = 2, Cost = 40,
         },
         ["robe_of_twilight"] = new()
         {
             Id = "robe_of_twilight", Name = "Robe of Twilight", Type = ItemType.Armor,
-            Description = "A deep-dyed robe that blurs in low light. Light armor, no Combat requirement. Resists freezing. Shadow Cloak is a shielding defend; Shadow Step is a heavy power recover.",
+            Description = "A deep-dyed robe that blurs in low light. Light armor, no Combat requirement.",
             ArmorClass = Rules.ArmorClass.Light,
             RequiredCombat = 0,
             RpsMoves = [new("Shielding Defend", "Shadow Cloak"), new("Heavy Power Wary Recover", "Shadow Step ✦")],
-            ResistModifiers = new Dictionary<string, int> { ["freezing"] = 3 },
         },
 
         // ── Armor: Medium (Trained Combat) ──
@@ -247,31 +243,28 @@ public sealed class ItemDef
         ["hide_armor"] = new()
         {
             Id = "hide_armor", Name = "Hide Armor", Type = ItemType.Armor,
-            Description = "Cured leather over a quilted undergarment. Medium armor, requires Trained Combat. Resists injury and freezing.",
+            Description = "Cured leather over a quilted undergarment. Medium armor, Trained Combat.",
             ArmorClass = Rules.ArmorClass.Medium,
             RequiredCombat = 2,
             RpsMoves = [new("Defend", "Defend")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 1, ["freezing"] = 2 },
             Biome = "mountains", ShopTier = 1, Cost = 15,
         },
         ["lamellar"] = new()
         {
             Id = "lamellar", Name = "Lamellar", Type = ItemType.Armor,
-            Description = "Riveted plates on a leather backing, the standard of mountain garrison troops. Medium armor, requires Trained Combat. Resists injury and freezing. Evade is a shielding power defend.",
+            Description = "Riveted plates on a leather backing, the standard of mountain garrison troops. Medium armor, Trained Combat.",
             ArmorClass = Rules.ArmorClass.Medium,
             RequiredCombat = 2,
             RpsMoves = [new("Defend", "Defend"), new("Shielding Power Defend", "Evade ✦")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 3 },
             Biome = "mountains", ShopTier = 2, Cost = 80,
         },
         ["mountain_regiment_armor"] = new()
         {
             Id = "mountain_regiment_armor", Name = "17th Mountain Regiment Armor", Type = ItemType.Armor,
-            Description = "Imperial campaign armor from the 17th Regiment, built for the long siege. Medium armor, requires Trained Combat. Resists injury and freezing. Perfect Block is a power defend; Cautious is a power wary recover.",
+            Description = "Imperial campaign armor from the 17th Regiment, built for the long siege. Medium armor, Trained Combat.",
             ArmorClass = Rules.ArmorClass.Medium,
             RequiredCombat = 2,
             RpsMoves = [new("Perfect Power Defend", "Perfect Block ✦"), new("Power Wary Recover", "Cautious ✦")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 3, ["freezing"] = 5 },
         },
 
         // ── Armor: Heavy (Expert Combat) ──
@@ -279,41 +272,37 @@ public sealed class ItemDef
         ["gambeson"] = new()
         {
             Id = "gambeson", Name = "Gambeson", Type = ItemType.Armor,
-            Description = "Thick quilted cloth, the workhorse of heavy infantry. Heavy armor, requires Expert Combat. Resists injury and freezing.",
+            Description = "Thick quilted cloth, the workhorse of heavy infantry. Heavy armor, Expert Combat.",
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
             RpsMoves = [new("Defend", "Defend")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2, ["freezing"] = 1 },
             Biome = "mountains", ShopTier = 1, Cost = 15,
         },
         ["scale_armor"] = new()
         {
             Id = "scale_armor", Name = "Scale Armor", Type = ItemType.Armor,
-            Description = "Overlapping iron scales on a leather backing. Heavy armor, requires Expert Combat. Resists injury. The Armored defend is weighted — hits harder when it lands.",
+            Description = "Overlapping iron scales on a leather backing. Heavy armor, Expert Combat.",
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
             RpsMoves = [new("Heavy Defend", "Armored")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 2 },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["brigandine"] = new()
         {
             Id = "brigandine", Name = "Brigandine", Type = ItemType.Armor,
-            Description = "Small steel plates riveted inside a cloth shell. Heavy armor, requires Expert Combat. Resists injury and freezing. Unstoppable is a heavy power shielding defend.",
+            Description = "Small steel plates riveted inside a cloth shell. Heavy armor, Expert Combat.",
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
             RpsMoves = [new("Defend", "Defend"), new("Heavy Power Shielding Defend", "Unstoppable ✦")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 4, ["freezing"] = 1 },
             Biome = "plains", ShopTier = 2, Cost = 80,
         },
         ["golem_armor"] = new()
         {
             Id = "golem_armor", Name = "Golem Armor", Type = ItemType.Armor,
-            Description = "Lattice-forged plates that move with eerie precision. Heavy armor, requires Expert Combat. Resists injury and freezing. Armored defend is heavy; Perfect Block is a power defend.",
+            Description = "Lattice-forged plates that move with eerie precision. Heavy armor, Expert Combat.",
             ArmorClass = Rules.ArmorClass.Heavy,
             RequiredCombat = 4,
             RpsMoves = [new("Heavy Defend", "Defend: Armored"), new("Perfect Power Defend", "Perfect Block ✦")],
-            ResistModifiers = new Dictionary<string, int> { ["injured"] = 5, ["freezing"] = 2 },
         },
 
         // ── Scarecrow Boots (passive Tool — exhaustion immunity while carried) ──
@@ -330,15 +319,13 @@ public sealed class ItemDef
         ["canteen"] = new()
         {
             Id = "canteen", Name = "Canteen", Type = ItemType.Tool,
-            Description = "A sealed tin flask that keeps water cool. Resists thirst.",
-            ResistModifiers = new Dictionary<string, int> { ["thirsty"] = 2 },
+            Description = "A sealed tin flask that keeps water cool.",
             Biome = "forest", ShopTier = 1, Cost = 15,
         },
         ["waterskin"] = new()
         {
             Id = "waterskin", Name = "Waterskin", Type = ItemType.Tool,
-            Description = "A treated hide bag holding two days of water. Resists thirst better than the canteen.",
-            ResistModifiers = new Dictionary<string, int> { ["thirsty"] = 3 },
+            Description = "A treated hide bag holding two days of water.",
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["letters_of_introduction"] = new()
@@ -368,15 +355,13 @@ public sealed class ItemDef
         ["cartographers_kit"] = new()
         {
             Id = "cartographers_kit", Name = "Cartographer's Kit", Type = ItemType.Tool,
-            Description = "Compass, sighting rod, and folded survey sheets. Resists getting lost.",
-            ResistModifiers = new Dictionary<string, int> { ["lost"] = 5 },
+            Description = "Compass, sighting rod, and folded survey sheets.",
             Biome = "plains", ShopTier = 1, Cost = 80,
         },
         ["sleeping_kit"] = new()
         {
             Id = "sleeping_kit", Name = "Sleeping Kit", Type = ItemType.Tool,
-            Description = "A wool blanket, oilskin ground sheet, and cordage. Resists exhaustion on wilderness nights.",
-            ResistModifiers = new Dictionary<string, int> { ["exhausted"] = 4 },
+            Description = "A wool blanket, oilskin ground sheet, and cordage.",
             Biome = "forest", ShopTier = 2, Cost = 80,
         },
 
@@ -385,20 +370,17 @@ public sealed class ItemDef
         ["lattice_ward"] = new()
         {
             Id = "lattice_ward", Name = "Lattice Ward", Type = ItemType.Tool,
-            Description = "A ceramic disc etched with suppression glyphs. Resists Lattice sickness while carried.",
-            ResistModifiers = new Dictionary<string, int> { ["lattice_sickness"] = 5 },
+            Description = "A ceramic disc etched with suppression glyphs.",
         },
         ["sakharov_mask"] = new()
         {
             Id = "sakharov_mask", Name = "Sakharov's Mask", Type = ItemType.Tool,
-            Description = "A fitted respirator from the old irradiation surveys. Resists radiation sickness while worn.",
-            ResistModifiers = new Dictionary<string, int> { ["irradiated"] = 5 },
+            Description = "A fitted respirator from the old irradiation surveys.",
         },
         ["antivenom_kit"] = new()
         {
             Id = "antivenom_kit", Name = "Antivenom Kit", Type = ItemType.Tool,
-            Description = "Vials of broad-spectrum antivenom packed in a padded case. Resists poison while carried.",
-            ResistModifiers = new Dictionary<string, int> { ["poison"] = 5 },
+            Description = "Vials of broad-spectrum antivenom packed in a padded case.",
         },
 
         // ── Food ──

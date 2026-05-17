@@ -256,8 +256,8 @@ public class ItemInfo
     public string Type { get; init; } = "";
     public int? Cost { get; init; }
     public Dictionary<string, int> SkillModifiers { get; init; } = [];
-    public Dictionary<string, int> ResistModifiers { get; init; } = [];
     public List<string> Cures { get; init; } = [];
+    public List<string> Moves { get; init; } = [];
     public bool IsEquippable { get; init; }
     public bool IsEquipped { get; init; }
     public string? DestinationName { get; init; }
