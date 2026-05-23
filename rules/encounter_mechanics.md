@@ -2,7 +2,7 @@
 kind: rule
 title: Encounter Mechanics & Game Commands
 created: 2026-02-21
-updated: 2026-05-17
+updated: 2026-05-23
 status: current
 touches:
   files:
@@ -93,10 +93,12 @@ SKILLS                          TIERS (for meets/set_skill_tier)
   bushcraft    survival/travel     expert     (tier 2)
   cunning      trickery/awareness
 
-  Gear unlocks by Combat tier:
-    untrained  no weapons or armor equipped
-    trained    T1 weapons + light/medium armor
-    expert     T2 weapons + all armor tiers
+  Gear gating by Combat tier (per-item RequiredCombat):
+    untrained (0)  daggers, light armor
+    trained   (2)  + axes, medium armor
+    expert    (4)  + swords, heavy armor
+  (RequiredCombat is declared per ItemDef and not yet enforced at equip
+  time — see ItemDef.RequiredCombat. Authors should still respect it.)
 
 APPROACH VERBS PER SKILL (used with check correct:/wrong:)
   negotiation:  charm    reason   threaten
@@ -123,6 +125,14 @@ CONDITIONS
 
 Flow control        @if check <skill> correct:<approach> wrong:<approach> { ... } @else { ... }
                       (picker check — terminal branch only, @else required)
+                      Any prose between the choice's `* Option text` line and the
+                      `@if check` is the PREAMBLE: it is shown to the player
+                      together with the three-approach picker, BEFORE they
+                      commit to an approach. The text inside the matching
+                      `{ ... }` branch is only shown AFTER the pick resolves.
+                      Author the preamble as the framing the player needs to
+                      make an informed approach choice; never put outcome
+                      reveals or branch-specific consequences there.
                     @if check <skill> <difficulty> { ... } @else { ... }
                       (DEPRECATED legacy DC form — emits deprecation warning; not subject to terminal rule)
                     @if meets <skill> <tier> { ... } @else { ... }
@@ -163,10 +173,7 @@ Gold                +give_gold <amount>
 Spirits             +damage_spirits <amount>
                     +heal_spirits <amount>
 
-Skills              +increase_skill <skill> <amount>
-                    +decrease_skill <skill> <amount>
-                    +set_skill_tier <skill> <tier>       (tier: untrained|trained|expert)
-                    +add_level                            (grant one pending tableau level-up pick)
+Skills              +add_level                           (grant one pending tableau level-up pick)
 
 Conditions          +add_condition <condition_id>
                     +remove_condition <condition_id>
@@ -203,62 +210,61 @@ Food cadence: one food item consumed per day. Cadence intervals vary by Bushcraf
                     completion and at key mid-arc beats. The player picks from a
                     tableau on their next visit to a settlement or chapterhouse.
                     There is no XP bar; advancement is entirely through arc beats.
-
-+set_skill_tier     Used by arc intro encounters to set starting skill tiers based
-                    on character background (e.g. a soldier background sets
-                    combat to trained). Authors: prefer set_skill_tier over
-                    increase_skill for absolute initialization.
+                    There are no direct skill-mutation verbs — skill tiers move
+                    only via the tableau level-up flow.
 
 
 ## Combat encounters (.fight format)
 
 Combat encounters use the `.fight` extension and drive the RPS combat screen.
-They are parsed by `CmbParser` (`lib/Encounter/CmbParser.cs`).
+They are parsed by `CmbParser` (`lib/Encounter/CmbParser.cs`). The format shares
+sigils with `.enc`: `[key value]` for front-matter, `* name` for sections,
+`+verb args` for mechanic verbs in prose blocks.
 
 ### File structure
 
-    +title Monster Name
-    +image monsters/biome_type.webp
-    +blood #7a0a0a                    (optional — default mammalian red)
-    +stats hp=18
-    +repool false                     (optional — default false)
+    [title Monster Name]
+    [image monsters/biome_type.webp]
+    [blood #7a0a0a]                   (optional — default mammalian red)
+    [stats hp=18]
 
-    +move Attack
+    * move Attack
       narration: It lunges at you, claws raking forward.
       narration: It darts in low and swipes at your legs.
 
-    +move Heavy Slow Attack
+    * move Heavy Slow Attack
       narration: It winds back and throws its full weight into the blow.
 
-    +intro
+    * intro
     Prose shown before combat begins.
 
-    +win
+    * win
     Prose shown on player victory.
-    > gold 12
-    > tag killed_name
+    +gold 12
+    +tag killed_name
 
-    +lose
+    * lose
     Prose shown on player defeat.
 
-### Directives
+### Front-matter and sections
 
-All directives start with `+` at column 0. `#` is a comment; blank lines are ignored.
+Front-matter is `[key value]` at column 0. Sections start with `* name` at
+column 0. `#` is a comment; blank lines are ignored.
 
-    +title <text>       Display title
-    +image <path>       Image path (relative to assets/)
-    +blood <hex>        Blood-splat color; override for non-mammals (golems, lattice, etc.)
-    +stats hp=<n>       Monster HP — required, must be > 0
-    +repool <bool>      Return monster to pool after defeat (true/yes/1 or false/no/0)
-    +move <encoding>    One move in the pool (followed by narration: lines)
-    +intro              Block: opening prose
-    +win                Block: prose + mechanics on player victory
-    +lose               Block: prose on player defeat
+    [title <text>]      Display title
+    [image <path>]      Image path (relative to assets/)
+    [blood <hex>]       Blood-splat color; override for non-mammals (golems, lattice, etc.)
+    [stats hp=<n>]      Monster HP — required, must be > 0
+
+    * move <encoding>   One move in the pool (followed by narration: lines)
+    * intro             Block: opening prose
+    * win               Block: prose + mechanics on player victory
+    * lose              Block: prose on player defeat
 
 ### Move encoding
 
 Last token is the base family; preceding tokens are mutators. Tokens are
-case-insensitive. Each `+move` block must have at least one `narration:` line.
+case-insensitive. Each `* move` block must have at least one `narration:` line.
 Multiple narration lines give texture — the runner picks one variant per use.
 
 Base families:
@@ -273,7 +279,10 @@ Attack mutators:
 
     heavy         +2 damage
     weak          -1 damage
-    riposte       Deals damage even when the player defends
+    riposte       Counter-attack: only triggers in mutual Attack vs Attack.
+                  When both sides commit Attack, riposte deals +2 outgoing
+                  damage AND absorbs 2 incoming damage. Against Defend,
+                  Recover, or Read it behaves as a plain Attack.
     brutal        Chance to inflict Injured on hit
     tainted       Chance to inflict Poisoned on hit
     glowing       Chance to inflict Irradiated on hit
@@ -314,17 +323,16 @@ not matter — the parser normalizes on load.
 
 ### Win/lose mechanics
 
-In `+win` and `+lose` blocks, `>` lines are mechanics run through the standard
-`Mechanics.Apply` pipeline after combat resolves. They use the same verb
-vocabulary as `.enc` action verbs with `>` instead of `+`:
+In `* win` and `* lose` blocks, `+verb` lines are mechanics run through the
+standard `Mechanics.Apply` pipeline after combat resolves. They share the verb
+vocabulary with `.enc` action verbs:
 
-    > gold <n>                Award gold
-    > tag <tag_id>            Set a world-state tag
-    > add_item <item_id>      Give item
-    > damage_spirits <n>      Damage spirits
+    +gold <n>                 Award gold
+    +tag <tag_id>             Set a world-state tag
+    +add_item <item_id>       Give item
+    +damage_spirits <n>       Damage spirits
+    +repool                   Re-eligible after defeat (overrides [repool] front-matter)
     (full verb list in the Action verbs section above)
-
-The leading `+` is optional: `> gold 8` and `> +gold 8` both parse.
 
 
 ## Factions
@@ -374,94 +382,73 @@ The leading `+` is optional: `> gold 8` and `> +gold 8` both parse.
 ## Item definitions
 
 Valid item_id values for +add_item, +lose_random_item, @if has, and [requires has].
+These mirror `lib/Rules/ItemDef.cs` — if you add an item there, add it here too.
+Weapons and armor contribute RPS combat moves (see ItemDef.RpsMoves); the
+description column below summarizes the equip-time identity, not the full
+moveset.
 
 ### Weapons
 
-Daggers (cancel-focused):
-  bodkin              Bodkin              Combat +1   plains T1  15g
-  jambiya             Jambiya             Combat +2   scrub T1   15g
-  kukri               Kukri               Combat +3   scrub T2   40g
-  hunting_knife       Hunting Knife       Combat +4   mountains T2  80g
-  the_old_tooth       The Old Tooth       Combat +5   (arc/reward only)
+Daggers (RequiredCombat 0 — Untrained, cancel/riposte-focused):
+  hunting_knife       Hunting Knife        plain Attack                                plains    T1  15g
+  kukri               Kukri                Attack + Pommel Stun                        scrub     T2  40g
+  seax                Fine Seax            Riposte Attack only                         mountains T2  80g
+  the_old_tooth       The Old Tooth        Riposte + Provoke (no plain attack)         arc/reward only
 
-Axes (aggro-focused, zero cancels):
-  hatchet             Hatchet             Combat +1   forest T1  15g
-  tomahawk            Tomahawk            Combat +2   forest T1  15g
-  war_axe             War Axe             Combat +3   forest T2  40g
-  broadaxe            Broadaxe            Combat +4   mountains T2  80g
-  revathi_labrys      Revathi Labrys      Combat +5   (arc/reward only)
+Axes (RequiredCombat 2 — Trained, aggro-focused):
+  hatchet             Hatchet              Attack + Wild Chop                          forest    T1  15g
+  war_axe             War Axe              Attack + Heavy Chop                         forest    T2  40g
+  broadaxe            Broadaxe             Attack + Brutal Stun                        mountains T2  80g
+  revathi_labrys      Revathi Labrys       Arcing Chop + Psychic Warp (no plain)       arc/reward only
 
-Swords (hybrid):
-  falchion            Falchion            Combat +1   plains T1  15g
-  short_sword         Short Sword         Combat +2   plains T1  15g
-  tulwar              Tulwar              Combat +3   scrub T2   40g
-  scimitar            Scimitar            Combat +4   scrub T2   80g
-  shimmering_blade    Shimmering Blade    Combat +5   (arc/reward only)
+Swords (RequiredCombat 4 — Expert, hybrid):
+  falchion            Falchion             Attack + Wild Lunge                         plains    T1  15g
+  short_sword         Short Sword          Riposte + Pommel Stun                       plains    T1  15g
+  scimitar            Scimitar             Attack + Whirling Blade (a Defend move)     scrub     T2  80g
+  shimmering_blade    Shimmering Blade     Riposte + Lattice Mending (Recover)         arc/reward only
 
 ### Armor
 
-Light (Cunning scaling, minor Freezing resist):
-  tunic               Tunic                                        plains T1  (free)
-  silks               Silks               Cunning +1               scrub T1   15g
-  hunters_gear        Hunter's Gear       Cunning +2  Freezing +1  swamp T1   15g
-  cartographers_cloak Cartographer's Cloak Cunning +3 Freezing +2  mountains T2  40g
-  desert_scout_gear   Desert Scout Gear   Cunning +4  Freezing +2  scrub T2   80g
-  robe_of_twilight    Robe of Twilight    Cunning +5  Freezing +3  (arc/reward only)
+Light (RequiredCombat 0 — Untrained):
+  tunic               Tunic                plain Defend                                plains    T1  (free)
+  silks               Silks                Defend + Cautious Read                      scrub     T1  15g
+  cartographers_cloak Cartographer's Cloak Defend + Cartographer's Guile (Recover)     mountains T2  40g
+  robe_of_twilight    Robe of Twilight     Shadow Cloak (Shielding Defend) + Shadow Step  arc/reward only
 
-Medium (balanced Cunning + Injury + Freezing resist):
-  leather             Leather             Cunning +1  Injured +1  Freezing +1  forest T1  15g
-  hide_armor          Hide Armor          Cunning +1  Injured +1  Freezing +2  mountains T1  15g
-  buff_coat           Buff Coat           Cunning +1  Injured +2  Freezing +3  forest T2  40g
-  lamellar            Lamellar            Cunning +2  Injured +2  Freezing +3  mountains T2  80g
-  mountain_regiment_armor  17th Mountain Regiment Armor  Cunning +2  Injured +3  Freezing +5  (arc/reward only)
+Medium (RequiredCombat 2 — Trained):
+  hide_armor              Hide Armor                  plain Defend                  mountains T1  15g
+  lamellar                Lamellar                    Defend + Evade                mountains T2  80g
+  mountain_regiment_armor 17th Mountain Regiment Armor  Perfect Block + Cautious     arc/reward only
 
-Heavy (Injury resist scaling, no Cunning):
-  gambeson            Gambeson            Injured +1  Freezing +1  mountains T1  15g
-  chainmail           Chainmail           Injured +2               plains T1  15g
-  scale_armor         Scale Armor         Injured +3               scrub T2   40g
-  brigandine          Brigandine          Injured +4  Freezing +1  plains T2  80g
-  golem_armor         Golem Armor         Injured +5  Freezing +2  (arc/reward only)
+Heavy (RequiredCombat 4 — Expert):
+  gambeson            Gambeson             plain Defend                                mountains T1  15g
+  scale_armor         Scale Armor          Heavy Defend (Armored) only                 scrub     T2  40g
+  brigandine          Brigandine           Defend + Unstoppable                        plains    T2  80g
+  golem_armor         Golem Armor          Armored + Perfect Block                     arc/reward only
 
 ### Tools
 
 Shopable:
-  canteen             Canteen             Thirsty +2               forest T1  15g
-  waterskin           Waterskin           Thirsty +3               scrub T2   40g
-  letters_of_introduction  Letters of Introduction  Negotiation +2  scrub T1  40g
-  peoples_borderlands A Guide to the Borderlands  Negotiation +3   mountains T2  80g
-  cartographers_diary Cartographer's Diary  Bushcraft +2           mountain T1  40g
-  ornate_spyglass     Ornate Spyglass     Bushcraft +3             scrub T2   80g
-  cartographers_kit   Cartographer's Kit  (gates Lost encounters)  plains T1  80g
-  sleeping_kit        Sleeping Kit        Exhausted +4             forest T2  80g
-  brass_lantern       Old Brass Lantern   (light source)           plains T1  15g
+  waterskin           Waterskin             PassiveImmunity:thirsty                    scrub  T2  40g
+  cartographers_kit   Cartographer's Kit    gates Lost encounters                      plains T1  80g
+  sleeping_kit        Wool Bedroll          PassiveImmunity:freezing                   forest T2  80g
+  brass_lantern       Old Brass Lantern     light source                               plains T1  15g
+  medical_kit         Medical Kit           Cures injured (not consumed)               (any) 25g
+
+Cure tools (consume nothing; remove the named condition):
+  siphon_glass        Siphon Glass          Cures lattice_sickness                     scrub  T2  40g
+  shustov_tonic       Shustov Apparatus     Cures irradiated                           plains T2  40g
+  mudcap_fungus       Mudcap Spores         Cures poisoned                             swamp  T2  15g
 
 Arc/dungeon-only:
-  scarecrow_boots     Scarecrow Boots     PassiveImmunity:exhausted  (Tool, not Boots type)
-  lattice_ward        Lattice Ward        Lattice_sickness +5
-  sakharov_mask       Sakharov's Mask     Irradiated +5
-  antivenom_kit       Antivenom Kit       Poison +5
-  control_shaft       Control Shaft       (quest item)
+  scarecrow_boots     Scarecrow Boots       PassiveImmunity:exhausted  (Tool, not Boots type)
+  control_shaft       Control Shaft         quest item
 
 ### Food
 
-  food_protein        Meat & Fish         (consumable, 3g)
-  food_grain          Breadstuffs         (consumable, 3g)
-  food_sweets         Sweets              (consumable, 3g)
-
-### Medicines
-
-  bandages            Bandages            Cures injured           3g
-  siphon_glass        Siphon Glass        Cures lattice_sickness  scrub T2  40g
-  pale_knot_berry     Pale Knot Berry     Cures exhausted         plains T2  15g
-  shustov_tonic       Shustov Tonic       Cures irradiated        plains T2  40g
-  mudcap_fungus       Mudcap Fungus       Cures poisoned          swamp T2  15g
-
-Capstone arc keys (no stats, unlock arc progression):
-  hunters_journal     Hunter's Journal
-  grid_cipher         Grid Cipher
-  color_lens          Color Lens
-  revathi_tile        Revathi Tile
+  food_ration         Rations               single ration = 1 day of food, 3g
+                                            (display name flavored per biome via FlavorText.RationName)
 
 ### Haul
 
-  haul                Haul                (generic — identity comes from HaulDef on the instance)
+  haul                Haul                  generic — identity comes from HaulDefId on the instance
