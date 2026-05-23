@@ -1,27 +1,27 @@
 # Vessel IV-N — scrub T2 basic tank (Color factory escapee)
 
-+title Vessel IV-N
-+image monsters/scrub_giant.png
-+blood #6b3aa0
-+stats hp=24
+[title Vessel IV-N]
+[image monsters/scrub_giant.png]
+[blood #6b3aa0]
+[stats hp=24]
 
-+move Attack
+* move Attack
   narration: It brings a blocky limb down at you, plates still hissing.
   narration: A blocky limb sweeps across — slower than it ought to be, heavier than it has any right to be.
 
-+move Defend
+* move Defend
   narration: The vents close one by one. The plates seal flush.
 
-+move Recover
+* move Recover
   narration: The Color cycles inside the gray plates, and what was venting goes back where it came from.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: Every vent on the unit shuts at once and the Color folds back inward, sealing it behind itself.
 
-+move Heavy Power Recover
+* move Heavy Power Recover
   narration: The plates seal hot. The Color rolls back into the vents and the unit takes whatever it gives back from inside.
 
-+intro
+* intro
 You smell it first — hot metal and something sweeter, like fruit gone
 wrong. The thing comes around the rail-cut on three legs and one limb
 that is not quite a leg, taller than a guardhouse, plated in Kesharat
@@ -30,14 +30,14 @@ cannot quite see directly. A small man in administrator's whites is
 jogging behind it with a tablet, shouting calmly: "Stand clear of the
 unit. Stand clear of the unit." The unit does not stand clear of you.
 
-+win
-> gold 12
-> tag killed_vessel_iv_n
+* win
++gold 12
++tag killed_vessel_iv_n
 The vents close one by one. The Color seals itself back behind the gray
 plates and the unit settles where it stands. The administrator is
 nowhere in sight. Far up the rail-cut, a tablet is bleating an alert
 nobody is listening to.
 
-+lose
+* lose
 The Color discharges in a sweep that takes the road and you with it.
 Far up the rail-cut, a tablet is still bleating its alert.

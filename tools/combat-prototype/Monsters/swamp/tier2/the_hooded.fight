@@ -1,27 +1,27 @@
 # The Hooded — swamp T2 basic duelist (Revënakh-witch)
 
-+title The Hooded
-+image monsters/swamp_mage.png
-+blood #3a3024
-+stats hp=18
+[title The Hooded]
+[image monsters/swamp_mage.png]
+[blood #3a3024]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: Behind your eyes, very gently, the bog pushes.
   narration: The hood turns slightly. Your skull goes warm where it shouldn't.
 
-+move Defend
+* move Defend
   narration: The shape inside the hood unresolves a little, edges blurring back into the wet light.
 
-+move Recover
+* move Recover
   narration: The robe gathers itself, deeper in the moss. Whatever was thinning settles.
 
-+move Terrifying Heavy Slow Attack
+* move Terrifying Heavy Slow Attack
   narration: The hood turns toward you and finds, at last, the right geometry — Revënakh remembers a witch through her, and through her remembers you.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: The shape folds inward on itself and, for a long beat, is only the suggestion of a shape.
 
-+intro
+* intro
 You see it first as a darker patch in the bioluminescent moss along the
 stone — a robed shape, or what wants to be a robed shape, edges blurring
 into the wet light around it. Up close the impression does not resolve.
@@ -34,14 +34,14 @@ all of them at once. Your skull goes warm. Behind your eyes, very
 gently, the bog begins to push. If you let it push long enough, you
 understand, you will be one more thing the swamp remembers.
 
-+win
-> gold 10
-> tag killed_the_hooded
+* win
++gold 10
++tag killed_the_hooded
 The shape inside the hood loses interest in being a shape. The robe
 sinks, deflates, soaks dark into the moss. The pressure behind your
 eyes drains away in a single long beat. The bioluminescence in the
 nearby stones goes back to its usual indifference.
 
-+lose
+* lose
 The bog finishes pushing. Revënakh remembers another witch, and remembers
 you, and the bioluminescence in the stones goes on being indifferent.

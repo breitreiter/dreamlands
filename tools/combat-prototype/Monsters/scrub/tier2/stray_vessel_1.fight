@@ -1,24 +1,24 @@
 # Stray Vessel — scrub T2 basic striker (Color-saturated warrior, Tashkari blade)
 
-+title Stray Vessel
-+image monsters/scrub_warrior_1.png
-+blood #6b3aa0
-+stats hp=18
+[title Stray Vessel]
+[image monsters/scrub_warrior_1.png]
+[blood #6b3aa0]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: The Tashkari curve cuts at you in a remembered hand.
   narration: It shifts its weight and the blade comes around in a clean arc.
 
-+move Defend
+* move Defend
   narration: The Color across its skin slows. It turns its body sidelong.
 
-+move Recover
+* move Recover
   narration: The pulses settle. Whatever it lost, the Color is putting back.
 
-+move Tainted Heavy Slow Telegraphed Attack
+* move Tainted Heavy Slow Telegraphed Attack
   narration: It plants its feet, the violet across its body floods to white, and it commits — the blade and the Color through it, both at once.
 
-+intro
+* intro
 You see it first as a wrong color on the hillside above the dry
 riverbed — a saturated violet the sun does not explain. As you watch,
 it stands. The shape is vaguely a man's shape, taller than a man,
@@ -30,14 +30,14 @@ gripped correctly, and that is the only thing about it that still
 remembers being human. It steps down off the slope toward you. It does
 not speak. Whatever walks out of the great factory does not speak.
 
-+win
-> gold 12
-> tag killed_stray_vessel_1
+* win
++gold 12
++tag killed_stray_vessel_1
 The Color drains out of the body in a long, slow exhale, and what is
 left in the dust is something that looks for a moment like a man, and
 then less like one, and then not very much like anything at all. The
 blade holds its shape. You leave it where it falls.
 
-+lose
+* lose
 The Color washes over you in a violet that hurts to remember. The
 hillside above the wash is very quiet.

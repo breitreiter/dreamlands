@@ -1,38 +1,38 @@
 # Bog Stalker — swamp T2 basic tank (HP 24, basic + limited powerful defend + limited powerful recover)
 
-+title Bog Stalker
-+image monsters/swamp_beast_4.png
-+blood #2a4a3a
-+stats hp=24
+[title Bog Stalker]
+[image monsters/swamp_beast_4.png]
+[blood #2a4a3a]
+[stats hp=24]
 
-+move Attack
+* move Attack
   narration: A thick-knuckled limb lashes out from the murk.
   narration: It lunges low, jaw splitting wider than it should.
 
-+move Defend
+* move Defend
   narration: It flattens against the bog, half-submerged, hide gone slick and stone-grey.
 
-+move Recover
+* move Recover
   narration: It sinks to the gill-line, drinking the rot back into itself.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: It folds inward and lets the swamp rise around it — water, weed, bone-mat — armor of the place itself.
 
-+move Heavy Power Recover
+* move Heavy Power Recover
   narration: The water around it bubbles black and the wounds you've put in it close like seams pulled tight.
 
-+intro
+* intro
 The reeds part without anything visibly parting them. Then a ridge breaks
 the water, then a long flat head you mistook for a half-sunk log. The eyes
 are old — older than they have any right to be, in something this size.
 It does not hurry. The bog hurries for it.
 
-+win
-> gold 12
-> tag killed_bog_stalker
+* win
++gold 12
++tag killed_bog_stalker
 It settles back into the water without a sound, going where it came from.
 The swamp closes up over it and after a moment you couldn't say where it
 had been.
 
-+lose
+* lose
 You go down in the wet. The cold is the last thing you notice.

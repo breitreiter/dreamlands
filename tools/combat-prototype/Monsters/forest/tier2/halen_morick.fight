@@ -1,26 +1,26 @@
 # Halen Morick — forest T2 basic duelist (knight, exile-hunter)
 
-+title Halen Morick
-+image monsters/forest_knight.png
-+stats hp=18
+[title Halen Morick]
+[image monsters/forest_knight.png]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: He steps in with a quick thrust, blade tracking your guard.
   narration: He shifts his weight and stabs for the gap above your hip.
 
-+move Defend
+* move Defend
   narration: He settles his stance, blade angled across his body.
 
-+move Recover
+* move Recover
   narration: He gives ground a half-step and resets his guard.
 
-+move Heavy Slow Attack
+* move Heavy Slow Attack
   narration: Halen brings the sword down in a committed two-handed cut.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: He raises the blade into a high hanging guard, both hands locked.
 
-+intro
+* intro
 You see a man in heavy imperial plate walking down the road toward you.
 Fine gear, not the rusted cast-offs you've seen in the nearby garrisons.
 He halts some ten paces away and you do the same. "Didn't think I'd find
@@ -29,14 +29,14 @@ your wake." He does a slight bow. "Halen Morick. I'm the one they've sent
 to put you down." He draws his blade. "Take a moment. When you're ready,
 we'll begin."
 
-+win
-> gold 10
-> tag killed_halen_morick
+* win
++gold 10
++tag killed_halen_morick
 Halen goes down with the same composure he came on with. He tries to say
 something, and does not. You take a moment yourself, then keep walking.
 Whoever sent him might send another, but not today.
 
-+lose
+* lose
 Your legs give out and your weapon slips from your grasp. Somewhere, far
 away, Halen is telling you that you fought well, good form. A bit slow on
 the reverse, but the voice fades to silence.

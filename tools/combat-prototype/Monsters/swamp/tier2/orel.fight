@@ -1,27 +1,27 @@
 # Orel-Who-Did-Not-Grow — swamp T2 basic duelist (flesh-mutant child)
 
-+title Orel-Who-Did-Not-Grow
-+image monsters/swamp_child.png
-+blood #3a3024
-+stats hp=18
+[title Orel-Who-Did-Not-Grow]
+[image monsters/swamp_child.png]
+[blood #3a3024]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: It darts in low and bites down on whatever it reaches.
   narration: It snatches at your sleeve with a hand that ends a finger short.
 
-+move Defend
+* move Defend
   narration: It crouches and the wet ribs flex inward, sheltering the soft places.
 
-+move Recover
+* move Recover
   narration: It goes very still on the planks. Whatever it lost, the swamp gives back.
 
-+move Venomous Heavy Slow Attack
+* move Venomous Heavy Slow Attack
   narration: It throws itself into you and clings, biting where it can hold, the mouth opening further than it should.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: It folds itself smaller than a child has any right to fold, the joints in the wrong order.
 
-+intro
+* intro
 It is on the plank walkway ahead, crouched, watching. The shape is a
 child's shape, mostly. The ribs show through the wet skin in places they
 should not, and one arm ends a finger short. It does not move when you
@@ -30,14 +30,14 @@ joints in the wrong order — and begins to come toward you in the gait of
 something that has never been told it is not a child. You remember, too
 late to matter now, hearing that you should offer it food.
 
-+win
-> gold 10
-> tag killed_orel
+* win
++gold 10
++tag killed_orel
 It folds on the planks with a small wet sound and does not get up. The
 walkway holds it the way the walkway holds anything else. You step
 around it carefully and keep moving, and try not to think about whose
 child it had once been, or whether anyone had told its mother.
 
-+lose
+* lose
 The mouth opens further than it should. The walkway holds you the way
 the walkway holds anything else.

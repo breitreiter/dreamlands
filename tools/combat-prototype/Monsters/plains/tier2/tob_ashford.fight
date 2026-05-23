@@ -1,26 +1,26 @@
 # Tob Ashford, the Mask — plains T2 basic duelist (bandit)
 
-+title Tob Ashford, the Mask
-+image monsters/plains_bandit.png
-+stats hp=18
+[title Tob Ashford, the Mask]
+[image monsters/plains_bandit.png]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: He closes the gap and cuts at you, fast and low.
   narration: He drives a long knife at your hip, footwork tight.
 
-+move Defend
+* move Defend
   narration: He turns his shoulder and lets the long-coat take the line.
 
-+move Recover
+* move Recover
   narration: He gives ground a half-step, watching where his crew has settled.
 
-+move Brutal Heavy Slow Attack
+* move Brutal Heavy Slow Attack
   narration: A bolt punches in from the flank as Tob presses the attack.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: He steps back behind the wagon-husk; the crossbowman covers his lane.
 
-+intro
+* intro
 Three of his crew are visible behind the wagon-husk — one with a crossbow,
 two pretending not to be paying attention. The man who steps out wears a
 brown leather long-coat and the visor of a dead Pylon strapped over his
@@ -30,13 +30,13 @@ cocks his head. "Now you can pay the toll, you can walk back the way you
 came, or — third option — you can be why my morning got interesting. Pick
 fast."
 
-+win
-> gold 12
-> tag killed_tob_ashford
+* win
++gold 12
++tag killed_tob_ashford
 Tob goes down hard and his crew goes the other way over the rise without
 looking back. The Pylon visor lies in the dust beside him, scratched and
 empty. The Old Survey Road is the Old Survey Road again.
 
-+lose
+* lose
 The bolt finds you somewhere in the cut of his footwork. Tob steps over
 to make sure of it. The road is his again, like he said.

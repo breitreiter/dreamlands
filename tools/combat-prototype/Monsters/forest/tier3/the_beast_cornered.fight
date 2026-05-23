@@ -1,0 +1,34 @@
+# The Beast — forest T3 basic striker
+
+[title The Beast]
+[image monsters/swamp_beast_4.png]
+[blood #2a4a3a]
+[stats hp=18]
+
+* move Tainted Attack
+  narration: It lunges low, black jaws splitting wider than they should.
+
+* move Defend
+  narration: It recoils back, head hunched low.
+
+* move Recover
+  narration: The creature is winded, breathing heavy and ragged.
+
+* move Heavy Power Recover
+  narration: The water around it bubbles black and the wounds you've put in it close like seams pulled tight.
+
+* intro
+You feel the thing before you see it; something is watching you, trailing you
+in the brush. The first attack is swift, soundless, as the things lunges past
+you. It comes to rest low on the trail in front of you, growling low from its
+ichor-filled maw.
+
+* win
++gold 12
++repool
+The beast has had enough. With a snarl, it bounds back into the forest, more
+swiftly than you could hope to follow. You've bloodies the thing, but it's
+not finished yet. Perhaps if you tracked it to its lair?
+
+* lose
+Your wounds overwhelm you, you collapse to the forest floor.

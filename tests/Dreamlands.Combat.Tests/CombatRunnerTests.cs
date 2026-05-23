@@ -7,31 +7,31 @@ namespace Dreamlands.Combat.Tests;
 public class CombatRunnerTests
 {
     static CombatEncounter MakeEncounter(string moves = """
-        +move Attack
+        * move Attack
           narration: It strikes.
 
-        +move Defend
+        * move Defend
           narration: It hunches.
 
-        +move Recover
+        * move Recover
           narration: It catches its breath.
         """)
     {
         var enc = CmbParser.ParseString($"""
-            +title Test Foe
-            +stats hp=12
+            [title Test Foe]
+            [stats hp=12]
 
             {moves}
 
-            +intro
+            * intro
             A test foe appears.
 
-            +win
-            > gold 1
+            * win
+            +gold 1
             You win.
 
-            +lose
-            > tag died
+            * lose
+            +tag died
             You lose.
             """);
         enc.Id = "test/foe";
@@ -183,7 +183,7 @@ public class CombatRunnerTests
     public void Player_winning_emits_outcome_and_clears_state()
     {
         var enc = MakeEncounter("""
-            +move Defend
+            * move Defend
               narration: It hunches.
             """);
         var player = MakePlayer();
@@ -216,21 +216,21 @@ public class CombatRunnerTests
         // with both moves zeroed out — analogous to stun, "being dead" replaces
         // your subsequent actions.
         var enc = CmbParser.ParseString("""
-            +title Frail Foe
-            +stats hp=4
+            [title Frail Foe]
+            [stats hp=4]
 
-            +move Attack
+            * move Attack
               narration: It strikes.
 
-            +intro
+            * intro
             A frail foe appears.
 
-            +win
-            > gold 1
+            * win
+            +gold 1
             You win.
 
-            +lose
-            > tag died
+            * lose
+            +tag died
             You lose.
             """);
         enc.Id = "test/frail";
@@ -315,19 +315,19 @@ public class CombatRunnerTests
         // every turn. Player attacks at slot 3 → Attack vs Recover always stuns the
         // recoverer (monster). Slot 3 stun bleeds into slot 1 of next turn.
         var enc = CmbParser.ParseString("""
-            +title Stationary Healer
-            +stats hp=999
+            [title Stationary Healer]
+            [stats hp=999]
 
-            +move Recover
+            * move Recover
               narration: It catches its breath.
 
-            +intro
+            * intro
             Test foe.
 
-            +win
+            * win
             Won.
 
-            +lose
+            * lose
             Lost.
             """);
         enc.Id = "test/healer";

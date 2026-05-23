@@ -1,24 +1,24 @@
 # Pylon Unit V-3 — plains T2 basic striker (Lattice automaton)
 
-+title Pylon Unit V-3
-+image monsters/plains_robot_1.png
-+blood #b58a2e
-+stats hp=18
+[title Pylon Unit V-3]
+[image monsters/plains_robot_1.png]
+[blood #b58a2e]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: A pale beam stutters out of the chest plate and burns past you.
   narration: An emitter cycles up and a quick lance of light flicks across the gap.
 
-+move Defend
+* move Defend
   narration: Its arms fold inward across the chest plate, projector lenses dimmed.
 
-+move Recover
+* move Recover
   narration: The chest indicators dim to amber. Internal capacitors begin to refill.
 
-+move Glowing Heavy Slow Telegraphed Attack
+* move Glowing Heavy Slow Telegraphed Attack
   narration: The antennae at the crown lock onto you, the indicator lights go red, and the full lance fires from the crown — clean, surgical, hot.
 
-+intro
+* intro
 You curse your foul luck and this old imperial survey map and the fact
 that you are, for the third time this hour, lost again. The road is
 gone or was never here. The sun is lower than it should be. The only
@@ -36,14 +36,14 @@ PERIMETER VIOLATION ACKNOWLEDGED. ENGAGEMENT AUTHORIZED." The lights
 go red. Its arms unfold. The plains around you are very open, and there
 is no road back the way you came.
 
-+win
-> gold 12
-> tag killed_pylon_v_3
+* win
++gold 12
++tag killed_pylon_v_3
 The lights along the chest plate fade through amber and out. The antennae
 keep turning a few revolutions before they remember to stop. The voice
 makes one more sound — a syllable that wasn't a word — and the unit goes
 still. The plains around you are still very open.
 
-+lose
+* lose
 The chest cavity opens once more, the lance fires clean, and the plains
 take what's left of you. The antennae go on turning.

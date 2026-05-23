@@ -1,44 +1,51 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Dreamlands.Encounter;
 
 /// <summary>
-/// Parses .fight monster encounter files. Token-driven, .enc-adjacent. Lines
-/// starting with '+' at column 0 are top-level directives; '#' is a comment;
-/// blank lines are ignored. Block directives (move/intro/win/lose) consume
-/// subsequent lines until the next column-0 '+'.
+/// Parses .fight monster encounter files. Token-driven; shares sigils with the
+/// .enc format so authors don't have to context-switch:
 ///
-/// New format (RPS-shaped):
+///   `[key value]`  front-matter (file-level attributes)
+///   `* name ...`   section header (move / intro / win / lose)
+///   `+verb args`   mechanic verb inside a prose block (gold, tag, etc.)
+///   `#`            comment
 ///
-///   +title Some Goblin
-///   +image foo/bar.webp
-///   +blood #7a0a0a
-///   +stats hp=18
+/// Example:
 ///
-///   +move Heavy Telegraphed Slow Attack
+///   [title Some Goblin]
+///   [image foo/bar.webp]
+///   [blood #7a0a0a]
+///   [stats hp=18]
+///
+///   * move Heavy Telegraphed Slow Attack
 ///     narration: It winds back, hauling the maul over its head.
 ///     narration: It snarls and lifts the spike to shoulder height.
 ///
-///   +move Defend
+///   * move Defend
 ///     narration: It hunches behind its shield.
 ///
-///   +intro
-///     A goblin steps from the brush.
+///   * intro
+///   A goblin steps from the brush.
 ///
-///   +win
-///     The goblin slumps.
-///     > gold 8
-///     > tag killed_goblin
+///   * win
+///   The goblin slumps.
+///   +gold 8
+///   +tag killed_goblin
 ///
-///   +lose
-///     Everything goes black.
+///   * lose
+///   Everything goes black.
 ///
-/// `+move` is a Move encoding parsed by <see cref="Move.Parse"/> (last token is
-/// the base, preceding tokens are mutators). Multiple narration lines on one
-/// move = variants; the runner picks one randomly per use.
+/// `* move` is followed by a Move encoding parsed by <see cref="Move.Parse"/>
+/// (last token is the base, preceding tokens are mutators). Multiple narration
+/// lines on one move = variants; the runner picks one randomly per use.
 /// </summary>
-public static class CmbParser
+public static partial class CmbParser
 {
+    [GeneratedRegex(@"^\[(\w+)(?:\s+(.+?))?\]\s*$")]
+    private static partial Regex FrontMatterPattern();
+
     public static CombatEncounter ParseFile(string path) =>
         ParseLines(File.ReadAllLines(path), path);
 
@@ -54,54 +61,94 @@ public static class CmbParser
         int i = 0;
         while (i < lines.Count)
         {
-            string trimmed = lines[i].TrimEnd();
+            string raw = lines[i];
+            string trimmed = raw.TrimEnd();
+            string stripped = trimmed.TrimStart();
 
-            if (trimmed.Length == 0 || trimmed.TrimStart().StartsWith('#'))
+            if (stripped.Length == 0 || stripped.StartsWith('#'))
             {
                 i++;
                 continue;
             }
 
-            if (!trimmed.StartsWith('+'))
-                throw new FormatException($"{source}:{i + 1}: expected directive starting with '+', got: {trimmed}");
-
-            (string directive, string args) = SplitDirective(trimmed);
-
-            switch (directive)
+            if (stripped.StartsWith('['))
             {
-                case "title":  enc.Title = args; i++; break;
-                case "image":  enc.Image = args; i++; break;
-                case "blood":  enc.BloodColor = args; i++; break;
-                case "repool": enc.Repool = ParseBool(args, source, i); i++; break;
-                case "stats":  enc.Stats = ParseStats(args, source, i); i++; break;
-                case "move":   i = ParseMoveBlock(lines, i, args, enc, source); break;
-                case "intro":
-                    i = ParseProseBlock(lines, i + 1, out string intro, out _);
-                    enc.Intro = intro;
-                    break;
-                case "win":
-                    i = ParseProseBlock(lines, i + 1, out string winText, out var winMech);
-                    enc.WinText = winText;
-                    enc.WinMechanics = winMech;
-                    break;
-                case "lose":
-                    i = ParseProseBlock(lines, i + 1, out string loseText, out var loseMech);
-                    enc.LoseText = loseText;
-                    enc.LoseMechanics = loseMech;
-                    break;
-                default:
-                    throw new FormatException($"{source}:{i + 1}: unknown directive '+{directive}'");
+                ParseFrontMatter(stripped, enc, source, i);
+                i++;
+                continue;
             }
+
+            if (stripped.StartsWith("* "))
+            {
+                i = ParseSection(lines, i, stripped[2..].TrimStart(), enc, source);
+                continue;
+            }
+
+            if (stripped.StartsWith('+'))
+                throw new FormatException(
+                    $"{source}:{i + 1}: '+' is reserved for mechanic verbs inside section bodies. " +
+                    $"Front-matter uses '[key value]'. Got: {stripped}");
+
+            if (stripped.StartsWith('>'))
+                throw new FormatException(
+                    $"{source}:{i + 1}: '>' mechanic lines are obsolete; use '+verb args' instead. Got: {stripped}");
+
+            throw new FormatException($"{source}:{i + 1}: expected '[key value]', '* section', or '#' comment, got: {stripped}");
         }
 
         return enc;
     }
 
-    static (string directive, string args) SplitDirective(string line)
+    static void ParseFrontMatter(string line, CombatEncounter enc, string source, int i)
     {
-        string body = line[1..];
-        int sp = body.IndexOf(' ');
-        return sp < 0 ? (body, "") : (body[..sp], body[(sp + 1)..].Trim());
+        var m = FrontMatterPattern().Match(line);
+        if (!m.Success)
+            throw new FormatException($"{source}:{i + 1}: malformed front-matter, expected '[key value]': {line}");
+        string key = m.Groups[1].Value;
+        string value = m.Groups[2].Success ? m.Groups[2].Value.Trim() : "";
+
+        switch (key)
+        {
+            case "title":  enc.Title = value; break;
+            case "image":  enc.Image = value; break;
+            case "blood":  enc.BloodColor = value; break;
+            case "repool": enc.Repool = ParseBool(value, source, i); break;
+            case "stats":  enc.Stats = ParseStats(value, source, i); break;
+            default:
+                throw new FormatException($"{source}:{i + 1}: unknown front-matter key '[{key}]'");
+        }
+    }
+
+    static int ParseSection(IReadOnlyList<string> lines, int i, string header, CombatEncounter enc, string source)
+    {
+        if (header.Length == 0)
+            throw new FormatException($"{source}:{i + 1}: '* ' needs a section name (move/intro/win/lose)");
+
+        int sp = header.IndexOf(' ');
+        string kind = sp < 0 ? header : header[..sp];
+        string args = sp < 0 ? "" : header[(sp + 1)..].Trim();
+
+        switch (kind)
+        {
+            case "move":
+                return ParseMoveBlock(lines, i, args, enc, source);
+            case "intro":
+                i = ParseProseBlock(lines, i + 1, out string intro, out _);
+                enc.Intro = intro;
+                return i;
+            case "win":
+                i = ParseProseBlock(lines, i + 1, out string winText, out var winMech);
+                enc.WinText = winText;
+                enc.WinMechanics = winMech;
+                return i;
+            case "lose":
+                i = ParseProseBlock(lines, i + 1, out string loseText, out var loseMech);
+                enc.LoseText = loseText;
+                enc.LoseMechanics = loseMech;
+                return i;
+            default:
+                throw new FormatException($"{source}:{i + 1}: unknown section '* {kind}'");
+        }
     }
 
     static bool ParseBool(string s, string source, int line) => s.ToLowerInvariant() switch
@@ -124,14 +171,14 @@ public static class CmbParser
             }
         }
         if (hp <= 0)
-            throw new FormatException($"{source}:{line + 1}: +stats needs hp=<n> with n > 0");
+            throw new FormatException($"{source}:{line + 1}: [stats] needs hp=<n> with n > 0");
         return new MonsterStats(hp);
     }
 
     static int ParseMoveBlock(IReadOnlyList<string> lines, int i, string moveEncoding, CombatEncounter enc, string source)
     {
         if (string.IsNullOrEmpty(moveEncoding))
-            throw new FormatException($"{source}:{i + 1}: '+move' needs a Move encoding (e.g. 'Big Attack')");
+            throw new FormatException($"{source}:{i + 1}: '* move' needs a Move encoding (e.g. 'Big Attack')");
 
         Move action;
         try
@@ -146,7 +193,7 @@ public static class CmbParser
         var def = new MonsterMoveDef { Action = action };
         i++;
 
-        while (i < lines.Count && !lines[i].TrimStart().StartsWith('+'))
+        while (i < lines.Count && !IsSectionStart(lines[i]))
         {
             string trimmed = lines[i].TrimEnd().TrimStart();
             if (trimmed.Length == 0 || trimmed.StartsWith('#')) { i++; continue; }
@@ -177,16 +224,18 @@ public static class CmbParser
     {
         var prose = new List<string>();
         mechanics = new List<string>();
-        while (i < lines.Count && !lines[i].TrimStart().StartsWith('+'))
+        while (i < lines.Count && !IsSectionStart(lines[i]))
         {
             string raw = lines[i];
             string trimmed = raw.TrimStart();
-            if (trimmed.StartsWith('>'))
+            if (trimmed.StartsWith('+'))
             {
-                // > +gold 8 → "gold 8"; > tag killed_gorzog → "tag killed_gorzog"
-                string mech = trimmed[1..].Trim();
-                if (mech.StartsWith('+')) mech = mech[1..].TrimStart();
+                string mech = trimmed[1..].TrimStart();
                 if (mech.Length > 0) mechanics.Add(mech);
+            }
+            else if (trimmed.StartsWith('>'))
+            {
+                throw new FormatException($"line {i + 1}: '>' mechanic lines are obsolete; use '+verb args' instead. Got: {trimmed}");
             }
             else if (trimmed.StartsWith('#'))
             {
@@ -200,6 +249,12 @@ public static class CmbParser
         }
         text = string.Join("\n", prose).Trim();
         return i;
+    }
+
+    static bool IsSectionStart(string line)
+    {
+        string s = line.TrimStart();
+        return s.StartsWith("* ") || s.StartsWith('[');
     }
 
     static string StripQuotes(string s) =>

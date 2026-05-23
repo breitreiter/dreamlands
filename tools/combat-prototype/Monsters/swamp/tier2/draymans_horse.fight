@@ -1,24 +1,24 @@
 # The Drayman's Horse — swamp T2 basic striker (revenant horse, skull-headed)
 
-+title The Drayman's Horse
-+image monsters/swamp_beast_1.png
-+blood #3a3024
-+stats hp=18
+[title The Drayman's Horse]
+[image monsters/swamp_beast_1.png]
+[blood #3a3024]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: It snaps the human jaw shut on whatever it can reach.
   narration: The neck cants too far for a horse's neck and the skull comes around for you.
 
-+move Defend
+* move Defend
   narration: It plants its forelegs and the harness cinches tighter around its flanks.
 
-+move Recover
+* move Recover
   narration: The bones reset themselves a little, the way old harness re-knots itself in the dark.
 
-+move Brutal Heavy Slow Telegraphed Attack
+* move Brutal Heavy Slow Telegraphed Attack
   narration: It does not slow. The harness flaps wet against its flanks, and it runs through where you are, and it does not yield the road.
 
-+intro
+* intro
 You hear the wheels first. There are no wheels. The thing comes up the
 old hauling track at a pace too steady to be alive — horse-bodied, the
 harness rotted on its flanks, the head a human skull set wrong on the
@@ -26,14 +26,14 @@ long neck. There is nothing pulling it. There is nothing it is pulling.
 It does not slow when it sees you. It has been on this run since before
 the village was built, and it does not yield the road.
 
-+win
-> gold 10
-> tag killed_draymans_horse
+* win
++gold 10
++tag killed_draymans_horse
 Whatever was driving it through its run-without-end has finished
 running. The bones come apart on the planks one piece at a time, the
 way old harness comes apart, and the human skull goes last and without
 ceremony. The hauling track is quiet. It was not, before.
 
-+lose
+* lose
 It does not slow. The hauling track takes you the way the hauling track
 takes anything that does not yield it.

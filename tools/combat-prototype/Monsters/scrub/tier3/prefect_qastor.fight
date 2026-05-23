@@ -1,26 +1,26 @@
 # Prefect Velor Qastor — scrub T3 legendary duelist (senior Color administrator)
 
-+title Prefect Velor Qastor
-+image monsters/scrub_boss.png
-+blood #6b3aa0
-+stats hp=24
+[title Prefect Velor Qastor]
+[image monsters/scrub_boss.png]
+[blood #6b3aa0]
+[stats hp=24]
 
-+move Defend
+* move Defend
   narration: He folds his hands and the angles of the hall sharpen around him.
 
-+move Riposte Attack
+* move Riposte Attack
   narration: He gestures, and the Color from him cuts across your line as you press forward.
 
-+move Tainted Heavy Slow Stunning Attack
+* move Tainted Heavy Slow Stunning Attack
   narration: He lowers his head fractionally, the walls of the hall brighten, and the Color folds out of him with administrative force, landing on you.
 
-+move Heavy Power Shielding Defend
+* move Heavy Power Shielding Defend
   narration: The hall aligns itself around him for a moment, geometry sharpening, and the Color settles on him like a robe.
 
-+move Heavy Power Recover
+* move Heavy Power Recover
   narration: He breathes in once, evenly. The Color in his eyes deepens, and what you took from him is no longer missing.
 
-+intro
+* intro
 The hall is geometrically too perfect — angles a fraction sharper than
 your eye can hold, walls that brighten on no schedule. The man who rises
 to greet you wears the formal pleating of a senior interior administrator,
@@ -30,14 +30,14 @@ irregularity, and I have the authority to address it personally." He
 smiles, briefly, the way a polite host smiles. "Please. Set down what you
 are carrying. The correction is brief."
 
-+win
-> gold 25
-> tag killed_prefect_qastor
+* win
++gold 25
++tag killed_prefect_qastor
 The Color goes out of him the way a lamp goes out — at once and
 completely. The angles of the hall settle a fraction softer. The
 pleating of his robe folds neatly under him as he sinks down, the way a
 senior administrator's robe ought to.
 
-+lose
+* lose
 The correction is, as he said, brief. The angles of the hall settle. The
 geometry continues to be very perfect.

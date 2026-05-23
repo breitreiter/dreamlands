@@ -1,27 +1,27 @@
 # Pylon Unit V-7 — plains T2 basic duelist (damaged Lattice automaton)
 
-+title Pylon Unit V-7
-+image monsters/plains_robot_2.png
-+blood #b58a2e
-+stats hp=18
+[title Pylon Unit V-7]
+[image monsters/plains_robot_2.png]
+[blood #b58a2e]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: A misfiring beam scorches past you, flickering.
   narration: It chatters off a shot from the broken emitter, half its energy.
 
-+move Defend
+* move Defend
   narration: It folds its arms across the damaged chest plate, sparking.
 
-+move Recover
+* move Recover
   narration: Internal coils whine into a higher pitch as the unit re-routes power.
 
-+move Glowing Heavy Slow Attack
+* move Glowing Heavy Slow Attack
   narration: The chest plate sparks and something inside it spools loud — it overdrives the lance, bigger than it should be, hotter than it should be.
 
-+move Heavy Power Defend
+* move Heavy Power Defend
   narration: It hunches and projects a stuttering field of pale light around itself.
 
-+intro
+* intro
 The Old Satara Road runs straight through scrub pine and blackened
 stumps, paving stones still fitted tight after centuries of neglect. Two
 men have a handcart blocking it — a sorry, mule-drawn affair, one wheel
@@ -46,14 +46,14 @@ runs. The recessed face-panel turns to you. One leg drags badly as it
 steps off the wreckage of the cart — something inside it is broken,
 maybe many things — but it is coming for you.
 
-+win
-> gold 12
-> tag killed_pylon_v_7
+* win
++gold 12
++tag killed_pylon_v_7
 The chest indicators stutter, hold a long amber, and go dark. The unit
 settles where it stands and does not move again. Ged is still on the
 ground. Mickey has not come back.
 
-+lose
+* lose
 The overdriven lance hits true. There is a smell of forge-heat and the
 last thing you see is the antennae at the crown still turning, calmly,
 a perimeter being measured and held.

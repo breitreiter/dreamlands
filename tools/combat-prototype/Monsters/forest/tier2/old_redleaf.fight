@@ -1,36 +1,36 @@
 # Old Redleaf — forest T2 basic striker (HP 18, basic moves + limited deadly attack)
 
-+title Old Redleaf
-+image monsters/forest_bear.png
-+stats hp=18
+[title Old Redleaf]
+[image monsters/forest_bear.png]
+[stats hp=18]
 
-+move Attack
+* move Attack
   narration: It swipes a forepaw at you, claws splayed.
   narration: It bats at your guard, testing.
 
-+move Defend
+* move Defend
   narration: It hunches and turns its shoulder to absorb the blow.
 
-+move Recover
+* move Recover
   narration: It steps back and shakes its head, clearing the daze.
 
-+move Heavy Slow Telegraphed Attack
+* move Heavy Slow Telegraphed Attack
   narration: It rears onto its hind legs and brings both forepaws down hard.
 
-+intro
+* intro
 You hear it first — the snap of brush thirty paces upslope, then the wet
 huff of breath. It comes down through the trees without hurry. Massive,
 grizzled, the fur at its shoulders silvered. When it stops to look at you,
 its eyes catch the canopy-light wrong, an ember-glow that holds steady when
 it shouldn't. The forest has gone quiet around you both.
 
-+win
-> gold 10
-> tag killed_old_redleaf
+* win
++gold 10
++tag killed_old_redleaf
 The bear settles in the leaves and does not rise again. Whatever held the
 ember-glow behind its eyes has gone out. The forest, slow to remember it
 was a forest, begins to make small noises again.
 
-+lose
+* lose
 The world tips sideways. Somewhere, a long way off, the forest starts
 breathing again without you.
