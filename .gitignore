@@ -21,6 +21,8 @@ mapgen/sizing.md
 mapgen/reference/
 generated_*.enc
 encounter_*.enc
+# fixme/colorize/factual backup files (written next to original as _<name>.enc)
+text/encounters/**/_*.enc
 .play-tmp/
 worlds/*/tiles/
 worlds/*/map.png
