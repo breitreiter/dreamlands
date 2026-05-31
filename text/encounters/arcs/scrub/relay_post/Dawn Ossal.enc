@@ -20,6 +20,42 @@ choices:
         # --- FACTUAL ---
         # The brass cylinder on Ossal's case is a Kesharat-issue cipher seal, its surface worn smooth from repeated use. The storeroom's single shelf holds three sealed envelopes labeled in the same script as the official message file, but with no sender. A single sheet of paper lies on the floor near the storeroom door, folded once and stamped with a faint impression of a lattice pattern. The pack's drawstring is untied, the knot slackened and not tied again, as if opened and closed without ceremony. The brazier in the corner is cold, its ash layered with fine dust from the storm, but a faint scent of burnt paper lingers. Devra's annotation log is missing from her desk, but the blank notebook she left behind remains, its pages unmarked. When Devra wakes she finds the storeroom slightly rearranged and her pack untied. She looks at Ossal. She looks at you. She does not ask. She sits down at her desk and gets to work, because the wire never stops and someone has to take what it brings.
         # --- end ---
+        # --- VOICED HPL mundane ---
+        # The brass cylinder upon Ossal's case bore the mark of a Kesharat-issue cipher seal—its surface worn smooth by countless turns, as though time and touch had conspired to efface its original form. On the single shelf of the storeroom, three sealed envelopes lay in silent array, their labels inscribed in the same angular, precise script as the official message file, yet devoid of any sender. A single sheet of paper, folded once and bearing only the faintest impression of a lattice pattern, rested near the doorway, as if dropped in haste or left behind by a hand too weary to return. The pack's drawstring hung loose, the knot unknotted and never retied—opened with no ceremony, closed without care. In the corner, the brazier lay cold; its ash, layered with fine dust from the recent storm, seemed to hold the memory of flame, though the fire had long since died. Yet still, beneath the silence, a faint, acrid scent lingered—burnt paper, or perhaps something older, more insidious. Devra's annotation log was gone, vanished without trace from her desk, but the blank notebook she had left behind remained untouched, its pages pure and untouched, as if awaiting the first breath of truth. When Devra awoke, she found the storeroom subtly altered—shelves shifted, objects repositioned with a precision that defied memory—and her pack, unfastened, its contents spilled in quiet disarray. She looked at Ossal. She looked at you. No question passed her lips. No tremor in her voice. She sat down at her desk, her hands steady, her eyes fixed upon the blank page, and began to write—because the wire never stops, and though the world may tremble or fall silent, someone must take what it brings.
+        # --- end ---
+        # --- VOICED REH mundane ---
+        # The brass cylinder on Ossal's case was a Kesharat seal, worn smooth by time and fingers, its surface a map of countless turns and twists. On the single shelf of the storeroom, three envelopes lay sealed—scripted in the same stark hand as the official dispatches, yet nameless, senderless, like letters from the void. A single sheet of paper lay crumpled on the floor near the door, folded once, its edge bearing the ghost of a lattice stamp, faint as a breath on glass. The pack's drawstring hung loose, the knot undone and never retied, as if opened without thought, closed without care. The brazier in the corner was cold, its ashes layered with storm-dust, yet a whisper of burnt paper clung to the air, like memory refusing to die. Devra's annotation log was gone—vanished like a shadow at dawn—but her blank notebook remained, the pages stark and unbroken. When she stirred awake, the storeroom was shifted just enough to make the breath catch in her throat: the shelf slightly askew, the pack unbound. She looked at Ossal. She looked at you. No words. No questions. Only the silence of a mind that knows the wire never sleeps, and someone must take what it brings. She sat at her desk, fingers brushing the paper, and began to write.
+        # --- end ---
+        # --- CRITIC factual ---
+        # (no findings)
+        # --- end ---
+        # --- CRITIC voiced HPL mundane ---
+        # [CRIT] "countless turns, as though time and touch had conspired to efface its original form" — invents speculation about causation and intentional erasure beyond "worn smooth from repeated use."
+        # [CRIT] "three sealed envelopes lay in silent array" — "silent array" is LOADED EMBELLISHMENT introducing a quality (silence/sentience) not in RECORD.
+        # [CRIT] "angular, precise script" — invents visual specificity ("angular, precise") not in RECORD; RECORD only says "same script."
+        # [CRIT] "as if dropped in haste or left behind by a hand too weary to return" — INVENTION of motive/action ("dropped in haste," "weary hand") not in RECORD.
+        # [CRIT] "seemed to hold the memory of flame" — INVENTION of poetic agency/memory not in RECORD.
+        # [CRIT] "burnt paper, or perhaps something older, more insidious" — INVENTION of alternate scent and moral quality ("insidious") not in RECORD.
+        # [CRIT] "vanished without trace" — CONTRADICTION; RECORD says log is "missing," not "vanished without trace" (adds supernatural suggestion).
+        # [CRIT] "its pages pure and untouched, as if awaiting the first breath of truth" — INVENTION of teleological waiting/purpose not in RECORD.
+        # [CRIT] "shelves shifted, objects repositioned with a precision that defied memory" — INVENTION; RECORD says room is "slightly rearranged," not "shifted" or "repositioned with precision."
+        # [CRIT] "its contents spilled in quiet disarray" — INVENTION; RECORD says pack is "untied," not that contents are "spilled."
+        # [CRIT] "her hands steady, her eyes fixed upon the blank page" — PC INTERIORITY; narrates Devra's internal physical/emotional state (steadiness, focus) as observable fact, crossing into her perspective.
+        # [LOW] "No question passed her lips. No tremor in her voice." — LOADED EMBELLISHMENT; adds sensory specifics (voice, tremor) not in RECORD's "does not ask."
+        # --- end ---
+        # --- CRITIC voiced REH mundane ---
+        # [CRIT] "worn smooth by time and fingers" — adds "fingers" as agent beyond the RECORD's "repeated use."
+        # [CRIT] "its surface a map of countless turns and twists" — INVENTION: adds metaphorical geography not in RECORD.
+        # [CRIT] "like letters from the void" — LOADED EMBELLISHMENT: introduces unspecified supernatural/existential quality beyond "no sender."
+        # [CRIT] "crumpled on the floor" — CONTRADICTION: RECORD states paper is "folded once," not crumpled.
+        # [CRIT] "the ghost of a lattice stamp, faint as a breath on glass" — adds sensory comparison and "ghost" language not in RECORD.
+        # [CRIT] "like memory refusing to die" — LOADED EMBELLISHMENT: imposes thematic meaning (memory, refusal, death) beyond "lingers."
+        # [CRIT] "vanished like a shadow at dawn" — INVENTION: adds metaphorical framing of disappearance not in RECORD.
+        # [CRIT] "the storeroom was shifted just enough to make the breath catch in her throat" — PC INTERIORITY: narrates Devra's physical/emotional response, conflating her experience with reader address.
+        # [CRIT] "the shelf slightly askew" — CONTRADICTION: RECORD says "slightly rearranged" but does not specify shelf position.
+        # [CRIT] "No words. No questions. Only the silence of a mind that knows the wire never sleeps" — PC INTERIORITY: interior narration of Devra's knowledge/intention ("mind that knows").
+        # [CRIT] "fingers brushing the paper, and began to write" — INVENTION: adds physical action and "write" (RECORD says "gets to work").
+        # --- end ---
     } @elif tag relay_post.stealth_failed {
         FIXME(dread): The brazier was still glowing when Ossal pulled the half-burned bundle from the coals. Most of it was gone. The unburned remainders were too charred to read. The official file remains, intact, in its place on the desk. Without Devra's annotations the messages read as routine wire traffic with slightly unusual content. Ossal looked at the file for a long time without saying anything.
         # --- COLOR ---
@@ -33,6 +69,45 @@ choices:
         # --- FACTUAL ---
         # The brass teapot on the brazier is dented from travel and still holds a faint residue of tea. The clay water jug beside the brazier is empty, its lip cracked from repeated exposure to sun and wind. The wire receiver on the desk is silent, but its brass casing bears a faint smudge of ash from the brazier's edge. The official file on the desk is bound in gray cloth with a Kesharat-issue seal that has not been opened in three weeks. The ledger on the desk has a fresh entry crossed out in red ink, the line drawn with deliberate precision. Ossal pulled the half-burned bundle from the coals; most of it was gone. The unburned remainders were too charred to read, fragments of paper with ink that had bled into the fibers under heat. The official file remains, intact, in its place on the desk. Without Devra's annotations the messages read as routine wire traffic with slightly unusual content. Ossal looked at the file for a long time without saying anything.
         # --- end ---
+        # --- VOICED HPL dread ---
+        # The brass teapot on the brazier bore the dents of a thousand miles, its surface pitted and dimmed by the grit of deserts and the weight of unspoken things. It still held, faintly, the ghost of tea—some bitter, forgotten brew that had long since ceased to be drinkable, yet lingered in the air like a memory of warmth. Beside it, the clay water jug stood empty, its lip cracked like the skin of a dying thing, frayed by sun and wind and the ceaseless passage of time. The wire receiver on the desk was silent—utterly, unnaturally silent—though its brass casing bore a smudge of ash, as though it had been pressed too close to the brazier's edge, as though something had touched it in the dark and left behind the mark of a presence that should not have been. The official file lay on the desk, bound in gray cloth, its Kesharat-issue seal unbroken, unopened for three weeks—yet it felt heavier than it should, as though the paper within carried a weight that defied measure. The ledger beside it bore a fresh entry, crossed out in red ink, the line drawn with such deliberate precision that it seemed less like a correction than a ritual obliteration. Ossal reached into the coals, pulling forth the half-burned bundle—what remained was little more than ash and brittle fragments, blackened paper where the ink had bled into the fibers, dissolving into meaningless stains, as if the words themselves had been consumed not by flame, but by some deeper, more ancient hunger. And yet the official file remained—intact, sealed, untouched—its contents, without Devra's annotations, reduced to the banal: routine wire traffic, faintly curious, slightly off—just enough to stir the mind to unease, just enough to make the silence of the room seem like the pause before a scream. Ossal stared at it, long and without breath, as though the file were not paper and ink, but a door that should not have been opened, and now could not be closed again.
+        # --- end ---
+        # --- VOICED REH dread ---
+        # The brass teapot on the brazier bore the dents of long travel, its once-bright surface dulled by dust and time, and still clung a ghost of tea, faint as a whisper. The clay water jug beside it, cracked at the lip from sun and wind, stood empty, a dry throat in the silence. The wire receiver on the desk was mute, yet its brass casing bore a smudge of ash—cooled, dark, like the kiss of something that had burned too long. The official file lay bound in gray cloth, the Kesharat seal unbroken, untouched for three weeks, yet the air around it seemed thick, as if something had stirred beneath. The ledger bore a fresh entry, slashed through in red ink, the line drawn with the cold precision of a blade. Ossal reached into the coals, drew forth the half-burned bundle—most of it gone, consumed, but the edges still smoldered with the memory of fire. The remnants were charred beyond reading, the ink bled into the fibers like blood into sand. And still, the file remained—intact, sealed, untouched. Without Devra's annotations, the messages were plain, routine, yet tinged with a wrongness, as if the very words had been twisted by some unseen hand. Ossal stared at the file, his face carved in shadow, his breath held. There was no sound. No movement. Only the weight of what had been lost—and what might yet come.
+        # --- end ---
+        # --- CRITIC factual ---
+        # (no findings)
+        # --- end ---
+        # --- CRITIC voiced HPL dread ---
+        # [CRIT] "the dents of a thousand miles" — INVENTION of specific distance/scale not in RECORD.
+        # [CRIT] "its surface pitted and dimmed by the grit of deserts" — INVENTION of desert setting not in RECORD.
+        # [CRIT] "the weight of unspoken things" — LOADED EMBELLISHMENT introducing metaphysical claim beyond dent description.
+        # [CRIT] "some bitter, forgotten brew" — INVENTION of taste and emotional valence not in RECORD.
+        # [CRIT] "lingered in the air like a memory of warmth" — LOADED EMBELLISHMENT; RECORD says only "faint residue."
+        # [CRIT] "like the skin of a dying thing, frayed by sun and wind and the ceaseless passage of time" — LOADED EMBELLISHMENT introducing vitalism and temporal dread not in RECORD.
+        # [CRIT] "utterly, unnaturally silent" — LOADED EMBELLISHMENT; RECORD says only "silent," not "unnatural."
+        # [CRIT] "as though it had been pressed too close to the brazier's edge, as though something had touched it in the dark and left behind the mark of a presence that should not have been" — INVENTION of agency/presence not in RECORD.
+        # [CRIT] "yet it felt heavier than it should, as though the paper within carried a weight that defied measure" — PC INTERIORITY (Ossal's subjective feeling about the file's weight).
+        # [CRIT] "seemed less like a correction than a ritual obliteration" — LOADED EMBELLISHMENT introducing ritual/ceremonial claim not in RECORD.
+        # [CRIT] "consumed not by flame, but by some deeper, more ancient hunger" — INVENTION of agency/intent not in RECORD.
+        # [CRIT] "reduced to the banal: routine wire traffic, faintly curious, slightly off" — CONTRADICTION; RECORD says "routine" and "slightly unusual," not "faintly curious, slightly off."
+        # [CRIT] "just enough to stir the mind to unease, just enough to make the silence of the room seem like the pause before a scream" — PC INTERIORITY (Ossal's emotional/mental state).
+        # [CRIT] "long and without breath" — PC INTERIORITY (Ossal's physical/emotional state during action).
+        # [CRIT] "as though the file were not paper and ink, but a door that should not have been opened, and now could not be closed again" — PC INTERIORITY (Ossal's interpretation/dread about the file).
+        # --- end ---
+        # --- CRITIC voiced REH dread ---
+        # [CRIT] "its once-bright surface dulled by dust and time" — INVENTION: no prior brightness or dulling mentioned in RECORD.
+        # [LOW] "ghost of tea, faint as a whisper" — LOADED EMBELLISHMENT: "whisper" introduces an unspecified sensory quality beyond "faint."
+        # [LOW] "a dry throat in the silence" — LOADED EMBELLISHMENT: personification that adds metaphorical claim not in RECORD.
+        # [CRIT] "cooled, dark, like the kiss of something that had burned too long" — INVENTION: "cooled," "dark," and the comparative "kiss of something" are not in RECORD; RECORD only notes "faint smudge of ash."
+        # [CRIT] "the air around it seemed thick, as if something had stirred beneath" — INVENTION: no atmospheric quality or sense of disturbance mentioned in RECORD.
+        # [LOW] "the cold precision of a blade" — LOADED EMBELLISHMENT: "cold" and "blade" simile add interpretive charge beyond "deliberate precision."
+        # [CRIT] "the edges still smoldered with the memory of fire" — INVENTION: RECORD says bundle was "half-burned" and "most of it was gone"; no active smoldering stated.
+        # [LOW] "the ink bled into the fibers like blood into sand" — LOADED EMBELLISHMENT: "blood into sand" simile adds unspecified emotional weight beyond "bled into the fibers."
+        # [CRIT] "the messages were plain, routine, yet tinged with a wrongness, as if the very words had been twisted by some unseen hand" — CONTRADICTION: RECORD states messages "read as routine wire traffic with slightly unusual content"; VOICED draft's "wrongness" and "twisted" exceed and reframe the RECORD's claim.
+        # [CRIT] "his face carved in shadow, his breath held" — PC INTERIORITY: narrates Ossal's physical state and breath control, interior to his conscious control.
+        # [CRIT] "There was no sound. No movement. Only the weight of what had been lost—and what might yet come." — PC INTERIORITY: "the weight of what had been lost" and speculative future projection ("what might yet come") are interior to Ossal's consciousness, not stated in RECORD.
+        # --- end ---
     } @else {
         FIXME(mundane): You and Ossal woke Devra together. She listened. She did not fight. She is an operator, not a fighter. She argued, passionately and logically, citing entries from her log by date and order number. When it became clear you would not help her she sat down at her desk and went quiet. Ossal collected the copies from her pack. The official file stayed where it was.
         # --- COLOR ---
@@ -45,6 +120,46 @@ choices:
         # --- end ---
         # --- FACTUAL ---
         # You and Ossal woke Devra together. She listened. She did not fight. She is an operator, not a fighter. She argued, passionately and logically, citing entries from her log by date and order number. When it became clear you would not help her she sat down at her desk and went quiet. Ossal collected the copies from her pack. The official file stayed where it was. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The tea in the brazier pot is cold, its dregs dark and sedimented at the bottom. The wire receiver on the desk is silent, its indicator light off, though the connection remains physically intact. The official file on the desk contains transcriptions in the smooth balanced script of the regional capital, all stamped with a red wax seal. Devra's second notebook lies open on the desk, its pages filled with handwritten annotations in a cramped, hurried hand. The copy of the message predicting the PC's arrival is missing from the official file, though the original transcription remains.
+        # --- end ---
+        # --- VOICED HPL mundane ---
+        # You and Ossal awoke Devra together, and she listened—without resistance, without protest. She was an operator, not a warrior; her strength lay not in defiance, but in precision, in the cold logic of record and sequence. She argued then, with a passion that was almost feverish, citing entries from her log with exactitude—by date, by order number, by the subtle inflection of the transmission's timbre. When it became evident that you would not aid her, she sank into silence. Not with despair, but with the stillness of one who has already seen the end and laid it to rest. Ossal gathered the copies from her pack, handling them with the detached care of one removing relics from a tomb. The official file remained where it had been, its presence a quiet, unyielding accusation. The brass cylinder upon the desk bore the marks of a Kesharat-issue cipher seal—its surface worn smooth, almost polished, as if the very act of turning it had become a ritual. The tea in the brazier pot was cold, its dregs thick and dark, settled like the residue of unspoken words. The wire receiver lay silent, its indicator light extinguished, though the connection persisted, a ghost in the circuit. The official file contained transcriptions in the smooth, even script of the regional capital—each page sealed with a red wax stamp, still unbroken, still airtight. Devra's second notebook lay open on the desk, its pages crowded with cramped, hurried annotations, as though written in a moment of rising dread. And the copy of the message predicting the PC's arrival—though the original transcription remained—was gone, as if it had never existed.
+        # --- end ---
+        # --- VOICED REH mundane ---
+        # You and Ossal woke Devra together, and she listened—no struggle, no cry, only the quiet acceptance of one who knows her place. She was no fighter, but a mind shaped for order, for the cold logic of records and sequences. She argued then, fiercely, her voice sharp as a blade drawn from its sheath, citing entries from her log with the precision of a scribe in a temple of law—dates, order numbers, cross-references, each one a nail in the coffin of your refusal. When it became plain you would not aid her, she sank into the chair, her hands falling limp upon the desk, her breath drawn short and shallow, as if the air itself had turned to stone. Ossal took the copies from her pack, his fingers moving with the care of a man handling sacred relics. The official file stayed where it was, untouched, a monument to silence. On the desk, the brass cylinder—Kesharat-issue, its surface worn smooth by the grip of a thousand hands—glistened faintly in the dim light, a thing of use and habit, not of ceremony. The tea in the brazier pot was cold, its dregs thick and black, settled like the dust of forgotten promises. The wire receiver sat mute, its indicator light dark, though the line still hummed with a ghostly tension, a voice waiting in the wires. The official file bore the transcriptions in the clean, balanced script of the regional capital, each page sealed with a red wax stamp, hard as a wound. And Devra's second notebook lay open, its pages a tangle of cramped, urgent writing, as if she had tried to outpace the truth. The copy of the message predicting the PC's arrival was gone—vanished, not torn, not burned, but stolen from the file, like a tooth pulled from a skull. Only the original remained, a shadow of what had been.
+        # --- end ---
+        # --- CRITIC factual ---
+        # (no findings)
+        # --- end ---
+        # --- CRITIC voiced HPL mundane ---
+        # [CRIT] "by the subtle inflection of the transmission's timbre" — INVENTION: no transmission or its timbre mentioned in RECORD.
+        # [CRIT] "Not with despair, but with the stillness of one who has already seen the end and laid it to rest." — PC INTERIORITY: narrates Devra's internal state and past knowledge beyond what the RECORD establishes.
+        # [CRIT] "handling them with the detached care of one removing relics from a tomb" — PC INTERIORITY: attributes intentional emotional stance to Ossal's action not in RECORD.
+        # [CRIT] "its presence a quiet, unyielding accusation" — PC INTERIORITY: assigns moral/emotional valence to the file's presence.
+        # [LOW] "almost polished, as if the very act of turning it had become a ritual" — LOADED EMBELLISHMENT: "ritual" introduces a claim about intentional repeated practice not in RECORD, which only notes "worn smooth from repeated handling."
+        # [LOW] "settled like the residue of unspoken words" — LOADED EMBELLISHMENT: metaphorical equation introduces a claim about suppressed speech/secrets.
+        # [LOW] "a ghost in the circuit" — LOADED EMBELLISHMENT: introduces the idea of haunting/spectral persistence beyond "connection remains physically intact."
+        # [CRIT] "each page sealed with a red wax stamp, still unbroken, still airtight" — CONTRADICTION: RECORD says file "contains transcriptions" (implying it has been opened and read); "still unbroken, still airtight" contradicts this use.
+        # [LOW] "as though written in a moment of rising dread" — PC INTERIORITY: attributes emotional state to the act of writing beyond RECORD's "cramped, hurried hand."
+        # --- end ---
+        # --- CRITIC voiced REH mundane ---
+        # [CRIT] "no struggle, no cry, only the quiet acceptance of one who knows her place" — PC INTERIORITY (ascribes internal state and knowledge to Devra beyond what the RECORD supports).
+        # [CRIT] "her voice sharp as a blade drawn from its sheath" — INVENTION (no sensory detail of voice quality in RECORD).
+        # [CRIT] "cross-references" — INVENTION (RECORD specifies "dates, order numbers" only).
+        # [CRIT] "each one a nail in the coffin of your refusal" — PC INTERIORITY (interprets Devra's argumentative intent through the PC's perspective).
+        # [CRIT] "her hands falling limp upon the desk, her breath drawn short and shallow, as if the air itself had turned to stone" — INVENTION (physical details of Devra's posture and breathing not in RECORD).
+        # [CRIT] "his fingers moving with the care of a man handling sacred relics" — PC INTERIORITY (narrates Ossal's internal manner/intention).
+        # [CRIT] "a monument to silence" — LOADED EMBELLISHMENT (introduces metaphysical claim about the file's significance).
+        # [CRIT] "by the grip of a thousand hands" — INVENTION (RECORD says "repeated handling," not quantified).
+        # [CRIT] "glistened faintly in the dim light" — INVENTION (no light quality or glistening specified in RECORD).
+        # [CRIT] "a thing of use and habit, not of ceremony" — PC INTERIORITY (interpretation of the cylinder's purpose).
+        # [CRIT] "thick and black" — CONTRADICTION (RECORD specifies "dark," not "thick"; "sedimented" ≠ "thick").
+        # [CRIT] "settled like the dust of forgotten promises" — LOADED EMBELLISHMENT (introduces metaphysical judgment about the tea).
+        # [CRIT] "the line still hummed with a ghostly tension, a voice waiting in the wires" — INVENTION (RECORD states connection "remains physically intact" but adds no auditory or metaphysical claim).
+        # [CRIT] "each page sealed with a red wax stamp, hard as a wound" — INVENTION (adds "hard" quality and wound metaphor; RECORD says seal is present but not its texture).
+        # [CRIT] "a tangle of cramped, urgent writing" — CONTRADICTION (RECORD: "cramped, hurried hand"; "tangle" and "urgent" are intensifications that contradict the neutral description).
+        # [CRIT] "as if she had tried to outpace the truth" — PC INTERIORITY (interprets Devra's motivation).
+        # [CRIT] "vanished, not torn, not burned, but stolen from the file, like a tooth pulled from a skull" — INVENTION (RECORD states it is "missing"; the manner of disappearance and metaphor are added).
+        # [CRIT] "Only the original remained, a shadow of what had been" — LOADED EMBELLISHMENT (introduces metaphysical judgment; RECORD states fact neutrally).
         # --- end ---
     }
 
@@ -63,6 +178,44 @@ choices:
     # --- end ---
     # --- FACTUAL ---
     # You take your pack and step out into the cleared morning. The mesa is bright and quiet. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The pot of tea on the brazier is cold, the dregs dark and bitter at the bottom. The wire receiver on the desk is silent, its indicator light off, though the lead remains connected. One of the filed transcriptions on the desk has a corner folded down, marked with a pencil note in Devra's hand: "Not from capital." The storm's grit has settled in a fine layer across the stone floor, visible only where the morning light slants through the door. The Kesharat pennant on the pole outside is limp, its fabric stiff with dried dust and salt. Behind you the relay carries on with its work, which it will continue to do for as long as the wire continues to bring it work.
+    # --- end ---
+    # --- VOICED HPL mundane ---
+    # You take your pack and step out into the cleared morning, where the mesa lies bathed in a pale, brittle light, as if the air itself were thin and strained. The brass cylinder on her desk—the Kesharat-issue cipher seal—gleams with a dull, worn smoothness, its surface worn by countless hands and countless turns, bearing the faint, ghostly imprint of forgotten codes. The pot of tea upon the brazier is cold, the dregs at the bottom black and thick as old blood, tasting of ash and neglect. The wire receiver on the desk lies silent, its indicator light extinguished, yet the lead remains connected, a taut thread of possibility stretched into the void. One of the filed transcriptions lies open, a corner folded down, marked in Devra's hand with a single, stark note: *"Not from capital."* Outside, the storm's grit has settled in a fine, pervasive layer across the stone floor—visible only where the morning light slants through the doorway in thin, dusty beams. The Kesharat pennant on the pole beyond the threshold hangs limp, its fabric stiff and cracked with dried dust and salt, as though the wind had long since abandoned it. Behind you, the relay hums on, a low, persistent thrumming in the walls, carrying out its function with mechanical indifference—so long as the wire brings work, so long as the current holds, it will not cease.
+    # --- end ---
+    # --- VOICED REH mundane ---
+    # You heave the pack onto your shoulders and step out into the cleared morning, where the mesa lies bright and still beneath a sky of hammered bronze. The brass cylinder on her desk gleams dully—Kesharat-issue, worn smooth as a river stone from a hundred hands, a seal of authority and silence. The tea on the brazier is cold, the dregs thick and black as old blood at the bottom of the pot. The wire receiver sits mute, its indicator dark, though the lead still snakes away into the wall like a dead serpent. One of the transcribed logs lies open, a corner folded down, a pencil mark in Devra's sharp hand: *"Not from capital."* Outside, the storm's grit lies in a thin, ghostly layer across the stone floor—visible only where the morning sun slants through the door in dusty shafts. The Kesharat pennant on the pole hangs limp, its fabric stiff with dust and salt, a banner of forgotten duty. Behind you, the relay hums on, a quiet, relentless machine, grinding through its work as long as the wire keeps feeding it.
+    # --- end ---
+    # --- CRITIC factual ---
+    # [CRIT] "The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling." — This shifts perspective mid-sentence from second person ("You take your pack") to third person narration of objects the PC is no longer observing. The bullets describe observable details; this reads as omniscient narration of Devra's workspace after the PC has stepped outside.
+    # [CRIT] "The pot of tea on the brazier is cold, the dregs dark and bitter at the bottom." — Same issue: the PC is outside ("step out into the cleared morning"); this describes the interior of the relay station the PC is leaving. The PC cannot see inside the building while standing outside.
+    # [CRIT] "The wire receiver on the desk is silent, its indicator light off, though the lead remains connected." — PC is outside. Cannot observe interior equipment.
+    # [CRIT] "One of the filed transcriptions on the desk has a corner folded down, marked with a pencil note in Devra's hand: 'Not from capital.'" — PC is outside. Cannot see desk details.
+    # [CRIT] "The Kesharat pennant on the pole outside is limp, its fabric stiff with dried dust and salt." — This is the only observable detail from outside, but it is presented as part of a list of interior details the PC cannot see, which collapses the spatial logic of the beat.
+    # [CRIT] SCOPE LEAK: The entire sequence of interior details violates the BEAT frame. The beat is "You take your pack and step out into the cleared morning." The beat ends with the PC outside. All narration after that step belongs to the next beat, not this one. This draft has the PC step outside and then immediately describes the interior of the building the PC just left.
+    # --- end ---
+    # --- CRITIC voiced HPL mundane ---
+    # [CRIT] "bathed in a pale, brittle light, as if the air itself were thin and strained" — INVENTION of atmospheric quality and sensory claim not in RECORD.
+    # [CRIT] "gleams with a dull, worn smoothness" — CONTRADICTION; RECORD says surface is "worn smooth" but adds "gleams" as new visual fact.
+    # [CRIT] "countless hands and countless turns, bearing the faint, ghostly imprint of forgotten codes" — INVENTION of handling history and spectral codes not in RECORD.
+    # [CRIT] "black and thick as old blood, tasting of ash and neglect" — LOADED EMBELLISHMENT; RECORD specifies "dark and bitter" but draft adds taste sensation ("tasting of ash and neglect") and metaphorical content beyond scope.
+    # [CRIT] "a taut thread of possibility stretched into the void" — INVENTION of metaphysical implication not in RECORD.
+    # [CRIT] "marked in Devra's hand with a single, stark note" — LOADED EMBELLISHMENT; "single, stark" adds qualitative claim beyond RECORD's neutral statement.
+    # [CRIT] "visible only where the morning light slants through the doorway in thin, dusty beams" — LOADED EMBELLISHMENT; "thin, dusty beams" specifies visual detail not in RECORD (which says "slants through the door").
+    # [CRIT] "stiff and cracked with dried dust and salt" — CONTRADICTION; RECORD says "stiff with" but does not say "cracked."
+    # [CRIT] "as though the wind had long since abandoned it" — INVENTION of metaphysical personification and historical claim not in RECORD.
+    # [CRIT] "the relay hums on, a low, persistent thrumming in the walls" — INVENTION of auditory detail (hum/thrumming) not in RECORD.
+    # [CRIT] "carrying out its function with mechanical indifference" — PC INTERIORITY disguised as narrator claim; attributes intent/state to the relay beyond what RECORD states.
+    # --- end ---
+    # --- CRITIC voiced REH mundane ---
+    # [CRIT] "where the mesa lies bright and still beneath a sky of hammered bronze" — INVENTION: sky description (color and texture) not in RECORD.
+    # [CRIT] "gleams dully—Kesharat-issue, worn smooth as a river stone from a hundred hands" — INVENTION: "gleams dully" (visual quality) and "a hundred hands" (quantified repetition detail) not in RECORD.
+    # [CRIT] "a seal of authority and silence" — INVENTION: functional/symbolic interpretation not in RECORD.
+    # [CRIT] "thick and black as old blood" — INVENTION: "thick" quality and blood simile not in RECORD; RECORD says "dark and bitter."
+    # [CRIT] "the lead still snakes away into the wall like a dead serpent" — INVENTION: trajectory ("into the wall") and serpent simile not in RECORD.
+    # [CRIT] "One of the transcribed logs lies open" — CONTRADICTION: RECORD says "filed transcriptions" (plural, on desk), not a single log; no "open" state specified in RECORD.
+    # [CRIT] "visible only where the morning sun slants through the door in dusty shafts" — CONTRADICTION: RECORD specifies "where the morning light slants through the door" with no mention of "dusty shafts" as a visible phenomenon (shafts themselves are added).
+    # [CRIT] "a banner of forgotten duty" — INVENTION: symbolic/thematic interpretation not in RECORD.
+    # [CRIT] "the relay hums on, a quiet, relentless machine, grinding through its work" — INVENTION: "hums" (auditory detail), "quiet, relentless" qualities, and "grinding" action not in RECORD.
     # --- end ---
     +add_level
     +finish_dungeon

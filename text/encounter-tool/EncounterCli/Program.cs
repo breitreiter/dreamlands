@@ -17,6 +17,8 @@ class Program
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "colorize" => ColorizeCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "factual" => FactualCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "voice" => VoiceCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "critic" => CriticCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "push" => PushCommand.Run(rest).GetAwaiter().GetResult(),
@@ -39,6 +41,13 @@ class Program
         Console.WriteLine("                  Inject COLOR draft bullets under each FIXME beat in the arc.");
         Console.WriteLine("  encounter factual <arc-dir> [--qwen-url <url>] [--force] [--prompts-only]");
         Console.WriteLine("                  Integrate FIXME + curated COLOR bullets into FACTUAL prose blocks.");
+        Console.WriteLine("  encounter voice <arc-dir> [--qwen-url <url>] [--authors HPL,REH] [--scene <name>]");
+        Console.WriteLine("                  [--default-scene mundane] [--programs <dir>] [--temperature 0.7]");
+        Console.WriteLine("                  [--force] [--prompts-only]");
+        Console.WriteLine("                  Produce author-voiced variants of each FACTUAL block via voices/*.json.");
+        Console.WriteLine("  encounter critic <arc-dir> [--config <path>] [--phase factual|voice|both]");
+        Console.WriteLine("                  [--force] [--prompts-only]");
+        Console.WriteLine("                  Cross-provider critique of FACTUAL and VOICED blocks via Anthropic SDK.");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter push [<path>] [--world <name>]");

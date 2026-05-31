@@ -117,6 +117,49 @@ static class DraftBlocks
         return lines.Count;
     }
 
+    /// <summary>
+    /// Find the line index just after the last adjacent comment line (the
+    /// end of the FIXME's accumulated draft-block stack). New draft blocks
+    /// should be inserted here so they stack at the bottom of the existing
+    /// drafts and before any blank separator + structural content.
+    /// </summary>
+    public static int FindEndOfDraftStack(List<string> lines, int fixmeIndex)
+    {
+        int insertAt = fixmeIndex + 1;
+        for (int i = fixmeIndex + 1; i < lines.Count; i++)
+        {
+            var trimmed = lines[i].TrimStart();
+            if (string.IsNullOrEmpty(trimmed)) continue;
+            if (!trimmed.StartsWith('#')) return insertAt;
+            insertAt = i + 1;
+        }
+        return insertAt;
+    }
+
+    /// <summary>
+    /// List the header attrs of every draft block adjacent to this FIXME,
+    /// in file order. E.g. for a fully-pipelined beat: ["COLOR", "FACTUAL",
+    /// "VOICED HPL dread", "VOICED REH dread"]. Stops at first non-comment
+    /// line. Skips `# --- end ---` markers.
+    /// </summary>
+    public static List<string> ListAdjacentBlocks(List<string> lines, int fixmeIndex)
+    {
+        var result = new List<string>();
+        for (int i = fixmeIndex + 1; i < lines.Count; i++)
+        {
+            var trimmed = lines[i].TrimStart();
+            if (string.IsNullOrEmpty(trimmed)) continue;
+            if (!trimmed.StartsWith('#')) return result;
+            if (!trimmed.StartsWith("# --- ", StringComparison.Ordinal)) continue;
+            if (trimmed.StartsWith("# --- end", StringComparison.OrdinalIgnoreCase)) continue;
+            var afterPrefix = trimmed[6..]; // skip "# --- "
+            var dashEnd = afterPrefix.LastIndexOf(" ---", StringComparison.Ordinal);
+            var attrs = dashEnd > 0 ? afterPrefix[..dashEnd].Trim() : afterPrefix.TrimEnd('-', ' ');
+            result.Add(attrs);
+        }
+        return result;
+    }
+
     public static string? ExtractRegister(string fixmeLine)
     {
         var m = RegisterPattern.Match(fixmeLine);
