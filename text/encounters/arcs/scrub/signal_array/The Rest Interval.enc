@@ -1,0 +1,30 @@
+The Rest Interval
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): The rest circle is a flat patch of rock about ten meters from the pylon. The kettle is on. Veran sits a little upslope. Baret is next to him. Richard is across from Baret, heavy in his seat. Chorik is off-axis, the one whose feet are not quite tucked in. The bell is silent. The crew has time on the clock until they go back to the work.
+
+choices:
+
+* Talk to Veran = Sit with the foreman [requires !tag signal_array.met_veran]
+    +open "Veran"
+
+* Talk to Baret = Sit with the young worker [requires !tag signal_array.met_baret]
+    +open "Baret"
+
+* Talk to Richard = Sit with the heavier man [requires !tag signal_array.met_richard]
+    +open "Richard"
+
+* Talk to Chorik = Sit with the quiet one [requires !tag signal_array.met_chorik]
+    +open "Chorik"
+
+* Sit and watch = Stay quiet and observe [requires !tag signal_array.observed]
+    +open "Observe"
+
+* Finish the pylon = Tell them you will wait while they finish
+    FIXME(mundane): The bell on Veran's belt rings again, softer than the first time. The crew rises from the rest circle and returns to the housing. Veran checks the cable connections. Chorik fits the top cross-piece into the lattice. Richard takes the laminated activation card out of his pocket. Baret rolls up the bedroll mat and stows the tea kit. The work resumes.
+    +open "Completion"
+
+* Walk off the work site = Decide this is not your concern
+    FIXME(mundane): You stand. You thank Veran for the tea. You step out of the rest circle and back onto the mesa road. The crew watches you go without rising. The bell on Veran's belt does not ring again before you are out of earshot.
+    +flee_dungeon

@@ -1,0 +1,17 @@
+Richard
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): Richard is in his forties. He is built like a man who lifts hogs. His collar is unbuttoned and the back of his neck shows grassland sunburn. He is a pig farmer from the rich grasslands near Aldgate. He has a prize pig at home. His brother is taking care of her in his absence.
+
+FIXME(mundane): He asks if you have been by his farm. He describes it: the road in, the gate, the pig pen by the barn. He wants news. He reckons it is about time for the harvest festival. He worries about his brother's husbandry. He does not think his brother feeds the pig appropriately.
+
+FIXME(dread): You ask him about the pylons. His voice shifts mid-sentence. He becomes precise. He talks about propagation, tolerances, schedule margins, the activation sequence. The technical fluency is fluent. The details are wrong in small confident ways. Real communications relays do not work the way he is describing. Neither Richard nor the others notice the shift. When he finishes he goes back to the pig.
+
+FIXME(dread): If you ask him how a pig farmer came to be running activation sequences on a mesa, he has a feeling of how. He does not have a memory.
+
+choices:
+
+* Return to the circle = Step back into the conversation
+    +add_tag signal_array.met_richard
+    +open "The Rest Interval"

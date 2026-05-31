@@ -1,0 +1,19 @@
+Grabbed
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(action): Veran's hand is on your shoulder. He is not gripping hard. He is being patient with you. The crew is not coordinated yet. Behind him Chorik is starting to turn. The housing is still right there.
+
+choices:
+
+* Break free and finish it = Get loose, get to the housing
+    @if check combat correct:rush wrong:outlast {
+        FIXME(action): You drop your shoulder under his hand and twist. He goes off balance. You are on the housing before he has recovered. The latch plate breaks under your second hit. You strip the activator unit out and break it across your knee. The signal cuts. The pylon goes dark.
+        +open "Aftermath"
+    } @else {
+        FIXME(action): You try to twist out of his grip. He follows you down. Baret is on your other side before you can recover. The two of them put you on the ground. Chorik is at the housing checking the latch. Richard is watching from the cable bundle.
+        FIXME(dread): When they let you up Veran asks you what you thought you were doing. He is not angry. He is concerned for you. There is a bruise rising on your hip and your ribs are sore. The activator is intact. The pylon is humming. The crew finishes packing the tools.
+        FIXME(dread): They head east down the mesa road, blueprints and coordinates and material quantities you can still feel pressing at the back of your skull. You are alone on the work site with the pylon.
+        +add_condition injured
+        +finish_dungeon
+    }

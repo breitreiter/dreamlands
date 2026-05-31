@@ -1,0 +1,15 @@
+Baret
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): Baret is in his late twenties. His hands have the build of someone who grew up working stone. His tunic cuffs are rolled and the Reshîd clan band on his wrist is visible whenever he reaches for the kettle.
+
+FIXME(mundane): He talks about his family. His mother is well. His sisters are well. His nephew was born while he has been on the road. He was supposed to be home for the birth. He knows he is overdue. He says he will be home after this job. Just this one more.
+
+FIXME(dread): He says "just this one more" twice in five minutes. He hears himself say it the second time. He laughs at himself a little. He does not stop saying it. If you point out that working a Kesharat infrastructure job is something a Reshîd elder's son would need to explain, he has an explanation ready. The explanation is fine. It does not hold up to the second question.
+
+choices:
+
+* Return to the circle = Step back into the conversation
+    +add_tag signal_array.met_baret
+    +open "The Rest Interval"

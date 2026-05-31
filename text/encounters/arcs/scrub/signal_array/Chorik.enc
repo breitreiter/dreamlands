@@ -1,0 +1,17 @@
+Chorik
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): Chorik is the quiet one. He is buttoned to the throat. His neck cloth is folded crisp. He is the only one of the four whose uniform fits him exactly the way the uniform is meant to fit.
+
+FIXME(mundane): You try to draw him out. He answers in short sentences. He does not initiate. He changes the subject when you press. He smiles thinly at the others' jokes a beat after the laugh lands.
+
+FIXME(dread): The other three patch his discomfort with on-his-behalf inventions. Veran says Chorik has been quiet since the last site, don't mind him. Baret says Chorik is just tired, aren't you Chorik. Richard says don't ask him about that, he doesn't like to talk about it. Chorik does not contradict any of them. He does not confirm any of them. He drinks his tea.
+
+FIXME(dread): You see what the others do not. The flip on the bell took three seconds for the other three. For Chorik it has not finished. He is sitting where they put him.
+
+choices:
+
+* Return to the circle = Step back into the conversation
+    +add_tag signal_array.met_chorik
+    +open "The Rest Interval"

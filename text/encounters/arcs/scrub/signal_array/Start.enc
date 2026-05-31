@@ -1,0 +1,21 @@
+The Pylon Crew
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): The mesa road runs along an exposed rock shelf. A half-erected pylon stands ahead. It is a lattice tower five meters tall, guyed with cable, the top cross-piece not yet fitted. Four workers are around the housing at its base. They wear Kesharat infrastructure uniform: dun canvas trousers and tunics, brass-buttoned at the throat, broad-brimmed hats, white linen neck cloths. The cable runs disappear into a cut in the rock.
+
+FIXME(mundane): The foreman sees you approach and waves you wide of the cable run. He does not stop the work. He does not introduce anyone. The young worker at the housing does not look up. The heavier man with his hands in the cable bundle does not look up. The fourth worker glances at you and looks away.
+
+FIXME(dread): The crew works around you for several minutes. You have time to notice what the uniform cannot cover. The young worker's cuffs are rolled to the elbow, showing a Reshîd clan band on his wrist. The heavier man's collar is unbuttoned and the back of his neck shows a grassland sunburn, the wrong sun for the mesa. The fourth worker is buttoned to the throat and stands too still.
+
+FIXME(dread): A bell on the foreman's belt rings. A hard clap of sound and a sustained buzz. Tools drop mid-motion. Postures unwind. The foreman turns to you smiling. The young worker has a bedroll mat out before the foreman sits. The heavier man drops the cable bundle and asks where you have come from. Three seconds. The flip is total.
+
+choices:
+
+* Sit with the crew = Take the tea they are offering
+    FIXME(mundane): You sit. The foreman pours tea from a small pot. The four workers ring you in around the rest circle. The foreman introduces them by name: Veran the foreman, Baret the young one, Richard the heavier man, Chorik the quiet one. The crew makes you welcome.
+    +open "The Rest Interval"
+
+* Walk on = Keep your road and put the crew behind you
+    FIXME(mundane): You nod to the foreman and walk past the work site. The mesa road continues north. The bell behind you cuts off at some point you do not notice.
+    +flee_dungeon

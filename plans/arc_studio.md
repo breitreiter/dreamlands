@@ -105,17 +105,177 @@ Produce three sibling files in the arc directory:
   appearance, what they know, what they can do, what they cannot do,
   what they want, how they speak. Locked-in facts the scaffold and
   downstream passes both consult.
+
+  **Voiceprint (borrowed from Ali:Chat — see references).** The
+  "how they speak" field carries the descriptive register *and*
+  one or two verbatim example lines: actual sentences in the
+  character's voice, not adjectives about it. The RP-card
+  community's load-bearing finding is that a couple of example
+  lines pin voice more reliably, and more token-efficiently, than
+  any amount of description — structured fields are for facts,
+  example lines are for feel. This is the dialog writer's anchor.
+  We defer dialog to the voice pass (step 5), so the bible owes
+  that pass *something to write against*: it generates its ~5
+  candidates per beat against the example lines, and the
+  voice/identity critics measure drift against them rather than
+  re-deriving the register from adjectives every candidate. The
+  example lines are *reference in the bible*, never prose decanted
+  into the `.enc` — `feedback_scaffold_no_creative_writing` still
+  holds. The current signal_array `_cast.md` has descriptive Voice
+  fields but no example lines; add them.
 - **`_set.md`** — the physical environment. Rooms, props, doors,
   lighting, what is where, what state things start in. Time of day,
   weather, any environmental beats that shift.
-- **`_scenes.md`** — the scene graph as a scannable table. Each row:
-  scene id, precursor state (tags/qualities/items that gate this
-  scene), what happens (3–6 beat bullets), resulting state, leads-to
-  list. The shape that exposes causal/chronological issues at bullet
-  scale, before any `.enc` exists.
+- **`_scenes.md`** — the scene graph, one scene per heading. For
+  each scene: id, precursor state (tags/qualities/items that gate
+  this scene), a physical-state ledger (below), what happens (3–6
+  beat bullets), resulting state, leads-to list. The shape that
+  exposes causal/chronological issues at bullet scale, before any
+  `.enc` exists.
+
+  **Granularity warning (load-bearing).** A scene is a *narrative
+  beat* — a coherent chunk of the arc the player traverses as
+  one unit — **not a `.enc` file.** Decompose is the step that
+  fans scenes out into `.enc` topology (hub-and-spoke,
+  branched choice, sequential beats, staged gates). If
+  `_scenes.md` ends up with ~15 entries and visibly maps 1:1
+  to expected `.enc` files, the shred has decomposed early
+  and the bible no longer sits above the substrate it is
+  supposed to govern. A typical arc has **3–6 scenes** plus
+  short outro-state stubs (end states, not scenes — a few
+  lines each). The signal_array arc, for example, is three
+  scenes (arrival, rest interval, completion-through-
+  decision), one optional side-scene (a Chorik aside), and a
+  small set of terminal-state outros.
+
+  Per-NPC chats inside a hub are *player activity inside a
+  scene*, not scenes of their own. They live as bullets under
+  the hub scene's "what happens" field. Same for branch
+  resolution beats inside the clutch: cunning roll, combat
+  roll, success/fail forks — all bullets under the clutch
+  scene, not their own scenes. The bibles operate one level
+  of abstraction above `.enc`. Keep them there.
+
+  **Physical-state ledger (borrowed from RP "tracker"
+  extensions — see references).** The `resulting state` field
+  is *mechanical* — the tags/qualities that gate flow. It does
+  not track physical continuity, so the physics/continuity
+  critics (step 5) have nothing concrete to check against. Each
+  scene therefore also carries a short prose ledger: who is
+  present, time of day / light, the state of the salient props,
+  what the PC is carrying that matters, and a one-line **Δ** of
+  what this scene changes. The critics then check two
+  invariants — the prose only touches things in the ledger, and
+  anything the prose changes shows up in Δ — which turns "does
+  this read continuously" from a vibe into a checkable assertion.
+  The "who is present" line doubles as the key set that drives
+  per-beat bible scoping (see "Bible scoping" below).
+
+  **Keep the ledger prose, not a state machine.** It is
+  continuity-checking scaffolding for the human and the critics:
+  *document what changes,* do not decant it into tags/qualities
+  or a build-ready state table. The same pull that makes a scene
+  list want to become a 1:1 `.enc` map (granularity warning
+  above) makes the ledger want to become a covert state machine.
+  Resist it. The mechanical state lives in `resulting state` and
+  ultimately in the `.enc` tags authored at decompose; the
+  ledger sits a level above, in prose, and stays there.
+
+**GAP triage.** The brief always leaves things unanswered.
+Shred resolves them rather than punting — downstream passes
+treat unmarked gaps as license to invent, and an unresolved
+gap is a drift vector. The skill picks a reasonable default
+for every gap and annotates it inline as `GAP: ...`, then
+sorts the gaps into three tiers:
+
+- **Cosmetic** (the brass-button design, a character's exact
+  age, boot height, what the next-site is named): default
+  silently with a `GAP:` annotation in the relevant bible
+  field. Author skims, almost always accepts, edits inline
+  if they care.
+- **Local** (a side-scene's placement, a tag's downstream
+  consumer, a roll's target tier): default with annotation
+  in-field. Expect a quick author look but rarely a deep
+  revisit. Cheap to override.
+- **Load-bearing** (anything that, if defaulted wrong, would
+  cascade through downstream passes and be expensive to
+  undo): default *and* surface at the top of the bible as a
+  **"Decisions to confirm"** block before the human-review
+  gate. Examples seen so far: whether the crew is uniformed,
+  whether a deflection scene is allowed, the save-skill
+  choice for an automatic mechanical beat, scene granularity
+  itself when the brief is structurally ambiguous.
+
+The triage is the skill's job; the author's job at the
+review gate is to confirm or override. If the skill cannot
+tell which tier a gap belongs to, it goes load-bearing —
+false-positives on the "Decisions to confirm" block are
+cheap (author waves them through), false-negatives are
+expensive (drift compounds through colorize/factual/voice).
+
+**Arc invariants (borrowed from RP "author's note" / depth
+injection — see references).** Some facts must not drift
+*anywhere* in the arc: Mareen's name taboo, Veran cannot
+recognize the recruitment signal, the farmer and the
+technician cannot both be true. These are not gaps to resolve
+and not mechanical state — they are settled facts whose
+violation cascades. Shred lifts them into a short
+**Invariants** block at the top of `_cast.md`, distinct from
+the "Decisions to confirm" block: that block is decisions to
+*make*; invariants are decisions already *made* and locked.
+Every downstream pass and every critic is handed this block
+verbatim, and crucially it survives the scoping prune (see
+"Bible scoping") — even a sub-agent that only sees one
+character's entry still sees the invariants. Cross-arc
+invariants belong in `rules/`; arc-local ones live at the top
+of `_cast.md`.
 
 All three prefixed with `_` so the encounter parser ignores them
 (extends the existing `_*.enc` backup convention).
+
+**Emergent property: many small files become viable.** The
+shipped arcs (`the_fugitive`, `the_hermitage`, `relay_post`)
+fought hard to minimize `.enc` count, packing branching into
+single-file `@if` trees and end-scenes-with-multiple-routes
+(see `relay_post/Dawn Ossal.enc`, which carries three terminal
+sub-routes via tag-branched prose). The reason was substrate-
+shaped: managing state across files was painful without a
+view onto the whole graph, so authors merged scenes into
+"giga-files" to keep state local. Decompose then had to honor
+that discipline.
+
+The bibles + scene-graph view flip this. Cross-file state is
+legible at a glance via the graph; orphan setters get caught
+by the audit step (every `+add_tag X` paired against a reader
+or removed); per-scene `.enc` files stay small and single-
+purpose. The signal_array decompose exercise produced 10
+files at 15–38 lines each, with no file carrying more than
+one Cunning/Combat/Negotiation picker — markedly more
+legible per-file than the shipped arcs.
+
+The default-arc skeleton should be **more files, smaller
+each**, not the old giga-file shape. Reach for in-file
+branching only when the branches are tiny outcome variants
+of a single choice (the Dawn Ossal pattern is still valid for
+small per-route prose tweaks); for anything heavier, factor
+the branch into its own `.enc`. Easier to read, easier to
+debug, easier for downstream prose passes to keep context
+tight on a single beat.
+
+**Formatting rule (applies to all three bibles): avoid markdown
+tables — for now.** The author reviews these in Sublime, where
+md tables render as a wall of gunk — hard to read, hard to
+edit, hard to diff. Prefer nested bullet lists, `###`-per-entity
+sections, or plain paragraphs.
+
+**Sunset clause: once the graph viewer ships** (the Arc Studio
+scene-graph pane reading `_scenes.md`), the author will not
+read `_scenes.md` directly anymore — the graph view becomes
+the read surface, the file becomes machine-shaped. At that
+point switch `_scenes.md` to JSON (or whatever the graph
+viewer parses natively); no need to keep it human-pretty.
+`_cast.md` and `_set.md` stay prose-shaped — those are read
+directly in the bibles pane regardless.
 
 ▼ **Human review.** Read three short files. Reject/refine anything
 wrong. Casualty/chronology errors caught here cost minutes, not
@@ -231,6 +391,77 @@ curation, re-run finalize.
 
 ▼ no review — the gate is mechanical.
 
+## Bible scoping (agentic RAG)
+
+The per-beat prose passes (colorize, factual, voice) and their
+critics each run as a sub-agent. The naive move is to hand every
+sub-agent everything in scope. Don't — that is both a
+context-budget problem (see open questions) and a *quality*
+problem: a knowledge-state critic that can see the entire cast
+can always rationalize "well, someone here could know this."
+
+**The corpus is not three small files.** It is tiered, and the
+tiers want different retrieval treatment:
+
+- **Per-arc bibles** (`_cast.md`, `_set.md`, `_scenes.md`).
+  Small, and for a given beat *mostly* all-relevant. The scoping
+  problem here is narrow — prune to present cast/props.
+- **Biome lore guides** (`text/lore/<biome>.md`). This is the
+  load-bearing addition. They are **big** — `scrub.md` is ~6.3k
+  words, the whole `text/lore/` corpus ~27k — and cleanly
+  sectioned (`## Identity`, `## Peoples` → `### Tashkari` /
+  `### Kesharat Administration` / `### The Lattice`,
+  `## Material Culture`, `## Distance Tiers`). A beat touching
+  the Kesharat crew needs the Kesharat + Lattice sections, not
+  the whole guide. Dumping a full biome guide into every beat is
+  the exact context-blowout the open questions warn about.
+- **Cross-cutting lore** (`timeline.md`, `imperial_calendar.md`,
+  `swamp_tongue.md`, the per-guide Lattice sections). Pulled by
+  topic, not by biome — a beat that dates an event or speaks the
+  swamp tongue needs these regardless of which arc it is in.
+- **Sibling arcs.** The cross-arc notes in `_cast.md` (Baret's
+  Reshîd clan links to `the_villa`) are retrieval edges into
+  other arcs' bibles, used rarely but real.
+
+This tiering is why the **agentic RAG through-line** is real and
+not over-engineering. The two poles, now mapped onto the tiers:
+
+- **Static / ledger-driven** handles the per-arc bibles cleanly:
+  scope is a deterministic function of the scene ledger's
+  "present" line plus one transitive hop. Cheap, no model call,
+  the right v1 for cast/props.
+- **Retrieval (keyed → semantic → agentic)** is what the biome
+  guides and cross-cutting lore actually need, because relevance
+  there is *topical*, not "who is on stage." A beat does not
+  announce "I touch the Lattice section." Start with keyed
+  injection over the guide's `###` sections (lorebook-style),
+  graduate to embeddings + reranking if keyed misses, and reach
+  for an agentic retrieval step when a beat needs a fact no
+  keyword or ledger line predicts (a callback, a sibling-arc
+  detail).
+
+Anthropic's **Contextual Retrieval** (see references) is the
+lodestar for *how the corpus is written and indexed*, and it
+matters most for the biome guides precisely because they are
+long. Each chunk — a `###` lore section, a cast entry — must
+survive being pulled out of its document: prepend enough
+situating context that a `### The Lattice` chunk still carries
+"this is the scrub biome's account of the Lattice" when injected
+alone. That is the same "comprehensive, standalone entry" rule
+the lorebook guides reached independently, and the article's
+Contextual Embeddings + Contextual BM25 + reranking stack is the
+concrete recipe if we go past flat keyed lookup. The through-line:
+**the bibles and `text/lore/` together are a retrieval corpus;
+the passes are its consumers; per-beat scope is a retrieval
+query, not a fixed prompt dump.**
+
+Scoping is also the constraint, not just an economy — a
+knowledge-state critic that cannot see an off-stage character's
+entry literally cannot launder that character's knowledge into
+the scene. The arc invariants block is the one tier that is
+*never* pruned: every sub-agent sees it regardless of what the
+retrieval returns.
+
 ## Curation UI (Arc Studio web app)
 
 Steps 3–5 are where the human-attention bottleneck lives. The
@@ -340,6 +571,49 @@ picks up external edits the same way.
 
 ## Open questions
 
+- **Lore retrieval index.** The "Bible scoping" section treats
+  `text/lore/` + the per-arc bibles as a retrieval corpus. How do
+  we index and query it? In all cases Qwen does the prep — free
+  instruct + embeddings to chunk the corpus into clean standalone
+  pieces with contextual-retrieval situating prefixes, and to
+  build embedding vectors if/when we go semantic — so that side is
+  cheap and off the Claude Code subsidy. The fork is *where the
+  index lives.* Corpus scale (low-thousands of chunks) makes both
+  legs fine on performance — brute-force cosine is instant at this
+  size, so we are nowhere near needing ANN — which means the
+  decision is **operational, not perf**:
+
+  - **Leg A — Lucene.NET in-process.** A BM25/keyed index over the
+    `###`-section chunks, embedded directly in the arc-studio
+    backend or an `EncounterCli` subcommand. No new runtime, no
+    service boundary, no Java. Cost: Lucene.NET is pinned to the
+    Java 4.8 (2014) codebase, so there is **no native vector
+    search** — going semantic means storing Qwen vectors as a
+    `byte[]` DocValues sidecar and hand-rolling a cosine rerank
+    over the BM25 candidate set in C#. Trivial at our scale, but
+    code we own and maintain.
+  - **Leg B — a Lucene-backed search *service* on imp.** Note that
+    bare Java Lucene is a *library*, not a server — the "raw binary
+    service + .NET client" shape is **OpenSearch** (Apache-2.0,
+    self-hostable, the natural pick), or Elasticsearch/Solr.
+    OpenSearch ships native Lucene-engine HNSW kNN and an official
+    .NET client (`OpenSearch.Client` / `OpenSearch.Net`), so the
+    C# tooling talks to it over HTTP and treats vectors as a
+    first-class feature — no hand-rolled rerank. Footprint is
+    nothing on the 128GB box (a small single-node instance idles
+    around 1–2 GB; the index + ~8 MB of vectors live off-heap in
+    page cache) and, crucially, it runs on CPU + RAM and **does
+    not draw from the unified-memory pool the Qwen KV cache
+    fights over** — it buys context-window headroom with cheap
+    RAM. Cost: another service to supervise and a network hop.
+
+  Lean: **Leg A to ship lexical-only fast** (prove retrieval scopes
+  a beat at all before adding machinery), with **Leg B as the
+  graduation** if/when we want semantic without owning the vector
+  code, or want the retrieval load permanently off the
+  context-window budget. Either way settle: chunk granularity (one
+  `###` section, or finer?) and build-once-and-watch (the studio
+  backend is already file-watched) vs. rebuild-per-pass.
 - **Bible drift policy.** If the factual pass introduces a useful
   prop the human keeps, does it back-write to `_set.md`? My
   instinct: no, bibles lock at step 1 review; if the human wants
@@ -363,16 +637,26 @@ picks up external edits the same way.
   emits a one-line summary per beat to its own context, writes
   full critic findings to the `.enc` file as `# --- CRITIC ... ---`
   annotations, and never re-reads them. Otherwise the parent
-  blows its context partway through the arc.
+  blows its context partway through the arc. The complementary
+  lever is **bible scoping** (see section above): each sub-agent
+  receives only the present cast/props plus invariants, not the
+  whole bible.
 - **What happens when Claude Code is offline / down.** API
   fallback path exists (`EncounterCli` still has `QwenClient` +
   Anthropic SDK) but the skills are the default. Need a `--via api`
   flag or sibling CLI command for the fallback case.
 - **One skill or two?** `arc-shred` and `arc-decompose` are
   different jobs. Two skills probably right, sharing input docs.
-- **`_scenes.md` table schema.** Markdown table vs. YAML vs.
-  something stricter. Table is most scannable; YAML round-trips
-  better. Pick before building shred.
+- **`_scenes.md` schema.** Resolved (2026-05-31): one `###`-per-
+  scene section with nested bullet fields (id, precursor, beats,
+  resulting state, leads to). Decided after the relay_post and
+  signal_array exercises showed md tables are unreadable in
+  Sublime. Open sub-question: should the schema be machine-
+  parsable (so the decompose skill can iterate scenes
+  programmatically), and if so, do we lean on field-prefix
+  conventions (`- id:`, `- beats:`) or just trust the LLM to
+  read prose? Default for now: prose-readable, prompt-driven
+  parsing. Revisit if decompose drifts.
 - **Coexistence with the current pipeline.** Cut over hard or
   let the old pipeline keep working until Arc Studio ships? My
   instinct: keep both until Arc Studio has shepherded one arc
@@ -457,3 +741,30 @@ the skills are stable.
   `feedback_scaffold_no_creative_writing`) — the lessons that
   motivated the bibles substrate. Each memory describes a class
   of drift the current pipeline cannot prevent.
+- **AI roleplay character-card conventions.** The SillyTavern
+  tooling community has spent years on exactly the in-scene
+  consistency problems the bibles substrate fights, in a harder
+  setting — live context eviction at play-time, which our static
+  authored prose does not have. The borrows are authoring-time
+  structure, not runtime features. Sources:
+  - Keyed injection — lorebook / World Info:
+    <https://docs.sillytavern.app/usage/core-concepts/worldinfo/>
+  - Persistent scene-state diff — the "tracker" extension:
+    <https://github.com/kaldigo/SillyTavern-Tracker>
+  - Example-line voicing — Ali:Chat:
+    <https://rentry.co/alichat>
+  - Always-injected invariants — author's note / depth
+    injection, and the general card schema:
+    <https://docs.sillytavern.app/usage/core-concepts/characterdesign/>
+  - The facts-vs-feel split (structured PList for facts,
+    example lines for voice) — PList + Ali:Chat:
+    <https://rentry.co/kingbri-chara-guide>
+- **Anthropic, "Introducing Contextual Retrieval"**
+  (<https://www.anthropic.com/engineering/contextual-retrieval>)
+  — the lodestar for the "Bible scoping" section. Prepend
+  chunk-specific situating context so each entry retrieves
+  standalone; Contextual Embeddings + Contextual BM25 +
+  reranking cut the top-20 retrieval-failure rate by 67%, and
+  prompt caching makes the context-generation pass cheap. The
+  agentic-RAG through-line for treating the bibles as a
+  retrieval corpus rather than one monolithic prompt dump.

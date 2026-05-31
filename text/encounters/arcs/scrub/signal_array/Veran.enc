@@ -1,0 +1,17 @@
+Veran
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): Veran is in his mid-fifties. He has the weathered build of a career fieldworker. He has been doing Kesharat infrastructure work for thirty years. He is the foreman of this crew and signs off completion. The bell on his belt is field-issue. He is responsible for it.
+
+FIXME(mundane): You ask him about the route they took to get here. He answers in detail. They came down from the previous site three days ago. He names the landmarks. He describes the river crossing, the salt-flat traverse, the long climb up the south slope of the mesa.
+
+FIXME(dread): The route does not close. The landmarks he names are real but they are arranged in a sequence that would take a week to walk, told in the time the direct road takes. If you press him on the geometry he has a second explanation. The second explanation does not close either. He seems mildly puzzled that you are asking.
+
+FIXME(mundane): He returns to the work talk. The previous site was good. The cable team there was tight. The next site is two days east. He is proud of the crew. He is proud of the work.
+
+choices:
+
+* Return to the circle = Step back into the conversation
+    +add_tag signal_array.met_veran
+    +open "The Rest Interval"

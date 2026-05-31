@@ -1,0 +1,29 @@
+Aftermath
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): The crew is gathered around the broken pylon. They have not coordinated; the signal cut before the transition finished. They are themselves again. They are confused. Veran is holding a piece of the broken activator unit and looking at the housing. Baret is checking himself for injuries. He has a bruise on his ribs from where he pulled you off. He does not remember pulling you off.
+
+FIXME(mundane): The narrative fills in around them. They piece it together while you stand there. A merchant came along during the rest interval. Came for the tea. Seemed friendly at first. Clearly something wrong with you. Heat sickness, maybe. Maybe something you ate out here on the mesa. You went at the housing without warning. They had to put you down. The housing is wrecked. They need a new activator unit. The depot is three days back. Veran is going to have strong feelings about this when the adrenaline settles.
+
+FIXME(dread): It is automatic. Their gap fills in the way it always does. They are not lying. They are remembering wrong, and what they are remembering wrong feels to them like remembering.
+
+choices:
+
+* Try to speak through the plaster = Say something true while the narrative is still wet
+    FIXME(action): You speak to Chorik. You do not try to convince him of the Lattice. The Lattice is not reachable. You try for one crack in the plaster wide enough for him to look through.
+    @if check negotiation correct:reason wrong:charm {
+        FIXME(revelation): You say a specific thing about the way the four of them fit together. The particular thing he has been not-saying since the bell rang. He goes quiet. He looks at his hands. Veran calls his name and he goes. You do not know if it landed. You walk away not knowing.
+        +add_tag signal_array.chorik_cracked
+        +finish_dungeon
+        +add_level
+    } @else {
+        FIXME(dread): You try to be warm. The warmth slides off the plaster. Chorik smiles thinly at you, the same beat-behind smile he has been giving all afternoon. Veran calls his name and he goes. The crew turns to the broken housing and starts the discussion about who walks back to the depot.
+        +finish_dungeon
+        +add_level
+    }
+
+* Walk away without speaking = Leave the work site and the broken pylon
+    FIXME(mundane): You step out of the rest circle. You walk down the mesa road north. Behind you the crew is talking about activator units and depot trips. None of them ask you to stay. None of them follow.
+    +finish_dungeon
+    +add_level

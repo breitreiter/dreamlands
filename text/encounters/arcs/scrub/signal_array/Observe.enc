@@ -1,0 +1,18 @@
+Observe
+[trigger none]
+[vignette dungeons/signal_array]
+
+FIXME(mundane): You sit at the edge of the circle and watch. The crew ribs each other about the morning's work. Baret pours a second round of tea. Veran tells a story about the previous site that does not quite track. Richard laughs and corrects a detail. Chorik laughs a beat behind.
+
+FIXME(dread): They fit together the way people who have been on the road together for weeks fit together. The familiarity is total. None of them remarks on the fact that the four of them have no business being a crew.
+
+choices:
+
+* Return to the circle = Step back into the conversation
+    @if tag relay_post.met_devra {
+        FIXME(revelation): You think of Devra at the relay post. The wire messages with no origin header. The order for aligned calcium. The personnel transfer with the malformed identification number. The resonance platform at empty desert coordinates. The messages were not communications passing through the relay. They were construction coordination. The system was scheduling this.
+    } @else {
+        FIXME(dread): There is something about the way they fit that you do not have a word for. They are the right shape. Nothing else about them is.
+    }
+    +add_tag signal_array.observed
+    +open "The Rest Interval"
