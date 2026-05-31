@@ -1,32 +1,50 @@
-Placeholder: The Relay Post
+The Mesa Road
 [trigger none]
+[vignette dungeons/relay_post]
 
-A placeholder encounter for the Relay Post arc.
+FIXME(mundane): The dust storm catches you on the mesa road. Visibility drops to nothing in a quarter mile. Grit stings exposed skin; the sky goes the color of rust. The scrub is too sparse to break the wind. You wrap cloth across your face and shoulder through it, half-blind.
+# --- COLOR ---
+# The dust storm reduces visibility to less than a quarter mile, with the mesa road disappearing into a wall of rust-colored particulate.
+# Grit from the storm embeds in the seams of your clothing and stings exposed skin, especially around the eyes and mouth.
+# The sky has taken on a uniformly rust-colored hue, with no discernible horizon or cloud structure.
+# The wind carries a dry, mineral scent that coats the back of the throat and lingers on the tongue.
+# The mesa road is composed of compacted red earth and fractured basalt, now nearly invisible under the storm's abrasive layer.
+# Your cloth-wrapped face is damp with sweat and dust, and the edges of the cloth are stiff with accumulated grit.
+# --- end ---
+# --- FACTUAL ---
+# The dust storm reduces visibility to less than a quarter mile, the mesa road swallowed by a wall of rust-colored particulate that blurs the edge of the world. Grit from the storm embeds in the seams of your clothing and stings exposed skin, especially around the eyes and mouth. The sky has taken on a uniformly rust-colored hue, with no discernible horizon or cloud structure. The wind carries a dry, mineral scent that coats the back of the throat and lingers on the tongue. The mesa road, composed of compacted red earth and fractured basalt, is now nearly invisible under the storm's abrasive layer. Your cloth-wrapped face is damp with sweat and dust, and the edges of the cloth are stiff with accumulated grit.
+# --- end ---
+
+FIXME(mundane): Through the murk you make out a shape: a low stone building, single-story, walls that look like they were assembled by a Kesharat engineer and a budget. A wire antenna rises off the roof, useless in this air. A Kesharat administrative pennant snaps from a steel pole next to the door, the wool already grey with dust. No other shelter for miles.
+# --- COLOR ---
+# The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
+# The wire receiver on the desk has a cracked earpiece, its cord frayed at the base.
+# The stack of filed transcriptions is bound with a leather strap that bears a faded Kesharat insignia.
+# The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves.
+# The pencil-stub on the desk is worn to a nub, its wood splintered from constant sharpening.
+# The back storeroom door is slightly ajar, revealing a narrow gap of shadow and the edge of a stacked crate labeled "Classified — Do Not Remove."
+# --- end ---
+# --- FACTUAL ---
+# Through the murk you make out a shape: a low stone building, single-story, walls that look like they were assembled by a Kesharat engineer and a budget. A wire antenna rises off the roof, useless in this air. A Kesharat administrative pennant snaps from a steel pole next to the door, the wool already grey with dust. No other shelter for miles. The door creaks open on stiff hinges, revealing a room lit by a brazier whose coals glow dull red. On the desk, the brass cylinder of a Kesharat-issue cipher seal rests beside a wire receiver with a cracked earpiece and a frayed cord. A stack of filed transcriptions is bound with a leather strap bearing a faded Kesharat insignia. The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves. A pencil-stub lies on the desk, worn to a nub, its wood splintered from constant sharpening. The back storeroom door is slightly ajar, revealing a narrow gap of shadow and the edge of a stacked crate labeled "Classified — Do Not Remove."
+# --- end ---
 
 choices:
 
-* Explore = Search the station [requires quality faction.kesharat 5]
-    @if check combat correct:rush wrong:outlast {
-        You find something valuable.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
+* Take shelter = Push through the wind to the door
+    FIXME(mundane): You push the door open against the wind. Inside is one main room, warm, small: a desk under a wire receiver, stacks of filed transcriptions, a brazier with a tea pot. Two people who were clearly mid-argument turn and stop talking when you come in. The storm shuts behind you with a thump.
+    # --- COLOR ---
+    # The brass cylinder on the desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+    # The tea pot on the brazier is made of dented brass, its spout partially clogged with mineral residue.
+    # The wire receiver on the desk has a cracked earpiece and a frayed cord that trails to a wall junction box.
+    # The stacks of filed transcriptions are organized by date in leather-bound folders, each labeled with a regional identifier in the smooth balanced script.
+    # The brazier contains glowing embers and a single charred tea leaf floating in the bottom of the pot.
+    # The wall opposite the door bears a scratched-stone map of the mesa region, its landmarks partially erased by wind-scoured stone.
+    # --- end ---
+    # --- FACTUAL ---
+    # You push the door open against the wind. Inside is one main room, warm, small: a desk under a wire receiver, stacks of filed transcriptions, a brazier with a tea pot. Two people who were clearly mid-argument turn and stop talking when you come in. The storm shuts behind you with a thump. The brass cylinder on the desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The tea pot on the brazier is made of dented brass, its spout partially clogged with mineral residue. The wire receiver on the desk has a cracked earpiece and a frayed cord that trails to a wall junction box. The stacks of filed transcriptions are organized by date in leather-bound folders, each labeled with a regional identifier in the smooth balanced script. The brazier contains glowing embers and a single charred tea leaf floating in the bottom of the pot. The wall opposite the door bears a scratched-stone map of the mesa region, its landmarks partially erased by wind-scoured stone.
+    # --- end ---
+    +open "The Relay Post"
 
-* Negotiate = Talk your way through [requires quality faction.kesharat 5]
-    @if check negotiation correct:reason wrong:threaten {
-        You find something valuable.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
-
-* Depart = Leave this place behind
-    You depart Relay Post.
+* Press on through the storm = This is not your shelter
+    FIXME(mundane): You set your shoulder against the wind and keep moving. The pennant snaps behind you, the building lost in the murk within fifty paces. Whatever was going on in there is not your problem. The road continues, somewhere ahead.
     +flee_dungeon

@@ -1,0 +1,64 @@
+Dawn
+[trigger none]
+[vignette dungeons/relay_post]
+
+FIXME(mundane): You sit at the desk with a borrowed sheet of vellum, a stick of sealing wax, and the candle Devra has set out for you. The letter takes five minutes. Guild standing, formal introduction, a request that the bearer be received and given a hearing. You press the signet ring into the wax. It is the easiest thing you do all night.
+# --- COLOR ---
+# The signet ring is a plain silver band engraved with the stylized glyph of the Trader's Guild, worn smooth from repeated use.
+# The sealing wax is pale yellow and brittle, cracked at the edges from being left out in the dry air.
+# The vellum sheet is slightly thicker than standard office paper, with a faint watermark of a coiled serpent in the corner.
+# The candle is a stub of beeswax, its wick charred at the tip and surrounded by a pool of congealed residue.
+# The desk surface beneath the vellum bears a faint circular impression from a previous candle, slightly darker than the surrounding wood.
+# The inkwell beside the vellum contains a deep blue pigment that smells faintly of iron and dried mint.
+# --- end ---
+# --- FACTUAL ---
+# You sit at the desk with a borrowed sheet of vellum, a stick of sealing wax, and the candle Devra has set out for you. The vellum is slightly thicker than standard office paper, with a faint watermark of a coiled serpent in the corner. The inkwell beside it contains a deep blue pigment that smells faintly of iron and dried mint. The signet ring is a plain silver band engraved with the stylized glyph of the Trader's Guild, worn smooth from repeated use. You dip the quill, write the letter in clean lines—guild standing, formal introduction, a request that the bearer be received and given a hearing. The candle is a stub of beeswax, its wick charred at the tip and surrounded by a pool of congealed residue. The sealing wax is pale yellow and brittle, cracked at the edges from being left out in the dry air. You press the signet ring into the wax. It is the easiest thing you do all night. The desk surface beneath the vellum bears a faint circular impression from a previous candle, slightly darker than the surrounding wood.
+# --- end ---
+
+FIXME(dread): At first light Devra packs her bag, takes the letter and her oilcloth bundle, and walks out into the clearing dust. She does not say goodbye to Ossal. She does not look back at the wire receiver. The door closes behind her.
+# --- COLOR ---
+# The oilcloth bundle is wrapped around a stack of transcribed message sheets with handwritten annotations in Devra's cramped script.
+# The oilcloth bundle contains a second set of message copies, sealed in a waxed linen pouch that smells faintly of camphor and iron.
+# The oilcloth bundle is tied with a frayed cord that matches the one Devra used to secure her personal notebook.
+# The brass cylinder on the desk is a Kesharat-issue cipher seal, currently open and unsealed.
+# The brazier still holds cold ash and a single charred corner of parchment from a burned transcription.
+# The wire receiver on the desk is silent, its indicator light dark, though the terminal port shows a faint residual charge.
+# --- end ---
+# --- FACTUAL ---
+# At first light Devra packs her bag, takes the letter and her oilcloth bundle, and walks out into the clearing dust. The oilcloth bundle is wrapped around a stack of transcribed message sheets with handwritten annotations in Devra's cramped script, tied with a frayed cord that matches the one she used to secure her personal notebook. Inside, a second set of message copies is sealed in a waxed linen pouch that smells faintly of camphor and iron. She does not say goodbye to Ossal. She does not look back at the wire receiver. The brass cylinder on the desk is a Kesharat-issue cipher seal, currently open and unsealed. The brazier still holds cold ash and a single charred corner of parchment from a burned transcription. The wire receiver on the desk is silent, its indicator light dark, though the terminal port shows a faint residual charge. The door closes behind her.
+# --- end ---
+
+FIXME(dread): Ossal comes out of the back room a few minutes later. He sees the empty desk. He sits down at it. He picks up a transcription pencil and sets it down. He picks it up again. He is an inspector, not an operator. His transcriptions will be slow and they will have errors. The settlements downstream will receive garbled or delayed messages for weeks. Some of those messages are medical requests. Some of them are supply orders. Some of them are, perhaps, instructions from something that is not human. All of them will be late.
+# --- COLOR ---
+# The transcription pencil on Ossal's desk is a standard-issue Kesharat number 7, its wood worn down to the lead in the grip.
+# The brazier in the corner holds cold ash and a single charred tea leaf.
+# The wire receiver on the desk is silent, its brass cylinder unmarked by fingerprints.
+# The official file of transcriptions is open to a page dated three days prior, with a handwritten note in Devra's hand: "Still no origin header."
+# The back room door is ajar, with a shadow cast across the floor that does not match the brazier's light.
+# A single sheet of paper lies face-down on the desk, its corner bent as if recently lifted.
+# --- end ---
+# --- FACTUAL ---
+# Ossal comes out of the back room a few minutes later. The door is ajar, casting a shadow across the floor that does not match the brazier's light. He sees the empty desk. The transcription pencil on his desk is a standard-issue Kesharat number 7, its wood worn down to the lead in the grip. He sits down at it. He picks up the pencil and sets it down. He picks it up again. The brazier in the corner holds cold ash and a single charred tea leaf. The wire receiver on the desk is silent, its brass cylinder unmarked by fingerprints. The official file of transcriptions is open to a page dated three days prior, with a handwritten note in Devra's hand: "Still no origin header." A single sheet of paper lies face-down on the desk, its corner bent as if recently lifted. He is an inspector, not an operator. His transcriptions will be slow and they will have errors. The settlements downstream will receive garbled or delayed messages for weeks. Some of those messages are medical requests. Some of them are supply orders. Some of them are, perhaps, instructions from something that is not human. All of them will be late.
+# --- end ---
+
+choices:
+
+* Step back onto the road
+    FIXME(mundane): You shoulder your pack and walk out into the cleared morning. The mesa is wide and quiet under a thin red sun. The pennant on the pole has gone slack. Whatever happens next at this relay, it is for Ossal and the wire to settle between them.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+    # The wire receiver on the desk is cold to the touch and shows no residual warmth from recent use.
+    # The cup of tea on the brazier is empty, its dregs dark and crystallized at the bottom.
+    # The pot of tea on the brazier is still warm, its surface faintly steamed despite the cold morning air.
+    # The ledger on the desk bears a fresh entry in Devra's hand, dated the night before, marked with a red wax seal.
+    # The ledger on the desk bears no new entries, its last page blank and untouched since the storm began.
+    # The signal tower on the roof is still silent, its brass fittings dull and unpolished under the red sun.
+    # The signal tower on the roof is now faintly glowing, its brass fittings reflecting a pale light that does not match the morning sky.
+    # The dust mask hanging on the wall is missing one strap, its fabric frayed from repeated use.
+    # The dust mask hanging on the wall is pristine, its leather undamaged and its cloth clean.
+    # --- end ---
+    # --- FACTUAL ---
+    # You shoulder your pack and walk out into the cleared morning. The mesa is wide and quiet under a thin red sun. The pennant on the pole has gone slack. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The wire receiver on the desk is cold to the touch and shows no residual warmth from recent use. The cup of tea on the brazier is empty, its dregs dark and crystallized at the bottom. The pot of tea on the brazier is still warm, its surface faintly steamed despite the cold morning air. The ledger on the desk bears a fresh entry in Devra's hand, dated the night before, marked with a red wax seal. The signal tower on the roof is still silent, its brass fittings dull and unpolished under the red sun. The dust mask hanging on the wall is missing one strap, its fabric frayed from repeated use. Whatever happens next at this relay, it is for Ossal and the wire to settle between them.
+    # --- end ---
+    +add_level
+    +finish_dungeon

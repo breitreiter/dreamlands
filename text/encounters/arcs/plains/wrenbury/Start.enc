@@ -17,8 +17,6 @@ You'd need to get closer to make much sense of it.
 choices:
 
 * Explore = Walk down into the village proper
-    +quality wrenbury.tour_visits 0
-    +quality wrenbury.worker_visits 0
     +open Wrenbury
 
 * Depart = Leave this place behind

@@ -1,0 +1,159 @@
+Midnight
+[trigger none]
+[vignette dungeons/relay_post]
+
+FIXME(mundane): The wire is silent. The brazier is low. The storm has dropped from a howl to a hiss against the stone walls. The back room door is closed; light leaks from under it in a thin line. Devra has been quiet at her desk for an hour.
+# --- COLOR ---
+# The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+# The pot of tea on the brazier is cold, its surface film cracked like dried riverbed mud.
+# The wire receiver on the desk is dark, its indicator light extinguished, though the cord remains plugged into the wall terminal.
+# The back room door's light leak is steady, not flickering, and shows no sign of movement behind the frame.
+# A single sheet of paper lies face-down on Devra's desk, its edge curled from heat, bearing a partial transcription of the coordinates that matched the relay post's location.
+# The pencil-stub on the desk is worn to a nub, its lead broken and lodged in the wood grain.
+# --- end ---
+# --- FACTUAL ---
+# The wire receiver on the desk is dark, its indicator light extinguished, though the cord remains plugged into the wall terminal. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The pot of tea on the brazier is cold, its surface film cracked like dried riverbed mud. A single sheet of paper lies face-down on Devra's desk, its edge curled from heat, bearing a partial transcription of the coordinates that matched the relay post's location. The pencil-stub on the desk is worn to a nub, its lead broken and lodged in the wood grain. The back room door is closed; light leaks from under it in a thin line, steady and unmoving, showing no sign of movement behind the frame. The storm has dropped from a howl to a hiss against the stone walls. Devra has been quiet at her desk for an hour.
+# --- end ---
+
+choices:
+
+* Hear Devra out = She finds you in the main room [requires !tag relay_post.heard_devra_pitch]
+    FIXME(mundane): Devra speaks quickly and quietly. She wants to leave at first light. Not back to the capital, to Aldgate, the nearest non-Kesharat settlement. She is done. She cannot keep filing orders she believes are coming from something inhuman. She cannot keep feeding messages to settlements when she does not know which messages are administrative and which are something else wearing the shape of administration.
+    # --- COLOR ---
+    # The brass tea set on the brazier has a cracked spout and a handle worn smooth by repeated use.
+    # The stack of filed transcriptions on the desk is bound with a frayed leather thong and marked with the Kesharat regional code "T-7".
+    # The wire receiver on the desk is cold and silent, its brass casing etched with a faint spiral pattern that matches the design on the cipher seal.
+    # The second notebook Devra keeps is made of recycled ledger paper and has a corner folded down at page 17, where the coordinates for the relay post are written.
+    # The pencil-stub on the desk is worn to a nub and rests beside a smudge of ink that has bled into the wood grain.
+    # The cup of tea on the desk is cold, its surface covered in a thin film of dust that has settled while the storm raged outside.
+    # --- end ---
+    # --- FACTUAL ---
+    # Devra speaks quickly and quietly. She wants to leave at first light. Not back to the capital, to Aldgate, the nearest non-Kesharat settlement. She is done. She cannot keep filing orders she believes are coming from something inhuman. She cannot keep feeding messages to settlements when she does not know which messages are administrative and which are something else wearing the shape of administration. The brass tea set on the brazier has a cracked spout and a handle worn smooth by repeated use. The stack of filed transcriptions on the desk is bound with a frayed leather thong and marked with the Kesharat regional code "T-7". The wire receiver on the desk is cold and silent, its brass casing etched with a faint spiral pattern that matches the design on the cipher seal. The second notebook Devra keeps is made of recycled ledger paper and has a corner folded down at page 17, where the coordinates for the relay post are written. The pencil-stub on the desk is worn to a nub and rests beside a smudge of ink that has bled into the wood grain. The cup of tea on the desk is cold, its surface covered in a thin film of dust that has settled while the storm raged outside.
+    # --- end ---
+
+    FIXME(mundane): She asks you for a guild letter of introduction to the Trade Guild in Aldgate. You are a guild member. A sealed letter with a guild credential would get her through the gate and give her standing to request asylum. Without it she is a Kesharat deserter and Aldgate may not take her in. She is not asking you to endorse her theory. She is asking for a piece of paper. She will do the rest.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
+    # The tea in the brazier pot is cold, its dregs dark and sediment-heavy.
+    # The ledger on the desk is written in the compact script of the plateau, with a fresh entry crossed out in red ink.
+    # The pencil-stub on the desk is worn to a nub, its tip split and stained with ink.
+    # The copy of the anomalous message is folded and tucked into the inner pocket of her tunic, its edges frayed from handling.
+    # The clay water jug beside the brazier is cracked, its rim chipped where it was dropped during the storm.
+    # --- end ---
+    # --- FACTUAL ---
+    # She sets the cold tea in the brazier pot aside, the dregs dark and sediment-heavy, and reaches into the inner pocket of her tunic, pulling out a folded sheet of paper with frayed edges from repeated handling. The brass cylinder on her desk, a Kesharat-issue cipher seal worn smooth from repeated use, sits beside the ledger written in the compact script of the plateau, a fresh entry crossed out in red ink. The pencil-stub on the desk is worn to a nub, its tip split and stained with ink. She places the folded message on the desk, the paper thin from being passed from hand to hand, and says the words in a quiet voice: a sealed letter with a guild credential would get her through the gate and give her standing to request asylum. Without it she is a Kesharat deserter and Aldgate may not take her in. She is not asking you to endorse her theory. She is asking for a piece of paper. She will do the rest. The clay water jug beside the brazier is cracked, its rim chipped where it was dropped during the storm.
+    # --- end ---
+
+    FIXME(dread): She also tells you something she has not told Ossal. She has been keeping copies of the anomalous messages, hidden in her pack. If the orders are coming from the Lattice, she says, those copies are evidence. She wants to take them to someone outside the Kesharat system who can evaluate them independently.
+    # --- COLOR ---
+    # The pack beside Devra's chair is made of reinforced hide stitched with thread that matches the color of dried blood.
+    # The copies of the anomalous messages are written on thin sheets of recycled ledger paper, each folded and sealed with wax that bears no official seal.
+    # The copies are bound with a strip of braided cord, knotted in a pattern that resembles a Tashkari runic sigil used for marking stolen property.
+    # One of the copies is stained with a ring of tea, likely from when Devra spilled her drink while writing.
+    # The messages are transcribed in Devra's handwriting, but some sections are underlined with a different ink—dark blue, not black—suggesting a second layer of annotation.
+    # The copies are tucked inside a false compartment in the pack, accessible only by sliding a flat stone from the bottom seam.
+    # --- end ---
+    # --- FACTUAL ---
+    # The pack beside Devra's chair is made of reinforced hide stitched with thread that matches the color of dried blood. She lifts it slowly, her fingers brushing the false compartment at the bottom seam, sliding a flat stone from the edge. Inside, folded and sealed with wax that bears no official seal, are thin sheets of recycled ledger paper bound with a strip of braided cord knotted in a pattern that resembles a Tashkari runic sigil used for marking stolen property. One sheet bears a ring of tea stain, likely from when she spilled her drink while writing. The messages are transcribed in her handwriting, but some sections are underlined with a different ink—dark blue, not black—suggesting a second layer of annotation. She holds them out, not to show, but to give. If the orders are coming from the Lattice, she says, those copies are evidence. She wants to take them to someone outside the Kesharat system who can evaluate them independently.
+    # --- end ---
+    +add_tag relay_post.heard_devra_pitch
+    +open "Midnight"
+
+* Hear Ossal out = He finds you an hour later [requires !tag relay_post.heard_ossal_pitch]
+    FIXME(mundane): Ossal does not mention the Lattice. He does not talk about theology or cosmic topology. He frames his concern in entirely secular terms. Devra is a state employee with access to classified communications. She is clearly disloyal. She has been keeping unauthorized copies of official documents. If she deserts the post the settlements downstream lose their only relay connection. Supply orders, medical requests, patrol coordination. Real people will suffer real consequences.
+    # --- COLOR ---
+    # The brass cylinder on Ossal's belt is engraved with the insignia of the Kesharat Inspection Corps, its surface worn smooth by decades of handling.
+    # The ledger on the desk beside Ossal's chair contains entries in the smooth, balanced script of the regional office, with a section marked "Pending Reconciliation" in red ink.
+    # A Kesharat-issued water skin sits on the floor near Ossal's feet, its leather cracked and its cap missing, the contents long evaporated.
+    # The wire receiver on Devra's desk has a loose connection that emits a faint, continuous hum when the storm is at its worst.
+    # The official file of transcriptions is bound in gray cloth with a metal clasp, its pages neatly indexed but missing the last six months of entries.
+    # Ossal's hands rest on the arms of his chair, the knuckles swollen from years of writing, the nails clean and trimmed to a precise length.
+    # --- end ---
+    # --- FACTUAL ---
+    # Ossal sits in his chair with his hands resting on the arms, knuckles swollen, nails clean and trimmed to a precise length. The brass cylinder on his belt bears the insignia of the Kesharat Inspection Corps, worn smooth by decades of handling. The ledger beside him holds entries in the smooth, balanced script of the regional office, a section marked "Pending Reconciliation" in red ink. A Kesharat-issued water skin lies on the floor near his feet, leather cracked, cap missing, contents long evaporated. The wire receiver on Devra's desk emits a faint, continuous hum from its loose connection, audible only when the storm's hiss drops to a whisper. The official file of transcriptions rests on the desk, bound in gray cloth with a metal clasp, pages neatly indexed but missing the last six months of entries. He speaks carefully, choosing words with the precision of a man who has written reports his entire life. Devra is a state employee with access to classified communications. She is clearly disloyal. She has been keeping unauthorized copies of official documents. If she deserts the post, the settlements downstream lose their only relay connection. Supply orders, medical requests, patrol coordination. Real people will suffer real consequences.
+    # --- end ---
+
+    FIXME(mundane): He asks you to help him detain her until a patrol arrives. He is too old to confront her alone. With your help he could secure the post, confiscate the copies, and keep the relay operational until a replacement operator arrives. He frames this as a civic duty.
+    # --- COLOR ---
+    # The brass teapot on the brazier is dented from travel and bears a faint scorch mark near the spout.
+    # The wire receiver on the desk has a loose connection that emits a low hum when touched.
+    # The ledger on the desk is written in the compact script of the plateau with a fresh entry crossed out in ink.
+    # The Kesharat-issued horse tethered outside the back door is not properly secured and shifts uneasily in the wind.
+    # The signal tower scaffolding on the roof is half-built and casts a long shadow across the stone floor.
+    # The clay water jug on the table has a wet cloth wrapped around its neck, though the water inside is nearly gone.
+    # --- end ---
+    # --- FACTUAL ---
+    # The brass teapot on the brazier is dented from travel and bears a faint scorch mark near the spout. The wire receiver on the desk has a loose connection that emits a low hum when touched. The ledger on the desk is written in the compact script of the plateau with a fresh entry crossed out in ink. The Kesharat-issued horse tethered outside the back door is not properly secured and shifts uneasily in the wind. The signal tower scaffolding on the roof is half-built and casts a long shadow across the stone floor. The clay water jug on the table has a wet cloth wrapped around its neck, though the water inside is nearly gone. The back room door remains closed; light leaks from under it in a thin line. Ossal steps into the main room, his movements deliberate, his voice measured. He asks you to help him detain her until a patrol arrives. He is too old to confront her alone. With your help he could secure the post, confiscate the copies, and keep the relay operational until a replacement operator arrives. He frames this as a civic duty.
+    # --- end ---
+
+    FIXME(dread): You can see, beneath the careful phrasing, that he is afraid. Not of Devra. Of what it means if she is right. Detaining her is not just about keeping the relay open. It is about keeping the question closed.
+    +add_tag relay_post.heard_ossal_pitch
+    +open "Midnight"
+
+* Write the letter for Devra = Guild seal, formal introduction [requires tag relay_post.heard_devra_pitch]
+    FIXME(mundane): You agree, and tell Devra so. She nods once, the way people nod when they have been bracing for a different answer. Then she returns to her desk and pretends to be working until first light.
+    +open "Dawn Devra"
+
+* Confront Devra openly = Help Ossal secure the post [requires tag relay_post.heard_ossal_pitch]
+    FIXME(mundane): You tell Ossal you will help. He looks relieved in a way he tries not to show. He suggests you wake Devra together and tell her plainly what is going to happen until a patrol arrives. The two of you walk to her desk.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from frequent handling.
+    # The stack of transcriptions beside her desk includes a folder labeled "Unverified Coordinates - Mesa Sector 7," its edges frayed from repeated opening.
+    # The brazier in the corner holds embers that glow faintly under a thin layer of ash, its iron rim scorched from repeated use.
+    # The wire receiver on the desk is cold, its earpiece cracked and partially disconnected, though the cord remains plugged into the wall junction.
+    # A second notebook, bound in faded blue cloth, lies open beneath a stack of blank forms, its pages filled with Devra's cramped handwriting and marginal sketches of geometric patterns.
+    # The cup of tea on the desk is cold, its surface filmed with a layer of dust that has settled since the storm began.
+    # --- end ---
+    # --- FACTUAL ---
+    # You tell Ossal you will help. He looks relieved in a way he tries not to show. He suggests you wake Devra together and tell her plainly what is going to happen until a patrol arrives. The two of you walk to her desk. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from frequent handling. The stack of transcriptions beside her desk includes a folder labeled "Unverified Coordinates - Mesa Sector 7," its edges frayed from repeated opening. The brazier in the corner holds embers that glow faintly under a thin layer of ash, its iron rim scorched from repeated use. The wire receiver on the desk is cold, its earpiece cracked and partially disconnected, though the cord remains plugged into the wall junction. A second notebook, bound in faded blue cloth, lies open beneath a stack of blank forms, its pages filled with Devra's cramped handwriting and marginal sketches of geometric patterns. The cup of tea on the desk is cold, its surface filmed with a layer of dust that has settled since the storm began.
+    # --- end ---
+    +open "Dawn Ossal"
+
+* Find the copies covertly = Take them without confronting her [requires tag relay_post.heard_ossal_pitch]
+    FIXME(mundane): You tell Ossal you will look for the copies while Devra sleeps. He hesitates, then nods. Devra has retired to the storeroom for the night. The room is small. You have one chance to do this without waking her.
+    @if check cunning correct:scheme wrong:hide {
+        FIXME(action): You plan the search. You note where Devra walked when you arrived, where her pack rests now, which boards in the floor creak. You move when the wind gusts strongest. The copies are in a folded oilcloth wedged behind a stack of filing crates. You bring them to Ossal and he locks them in his case.
+        # --- COLOR ---
+        # The oilcloth is folded into a triangle and sealed with a wax stamp bearing the Kesharat insignia of a spiral within a circle.
+        # The filing crates are stacked with the precision of a Kesharat audit, each labeled in block script with a date and a three-digit code.
+        # The floorboard beneath the crates creaks on the third step from the west wall, where the grain runs diagonally across the plank.
+        # Devra's pack is slung over the back of a chair, its leather strap worn thin at the knot where it rests against the wood.
+        # The oilcloth is stained with a faint residue of tea, likely from when Devra tucked it behind the crates during a break.
+        # The stack of crates is positioned so that the shadow from the brazier falls across the gap between the crates and the wall, obscuring the space from direct view.
+        # --- end ---
+        # --- FACTUAL ---
+        # You plan the search. You note where Devra walked when you arrived, where her pack rests now, which boards in the floor creak. The oilcloth is folded into a triangle and sealed with a wax stamp bearing the Kesharat insignia of a spiral within a circle. The filing crates are stacked with the precision of a Kesharat audit, each labeled in block script with a date and a three-digit code. The floorboard beneath the crates creaks on the third step from the west wall, where the grain runs diagonally across the plank. Devra's pack is slung over the back of a chair, its leather strap worn thin at the knot where it rests against the wood. The oilcloth is stained with a faint residue of tea, likely from when Devra tucked it behind the crates during a break. The stack of crates is positioned so that the shadow from the brazier falls across the gap between the crates and the wall, obscuring the space from direct view. You move when the wind gusts strongest. The copies are in a folded oilcloth wedged behind a stack of filing crates. You bring them to Ossal and he locks them in his case.
+        # --- end ---
+        +add_tag relay_post.stealth_succeeded
+        +open "Dawn Ossal"
+    } @else {
+        FIXME(action): You go straight for the pack and trust silence to cover you. It does not. Devra wakes before you have the oilcloth out. She crosses the storeroom in three steps, takes the bundle from your hand without speaking, and walks past you to the brazier. The copies are paper. The brazier is hot. Ossal arrives in the doorway in time to watch them burn.
+        # --- COLOR ---
+        # The oilcloth bundle is wrapped around a stack of transcriptions that bear the Kesharat-issue seal and a faded date stamp from two weeks prior.
+        # The brazier contains embers from a previous night's fire, still glowing under a layer of ash.
+        # Devra's pack is made of cured goat hide, stitched with thread that matches the color of the mesa dust.
+        # The copies are written in Devra's hand, using a fine-pointed quill and indigo ink that has bled slightly at the edges.
+        # The paper is standard Kesharat-issue ledger stock, thin and brittle, with a watermark of a stylized lattice pattern.
+        # Ossal stands in the doorway with his inspector's ledger open in one hand, its pages blank except for a single line: "No anomalies observed."
+        # --- end ---
+        # --- FACTUAL ---
+        # You go straight for the pack and trust silence to cover you. The pack is made of cured goat hide, stitched with thread that matches the color of the mesa dust. The oilcloth bundle is wrapped around a stack of transcriptions that bear the Kesharat-issue seal and a faded date stamp from two weeks prior. The copies are written in Devra's hand, using a fine-pointed quill and indigo ink that has bled slightly at the edges. The paper is standard Kesharat-issue ledger stock, thin and brittle, with a watermark of a stylized lattice pattern. The brazier contains embers from a previous night's fire, still glowing under a layer of ash. Devra wakes before you have the oilcloth out. She crosses the storeroom in three steps, takes the bundle from your hand without speaking, and walks past you to the brazier. The copies are paper. The brazier is hot. Ossal arrives in the doorway in time to watch them burn. He stands in the doorway with his inspector's ledger open in one hand, its pages blank except for a single line: "No anomalies observed."
+        # --- end ---
+        +add_tag relay_post.stealth_failed
+        +open "Dawn Ossal"
+    }
+
+* Leave at dawn without acting = This is not your relay
+    FIXME(mundane): You tell neither of them. You sit by the brazier and wait out the dark. Devra glances at you once. Ossal does not come out of the back room again. The wind drops, and a thinning of the murk in the small window says first light is coming.
+    # --- COLOR ---
+    # The brass tea set on the table is dented from travel and has a chipped handle.
+    # The brazier contains cold ash and a single glowing ember.
+    # The wire receiver on the desk is silent but shows a faint residual hum when touched.
+    # A stack of filed transcriptions is arranged by date in a wooden box labeled "Incoming: Mesa Relay."
+    # The pencil-stub on the desk is worn to a nub and has a faint indentation from repeated pressure.
+    # The door to the back room is ajar, revealing a sliver of dim light from a kerosene lamp.
+    # --- end ---
+    # --- FACTUAL ---
+    # The brass tea set on the table is dented from travel and has a chipped handle. The brazier contains cold ash and a single glowing ember. The wire receiver on the desk is silent but shows a faint residual hum when touched. A stack of filed transcriptions is arranged by date in a wooden box labeled "Incoming: Mesa Relay." The pencil-stub on the desk is worn to a nub and has a faint indentation from repeated pressure. The door to the back room is ajar, revealing a sliver of dim light from a kerosene lamp. You tell neither of them. You sit by the brazier and wait out the dark. Devra glances at you once. Ossal does not come out of the back room again. The wind drops, and a thinning of the murk in the small window says first light is coming.
+    # --- end ---
+    +open "Dawn Refuse"

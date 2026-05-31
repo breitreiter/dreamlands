@@ -1,0 +1,179 @@
+The Relay Post
+[trigger none]
+[vignette dungeons/relay_post]
+
+FIXME(mundane): The room is small enough that three people make it feel crowded. A wire receiver squats on a wooden desk; behind it, hanging on pegs, the day's transcriptions clipped onto a wire. Stacks of older filings line one wall. The brazier puts off a useful amount of heat for the wind howling outside. The pot of tea on it is still warm. The two arguing parties have settled themselves to opposite ends of the room and are pretending the conversation never happened.
+# --- COLOR ---
+# The wire receiver on the desk has a brass cylinder attached to its base, marked with a Kesharat-issue cipher seal.
+# The transcriptions clipped onto the wire behind the receiver are written in a compact, standardized script with consistent spacing and marginalia in a different hand.
+# The stacks of older filings along the wall are bound with twine and labeled in faded ink with dates and regional codes.
+# The brazier is made of blackened iron with a cracked enamel lining, and the coals beneath the tea pot glow faintly orange.
+# The tea pot on the brazier is a dented brass vessel with a chipped spout, its handle wrapped in frayed leather.
+# The two chairs at opposite ends of the room are mismatched—one a plain wooden stool, the other a padded seat with a frayed cushion and a small brass nameplate reading "Ossal, Inspector."
+# --- end ---
+# --- FACTUAL ---
+# The room is small enough that three people make it feel crowded. A wire receiver squats on a wooden desk, its brass cylinder attached to the base marked with a Kesharat-issue cipher seal. Behind it, the day's transcriptions are clipped onto a wire, each sheet written in a compact, standardized script with consistent spacing and marginalia in a different hand. Stacks of older filings line one wall, bound with twine and labeled in faded ink with dates and regional codes. The brazier is made of blackened iron with a cracked enamel lining, and the coals beneath the tea pot glow faintly orange. The tea pot on the brazier is a dented brass vessel with a chipped spout, its handle wrapped in frayed leather. At opposite ends of the room, the two chairs sit mismatched—one a plain wooden stool, the other a padded seat with a frayed cushion and a small brass nameplate reading "Ossal, Inspector." The two arguing parties have settled themselves to opposite ends of the room and are pretending the conversation never happened.
+# --- end ---
+
+choices:
+
+* Speak with the operator = The woman at the desk
+    @if tag relay_post.met_devra {
+        FIXME(mundane): Devra glances up when you approach, then back to her pencil work. "Still thinking it over?" She does not specify what.
+    } @else {
+        FIXME(mundane): The operator introduces herself as Devra. Mid-thirties, sharp-featured, ink on her fingers. She has been running this post for four years. She pours you tea without asking and shows you, with the slightly manic energy of someone who has been alone too much, the recent message file. She frames it as entertainment, look what's been coming down the wire lately.
+        # --- COLOR ---
+        # The brass teapot on the brazier is dented from travel and bears a faded Kesharat insignia.
+        # The cup Devra pours tea into has a hairline crack near the rim, repaired with silver solder.
+        # The wire receiver on the desk is a Kesharat-issue model with a cracked earpiece and a frayed cord.
+        # Devra's ink-stained fingers are visibly trembling as she flips open the message file.
+        # The message file is bound in worn leather and labeled in neat script: "Transcriptions - Recent Anomalies."
+        # The stack of filed transcriptions beside the desk is organized by date, but the most recent entries are marked with red wax seals.
+        # --- end ---
+        # --- FACTUAL ---
+        # The operator introduces herself as Devra. Mid-thirties, sharp-featured, ink on her fingers. She has been running this post for four years. She pours tea from a dented brass teapot bearing a faded Kesharat insignia into a cup with a hairline crack near the rim, repaired with silver solder. The wire receiver on the desk is a Kesharat-issue model with a cracked earpiece and a frayed cord. She flips open a message file bound in worn leather and labeled in neat script: "Transcriptions - Recent Anomalies," her ink-stained fingers visibly trembling as she does so. The stack of filed transcriptions beside the desk is organized by date, but the most recent entries are marked with red wax seals. She shows you the file with the slightly manic energy of someone who has been alone too much, framing it as entertainment—look what's been coming down the wire lately.
+        # --- end ---
+
+        FIXME(mundane): An order for the construction of a "resonance platform" at coordinates that correspond to empty desert. A request for 400 units of a material called "aligned calcium" that does not appear in any supply catalog. A personnel transfer for an employee whose identification number doesn't match any known format. A schedule adjustment for a facility that does not exist. She has filed all of them faithfully. That is her job.
+        # --- COLOR ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+        # The ledger on the desk contains entries in the smooth balanced script of the Kesharat administrative standard, with recent pages marked with a red wax stamp labeled "URGENT: LATTICE ALIGNMENT."
+        # The tea in the pot on the brazier is cold and has a faint metallic aftertaste, possibly from the clay of the vessel.
+        # The wire receiver on the desk is a Kesharat Model-7, its brass casing etched with the serial number 9421-V, and it remains silent except for the occasional faint hum.
+        # The stack of transcriptions on the desk includes a single sheet with a handwritten note in Devra's hand: "Coordinates match the relay post. Message timestamped before arrival."
+        # The second notebook, hidden beneath a false bottom in the desk drawer, contains annotated copies of the anomalous messages, each entry dated and cross-referenced with terrain maps from the previous year.
+        # --- end ---
+        # --- FACTUAL ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The ledger on the desk contains entries in the smooth balanced script of the Kesharat administrative standard, with recent pages marked with a red wax stamp labeled "URGENT: LATTICE ALIGNMENT." The tea in the pot on the brazier is cold and has a faint metallic aftertaste, possibly from the clay of the vessel. The wire receiver on the desk is a Kesharat Model-7, its brass casing etched with the serial number 9421-V, and it remains silent except for the occasional faint hum. The stack of transcriptions on the desk includes a single sheet with a handwritten note in Devra's hand: "Coordinates match the relay post. Message timestamped before arrival." The second notebook, hidden beneath a false bottom in the desk drawer, contains annotated copies of the anomalous messages, each entry dated and cross-referenced with terrain maps from the previous year. An order for the construction of a "resonance platform" at coordinates that correspond to empty desert. A request for 400 units of a material called "aligned calcium" that does not appear in any supply catalog. A personnel transfer for an employee whose identification number doesn't match any known format. A schedule adjustment for a facility that does not exist. She has filed all of them faithfully. That is her job.
+        # --- end ---
+
+        FIXME(mundane): She mentions, almost in passing, that she has been keeping a second notebook. Her own log. She does not say what she is logging it for.
+        +add_tag relay_post.met_devra
+    }
+    +open "The Relay Post"
+
+* Speak with the inspector = The old man near the back
+    @if tag relay_post.met_ossal {
+        FIXME(mundane): Ossal is reading by the brazier, an administrative manual open on his knee. He nods to you and turns a page.
+    } @else {
+        FIXME(mundane): Ossal is in his seventies or eighties, careful in his movements, the way an old man is careful when he means to be useful tomorrow. He is a Kesharat administrative inspector on a circuit of remote posts. He has been on the mesa for weeks. He is tired. When he speaks, he chooses his words with the precision of a man who has written reports his entire life.
+        # --- COLOR ---
+        # The brass teapot on the brazier is dented from travel and bears a Kesharat-issue insignia worn smooth by use.
+        # Ossal's worn leather satchel rests against the wall, its strap frayed and the flap secured with a brass clasp that matches the teapot's design.
+        # A Kesharat-issued census form in triplicate lies open on the desk, its third copy partially torn and discarded on the floor.
+        # The brazier contains cold ash, but the tea in the brass pot is still warm, suggesting Ossal has not left his seat in some time.
+        # Ossal's right hand rests on a ledger bound in cracked leather, its pages filled with neat, spidery script in the smooth balanced register of the Kesharat capital.
+        # A small wooden idol of one of the old gods, carved with a face that does not match any known clan style, sits hidden beneath the edge of Ossal's satchel.
+        # --- end ---
+        # --- FACTUAL ---
+        # Ossal sits at the edge of the desk, his back straight but his movements deliberate, as though conserving energy for a task that will come. The brass teapot on the brazier is dented from travel and bears a Kesharat-issue insignia worn smooth by use. Its lid is slightly ajar, releasing a thin wisp of steam into the cold air. The brazier contains cold ash, but the tea in the pot is still warm, suggesting Ossal has not left his seat in some time. His right hand rests on a ledger bound in cracked leather, its pages filled with neat, spidery script in the smooth balanced register of the Kesharat capital. A Kesharat-issued census form in triplicate lies open on the desk, its third copy partially torn and discarded on the floor. His worn leather satchel rests against the wall, its strap frayed and the flap secured with a brass clasp that matches the teapot's design. Beneath the edge of the satchel, a small wooden idol of one of the old gods—carved with a face that does not match any known clan style—peeks out from the shadow.
+        # --- end ---
+
+        FIXME(mundane): He listens to your account of Devra's recital with patience. When you finish he responds, not with dismissal but with explanation. The Kesharat Administration is the instrument of the Lattice. The Lattice perceives connections that humans cannot. Its directives appear arbitrary because human understanding is limited to three dimensions of space and one of time. The Lattice operates across a broader topology.
+        # --- COLOR ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
+        # The stack of filed transcriptions on the desk is organized by date in ascending order, with a red ribbon marking the most recent batch.
+        # The wire receiver on the desk is a Model-7 relay unit, its casing pitted from desert exposure and its indicator light dark.
+        # The pot of tea on the brazier is the same shade as the rust-colored sky outside, its dregs thick with sediment.
+        # The pencil-stub on the desk is worn to a nub, its eraser gone, and lies beside a page of notes written in Devra's cramped hand.
+        # The back room door is ajar, revealing a narrow cot, a folded blanket, and a ledger open to a page with a single entry in Ossal's precise script.
+        # --- end ---
+        # --- FACTUAL ---
+        # He listens to your account of Devra's recital with patience. When you finish he responds, not with dismissal but with explanation. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use. The stack of filed transcriptions on the desk is organized by date in ascending order, with a red ribbon marking the most recent batch. The wire receiver on the desk is a Model-7 relay unit, its casing pitted from desert exposure and its indicator light dark. The pot of tea on the brazier is the same shade as the rust-colored sky outside, its dregs thick with sediment. The pencil-stub on the desk is worn to a nub, its eraser gone, and lies beside a page of notes written in Devra's cramped hand. The back room door is ajar, revealing a narrow cot, a folded blanket, and a ledger open to a page with a single entry in Ossal's precise script. The Kesharat Administration is the instrument of the Lattice. The Lattice perceives connections that humans cannot. Its directives appear arbitrary because human understanding is limited to three dimensions of space and one of time. The Lattice operates across a broader topology.
+        # --- end ---
+
+        FIXME(dread): He says all of this calmly, reasonably, without condescension. He believes it. Fifty years of service have made his faith structural. He explains it the way you would explain a rule of grammar to a child who has not yet learned the rule.
+        # --- COLOR ---
+        # The brass cylinder on the desk is a Kesharat-issue cipher seal, its surface worn smooth from frequent handling.
+        # The ledger on the shelf contains entries in the smooth balanced script of the Kesharat administrative standard, each page marked with a date stamp from the current year.
+        # The brazier holds cold ash and one unburned scrap of paper bearing a partial message in Devra's handwriting.
+        # The wire receiver is connected to a looped signal line that hums faintly, though no active transmission is registered.
+        # The back room door has a narrow slot beneath it, through which a thin strip of paper has been slid and left lying on the floor.
+        # The teacup on the table is cracked at the rim but still bears a faint residue of cardamom and dried tea leaves.
+        # --- end ---
+        # --- FACTUAL ---
+        # The brass cylinder on the desk is a Kesharat-issue cipher seal, its surface worn smooth from frequent handling. The ledger on the shelf contains entries in the smooth balanced script of the Kesharat administrative standard, each page marked with a date stamp from the current year. The brazier holds cold ash and one unburned scrap of paper bearing a partial message in Devra's handwriting. The wire receiver is connected to a looped signal line that hums faintly, though no active transmission is registered. The back room door has a narrow slot beneath it, through which a thin strip of paper has been slid and left lying on the floor. The teacup on the table is cracked at the rim but still bears a faint residue of cardamom and dried tea leaves. He says all of this calmly, reasonably, without condescension. He believes it. Fifty years of service have made his faith structural. He explains it the way you would explain a rule of grammar to a child who has not yet learned the rule.
+        # --- end ---
+        +add_tag relay_post.met_ossal
+    }
+    +open "The Relay Post"
+
+* Read the message file = Look at the wire's recent traffic closely [requires !tag relay_post.saw_wire || tag relay_post.met_devra && !tag relay_post.predicted_arrival]
+    @if tag relay_post.saw_wire {
+        FIXME(dread): With Devra's account fresh, you go back through the file. You find what she had not yet shown you: a maintenance notice from earlier this week. Routine in form. The coordinates match this relay's location. The text reads, "Confirm operational status of relay node at coordinates. Expect transient personnel." The timestamp is from before you arrived. You are the transient personnel.
+        # --- COLOR ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface etched with the cold geometries of empire.
+        # The wire receiver on the desk is cold to the touch, its connection still active despite the storm.
+        # The ledger on the desk contains entries in the smooth balanced script of the plateau, each page marked with a red stamp that reads "Lattice Alignment Verified."
+        # The pot of tea on the brazier is cold, its surface crusted with a thin film of dried residue.
+        # The second notebook, tucked beneath a stack of transcriptions, is bound in worn leather and contains handwritten annotations in Devra's precise hand.
+        # The signal tower on the roof is silent, its brass antenna bent at a slight angle from the wind.
+        # --- end ---
+        # --- FACTUAL ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface etched with the cold geometries of empire. The wire receiver on the desk is cold to the touch, its connection still active despite the storm. The ledger on the desk contains entries in the smooth balanced script of the plateau, each page marked with a red stamp that reads "Lattice Alignment Verified." The pot of tea on the brazier is cold, its surface crusted with a thin film of dried residue. The second notebook, tucked beneath a stack of transcriptions, is bound in worn leather and contains handwritten annotations in Devra's precise hand. The signal tower on the roof is silent, its brass antenna bent at a slight angle from the wind. You go back through the file. You find what she had not yet shown you: a maintenance notice from earlier this week. Routine in form. The coordinates match this relay's location. The text reads, "Confirm operational status of relay node at coordinates. Expect transient personnel." The timestamp is from before you arrived. You are the transient personnel.
+        # --- end ---
+
+        FIXME(dread): You check the header. There is no header. The message did not come from the capital. The message did not come from anywhere. It arrived through the wire and was filed.
+        +add_tag relay_post.predicted_arrival
+    } @else {
+        FIXME(mundane): The file is a few weeks of standard wire traffic with the strange orders interleaved. Most of it is mundane: patrol schedules, medical requests, census updates. The strange ones stand out by their flatness. A resonance platform. Aligned calcium. An employee with a malformed ID. A facility that does not exist. Each message is in the same neat hand, filed by date.
+        # --- COLOR ---
+        # The file contains a stack of transcribed messages bound with a frayed leather thong, the edges worn smooth from repeated handling.
+        # Each message is written in the same neat, precise hand using indigo ink that has bled slightly at the edges of some pages.
+        # The file includes a separate notebook with handwritten annotations in red ink, detailing discrepancies between the messages and known locations, materials, and personnel records.
+        # One page bears a smudge of tea near the corner, likely from the pot on the brazier during a late-night session.
+        # The file is stored in a metal box with a Kesharat-issue cipher seal, though the seal is cracked and does not appear to have been resealed.
+        # A single message is folded and tucked beneath the main stack, its corner slightly torn, as if removed and returned hastily.
+        # --- end ---
+        # --- FACTUAL ---
+        # The file lies open on the desk, a stack of transcribed messages bound with a frayed leather thong, the edges worn smooth from repeated handling. Each message is written in the same neat, precise hand using indigo ink that has bled slightly at the edges of some pages. Among them, a separate notebook is tucked beneath the main stack, its pages filled with handwritten annotations in red ink, detailing discrepancies between the messages and known locations, materials, and personnel records. One page bears a smudge of tea near the corner, likely from the pot on the brazier during a late-night session. The file is stored in a metal box with a Kesharat-issue cipher seal, though the seal is cracked and does not appear to have been resealed. A single message is folded and tucked beneath the main stack, its corner slightly torn, as if removed and returned hastily. Most of the messages are mundane: patrol schedules, medical requests, census updates. The strange ones stand out by their flatness—resonance platform, aligned calcium, an employee with a malformed ID, a facility that does not exist—each filed by date in the same precise hand.
+        # --- end ---
+
+        FIXME(mundane): You note the routing. Every message arrives through the same wire from the regional capital. Devra transcribes each one. Runners take the transcriptions downstream to the settlements that depend on this relay.
+        +add_tag relay_post.saw_wire
+    }
+    +open "The Relay Post"
+
+* Listen to the argument = Hear them debate the messages [requires tag relay_post.met_devra && tag relay_post.met_ossal && !tag relay_post.heard_debate]
+    FIXME(mundane): The debate has been worn smooth by repetition. Devra cites a specific absurd order. Ossal supplies a plausible administrative explanation. Devra pushes. Ossal gives ground gracefully and repositions. They are intelligent. They are honest. They are talking past each other because they are answering different questions. Devra is asking what the orders mean. Ossal is asking what kind of system produces such orders.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from frequent handling.
+    # The pot of tea on the brazier is cold, its surface film cracked from cooling.
+    # The wire receiver on the desk has no active connection; its indicator light is dark.
+    # The stack of filed transcriptions is organized by date, but the most recent folder is labeled with a handwritten note: "Do not open without authorization."
+    # The pencil-stub on the desk is worn to a nub, its tip split from repeated sharpening.
+    # The cup beside the brazier holds cold tea, its rim stained with a faint residue of cardamom.
+    # --- end ---
+    # --- FACTUAL ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from frequent handling. The pot of tea on the brazier is cold, its surface film cracked from cooling. The wire receiver on the desk has no active connection; its indicator light is dark. The stack of filed transcriptions is organized by date, but the most recent folder is labeled with a handwritten note: "Do not open without authorization." The pencil-stub on the desk is worn to a nub, its tip split from repeated sharpening. The cup beside the brazier holds cold tea, its rim stained with a faint residue of cardamom. Devra lifts the cup, sets it down without finishing it. Ossal adjusts the edge of his sleeve, his fingers brushing the worn seal. She cites a specific absurd order—construction of a resonance platform at coordinates that map to empty desert. He supplies a plausible administrative explanation: the regional office is testing new alignment protocols across unpopulated zones. She pushes, demanding why the platform would require a material called "aligned calcium" not listed in any supply catalog. He gives ground gracefully, repositions: perhaps it's a new alloy in trial phase, not yet added to the central registry. The argument has been worn smooth by repetition. They are intelligent. They are honest. They are talking past each other because they are answering different questions. Devra is asking what the orders mean. Ossal is asking what kind of system produces such orders.
+    # --- end ---
+
+    FIXME(dread): The tone sharpens when Devra mentions a recent message that contained coordinates matching the post itself, timestamped before your arrival. She produces the message. Ossal sees nothing alarming, the administration tracks travel patterns, maintenance notices can anticipate traffic. Devra points to the missing origin header. Ossal is quiet for a beat longer than the conversation calls for. Then he repositions.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, unopened and unmarked.
+    # The wire receiver on the desk emits a low, steady hum that matches the pitch of the wind outside.
+    # The pot of tea on the brazier has cooled to the point where steam no longer rises.
+    # The second notebook Devra keeps is bound in worn leather and has a corner folded down at page 17.
+    # Ossal's ledger is open to a page marked with a red wax seal that has not been broken.
+    # The message Devra shows is printed on official Kesharat stationery with a faint watermark of a lattice pattern.
+    # --- end ---
+    # --- FACTUAL ---
+    # The brass cylinder on her desk sits unopened, its surface dull under the brazier's glow, unmarked by any seal or inscription. The wire receiver on the desk emits a low, steady hum that matches the pitch of the wind outside, a constant vibration felt in the teeth. The pot of tea on the brazier has cooled to the point where steam no longer rises, its surface still and flat. Devra lifts the message from the stack, a sheet of official Kesharat stationery with a faint watermark of a lattice pattern, and places it on the desk between them. The second notebook Devra keeps is bound in worn leather and has a corner folded down at page 17. Ossal's ledger is open to a page marked with a red wax seal that has not been broken. She points to the missing origin header. Ossal is quiet for a beat longer than the conversation calls for. Then he repositions.
+    # --- end ---
+    +add_tag relay_post.heard_debate
+    +open "The Relay Post"
+
+* Wait for midnight = Both parties have retreated to their corners [requires tag relay_post.met_devra && tag relay_post.met_ossal]
+    FIXME(mundane): The evening draws down. Ossal settles into the back room with the door cracked. Devra sits at her desk and stares at the wire receiver as if waiting for it to volunteer something. The brazier glows low. Outside, the wind has not let up. You have a few hours before midnight, and you are awake.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
+    # The tea in the pot on the brazier is cold, its surface cracked with a thin film of congealed residue.
+    # The wire receiver on Devra's desk has no active connection, but the earpiece is warm to the touch.
+    # The second notebook under Devra's desk is made of recycled ledger paper, its pages filled with cramped annotations in fading ink.
+    # Ossal's cot in the back room is neatly made, the blanket folded with the precision of a field officer's uniform.
+    # A dust mask hangs on a hook by the door, its fabric stiff with grit and the faint scent of old leather.
+    # --- end ---
+    # --- FACTUAL ---
+    # The room is small enough that three people make it feel crowded. A wire receiver squats on a wooden desk; behind it, hanging on pegs, the day's transcriptions clipped onto a wire. Stacks of older filings line one wall. The brazier puts off a useful amount of heat for the wind howling outside. The pot of tea on it is still warm. The two arguing parties have settled themselves to opposite ends of the room and are pretending the conversation never happened. Ossal settles into the back room with the door cracked. His cot is neatly made, the blanket folded with the precision of a field officer's uniform. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use. Devra sits at her desk and stares at the wire receiver as if waiting for it to volunteer something. The wire receiver on Devra's desk has no active connection, but the earpiece is warm to the touch. The second notebook under Devra's desk is made of recycled ledger paper, its pages filled with cramped annotations in fading ink. The tea in the pot on the brazier is cold, its surface cracked with a thin film of congealed residue. A dust mask hangs on a hook by the door, its fabric stiff with grit and the faint scent of old leather. Outside, the wind has not let up. You have a few hours before midnight, and you are awake.
+    # --- end ---
+    +open "Midnight"

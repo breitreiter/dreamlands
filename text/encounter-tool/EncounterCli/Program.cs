@@ -15,6 +15,8 @@ class Program
             "check" => CheckCommand.Run(rest),
             "bundle" => BundleCommand.Run(rest),
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "colorize" => ColorizeCommand.RunAsync(rest).GetAwaiter().GetResult(),
+            "factual" => FactualCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "push" => PushCommand.Run(rest).GetAwaiter().GetResult(),
@@ -32,6 +34,11 @@ class Program
         Console.WriteLine("                  [--expand-url <url>] [--programs <dir>] [--author HPL|REH|CAS]");
         Console.WriteLine("                  [--scene mundane|action|horror|dread|wonder|revelation] [--candidates N]");
         Console.WriteLine("                  per-beat: FIXME(scene_type): e.g. FIXME(dread): or FIXME(horror):");
+        Console.WriteLine("  encounter colorize <arc-dir> [--qwen-url <url>] [--min-words N] [--per-beat N]");
+        Console.WriteLine("                  [--force] [--prompts-only]");
+        Console.WriteLine("                  Inject COLOR draft bullets under each FIXME beat in the arc.");
+        Console.WriteLine("  encounter factual <arc-dir> [--qwen-url <url>] [--force] [--prompts-only]");
+        Console.WriteLine("                  Integrate FIXME + curated COLOR bullets into FACTUAL prose blocks.");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter push [<path>] [--world <name>]");

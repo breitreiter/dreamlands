@@ -1,0 +1,68 @@
+Dawn
+[trigger none]
+[vignette dungeons/relay_post]
+
+FIXME(mundane): The storm has dropped to nothing by first light. The pennant on the pole is straightening in the new air. Inside, the brazier is cold and the wire is operational. The relay is, by any administrative measure, fine.
+
+choices:
+
+* Step back onto the road
+    @if tag relay_post.stealth_succeeded {
+        FIXME(mundane): The copies are in Ossal's case before dawn. When Devra wakes she finds the storeroom slightly rearranged and her pack untied. She looks at Ossal. She looks at you. She does not ask. She sits down at her desk and gets to work, because the wire never stops and someone has to take what it brings.
+        # --- COLOR ---
+        # The brass cylinder on Ossal's case is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
+        # The storeroom's single shelf holds three sealed envelopes labeled in the same script as the official message file, but with no sender.
+        # The pack's drawstring is untied, the knot slackened and not tied again, as if opened and closed without ceremony.
+        # A single sheet of paper lies on the floor near the storeroom door, folded once and stamped with a faint impression of a lattice pattern.
+        # The brazier in the corner is cold, its ash layered with fine dust from the storm, but a faint scent of burnt paper lingers.
+        # Devra's annotation log is missing from her desk, but the blank notebook she left behind remains, its pages unmarked.
+        # --- end ---
+        # --- FACTUAL ---
+        # The brass cylinder on Ossal's case is a Kesharat-issue cipher seal, its surface worn smooth from repeated use. The storeroom's single shelf holds three sealed envelopes labeled in the same script as the official message file, but with no sender. A single sheet of paper lies on the floor near the storeroom door, folded once and stamped with a faint impression of a lattice pattern. The pack's drawstring is untied, the knot slackened and not tied again, as if opened and closed without ceremony. The brazier in the corner is cold, its ash layered with fine dust from the storm, but a faint scent of burnt paper lingers. Devra's annotation log is missing from her desk, but the blank notebook she left behind remains, its pages unmarked. When Devra wakes she finds the storeroom slightly rearranged and her pack untied. She looks at Ossal. She looks at you. She does not ask. She sits down at her desk and gets to work, because the wire never stops and someone has to take what it brings.
+        # --- end ---
+    } @elif tag relay_post.stealth_failed {
+        FIXME(dread): The brazier was still glowing when Ossal pulled the half-burned bundle from the coals. Most of it was gone. The unburned remainders were too charred to read. The official file remains, intact, in its place on the desk. Without Devra's annotations the messages read as routine wire traffic with slightly unusual content. Ossal looked at the file for a long time without saying anything.
+        # --- COLOR ---
+        # The brass teapot on the brazier is dented from travel and still holds a faint residue of tea.
+        # The official file on the desk is bound in gray cloth with a Kesharat-issue seal that has not been opened in three weeks.
+        # The half-burned bundle in the coals contains fragments of paper with ink that has bled into the fibers under heat.
+        # The wire receiver on the desk is silent, but its brass casing bears a faint smudge of ash from the brazier's edge.
+        # The clay water jug beside the brazier is empty, its lip cracked from repeated exposure to sun and wind.
+        # The ledger on the desk has a fresh entry crossed out in red ink, the line drawn with deliberate precision.
+        # --- end ---
+        # --- FACTUAL ---
+        # The brass teapot on the brazier is dented from travel and still holds a faint residue of tea. The clay water jug beside the brazier is empty, its lip cracked from repeated exposure to sun and wind. The wire receiver on the desk is silent, but its brass casing bears a faint smudge of ash from the brazier's edge. The official file on the desk is bound in gray cloth with a Kesharat-issue seal that has not been opened in three weeks. The ledger on the desk has a fresh entry crossed out in red ink, the line drawn with deliberate precision. Ossal pulled the half-burned bundle from the coals; most of it was gone. The unburned remainders were too charred to read, fragments of paper with ink that had bled into the fibers under heat. The official file remains, intact, in its place on the desk. Without Devra's annotations the messages read as routine wire traffic with slightly unusual content. Ossal looked at the file for a long time without saying anything.
+        # --- end ---
+    } @else {
+        FIXME(mundane): You and Ossal woke Devra together. She listened. She did not fight. She is an operator, not a fighter. She argued, passionately and logically, citing entries from her log by date and order number. When it became clear you would not help her she sat down at her desk and went quiet. Ossal collected the copies from her pack. The official file stayed where it was.
+        # --- COLOR ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+        # The tea in the brazier pot is cold, its dregs dark and sedimented at the bottom.
+        # The wire receiver on the desk is silent, its indicator light off, though the connection remains physically intact.
+        # The official file on the desk contains transcriptions in the smooth balanced script of the regional capital, all stamped with a red wax seal.
+        # Devra's second notebook lies open on the desk, its pages filled with handwritten annotations in a cramped, hurried hand.
+        # The copy of the message predicting the PC's arrival is missing from the official file, though the original transcription remains.
+        # --- end ---
+        # --- FACTUAL ---
+        # You and Ossal woke Devra together. She listened. She did not fight. She is an operator, not a fighter. She argued, passionately and logically, citing entries from her log by date and order number. When it became clear you would not help her she sat down at her desk and went quiet. Ossal collected the copies from her pack. The official file stayed where it was. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The tea in the brazier pot is cold, its dregs dark and sedimented at the bottom. The wire receiver on the desk is silent, its indicator light off, though the connection remains physically intact. The official file on the desk contains transcriptions in the smooth balanced script of the regional capital, all stamped with a red wax seal. Devra's second notebook lies open on the desk, its pages filled with handwritten annotations in a cramped, hurried hand. The copy of the message predicting the PC's arrival is missing from the official file, though the original transcription remains.
+        # --- end ---
+    }
+
+    FIXME(dread): Devra is at her post now, doing the work with the particular precision of someone who has stopped believing in it.
+
+    FIXME(mundane): Ossal sits at the small table by the brazier and writes his inspection report. Post operational. Personnel stable. No anomalies. He believes this. The report is accurate in every particular and false in every way that matters.
+
+    FIXME(mundane): You take your pack and step out into the cleared morning. The mesa is bright and quiet. Behind you the relay carries on with its work, which it will continue to do for as long as the wire continues to bring it work.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+    # The pot of tea on the brazier is cold, the dregs dark and bitter at the bottom.
+    # The wire receiver on the desk is silent, its indicator light off, though the lead remains connected.
+    # One of the filed transcriptions on the desk has a corner folded down, marked with a pencil note in Devra's hand: "Not from capital."
+    # The storm's grit has settled in a fine layer across the stone floor, visible only where the morning light slants through the door.
+    # The Kesharat pennant on the pole outside is limp, its fabric stiff with dried dust and salt.
+    # --- end ---
+    # --- FACTUAL ---
+    # You take your pack and step out into the cleared morning. The mesa is bright and quiet. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The pot of tea on the brazier is cold, the dregs dark and bitter at the bottom. The wire receiver on the desk is silent, its indicator light off, though the lead remains connected. One of the filed transcriptions on the desk has a corner folded down, marked with a pencil note in Devra's hand: "Not from capital." The storm's grit has settled in a fine layer across the stone floor, visible only where the morning light slants through the door. The Kesharat pennant on the pole outside is limp, its fabric stiff with dried dust and salt. Behind you the relay carries on with its work, which it will continue to do for as long as the wire continues to bring it work.
+    # --- end ---
+    +add_level
+    +finish_dungeon

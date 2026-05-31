@@ -23,7 +23,7 @@ choices:
 * Visit the stalls = See what's for sale here
     +open "Wrenbury Market"
 
-* Find the guide = Listen in on the performance [requires quality wrenbury.tour_visits 0]
+* Find the guide = Listen in on the performance [requires !tag wrenbury.toured]
   The guide has arranged his audience in a semicircle at the reconstructed stake-wall, positioning himself so the earthworks slope away behind him like a stage set. He's dressed in something that's close enough to a legion uniform to play the part, but not so close as to be disrespectful.
 
   "...and the Ninth had been marching for six days. Six days on field rations, half of them raw recruits who'd never seen action, and they come over that ridge," he sweeps his walking stick dramatically, and every head turns, "and they see this. Miles of earthwork. Pits deep enough to swallow a house. And they know, every one of them knows, because they've all heard the stories of what's coming."
@@ -51,10 +51,10 @@ choices:
   And you're back. The spell cracks and the sky is just the sky and the guide is just a man who does this three times a day for coins. Someone in the audience coughs. Someone else laughs, a little too loud, shaking something off.
 
   You head back to the village entrance.
-  +quality wrenbury.tour_visits 1
+  +add_tag wrenbury.toured
   +open "Wrenbury"
 
-* Talk to the worker = Hear his perspective [requires quality wrenbury.worker_visits 0]
+* Talk to the worker = Hear his perspective [requires !tag wrenbury.worker_met]
   The man sits on a toppled block of masonry with a meal spread beside him on a cloth: bread, hard cheese, something pickled, a clay bottle. His shovel leans against the stone within arm's reach, and it catches the light in a way that makes you look twice. The blade is that bronzy Kesharat alloy, smooth-ground, not a spot of corrosion on it.
 
   He notices you noticing. "Nice, isn't she? Month's wages, but worth every penny. Probably the only thing on this hill less than fifty years old." He tears the bread without urgency. "Present company excepted."
@@ -66,7 +66,7 @@ choices:
   "You want to see the real Wrenbury, not," he gestures at the stalls, the guide's audience, the general circus of it, "all that? I can take you down to the pits. Show you where the actual work happens." He takes a bite. Chews. Swallows. "After I've finished, though. Nothing down there's going anywhere. Hasn't for sixty years."
 
   You take your leave and return to the entrance.
-  +quality wrenbury.worker_visits 1
+  +add_tag wrenbury.worker_met
   +open "Wrenbury"
 
 * Depart = Leave this place behind

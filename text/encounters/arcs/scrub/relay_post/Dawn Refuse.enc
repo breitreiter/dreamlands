@@ -1,0 +1,52 @@
+Dawn
+[trigger none]
+[vignette dungeons/relay_post]
+
+FIXME(mundane): The wind drops in the small hours. By first light the murk has thinned enough to see the road again. Inside the relay post, Devra is at her desk where you left her and Ossal is still in the back room. Neither of them looks up.
+# --- COLOR ---
+# The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
+# The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves.
+# The wire receiver on the desk is silent, its indicator light dark, though the cord remains plugged into the wall junction.
+# The ledger on the desk contains a fresh entry crossed out with a single line, the ink still damp.
+# A dust mask hangs on a hook by the door, its fabric stiff with grit and layered with fine powder.
+# The second notebook, Devra's private log, lies open on the desk, its pages filled with marginal annotations in red ink.
+# --- end ---
+# --- FACTUAL ---
+# The wind drops in the small hours. By first light the murk has thinned enough to see the road again. Inside the relay post, Devra is at her desk where you left her and Ossal is still in the back room. Neither of them looks up. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves. The wire receiver on the desk is silent, its indicator light dark, though the cord remains plugged into the wall junction. The ledger on the desk contains a fresh entry crossed out with a single line, the ink still damp. A dust mask hangs on a hook by the door, its fabric stiff with grit and layered with fine powder. The second notebook, Devra's private log, lies open on the desk, its pages filled with marginal annotations in red ink.
+# --- end ---
+
+choices:
+
+* Step back onto the road
+    FIXME(mundane): You take your pack down from the peg, set the door on its latch so it does not slam, and step out into the cleared morning. Whatever happens between the two of them in this small stone building, it happens without your part in it.
+    # --- COLOR ---
+    # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn from repeated use.
+    # The pot of tea on the brazier is cold, its surface film cracked like dried mud.
+    # The wire receiver on the desk is silent, its brass casing scuffed from repeated handling.
+    # The stack of filed transcriptions on the desk includes a folder labeled "Resonance Platform - Mesa Sector 7."
+    # The pencil-stub on the desk is worn to a nub, its tip split from repeated sharpening.
+    # The back room door is slightly ajar, revealing a narrow cot and a stack of unopened census forms.
+    # --- end ---
+    # --- FACTUAL ---
+    # You take your pack down from the peg, set the door on its latch so it does not slam, and step out into the cleared morning. The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn from repeated use. The pot of tea on the brazier is cold, its surface film cracked like dried mud. The wire receiver on the desk is silent, its brass casing scuffed from repeated handling. The stack of filed transcriptions on the desk includes a folder labeled "Resonance Platform - Mesa Sector 7." The pencil-stub on the desk is worn to a nub, its tip split from repeated sharpening. The back room door is slightly ajar, revealing a narrow cot and a stack of unopened census forms. Whatever happens between the two of them in this small stone building, it happens without your part in it.
+    # --- end ---
+
+    @if tag relay_post.predicted_arrival {
+        FIXME(dread): What you carry from the night is one thing. A maintenance notice on the wire, timestamped before you decided to shelter at the relay post, naming the relay's coordinates and predicting the arrival of transient personnel. No origin header. The message did not come from the capital. The system knew you were coming. The system does not know anything. Both of these are true.
+        # --- COLOR ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
+        # The wire receiver on the desk is silent but still warm to the touch, as if recently active.
+        # The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves.
+        # A set of Kesharat-issued census forms lies open on the desk, one corner folded back with a pencil mark.
+        # The ledger on the desk contains a fresh entry crossed out in red ink, the original text illegible.
+        # The wind outside has lessened, but the dust still clings to the stone walls in fine, rust-colored layers.
+        # --- end ---
+        # --- FACTUAL ---
+        # The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use. The wire receiver on the desk is silent but still warm to the touch, as if recently active. The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves. A set of Kesharat-issued census forms lies open on the desk, one corner folded back with a pencil mark. The ledger on the desk contains a fresh entry crossed out in red ink, the original text illegible. The wind outside has lessened, but the dust still clings to the stone walls in fine, rust-colored layers. The maintenance notice on the wire, timestamped before you decided to shelter at the relay post, names the relay's coordinates and predicts the arrival of transient personnel. No origin header. The message did not come from the capital. The system knew you were coming. The system does not know anything. Both of these are true.
+        # --- end ---
+    } @else {
+        FIXME(mundane): You did not get involved. What you saw in there was an argument between two people about paperwork, and the paperwork is theirs to argue about.
+    }
+
+    FIXME(mundane): You set your face into the wind and start walking. The mesa road resumes under your boots. The pennant on the pole behind you snaps once in the new air and then is too far away to hear.
+    +flee_dungeon
