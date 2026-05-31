@@ -208,6 +208,25 @@ Write one `.enc` per file in the file list. For each:
   trailers on the choice line for hide-the-choice gating. Outcome
   blocks with proper `@if` chains, mechanic verbs, and `+open` /
   `+finish_dungeon` / `+flee_dungeon` terminators.
+
+  **Choice labels describe what the PC does**, not what is happening
+  in the world. "Wait out the rest interval" is right because the
+  PC's action is waiting; "Finish the pylon" is wrong because the
+  *crew* finishes the pylon. The PC is the subject of the verb, even
+  when the action is "wait" or "watch" or "do nothing." World events
+  go in the preview text after `=`, or in the outcome prose. Common
+  red flags: world-state changes as choice labels ("The fire dies"),
+  imperatives whose implied subject is someone else ("Finish the
+  pylon"), NPC actions as choice labels.
+
+  **Vary the action verb across parallel spokes.** When a hub has
+  multiple spokes (one per NPC, one per location), five rows of "Talk
+  to X" reads as a generated menu. Distinct verbs carry the same
+  gating with more texture: Walk over to, Chat with, Meet, Check in
+  on, Sit back and watch. Pick the verb that fits the character or
+  beat the spoke delivers — the foreman gets "walk over to" because
+  he is the figure of authority; the quiet one gets "check in on"
+  because he is the one you would worry about.
 - Edge-transit: per `arc_patterns.md` §5, edge-transit prose lives in
   the *outgoing* outcome of a choice. Drop a FIXME line for it where
   needed; the next encounter assumes the player is already there.
@@ -341,6 +360,120 @@ Write one `.enc` per file in the file list. For each:
    passes are the ones that turn those facts into prose with
    texture. The decompose pass writes *the truth*; later passes
    write *the writing*.
+
+8. **Hedge in-world jargon.** The player may not know terms like
+   "lattice tower," "the Lattice," "siphon glass," "the Stand,"
+   "alignment with the Lattice," "rest interval." The first time
+   a stub names one, the same sentence or the next adds a brief
+   plain-language gloss or a "locals call it X" frame. Downstream
+   passes tighten and re-voice; they do not *add explanation that
+   wasn't in the stub*. If the stub names a jargon term cold, the
+   rendered prose names it cold, and the player has no frame.
+   Example fix from `signal_array/Start.enc`: "lattice tower" →
+   "tower of crossed metal struts five meters tall, guyed with
+   cable…Kesharat work; you have seen the scaffolding of these
+   going up across the mesa over the past months; the locals call
+   them signal arrays, but nobody outside the Administration is
+   clear on what they signal to." Hedging in-line is preferred to a
+   separate paragraph; the voice pass can compress the hedge if the
+   rendered context makes the term clear.
+
+9. **The narrator does not name the strangeness.** Stubs put
+   factual events on the page; the player makes sense of them. A
+   beat where a Lattice signature is visible should be parseable
+   by a reasonable reader as something ordinary (disciplined work
+   crew, polite host, careful clerk) and by an attentive reader as
+   something off. The stub provides both readings simultaneously
+   by writing events, not diagnoses. "Three seconds. The flip is
+   total" is wrong — it names the wrongness. "The crew downs tools
+   and breaks for rest. The foreman turns to you, smiling, and
+   beckons you over" is right — same beat, no diagnosis. Avoid
+   "she has the focused purposefulness of someone protecting
+   equipment," "the warmth is wrong," "they are someone else
+   behind the eyes," and similar diagnostic-narrator constructions
+   that take the discovery away from the player. The horror in
+   these arcs is the slow build of "wait, that doesn't quite add
+   up." If the narrator italicizes it, the discovery is gone.
+
+10. **No hypothetical player actions in stubs.** Second-person
+    narration must not reference player actions the player did not
+    perform. "If you press him on the geometry he has a second
+    explanation" is wrong: the reader has no way to engage the
+    hypothetical, and the second explanation is being shown to
+    them without their having earned it. Reach for one of four
+    shapes instead:
+
+    - **Just narrate the ask** (default for natural curiosity) —
+      if any reasonably engaged player would ask, just say "you
+      ask him..." and continue. Saves clicks; load-bearing reveal
+      lands for every player. The signal_array Baret and Richard
+      spokes use this shape.
+    - **Promote into a choice** (when the press is a real
+      decision) — if the press is confrontational, costly, or one
+      a careful player might reasonably not do, make it an
+      explicit choice with its own outcome. Optionally a self-
+      looping hub spoke (1a.ii hide-after-press). The signal_array
+      Veran spoke uses this shape.
+    - **Move the first beat into transit, make the encounter a
+      small hub** — uplift introduction + first explanation into
+      the spoke's transit text; leave the spoke encounter to
+      carry just the meaningful decision. See `arc_patterns.md`
+      §5b (intro-in-transit pattern).
+    - **Drop the second beat entirely** — if the deeper reveal
+      isn't earning its keep, cut it.
+
+    A hypothetical in the body ("if you press, if you ask") is
+    always wrong. Pick one of the four shapes above. Default to
+    "just narrate the ask."
+
+11. **Match prose severity to mechanical condition weight.** When
+    a stub applies `+add_condition X`, the prose must match what
+    the engine actually models. `injured` is a serious wound —
+    without treatment, the PC dies in four days. Writing "bruised
+    ribs" with `+add_condition injured` underspecifies the
+    consequence; write "a wound that is not closing" plus
+    `+skip_time morning` to model the PC being non-functional.
+    Consult `rules/encounter_mechanics.md` for each condition's
+    mechanical meaning before deciding the prose register. Common
+    conditions and prose registers:
+
+    - `freezing` — cold/exposure: shivering, blue lips, slowing
+      limbs.
+    - `thirsty` — water scarcity: dry mouth, headache, cracking
+      lips.
+    - `irradiated` — long-term degradation: ambient nausea, hair
+      loss, sores.
+    - `lattice_sickness` — Lattice exposure: dissociation,
+      schematic intrusions, memory gaps.
+    - `exhausted` — sleep deprivation: unfocused, dropping things,
+      can't think.
+    - `injured` — serious physical wound: a wound that isn't
+      closing; **4 days to death** without a Medical Kit; pairs
+      naturally with `+skip_time` for unconsciousness.
+    - `poisoned` — toxin: sweats, cramps, taste of metal.
+
+    If the brief calls for a scrape, some bruises, or a sore
+    shoulder, do not reach for `+add_condition injured` — the
+    narrative damage doesn't match the mechanical damage. The
+    right verb for a minor wound is often nothing at all (a
+    narrative-only beat) or `+damage_spirits` if the cost is
+    morale/composure rather than flesh.
+
+12. **Picker preambles frame the approach without telegraphing
+    the answer.** The prose between a choice's `* Option text`
+    line and its `@if check` is shown alongside the picker, before
+    the player commits. Its job is to give the player layout,
+    stakes, and what is at hand. Its job is NOT to advise. Phrases
+    that lean the reader toward the correct approach ("the crew
+    is starting to turn," "you don't have much time," "best to
+    move now") clobber the choice — the player no longer feels
+    they are picking between three real approaches. Put the hint
+    in the *layout*, not the recommendation: "The crew is on the
+    work side of the housing, not coordinated yet. Veran is the
+    closest" frames a rush-vs-outlast choice without telling the
+    reader which to pick. Wrong approaches are punished by the
+    `@else` branch, not by an unfair preamble. The preamble stays
+    neutral; the outcome teaches.
 
 Write the files in dependency order (Start.enc last, since it links
 forward; or write all and verify at the end — either works).

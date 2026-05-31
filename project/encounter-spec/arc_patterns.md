@@ -593,6 +593,69 @@ behind you for a quarter mile, voices rising and falling through the
 trees, getting quieter with distance." A sound-fade transitions the
 player from inside the arc to outside it, then `+flee_dungeon`.
 
+### 5b. Intro-in-transit pattern
+
+A structural variant for hub-spoke shapes that emerged from the
+`signal_array` decompose exercise (2026-05-31): the *transit prose* of
+a hub's spoke choice can carry significant scene content — the
+introduction of an NPC, the opening exchange, a first revealed beat
+— leaving the spoke encounter itself to carry only the meaningful
+decision the PC is about to make.
+
+The hub-side transit carries the *scene*; the spoke encounter
+carries the *decision*.
+
+```
+# In the hub's choices: block
+
+* Walk over to the foreman = He has the head of the rest circle and the teapot. [requires !tag arc.met_veran]
+    FIXME(mundane): You cross to Veran and sit down. He pours you tea.
+    FIXME(mundane): Veran is in his mid-fifties, weathered, foreman of the crew.
+    FIXME(mundane): He talks about the route from the last site. He names the landmarks.
+    FIXME(dread): The route does not close.
+    +open "Veran"
+
+# In Veran.enc
+
+FIXME(mundane): Veran is across from you at the rest circle, finishing his tea. He waits for what you might say.
+
+choices:
+* Press him on the geometry = ...
+* Step back to the circle = ...
+```
+
+**When to use:**
+
+- The spoke has a meaningful decision after a load-bearing intro
+  or first-beat. Hub transit carries the intro; spoke carries the
+  decision.
+- The spoke would otherwise contain a "if you press him..."
+  hypothetical (arc-decompose skill continuity rule §10): uplift
+  the first beat into the transit, make the press a real choice.
+  This is the natural shape for "press or step back" forks.
+
+**When NOT to use:**
+
+- The intro and the decision are inseparable (the PC walks in,
+  sees something, must choose immediately). Keep the whole beat in
+  the spoke body.
+- The spoke is pure information-delivery hide-after-visit (§1a.ii)
+  with no decision — body carries everything, the only choice is
+  "Return to the hub." No reason to fragment.
+- The spoke is itself a sub-hub with its own multi-spoke menu.
+  Standard hub shape applies; intro in spoke body.
+
+**Canonical instances:**
+
+- `signal_array/The Rest Interval.enc` (2026-05-31) — four of the
+  five named-NPC spokes (Veran / Baret / Richard / Chorik) use
+  this shape. The Observe spoke does not, because it has no
+  separate decision to delegate to.
+
+Pairs naturally with the bibles + many-small-files emergent
+pattern (see `plans/arc_studio.md`): each spoke `.enc` stays
+small, single-purpose, and easy to read in isolation.
+
 ### Still to mine (§5)
 
 - Examples of long inter-scene travel (multi-day, biome-change) and how
