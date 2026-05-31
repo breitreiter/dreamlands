@@ -1,159 +1,24 @@
-The Mesa Road
+The Dust Storm
 [trigger none]
 [vignette dungeons/relay_post]
 
-FIXME(mundane): The dust storm catches you on the mesa road. Visibility drops to nothing in a quarter mile. Grit stings exposed skin; the sky goes the color of rust. The scrub is too sparse to break the wind. You wrap cloth across your face and shoulder through it, half-blind.
-# --- COLOR ---
-# The dust storm reduces visibility to less than a quarter mile, with the mesa road disappearing into a wall of rust-colored particulate.
-# Grit from the storm embeds in the seams of your clothing and stings exposed skin, especially around the eyes and mouth.
-# The sky has taken on a uniformly rust-colored hue, with no discernible horizon or cloud structure.
-# The wind carries a dry, mineral scent that coats the back of the throat and lingers on the tongue.
-# The mesa road is composed of compacted red earth and fractured basalt, now nearly invisible under the storm's abrasive layer.
-# Your cloth-wrapped face is damp with sweat and dust, and the edges of the cloth are stiff with accumulated grit.
-# --- end ---
-# --- FACTUAL ---
-# The dust storm reduces visibility to less than a quarter mile, the mesa road swallowed by a wall of rust-colored particulate that blurs the edge of the world. Grit from the storm embeds in the seams of your clothing and stings exposed skin, especially around the eyes and mouth. The sky has taken on a uniformly rust-colored hue, with no discernible horizon or cloud structure. The wind carries a dry, mineral scent that coats the back of the throat and lingers on the tongue. The mesa road, composed of compacted red earth and fractured basalt, is now nearly invisible under the storm's abrasive layer. Your cloth-wrapped face is damp with sweat and dust, and the edges of the cloth are stiff with accumulated grit.
-# --- end ---
-# --- VOICED HPL mundane ---
-# The dust storm had descended with a suddenness that seemed almost deliberate, reducing visibility to less than a quarter mile and swallowing the mesa road in a churning, rust-colored shroud that blurred the very edge of the world. The air was thick with particulate, fine as powdered bone and sharp as flint, driven by a wind that whistled through the fissures of the land with a dry, mournful hiss. Grit bit into the seams of my garments, worked its way beneath my collar, and stung the tender flesh around my eyes and mouth, each breath a rasping intrusion. The sky—once a pale, indifferent blue—had become a uniform, oppressive hue, a vast, unbroken dome of rust that concealed the sun and obliterated all sense of horizon or cloud. The wind bore a scent of ancient stone and desiccated earth, a mineral tang that clung to the back of the throat and settled on the tongue like ash. The mesa road, once a familiar path of compacted red earth and fractured basalt, was now all but erased beneath the storm's relentless, abrasive blanket. My cloth-wrapped face, damp with sweat and dust, had grown stiff and heavy; the edges of the kerchief were crusted with grit, and each movement of my head brought a faint, gritty whisper, as though the very air itself were composed of microscopic fragments of forgotten time.
-# --- end ---
-# --- VOICED REH mundane ---
-# The dust storm howled like a banshee from the void, blinding the world in a curtain of rust-colored grit that choked the sky and swallowed the mesa road whole. Visibility shrunk to less than a quarter mile, the edge of the world erased as if the earth had been scoured clean. The wind clawed at exposed skin, stinging eyes and lips with a thousand tiny needles, while the dust worked its way into every seam of clothing, grinding against the flesh like sandpaper. Above, the heavens were a seamless, blood-tinged dome—no sun, no cloud, no hint of sky beyond the suffocating haze. The air tasted of dry stone and old bones, thick on the tongue and clogging the throat with every breath. The road, once a firm trail of compacted red earth and shattered basalt, was now a ghost beneath the storm's abrasive shroud, buried under a layer of dust so fine it clung like a second skin. Your face, wrapped in cloth, was damp with sweat and grit, the fabric stiff and crusted, each movement a grating rasp against the skin.
-# --- end ---
-# --- CRITIC factual ---
-# (no findings)
-# --- end ---
-# --- CRITIC voiced HPL mundane ---
-# [CRIT] "fine as powdered bone" — INVENTION: sensory simile not in RECORD.
-# [CRIT] "sharp as flint" — INVENTION: comparative claim about grit sharpness not in RECORD.
-# [CRIT] "whistled through the fissures of the land with a dry, mournful hiss" — INVENTION: specific wind sound and "mournful" quality not in RECORD.
-# [CRIT] "worked its way beneath my collar" — INVENTION: specific action detail not in RECORD.
-# [CRIT] "The sky—once a pale, indifferent blue" — INVENTION: prior sky color not mentioned in RECORD.
-# [CRIT] "concealed the sun" — INVENTION: sun explicitly present in voiced draft; RECORD does not mention it.
-# [CRIT] "scent of ancient stone and desiccated earth" — INVENTION: "ancient" and "desiccated" add interpretive specificity beyond "dry, mineral scent" in RECORD.
-# [CRIT] "settled on the tongue like ash" — INVENTION: simile and specificity ("ash") not in RECORD.
-# [CRIT] "once a familiar path" — PC INTERIORITY: attributes familiarity to PC's prior experience, not in RECORD.
-# [CRIT] "had grown stiff and heavy" — INVENTION: adds weight/heaviness quality not in RECORD.
-# [CRIT] "each movement of my head brought a faint, gritty whisper" — INVENTION: specific auditory sensation not in RECORD.
-# [CRIT] "as though the very air itself were composed of microscopic fragments of forgotten time" — INVENTION: elaborate metaphysical claim not in RECORD.
-# [LOW] "my garments" / "my eyes" — PC INTERIORITY: shifts "your" to "my/I" throughout, though this is consistent voice choice.
-# --- end ---
-# --- CRITIC voiced REH mundane ---
-# [LOW] "howled like a banshee from the void" — simile adds auditory fact (howling sound) not in RECORD, which specifies only wind carrying scent.
-# [LOW] "The wind clawed at exposed skin" — "clawed" introduces tactile metaphor that adds aggression/intent beyond the RECORD's "stings."
-# [LOW] "a thousand tiny needles" — quantified sensory intensification adds specificity beyond RECORD's "stings."
-# [LOW] "grinding against the flesh like sandpaper" — introduces texture comparison (sandpaper friction) not in RECORD.
-# [LOW] "blood-tinged dome" — "blood-tinged" adds color qualifier ("blood") beyond RECORD's "rust-colored hue."
-# [LOW] "no sun, no cloud, no hint of sky" — "no sun" and "no hint of sky" add negative facts (absence of sun, sky imperceptibility) beyond RECORD's focus on "no discernible horizon or cloud structure."
-# [LOW] "The air tasted of dry stone and old bones" — "old bones" adds a specific scent ingredient not in RECORD, which names only "dry, mineral scent."
-# [LOW] "thick on the tongue and clogging the throat" — "thick" and "clogging" add tactile/obstruction qualities beyond RECORD's "coats the back of the throat and lingers on the tongue."
-# [LOW] "buried under a layer of dust so fine it clung like a second skin" — "clung like a second skin" introduces adhesion metaphor and comparison not in RECORD.
-# [LOW] "each movement a grating rasp against the skin" — "each movement" and "rasp" add sensory consequence and sound quality not in RECORD.
-# --- end ---
+FIXME(mundane): You are on the mesa road when the storm comes up out of the south. The light goes wrong first, then the air, then everything. Visibility collapses to arm's-length. Grit drives into exposed skin and works under your collar. The sky turns the color of rust.
 
-FIXME(mundane): Through the murk you make out a shape: a low stone building, single-story, walls that look like they were assembled by a Kesharat engineer and a budget. A wire antenna rises off the roof, useless in this air. A Kesharat administrative pennant snaps from a steel pole next to the door, the wool already grey with dust. No other shelter for miles.
-# --- COLOR ---
-# The brass cylinder on her desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated use.
-# The wire receiver on the desk has a cracked earpiece, its cord frayed at the base.
-# The stack of filed transcriptions is bound with a leather strap that bears a faded Kesharat insignia.
-# The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves.
-# The pencil-stub on the desk is worn to a nub, its wood splintered from constant sharpening.
-# The back storeroom door is slightly ajar, revealing a narrow gap of shadow and the edge of a stacked crate labeled "Classified — Do Not Remove."
-# --- end ---
-# --- FACTUAL ---
-# Through the murk you make out a shape: a low stone building, single-story, walls that look like they were assembled by a Kesharat engineer and a budget. A wire antenna rises off the roof, useless in this air. A Kesharat administrative pennant snaps from a steel pole next to the door, the wool already grey with dust. No other shelter for miles. The door creaks open on stiff hinges, revealing a room lit by a brazier whose coals glow dull red. On the desk, the brass cylinder of a Kesharat-issue cipher seal rests beside a wire receiver with a cracked earpiece and a frayed cord. A stack of filed transcriptions is bound with a leather strap bearing a faded Kesharat insignia. The pot of tea on the brazier is cold, its surface crusted with a thin film of dried leaves. A pencil-stub lies on the desk, worn to a nub, its wood splintered from constant sharpening. The back storeroom door is slightly ajar, revealing a narrow gap of shadow and the edge of a stacked crate labeled "Classified — Do Not Remove."
-# --- end ---
-# --- VOICED HPL mundane ---
-# Through the murk you make out a shape: a low, single-story structure of rough-hewn stone, its walls assembled with the clumsy precision of a Kesharat engineer and the meager resources of a forgotten outpost. A wire antenna, brittle and drooping, rears from the roof like a dead limb, its purpose long since nullified by the thin, lifeless air. A Kesharat administrative pennant flaps weakly from a steel pole beside the door—its wool faded to the color of old bone, dust-caked and brittle with disuse. No other shelter for miles, nor any sign of life beyond the faint, metallic hum of the air itself. The door groans open on stiff, rusted hinges, revealing a chamber dimly lit by a brazier whose coals burn with a dull, sluggish redness, as though the fire itself were weary. On the desk, the brass cylinder of a Kesharat-issue cipher seal lies cold and inert, its surface etched with the faint, deliberate symbols of a dead protocol. Beside it rests a wire receiver, its earpiece cracked and split, the cord frayed and fraying, as if it had been used too often, too desperately. A stack of transcriptions, bound with a leather strap bearing a faded Kesharat insignia—once proud, now nearly illegible—slumps like a reliquary of forgotten secrets. The pot of tea on the brazier is cold, its surface encrusted with a thin, dark film of dried leaves, as though it had been left undisturbed for weeks. A pencil-stub lies on the desk, worn to a nub, its wood splintered and blackened from constant sharpening, as though the last hand to hold it had been driven to desperation. The door to the back storeroom stands slightly ajar, revealing a narrow gap of shadow—deep and unyielding—and the edge of a crate, its label faded but still legible: "Classified — Do Not Remove." Nothing moves. Nothing speaks. Only the silence, thick and watchful, presses in from every corner.
-# --- end ---
-# --- VOICED REH mundane ---
-# Through the haze, a shape resolved—a low, squat building of rough-hewn stone, as though assembled by a Kesharat engineer on a tight budget and a short temper. A wire antenna jutted from the roof like a dead man's finger, useless in the stagnant air. A Kesharat administrative pennant, its wool bleached gray by dust and time, flapped listlessly from a steel pole beside the door. No other shelter for miles—only the endless, baked earth and the indifferent sky. The door groaned open on stiff hinges, revealing a single room lit by a brazier whose coals glowed dull red, like the eyes of a sleeping beast. On the desk, the brass cylinder of a Kesharat cipher seal lay beside a wire receiver, its earpiece cracked, the cord frayed and brittle. A stack of transcriptions, bound with a leather strap bearing a faded insignia, leaned against the edge of the desk, as if waiting for a hand that would never come. The pot of tea on the brazier was cold, its surface crusted with a film of dried leaves. A pencil-stub, worn to a nub, lay on the desk, its wood splintered from constant sharpening. And in the back, the storeroom door hung ajar, revealing a narrow slit of shadow and the edge of a crate stamped in faded ink: *Classified — Do Not Remove.*
-# --- end ---
-# --- CRITIC factual ---
-# [CRIT] "The door creaks open on stiff hinges, revealing a room lit by a brazier whose coals glow dull red." — The BEAT does not state that the PC opens the door or that it creaks. This narrates an action the PC takes and its result, but the BEAT only establishes that the PC spots the building. The prose scope-leaks into the moment of entry, which is beyond the one-sentence frame.
-# [LOW] "whose coals glow dull red" — The BULLETS specify "a pot of tea on a brazier" but do not describe the brazier's state (dull red coals). This is a minor stylistic addition that does not materially contradict the source.
-# --- end ---
-# --- CRITIC voiced HPL mundane ---
-# [CRIT] "brittle and drooping" — INVENTION: antenna's condition not specified in RECORD.
-# [CRIT] "its purpose long since nullified by the thin, lifeless air" — INVENTION: causal claim about why antenna is useless; RECORD only states it is "useless in this air."
-# [CRIT] "faint, metallic hum of the air itself" — INVENTION: auditory detail not in RECORD.
-# [CRIT] "groans open on stiff, rusted hinges" — CONTRADICTION: RECORD says "stiff hinges," not "rusted."
-# [CRIT] "as though the fire itself were weary" — LOADED EMBELLISHMENT: introduces unstated pathetic fallacy/animism beyond "dull red."
-# [CRIT] "cold and inert" — INVENTION: temperature/state of cipher seal not specified in RECORD.
-# [CRIT] "its surface etched with the faint, deliberate symbols of a dead protocol" — INVENTION: visual detail of symbols on seal not in RECORD.
-# [CRIT] "as if it had been used too often, too desperately" — PC INTERIORITY / LOADED EMBELLISHMENT: attributes intentionality and emotional history to the object not supported by RECORD.
-# [CRIT] "once proud, now nearly illegible" — INVENTION: the insignia's legibility is not described in RECORD; "nearly illegible" contradicts "faded" without confirmation.
-# [CRIT] "slumps like a reliquary of forgotten secrets" — LOADED EMBELLISHMENT: introduces metaphorical characterization beyond "bound with a leather strap."
-# [CRIT] "as though it had been left undisturbed for weeks" — INVENTION: duration of abandonment not specified in RECORD.
-# [CRIT] "blackened from constant sharpening" — INVENTION: darkening of pencil-stub not in RECORD.
-# [CRIT] "as though the last hand to hold it had been driven to desperation" — PC INTERIORITY / LOADED EMBELLISHMENT: speculates on absent user's emotional state.
-# [CRIT] "deep and unyielding" — INVENTION: qualitative description of shadow not in RECORD.
-# [CRIT] "its label faded but still legible" — CONTRADICTION: RECORD states label is "Classified — Do Not Remove" without noting legibility; "still legible" implies prior illegibility not supported by RECORD.
-# [CRIT] "Nothing moves. Nothing speaks. Only the silence, thick and watchful, presses in from every corner." — INVENTION: entire closing paragraph is not in RECORD; "watchful" imports animism/presence.
-# --- end ---
-# --- CRITIC voiced REH mundane ---
-# [LOW] "a short temper" — invents motive/emotional state for the Kesharat engineer beyond the RECORD's neutral "budget."
-# [LOW] "like a dead man's finger" — INVENTION: simile that anthropomorphizes the antenna in a way not present in RECORD.
-# [LOW] "the stagnant air" — INVENTION: "stagnant" adds a quality of the air not specified in RECORD, which only says "useless in this air."
-# [LOW] "like the eyes of a sleeping beast" — INVENTION: simile that projects animal consciousness onto the brazier coals; RECORD says they "glow dull red" without comparison.
-# [LOW] "brittle" — INVENTION: the RECORD describes the cord as "frayed" but does not claim brittleness.
-# [LOW] "leaned against the edge of the desk, as if waiting for a hand that would never come" — INVENTION: anthropomorphic gesture and PC interiority ("waiting for a hand") not in RECORD, which states the stack "rests beside" the other items on the desk.
-# [LOW] "only the endless, baked earth and the indifferent sky" — INVENTION: "baked" and "indifferent" add sensory/emotional specificity to the landscape not claimed in RECORD.
-# --- end ---
+FIXME(mundane): There is no shelter on this stretch of road. Flat rock, scrub brush, the bones of an old fence. You cast around for anything and almost miss it: a low stone building set against the slope, a Kesharat pennant snapping on a pole, the whole structure barely a shape inside the murk.
 
 choices:
 
-* Take shelter = Push through the wind to the door
-    FIXME(mundane): You push the door open against the wind. Inside is one main room, warm, small: a desk under a wire receiver, stacks of filed transcriptions, a brazier with a tea pot. Two people who were clearly mid-argument turn and stop talking when you come in. The storm shuts behind you with a thump.
-    # --- COLOR ---
-    # The brass cylinder on the desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling.
-    # The tea pot on the brazier is made of dented brass, its spout partially clogged with mineral residue.
-    # The wire receiver on the desk has a cracked earpiece and a frayed cord that trails to a wall junction box.
-    # The stacks of filed transcriptions are organized by date in leather-bound folders, each labeled with a regional identifier in the smooth balanced script.
-    # The brazier contains glowing embers and a single charred tea leaf floating in the bottom of the pot.
-    # The wall opposite the door bears a scratched-stone map of the mesa region, its landmarks partially erased by wind-scoured stone.
-    # --- end ---
-    # --- FACTUAL ---
-    # You push the door open against the wind. Inside is one main room, warm, small: a desk under a wire receiver, stacks of filed transcriptions, a brazier with a tea pot. Two people who were clearly mid-argument turn and stop talking when you come in. The storm shuts behind you with a thump. The brass cylinder on the desk is a Kesharat-issue cipher seal, its surface worn smooth from repeated handling. The tea pot on the brazier is made of dented brass, its spout partially clogged with mineral residue. The wire receiver on the desk has a cracked earpiece and a frayed cord that trails to a wall junction box. The stacks of filed transcriptions are organized by date in leather-bound folders, each labeled with a regional identifier in the smooth balanced script. The brazier contains glowing embers and a single charred tea leaf floating in the bottom of the pot. The wall opposite the door bears a scratched-stone map of the mesa region, its landmarks partially erased by wind-scoured stone.
-    # --- end ---
-    # --- VOICED HPL mundane ---
-    # You push the door open against the wind, and it slams shut behind you with a thud that echoes through the small, stifling room like the closing of a tomb. Inside, the air is warm and thick with the scent of old paper, damp wool, and faintly, of burnt tea. The single chamber is cramped, barely more than a cell—dominated by a desk of scarred oak, upon which rests a wire receiver with a cracked earpiece and a frayed cord that snakes toward a wall junction box, its connections frayed and blackened as though by some long-ago spark. Above the desk, a brass cylinder lies half-obscured by a pile of transcriptions—Kesharat-issue, its surface worn smooth from constant handling, bearing the faint, ritualistic grooves of a seal long used to authenticate or conceal. The brazier beside it smolders with embers, glowing dull red, and within its dented brass pot floats a single charred tea leaf, its edges curled like a dead hand. The transcriptions themselves are stacked in leather-bound folders, neatly ordered by date, each labeled in a precise, balanced script—calm, unyielding, as though composed by a hand that feared disorder as much as madness. On the wall opposite the door, a scratched-stone map of the mesa region is etched with care, but the landmarks are blurred and half-erased, their outlines worn down by wind-scoured stone, as though time itself had begun to erase the past. And in the sudden silence, broken only by the whisper of the storm outside and the faint crackle of the brazier, two figures—mid-argument, their faces tense, their voices cut short—turn to regard you with eyes that hold not surprise, but the slow, dawning recognition of one who has waited too long for a visitor who was never expected.
-    # --- end ---
-    # --- VOICED REH mundane ---
-    # You heaved the door open against the wind, the iron hinges groaning like a beast in pain. Inside, the room was small, warm, and close—cramped as a tomb. A desk stood beneath a wire receiver, its brass fittings dull with age, the earpiece cracked and split like old leather. The cord snaked to a wall junction box, frayed and fraying still. On the desk, stacks of transcriptions lay in leather-bound folders, neatly labeled in the smooth, balanced script of the Kesharat, each bearing a regional mark. A brazier glowed with embers, a single charred tea leaf drifting in the bottom of a dented brass pot, its spout clogged with the stubborn residue of a thousand steeps. The air was thick with the smell of old paper, hot metal, and bitter tea. Two figures, mid-argument, snapped silent as you entered, their voices cut short like a knife through flesh. The storm slammed shut behind you with a thunderous thud, sealing the room in a sudden, heavy quiet. On the far wall, scratched into the stone with a blade or a nail, the map of the mesa region lay half-erased—landmarks worn down by wind and time, as if the earth itself had forgotten its own name.
-    # --- end ---
-    # --- CRITIC factual ---
-    # (no findings)
-    # --- end ---
-    # --- CRITIC voiced HPL mundane ---
-    # [CRIT] "echoes through the small, stifling room like the closing of a tomb" — LOADED EMBELLISHMENT introducing atmospheric claim ("tomb") not in RECORD.
-    # [CRIT] "the air is warm and thick with the scent of old paper, damp wool, and faintly, of burnt tea" — INVENTION of sensory details (paper scent, wool, burnt tea aroma) not in RECORD.
-    # [CRIT] "The single chamber is cramped, barely more than a cell" — INVENTION of spatial characterization ("cell") beyond RECORD's "small."
-    # [CRIT] "a desk of scarred oak" — INVENTION of material and damage detail ("scarred oak") not in RECORD.
-    # [CRIT] "its connections frayed and blackened as though by some long-ago spark" — LOADED EMBELLISHMENT adding burned appearance and causal speculation not in RECORD.
-    # [CRIT] "Above the desk, a brass cylinder lies half-obscured by a pile of transcriptions" — CONTRADICTION; RECORD places cipher seal "on the desk," not above or obscured.
-    # [CRIT] "bearing the faint, ritualistic grooves of a seal long used to authenticate or conceal" — INVENTION of grooves and functional speculation not in RECORD.
-    # [CRIT] "glowing dull red" — INVENTION of color specification not in RECORD.
-    # [CRIT] "its edges curled like a dead hand" — LOADED EMBELLISHMENT introducing simile with death imagery not in RECORD.
-    # [CRIT] "calm, unyielding, as though composed by a hand that feared disorder as much as madness" — PC INTERIORITY; attributes intention/psychology to the script-writer's hand, exterior to RECORD facts.
-    # [CRIT] "their faces tense, their voices cut short" — INVENTION of facial expression detail not in RECORD.
-    # [CRIT] "eyes that hold not surprise, but the slow, dawning recognition of one who has waited too long for a visitor who was never expected" — PC INTERIORITY attributing thoughts, expectations, and emotional states to the two figures; adds unrecorded characterization.
-    # --- end ---
-    # --- CRITIC voiced REH mundane ---
-    # [CRIT] "the iron hinges groaning like a beast in pain" — INVENTION: no hinges mentioned in RECORD; added sensory detail with personification.
-    # [LOW] "its brass fittings dull with age" — INVENTION: RECORD specifies wire receiver details (cracked earpiece, frayed cord) but adds new claim about "brass fittings dull with age."
-    # [CRIT] "The cord snaked to a wall junction box" — INVENTION: RECORD says cord "trails to a wall junction box"; "snaked" is voice, but adding active motion beyond the static description.
-    # [CRIT] "labeled in the smooth, balanced script of the Kesharat" — CONTRADICTION: RECORD says folders are "labeled with a regional identifier in the smooth balanced script" — does not identify the script as Kesharat script. The cipher seal is Kesharat-issue, but the script's origin is not stated.
-    # [CRIT] "each bearing a regional mark" — INVENTION: RECORD says "labeled with a regional identifier" but does not claim marks are also present; unclear if "mark" is synonym or addition.
-    # [LOW] "a single charred tea leaf drifting in the bottom of a dented brass pot" — INVENTION: RECORD says "floating in the bottom of the pot"; "drifting" adds gentle motion not in RECORD.
-    # [CRIT] "the stubborn residue of a thousand steeps" — LOADED EMBELLISHMENT: RECORD states spout is "partially clogged with mineral residue"; "stubborn" and "thousand steeps" add interpretive claims about the residue's nature and history.
-    # [CRIT] "The air was thick with the smell of old paper, hot metal, and bitter tea." — INVENTION: RECORD contains no sensory detail about air thickness or smell; entirely added.
-    # [CRIT] "their voices cut short like a knife through flesh" — INVENTION: RECORD says they "turn and stop talking"; the simile and violence-inflected imagery add tone not in RECORD.
-    # [CRIT] "sealing the room in a sudden, heavy quiet" — INVENTION: RECORD says "The storm shuts behind you with a thump"; adds interpretive claim about room being "sealed" and emotional quality of the silence.
-    # [CRIT] "as if the earth itself had forgotten its own name" — LOADED EMBELLISHMENT: RECORD says landmarks are "partially erased by wind-scoured stone"; adds metaphysical/poetic claim about geological amnesia not present in RECORD.
-    # --- end ---
+* Make for the building = Push toward the Kesharat post
+    FIXME(mundane): You put your shoulder to the wind and cross the open ground at a run. The door is unlatched. You shove it open against the storm and fall inside in a wash of grit and noise. A woman at a desk gets up and crosses to the door, puts her shoulder against it, and forces the latch closed. She turns to you. She is delighted to see you.
+    FIXME(mundane): Her name is Devra. She is mid-thirties. She is sharp-featured. She has ink on her fingers. She is the relay operator. She has been here four years. She is alone at the post tonight. She is glad of the company and talks too much.
+    FIXME(mundane): She sits you down at a stool by the brazier and gives you tea from her own teapot. She offers you a place to wait out the storm. She asks about the road south, the towns you have passed through, the news from anywhere. You have been a person on a road for a day. To her you are the whole world coming in out of the dust.
+    FIXME(dread): After a while she stops asking. She fetches her work log down off the desk and brings it over to the brazier and shows it to you. The log is a private notebook. It is not the official file. It is her own annotation of the wire messages she has been transcribing lately. She says she wants someone outside the system to look at them with her. She apologizes for the imposition and then does not stop.
+    FIXME(dread): She shows you the original transcriptions in the official file: each one is a sheet of carbon paper carrying the standard wire header from the regional office. They look correct in every procedural way. Then she walks you through the strange ones. An order to construct a resonance platform at coordinates that match empty desert. A request for four hundred units of aligned calcium, a material no catalog lists. A personnel transfer for an ID that does not match any known format. She files them all because that is her job. She does not know what to do about them.
+    +add_tag relay_post.met_devra
+    +add_tag relay_post.saw_wire
+    FIXME(mundane): A heavy knock at the back door cuts her off. She freezes. Then she gets up, crosses the room, and works the bolt. An old man comes in, shaking dust from a heavy oilskin. Devra stiffens. The old man takes off his coat and hangs it on a peg without comment. He looks at you, looks at her, and crosses to the brazier for the tea.
     +open "The Relay Post"
 
-* Press on through the storm = This is not your shelter
-    FIXME(mundane): You set your shoulder against the wind and keep moving. The pennant snaps behind you, the building lost in the murk within fifty paces. Whatever was going on in there is not your problem. The road continues, somewhere ahead.
+* Ride it out in place = Find a hollow and wait the storm out
+    You wedge yourself behind a slab of caprock and pull your cloak across your face. The wind takes hours to ease. When it does the post is still there across the flat, a stone shape in the settling dust, but the urgency is gone and so is your reason to knock.
     +flee_dungeon

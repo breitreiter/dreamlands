@@ -80,17 +80,81 @@ Produce a short plan in chat (~half a screen) covering, in order:
    rewards (`+add_item`, `+add_level`, gold). If the brief implies
    multiple "good" endings, the same artifact reward can hang off
    several routes (see `arc_patterns.md` §1c.ii).
+
+   **Reward conventions** (apply unless the brief explicitly says
+   otherwise):
+   - **Default reward is `+add_level`** on any route that resolves
+     the arc's central situation. This is the floor: if the player
+     saw the arc through and made a real call, they get a level.
+     Gold may ride along where it's diegetically motivated (the
+     NPC pays them, they loot a body), but the level is the
+     baseline.
+   - **T3 arcs grant a unique piece of end-game gear** instead of
+     (or alongside) the level — a one-of-a-kind `+add_item` named
+     in the brief or chosen from the arc-only items in
+     `rules/encounter_mechanics.md` (e.g. `the_old_tooth`,
+     `shimmering_blade`, `robe_of_twilight`). T1 and T2 arcs do
+     not grant unique gear by default. The arc's tier is named in
+     the brief's title line ("Scrub Tier 2", "Forest Tier 3").
+   - **Reward on resolution.** Any ending that engages the arc's
+     core conflict and resolves it — even bleakly, even via the
+     "wrong" choice — earns the default reward. Resolution is the
+     trigger, not moral correctness.
+   - **No reward for bailing out.** Routes that walk away before
+     the arc's central choice is faced get `+flee_dungeon` and no
+     reward. Brief language like "the PC declines to engage" or
+     "this isn't their problem" signals a bailout route.
+   - **No reward for making things worse.** Routes that destroy
+     the arc's premise (kill the informant, burn the evidence,
+     hand the captive to the wrong party out of spite) terminate
+     via `+finish_dungeon` but grant no level — the arc resolved,
+     but in a way the game does not celebrate.
+   - **No reward for failed obvious gambles.** If a picker check
+     is framed as "you tried something risky and it didn't work"
+     (the deception fails, the bluff is called), the wrong branch
+     skips the reward. Reward on the right branch only. Pure
+     uncertainty pickers (combat outcome, ambient skill check)
+     can reward both branches at different magnitudes per the
+     `brides_cave/The Ghosts.enc` precedent — distinguish by
+     whether the failure is a *consequence of the player's bad
+     read* (no reward) vs. *bad luck on a fair check* (reduced
+     reward okay).
 6. **Pickers.** Each `check <skill> correct:X wrong:Y` you intend to
    use, in which scene, with which `correct:`/`wrong:` approaches
    from the canonical pairs in `rules/encounter_mechanics.md`. Picker
    checks are terminal in their `@if` chain; `@else` is mandatory.
-7. **Choice-gating pattern per hub.** Pattern 1a (recap-in-place) or
-   1a.ii (hide-the-choice) per `arc_patterns.md` §1a. Default to
-   1a.ii for one-shot informational beats and 1a for hubs where
-   revisiting has texture. **Every hub needs at least one
-   pattern-1a or unconditional choice** to satisfy §3.1; if every
-   spoke would naturally be 1a.ii, convert the first
-   character-intro spoke to 1a or add an always-visible exit.
+7. **Choice-gating pattern per hub.** **Default to pattern 1a.ii
+   (hide-the-choice) for every spoke.** A spoke that has been
+   resolved should disappear from the menu, not present a
+   summary the player has to click through to learn there is
+   nothing new. Use `[requires !tag <arc>.<flag>]` on the choice
+   line and set the flag inside the outcome.
+
+   **Do not use pattern 1a (recap-in-place) as a default**, even
+   though `arc_patterns.md` calls it canonical. The recap pattern
+   has narrow legitimate uses: a hub where revisiting a spoke
+   *delivers genuinely new content* on the second visit (the
+   spoke's prose responds to a tag the player set elsewhere in
+   the interim), or a beat where the recap itself does meaningful
+   diegetic work (mood-shift, time-of-day change, NPC reaction).
+   "I want the choice to still be visible so the hub looks full"
+   is not a reason — the hub is allowed to drain as the player
+   makes progress.
+
+   §3.3 staged-gate (the wire-spoke pattern) is the exception
+   that proves the rule: the choice is visible across two visits
+   because the *second visit fires different content gated on a
+   precursor tag*. The recap pattern would be lazy here; the
+   staged-gate is precise. Reach for it when a scene's meaning
+   genuinely shifts across visits.
+
+   **§3.1 floor** (every encounter needs at least one
+   unconditional choice) is satisfied by **adding an always-
+   visible exit**, not by converting a spoke to 1a. The exit can
+   be the forward-advance choice ("Wait for midnight", "Walk
+   out"), an idle/decline choice that ends the scene without
+   committing, or — at terminals — the route-out itself. Never
+   keep a stale spoke visible just to satisfy §3.1.
 8. **Staged gates for context-shifted re-reads.** When a scene's
    meaning changes across visits (e.g., a clue reread after talking
    to the character it concerns), use the §3.3 staged-gate pattern:
@@ -98,16 +162,33 @@ Produce a short plan in chat (~half a screen) covering, in order:
    visit fires only after precursor B; the choice hides after the
    climax tag C lands.
 
-### Step 3 — Present the plan and wait.
+### Step 3 — Present the plan, then proceed.
 
-Send the plan to the user. Stop. Do not write files. The model is
-likely to anchor wrong on any of: which character is the moral center,
-which ending is the "good" one, whether the arc has a violence-shaped
-ending at all, what should be quality-tracked vs. tag-tracked. The
-user catches these in seconds reading the plan; catches them in
-half-hours reading the files.
+Send the plan to the user. **Default to writing the files
+immediately after** — the plan is a chance for the user to redirect,
+not a gate. The scaffold is cheap to regenerate; waiting on
+sign-off for every routine arc burns the user's attention.
 
-When the user redirects, redraft the plan. Repeat until they accept.
+**Only stop and wait for sign-off if the brief is genuinely
+broken** in a way the plan can't paper over:
+
+- The brief is incoherent or contradicts itself (one paragraph says
+  the NPC dies, a later one has them traveling with the PC).
+- The brief is a recipe for brownies / clearly the wrong document.
+- The brief ends part-way through (no endings described, hub
+  unresolved).
+- The brief calls for mechanics the vocabulary doesn't support
+  (charm, paralyze, insta-kill, disarm — see the
+  `no-agency-negation` rule).
+- The brief implies a structural shape the inventory doesn't
+  cover and you'd be inventing patterns wholesale.
+
+If none of those apply, ship the plan and the files together. The
+user reviews the plan as a heads-up for the diff they're about to
+read, and redirects via revisions after rather than gating before.
+
+When the user does redirect, redraft the plan **and** the files in
+the same turn.
 
 ### Step 4 — Write the files.
 
@@ -130,6 +211,136 @@ Write one `.enc` per file in the file list. For each:
 - Edge-transit: per `arc_patterns.md` §5, edge-transit prose lives in
   the *outgoing* outcome of a choice. Drop a FIXME line for it where
   needed; the next encounter assumes the player is already there.
+
+**Continuity rules for the skeleton:**
+
+1. **Facts must be broadly consistent across the arc.** If the
+   Start.enc transit says someone closes the door behind the PC,
+   the hub body cannot describe that same someone as having been
+   sitting across the room the whole time. If the brief says two
+   characters are mid-argument when the PC arrives, decide *where*
+   that argument lives diegetically and stage it once — do not
+   re-establish the same arrival moment in the hub body. The
+   skill owns continuity at the beat-summary level; the factual
+   pass will reproduce whatever contradictions the stubs encode.
+
+2. **Transit prose and the next scene's body read adjacently.**
+   At runtime the player sees the outgoing outcome of the choice
+   they picked, followed immediately by the next encounter's
+   body — two blocks across two files rendered as one continuous
+   scene. Write them as continuous prose. The transit should
+   *land* the PC in the next scene; the next scene's body should
+   pick up *after* the landing, not re-narrate the arrival. The
+   common failure is the transit ending with "you step inside"
+   and the body opening with "you step inside" again.
+
+3. **Arrival/welcome belongs in the incoming transit, not the
+   hub body.** The hub body is re-rendered on every spoke return.
+   Anything that should only happen once — a door slamming, an
+   NPC standing up to greet the PC, the smell of tea hitting them
+   for the first time — goes in the transit, not the body. The
+   body is static ambient texture true on every visit.
+
+4. **Character tension surfaces through observed reactions in
+   spokes, not as body fixtures.** If two NPCs are in a long-
+   running disagreement, don't write "two people are clearly
+   mid-argument" in the hub body. Stage the tension through
+   small cross-room beats inside the spokes — when the player
+   talks to A, B exhales/snorts/makes a dry sound from across
+   the room; when the player talks to B, A returns the gesture.
+   The disagreement registers diegetically, not as an ambient
+   "argument aura."
+
+5. **Bare interiority in stubs is okay; the factual pass owns
+   unpacking it.** It is fine to write `FIXME(mundane): She is
+   quietly terrified` or `FIXME(dread): He is afraid of what it
+   means if she is right` in a stub — the beat-summary form is
+   allowed to compress to character state. The factual pass is
+   responsible for rendering that state as observable phenomenon
+   (a hand going still, a tea cup set down without finishing,
+   the way someone phrases a question) rather than direct
+   interiority. The skill does not need to pre-unpack; just do
+   not leave interiority in the *final* prose.
+
+6a. **Staging must be physically plausible.** Track where every
+   NPC actually is across the arc's timeline. A visitor needs
+   lodging — they don't just "withdraw to the back storeroom"
+   unless someone offered it. Humans sleep at night — if an NPC
+   is awake through a midnight scene, the stub must justify it
+   (night shift, can't sleep, expecting a late transmission,
+   keeping watch). Private conversations in a shared space need
+   a privacy mechanism — proximity (whispered low), distance
+   (stepped outside under the eaves), or a closed door (beckoned
+   into the storeroom). Two NPCs cannot have separate private
+   conversations with the PC in a one-room building unless the
+   staging accounts for it.
+
+   **Transit prose carries the lead-in facts.** When a `+open`
+   bridges scenes that imply offstage logistics — going to bed,
+   one character leaving the room, weather changing, a meal
+   eaten — the transit must establish them. The next scene's
+   body should not have to handwave them. If "Wait for midnight"
+   bridges evening to night, the transit handles: who slept
+   where, who took which shift, who agreed to what. The
+   midnight body is then a snapshot of the *resulting* state,
+   not a re-staging of it.
+
+   **Transits must acknowledge state changes that happen during
+   them.** If a state changes between the source scene and the
+   destination scene — *anything* the player would otherwise
+   notice as a jump cut — the transit narrates the change. Time
+   is the most common case: a transit from a midnight scene to
+   a dawn scene must acknowledge the six hours that passed and
+   sketch what the PC and the NPCs did with them (slept,
+   waited, packed, kept watch). Other examples: weather
+   changing (storm subsides), a character departing (one NPC
+   leaves the room offstage), an item moving (the wax-paper
+   sleeve goes from her bedroll to her coat pocket), a tag
+   being set whose narrative content has to land somewhere. If
+   the state delta isn't on the page, the player feels the
+   discontinuity. Never jump-cut between two timed or staged
+   moments without bridging the delta.
+
+7. **No Intro to Creative Writing in scaffolds.** Stubs are for
+   *factual information*, not for clever phrasing. Avoid:
+   - Similes and metaphors. "She pours tea with the manic warmth
+     of someone alone with the wire too long" → "She pours tea."
+     "He moves the way old men move who have decided which
+     motions are worth the cost" → "He is old. He moves slowly."
+     "He chooses his words the way a man chooses them who has
+     written reports his whole life" → "He chooses his words
+     precisely."
+   - Cute generalized observations. "as if he had been expecting
+     the door to open and had set the question of who would be
+     on the other side of it aside" → "He looks up without
+     surprise."
+   - Editorial framing. "you will come to see" / "the easiest
+     thing you have done all night" / "the silence of two people
+     deciding what to do without you" — all defer to downstream.
+   - Elided objects. If a character offers a second cup, the
+     stub must first establish there is tea. Do not lean on
+     implication; downstream readers (the factual pass, the
+     voice pass, the eventual critic) need the *facts* to render
+     well. "She pushes a second cup at you" is wrong if no cup
+     was established. "She has a teapot at her desk. She pours
+     you a cup." is right.
+   - Jargon-as-style and ambiguous referents. "She frames the
+     recent traffic as entertainment" → "She shows you the recent
+     wire messages she has transcribed." "Traffic" is telecom
+     jargon the model reaches for because it sounds professional;
+     it also collides with foot-traffic, road-traffic. Use the
+     plainest concrete noun for the referent. If the brief calls
+     a thing X, the stub calls it X. Downstream has access to
+     the brief, but should not have to disambiguate the stub
+     against it.
+
+   Factual stubs should read like a competent witness statement:
+   short declarative sentences, named props, named relations,
+   no flourishes. "Bob is an old man." "Bob has been here for
+   ten years." "Bob knows the price of everything." The downstream
+   passes are the ones that turn those facts into prose with
+   texture. The decompose pass writes *the truth*; later passes
+   write *the writing*.
 
 Write the files in dependency order (Start.enc last, since it links
 forward; or write all and verify at the end — either works).

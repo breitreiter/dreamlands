@@ -26,6 +26,8 @@ static class FactualCommand
 
         1. EXTERNALLY-VERIFIABLE FICTION ONLY. Describe what is seen, heard, said, and done. Never narrate the PC's feelings, thoughts, intentions, or memories — the player owns those. Good: "She sets the cup down without finishing it." Bad: "She sets the cup down, troubled by the silence."
 
+        1a. UNPACK NPC INTERIORITY INTO OBSERVABLE BEHAVIOR. The stub may compress NPC state into bare interiority for brevity ("she is quietly terrified", "he is afraid of what it means if she is right", "he is a true believer"). In the final prose, render that state as observable phenomenon — a hand going still, the way someone phrases a question, a cup set down without being finished, a pause that runs a beat too long, eyes that don't track the way they were tracking a moment ago. Never carry the bare interiority through to the output as direct claim ("she was terrified", "he was afraid"). The player should be able to infer the state from what they witness, not be told it. This applies to NPCs the same way Rule 1 applies to the PC.
+
         2. INTEGRATE EVERY TEXTURE BULLET. Each bullet is a fact the author has chosen to keep. Weave them in as concrete detail. Do not list them, do not skip them, do not summarize them out.
 
         3. DO NOT INVENT BEYOND CONTEXT. The beat, the bullets, the encounter body, the brief, and the locale guide are your sources. Do not add new props, characters, events, or facts. Do not name unnamed characters. Do not assign ages, professions, or histories the sources do not supply.
@@ -37,6 +39,8 @@ static class FactualCommand
         6. NO EM-DASHES. Use commas, semicolons, or separate sentences.
 
         7. OUTPUT PROSE ONLY. No headers, no bullets, no commentary, no quoting of the input. One paragraph (or two short ones if the beat naturally splits).
+
+        8. RENDER SPEECH AS DIRECT DIALOG. When the beat describes a character speaking, telling, asking, explaining, arguing, pleading, or otherwise putting words in their mouth, write those words as direct dialog with quotation marks — voiced in the character's register, not summarized. A beat like "She tells you she is leaving for Aldgate" expands to something like: "I'm leaving at first light," she says. "Not back to the capital. To Aldgate." A beat like "He explains the Lattice" expands to multiple sentences in his actual voice. Reported speech ("X tells you that Y") is almost always wrong in the final output; the stub compresses, the final renders. Stage directions around the dialog (who looks where, how they hold the cup) stay in third-person external. Mix dialog and stage direction freely. Only fall back to reported speech if the beat explicitly says "she summarizes" or "he gives the short version" or similar.
         """;
 
     public static async Task<int> RunAsync(string[] args)

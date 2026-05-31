@@ -291,6 +291,37 @@ independently shippable.
   `<arc>/draft.json`? Trades editor ergonomics against parser cleanliness.
 - **Skill name.** `/arc-decompose`? `/arc-skeleton`? `/arc-write`?
 - **Tool name.** `ArcCli` is a placeholder.
+- **Continuity-critic pass (post-voice, investigate).** The existing
+  critic (5a/5b) checks each block against the brief + color for
+  invention, scope leak, PC interiority. It does not cross-check
+  prose against the *adjacent text the player will actually read*.
+  Real failures observed in the `relay_post` decomposition pass:
+  the transit prose of a `+open` choice and the body of the next
+  encounter contradicting each other; the hub body re-establishing
+  an arrival moment that already played in the transit; bare NPC
+  interiority surviving the factual pass. A post-voice continuity
+  critic could catch these by walking the runtime graph and, for
+  each prose block, bundling the deterministically-derivable
+  immediate context for the critique prompt:
+    - **preceding encounter body** (the static frame the player
+      read most recently — the body of whichever encounter `+open`ed
+      to this one),
+    - **transit prose** (the outgoing-outcome block of the
+      `+open`-bearing choice that just fired — the prose
+      *immediately* before the block under critique),
+    - **the block under critique** (the FACTUAL or VOICED prose to
+      evaluate).
+  These three pieces are derivable from the parsed encounter graph
+  modulo skill-check branches (which fan out non-deterministically;
+  treat each branch as a separate critique input). Critic prompt
+  becomes: "given that the player just read X then Y, does Z
+  follow as continuous prose without restating, contradicting, or
+  re-establishing the same beat?" Worth prototyping after the
+  pipeline ships its first full arc end-to-end. Related: the
+  arc-decompose skill's Step 4 continuity rules (which the skill
+  owns at the stub level) and the FactualCommand HARD RULE 1a
+  (which the factual pass owns at the per-block level) — both
+  upstream of this, neither catches cross-file inconsistency.
 
 ## What this plan does not cover
 
