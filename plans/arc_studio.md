@@ -248,12 +248,13 @@ Located at `/home/joseph/repos/ngraph/src/Ngraph.Studio/`:
 - **Vite + React 19 frontend** with Monaco editor for the source
   pane and `@xyflow/react` + `elkjs` for the graph pane.
 - **`GraphPane.tsx`** — ReactFlow + ELK layered left-to-right
-  graph, custom node renderer, edge selection state. Direct fit
-  for `_scenes.md` visualization. In ngraph this rendered the
-  fact-state graph; in Arc Studio it renders the scene graph,
-  which is structurally simpler and the curated source-of-truth
-  (so the graph is sane out of the box, unlike ngraph's projected
-  graph that needed shaping).
+  graph, custom node renderer, edge selection state. Used in Arc
+  Studio **only during the shred/decompose stages** for
+  `_scenes.md` visualization. See "Scope of the graph view"
+  below — this is a *story-shape sketching tool*, not a view onto
+  the `.enc` files. In ngraph it rendered the fact-state graph
+  (often messy because projected from facts); here it renders
+  the human-curated scene graph, which is sane out of the box.
 - **`EdgeDetailPane.tsx`** — inspector for variants of a single
   edge, with "author / generated / voiced" body piles. Exactly
   the variant-picker UX needed for step 5.
@@ -264,24 +265,73 @@ Located at `/home/joseph/repos/ngraph/src/Ngraph.Studio/`:
 The ngraph studio is ≈1,000 lines of frontend + a single-file
 ASP.NET backend. Forkable in an afternoon.
 
+### Scope of the graph view
+
+The graph viewer is a **shred/decompose-stage tool only.** `.enc`
+files do not map cleanly to a graph: hubs (a single encounter
+returned to from many spokes) and self-looping edges (a spoke that
+`+open`s back to its own hub) produce a "graph" that is technically
+correct but visually unhelpful — every hub becomes a dense star,
+self-loops clutter, and what the player actually *experiences* is
+nothing like the rendered topology.
+
+**Where this would have helped on shipped arcs.**
+`forest/the_hermitage` (staged hubs with three character spokes
+and three distinct good endings, all granting the same artifact)
+and `plains/grainway_station` (two-reward fork with many branching
+paths between intro and resolution) were both authored painfully
+without an up-front picture of how the story flowed. The author
+held the shape in their head and re-discovered missing connections
+the slow way — by reading `.enc` files top to bottom and noticing
+gaps. A `_scenes.md` graph view at the sketching stage would have
+surfaced reachability holes and ending coverage in seconds.
+
+So the graph is bounded:
+
+- **Available during shred (step 1) and decompose (step 2).** This
+  is where the author is figuring out the *shape* of the story —
+  what scenes exist, what precursors gate them, what leads to
+  what. A bullet list of scenes plus a graph view is the right
+  pairing here. Move nodes around, see the flow, catch
+  unreachable terminals.
+- **Hidden during colorize / factual / voice / critique (steps
+  3–5).** These are per-beat prose passes. The author is reading
+  text, picking variants, fixing wording — graph topology is
+  noise. Replace with a file-tree + per-beat inspector flow.
+- **Optionally available read-only at finalize.** A quick "does
+  this still look like the arc I planned?" check before shipping.
+  Same `_scenes.md`-derived view, not a `.enc`-derived view.
+
+The rule: the graph reflects the **author-curated scene graph**
+(`_scenes.md`), never the **rendered click-graph** (.enc files).
+The latter is best viewed as text + walk-through, not as a node-
+edge diagram.
+
 ### Arc Studio screens (rough)
 
 - **Arc picker** — list arcs in `text/encounters/arcs/`, click to
   open. Same shape as the ngraph file picker.
-- **Bibles pane** — three short scrollable views of `_cast.md`,
-  `_set.md`, `_scenes.md`. Editable in Monaco. Save-on-blur with
-  the existing debounce.
-- **Scene graph** — `_scenes.md` rendered with `GraphPane`. Click a
-  node to focus that scene in the next pane.
-- **Beat inspector** — for the focused scene, list each FIXME beat
-  with its color bullets, factual block, voiced candidates, and
-  critic findings (color-coded by severity). Pick a variant per
-  beat with a click. Edit Monaco-style inline.
+- **Bibles + graph pane** (shred / decompose mode) — three
+  scrollable views of `_cast.md`, `_set.md`, `_scenes.md` in
+  Monaco, with the graph view rendered alongside `_scenes.md`.
+  This is where the author lives during structural sketching.
+- **File tree + beat inspector** (prose-pass mode) — flat list of
+  `.enc` files in the arc; click one to open. For the selected
+  file, list each FIXME beat with its color bullets, factual
+  block, voiced candidates, and critic findings (color-coded by
+  severity). Pick a variant per beat with a click. Edit Monaco-
+  style inline. **No graph here** — beats are the unit of work,
+  not nodes.
 - **Pipeline runner** — buttons to kick off colorize / factual /
-  voice / critic passes against a selection (all-arc, one-scene,
-  one-beat). Job-status panel with stream.
+  voice / critic passes against a selection (all-arc, one-file,
+  one-beat). Job-status panel with stream. Available in both
+  modes.
 - **Finalize button** — runs `arc finalize`, surfaces assertion
   failures.
+
+Mode switch is per-arc, not global — the studio can be in
+shred/decompose mode for one arc and prose-pass mode for another
+in adjacent tabs.
 
 The .enc files remain the canonical artifact; the studio is just a
 view + edit + pipeline-trigger surface over them. Authors can
