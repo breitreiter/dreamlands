@@ -85,6 +85,47 @@ Operator precedence: ! (tightest) > && > ||
 Restriction: check and meets cannot be negated or used in compound expressions.
 
 
+## Pipeline draft comments
+
+Any line whose first non-whitespace character is `#` is a pipeline draft
+comment. The parser strips it everywhere (front-matter, body, choices
+block, inside @if blocks, between outcome lines). It produces no role,
+no paragraph break, no role-dispatch. `EncounterCli check`'s prose
+rules (em-dash detection, banned-phrase detection, FIXME/REVIEW
+markers) exempt `#` lines.
+
+Purpose: the arc-writer pipeline (colorize → factual → voice → critic
+passes) accumulates draft content alongside the original FIXME beats.
+Drafts live in `#`-prefixed blocks so partially-curated files remain
+`check`-clean. The human author curates by deleting rejected blocks
+and stripping the `# ` prefix from the chosen variant.
+
+Convention (used by the arc-writer passes; not enforced by the parser):
+
+  # --- KIND [attrs...] ---
+  # <one or more `# `-prefixed content lines>
+  # --- end ---
+
+KIND is one of: COLOR, FACTUAL, VOICED, CRITIC. Drafts attach to the
+FIXME beat they sit immediately below — physical proximity is the
+binding; no ids or scope keys. Each pass walks FIXME beats and looks
+for downstream blocks of its predecessor type.
+
+Attrs disambiguate within a stack only:
+  COLOR              (no attrs — one COLOR stack per beat)
+  FACTUAL            (no attrs — one FACTUAL block per beat)
+  VOICED <author> <scene>   (multiple variants per beat; e.g. VOICED HPL dread)
+  CRITIC <target>           (target: factual | voiced-<author>-<scene>)
+
+Re-run a pass on a single beat by deleting its downstream block(s);
+the tool picks up any FIXME without the expected next-stage block.
+
+See plans/arc_writer.md for the full pipeline.
+
+A commented-out choice (`# * Some choice`) is also skipped — the `* `
+choice-boundary detection does not fire on `#`-prefixed lines.
+
+
 ## Skills, tiers, time, conditions
 
 SKILLS                          TIERS (for meets/set_skill_tier)

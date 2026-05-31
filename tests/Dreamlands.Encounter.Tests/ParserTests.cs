@@ -199,6 +199,78 @@ public class ParserTests
     }
 
     [Fact]
+    public void HashComments_StrippedFromBodyAndOutcomes()
+    {
+        var source = """
+            Test
+            [trigger none]
+            # --- pipeline draft annotation ---
+            # COLOR: a stray draft bullet that must not ship
+            Real body line.
+            choices:
+            * Choose
+            # COLOR scope=choose-outcome
+            # Devra's tea has gone cold.
+            Outcome prose.
+            # FACTUAL: another draft block to be stripped
+            +finish_dungeon
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors.Select(e => e.Message)));
+
+        var enc = result.Encounter!;
+        Assert.DoesNotContain("COLOR", enc.Body);
+        Assert.DoesNotContain("draft", enc.Body);
+        Assert.Contains("Real body line.", enc.Body);
+
+        var outcome = enc.Choices[0].Single!.Part.Text;
+        Assert.DoesNotContain("COLOR", outcome);
+        Assert.DoesNotContain("FACTUAL", outcome);
+        Assert.DoesNotContain("Devra's tea", outcome);
+        Assert.Contains("Outcome prose.", outcome);
+        Assert.Contains("finish_dungeon", enc.Choices[0].Single!.Part.Mechanics);
+    }
+
+    [Fact]
+    public void HashComments_BetweenFrontMatterLines_DoNotBreakParsing()
+    {
+        var source = """
+            Test
+            [trigger none]
+            # a draft annotation between front-matter and the next field
+            [tier 2]
+            Body.
+            choices:
+            * Go
+            +finish_dungeon
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Errors.Select(e => e.Message)));
+        Assert.Equal(2, result.Encounter!.Tier);
+    }
+
+    [Fact]
+    public void HashCommentedChoiceMarker_DoesNotStartChoice()
+    {
+        var source = """
+            Test
+            [trigger none]
+            Body.
+            choices:
+            # * Commented-out draft choice
+            * Real choice
+            +finish_dungeon
+            """;
+
+        var result = EncounterParser.Parse(source);
+        Assert.True(result.IsSuccess);
+        Assert.Single(result.Encounter!.Choices);
+        Assert.Equal("Real choice", result.Encounter!.Choices[0].OptionText);
+    }
+
+    [Fact]
     public void Error_UnclosedBrace_ReportsError()
     {
         var source = """

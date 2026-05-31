@@ -74,6 +74,7 @@ static class CheckCommand
             {
                 vocabErrors = ValidateVocabulary(result.Encounter);
                 ValidateAccessibility(result.Encounter, vocabErrors);
+                ValidateBodyIsProse(result.Encounter.Body, vocabErrors);
                 if (registry != null)
                     idWarnings = ValidateKnownIds(result.Encounter, registry);
 
@@ -126,6 +127,32 @@ static class CheckCommand
     {
         if (encounter.Choices.Count > 0 && encounter.Choices.All(c => c.Requires != null))
             errors.Add("All choices are gated with [requires] — at least one must be unconditional");
+    }
+
+    /// <summary>
+    /// Body is rendered as raw prose at runtime; flow-control tokens (@if/@else/@elif,
+    /// `+verb`, choice markers) only have meaning inside the choices block. If they
+    /// appear in the body the player sees them literally.
+    /// </summary>
+    private static void ValidateBodyIsProse(string body, List<string> errors)
+    {
+        var bodyLines = body.Split('\n');
+        for (int i = 0; i < bodyLines.Length; i++)
+        {
+            var trimmed = bodyLines[i].TrimStart();
+            if (trimmed.StartsWith("@if ", StringComparison.Ordinal) ||
+                trimmed.StartsWith("@elif ", StringComparison.Ordinal) ||
+                trimmed.StartsWith("@else", StringComparison.Ordinal) ||
+                trimmed == "}" ||
+                trimmed.StartsWith("} @", StringComparison.Ordinal))
+            {
+                errors.Add($"Body line {i + 1}: flow-control token '{trimmed.Split(' ')[0]}' is only valid inside the choices block — body renders as raw prose");
+            }
+            else if (trimmed.Length >= 2 && trimmed[0] == '+' && char.IsLetter(trimmed[1]))
+            {
+                errors.Add($"Body line {i + 1}: mechanic verb '+{trimmed[1..].Split(' ')[0]}' is only valid inside the choices block");
+            }
+        }
     }
 
     private static readonly HashSet<string> ItemIdVerbs = new()
@@ -203,6 +230,7 @@ static class CheckCommand
         var lines = text.Split('\n');
         for (int i = 0; i < lines.Length; i++)
         {
+            if (lines[i].TrimStart().StartsWith('#')) continue; // skip pipeline draft comments
             foreach (var (pattern, label) in DashAffectations)
             {
                 if (lines[i].Contains(pattern))
@@ -219,6 +247,8 @@ static class CheckCommand
         for (int i = 0; i < lines.Length; i++)
         {
             var trimmed = lines[i].TrimStart();
+            if (trimmed.StartsWith('#')) continue; // skip pipeline draft comments
+
             if (trimmed.StartsWith("FIXME:"))
                 warnings.Add($"Line {i + 1}: FIXME marker (must be expanded before publishing)");
             else if (trimmed.StartsWith("REVIEW:"))

@@ -43,6 +43,11 @@ public static partial class EncounterParser
         {
             var trimmed = lines[i].Trim();
             if (string.IsNullOrEmpty(trimmed)) continue; // skip blanks between title and front-matter
+            if (trimmed.StartsWith('#'))
+            {
+                bodyStart = i + 1;
+                continue; // pipeline draft comment — skip
+            }
             var fmMatch = FrontMatterPattern().Match(trimmed);
             if (fmMatch.Success)
             {
@@ -124,7 +129,10 @@ public static partial class EncounterParser
     {
         var bodyLines = new List<string>();
         for (int i = start; i < end; i++)
+        {
+            if (lines[i].TrimStart().StartsWith('#')) continue; // pipeline draft comment
             bodyLines.Add(lines[i]);
+        }
         return string.Join("\n", bodyLines);
     }
 
@@ -287,6 +295,9 @@ public static partial class EncounterParser
             var lineNum = i + 1;
             var raw = lines[i];
             var trimmed = raw.TrimStart();
+
+            // Pipeline draft comment — skip entirely (no role, no paragraph break)
+            if (trimmed.StartsWith('#')) continue;
 
             // Blank lines become paragraph breaks in prose
             if (string.IsNullOrWhiteSpace(trimmed))
