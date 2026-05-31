@@ -2,16 +2,23 @@ Chorik
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): Chorik is the quiet one. He is buttoned to the throat. His neck cloth is folded crisp. He is the only one of the four whose uniform fits him exactly the way the uniform is meant to fit.
-
-FIXME(mundane): You try to draw him out. He answers in short sentences. He does not initiate. He changes the subject when you press. He smiles thinly at the others' jokes a beat after the laugh lands.
-
-FIXME(dread): The other three patch his discomfort with on-his-behalf inventions. Veran says Chorik has been quiet since the last site, don't mind him. Baret says Chorik is just tired, aren't you Chorik. Richard says don't ask him about that, he doesn't like to talk about it. Chorik does not contradict any of them. He does not confirm any of them. He drinks his tea.
-
-FIXME(dread): You see what the others do not. The flip on the bell took three seconds for the other three. For Chorik it has not finished. He is sitting where they put him.
+FIXME(mundane): Chorik is next to you at the rest circle, teacup in both hands. The others have gone back to their own conversations across the rock but they are still in easy earshot.
 
 choices:
 
-* Return to the circle = Step back into the conversation
+* Try to draw him out = Speak low and see what he gives
+    @if check negotiation correct:reason wrong:charm {
+        FIXME(revelation): You speak low. You ask the kind of thing the others' patching has been keeping you from asking. He looks at his hands. He says he keeps thinking about leaving and never quite manages it. He says he has gaps in his memory. He says he thinks the mesa is driving him mad. He is more afraid than he is anything else, and afraid of being heard. Then Veran calls a question across the rock and Chorik straightens and answers it, and the moment closes.
+        +add_tag signal_array.met_chorik
+        +add_tag signal_array.chorik_unguarded
+        +open "The Rest Interval"
+    } @else {
+        FIXME(dread): You speak low. He does not look at you. He sets his teacup down on the rock and stands up. He says something at normal volume to Veran about checking the cable runs, and crosses out of the rest circle to the half-built tower. The others watch him go without comment. You are alone on your side of the circle.
+        +add_tag signal_array.met_chorik
+        +open "The Rest Interval"
+    }
+
+* Let him be = Sit quietly without pressing
+    FIXME(mundane): You let him sit. He does not seem grateful, exactly, but he relaxes a fraction. He finishes his tea. The conversation moves on around you without involving him.
     +add_tag signal_array.met_chorik
     +open "The Rest Interval"

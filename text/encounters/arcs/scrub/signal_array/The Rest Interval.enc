@@ -2,27 +2,41 @@ The Rest Interval
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): The rest circle is a flat patch of rock about ten meters from the pylon. The kettle is on. Veran sits a little upslope. Baret is next to him. Richard is across from Baret, heavy in his seat. Chorik is off-axis, the one whose feet are not quite tucked in. The bell is silent. The crew has time on the clock until they go back to the work.
+FIXME(mundane): The rest circle is a flat patch of rock about ten meters from the tower. The kettle is on. Veran sits a little upslope. Baret is next to him. Richard is across from Baret, heavy in his seat. Chorik is off-axis from the circle, not quite settled in. The bell is silent. The crew has time on the clock until they go back to the work.
 
 choices:
 
-* Talk to Veran = Sit with the foreman [requires !tag signal_array.met_veran]
+* Walk over to the foreman = He has the head of the rest circle and the teapot. [requires !tag signal_array.met_veran]
+    FIXME(mundane): You cross to where Veran sits. He pours you a cup of tea from the small pot. You sit down across from him.
+    FIXME(mundane): Veran is in his mid-fifties. He has the weathered build of a career fieldworker. He has been doing Kesharat infrastructure work for thirty years. He is the foreman of this crew and signs off completion. The bell on his belt is field-issue.
+    FIXME(mundane): He asks where you have come from. He listens. He volunteers the crew's own route in return: they came down from the previous site three days ago. He names the landmarks. He describes the river crossing, the salt-flat traverse, the long climb up the south slope of the mesa.
+    FIXME(dread): The route does not close. The landmarks he names are real, but they are arranged in a sequence that would take a week to walk, told in the time the direct road takes.
     +open "Veran"
 
-* Talk to Baret = Sit with the young worker [requires !tag signal_array.met_baret]
+* Chat with the young worker = He has just settled in with a fresh cup of tea. [requires !tag signal_array.met_baret]
+    FIXME(mundane): You sit next to Baret. He pours you a cup of tea from the kettle.
+    FIXME(mundane): Baret is in his late twenties. His hands have the build of someone who grew up working stone. His tunic cuffs are rolled and the Reshîd clan band on his wrist is visible whenever he reaches for the kettle.
+    FIXME(mundane): He talks about his family. His mother is well. His sisters are well. His nephew was born while he has been on the road. He was supposed to be home for the birth. He knows he is overdue. He says he will be home after this job. Just this one more.
+    FIXME(dread): He says "just this one more" twice in five minutes. He hears himself say it the second time. He laughs at himself a little. He does not stop saying it.
     +open "Baret"
 
-* Talk to Richard = Sit with the heavier man [requires !tag signal_array.met_richard]
+* Meet the heavier man = He is across the circle, his weight on the rock. [requires !tag signal_array.met_richard]
+    FIXME(mundane): You move around the circle and sit by Richard. He shifts to make room and tops up your tea.
+    FIXME(mundane): Richard is in his forties. He is built like a man who lifts hogs. His collar is unbuttoned and the back of his neck shows grassland sunburn. He is a pig farmer from the rich grasslands near Aldgate. He has a prize pig at home. His brother is taking care of her in his absence.
+    FIXME(mundane): He asks if you have been by his farm. He describes it: the road in, the gate, the pig pen by the barn. He wants news. He reckons it is about time for the harvest festival. He worries about his brother's husbandry. He does not think his brother feeds the pig appropriately.
     +open "Richard"
 
-* Talk to Chorik = Sit with the quiet one [requires !tag signal_array.met_chorik]
+* Check in on the quiet one = He is off to one side of the circle. [requires !tag signal_array.met_chorik]
+    FIXME(mundane): You move around to where Chorik is sitting and settle in next to him. The rest circle is small enough that the others are in easy earshot, conversations carrying without anyone raising a voice.
+    FIXME(mundane): Chorik is buttoned to the throat. His neck cloth is folded crisp. He is the only one of the four whose uniform fits him exactly the way the uniform is meant to fit. You ask him how he is. He answers in short sentences. He does not initiate. When you press for more he changes the subject.
+    FIXME(dread): The other three patch his discomfort with on-his-behalf inventions, contributing across the rock. Veran says Chorik has been quiet since the last site, don't mind him. Baret says Chorik is just tired, aren't you Chorik. Richard says don't ask him about that, he doesn't like to talk about it. Chorik does not contradict any of them. He does not confirm any of them. He drinks his tea.
     +open "Chorik"
 
-* Sit and watch = Stay quiet and observe [requires !tag signal_array.observed]
+* Sit back and watch = Stay quiet and listen [requires !tag signal_array.observed]
     +open "Observe"
 
-* Finish the pylon = Tell them you will wait while they finish
-    FIXME(mundane): The bell on Veran's belt rings again, softer than the first time. The crew rises from the rest circle and returns to the housing. Veran checks the cable connections. Chorik fits the top cross-piece into the lattice. Richard takes the laminated activation card out of his pocket. Baret rolls up the bedroll mat and stows the tea kit. The work resumes.
+* Wait out the rest interval = Let the time pass; they will finish the work after.
+    FIXME(mundane): You stay where you are. The crew finishes their tea. The dust shimmer settles back over the road, and after a while the bell on Veran's belt rings again, softer this time. The crew rises from the rest circle and returns to the housing at the base of the tower. Veran checks the cable connections. Chorik fits the top cross-piece. Richard takes a laminated activation card out of his pocket. Baret rolls up the bedroll mat and stows the tea kit. The work resumes.
     +open "Completion"
 
 * Walk off the work site = Decide this is not your concern

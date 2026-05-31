@@ -2,37 +2,38 @@ Completion
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): The crew finishes the pylon. Veran checks the cable connections one by one. Chorik fits the top cross-piece. Baret rolls up the rest circle and stows the kit. Richard reads the activation sequence from a laminated card he keeps in his pocket. Twenty minutes of focused work. The four of them work the way the crew of any well-run job works. When the last bolt is tight Richard turns the key on the housing.
+FIXME(wonder): The crew finishes the pylon. Veran checks the cable connections one by one. Chorik fits the top cross-piece. Baret rolls up the rest circle and stows the kit. Richard reads the activation sequence from a laminated card he keeps in his pocket. Twenty minutes of focused work. The four of them work the way the crew of any well-run job works. When the last bolt is tight Richard turns the key on the housing.
 
 FIXME(dread): There is a click. Something cycles up inside the housing. The pylon is live.
 
-FIXME(revelation): The weight is immediate. It is not pain. It is purpose. Blueprints unroll in your mind: schematics with part numbers for components you have never seen and now understand the function of, coordinates for the next site east, material quantities, scheduling margins. The full weight of a job that is organized and waiting and makes complete sense.
+FIXME(horror): The weight is immediate. It is not pain. It is purpose. Blueprints unroll in your mind: schematics with part numbers for components you have never seen and now understand the function of, coordinates for the next site east, material quantities, scheduling margins. The full weight of a job that is organized and waiting and makes complete sense.
 
-FIXME(revelation): You push against it. The signal does not feel hostile. It feels like an offer. You push against it because you know what it is.
+FIXME(horror): You push against it. The offer-language was wrong. There is no offer. The signal is doing to you what was done to the four of them around the housing. It is replacing the parts of you that hold your name with parts that hold schematics. It is hostile and fast and moving inside your head with the unhurried confidence of something that has done this before. You push back against it with everything you are and do not know yet whether it is enough.
 
 FIXME(dread): You surface. The crew is somewhere else behind the eyes. They are present in body. They are not coordinated yet. The activator housing is at the base of the pylon, closed and latched. The window will not stay open.
 
-# GAP (load-bearing): the bibles called for a save-shaped resist roll
-# here with Cunning as the default skill. Deferred from the skeleton
-# pending author decision on the signal_caught fragment quality. If
-# the author wants it, drop a single picker choice between the body
-# and the act/walk choices below, with both branches +open-ing into a
-# small Window.enc file that hosts the act/walk fork.
+# GAP (load-bearing): the bibles called for a save-shaped resist
+# roll here, separate from the act picker below. Deferred from the
+# skeleton pending author decision on the signal_caught fragment
+# quality. If wanted, drop a single picker choice (Cunning per the
+# bibles, or Bushcraft) between the body and the act/clear choices
+# below, with both branches +open-ing into a small Window.enc file
+# that hosts the fork.
 
 choices:
 
-* Move on the housing = Try to break the activator before the crew firms up
-    FIXME(action): You move. The housing is small and bolted to the bedrock. You have to find the seam where the bolts seat into the metal. The crew is starting to turn.
-    @if check cunning correct:scheme wrong:bluff {
-        FIXME(action): You read the seam fast. You drive the heel of your hand against the latch plate. The plate bends. You strip the housing open and pull the activator unit out and break it across your knee. The signal cuts. The pylon goes dark behind you.
+* Move on the housing = Get to the activator
+    FIXME(action): You move on the housing. The latch plate is bolted to the bedrock and will need force to break. The crew is on the work side of the housing, not coordinated yet. Veran is the closest.
+    @if check combat correct:rush wrong:outlast {
+        FIXME(action): You commit the moment you decide. You drive the heel of your hand against the latch plate. The plate bends. You strip the housing open, pull the activator unit out, and break it across your knee. The signal cuts. The pylon goes dark behind you.
         +open "Aftermath"
     } @else {
-        FIXME(action): You go at the housing without reading it first. The latch plate does not give. Before you can try again Veran has a hand on your shoulder. He is not aggressive. He is firm.
+        FIXME(action): You hold a beat to read the moment. The beat is too long. Veran's hand is on your shoulder before you set yourself. He is not aggressive. He is firm.
         +open "Grabbed"
     }
 
-* Let the window close = Stay where you are
-    FIXME(dread): You do not move. The window closes. The crew finishes their transition. They collect their tools with the synchronized economy of people who know exactly where they are going and why. The pylon hums behind them as they head east down the mesa road. They do not look back.
-    FIXME(dread): You are alone on the mesa with it. The coordinates for the next site are still in your head, whether you want them or not.
+* Get clear of the pylon = Put distance between yourself and the signal
+    FIXME(horror): You stumble back from the housing. Each step you take from the pylon, the signal thins by a degree, and your head clears by the same degree. By the time you are forty paces out the schematics have receded to a low hum at the back of your skull. You know now not to get close to one of these again.
+    FIXME(dread): You watch from the rocks at a safe distance as the crew finishes their transition. They collect their tools with the synchronized economy of people who know exactly where they are going and why. They form up and start east down the mesa road toward the next build site, wherever that is. You watch them go and there is nothing you can do about it.
     +finish_dungeon
     +add_level

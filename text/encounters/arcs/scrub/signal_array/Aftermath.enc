@@ -2,23 +2,28 @@ Aftermath
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): The crew is gathered around the broken pylon. They have not coordinated; the signal cut before the transition finished. They are themselves again. They are confused. Veran is holding a piece of the broken activator unit and looking at the housing. Baret is checking himself for injuries. He has a bruise on his ribs from where he pulled you off. He does not remember pulling you off.
+FIXME(mundane): The crew is gathered around the broken pylon. They have not coordinated; the signal cut before the transition finished. They are themselves again. Veran is holding a piece of the broken activator unit and looking at the housing. Baret is checking himself for injuries. He has a bruise on his ribs from where he pulled you off. He does not remember pulling you off.
 
-FIXME(mundane): The narrative fills in around them. They piece it together while you stand there. A merchant came along during the rest interval. Came for the tea. Seemed friendly at first. Clearly something wrong with you. Heat sickness, maybe. Maybe something you ate out here on the mesa. You went at the housing without warning. They had to put you down. The housing is wrecked. They need a new activator unit. The depot is three days back. Veran is going to have strong feelings about this when the adrenaline settles.
+FIXME(horror): None of them are angry. They are not even confused for long. Baret asks the air what could have caused that and Veran answers without looking up: heat sickness, most likely. Richard says or something you ate, the wells out here are bad. Baret nods and adds that you did look pale when you sat down. Chorik says nothing. They build the account between them in real time, contribution by contribution, each piece accepted by the others as it lands. By the time they have gone around the circle twice they have a complete story. None of them is lying. None of them is performing. The story feels to them like remembering.
 
-FIXME(dread): It is automatic. Their gap fills in the way it always does. They are not lying. They are remembering wrong, and what they are remembering wrong feels to them like remembering.
+FIXME(dread): You stand at the edge of the rest circle and watch them piece it together. The merchant came up from the south. Came for the tea. Was off, in retrospect. Went at the housing without warning. They had to put you down. The housing is wrecked. The depot is three days back. Veran is going to have strong feelings about this when the adrenaline settles. None of these things happened. All of them are now true.
 
 choices:
 
-* Try to speak through the plaster = Say something true while the narrative is still wet
-    FIXME(action): You speak to Chorik. You do not try to convince him of the Lattice. The Lattice is not reachable. You try for one crack in the plaster wide enough for him to look through.
-    @if check negotiation correct:reason wrong:charm {
-        FIXME(revelation): You say a specific thing about the way the four of them fit together. The particular thing he has been not-saying since the bell rang. He goes quiet. He looks at his hands. Veran calls his name and he goes. You do not know if it landed. You walk away not knowing.
+* Speak up = Say something true before their story sets
+    FIXME(action): You speak. You do not try to convince them of the Lattice; the Lattice is not reachable. You say a specific true thing about what just happened, the kind of thing the story they are building has just contradicted.
+    @if tag signal_array.chorik_unguarded {
+        FIXME(revelation): The thread you opened with Chorik at the rest circle is still there. Your sentence pulls it. Veran does not break stride; Baret nods absently and adds another detail to the story; Richard agrees. But Chorik stops. He looks at his hands. He sets his cup down. The look stays in his eyes after Veran calls his name and he turns. You walk out of the rest circle not knowing if anything landed, but you felt the thread give.
+        +add_tag signal_array.chorik_cracked
+        +finish_dungeon
+        +add_level
+    } @elif check negotiation correct:reason wrong:charm {
+        FIXME(revelation): Veran does not break stride. Baret nods absently and adds another detail to the story. Richard agrees. But Chorik stops. He looks at his hands. He sets his cup down. He does not say anything. Veran calls his name a moment later and Chorik turns to him, but the turn is slow, and the look stays in his eyes after he has turned away. You walk out of the rest circle not knowing if anything landed.
         +add_tag signal_array.chorik_cracked
         +finish_dungeon
         +add_level
     } @else {
-        FIXME(dread): You try to be warm. The warmth slides off the plaster. Chorik smiles thinly at you, the same beat-behind smile he has been giving all afternoon. Veran calls his name and he goes. The crew turns to the broken housing and starts the discussion about who walks back to the depot.
+        FIXME(dread): The four of them absorb the sentence into the story without breaking rhythm. Baret incorporates it. Veran nods. Richard agrees. The account seals over the gap before you finish speaking. As you turn to leave Chorik looks back at you and for a moment you think he is going to step out of the circle and follow you. Veran claps him on the shoulder and Chorik falls back into the line of the conversation.
         +finish_dungeon
         +add_level
     }

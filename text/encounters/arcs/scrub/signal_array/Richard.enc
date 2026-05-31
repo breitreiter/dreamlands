@@ -2,16 +2,18 @@ Richard
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): Richard is in his forties. He is built like a man who lifts hogs. His collar is unbuttoned and the back of his neck shows grassland sunburn. He is a pig farmer from the rich grasslands near Aldgate. He has a prize pig at home. His brother is taking care of her in his absence.
+FIXME(mundane): Richard is still on his brother's husbandry, telling you what the pig should be eating and what he suspects his brother is actually feeding her. He is genuinely worried about it.
 
-FIXME(mundane): He asks if you have been by his farm. He describes it: the road in, the gate, the pig pen by the barn. He wants news. He reckons it is about time for the harvest festival. He worries about his brother's husbandry. He does not think his brother feeds the pig appropriately.
+FIXME(dread): You ask him about the tower. His voice shifts mid-sentence. He becomes precise. He talks about propagation, tolerances, schedule margins, the activation sequence. The technical fluency is fluent. The details are wrong in small confident ways. Real communications relays do not work the way he is describing. Neither Richard nor the others notice the shift. When he finishes he goes back to the pig.
 
-FIXME(dread): You ask him about the pylons. His voice shifts mid-sentence. He becomes precise. He talks about propagation, tolerances, schedule margins, the activation sequence. The technical fluency is fluent. The details are wrong in small confident ways. Real communications relays do not work the way he is describing. Neither Richard nor the others notice the shift. When he finishes he goes back to the pig.
+FIXME(dread): You ask him how a pig farmer from Aldgate came to be running activation sequences on a mesa. Richard blanks. His eyes go somewhere middle-distance and he starts a sentence and does not finish it.
 
-FIXME(dread): If you ask him how a pig farmer came to be running activation sequences on a mesa, he has a feeling of how. He does not have a memory.
+FIXME(dread): Veran steps in to save him. He says the Kesharat training program is the finest on the continent: bright young men like Richard come through the regional academy in eight weeks and are calibrating carrier-frequency drift by the end of the second. He says it the way a man says it who has trained other men.
+
+FIXME(dread): Then Veran turns to you. He says you strike him as someone who would do well in the program. The autumn cohort at Hesh is still taking names. He says it without urgency, in the same tone he just used about Richard, as if mentioning a road that goes somewhere useful you might not have known about. Richard nods along. The blank does not entirely leave him. Veran goes back to his tea. Richard finds his way back to the pig.
 
 choices:
 
-* Return to the circle = Step back into the conversation
+* Step back to the circle = Let the conversation end
     +add_tag signal_array.met_richard
     +open "The Rest Interval"

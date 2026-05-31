@@ -11,9 +11,16 @@ choices:
         FIXME(action): You drop your shoulder under his hand and twist. He goes off balance. You are on the housing before he has recovered. The latch plate breaks under your second hit. You strip the activator unit out and break it across your knee. The signal cuts. The pylon goes dark.
         +open "Aftermath"
     } @else {
-        FIXME(action): You try to twist out of his grip. He follows you down. Baret is on your other side before you can recover. The two of them put you on the ground. Chorik is at the housing checking the latch. Richard is watching from the cable bundle.
-        FIXME(dread): When they let you up Veran asks you what you thought you were doing. He is not angry. He is concerned for you. There is a bruise rising on your hip and your ribs are sore. The activator is intact. The pylon is humming. The crew finishes packing the tools.
-        FIXME(dread): They head east down the mesa road, blueprints and coordinates and material quantities you can still feel pressing at the back of your skull. You are alone on the work site with the pylon.
+        FIXME(action): You try to twist. Veran takes you down. Baret is on your other side before you can recover. The two of them put you on the ground. Something hits you wrong on the way down and the world goes white at the edges and then black.
+        FIXME(dread): You come to in pale morning light. You are off the mesa road, in the lee of a slab of rock. Your pack is next to you. There is a half-full waterskin beside it. The work site above you is empty. The tower stands complete and humming on the rock. The crew is gone. The wound at your side is shallow but it is not closing on its own.
+        +skip_time morning
         +add_condition injured
         +finish_dungeon
     }
+
+* Back off slow = Hands where they can see them, no sudden moves
+    FIXME(action): You raise your hands, slow. You take a step back from Veran. He releases your shoulder without comment. He does not move to follow. The other three watch you, calm and attentive in the way of people who are about to firm up and have not quite yet.
+    FIXME(horror): You back away from the housing, eyes on them, hands still visible. Each step you take from the tower, the signal in your skull thins by a degree. By the time you are forty paces out the schematics have receded to a low hum. You know now not to get close to one of these again.
+    FIXME(dread): You watch from the rocks at a safe distance as the crew completes their transition and finishes packing the tools. They form up and start east down the mesa road toward the next build site, wherever that is. The pylon hums behind them. There is nothing you can do about it.
+    +finish_dungeon
+    +add_level
