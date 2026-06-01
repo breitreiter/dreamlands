@@ -2,6 +2,21 @@ Grabbed
 [trigger none]
 [vignette dungeons/signal_array]
 
+# --- COLOR ---
+# [] brass throat-button stamped with the Kesharat mark, worn smooth at the edge from constant handling
+# [] hatband dry and dust-pale at the inside fold, no sweat stain despite the heat
+# [] tool roll laid out with wrenches and cable cutters arranged in precise order by size
+# [] Richard's collar left unbuttoned, neck cloth loose, revealing a grassland sunburn with a distinct line at the hairline
+# [] Chorik's cuffs stay down, the fabric crisp and unwrinkled, not a single crease from motion
+# [] Veran's interval bell hanging steady on his belt, the brass case dull and unmarked by wear
+# [] Baret's Reshîd clan band visible at his wrist whenever he reaches for the kettle or sets a tool down
+# [] tea pot on the rock, spout stained dark with old residue, handle wrapped in frayed leather cord
+# [] Richard's hands inside rolled cuffs, farmer's hands with calluses at the knuckles and a nick across the thumb
+# [] Chorik's flip-flop incomplete — he sits with his feet tucked in, but his right hand rests on his knee, palm up, as if waiting to be told what to do
+# [] the pylon housing at the base, metal panel flush with the rock, no visible bolt heads or seam
+# [] wind gust carrying the smell of hot metal off the pylon, sharp and brief, like struck iron
+# --- end ---
+
 FIXME(action): Veran's hand is on your shoulder. He is not gripping hard. He is being patient with you. The crew is not coordinated yet. Behind him Chorik is starting to turn. The housing is still right there.
 
 choices:

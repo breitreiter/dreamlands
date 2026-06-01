@@ -17,6 +17,7 @@ mapgen/sizing.md
 !worlds/*/build.sh
 !worlds/*/use.sh
 !worlds/*/rebuild.sh
+!text/encounter-tool/skills/**/*.sh
 .deploy/
 mapgen/reference/
 generated_*.enc

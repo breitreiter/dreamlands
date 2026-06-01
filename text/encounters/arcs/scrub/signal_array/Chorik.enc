@@ -2,6 +2,19 @@ Chorik
 [trigger none]
 [vignette dungeons/signal_array]
 
+# --- COLOR ---
+# [] brass throat-button stamped with the Kesharat mark, worn smooth at the edges from constant touch
+# [] tea cup chipped at the rim, held with both hands like a shield against the air
+# [] his left boot sole cracked at the heel, leather split like old parchment
+# [] fingers of his right hand tracing the seam of his tunic cuff, a habit when not working
+# [] tea steam rising in thin wisps, curling above the cup but not spreading further
+# [] one corner of his neck cloth folded unevenly, the crease not from pressing
+# [] his hat tilted forward just enough to shadow his eyes, not for sun, for cover
+# [] the teacup resting on a small patch of clean rock, the dust around it undisturbed
+# [] the line of his jaw tight, not in anger, in the stillness of someone holding a breath
+# [] a faint tremor in his left hand when he sets the cup down, barely visible
+# --- end ---
+
 FIXME(mundane): Chorik is next to you at the rest circle, teacup in both hands. The others have gone back to their own conversations across the rock but they are still in easy earshot.
 
 choices:

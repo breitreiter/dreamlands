@@ -2,18 +2,31 @@ The Pylon Crew
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): The mesa road runs along an exposed rock shelf. A half-erected tower stands on the rock ahead, five meters of crossed metal struts guyed with cable, the top cross-piece not yet fitted. Kesharat work. You have seen the scaffolding of these going up across the mesa over the past months; the locals call them signal arrays, but nobody outside the Administration is clear on what they signal to. Four workers are around a metal housing at its base. They wear Kesharat infrastructure uniform: dun canvas trousers and tunics, brass-buttoned at the throat, broad-brimmed hats, white linen neck cloths. Cable runs disappear into a cut in the rock.
+# --- COLOR ---
+# [] brass throat-button stamped with the Kesharat mark, worn smooth from frequent touch
+# [] hatband dry and dust-pale at the inside fold, no sweat stain despite the heat
+# [] tool roll laid open like a cracked spine, wrenches arranged by size, torque bar resting on a folded rag
+# [] Baret's clan band still showing the deep indent from where it was pressed into his wrist for years
+# [] Richard's collar unbuttoned just enough to expose the raw pink of sunburn across the nape, not the dry red of mesa wind
+# [] Chorik's hands resting on his thighs, palms up, fingers curled slightly as if still holding invisible tools
+# [] Veran's belt buckle worn thin at the edge where the bell's cord rubs against it every shift
+# [] kettle on the fire, lid slightly ajar, steam coiling in a straight line up through the still air
+# [] tea leaves in the pot dark and crinkled, the color of dried earth
+# [] Richard's voice shifting mid-sentence from coarse farmer to precise technician, the cadence snapping back like a snapped wire
+# [] Baret's fingers drumming once on his knee, then stopping before the rhythm could start
+# [] Chorik's neck cloth folded so crisply it looks pressed that morning, not just tied
+# [] wind gusting off the mesa wall, carrying the smell of hot iron and old oil from the pylon
+# [] Veran's left hand resting on the bell's case, thumb not touching the lever, not pulling, not letting go
+# --- end ---
 
-FIXME(mundane): The foreman sees you approach and waves you wide of the cable run. He does not stop the work. He does not introduce anyone. The young worker at the housing does not look up. The heavier man with his hands in the cable bundle does not look up. The fourth worker glances at you and looks away.
-
-FIXME(dread): The crew works around you for several minutes. You have time to notice what the uniform cannot cover. The young worker's cuffs are rolled to the elbow, showing a Reshîd clan band on his wrist. The heavier man's collar is unbuttoned and the back of his neck shows a grassland sunburn, the wrong sun for the mesa. The fourth worker is buttoned to the throat and stands too still.
-
-FIXME(mundane): A bell on the foreman's belt rings. The crew downs tools and breaks for rest. The foreman turns to you, smiling, and beckons you over to a flat patch of rock where they take their breaks. The young worker lays out a bedroll mat in the shade. The heavier man stands up from the cable bundle and asks where you have come from. The fourth worker drifts in after the others, slower, and sits where they make room for him.
-
+FIXME(mundane): PC comes upon a half-built Kesharat tower on the mesa road. Locals call them signal arrays; nobody outside the Administration is clear on what they signal to. Four workers in Kesharat infrastructure uniform are around the metal housing at the base.
+FIXME(mundane): The foreman waves the PC wide of the cable run and does not stop the work. The crew works around the PC without introductions. None of them looks up except the fourth worker, who glances at the PC and looks away.
+FIXME(dread): During the wait the PC clocks the seams the uniform cannot cover. Baret's Reshîd clan band is visible at his rolled cuff. Richard's grassland sunburn shows above his unbuttoned collar. Chorik is buttoned to the throat and stands too still.
+FIXME(mundane): The bell on the foreman's belt rings. The crew breaks for rest and turns warm. The foreman smiles and welcomes the PC. The other three fall in around the rest circle. The fourth worker drifts in after the others, slower, and sits where they make room for him.
 choices:
 
 * Sit with the crew = Take the tea they are offering
-    FIXME(mundane): You sit. The foreman pours tea from a small pot. The four workers ring you in around the rest circle. The foreman introduces them by name: Veran the foreman, Baret the young one, Richard the heavier man, Chorik the quiet one. The crew makes you welcome.
+    FIXME(mundane): The PC sits with the crew at the rest circle. The foreman pours tea and introduces the crew: Veran, Baret, Richard, Chorik.
     +open "The Rest Interval"
 
 * Walk on = Keep your road and put the crew behind you

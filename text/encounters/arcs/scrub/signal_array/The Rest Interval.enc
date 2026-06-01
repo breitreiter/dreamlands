@@ -2,8 +2,24 @@ The Rest Interval
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): The rest circle is a flat patch of rock about ten meters from the tower. The kettle is on. Veran sits a little upslope. Baret is next to him. Richard is across from Baret, heavy in his seat. Chorik is off-axis from the circle, not quite settled in. The bell is silent. The crew has time on the clock until they go back to the work.
+# --- COLOR ---
+# [] brass throat-button stamped with the Kesharat mark, worn smooth at the edges from constant brushing
+# [] hatband dry and dust-pale at the inside fold, no sweat ring despite the heat
+# [] tea pot spout cracked at the lip, sealed with a sliver of wax from a previous repair
+# [] Richard's collar unbuttoned just enough to show the grassland sunburn creeping up his neck
+# [] Baret's clan band folded under the cuff when he's not reaching, but always visible when he lifts the kettle
+# [] Chorik's boots polished to a flat sheen, no scuff marks from the scree, leather still stiff at the toe
+# [] Veran's belt buckle loose at the hinge, the brass worn down to a shallow groove from years of clinking
+# [] tea leaves at the bottom of the pot, brown and coarse, the kind that won't steep twice
+# [] Richard's hands resting on his knees, calluses thick where he grips the pig's tether rope
+# [] Baret's left thumb tracing the edge of his clan band every time he speaks, a habit not broken by the tea
+# [] Chorik's neck cloth folded with the same precision each time, no slant, no shift in the crease
+# [] wind gusts carry the scent of hot metal off the pylon, sharp and electric, then fades
+# [] Veran's fingers resting on the bell, not touching it, but always near, close enough to feel the vibration
+# [] tea cup rim chipped at the inner edge, the chip matching a groove in the pot's base where it sets
+# --- end ---
 
+FIXME(mundane): The rest circle is a flat patch of rock about ten meters from the tower. The kettle is on. Veran sits a little upslope. Baret is next to him. Richard is across from Baret, heavy in his seat. Chorik is off-axis from the circle, not quite settled in. The bell is silent. The crew has time on the clock until they go back to the work.
 choices:
 
 * Walk over to the foreman = He has the head of the rest circle and the teapot. [requires !tag signal_array.met_veran]
