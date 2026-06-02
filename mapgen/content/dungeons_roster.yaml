@@ -94,12 +94,12 @@ dungeons:
   # SCRUB (4 dungeons)
   # ============================================================================
 
-  - id: census_house
-    name: The Census House
+  - id: the_villa
+    name: The Villa
     biome: scrub
-    decal: census_house.png
-    folder: census_house
-    tier_range: [2, 2]
+    decal: the_villa.png
+    folder: the_villa
+    tier_range: [1, 1]
 
   - id: foundry
     name: The Foundry
@@ -115,11 +115,11 @@ dungeons:
     folder: relay_post
     tier_range: [2, 2]
 
-  - id: wellhead_station
-    name: Wellhead Station
+  - id: signal_array
+    name: The Signal Array
     biome: scrub
-    decal: wellhead_station.png
-    folder: wellhead_station
+    decal: signal_array.png
+    folder: signal_array
     tier_range: [2, 2]
 
   # ============================================================================

@@ -1,13 +1,13 @@
-Placeholder: The Census House
+Placeholder: The Villa
 [trigger none]
 
-A placeholder encounter for the Census House arc.
+A placeholder encounter for The Villa arc.
 
 choices:
 
-* Explore = Search the records
-    @if check combat correct:rush wrong:outlast {
-        You find something valuable.
+* Explore = Search the villa
+    @if check cunning correct:slip wrong:caught {
+        You find what you came for.
         +give_gold 25
         +finish_dungeon
     } @else {
@@ -18,7 +18,7 @@ choices:
 
 * Negotiate = Talk your way through
     @if check negotiation correct:reason wrong:threaten {
-        You find something valuable.
+        You find what you came for.
         +give_gold 25
         +finish_dungeon
     } @else {
@@ -28,5 +28,5 @@ choices:
     }
 
 * Depart = Leave this place behind
-    You depart Census House.
+    You depart The Villa.
     +flee_dungeon
