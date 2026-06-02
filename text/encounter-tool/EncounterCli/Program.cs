@@ -36,9 +36,10 @@ class Program
         Console.WriteLine("                  [--expand-url <url>] [--programs <dir>] [--author HPL|REH|CAS]");
         Console.WriteLine("                  [--scene mundane|action|horror|dread|wonder|revelation] [--candidates N]");
         Console.WriteLine("                  per-beat: FIXME(scene_type): e.g. FIXME(dread): or FIXME(horror):");
-        Console.WriteLine("  encounter colorize <arc-dir> [--qwen-url <url>] [--min-words N] [--per-beat N]");
-        Console.WriteLine("                  [--force] [--prompts-only]");
-        Console.WriteLine("                  Inject COLOR draft bullets under each FIXME beat in the arc.");
+        Console.WriteLine("  encounter colorize <arc-dir> [--config <path>] [--force] [--prompts-only]");
+        Console.WriteLine("                  [--no-filter] [--audit]");
+        Console.WriteLine("                  Generate a scene-level COLOR pool per .enc: GLM over-generates");
+        Console.WriteLine("                  (steered by a <name>.lens.md / _lens.md), Haiku culls the slop.");
         Console.WriteLine("  encounter factual <arc-dir> [--qwen-url <url>] [--force] [--prompts-only]");
         Console.WriteLine("                  Integrate FIXME + curated COLOR bullets into FACTUAL prose blocks.");
         Console.WriteLine("  encounter voice <arc-dir> [--qwen-url <url>] [--authors HPL,REH] [--scene <name>]");

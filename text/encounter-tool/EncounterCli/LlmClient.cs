@@ -83,7 +83,7 @@ public sealed class LlmClient
         return text;
     }
 
-    private static IConfiguration? LoadConfig(string? configPath)
+    internal static IConfiguration? LoadConfig(string? configPath)
     {
         if (!string.IsNullOrEmpty(configPath))
         {

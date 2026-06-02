@@ -1,384 +1,516 @@
-using System.Text.RegularExpressions;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace EncounterCli;
 
 /// <summary>
-/// Pipeline stage 1 of the arc-writer flow (see plans/arc_writer.md).
-/// Walks the .enc files in an arc directory, finds FIXME beats, and for each
-/// one prompts qwen for a handful of texture bullets that the human can curate.
-/// Bullets are injected as a `# --- COLOR ---` block immediately below the
-/// FIXME. Idempotent: a FIXME that already has an adjacent COLOR block is
-/// skipped unless --force.
+/// Pipeline stage 1 of the arc-writer flow. Generates "color" — scene texture as
+/// raw, atomic observables — for each `.enc` in an arc, as a single scene-level
+/// grab bag the author curates.
+///
+/// Two stages (the method validated in the ../colorize spike; see that repo's
+/// FINDINGS.md and the project_colorize_method memory):
+///   A. over-generate with the local GLM-4.5-Air (v3 prompt, thinking off, a
+///      small temperature sweep), steered FIRST by a per-scene lens;
+///   B. cull the pool with a cheap Haiku critic (cuts simile / argue / invention
+///      / anachronism / generic / ornate; light dedup only).
+/// The survivors are written as ONE `# --- COLOR ---` pool at the top of the
+/// file body, each line a `# []` curation checkbox the author toggles to `# [x]`.
+///
+/// Idempotent: a file that already carries a COLOR pool is skipped unless --force.
 /// </summary>
 static class ColorizeCommand
 {
+    // Generation system prompt — ported from ../colorize/prompts/v3.md. Built
+    // around one positive frame ("transcribe the recording") rather than a
+    // "don't"-list; the per-scene lens does the heavy steering at call time.
     const string SystemPrompt = """
-        You are a fact-elaboration pre-pass for an interactive fiction encounter system.
+        You generate **color** for an encounter in a horror RPG: short, raw fragments of
+        what a present, attentive character would notice while the scene happens. Your
+        lines are raw material for a later writer — never shown to the player as-is.
+        Plain and spare is correct, not lazy.
 
-        You receive a BRIEF (the author's high-level description of an arc), a LOCALE GUIDE (the biome's setting and tone), and a single BEAT (a sentence-level scene direction the author has written as a placeholder for prose). You propose discrete TEXTURE BULLETS that the author can pick from to enrich the beat. The author makes the final decision; you are a librarian, not a fiction writer.
+        # What color is
 
-        YOU ARE NOT WRITING PROSE. You extract and rearrange concrete detail from the brief and locale guide into bullets the author can choose from.
+        Color is the camera, not the plot. A beat says *a worker tightens a cable*;
+        color says *the metallic twang of a guy line as he torques it into place*.
 
-        OUTPUT FORMAT: each bullet on its own line, starting with '- ', one sentence each. No preamble, no section headers, no summary.
+        - Each fragment is **one observable instant** — something a lens or a microphone
+          could catch, held still in frame.
+        - You are **transcribing a recording, not describing it.** Write down the exact
+          thing that was caught, and stop. The moment you reach for what it's *like*, or
+          what it *means*, you have left the recording and started decorating it.
+        - **Surface only.** Show the outside of things; let the reader infer the rest.
+          Not "Baret misses home" — a hand returning to a worn clan band.
 
-        HARD RULES:
+        # The taste anchor — study these five (reference only, never output)
 
-        1. WIKI VOICE ONLY. Write like a wiki entry, not like fiction. Flat, factual, no stylization, no atmospheric flourishes. NO horror register. NO operatic phrasing. NO sensory crescendos. Good: "The brass cylinder on her desk is a Kesharat-issue cipher seal." Bad: "On the desk sits a brass cylinder, its surface etched with the cold geometries of empire."
+        Calibration, not output. **Do not reproduce any of them, in whole or in part.**
+        They happen to come from one scene — a half-built signal tower — and yours may
+        be nothing like it. Study their *altitude*, not their subject: concrete, spare,
+        a thing named once and let alone.
 
-        2. STATE, NOT EVENTS. Each bullet describes a STANDING CONDITION, something true while the beat holds. Use present tense and stative verbs. Never narrate the PC doing things. Good: "The pencil-stub on the desk is worn to a nub." Bad: "You notice the pencil-stub worn to a nub."
+        - the sound of the wind whistling through the metal structure
+        - the strange metal construction of the tower itself (the character is from a
+          renaissance-era world, so a signal tower is nearly magical to them)
+        - the oppressive heat and sun
+        - the strange way the workers had laid out their tools in orderly rows
+        - the metallic twang of a guy line as a worker torques it into place
 
-        3. GROUND IN THE SOURCE. Every concrete detail must trace to the BRIEF, the LOCALE GUIDE, or knowledge made canonical in the BEAT. Do not invent names, dates, numbers, props, or events. If the BRIEF gives a character's age range, you may use it; if it does not, do not invent one.
+        Notice what is *absent*: no "like," no "as if," no two things held up against
+        each other. Each is one thing, recorded once.
 
-        4. BULLETS MAY CONTRADICT EACH OTHER. The author picks. You may propose "the cup is empty" and "the cup is full of cold tea" for the same beat. Diversity is good. Cross-consistency is the author's job at pick-time.
+        # What to look at
 
-        5. ONE SENTENCE PER BULLET. No prose paragraphs. No multi-sentence bullets.
+        - **The place and the work carry the scene.** Most color is environment and
+          labor: weather, light, sound, the materials and motions of the work. People
+          are alive through observed work and posture — a body, a craft, an intention,
+          seen entirely from outside. Look at hands and tools, not biography.
+        - **Render only what is here.** Every fragment comes from something the scene
+          already gives you — a fact in the world or the beats — rendered as one
+          observable instant. You invent the *lens* (the exact pitch of the twang, which
+          detail you hold still on); you never invent the *subject*. If the scene hands
+          you no wrong thing, then you have no wrong thing: record the ordinary. **Do not
+          author events the beats do not contain** — no sound that wasn't there, nothing
+          that moves when nothing said it moved, no object the scene didn't place.
+        - **Could this be only this scene?** A good fragment could not be lifted into
+          some other encounter. Generic atmosphere — dust motes in a shaft of light, a
+          long shadow, a chill on the air — fits everywhere and so belongs nowhere.
+          Reach past the first stock image to the detail particular to *here*.
+        - **The character's frame is the lens.** They name what they see in their own
+          words: a pre-industrial world of steel, sail, and black powder. Where this
+          world's machinery runs past what they can name (rail, steam, signal, an even
+          light from no source), they read it as strange and near-magical and describe it
+          in *their* vocabulary, never ours — no "radio," "electricity," "ozone,"
+          "ventilation," "industrial."
 
-        6. NO EM-DASHES. Use commas, semicolons, or separate sentences.
+        # The four kinds of work — a palette, not a checklist
 
-        7. If the beat already names everything that matters and the source has nothing concrete to add, output zero bullets. Padding is worse than silence.
+        - **grounding** — ties the scene to the world and the character's frame
+        - **aliveness** — incidental sensory texture; the bulk of good color
+        - **dread** — a wrong, discordant, or straining detail, *only where the beats
+          already put one* (supernatural wrongness, or plain human strain — render
+          whichever the scene actually carries; do not import horror into a scene that
+          has none)
+        - **warmth** — a humanizing detail, where the scene reaches for it
+
+        Pitch each fragment to what its beat is doing. An opening establishes what
+        *normal* feels like, so the off-key register is a rare seam caught in passing,
+        not every line. A beat that already states something wrong wants color that
+        gives that wrong **observable flesh** — substantiate the trouble the scene named;
+        never manufacture a new one.
+
+        # The one discipline: the thing itself, nothing added
+
+        Name what is in frame and stop — a caption under a photograph. A photograph
+        makes no comparisons and argues nothing. Cut whatever is not the recording:
+
+        - **No comparison.** No "like," no "as if," no "as though." When you reach for
+          one, write instead the literal thing that made you reach — the actual shape,
+          sound, weight, motion.
+        - **No clause that explains the meaning.** The tells are *"despite,"
+          *"not X but Y,"* and any *because / so-that* reasoning about why a thing is
+          wrong.
+        - One honest perception word ("strange," "oppressive") is fine — it is the
+          character's plain read. A *clause* that reasons about an anomaly is not.
+
+        # Output
+
+        - **8 to 20 fragments**, one per line. Every fragment new — none of the five
+          reference lines, in whole or in part.
+        - One observable per line, plain: no comparison, no explaining clause.
+        - **Spread** across register (mostly aliveness/grounding; the off-key register a
+          minority, and only where a beat plants it; warmth where supported), anchor
+          (environment, objects, the work, the place, a single person — don't pile lines
+          on one person), and sense (sound, smell, touch, thermal — not sight alone).
+
+        Output only the fragments, one per line. No tags, no numbering, no preamble,
+        no commentary.
         """;
 
-    static readonly Regex FixmePattern = new(
-        @"^(\s*)FIXME(?:\([^)]*\))?:\s*(.*)$",
-        RegexOptions.Compiled);
+    // Post-filter rubric — ported from ../colorize/src/Program.cs. One cached Haiku
+    // call per scene reads the candidate pool + the scene's beats and keeps only
+    // clean atomic observables. Judges by discipline + beats, never any gold.
+    const string FilterRules = """
+        You are a strict quality filter for raw "color" candidates in a horror RPG.
+        Color = one observable instant, recorded plainly — what a lens or microphone
+        caught, surface only, no comparison, no explanation. Lines are raw material
+        for a later writer, never finished prose.
+
+        You are given the scene's facts (the beats) and a numbered pool of candidate
+        lines. KEEP only the clean ones; CUT the rest. When in doubt, cut.
+
+        CUT a line if it:
+        - contains a comparison or figure of speech — "like", "as if", "as though",
+          any simile or metaphor. (A bare sensory approximation of a smell/taste,
+          e.g. "a smell of iron", is fine; "like a wound" / "like a held breath" is not.)
+        - explains or argues meaning — "despite", "not X but Y", or any because/so-that
+          clause reasoning about why a thing is wrong.
+        - names something NOT present in the beats — an invented object, sound, motion,
+          or event. Color renders what the scene gives; it does not author new facts.
+        - uses words outside a renaissance-era person's vocabulary — "radio",
+          "electricity", "ozone", "ventilation", "industrial", "condensation",
+          "antenna", and the like. (The character names tech in their own plain words.)
+        - is generic atmosphere that could sit in any scene — "dust motes in a shaft of
+          light", "a long shadow", "a chill in the air". Color must be particular to THIS scene.
+        - is over-written or ornate, burying the observable.
+
+        Work in two passes:
+        1. Cut every line that breaks a rule above. A banned word ("like", "ventilation",
+           "industrial", etc.) cuts the whole line even if the rest is good — no exceptions,
+           check every line.
+        2. Light dedup only: cut a line as "dup" ONLY when it is a near-identical restatement
+           of another (same observable, trivially reworded). KEEP genuine variations on a
+           theme — a different angle, sense, or phrasing — they are useful options for the
+           human curator to choose between or pair off. When unsure, keep both.
+
+        Do not cap the count and do not thin for variety — keep every clean line. This is a
+        grab bag for a human to curate, not a finished set.
+
+        "kept" = every clean line that survives. "cut" = the rest, each with its reason.
+        Return ONLY JSON, no prose:
+        {"kept":["<line verbatim>", ...],
+         "cut":[{"line":"<verbatim>","reason":"simile|argue|invention|anachronism|generic|ornate|dup"}, ...]}
+        """;
 
     public static async Task<int> RunAsync(string[] args)
     {
-        string? arcDir = null;
-        var qwenUrl = "http://imp:8080";
-        var minWords = 40;
-        var perBeat = 5;
-        var force = false;
-        var promptsOnly = false;
+        string? arcDir = null, configPath = null;
+        bool force = false, promptsOnly = false, noFilter = false, audit = false;
 
         for (int i = 0; i < args.Length; i++)
         {
-            if (args[i] == "--qwen-url" && i + 1 < args.Length) qwenUrl = args[++i];
-            else if (args[i] == "--min-words" && i + 1 < args.Length) minWords = int.Parse(args[++i]);
-            else if (args[i] == "--per-beat" && i + 1 < args.Length) perBeat = int.Parse(args[++i]);
+            if (args[i] == "--config" && i + 1 < args.Length) configPath = args[++i];
             else if (args[i] == "--force") force = true;
             else if (args[i] == "--prompts-only") promptsOnly = true;
+            else if (args[i] == "--no-filter") noFilter = true;
+            else if (args[i] == "--audit") audit = true;
             else if (!args[i].StartsWith('-')) arcDir = args[i];
         }
 
-        if (arcDir == null)
-        {
-            Console.Error.WriteLine("colorize requires <arc-dir>.");
-            return 1;
-        }
-
+        if (arcDir == null) { Console.Error.WriteLine("colorize requires <arc-dir>."); return 1; }
         arcDir = Path.GetFullPath(arcDir);
-        if (!Directory.Exists(arcDir))
+        if (!Directory.Exists(arcDir)) { Console.Error.WriteLine($"Directory not found: {arcDir}"); return 1; }
+
+        var facts = LoadFacts(arcDir);
+        if (string.IsNullOrWhiteSpace(facts))
         {
-            Console.Error.WriteLine($"Directory not found: {arcDir}");
+            Console.Error.WriteLine($"No bibles or brief (.md files) found in {arcDir}");
+            return 1;
+        }
+        var localeGuide = DraftBlocks.LoadLocaleGuide(DraftBlocks.InferBiome(arcDir));
+
+        var encFiles = Directory.GetFiles(arcDir, "*.enc")
+            .Where(f => !Path.GetFileName(f).StartsWith('_'))   // skip _Backup.enc copies
+            .OrderBy(f => f).ToList();
+        if (encFiles.Count == 0) { Console.Error.WriteLine($"No .enc files in {arcDir}"); return 1; }
+
+        // prompts-only needs no model or config; just assemble and print.
+        if (promptsOnly)
+        {
+            foreach (var file in encFiles)
+            {
+                Console.WriteLine($"\n===== {Path.GetFileName(file)} =====\n");
+                Console.WriteLine(BuildUserMessage(file, facts, localeGuide));
+            }
+            return 0;
+        }
+
+        var cfg = LoadConfig(configPath);
+        if (cfg == null) return 1;
+        if (cfg.Local == null)
+        {
+            Console.Error.WriteLine("No 'LocalLlm' provider in appsettings.json ChatProviders (need Endpoint + Model for GLM).");
             return 1;
         }
 
-        var briefFiles = Directory.GetFiles(arcDir, "*.md").OrderBy(f => f).ToList();
-        if (briefFiles.Count == 0)
-        {
-            Console.Error.WriteLine($"No .md brief found in {arcDir}");
-            return 1;
-        }
-        var brief = string.Join("\n\n---\n\n",
-            briefFiles.Select(f => $"### {Path.GetFileName(f)}\n\n{File.ReadAllText(f)}"));
+        var glm = new GlmClient(cfg.Local.Endpoint!, cfg.Local.Model, cfg.Local.ApiKey ?? "local", cfg.TimeoutSeconds);
+        using var anthropicHttp = new HttpClient { Timeout = TimeSpan.FromSeconds(120) };
+        bool canFilter = !noFilter && cfg.Anthropic?.ApiKey is { Length: > 0 } k && !k.Contains("your-");
+        if (!noFilter && !canFilter)
+            Console.WriteLine("(no Anthropic key — writing the raw pool unfiltered; set the 'Anthropic' provider key to enable the Haiku cull)\n");
 
-        var biome = InferBiome(arcDir);
-        var localeGuide = LoadLocaleGuide(biome);
-        if (localeGuide == null)
-        {
-            Console.Error.WriteLine($"No locale guide found for biome '{biome}' (looked under text/encounters/{biome}/tier*/locale_guide.txt)");
-            return 1;
-        }
-
-        var encFiles = Directory.GetFiles(arcDir, "*.enc").OrderBy(f => f).ToList();
-        if (encFiles.Count == 0)
-        {
-            Console.Error.WriteLine($"No .enc files in {arcDir}");
-            return 1;
-        }
-
-        QwenClient? client = promptsOnly ? null : new QwenClient(qwenUrl);
-
-        int totalColorized = 0, totalSkipped = 0, totalSilent = 0;
+        int wrote = 0, skipped = 0;
         foreach (var file in encFiles)
         {
-            var rel = Path.GetRelativePath(arcDir, file);
-            Console.WriteLine($"{rel}:");
-            var (colorized, skipped, silent) = await ProcessFileAsync(
-                file, brief, localeGuide, client, minWords, perBeat, force, promptsOnly);
-            totalColorized += colorized;
-            totalSkipped += skipped;
-            totalSilent += silent;
+            var name = Path.GetFileName(file);
+            var raw = File.ReadAllText(file).Replace("\r\n", "\n");
+            if (!force && raw.Contains("# --- COLOR"))
+            {
+                Console.WriteLine($"{name}: already has a COLOR pool, skip (use --force to regenerate)");
+                skipped++;
+                continue;
+            }
+
+            Console.Write($"{name}: generating ({cfg.Temperatures.Length}×{cfg.SamplesPerTemp} samples)... ");
+            var pool = await GeneratePool(glm, file, facts, localeGuide, cfg);
+            Console.Write($"{pool.Count} candidates → ");
+
+            List<string> kept = pool;
+            List<(string line, string reason)> cut = new();
+            if (canFilter)
+            {
+                var beats = StripDraftComments(raw);
+                (kept, cut) = await FilterPool(anthropicHttp, cfg.Anthropic!, beats, pool);
+            }
+            Console.WriteLine($"{kept.Count} kept{(cut.Count > 0 ? $" ({cut.Count} cut)" : "")}");
+            if (audit)
+                foreach (var c in cut) Console.WriteLine($"    cut [{c.reason}] {c.line}");
+
+            if (kept.Count == 0) { skipped++; continue; }
+            WritePool(file, kept, force);
+            wrote++;
         }
 
-        Console.WriteLine();
-        Console.WriteLine($"Colorized {totalColorized} beat(s); skipped {totalSkipped} (already-done or below min-words); {totalSilent} beat(s) returned no bullets.");
+        Console.WriteLine($"\nWrote {wrote} COLOR pool(s); skipped {skipped}.");
         return 0;
     }
 
-    static async Task<(int colorized, int skipped, int silent)> ProcessFileAsync(
-        string file, string brief, string localeGuide, QwenClient? client,
-        int minWords, int perBeat, bool force, bool promptsOnly)
+    // ── Stage A: over-generate with GLM across a temperature sweep ──────────────
+    static async Task<List<string>> GeneratePool(
+        GlmClient glm, string encFile, string facts, string? localeGuide, Cfg cfg)
     {
-        var content = File.ReadAllText(file).Replace("\r\n", "\n").Replace("\r", "\n");
-        var lines = content.Split('\n').ToList();
-        var title = lines.Count > 0 ? lines[0].Trim() : Path.GetFileNameWithoutExtension(file);
+        var user = BuildUserMessage(encFile, facts, localeGuide);
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var pool = new List<string>();
+        // Serial: this box shares no KV cache across slots, so concurrent cold
+        // prompts each re-eval the whole (slow) prefix. Serial keeps the cache warm.
+        foreach (var temp in cfg.Temperatures)
+            for (int s = 0; s < cfg.SamplesPerTemp; s++)
+            {
+                string text;
+                try
+                {
+                    text = await glm.CompleteAsync(SystemPrompt, user, temp, cfg.TopP, cfg.MinP,
+                        cfg.MaxOutputTokens, cfg.EnableThinking);
+                }
+                catch (Exception ex) { Console.Error.WriteLine($"\n  GLM error (t{temp}): {ex.Message}"); continue; }
 
-        var fixmes = new List<int>();
-        for (int i = 0; i < lines.Count; i++)
-            if (FixmePattern.IsMatch(lines[i]))
-                fixmes.Add(i);
+                foreach (var frag in ExtractFragments(text))
+                    if (seen.Add(frag)) pool.Add(frag);
+            }
+        return pool;
+    }
 
-        if (fixmes.Count == 0)
+    // ── Stage B: cull the pool with a cached Haiku call ─────────────────────────
+    static async Task<(List<string> kept, List<(string, string)> cut)> FilterPool(
+        HttpClient http, Provider anthropic, string beats, List<string> pool)
+    {
+        var numbered = string.Join("\n", pool.Select((c, i) => $"{i + 1}. {c}"));
+        var user = $"# The scene's facts (the beats)\n\n{beats}\n\n# Candidate color lines\n\n{numbered}";
+        var body = new
         {
-            Console.WriteLine("  (no FIXME beats)");
-            return (0, 0, 0);
+            model = anthropic.Model,
+            max_tokens = 4096,
+            system = new object[] { new { type = "text", text = FilterRules, cache_control = new { type = "ephemeral" } } },
+            messages = new object[] { new { role = "user", content = user } },
+        };
+        using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.anthropic.com/v1/messages")
+        { Content = JsonContent.Create(body) };
+        req.Headers.Add("x-api-key", anthropic.ApiKey);
+        req.Headers.Add("anthropic-version", "2023-06-01");
+
+        var resp = await http.SendAsync(req);
+        var json = await resp.Content.ReadAsStringAsync();
+        if (!resp.IsSuccessStatusCode)
+        {
+            Console.Error.WriteLine($"\n  Anthropic HTTP {(int)resp.StatusCode} — keeping raw pool: {json[..Math.Min(json.Length, 400)]}");
+            return (pool, new());
         }
 
-        int colorized = 0, skipped = 0, silent = 0;
+        using var doc = JsonDocument.Parse(json);
+        var content = doc.RootElement.GetProperty("content")[0].GetProperty("text").GetString() ?? "";
+        int a = content.IndexOf('{'), b = content.LastIndexOf('}');
+        var text = a >= 0 && b > a ? content[a..(b + 1)] : content;
 
-        // Reverse order: later insertions don't shift earlier indices
-        for (int idx = fixmes.Count - 1; idx >= 0; idx--)
+        var kept = new List<string>();
+        var cut = new List<(string, string)>();
+        try
         {
-            var li = fixmes[idx];
-            var match = FixmePattern.Match(lines[li]);
-            var indent = match.Groups[1].Value;
-            var body = match.Groups[2].Value.Trim();
-            var words = body.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
-
-            if (words < minWords)
-            {
-                skipped++;
-                continue;
-            }
-
-            if (!force && HasAdjacentColorBlock(lines, li))
-            {
-                skipped++;
-                continue;
-            }
-
-            var userPrompt = BuildPrompt(brief, localeGuide, title, lines, li, body, perBeat);
-
-            if (promptsOnly)
-            {
-                Console.WriteLine($"  L{li + 1}: prompt for '{Truncate(body, 50)}'");
-                Console.WriteLine("  ---");
-                foreach (var ln in userPrompt.Split('\n'))
-                    Console.WriteLine("  " + ln);
-                Console.WriteLine("  ---");
-                continue;
-            }
-
-            string? raw;
-            try
-            {
-                Console.Write($"  L{li + 1}: '{Truncate(body, 50)}'... ");
-                raw = await client!.CompleteAsync(SystemPrompt, userPrompt, temperature: 0.6, maxTokens: 1200);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ERROR: {ex.Message}");
-                continue;
-            }
-
-            var bullets = ExtractBullets(raw ?? "");
-            if (bullets.Count == 0)
-            {
-                Console.WriteLine("0 bullets (silent)");
-                silent++;
-                continue;
-            }
-            Console.WriteLine($"{bullets.Count} bullets");
-
-            var block = BuildColorBlock(indent, bullets);
-            lines.InsertRange(li + 1, block);
-            colorized++;
+            using var r = JsonDocument.Parse(text);
+            if (r.RootElement.TryGetProperty("kept", out var kk))
+                foreach (var e in kk.EnumerateArray()) kept.Add(e.GetString() ?? "");
+            if (r.RootElement.TryGetProperty("cut", out var cc))
+                foreach (var e in cc.EnumerateArray())
+                    cut.Add((e.GetProperty("line").GetString() ?? "",
+                             e.TryGetProperty("reason", out var rr) ? rr.GetString() ?? "" : ""));
         }
-
-        if (colorized > 0 && !promptsOnly)
+        catch (JsonException)
         {
-            var backup = Path.Combine(Path.GetDirectoryName(file)!, "_" + Path.GetFileName(file));
-            File.Copy(file, backup, overwrite: true);
-            File.WriteAllText(file, string.Join("\n", lines));
-            Console.WriteLine($"  → wrote {colorized} block(s); backup at {Path.GetFileName(backup)}");
+            Console.Error.WriteLine("\n  filter returned unparseable JSON — keeping raw pool");
+            return (pool, new());
         }
+        kept.RemoveAll(string.IsNullOrWhiteSpace);
+        return (kept, cut);
+    }
 
-        return (colorized, skipped, silent);
+    // ── Prompt assembly ─────────────────────────────────────────────────────────
+    static string BuildUserMessage(string encFile, string facts, string? localeGuide)
+    {
+        var sb = new StringBuilder();
+        // The lens sits first and loudest: whose eye, what to notice, in what key.
+        // It is the highest-leverage steer (FINDINGS §3.4) — steering, not background.
+        if (FindLens(encFile) is { } lens)
+        {
+            sb.AppendLine("# The lens — how the PC sees this scene\n");
+            sb.AppendLine("Read this first. It governs *whose eye* you look through, *what* is worth noticing here, and *in what key* — it outranks habit. Render facts the way this lens would see them.\n");
+            sb.AppendLine(lens + "\n");
+        }
+        sb.AppendLine("# World & arc facts (the ground truth — render from these, invent no new subjects)\n");
+        sb.AppendLine(facts + "\n");
+        if (!string.IsNullOrWhiteSpace(localeGuide))
+        {
+            sb.AppendLine("# Locale guide (the biome's palette — fair game when grounding a fragment)\n");
+            sb.AppendLine(localeGuide + "\n");
+        }
+        sb.AppendLine("# The encounter\n");
+        sb.AppendLine(StripDraftComments(File.ReadAllText(encFile).Replace("\r\n", "\n")));
+        sb.AppendLine("\n# Task\n");
+        sb.AppendLine("Produce the color candidates for this whole encounter now, following the rules above and through the lens. Output only the fragments, one per line.");
+        return sb.ToString();
     }
 
     /// <summary>
-    /// True if a `# --- COLOR ...` line appears between the FIXME and the next
-    /// non-comment, non-blank line.
+    /// A scene's lens: a per-scene "&lt;name&gt;.lens.md" sidecar (preferred) or an
+    /// arc-wide "_lens.md" peer beside the encounter. Null if neither exists.
     /// </summary>
-    static bool HasAdjacentColorBlock(List<string> lines, int fixmeIndex)
+    static string? FindLens(string encFile)
     {
-        for (int i = fixmeIndex + 1; i < lines.Count; i++)
-        {
-            var trimmed = lines[i].TrimStart();
-            if (string.IsNullOrEmpty(trimmed)) continue;
-            if (!trimmed.StartsWith('#')) return false;
-            if (trimmed.StartsWith("# --- COLOR", StringComparison.OrdinalIgnoreCase))
-                return true;
-        }
-        return false;
-    }
-
-    static string BuildPrompt(
-        string brief, string localeGuide, string title,
-        List<string> lines, int fixmeIndex, string body, int perBeat)
-    {
-        var context = DescribeBeatContext(lines, fixmeIndex);
-        var register = ExtractRegister(lines[fixmeIndex]) ?? "(unspecified)";
-        var low = Math.Max(2, perBeat - 1);
-        var high = perBeat + 1;
-        return $"""
-            BRIEF (arc-specific source — author's intent and content):
-
-            {brief}
-
-            ---
-
-            LOCALE GUIDE (biome-wide setting, palette, characters, sensory register):
-
-            {localeGuide}
-
-            ---
-
-            ENCOUNTER: {title}
-            LOCATION IN FILE: {context}
-            BEAT REGISTER: {register}
-
-            BEAT (the FIXME beat to colorize):
-            {body}
-
-            Propose {low}-{high} texture bullets now. Ground every concrete detail in the BRIEF or LOCALE GUIDE. Wiki voice, state-not-events, may contradict each other. Output bullets only, one per line, prefixed with '- '.
-            """;
+        var sidecar = Path.ChangeExtension(encFile, ".lens.md");
+        if (File.Exists(sidecar)) return File.ReadAllText(sidecar).Trim();
+        var peer = Path.Combine(Path.GetDirectoryName(encFile)!, "_lens.md");
+        if (File.Exists(peer)) return File.ReadAllText(peer).Trim();
+        return null;
     }
 
     /// <summary>
-    /// Describe where in the encounter file this FIXME sits, so the prompt
-    /// can give the model useful framing without forcing the model to parse
-    /// the whole file.
+    /// All arc .md files (bibles + brief) concatenated, EXCLUDING lens files —
+    /// the lens is injected separately and louder.
     /// </summary>
-    static string DescribeBeatContext(List<string> lines, int fixmeIndex)
+    static string LoadFacts(string arcDir)
     {
-        string? choice = null;
-        string? branch = null;
-        int depth = 0;
-        for (int i = fixmeIndex - 1; i >= 0; i--)
-        {
-            var trimmed = lines[i].TrimStart();
-            if (trimmed.StartsWith('#')) continue;
-            if (trimmed.StartsWith('}')) { depth++; continue; }
-            if (trimmed.EndsWith('{') && depth > 0) { depth--; continue; }
-
-            if (branch == null)
-            {
-                if (trimmed.StartsWith("@if ", StringComparison.Ordinal))
-                    branch = trimmed[4..].TrimEnd('{', ' ', '\t');
-                else if (trimmed.StartsWith("} @elif ", StringComparison.Ordinal))
-                    branch = trimmed[8..].TrimEnd('{', ' ', '\t');
-                else if (trimmed.StartsWith("@elif ", StringComparison.Ordinal))
-                    branch = trimmed[6..].TrimEnd('{', ' ', '\t');
-                else if (trimmed.StartsWith("} @else", StringComparison.Ordinal) || trimmed.StartsWith("@else", StringComparison.Ordinal))
-                    branch = "else";
-            }
-
-            if (trimmed.StartsWith("* ", StringComparison.Ordinal))
-            {
-                var afterStar = trimmed[2..];
-                var eq = afterStar.IndexOf('=');
-                choice = (eq > 0 ? afterStar[..eq] : afterStar).Trim();
-                break;
-            }
-            if (trimmed.Equals("choices:", StringComparison.Ordinal)) break;
-        }
-
-        if (choice == null) return "encounter body (before the choices block)";
-        if (branch == null) return $"outcome of choice \"{choice}\"";
-        return $"outcome of choice \"{choice}\", branch: {branch}";
+        var files = Directory.GetFiles(arcDir, "*.md")
+            .Where(f => !f.EndsWith(".lens.md", StringComparison.OrdinalIgnoreCase))
+            .Where(f => !Path.GetFileName(f).Equals("_lens.md", StringComparison.OrdinalIgnoreCase))
+            .OrderBy(f => f).ToList();
+        return string.Join("\n\n---\n\n",
+            files.Select(f => $"## {Path.GetFileName(f)}\n\n{File.ReadAllText(f)}"));
     }
 
-    static string? ExtractRegister(string fixmeLine)
-    {
-        var m = Regex.Match(fixmeLine, @"FIXME\(([^)]+)\):");
-        return m.Success ? m.Groups[1].Value.Trim() : null;
-    }
-
-    static List<string> ExtractBullets(string output)
+    // ── Output parsing + writeback ───────────────────────────────────────────────
+    static List<string> ExtractFragments(string output)
     {
         if (string.IsNullOrWhiteSpace(output)) return [];
         var text = output.Trim();
-
         if (text.StartsWith("```"))
         {
-            var firstNl = text.IndexOf('\n');
-            if (firstNl > 0) text = text[(firstNl + 1)..];
+            var nl = text.IndexOf('\n');
+            if (nl > 0) text = text[(nl + 1)..];
+            if (text.EndsWith("```")) text = text[..^3];
         }
-        if (text.EndsWith("```"))
-            text = text[..^3];
-
-        var bullets = new List<string>();
+        var frags = new List<string>();
         foreach (var line in text.Split('\n'))
         {
-            var trim = line.TrimStart();
-            string? bullet = null;
-            if (trim.StartsWith("- ", StringComparison.Ordinal)) bullet = trim[2..].Trim();
-            else if (trim.StartsWith("* ", StringComparison.Ordinal)) bullet = trim[2..].Trim();
-            else if (trim.StartsWith("• ", StringComparison.Ordinal)) bullet = trim[2..].Trim();
-            if (!string.IsNullOrEmpty(bullet)) bullets.Add(bullet);
+            var t = line.Trim();
+            if (t.Length == 0) continue;
+            // strip a leading bullet or "N." numbering the model may add
+            t = t.TrimStart('-', '*', '•', ' ');
+            int dot = t.IndexOf('.');
+            if (dot > 0 && dot <= 3 && t[..dot].All(char.IsDigit)) t = t[(dot + 1)..].Trim();
+            if (t.Length > 0) frags.Add(t);
         }
-        return bullets;
-    }
-
-    static List<string> BuildColorBlock(string indent, List<string> bullets)
-    {
-        var result = new List<string> { indent + "# --- COLOR ---" };
-        foreach (var b in bullets)
-            result.Add(indent + "# " + b);
-        result.Add(indent + "# --- end ---");
-        return result;
-    }
-
-    static string Truncate(string s, int max) =>
-        s.Length > max ? s[..max] + "..." : s;
-
-    static string InferBiome(string arcDir)
-    {
-        var parts = arcDir.Split(Path.DirectorySeparatorChar);
-        for (int i = 0; i < parts.Length - 1; i++)
-            if (parts[i].Equals("arcs", StringComparison.OrdinalIgnoreCase))
-                return parts[i + 1];
-        return "";
+        return frags;
     }
 
     /// <summary>
-    /// Concatenate every tier's locale_guide.txt for the given biome.
-    /// Searches up from cwd for text/encounters/&lt;biome&gt;/.
+    /// Insert ONE scene-level COLOR pool at the top of the file body (after the
+    /// title and any [attr] / leading comment lines). Each kept line is a `# []`
+    /// curation checkbox the author toggles to `# [x]`. On --force, an existing
+    /// pool is removed first. Writes a `_&lt;file&gt;` backup (gitignored).
     /// </summary>
-    static string? LoadLocaleGuide(string biome)
+    static void WritePool(string file, List<string> kept, bool force)
     {
-        if (string.IsNullOrEmpty(biome)) return null;
-        var dir = Directory.GetCurrentDirectory();
-        while (dir != null)
+        var lines = File.ReadAllText(file).Replace("\r\n", "\n").Split('\n').ToList();
+        if (force) RemoveColorPool(lines);
+
+        var block = new List<string> { "# --- COLOR ---" };
+        block.AddRange(kept.Select(k => $"# [] {k}"));
+        block.Add("# --- end ---");
+        block.Add("");
+
+        lines.InsertRange(BodyStart(lines), block);
+
+        var backup = Path.Combine(Path.GetDirectoryName(file)!, "_" + Path.GetFileName(file));
+        File.Copy(file, backup, overwrite: true);
+        File.WriteAllText(file, string.Join("\n", lines));
+    }
+
+    /// <summary>First body line: past the title (line 0), any leading `[attr]`
+    /// lines, and any existing leading `#` comment lines.</summary>
+    static int BodyStart(List<string> lines)
+    {
+        int i = 1;
+        for (; i < lines.Count; i++)
         {
-            var biomeDir = Path.Combine(dir, "text", "encounters", biome);
-            if (Directory.Exists(biomeDir))
-            {
-                var guides = new List<string>();
-                foreach (var sub in Directory.GetDirectories(biomeDir).OrderBy(p => p))
-                {
-                    var lg = Path.Combine(sub, "locale_guide.txt");
-                    if (File.Exists(lg))
-                        guides.Add($"### {Path.GetFileName(sub)}\n\n{File.ReadAllText(lg)}");
-                }
-                if (guides.Count > 0)
-                    return string.Join("\n\n---\n\n", guides);
-            }
-            dir = Path.GetDirectoryName(dir);
+            var t = lines[i].Trim();
+            if (t.Length == 0) continue;
+            if (t.StartsWith('[') && t.EndsWith(']')) continue;
+            if (t.StartsWith('#')) continue;
+            break;
         }
-        return null;
+        return i;
+    }
+
+    static void RemoveColorPool(List<string> lines)
+    {
+        for (int i = 0; i < lines.Count; i++)
+        {
+            if (!lines[i].TrimStart().StartsWith("# --- COLOR", StringComparison.OrdinalIgnoreCase)) continue;
+            int end = i;
+            while (end < lines.Count && !lines[end].TrimStart().StartsWith("# --- end", StringComparison.OrdinalIgnoreCase)) end++;
+            if (end < lines.Count) end++;                       // include the closing marker
+            while (end < lines.Count && lines[end].Trim().Length == 0) end++;  // and trailing blank
+            lines.RemoveRange(i, end - i);
+            return;
+        }
+    }
+
+    /// <summary>Drop pipeline draft-comment (`#`) lines so the model sees clean beats.</summary>
+    static string StripDraftComments(string enc) =>
+        string.Join("\n", enc.Replace("\r\n", "\n").Split('\n')
+            .Where(l => !l.TrimStart().StartsWith('#'))).Trim();
+
+    // ── Config ───────────────────────────────────────────────────────────────────
+    record Provider(string Name, string? Endpoint, string? ApiKey, string Model);
+
+    record Cfg(Provider? Local, Provider? Anthropic,
+        double[] Temperatures, int SamplesPerTemp, double TopP, double MinP,
+        int MaxOutputTokens, bool EnableThinking, int TimeoutSeconds);
+
+    static Cfg? LoadConfig(string? configPath)
+    {
+        var config = LlmClient.LoadConfig(configPath);
+        if (config == null) return null;
+
+        var providers = config.GetSection("ChatProviders").GetChildren().ToList();
+        Provider? P(string name)
+        {
+            var s = providers.FirstOrDefault(c => string.Equals(c["Name"]?.Trim(), name, StringComparison.OrdinalIgnoreCase));
+            return s == null ? null : new Provider(name, s["Endpoint"]?.Trim(), s["ApiKey"]?.Trim(), s["Model"]?.Trim() ?? "");
+        }
+
+        var cs = config.GetSection("Colorize");
+        return new Cfg(
+            Local: P("LocalLlm"),
+            Anthropic: P("Anthropic"),
+            Temperatures: cs.GetSection("Temperatures").Get<double[]>() ?? [0.4, 0.7],
+            SamplesPerTemp: cs.GetValue("SamplesPerTemp", 2),
+            TopP: cs.GetValue("TopP", 1.0),
+            MinP: cs.GetValue("MinP", 0.01),
+            MaxOutputTokens: cs.GetValue("MaxOutputTokens", 1200),
+            EnableThinking: cs.GetValue("EnableThinking", false),
+            TimeoutSeconds: cs.GetValue("TimeoutSeconds", 600));
     }
 }
