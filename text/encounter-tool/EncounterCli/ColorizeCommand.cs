@@ -8,25 +8,30 @@ namespace EncounterCli;
 
 /// <summary>
 /// Pipeline stage 1 of the arc-writer flow. Generates "color" — scene texture as
-/// raw, atomic observables — for each `.enc` in an arc, as a single scene-level
-/// grab bag the author curates.
+/// raw, atomic observables — for each `.enc` in an arc, as a scene-level pool the
+/// author curates.
 ///
-/// Two stages (the method validated in the ../colorize spike; see that repo's
-/// FINDINGS.md and the project_colorize_method memory):
-///   A. over-generate with the local GLM-4.5-Air (v3 prompt, thinking off, a
-///      small temperature sweep), steered FIRST by a per-scene lens;
-///   B. cull the pool with a cheap Haiku critic (cuts simile / argue / invention
-///      / anachronism / generic / ornate; light dedup only).
-/// The survivors are written as ONE `# --- COLOR ---` pool at the top of the
-/// file body, each line a `# []` curation checkbox the author toggles to `# [x]`.
+/// Strategy ported from the ../colorize spike's drain_loop.py:
+///   A. DRAIN — GLM generates in small batches (5/turn, low temp), fed the
+///      already-accepted set each turn so it doesn't re-derive lines. GLM front-
+///      loads its strongest material, so a hard turn-cap (~4 turns / ~20 lines)
+///      clips the pool before quality degrades into rephrasings and bland
+///      inventions — GLM will NOT self-terminate, so it's bounded from outside.
+///      A cheap BM25 cull drops lexical near-dups within the loop.
+///   B. END-PASS — one Haiku call CUTS (load-bearing invention / explanation /
+///      generic / ornate — leaning toward keep; it does NOT cut similes or
+///      in-world anachronisms) and then RANKS survivors best-first, so the author
+///      reads top-down and stops early. The rank pass is the main event.
+/// Survivors are written as ONE `# --- COLOR ---` pool at the top of the file,
+/// ranked, each line a `# []` curation checkbox the author toggles to `# [x]`.
 ///
 /// Idempotent: a file that already carries a COLOR pool is skipped unless --force.
 /// </summary>
 static class ColorizeCommand
 {
-    // Generation system prompt — ported from ../colorize/prompts/v3.md. Built
-    // around one positive frame ("transcribe the recording") rather than a
-    // "don't"-list; the per-scene lens does the heavy steering at call time.
+    // Generation system prompt — ../colorize/prompts/v3.md. The per-turn user
+    // message overrides its "8-20" count ("ignore any count target"); the drain
+    // loop controls volume from outside via the turn-cap.
     const string SystemPrompt = """
         You generate **color** for an encounter in a horror RPG: short, raw fragments of
         what a present, attentive character would notice while the scene happens. Your
@@ -119,8 +124,6 @@ static class ColorizeCommand
 
         # Output
 
-        - **8 to 20 fragments**, one per line. Every fragment new — none of the five
-          reference lines, in whole or in part.
         - One observable per line, plain: no comparison, no explaining clause.
         - **Spread** across register (mostly aliveness/grounding; the off-key register a
           minority, and only where a beat plants it; warmth where supported), anchor
@@ -131,56 +134,52 @@ static class ColorizeCommand
         no commentary.
         """;
 
-    // Post-filter rubric — ported from ../colorize/src/Program.cs. One cached Haiku
-    // call per scene reads the candidate pool + the scene's beats and keeps only
-    // clean atomic observables. Judges by discipline + beats, never any gold.
-    const string FilterRules = """
-        You are a strict quality filter for raw "color" candidates in a horror RPG.
-        Color = one observable instant, recorded plainly — what a lens or microphone
-        caught, surface only, no comparison, no explanation. Lines are raw material
-        for a later writer, never finished prose.
+    // End-pass rubric — ported from ../colorize/src/drain_loop.py END_RUBRIC. Cuts
+    // sparingly (load-bearing invention / explanation / generic / ornate; leans
+    // toward KEEP; does NOT cut similes or in-world anachronisms), then RANKS the
+    // survivors best-first. The ranking is the main work; the cull is secondary.
+    const string EndRubric = """
+        You are the final critic for raw "color" candidates in a horror RPG. Color is
+        one observable instant, recorded plainly — what a lens or microphone caught, surface only.
+        Lines are raw material a later writer will shape; they are never finished prose.
 
-        You are given the scene's facts (the beats) and a numbered pool of candidate
-        lines. KEEP only the clean ones; CUT the rest. When in doubt, cut.
+        You get the scene's beats and a candidate pool. Do TWO things: CUT the bad lines, then RANK
+        what survives.
 
-        CUT a line if it:
-        - contains a comparison or figure of speech — "like", "as if", "as though",
-          any simile or metaphor. (A bare sensory approximation of a smell/taste,
-          e.g. "a smell of iron", is fine; "like a wound" / "like a held breath" is not.)
-        - explains or argues meaning — "despite", "not X but Y", or any because/so-that
-          clause reasoning about why a thing is wrong.
-        - names something NOT present in the beats or the recurring arc color — an
-          invented object, sound, motion, or event. Color renders what the scene (or
-          the arc's canonical recurring color) gives; it does not author new facts.
-        - uses words outside a renaissance-era person's vocabulary — "radio",
-          "electricity", "ozone", "ventilation", "industrial", "condensation",
-          "antenna", and the like. (The character names tech in their own plain words.)
-        - is generic atmosphere that could sit in any scene — "dust motes in a shaft of
-          light", "a long shadow", "a chill in the air". Color must be particular to THIS scene.
-        - is over-written or ornate, burying the observable.
+        CUT a line only if it:
+        - LOAD-BEARING INVENTION: introduces a new object, agent, or event that a reader would stop
+          and ask about — "whose chisel is this?", "why is there a body here?", "what is moving?".
+          These drag a causal story a color pop can't carry.
+          *** Lean toward KEEPING. *** Inert atmosphere is GOOD even when the beats did not name it —
+          a drip of water, a vein of quartz, a cold draught, a distant unseen sound that stays a
+          sensation (not a named creature) assert no new fact to explain, and deepen the register.
+          The test is not "is it in the beats" but "would a reader stop to ask a question." When in
+          any doubt whether a line is load-bearing or merely atmospheric, KEEP it.
+        - EXPLANATION / TELLING: "despite", "not X but Y", any because/so-that clause, or a
+          parenthetical that explains the meaning — anything that narrates what a thing *means* or a
+          person's motive/interior rather than recording the observable surface.
+        - GENERIC: atmosphere that could sit in any scene at all (dust motes in a shaft of light, a
+          long shadow). Color must be particular to THIS scene.
+        - ORNATE: over-written, the observable buried in decoration.
 
-        Work in two passes:
-        1. Cut every line that breaks a rule above. A banned word ("like", "ventilation",
-           "industrial", etc.) cuts the whole line even if the rest is good — no exceptions,
-           check every line.
-        2. Light dedup only: cut a line as "dup" ONLY when it is a near-identical restatement
-           of another (same observable, trivially reworded). KEEP genuine variations on a
-           theme — a different angle, sense, or phrasing — they are useful options for the
-           human curator to choose between or pair off. When unsure, keep both.
+        DO NOT cut for comparison/simile ("like", "as if") or for anachronistic vocabulary on their
+        own — a coherent comparison ("hands like roots") and in-world tech words are fine here. (The
+        only bad comparison is one that asserts a physically false state, e.g. "steam like spun gold"
+        — steam is white; that is rare, leave it for the human curator, do not hunt for it.)
 
-        Do not cap the count and do not thin for variety — keep every clean line. This is a
-        grab bag for a human to curate, not a finished set.
+        Then RANK the kept lines best-first: most concretely observable and most particular to THIS
+        scene's specific beats at the top; inert ambient texture kept but lower. An author will read
+        top-down and stop early, so the strongest grounded lines must come first.
 
-        "kept" = every clean line that survives. "cut" = the rest, each with its reason.
         Return ONLY JSON, no prose:
-        {"kept":["<line verbatim>", ...],
-         "cut":[{"line":"<verbatim>","reason":"simile|argue|invention|anachronism|generic|ornate|dup"}, ...]}
+        {"kept":["<line verbatim>", ... ranked best-first ...],
+         "cut":[{"line":"<verbatim>","reason":"loadbearing|explain|generic|ornate"}, ...]}
         """;
 
     public static async Task<int> RunAsync(string[] args)
     {
         string? arcDir = null, configPath = null;
-        bool force = false, promptsOnly = false, noFilter = false, audit = false;
+        bool force = false, promptsOnly = false, noRank = false, audit = false;
         var only = new List<string>();   // scene stems to limit to (repeatable); empty = whole arc
 
         for (int i = 0; i < args.Length; i++)
@@ -189,7 +188,7 @@ static class ColorizeCommand
             else if (args[i] == "--only" && i + 1 < args.Length) only.Add(args[++i]);
             else if (args[i] == "--force") force = true;
             else if (args[i] == "--prompts-only") promptsOnly = true;
-            else if (args[i] == "--no-filter") noFilter = true;
+            else if (args[i] == "--no-filter") noRank = true;
             else if (args[i] == "--audit") audit = true;
             else if (!args[i].StartsWith('-')) arcDir = args[i];
         }
@@ -198,13 +197,11 @@ static class ColorizeCommand
         arcDir = Path.GetFullPath(arcDir);
         if (!Directory.Exists(arcDir)) { Console.Error.WriteLine($"Directory not found: {arcDir}"); return 1; }
 
-        var facts = LoadFacts(arcDir);
-        if (string.IsNullOrWhiteSpace(facts))
+        if (string.IsNullOrWhiteSpace(LoadArcBriefCheck(arcDir)))
         {
             Console.Error.WriteLine($"No bibles or brief (.md files) found in {arcDir}");
             return 1;
         }
-        var localeGuide = DraftBlocks.LoadLocaleGuide(DraftBlocks.InferBiome(arcDir));
         var bible = LoadColorBible(arcDir);   // _color.md recurring motifs + authored callbacks (may be empty)
 
         var encFiles = Directory.GetFiles(arcDir, "*.enc")
@@ -214,13 +211,14 @@ static class ColorizeCommand
             .OrderBy(f => f).ToList();
         if (encFiles.Count == 0) { Console.Error.WriteLine($"No matching .enc files in {arcDir}"); return 1; }
 
-        // prompts-only needs no model or config; just assemble and print.
+        // prompts-only prints the turn-1 message (no model, no config needed).
         if (promptsOnly)
         {
             foreach (var file in encFiles)
             {
-                Console.WriteLine($"\n===== {Path.GetFileName(file)} =====\n");
-                Console.WriteLine(BuildUserMessage(file, facts, localeGuide, ApplicableColor(bible, file)));
+                var beats = StripDraftComments(File.ReadAllText(file).Replace("\r\n", "\n"));
+                Console.WriteLine($"\n===== {Path.GetFileName(file)} (turn 1) =====\n");
+                Console.WriteLine(BuildTurnMessage(FindLens(file), ApplicableColor(bible, file), beats, "(nothing yet)", 5));
             }
             return 0;
         }
@@ -235,9 +233,9 @@ static class ColorizeCommand
 
         var glm = new GlmClient(cfg.Local.Endpoint!, cfg.Local.Model, cfg.Local.ApiKey ?? "local", cfg.TimeoutSeconds);
         using var anthropicHttp = new HttpClient { Timeout = TimeSpan.FromSeconds(120) };
-        bool canFilter = !noFilter && cfg.Anthropic?.ApiKey is { Length: > 0 } k && !k.Contains("your-");
-        if (!noFilter && !canFilter)
-            Console.WriteLine("(no Anthropic key — writing the raw pool unfiltered; set the 'Anthropic' provider key to enable the Haiku cull)\n");
+        bool canRank = !noRank && cfg.Anthropic?.ApiKey is { Length: > 0 } k && !k.Contains("your-");
+        if (!noRank && !canRank)
+            Console.WriteLine("(no Anthropic key — writing the raw drained pool without the rank/cull pass; set the 'Anthropic' provider key to enable it)\n");
 
         int wrote = 0, skipped = 0;
         foreach (var file in encFiles)
@@ -252,16 +250,16 @@ static class ColorizeCommand
             }
 
             var recurring = ApplicableColor(bible, file);
-            Console.Write($"{name}: generating ({cfg.Temperatures.Length}×{cfg.SamplesPerTemp} samples)... ");
-            var pool = await GeneratePool(glm, file, facts, localeGuide, recurring, cfg);
-            Console.Write($"{pool.Count} candidates → ");
+            Console.Write($"{name}: draining ");
+            var pool = await DrainGenerate(glm, file, recurring, cfg);
+            Console.Write($"= {pool.Count} → ");
 
             List<string> kept = pool;
             List<(string line, string reason)> cut = new();
-            if (canFilter)
+            if (canRank)
             {
                 var beats = StripDraftComments(raw);
-                (kept, cut) = await FilterPool(anthropicHttp, cfg.Anthropic!, beats, recurring, pool);
+                (kept, cut) = await EndPass(anthropicHttp, cfg.Anthropic!, beats, pool);
             }
             Console.WriteLine($"{kept.Count} kept{(cut.Count > 0 ? $" ({cut.Count} cut)" : "")}");
             if (audit)
@@ -276,46 +274,69 @@ static class ColorizeCommand
         return 0;
     }
 
-    // ── Stage A: over-generate with GLM across a temperature sweep ──────────────
-    static async Task<List<string>> GeneratePool(
-        GlmClient glm, string encFile, string facts, string? localeGuide, string? recurring, Cfg cfg)
+    // ── Stage A: drain GLM in small batches with a hard turn-cap ─────────────────
+    static async Task<List<string>> DrainGenerate(GlmClient glm, string encFile, string? recurring, Cfg cfg)
     {
-        var user = BuildUserMessage(encFile, facts, localeGuide, recurring);
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var pool = new List<string>();
-        // Serial: this box shares no KV cache across slots, so concurrent cold
-        // prompts each re-eval the whole (slow) prefix. Serial keeps the cache warm.
-        foreach (var temp in cfg.Temperatures)
-            for (int s = 0; s < cfg.SamplesPerTemp; s++)
-            {
-                string text;
-                try
-                {
-                    text = await glm.CompleteAsync(SystemPrompt, user, temp, cfg.TopP, cfg.MinP,
-                        cfg.MaxOutputTokens, cfg.EnableThinking);
-                }
-                catch (Exception ex) { Console.Error.WriteLine($"\n  GLM error (t{temp}): {ex.Message}"); continue; }
+        var lens = FindLens(encFile);
+        var beats = StripDraftComments(File.ReadAllText(encFile).Replace("\r\n", "\n"));
+        var accepted = new List<string>();
 
-                foreach (var frag in ExtractFragments(text))
-                    if (seen.Add(frag)) pool.Add(frag);
+        for (int turn = 1; turn <= cfg.TurnCap; turn++)
+        {
+            var already = accepted.Count > 0
+                ? string.Join("\n", accepted.Select(a => $"- {a}"))
+                : "(nothing yet)";
+            var user = BuildTurnMessage(lens, recurring, beats, already, cfg.Batch);
+
+            string text;
+            try
+            {
+                text = await glm.CompleteAsync(SystemPrompt, user, cfg.Temp, cfg.TopP, cfg.MinP,
+                    cfg.MaxTokensPerTurn, cfg.EnableThinking);
             }
-        return pool;
+            catch (Exception ex) { Console.Error.WriteLine($"\n  GLM turn {turn} error: {ex.Message}"); break; }
+
+            // Keep a candidate only if it's a BM25-novel line vs the accepted set AND
+            // vs the lines already taken this turn (the batch can repeat itself).
+            var novel = new List<string>();
+            foreach (var c in ParseLines(text))
+                if (Bm25Novel(c, accepted, cfg.Bm25Threshold) && Bm25Novel(c, novel, cfg.Bm25Threshold))
+                    novel.Add(c);
+
+            accepted.AddRange(novel);
+            Console.Write($"t{turn}+{novel.Count} ");
+            if (novel.Count <= cfg.BailAt) break;   // the well is dry; stop before GLM invents filler
+        }
+        return accepted;
     }
 
-    // ── Stage B: cull the pool with a cached Haiku call ─────────────────────────
-    static async Task<(List<string> kept, List<(string, string)> cut)> FilterPool(
-        HttpClient http, Provider anthropic, string beats, string? recurring, List<string> pool)
+    static string BuildTurnMessage(string? lens, string? recurring, string beats, string already, int batch)
     {
-        var numbered = string.Join("\n", pool.Select((c, i) => $"{i + 1}. {c}"));
-        var recurringBlock = string.IsNullOrWhiteSpace(recurring)
-            ? ""
-            : $"# Recurring arc color (canonical — allowed even if not in the beats above)\n\n{recurring}\n\n";
-        var user = $"# The scene's facts (the beats)\n\n{beats}\n\n{recurringBlock}# Candidate color lines\n\n{numbered}";
+        var sb = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(lens))
+            sb.Append("## LENS (read first — whose eye, what to notice, in what key)\n").Append(lens).Append("\n\n");
+        if (!string.IsNullOrWhiteSpace(recurring))
+            sb.Append("## RECURRING ARC COLOR (canonical, available where it fits this scene — render fresh, never forced)\n")
+              .Append(recurring).Append("\n\n");
+        sb.Append("## SCENE BEATS\n").Append(beats).Append("\n\n");
+        sb.Append("## ALREADY RECORDED — do not repeat these or restate them in other words:\n").Append(already).Append("\n\n");
+        sb.Append($"## YOUR TASK THIS TURN\nGive up to {batch} NEW color fragments not already recorded above ")
+          .Append("and not rewordings of them. Ignore any count target in your instructions. Record ONLY ")
+          .Append("observations grounded in this scene. One fragment per line, no numbering, no commentary.");
+        return sb.ToString();
+    }
+
+    // ── Stage B: end-pass cut + rank with a cached Haiku call ───────────────────
+    static async Task<(List<string> kept, List<(string, string)> cut)> EndPass(
+        HttpClient http, Provider anthropic, string beats, List<string> pool)
+    {
+        var user = "## SCENE BEATS\n" + beats + "\n\n## CANDIDATE POOL\n"
+                 + string.Join("\n", pool.Select(l => $"- {l}"));
         var body = new
         {
             model = anthropic.Model,
-            max_tokens = 4096,
-            system = new object[] { new { type = "text", text = FilterRules, cache_control = new { type = "ephemeral" } } },
+            max_tokens = 2000,
+            system = new object[] { new { type = "text", text = EndRubric, cache_control = new { type = "ephemeral" } } },
             messages = new object[] { new { role = "user", content = user } },
         };
         using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.anthropic.com/v1/messages")
@@ -350,52 +371,87 @@ static class ColorizeCommand
         }
         catch (JsonException)
         {
-            Console.Error.WriteLine("\n  filter returned unparseable JSON — keeping raw pool");
+            Console.Error.WriteLine("\n  end-pass returned unparseable JSON — keeping raw pool");
             return (pool, new());
         }
         kept.RemoveAll(string.IsNullOrWhiteSpace);
         return (kept, cut);
     }
 
-    // ── Prompt assembly ─────────────────────────────────────────────────────────
-    static string BuildUserMessage(string encFile, string facts, string? localeGuide, string? recurring)
+    // ── BM25 near-dup cull (ported from drain_loop.py) ──────────────────────────
+    static readonly HashSet<string> Stop = new(
+        ("the a an of in on to into and or with its it that this as at by from for over under up "
+       + "so still where when one two has have been is are was").Split(' '),
+        StringComparer.Ordinal);
+
+    static string Stem(string w)
     {
-        var sb = new StringBuilder();
-        // The lens sits first and loudest: whose eye, what to notice, in what key.
-        // It is the highest-leverage steer (FINDINGS §3.4) — steering, not background.
-        if (FindLens(encFile) is { } lens)
-        {
-            sb.AppendLine("# The lens — how the PC sees this scene\n");
-            sb.AppendLine("Read this first. It governs *whose eye* you look through, *what* is worth noticing here, and *in what key* — it outranks habit. Render facts the way this lens would see them.\n");
-            sb.AppendLine(lens + "\n");
-        }
-        // Recurring arc color: canonical motifs/callbacks available to every scene
-        // where relevant. Right after the lens so they ride as available material,
-        // not buried in the facts. Rendered fresh per scene, never forced.
-        if (!string.IsNullOrWhiteSpace(recurring))
-        {
-            sb.AppendLine("# Recurring color for this arc (canonical — available, never forced)\n");
-            sb.AppendLine("These images and details recur across the arc. Reach for one only where this scene's beats and lens make it land, and render it fresh for THIS moment while keeping the stated invariant. Do not force them in.\n");
-            sb.AppendLine(recurring + "\n");
-        }
-        sb.AppendLine("# World & arc facts (the ground truth — render from these, invent no new subjects)\n");
-        sb.AppendLine(facts + "\n");
-        if (!string.IsNullOrWhiteSpace(localeGuide))
-        {
-            sb.AppendLine("# Locale guide (the biome's palette — fair game when grounding a fragment)\n");
-            sb.AppendLine(localeGuide + "\n");
-        }
-        sb.AppendLine("# The encounter\n");
-        sb.AppendLine(StripDraftComments(File.ReadAllText(encFile).Replace("\r\n", "\n")));
-        sb.AppendLine("\n# Task\n");
-        sb.AppendLine("Produce the color candidates for this whole encounter now, following the rules above and through the lens. Output only the fragments, one per line.");
-        return sb.ToString();
+        foreach (var s in new[] { "ing", "ed", "es", "s" })
+            if (w.EndsWith(s, StringComparison.Ordinal) && w.Length - s.Length >= 3) return w[..^s.Length];
+        return w;
     }
 
-    /// <summary>
-    /// A scene's lens: a per-scene "&lt;name&gt;.lens.md" sidecar (preferred) or an
-    /// arc-wide "_lens.md" peer beside the encounter. Null if neither exists.
-    /// </summary>
+    static List<string> Toks(string s) =>
+        Regex.Matches(s.ToLowerInvariant(), "[a-z]+")
+            .Select(m => m.Value).Where(w => w.Length > 2 && !Stop.Contains(w)).Select(Stem).ToList();
+
+    /// <summary>True if `line` is lexically novel vs every line in `accepted`
+    /// (tf-idf cosine below the threshold). Mirrors drain_loop.py bm25_novel.</summary>
+    static bool Bm25Novel(string line, List<string> accepted, double thr)
+    {
+        if (accepted.Count == 0) return true;
+        var corpus = accepted.Append(line).ToList();
+        var df = new Dictionary<string, int>();
+        foreach (var t in corpus)
+            foreach (var w in Toks(t).ToHashSet()) df[w] = df.GetValueOrDefault(w) + 1;
+        int n = corpus.Count;
+        var idf = df.ToDictionary(kv => kv.Key, kv => Math.Log((n + 1.0) / (kv.Value + 0.5)));
+
+        Dictionary<string, double> Vec(string t)
+        {
+            var v = new Dictionary<string, double>();
+            foreach (var w in Toks(t)) v[w] = v.GetValueOrDefault(w) + 1;
+            return v.ToDictionary(kv => kv.Key, kv => kv.Value * idf.GetValueOrDefault(kv.Key));
+        }
+
+        var lv = Vec(line);
+        double dl = Math.Sqrt(lv.Values.Sum(x => x * x));
+        foreach (var acc in accepted)
+        {
+            var av = Vec(acc);
+            var common = lv.Keys.Where(av.ContainsKey).ToList();
+            if (common.Count == 0) continue;
+            double num = common.Sum(w => lv[w] * av[w]);
+            double da = Math.Sqrt(av.Values.Sum(x => x * x));
+            if (dl > 0 && da > 0 && num / (dl * da) >= thr) return false;
+        }
+        return true;
+    }
+
+    static List<string> ParseLines(string text)
+    {
+        var outl = new List<string>();
+        if (string.IsNullOrWhiteSpace(text)) return outl;
+        text = text.Trim();
+        if (text.StartsWith("```"))
+        {
+            var nl = text.IndexOf('\n');
+            if (nl > 0) text = text[(nl + 1)..];
+            if (text.EndsWith("```")) text = text[..^3];
+        }
+        foreach (var raw in text.Split('\n'))
+        {
+            var l = raw.Trim().TrimStart('-', '*', '•', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', ' ').Trim();
+            l = Regex.Replace(l, @"\[.*?\]", "").Trim();
+            if (l.Length > 8 && !l.StartsWith('#')) outl.Add(l);
+        }
+        return outl;
+    }
+
+    // ── Lens + color bible inputs ────────────────────────────────────────────────
+
+    /// <summary>A scene's lens: a per-scene "&lt;name&gt;.lens.md" sidecar (preferred)
+    /// or an arc-wide "_lens.md" peer beside the encounter. Null if neither exists.</summary>
     static string? FindLens(string encFile)
     {
         var sidecar = Path.ChangeExtension(encFile, ".lens.md");
@@ -405,27 +461,21 @@ static class ColorizeCommand
         return null;
     }
 
-    /// <summary>
-    /// All arc .md files (bibles + brief) concatenated, EXCLUDING lens files —
-    /// the lens is injected separately and louder.
-    /// </summary>
-    static string LoadFacts(string arcDir)
-    {
-        var files = Directory.GetFiles(arcDir, "*.md")
+    /// <summary>Sanity check that the dir is a real arc: any .md that isn't a lens or
+    /// the color bible (a bible or brief). The bibles aren't fed to generation — the
+    /// lens + color bible + beats carry the context — but their presence gates the run.</summary>
+    static string LoadArcBriefCheck(string arcDir) =>
+        string.Join("", Directory.GetFiles(arcDir, "*.md")
             .Where(f => !f.EndsWith(".lens.md", StringComparison.OrdinalIgnoreCase))
             .Where(f => !Path.GetFileName(f).Equals("_lens.md", StringComparison.OrdinalIgnoreCase))
             .Where(f => !Path.GetFileName(f).Equals("_color.md", StringComparison.OrdinalIgnoreCase))
-            .OrderBy(f => f).ToList();
-        return string.Join("\n\n---\n\n",
-            files.Select(f => $"## {Path.GetFileName(f)}\n\n{File.ReadAllText(f)}"));
-    }
+            .Select(f => Path.GetFileName(f)));
 
-    // ── Color bible (_color.md): arc-wide recurring motifs + hand-authored callbacks ──
-    // Authored, canonical. Each entry is a `- ` bullet (plus indented continuation,
-    // e.g. a `render:` cue). An optional `only-in: FileA, FileB` line scopes the entry
-    // to named scenes (chronology safety for callbacks); absent = available to all,
-    // gated by the entry's own prose. `only-in:` is a tool directive, stripped from the
-    // text shown to the model.
+    // _color.md: arc-wide recurring motifs + hand-authored callbacks. Authored,
+    // canonical. Each entry is a `- ` bullet (plus indented continuation, e.g. a
+    // `render:` cue). An optional `only-in: FileA, FileB` line scopes the entry to
+    // named scenes (chronology safety for callbacks); absent = available to all.
+    // `only-in:` is a tool directive, stripped from the text shown to the model.
     record ColorEntry(string Text, List<string> OnlyIn);
 
     static List<ColorEntry> LoadColorBible(string arcDir)
@@ -481,36 +531,13 @@ static class ColorizeCommand
         return hits.Count == 0 ? null : string.Join("\n", hits);
     }
 
-    // ── Output parsing + writeback ───────────────────────────────────────────────
-    static List<string> ExtractFragments(string output)
-    {
-        if (string.IsNullOrWhiteSpace(output)) return [];
-        var text = output.Trim();
-        if (text.StartsWith("```"))
-        {
-            var nl = text.IndexOf('\n');
-            if (nl > 0) text = text[(nl + 1)..];
-            if (text.EndsWith("```")) text = text[..^3];
-        }
-        var frags = new List<string>();
-        foreach (var line in text.Split('\n'))
-        {
-            var t = line.Trim();
-            if (t.Length == 0) continue;
-            // strip a leading bullet or "N." numbering the model may add
-            t = t.TrimStart('-', '*', '•', ' ');
-            int dot = t.IndexOf('.');
-            if (dot > 0 && dot <= 3 && t[..dot].All(char.IsDigit)) t = t[(dot + 1)..].Trim();
-            if (t.Length > 0) frags.Add(t);
-        }
-        return frags;
-    }
+    // ── Writeback ────────────────────────────────────────────────────────────────
 
     /// <summary>
     /// Insert ONE scene-level COLOR pool at the top of the file body (after the
-    /// title and any [attr] / leading comment lines). Each kept line is a `# []`
-    /// curation checkbox the author toggles to `# [x]`. On --force, an existing
-    /// pool is removed first. Writes a `_&lt;file&gt;` backup (gitignored).
+    /// title and any [attr] / leading comment lines), kept in ranked order. Each
+    /// line is a `# []` curation checkbox the author toggles to `# [x]`. On --force,
+    /// an existing pool is removed first. Writes a `_&lt;file&gt;` backup (gitignored).
     /// </summary>
     static void WritePool(string file, List<string> kept, bool force)
     {
@@ -568,8 +595,9 @@ static class ColorizeCommand
     record Provider(string Name, string? Endpoint, string? ApiKey, string Model);
 
     record Cfg(Provider? Local, Provider? Anthropic,
-        double[] Temperatures, int SamplesPerTemp, double TopP, double MinP,
-        int MaxOutputTokens, bool EnableThinking, int TimeoutSeconds);
+        double Temp, double TopP, double MinP, int MaxTokensPerTurn,
+        int Batch, int TurnCap, int BailAt, double Bm25Threshold,
+        bool EnableThinking, int TimeoutSeconds);
 
     static Cfg? LoadConfig(string? configPath)
     {
@@ -587,11 +615,14 @@ static class ColorizeCommand
         return new Cfg(
             Local: P("LocalLlm"),
             Anthropic: P("Anthropic"),
-            Temperatures: cs.GetSection("Temperatures").Get<double[]>() ?? [0.4, 0.7],
-            SamplesPerTemp: cs.GetValue("SamplesPerTemp", 2),
+            Temp: cs.GetValue("Temp", 0.3),
             TopP: cs.GetValue("TopP", 1.0),
             MinP: cs.GetValue("MinP", 0.01),
-            MaxOutputTokens: cs.GetValue("MaxOutputTokens", 1200),
+            MaxTokensPerTurn: cs.GetValue("MaxTokensPerTurn", 500),
+            Batch: cs.GetValue("Batch", 5),
+            TurnCap: cs.GetValue("TurnCap", 4),
+            BailAt: cs.GetValue("BailAt", 1),
+            Bm25Threshold: cs.GetValue("Bm25Threshold", 0.5),
             EnableThinking: cs.GetValue("EnableThinking", false),
             TimeoutSeconds: cs.GetValue("TimeoutSeconds", 600));
     }
