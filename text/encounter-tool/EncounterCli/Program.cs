@@ -37,7 +37,7 @@ class Program
         Console.WriteLine("                  [--scene mundane|action|horror|dread|wonder|revelation] [--candidates N]");
         Console.WriteLine("                  per-beat: FIXME(scene_type): e.g. FIXME(dread): or FIXME(horror):");
         Console.WriteLine("  encounter colorize <arc-dir> [--config <path>] [--force] [--prompts-only]");
-        Console.WriteLine("                  [--no-filter] [--audit]");
+        Console.WriteLine("                  [--no-filter] [--audit] [--only <scene>]...");
         Console.WriteLine("                  Generate a scene-level COLOR pool per .enc: GLM over-generates");
         Console.WriteLine("                  (steered by a <name>.lens.md / _lens.md), Haiku culls the slop.");
         Console.WriteLine("  encounter factual <arc-dir> [--qwen-url <url>] [--force] [--prompts-only]");

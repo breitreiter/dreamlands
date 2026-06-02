@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 
 namespace EncounterCli;
@@ -148,8 +149,9 @@ static class ColorizeCommand
           e.g. "a smell of iron", is fine; "like a wound" / "like a held breath" is not.)
         - explains or argues meaning — "despite", "not X but Y", or any because/so-that
           clause reasoning about why a thing is wrong.
-        - names something NOT present in the beats — an invented object, sound, motion,
-          or event. Color renders what the scene gives; it does not author new facts.
+        - names something NOT present in the beats or the recurring arc color — an
+          invented object, sound, motion, or event. Color renders what the scene (or
+          the arc's canonical recurring color) gives; it does not author new facts.
         - uses words outside a renaissance-era person's vocabulary — "radio",
           "electricity", "ozone", "ventilation", "industrial", "condensation",
           "antenna", and the like. (The character names tech in their own plain words.)
@@ -179,10 +181,12 @@ static class ColorizeCommand
     {
         string? arcDir = null, configPath = null;
         bool force = false, promptsOnly = false, noFilter = false, audit = false;
+        var only = new List<string>();   // scene stems to limit to (repeatable); empty = whole arc
 
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i] == "--config" && i + 1 < args.Length) configPath = args[++i];
+            else if (args[i] == "--only" && i + 1 < args.Length) only.Add(args[++i]);
             else if (args[i] == "--force") force = true;
             else if (args[i] == "--prompts-only") promptsOnly = true;
             else if (args[i] == "--no-filter") noFilter = true;
@@ -201,11 +205,14 @@ static class ColorizeCommand
             return 1;
         }
         var localeGuide = DraftBlocks.LoadLocaleGuide(DraftBlocks.InferBiome(arcDir));
+        var bible = LoadColorBible(arcDir);   // _color.md recurring motifs + authored callbacks (may be empty)
 
         var encFiles = Directory.GetFiles(arcDir, "*.enc")
             .Where(f => !Path.GetFileName(f).StartsWith('_'))   // skip _Backup.enc copies
+            .Where(f => only.Count == 0 || only.Any(o =>
+                string.Equals(Path.GetFileNameWithoutExtension(f), o, StringComparison.OrdinalIgnoreCase)))
             .OrderBy(f => f).ToList();
-        if (encFiles.Count == 0) { Console.Error.WriteLine($"No .enc files in {arcDir}"); return 1; }
+        if (encFiles.Count == 0) { Console.Error.WriteLine($"No matching .enc files in {arcDir}"); return 1; }
 
         // prompts-only needs no model or config; just assemble and print.
         if (promptsOnly)
@@ -213,7 +220,7 @@ static class ColorizeCommand
             foreach (var file in encFiles)
             {
                 Console.WriteLine($"\n===== {Path.GetFileName(file)} =====\n");
-                Console.WriteLine(BuildUserMessage(file, facts, localeGuide));
+                Console.WriteLine(BuildUserMessage(file, facts, localeGuide, ApplicableColor(bible, file)));
             }
             return 0;
         }
@@ -244,8 +251,9 @@ static class ColorizeCommand
                 continue;
             }
 
+            var recurring = ApplicableColor(bible, file);
             Console.Write($"{name}: generating ({cfg.Temperatures.Length}×{cfg.SamplesPerTemp} samples)... ");
-            var pool = await GeneratePool(glm, file, facts, localeGuide, cfg);
+            var pool = await GeneratePool(glm, file, facts, localeGuide, recurring, cfg);
             Console.Write($"{pool.Count} candidates → ");
 
             List<string> kept = pool;
@@ -253,7 +261,7 @@ static class ColorizeCommand
             if (canFilter)
             {
                 var beats = StripDraftComments(raw);
-                (kept, cut) = await FilterPool(anthropicHttp, cfg.Anthropic!, beats, pool);
+                (kept, cut) = await FilterPool(anthropicHttp, cfg.Anthropic!, beats, recurring, pool);
             }
             Console.WriteLine($"{kept.Count} kept{(cut.Count > 0 ? $" ({cut.Count} cut)" : "")}");
             if (audit)
@@ -270,9 +278,9 @@ static class ColorizeCommand
 
     // ── Stage A: over-generate with GLM across a temperature sweep ──────────────
     static async Task<List<string>> GeneratePool(
-        GlmClient glm, string encFile, string facts, string? localeGuide, Cfg cfg)
+        GlmClient glm, string encFile, string facts, string? localeGuide, string? recurring, Cfg cfg)
     {
-        var user = BuildUserMessage(encFile, facts, localeGuide);
+        var user = BuildUserMessage(encFile, facts, localeGuide, recurring);
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var pool = new List<string>();
         // Serial: this box shares no KV cache across slots, so concurrent cold
@@ -296,10 +304,13 @@ static class ColorizeCommand
 
     // ── Stage B: cull the pool with a cached Haiku call ─────────────────────────
     static async Task<(List<string> kept, List<(string, string)> cut)> FilterPool(
-        HttpClient http, Provider anthropic, string beats, List<string> pool)
+        HttpClient http, Provider anthropic, string beats, string? recurring, List<string> pool)
     {
         var numbered = string.Join("\n", pool.Select((c, i) => $"{i + 1}. {c}"));
-        var user = $"# The scene's facts (the beats)\n\n{beats}\n\n# Candidate color lines\n\n{numbered}";
+        var recurringBlock = string.IsNullOrWhiteSpace(recurring)
+            ? ""
+            : $"# Recurring arc color (canonical — allowed even if not in the beats above)\n\n{recurring}\n\n";
+        var user = $"# The scene's facts (the beats)\n\n{beats}\n\n{recurringBlock}# Candidate color lines\n\n{numbered}";
         var body = new
         {
             model = anthropic.Model,
@@ -347,7 +358,7 @@ static class ColorizeCommand
     }
 
     // ── Prompt assembly ─────────────────────────────────────────────────────────
-    static string BuildUserMessage(string encFile, string facts, string? localeGuide)
+    static string BuildUserMessage(string encFile, string facts, string? localeGuide, string? recurring)
     {
         var sb = new StringBuilder();
         // The lens sits first and loudest: whose eye, what to notice, in what key.
@@ -357,6 +368,15 @@ static class ColorizeCommand
             sb.AppendLine("# The lens — how the PC sees this scene\n");
             sb.AppendLine("Read this first. It governs *whose eye* you look through, *what* is worth noticing here, and *in what key* — it outranks habit. Render facts the way this lens would see them.\n");
             sb.AppendLine(lens + "\n");
+        }
+        // Recurring arc color: canonical motifs/callbacks available to every scene
+        // where relevant. Right after the lens so they ride as available material,
+        // not buried in the facts. Rendered fresh per scene, never forced.
+        if (!string.IsNullOrWhiteSpace(recurring))
+        {
+            sb.AppendLine("# Recurring color for this arc (canonical — available, never forced)\n");
+            sb.AppendLine("These images and details recur across the arc. Reach for one only where this scene's beats and lens make it land, and render it fresh for THIS moment while keeping the stated invariant. Do not force them in.\n");
+            sb.AppendLine(recurring + "\n");
         }
         sb.AppendLine("# World & arc facts (the ground truth — render from these, invent no new subjects)\n");
         sb.AppendLine(facts + "\n");
@@ -394,9 +414,71 @@ static class ColorizeCommand
         var files = Directory.GetFiles(arcDir, "*.md")
             .Where(f => !f.EndsWith(".lens.md", StringComparison.OrdinalIgnoreCase))
             .Where(f => !Path.GetFileName(f).Equals("_lens.md", StringComparison.OrdinalIgnoreCase))
+            .Where(f => !Path.GetFileName(f).Equals("_color.md", StringComparison.OrdinalIgnoreCase))
             .OrderBy(f => f).ToList();
         return string.Join("\n\n---\n\n",
             files.Select(f => $"## {Path.GetFileName(f)}\n\n{File.ReadAllText(f)}"));
+    }
+
+    // ── Color bible (_color.md): arc-wide recurring motifs + hand-authored callbacks ──
+    // Authored, canonical. Each entry is a `- ` bullet (plus indented continuation,
+    // e.g. a `render:` cue). An optional `only-in: FileA, FileB` line scopes the entry
+    // to named scenes (chronology safety for callbacks); absent = available to all,
+    // gated by the entry's own prose. `only-in:` is a tool directive, stripped from the
+    // text shown to the model.
+    record ColorEntry(string Text, List<string> OnlyIn);
+
+    static List<ColorEntry> LoadColorBible(string arcDir)
+    {
+        var path = Path.Combine(arcDir, "_color.md");
+        if (!File.Exists(path)) return [];
+        var entries = new List<ColorEntry>();
+        List<string>? cur = null;
+
+        void Flush()
+        {
+            if (cur == null) return;
+            var only = new List<string>();
+            var kept = new List<string>();
+            foreach (var l in cur)
+            {
+                var m = Regex.Match(l.TrimStart(), @"^only-in:\s*(.+)$", RegexOptions.IgnoreCase);
+                if (m.Success)
+                    only.AddRange(m.Groups[1].Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+                else kept.Add(l);
+            }
+            var text = string.Join("\n", kept).Trim();
+            if (text.Length > 0) entries.Add(new ColorEntry(text, only));
+            cur = null;
+        }
+
+        foreach (var line in File.ReadAllText(path).Replace("\r\n", "\n").Split('\n'))
+        {
+            var t = line.TrimStart();
+            if (t.StartsWith('#')) Flush();                 // heading ends an entry
+            else if (t.StartsWith("- ")) { Flush(); cur = [line]; }
+            else if (cur != null && t.Length == 0) Flush();  // blank line ends an entry
+            else cur?.Add(line);                             // continuation
+        }
+        Flush();
+        return entries;
+    }
+
+    /// <summary>The bible entries applicable to one scene, concatenated. An entry with
+    /// no `only-in` applies everywhere; otherwise only to the named scene files.</summary>
+    static string? ApplicableColor(List<ColorEntry> bible, string encFile)
+    {
+        if (bible.Count == 0) return null;
+        var stem = Path.GetFileNameWithoutExtension(encFile);
+        bool Names(string f)
+        {
+            f = f.Trim();
+            if (f.EndsWith(".enc", StringComparison.OrdinalIgnoreCase)) f = f[..^4];
+            return string.Equals(f, stem, StringComparison.OrdinalIgnoreCase);
+        }
+        var hits = bible.Where(e => e.OnlyIn.Count == 0 || e.OnlyIn.Any(Names))
+            .Select(e => e.Text).ToList();
+        return hits.Count == 0 ? null : string.Join("\n", hits);
     }
 
     // ── Output parsing + writeback ───────────────────────────────────────────────
