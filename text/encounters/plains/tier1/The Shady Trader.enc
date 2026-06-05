@@ -10,6 +10,10 @@ This encounter does not appear in production builds.
 
 choices:
 
+* Skill Up = I know Kung-fu
+  +add_level
+  +repool
+
 * Outdoorsman loadout = Knife, lamellar, wool bedroll, waterskin
   +give_gold 500
   +add_item hunting_knife
@@ -33,3 +37,4 @@ choices:
   +add_item waterskin
 
 * Skip = Take nothing
+  +repool

@@ -1,32 +1,15 @@
-Placeholder: The Lodge
+The Follower
 [trigger none]
+[vignette dungeons/the_lodge]
 
-A placeholder encounter for The Lodge arc.
+FIXME(mundane): You have been in the deep forest for days. The paths here are animal trails or nothing. The canopy is so dense that direction loses meaning, and the undergrowth has thinned to almost nothing in the deep shade, leaving cathedral distances between enormous trunks. You notice the figure at the edge of your vision. Lean, dark-clad, standing between two trees forty yards ahead. When you look directly, nothing. The space between the trunks is empty.
 
 choices:
 
-* Explore = Search the lodge
-    @if check combat correct:rush wrong:outlast {
-        You find something valuable.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
+* Follow = Step off the path toward where it was
+    The track is faint but present: a compressed fern here, a turned stone there. Something with light feet and long practice in not being seen. You follow it north, and deeper.
 
-* Negotiate = Talk your way through
-    @if check negotiation correct:reason wrong:threaten {
-        You find something valuable.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
 
-* Depart = Leave this place behind
-    You depart The Lodge.
+* Ignore it = Keep your heading
+    You keep your eyes forward and your pace steady. The sense of being watched fades after half a mile. The deep forest continues in silence, undisturbed, offering nothing.
     +flee_dungeon

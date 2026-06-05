@@ -1,0 +1,57 @@
+The Lodge
+[trigger none]
+[vignette dungeons/the_lodge]
+
+The lodge sits between the trees as though it grew there. Low-roofed, timber and fieldstone, fitted into the terrain with such care you nearly walk past it. The door is closed, but not barred. You push it open. Inside, silence.
+
+The dust is the first thing. Dust on the table, dust on the chairs, dust thick on the bedding in the loft where the corners have been mouse-chewed and not repaired. Tools on the wall — drawknife, awl, a small adze — with the leather of their handles gone hard and cracked. The single window has a film on it the color of old tallow. A spider has built across the inside of it in a generation that came and went.
+
+choices:
+
+* Take the Old Tooth = It was left for whoever came this far
+    +add_item the_old_tooth
+    +finish_dungeon
+
+* Leave the lodge as you found it = Close the door behind you
+    +finish_dungeon
+
+
+--- NOTES ---
+
+The Lodge
+It is most of a day further on, in a small flat above a stream — defensible sightlines, a spring nearby, good drainage. A low building of dark timber, sod roof gone partway to moss, a stone chimney. No smoke. A worked stump out front with a deep grain-smoothed dish in the center from years of use.
+The door is closed but not barred. The PC pushes it open.
+
+
+No one has lit a fire in this room in a long time.
+The Journal
+It is on a shelf above the hearth, where a working man would keep his Bible or his ledger. Wrapped in oiled cloth that has gone brittle. Pages of irregular paper sewn into a hide cover. The hand is the same throughout but degrades — early entries neat and slightly schooled, late entries cramped, hurried, with the descender strokes growing more emphatic until they are almost slashes.
+"""
+Foundation laid. Two courses of stone before the ground hardened. The country gives good timber and is honest about its weather. M. will approve of the spring. She'll hate the winters, but we'll get by.
+Came down to Hadrith for nails, salt, ten pounds of flour. The smith asked where I had settled and I told him east of the ridge and he did not ask further. I think he had heard already. He gave me fair coin for the pelts.
+"""
+
+You skip ahead.
+
+"""
+Something at the treeline two nights running. Not bear. Not cat. Stood at the edge of the clearing and watched until I came out, and then it was gone before I cleared the door. Cast for sign in the morning. Four-toed. Hand-sized. I do not know the track.
+"""
+
+Then further, near the end.
+
+"""
+Found another body this morning. Woodsman, man I had seen but never spoken with. Body was in a pitiful state. The beast makes crude totems from them. I could not bring myself to bury this one. I think, perhaps, the beast is doing something sacred here. He's trying to teach me something, a higher truth. 
+They say there used to be an older race in these woods. Here long before the Revathi came. Perhaps the beast is one of them. It must see something in me; know that we are more alike.
+"""
+
+You skip ahead to the final entry
+
+"""
+In sleep last night we spoke again. Not with words. No need.
+I cannot find the word for the things now. I go looking for them among the words and it was not there. I do not need them.
+I know where he is.
+Found the place this morning. Cleft in the rock. Cold air out of it. Just like the dreams.
+Tomorrow at first light.
+The final lesson is there. After that I am free.
+"""
+

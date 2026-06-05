@@ -1,0 +1,22 @@
+The Lair
+[trigger none]
+[vignette dungeons/the_lodge]
+
+The trail opens onto the lip of a long fold in the ground — not a sinkhole, more a depression where the land drops twenty feet into a wet hollow choked with fern and the bones of old falls. The air coming out of it is colder than the air on the rim, and rank.
+
+REPLACE WITH FIGHT
+
+choices:
+
+* Continue north = Follow the smoke
+    +open "The Lodge"
+
+* Sit with what this means = [requires meets cunning trained]
+    A guide who does not wish to be seen. A trail that tests. A destination at the end of it. Whatever is waiting at that smoke, it expected you to come this far.
+
+    You continue north.
+    +open "The Lodge"
+
+* Turn back = You have seen enough
+    You have not been harmed. You are free to leave. You descend the ridge and walk south until the deep forest thins and the tier-two paths return.
+    +flee_dungeon

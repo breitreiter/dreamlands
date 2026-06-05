@@ -1,0 +1,53 @@
+Yana
+[trigger none]
+[vignette dungeons/the_lodge]
+
+The woman stands in her small living room, clearly proud of the life she's made for herself out here.
+
+choices:
+
+* Ask about her = How did you end up out here? [requires !the_lodge.yana.asked_about_her]
+    Things fell apart, she says, and waits to see if you press her. You do, and she gives it in pieces: not in order, not cleanly. A husband who changed. A child she lost before that. An accusation she did not have the energy to fight. A winter where the neighbors stopped meeting her eyes. It is the kind of accumulating small ruin that makes a person walk into the forest one spring with a hatchet and a sack of seed to see what happens.
+
+    She does not tell it as a tragedy. She has fixed her own roof three times this year. The garden came in. She stopped grinding her teeth in her sleep sometime around midsummer and has not started again. By her own account she is better now than she has been in years.
+
+    She nudges one of the stools toward you with her foot. She made that one herself. The other one she just found here.
+    +add_tag the_lodge.yana.asked_about_her
+    +open "Yana"
+
+* Ask about the figure = Have you seen anything out here? [requires !the_lodge.yana.asked_about_hunter]
+    She heard the rumors before she came here: a village she passed through, people who spoke of travelers going into the deep forest and not coming out. She believed it then.
+
+    In a year of living here she has found two signs of another person: a snare on a deer path she had not set, and a small pile of stones on the ridge above the cabin, deliberate and careful. Neither felt like a warning. She stays off the ridge. She keeps to herself. She brings no one in. Whatever is out there has left her alone. She has not tested this arrangement and does not plan to.
+
+    "I think it's the reason nobody's come looking for me out here," she says.
+
+    When you tell her you are hunting it, something in her face settles differently. 
+
+    "I hope you'll reconsider." She does not press it. She refills her cup.
+    +add_tag the_lodge.yana.asked_about_hunter
+    +open "Yana"
+
+* Accept the offer = Sleep in the loft
+    The stew is good. The fire is good. She asks about your travels with real curiosity. She tells you a story about her chickens: the three of them have slept in the same order since she got them, always left-to-right. Last autumn the middle one decided to roost on the left. The left one refused to move. The right one, sensing instability, relocated to the top of the garden fence. She spent an hour in the dark trying to put them right and got scratched for her trouble. She still does not know what the middle one wanted.
+
+    You sleep in the loft, warmer than you have slept in weeks.
+
+    You wake a bit before daybreak. The door stands open; you head outside.
+
+    FIXME(horror):It takes you a moment to understand what you are seeing. In the clearing, outside the house, someone has erected a grisly, blood-slick totem. The antlered head clearly belongs to a deer, but you turn away, not wanting to look too closely at such a thing. Not sure if you want to know the origin of the other parts.
+
+    You call for the woman. You check the garden, the smokehouse, the creek behind. Nothing.
+
+    Then, your eye catches a blood trail. You follow it.
+    +open "The Lair"
+
+* Refuse the offer = Sleep in the forest tonight
+    You thank her for her offer, but insist you cannot accept. She seems puzzled, but does not press the matter. 
+
+    "Don't go past the ridge; that's... that place is not for our kind."
+
+    You sleep badly in the cold a quarter mile off, stiff by dawn. When you move out in the early light her morning smoke is visible above the canopy. You think you can hear her singing, only just.
+
+    You head up and over the ridge.
+    +open "The Lair"

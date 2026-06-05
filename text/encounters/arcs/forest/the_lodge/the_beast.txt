@@ -1,0 +1,9 @@
+this enc needs two new monsters, basically duplicates:
+
+The Beast - road encounter in t3, always repools
+The Beast, Cornered - arc encounter
+
+The first has to disqualify on a tag, something like the_lodge.beast_defeated
+The second has to set that tag on win
+
+This ensures that defeating the beast in its lair defeats it for good

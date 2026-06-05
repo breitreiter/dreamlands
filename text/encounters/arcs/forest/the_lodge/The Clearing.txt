@@ -1,0 +1,34 @@
+The Clearing
+[trigger none]
+[vignette dungeons/the_lodge]
+
+FIXME(dread): Deep on the path, you come upon a man caught in a deadfall trap. Leg crushed, slow bleed, hours from death. His breathing is ragged and desperate. He is perhaps forty, salt-and-pepper hair, short-cropped beard. He wears hunter's leathers; a tracker or scout. Someone familiar with the forest.
+
+FIXME(dread): The wounded man has not seen you yet. You catch a glimpse of the the shadowy figure you were following; it moves lightly through the forest, farther away each moment.
+
+choices:
+
+* Stop and help = Perhaps you can save the man's life [requires has medical_kit]
+    FIXME(mundane): The man stares at you wild-eyed. "Leave me," he says, "You'll lose him. You need to hunt him, carry my revenge to him." You ignore the cries; you need to figure out how to get the log off his legs.
+    @if check Bushcraft correct:push wrong:plan {
+        FIXME(mundane): You lean your full weight into the log immediately. The trapped man howls with pain as the weight rolls off. You drop your pack and fetch your medical kit. You can't do much for the pain, but you bind the wound and splint the leg. "Enough," the man says. "Go, go, this is not the worst hurt I've suffered; I'll see after myself." You nod, shove everything back in your pack, and head in the direction you last saw the figure.
+        +open "The Crossing"
+    } @else {
+        FIXME(mundane): The log is too heavy to move. You build a lever to lift it a few inches, then drag the man out. The man is unconscious by the time you get him clear of the trap. You pull your medical kit from your pack and see to his wounds. You consider leaving him, but he'd not survive this far into the woods.
+        FIXME(mundane): He awakens a few hours later. Says his name is Simon. Thanks you for saving him. Says his sister wandered into these woods some three months back. She was killed by some madman who lives in the forest and hunts those who come here. He's been tracking this shadowy figure, but came to a bad end here. You leave Simon in a makeshift camp while you try to pick up the hunter's trail.
+        FIXME(dread): In time, night falls. You see signs of someone's passing, but never a clear trail. You return to camp, but Simon is gone. You call his name into the dark, but there is no answer. You sleep in fits and starts, your dreams plagued by the ghostly hunter and Simon's screams. In the morning, you try to pick up Simon's trail, but to no end. It seems he stumbled into the woods a dozen yards, then vanished. You return to the road. Whatever was happening here, it's lost to you now.
+        +finish_dungeon
+    }
+    
+
+* End his suffering = Give him a clean death
+    FIXME(dread): The man stares at you, uncertain. As you draw your knife, recognition passes over his face. He nods and closes his eyes. As you do the work, his final words are simply "Annabelle." You wipe your blade and follow after the shadowy figure.
+    FIXME(mundane): you head deeper into the forest, always just out of sight of your prey. Yet each time you think you've lost the path, you notice something small. a broken branch. a stone pushed into the mud. the shadow of a footprint.
+    FIXME(mundane): You hear singing, light and airy, in the distance. a strange foreign sound this deep in the wood. you follow it and come upon a small clearing. There is a woman here, she falls silent when she sees you. "oh, you gave me a scare, not polite to sneak up on folk. not many visitors out here." She's maybe 30, short-cropped blonde hair. linen dress with a leather apron.
+    FIXME(mundane): she has a small cabin here, a little smoker off to one side, garden on another. there a small fenced-off area with chickens. She calls out before you are close enough that she needs to raise her voice. Asks where you've come from. Listens to whatever you tell her without much reaction. After a moment she sets the axe against the stump.
+    "Full dark in near an hour. You can take the bed if you like, I sleep on the chair, helps my back."
+    +open "Yana"
+
+* Press on with your pursuit = You have no time for mercy
+    FIXME(mundane): You press on with your pursuit. For all you know, this could be yet another trap.
+    +open "Yana"
