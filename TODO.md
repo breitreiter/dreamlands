@@ -1,35 +1,103 @@
 # TODO
 
 <!-- Migrated from project/TODO.md on 2026-05-15 (M-001). -->
+<!-- Restructured 2026-06-05: launch-blocker triage ahead of possible go-live within a month. -->
 
-Three buckets toward playable alpha.
+Buckets ordered by urgency: launch blockers, cheap pre-launch wins, post-launch
+iteration, then the writing track (its own schedule).
 
---
+## 1. Launch Blockers
 
-## 1. Playable Alpha — Code & Mechanics
+Real things strangers from socials will hit. No public posting until these are done.
 
-Features, fixes, and balancing needed for a complete gameplay loop.
+- [ ] **Azure .NET 10 runtime bump** — the repo upgraded to .NET 10 (June 2026) but the
+      `dreamlands-api` Function App is still on the .NET 8 isolated runtime. The next
+      `./deploy.sh api` will deploy fine and then serve a broken API. deploy.sh has a
+      blocking banner until this is done. Steps:
+      1. Bump the runtime stack:
+         `az functionapp config set -n dreamlands-api -g dreamlands-rg --linux-fx-version "DOTNET-ISOLATED|10.0"`
+      2. Verify it took:
+         `az functionapp config show -n dreamlands-api -g dreamlands-rg --query linuxFxVersion`
+         (expect `DOTNET-ISOLATED|10.0`) and confirm `FUNCTIONS_EXTENSION_VERSION` is `~4`:
+         `az functionapp config appsettings list -n dreamlands-api -g dreamlands-rg --query "[?name=='FUNCTIONS_EXTENSION_VERSION'].value"`
+      3. Run `./deploy.sh api` and smoke-test the live API (load the game at
+         game.dreamlands.org, hit an endpoint).
+      4. Delete the scary banner block from `deploy_api()` in deploy.sh (it's marked
+         with DELETE THIS BLOCK comments), then check this off.
+- [ ] **Debug affordance sweep — remove everything at once, last thing before launch.**
+      The Shady Trader and the "Pick a fight" button are both essential testing tools
+      (gear combos, spawning specific combat encounters) and stay until the end; they
+      must come out together in one coordinated pass:
+      - `text/encounters/plains/tier1/The Shady Trader.enc` — its body claims "does
+        not appear in production builds" but nothing enforces that; verified present
+        in `worlds/production/encounters.bundle.json` (2026-06-05).
+      - "Pick a fight" button (`ui/web/src/screens/Explore.tsx` + `CombatPicker.tsx`) —
+        UI already hidden by `import.meta.env.DEV`, but the server endpoints behind it
+        (`CombatList`/`CombatBegin` in `GameFunctions.cs`) are anonymous and live in prod.
+      - `DebugAddCondition` endpoint (`game/{id}/debug/add-condition` in
+        `GameFunctions.cs`) — same problem, anyone who knows the route can call it.
+      Consider a real debug gate instead of deletion: a `[debug]` tag filtered at
+      bundle time + a `DREAMLANDS_DEBUG` env flag on the server endpoints, so testing
+      keeps working right up to launch and removal is one switch, not a scavenger hunt.
+- [ ] Fix mobile layout — desktop-first design breaks on phones and tablets:
+      fixed-width panels (420px inventory mechanics column), 3-column layouts with
+      no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
+      overlay not adapted for small screens, no touch-friendly target sizing.
+      Socials traffic is mostly phones — biggest single item on this list.
+- [ ] Update weapon/armor descriptions in inventory, market, and bank screens to explain
+      what they actually do in the RPS combat system — current copy is from the d20 era
+      ("+2 to attack rolls" etc.) and doesn't surface the moves the item contributes to
+      the player's pool, mutators (heavy/wary/shielding/etc.), or cooldowns. Players can't
+      make informed buy/equip decisions without this, and stale d20 text reads as broken.
+- [ ] Combat: cancel monster's later-slot actions when it dies on an early slot
+      (currently slots 2/3 still resolve against a corpse, producing nonsense narration
+      and zero-damage entries that get stripped client-side)
+- [ ] Hide locked choice requirements — currently we show the `requires` condition text to the
+      player as a UI hint. This breaks with arc encounters that offer the same choice multiple
+      times gated by different mutually-exclusive conditions (e.g. faction standing). Remove or
+      rethink the locked-choice display before launch.
+- [ ] POI position mismatch — observed a case where the server's in-memory map had a
+      settlement at (16,5) but map.json on disk had it at (16,7). Player could enter a
+      "ghost" settlement that didn't exist in the data. Server restart fixed it. Root cause
+      unclear — map was NOT regenerated between server start and the bug appearing.
+      Unknown-root-cause state corruption + live traffic is a bad combo: at minimum, build
+      a regression test that verifies every node's POI in the server's loaded map matches
+      the source map.json.
+- [ ] **Decide** the session-persistence story for launch. Google OAuth + session
+      reconnect (see [[google_oauth]]) is marked "very late" but launch is ~a month out
+      and it's the only long-lead item here. Anonymous sessions with losable saves is a
+      legitimate alpha answer — just decide it consciously. (Implementation, if chosen,
+      tracked under Post-Launch → Deployment & Hosting.)
+
+## 2. Pre-Launch Cheap Wins
+
+Not blockers, but cheap enough (or screenshot-prone enough) to just do.
+
+- [ ] Set Cosmos DB TTL on `games` container — 30 days (2592000s) to auto-expire idle saves.
+      `az cosmosdb sql container update -a <account> -g <rg> -d dreamlands -n games --ttl 2592000`
+      One command — do it during the .NET 10 Azure session.
+- [ ] Combat: cap worksheet panel `max-width: 820px` so cards don't sprawl on wide
+      monitors (right column min-width is 420 today, but no upper bound)
+- [ ] Mountain settlement decals invisible in deep mountains — a couple of the settlement
+      decals get buried by the tallest mountain peaks. Players literally can't see the
+      settlement. Figure out the minimum image height they need to render above peak
+      silhouettes, then resize/repaint the offending decals.
+- [ ] Combat: rotate the "What's the plan, merchant?" greeting through a small pool
+      of one-liners (e.g., "Eyes up.", "Make it count.", "What's it gonna be?"). Pick
+      randomly per turn so every fight doesn't open with the same line.
+
+## 3. Post-Launch — Iterate Live
+
+Balance is better tuned with real player data anyway.
 
 ### Frontend
 
 - [x] Redesign severe condition end-of-day screen
 - [x] UX design: Town — Guild Bank
-- [ ] Fix mobile layout — desktop-first design breaks on phones and tablets:
-      fixed-width panels (420px inventory mechanics column), 3-column layouts with
-      no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
-      overlay not adapted for small screens, no touch-friendly target sizing
-- [ ] Rewrite any encounters that use single-spacing between paragraphs
-- [ ] Combat: cancel monster's later-slot actions when it dies on an early slot
-      (currently slots 2/3 still resolve against a corpse, producing nonsense narration
-      and zero-damage entries that get stripped client-side)
 - [x] Combat: add the standard yellow status banner to the top of the combat screen
       (same as Market/Inventory/etc. — duplicate of in-card vitals so the bar matches
       the rest of the app and gives Flee a permanent home)
-- [ ] Combat: cap worksheet panel `max-width: 820px` so cards don't sprawl on wide
-      monitors (right column min-width is 420 today, but no upper bound)
-- [ ] Combat: rotate the "What's the plan, merchant?" greeting through a small pool
-      of one-liners (e.g., "Eyes up.", "Make it count.", "What's it gonna be?"). Pick
-      randomly per turn so every fight doesn't open with the same line.
+- [ ] Rewrite any encounters that use single-spacing between paragraphs
 
 ### Map Generation
 
@@ -51,11 +119,6 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       opt-in, only the_beast seeded so far), `+combat`/`+chain` link arcs and fights both
       ways, files live under `text/encounters/` (combat/ + arc dirs) and ship via
       `worlds/<name>/combat/`. Remaining: seed fights as they clear balance.
-- [ ] Update weapon/armor descriptions in inventory, market, and bank screens to explain
-      what they actually do in the RPS combat system — current copy is from the d20 era
-      ("+2 to attack rolls" etc.) and doesn't surface the moves the item contributes to
-      the player's pool, mutators (heavy/wary/shielding/etc.), or cooldowns. Players can't
-      make informed buy/equip decisions without this.
 
 ### Rules & Balancing
 
@@ -64,13 +127,11 @@ Features, fixes, and balancing needed for a complete gameplay loop.
       whether each biome has at least one natural Travel Condition source. Each new condition
       motivates a new immunity item (mosquito netting, etc.) — important since the skill-bonus
       gear purge will gut the market; immunity gear is the replacement flavor.
-- [ ] Nuke equippable boots. Replace with a single non-equippable item (good boots, trail
-      boots, whatever) that sits in inventory, consumes a slot, and grants exhaustion immunity.
-      Fits the gear-purge ethos and keeps footwear meaningful without a dedicated equip slot.
-- [ ] Contemplate nuking Mercantile and folding it into Negotiation, leaving a clean
-      two-skill parity: Cunning (encounter checks + resists special attacks) and
-      Negotiation (encounter checks + better prices). Frees one tableau slot in the
-      arc leveling system. See [[arc_leveling]].
+- [x] Nuke equippable boots — done (verified 2026-06-05): no boots slot in `ItemType`;
+      `scarecrow_boots` is already the non-equippable Tool with exhaustion immunity.
+- [x] Contemplate nuking Mercantile and folding it into Negotiation — done in the Phase 8
+      skill cleanup (4 skills: Combat, Negotiation, Bushcraft, Cunning). Vestige cleanup
+      tracked under Cleanup below.
 - [ ] Playtest medicine vs. health drain in T3 areas — currently medicine reduces condition
       stacks but you still lose 1 HP if any severe condition remains. Could be too punishing
       in endgame where multi-stack injuries are common and one bandage per night isn't enough.
@@ -96,11 +157,8 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Quality of Life
 
-- [ ] Hide locked choice requirements — currently we show the `requires` condition text to the
-      player as a UI hint. This breaks with arc encounters that offer the same choice multiple
-      times gated by different mutually-exclusive conditions (e.g. faction standing). Remove or
-      rethink the locked-choice display before launch.
-- [x] Server "quick start" flag — solved via shady trader encounter (temporary, remove before launch)
+- [x] Server "quick start" flag — solved via shady trader encounter. Removal is tracked
+      in Launch Blockers → debug affordance sweep.
 - [ ] Biome intro encounters — one-time scripted encounter per biome/tier that fires on
       first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
       in selection logic. Design in [[biome_intro_encounters]].
@@ -113,34 +171,23 @@ Everything else is a one-liner placeholder.
 
 - [x] Improve settlement and region names
 
-## 2. Deployment, Testing & Hardening
-
-Ship-readiness: hosting, testing, polish, cleanup.
-
 ### Deployment & Hosting
 
-- [ ] Set Cosmos DB TTL on `games` container — 30 days (2592000s) to auto-expire idle saves.
-      `az cosmosdb sql container update -a <account> -g <rg> -d dreamlands -n games --ttl 2592000`
+- [x] React app hosting — live on Cloudflare Pages via `deploy.sh web` (verified 2026-06-05).
+- [x] GameServer hosting — live on Azure Functions + Cosmos DB via `deploy.sh api`
+      (verified 2026-06-05).
 - [ ] Cloudflare R2 asset CDN — create bucket, attach custom domain, wire up push.sh,
       update web client to use CDN base URL in production. Existing push.sh skeleton works.
       Reference at [[cdn_deployment]].
-- [ ] React app hosting — Cloudflare Pages or Azure Static Web Apps, git-connected deploys.
-- [ ] GameServer hosting — Azure Functions, App Service, Fly.io, or similar.
-      Needs Cosmos DB or equivalent for player state persistence.
 - [ ] World build + deploy pipeline — build.sh + push.sh + app deploy as one scripted flow.
       Version-prefix assets for cache busting.
-- [ ] Google OAuth login + session reconnect (very late — production only). See [[google_oauth]].
+- [ ] Google OAuth login + session reconnect — implementation, if the launch-blocker
+      decision lands on "yes". See [[google_oauth]].
 
 ### Testing & Regression
 
 - [ ] CLI integration tests — exercise core loops via CLI against GameServer: encounters,
       movement, inventory, market buy/sell. See [[integration_test_plan]].
-- [ ] POI position mismatch — observed a case where the server's in-memory map had a
-      settlement at (16,5) but map.json on disk had it at (16,7). Player could enter a
-      "ghost" settlement that didn't exist in the data. Server restart fixed it. Root cause
-      unclear — map was NOT regenerated between server start and the bug appearing. Need a
-      regression test that verifies every node's POI in the server's loaded map matches the
-      source map.json.
 
 ### Map Polish
 
@@ -153,12 +200,11 @@ Ship-readiness: hosting, testing, polish, cleanup.
       `SwampPass.cs`, `HillPass.cs`) still references the old flat dirs (`grass_tufts/`,
       `farm_stuff/`, `bogs/`, `trees/`). Migrate code to load from
       `assets/map/decals/{plains,swamp,forest}/` tier-aware structure, then delete old dirs.
-- [ ] Mountain settlement decals invisible in deep mountains — a couple of the settlement
-      decals get buried by the tallest mountain peaks. Figure out the minimum image height
-      they need to render above peak silhouettes, then resize/repaint the offending decals.
 
 ### Cleanup
 
+- [ ] Delete dead `MercantileHaulBonusPerPoint` from `lib/Rules/TradeBalance.cs` —
+      vestige of the removed Mercantile skill.
 - [ ] DungeonRoster refactor (`DungeonRoster.cs` TODO: per-dungeon `descriptor.yaml` files)
 - [ ] Stale reference docs — [[mapgen_design_foundation]] references ocean/coast
       terrain that no longer exists. Several reference docs may have similar staleness.
@@ -184,7 +230,7 @@ None are obviously aged-out — keep for now, revisit when their parent systems 
 - `Noise.Octaves()`, `TerrainPass.Draw()`, `SettlementPlacer.GetTraversableNeighbor()`
 - `MapGenerator.FindRegions()`, `PoiPass.BiomeToDungeonFolder`
 
-## 3. Writing
+## 4. Writing
 
 Content authoring — encounters, lore, art. ~163 hours remaining.
 Pace: ~24 hr/week (Mon–Thu 2hr, Sat–Sun 8hr, Fri off). Target: late May 2026.
