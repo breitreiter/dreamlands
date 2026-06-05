@@ -79,7 +79,7 @@ public class EncounterSelectionTests
         var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
 
         Assert.NotNull(picked);
-        Assert.Equal("plains/tier1/enc2", picked.Id);
+        Assert.Equal("plains/tier1/enc2", picked.Enc!.Id);
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class EncounterSelectionTests
         var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
 
         Assert.NotNull(picked);
-        Assert.Equal("plains/tier1/open", picked.Id);
+        Assert.Equal("plains/tier1/open", picked.Enc!.Id);
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class EncounterSelectionTests
         var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
 
         Assert.NotNull(picked);
-        Assert.Equal("plains/tier1/gated", picked.Id);
+        Assert.Equal("plains/tier1/gated", picked.Enc!.Id);
     }
 
     [Fact]
@@ -215,6 +215,65 @@ public class EncounterSelectionTests
         var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
 
         Assert.Empty(available);
+    }
+
+    static GameSession MakeFightSession(params Dreamlands.Encounter.CombatEncounter[] fights)
+    {
+        var map = Helpers.MakeMap();
+        map[1, 1].Region = new Region(1, Terrain.Plains) { Tier = 1 };
+        return Helpers.MakeSession(map: map, combatBundle: Helpers.MakeCombatBundle(fights));
+    }
+
+    [Fact]
+    public void PickOverworld_PicksRoadFight()
+    {
+        var session = MakeFightSession(Helpers.MakeFight("plains/tier1/bandit", "plains/tier1"));
+
+        var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
+
+        Assert.NotNull(picked);
+        Assert.Null(picked.Enc);
+        Assert.Equal("plains/tier1/bandit", picked.Fight!.Id);
+    }
+
+    [Fact]
+    public void PickOverworld_MatchesCombatPrefixedCategory()
+    {
+        var session = MakeFightSession(Helpers.MakeFight("combat/plains/tier1/bandit", "combat/plains/tier1"));
+
+        var picked = EncounterSelection.PickOverworld(session, session.CurrentNode);
+
+        Assert.Equal("combat/plains/tier1/bandit", picked!.Fight!.Id);
+    }
+
+    [Fact]
+    public void PickOverworld_ExcludesNonRoadFights()
+    {
+        var session = MakeFightSession(Helpers.MakeFight("plains/tier1/arc_fight", "plains/tier1", trigger: "none"));
+
+        Assert.Null(EncounterSelection.PickOverworld(session, session.CurrentNode));
+    }
+
+    [Fact]
+    public void PickOverworld_ExcludesWonFights()
+    {
+        var session = MakeFightSession(Helpers.MakeFight("plains/tier1/bandit", "plains/tier1"));
+        session.Player.UsedEncounterIds.Add("fight:plains/tier1/bandit");
+
+        Assert.Null(EncounterSelection.PickOverworld(session, session.CurrentNode));
+    }
+
+    [Fact]
+    public void PickOverworld_FightRequiresGate()
+    {
+        var beast = Helpers.MakeFight("plains/tier1/beast", "plains/tier1",
+            persistent: true, requires: ["!tag beast_defeated"]);
+        var session = MakeFightSession(beast);
+
+        Assert.NotNull(EncounterSelection.PickOverworld(session, session.CurrentNode));
+
+        session.Player.Tags.Add("beast_defeated");
+        Assert.Null(EncounterSelection.PickOverworld(session, session.CurrentNode));
     }
 
     [Fact]

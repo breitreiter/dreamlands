@@ -102,7 +102,14 @@ mechanics verbs, requires conditions, and `+chain`/`+combat` target syntax.
 
 Tests in `tests/Encounter.Tests` for each new token.
 
-## Phase 2 — Selection: fights in the road pool
+## Phase 2 — Selection: fights in the road pool [DONE 2026-06-05]
+
+Landed as planned. Notes: `PickOverworld` returns `RoadPick`; fight categories
+match both `<biome>/tier<n>` (prototype dir) and `combat/<biome>/tier<n>`
+(post-relocation) during the transition; the travel response carries
+`stopReason: "combat"`. The only seeded road fight so far is the_beast
+(forest/tier3, persistent) — everything else stays `[trigger none]` until it
+clears balance.
 
 - `CombatBundle`: add `GetRoadPool(category)` (or reuse `GetByCategory` + trigger
   filter at call site) mirroring the `.enc` filter chain.

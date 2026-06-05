@@ -60,6 +60,7 @@ internal static class Helpers
     internal static GameSession MakeSession(
         Dreamlands.Map.Map? map = null,
         EncounterBundle? bundle = null,
+        CombatBundle? combatBundle = null,
         int playerX = 1,
         int playerY = 1)
     {
@@ -68,7 +69,38 @@ internal static class Helpers
         var player = PlayerState.NewGame("test", 42, Balance);
         player.X = playerX;
         player.Y = playerY;
-        return new GameSession(player, map, bundle, Balance, new Random(42));
+        return new GameSession(player, map, bundle, Balance, new Random(42), combatBundle);
+    }
+
+    internal static CombatBundle MakeCombatBundle(params CombatEncounter[] fights) =>
+        CombatBundle.FromEncounters(fights);
+
+    internal static CombatEncounter MakeFight(
+        string id,
+        string category,
+        string trigger = "road",
+        bool persistent = false,
+        string[]? requires = null)
+    {
+        var fight = CmbParser.ParseString("""
+            [title Test Fight]
+            [stats hp=10]
+
+            * move Attack
+              narration: It swings.
+
+            * win
+            It falls.
+
+            * lose
+            You fall.
+            """);
+        fight.Id = id;
+        fight.Category = category;
+        fight.Trigger = trigger;
+        fight.Persistent = persistent;
+        if (requires != null) fight.Requires.AddRange(requires);
+        return fight;
     }
 
     internal record BundleEntry(

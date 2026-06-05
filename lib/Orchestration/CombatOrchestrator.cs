@@ -70,6 +70,11 @@ public static class CombatOrchestrator
 
             playerDied = state.PlayerLost || session.Player.Health <= 0;
 
+            // Only winning consumes a fight; lose/flee leave it in the road pool.
+            // Persistent fights are never retired — their [requires] gate ends them.
+            if (state.PlayerWon && !encounter.Persistent)
+                session.Player.UsedEncounterIds.Add(EncounterSelection.FightUsedKey(encounter));
+
             if (!playerDied)
             {
                 session.Player.ActiveCombat = null;

@@ -38,20 +38,47 @@ public static class EncounterSelection
         };
     }
 
-    public static Encounter.Encounter? PickOverworld(GameSession session, Dreamlands.Map.Node node)
+    /// <summary>Result of a road-encounter roll. Exactly one of <see cref="Enc"/> /
+    /// <see cref="Fight"/> is set.</summary>
+    public sealed record RoadPick(Encounter.Encounter? Enc, CombatEncounter? Fight);
+
+    /// <summary>Used-pool key for a fight. Prefixed so fight ids can never collide
+    /// with .enc ids in <c>UsedEncounterIds</c>.</summary>
+    public static string FightUsedKey(CombatEncounter fight) => "fight:" + fight.Id;
+
+    public static RoadPick? PickOverworld(GameSession session, Dreamlands.Map.Node node)
     {
         var category = GetCategory(node);
         if (category == null) return null;
 
-        var pool = session.Bundle.GetByCategory(category);
-        var available = pool
+        var encs = session.Bundle.GetByCategory(category)
             .Where(e => e.Trigger == "road")
             .Where(e => !session.Player.UsedEncounterIds.Contains(e.Id))
             .Where(e => e.Requires.Count == 0 || e.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
             .ToList();
-        if (available.Count == 0) return null;
+        var fights = GetRoadFights(session, category);
 
-        return available[session.Rng.Next(available.Count)];
+        var total = encs.Count + fights.Count;
+        if (total == 0) return null;
+
+        var roll = session.Rng.Next(total);
+        return roll < encs.Count
+            ? new RoadPick(encs[roll], null)
+            : new RoadPick(null, fights[roll - encs.Count]);
+    }
+
+    static List<CombatEncounter> GetRoadFights(GameSession session, string category)
+    {
+        if (session.CombatBundle is not { } bundle) return [];
+        // Road fights live at combat/<biome>/tier<n> once relocated under
+        // text/encounters/; the prototype dir loads them at <biome>/tier<n>.
+        // Accept both during the transition.
+        return bundle.GetByCategory("combat/" + category)
+            .Concat(bundle.GetByCategory(category))
+            .Where(f => f.Trigger == "road")
+            .Where(f => !session.Player.UsedEncounterIds.Contains(FightUsedKey(f)))
+            .Where(f => f.Requires.Count == 0 || f.Requires.All(r => Conditions.Evaluate(r, session.Player, session.Balance, session.Rng)))
+            .ToList();
     }
 
     public static Encounter.Encounter? GetDungeonStart(GameSession session, Dreamlands.Map.Node node)

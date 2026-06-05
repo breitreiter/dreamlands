@@ -23,6 +23,11 @@ public sealed class CombatBundle
             .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
     }
 
+    /// <summary>Build a bundle from already-parsed encounters (Id/Category/Tier preset).
+    /// Used by tests; the JSON bundle load path will share it.</summary>
+    public static CombatBundle FromEncounters(IEnumerable<CombatEncounter> encounters) =>
+        new(encounters.ToList());
+
     public CombatEncounter? GetById(string id) =>
         _byId.TryGetValue(id, out var e) ? e : null;
 

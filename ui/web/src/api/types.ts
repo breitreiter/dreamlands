@@ -363,7 +363,7 @@ export interface CombatRollInfo {
 export interface TravelInfo {
   path: { x: number; y: number }[];
   stepsCompleted: number;
-  stopReason: "arrived" | "encounter" | "rescued";
+  stopReason: "arrived" | "encounter" | "combat" | "rescued";
 }
 
 export interface MechanicsInfo {

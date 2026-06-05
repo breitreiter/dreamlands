@@ -289,12 +289,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                     if (eligible && !data.NoEncounters)
                     {
-                        var enc = EncounterSelection.PickOverworld(session, node);
-                        if (enc != null)
+                        var pick = EncounterSelection.PickOverworld(session, node);
+                        if (pick?.Enc is { } enc)
                         {
                             var step = EncounterRunner.Begin(session, enc);
                             await store.Save(player);
                             return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
+                        }
+                        if (pick?.Fight is { } fight)
+                        {
+                            var turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, fight.Id);
+                            await store.Save(player);
+                            return new OkObjectResult(BuildCombatResponse(session, turn));
                         }
                     }
                 }
@@ -504,8 +510,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                         if (eligible && !data.NoEncounters)
                         {
-                            var enc = EncounterSelection.PickOverworld(session, encNode);
-                            if (enc != null)
+                            var pick = EncounterSelection.PickOverworld(session, encNode);
+                            if (pick?.Enc is { } enc)
                             {
                                 var step = EncounterRunner.Begin(session, enc);
                                 await store.Save(player);
@@ -523,6 +529,28 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                         Path = proposedPath,
                                         StepsCompleted = stepsCompleted,
                                         StopReason = "encounter",
+                                    },
+                                });
+                            }
+                            if (pick?.Fight is { } fight)
+                            {
+                                var turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, fight.Id);
+                                await store.Save(player);
+                                var info = BuildCombatInfo(session, turn);
+                                return new OkObjectResult(new GameResponse
+                                {
+                                    Mode = info.Resolved ? "combat_resolved" : "combat",
+                                    Status = BuildStatus(player),
+                                    Node = BuildNodeInfo(session.CurrentNode, player, session),
+                                    Combat = info,
+                                    Inventory = BuildInventory(player),
+                                    Mechanics = BuildMechanics(player),
+                                    Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
+                                    Travel = new TravelInfo
+                                    {
+                                        Path = proposedPath,
+                                        StepsCompleted = stepsCompleted,
+                                        StopReason = "combat",
                                     },
                                 });
                             }
