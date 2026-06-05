@@ -68,7 +68,8 @@ static class CheckCommand
 
             if (file.EndsWith(".fight", StringComparison.OrdinalIgnoreCase))
             {
-                if (CheckFight(text, rel)) failed++;
+                var fightDir = Path.GetDirectoryName(file) ?? "";
+                if (CheckFight(text, rel, shortIdsByDir.GetValueOrDefault(fightDir))) failed++;
                 continue;
             }
 
@@ -130,7 +131,7 @@ static class CheckCommand
     }
 
     /// <summary>Validate a .fight file. Returns true if it had errors.</summary>
-    private static bool CheckFight(string text, string rel)
+    private static bool CheckFight(string text, string rel, HashSet<string>? siblingIds)
     {
         var errors = new List<string>();
         CombatEncounter? fight = null;
@@ -161,9 +162,17 @@ static class CheckCommand
                     errors.Add($"[requires {req}]: {err}");
                 ValidateItemId(req, errors);
             }
-            ValidateMechanics(fight.WinMechanics, errors);
-            ValidateMechanics(fight.LoseMechanics, errors);
-            ValidateMechanics(fight.FleeMechanics, errors);
+            ValidateMechanics(fight.WinMechanics, errors, isFight: true);
+            ValidateMechanics(fight.LoseMechanics, errors, isFight: true);
+            ValidateMechanics(fight.FleeMechanics, errors, isFight: true);
+
+            foreach (var target in CollectVerbTargets(fight.WinMechanics.Concat(fight.FleeMechanics), "chain"))
+            {
+                if (!target.Contains('/') && (siblingIds == null || !siblingIds.Contains(target)))
+                    errors.Add($"+chain {target}: no encounter file '{target}' in the same directory (qualified ids allowed for cross-directory chains)");
+            }
+            foreach (var target in CollectVerbTargets(fight.LoseMechanics, "chain"))
+                errors.Add($"+chain {target}: chaining from a lose outro is not supported — defeat goes to rescue");
         }
 
         errors.AddRange(CheckForDashAffectations(text));
@@ -332,7 +341,7 @@ static class CheckCommand
         return true;
     }
 
-    private static void ValidateMechanics(IReadOnlyList<string> mechanics, List<string> errors)
+    private static void ValidateMechanics(IReadOnlyList<string> mechanics, List<string> errors, bool isFight = false)
     {
         foreach (var mechanic in mechanics)
         {
@@ -340,43 +349,56 @@ static class CheckCommand
             if (err != null)
                 errors.Add($"+{mechanic}: {err}");
             ValidateItemId(mechanic, errors);
+
+            // +open/+combat/+chain are context-specific: encounters navigate with
+            // +open and hand off with +combat; fight outros chain with +chain.
+            var verb = ActionVerb.Tokenize(mechanic).FirstOrDefault();
+            if (isFight && verb is "open" or "combat")
+                errors.Add($"+{mechanic}: '{verb}' is not valid in fight outros — use +chain to launch a .enc after the coda");
+            else if (!isFight && verb == "chain")
+                errors.Add($"+{mechanic}: 'chain' is fight-outro only — use +open to navigate between encounters");
+        }
+    }
+
+    private static IEnumerable<string> CollectVerbTargets(IEnumerable<string> mechanics, string verb)
+    {
+        foreach (var mechanic in mechanics)
+        {
+            var tokens = ActionVerb.Tokenize(mechanic);
+            if (tokens.Count >= 2 && tokens[0] == verb)
+                yield return tokens[1];
         }
     }
 
     private static List<string> ValidateOpenTargets(Encounter encounter, HashSet<string>? siblingIds)
     {
         var errors = new List<string>();
-        var targets = new List<string>();
+        var mechanics = new List<string>();
 
         foreach (var choice in encounter.Choices)
         {
             if (choice.Conditional is { } conditional)
             {
                 foreach (var branch in conditional.Branches)
-                    CollectOpenTargets(branch.Outcome.Mechanics, targets);
+                    mechanics.AddRange(branch.Outcome.Mechanics);
                 if (conditional.Fallback is { } fallback)
-                    CollectOpenTargets(fallback.Mechanics, targets);
+                    mechanics.AddRange(fallback.Mechanics);
             }
             if (choice.Single is { } single)
-                CollectOpenTargets(single.Part.Mechanics, targets);
+                mechanics.AddRange(single.Part.Mechanics);
         }
 
-        foreach (var target in targets)
+        foreach (var target in CollectVerbTargets(mechanics, "open"))
         {
             if (siblingIds == null || !siblingIds.Contains(target))
                 errors.Add($"+open {target}: no encounter file '{target}' (.enc) found in the same directory");
         }
-        return errors;
-    }
-
-    private static void CollectOpenTargets(IReadOnlyList<string> mechanics, List<string> targets)
-    {
-        foreach (var mechanic in mechanics)
+        foreach (var target in CollectVerbTargets(mechanics, "combat"))
         {
-            var tokens = ActionVerb.Tokenize(mechanic);
-            if (tokens.Count >= 2 && tokens[0] == "open")
-                targets.Add(tokens[1]);
+            if (!target.Contains('/') && (siblingIds == null || !siblingIds.Contains(target)))
+                errors.Add($"+combat {target}: no fight file '{target}' (.fight) found in the same directory (qualified ids allowed)");
         }
+        return errors;
     }
 
     private static readonly HashSet<string> TagVerbs = new() { "add_tag", "remove_tag", "tag" };

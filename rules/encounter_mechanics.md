@@ -48,8 +48,10 @@ Where each one is used:
   1. Short-name match within the current category (arc/directory) — case-insensitive
   2. Fall back to fully qualified id (e.g. "arcs/plains/grainway_station/Captain Aldric")
   Targets only need to be unique within the arc. Two arcs can both have "Start".
-  Note: `.fight` combat encounters are not opened via `+open` — they are launched
-  by the combat mechanic separately.
+  Note: `.fight` combat encounters are not opened via `+open` — use `+combat <fight_id>`
+  (same resolution order, against the combat bundle). The reverse direction is
+  `+chain <enc_id>` in a fight's win/flee outro: the named .enc launches once the
+  player dismisses the coda. Lose outros cannot chain — defeat goes to rescue.
 
 +open bypasses UsedEncounterIds — the used-encounter pool only gates the random
 pickers (road cadence, settlement stocking). Direct navigation always resolves,
@@ -249,6 +251,8 @@ Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
 Dungeon             +finish_dungeon
                     +flee_dungeon
 
+Combat              +combat <fight_id>                   (.enc only — hand off into a .fight; see Naming & identity)
+
 Return to pool      +repool                              (.enc only, extremely rare — see Pooling & recurrence)
 
 Identity            +set_name <name>                     (set player display name; intro only)
@@ -407,10 +411,17 @@ no fight-specific aliases (`+gold`/`+tag` silently no-op; use the real verbs):
     +add_tag <tag_id>         Set a world-state tag
     +add_item <item_id>       Give item
     +damage_spirits <n>       Damage spirits
+    +chain <enc_id>           Launch a .enc after the coda (win/flee only, not lose)
     (full verb list in the Action verbs section above)
+
+`+chain` resolves like `+open`: short name within the fight's own directory
+first, then fully qualified. The .enc launches when the player dismisses the
+outcome coda.
 
 `+repool` is NOT valid in fights — recurrence is implicit (see Pooling &
 recurrence): lose and flee leave the fight in the pool, winning retires it.
+`+open` and `+combat` are also invalid in fight outros — `+chain` is the only
+fight-side navigation.
 
 
 ## Factions

@@ -91,6 +91,14 @@ public sealed class ActionVerb
         VerbUsage.Mechanic, "Navigate to another encounter",
         new ArgDef("encounter_id", ArgType.Id));
 
+    public static readonly ActionVerb StartCombat = new("combat",
+        VerbUsage.Mechanic, "Hand off into a .fight encounter (.enc only)",
+        new ArgDef("fight_id", ArgType.Id));
+
+    public static readonly ActionVerb Chain = new("chain",
+        VerbUsage.Mechanic, "Launch a .enc after the fight coda (fight outros only)",
+        new ArgDef("encounter_id", ArgType.Id));
+
     // ── Identity ────────────────────────────────────────────────
 
     public static readonly ActionVerb SetName = new("set_name",
@@ -210,7 +218,7 @@ public sealed class ActionVerb
     public static IReadOnlyList<ActionVerb> All { get; } = new ActionVerb[]
     {
         Check, Has, Tag, Meets, Quality,
-        Open,
+        Open, StartCombat, Chain,
         SetName,
         AddTag, RemoveTag, SetQuality,
         AddItem, AddRandomItems, LoseRandomItem,

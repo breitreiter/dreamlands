@@ -1,4 +1,6 @@
 # The Beast's Lair — forest T3 basic striker
+# Arc-launched (the_lodge): killing it here sets the_lodge.beast_defeated,
+# which closes the [requires] gate on the roaming the_beast road fight.
 
 [title The Beast's Lair]
 [image monsters/swamp_beast_4.png]
@@ -25,7 +27,7 @@ ichor-filled maw.
 
 * win
 +give_gold 12
-+add_tag the_beast_slain
++add_tag the_lodge.beast_defeated
 The creature crouches to attack again, then, all at once, it collapses with a 
 heavy thud. Whatever force animated this monster is gone, and all that remains
 is its ragged corpse.

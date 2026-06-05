@@ -137,7 +137,18 @@ clears balance.
   (`CombatOrchestrator`), so the response is the normal combat mode payload. No new
   client states — the web UI already renders `mode == "combat"`.
 
-## Phase 3 — Outro scripting: flee + chaining
+## Phase 3 — Outro scripting: flee + chaining [DONE 2026-06-05]
+
+Landed as planned. Notes: `+chain` resolves at combat-resolution time (fail
+fast) and stores the qualified id in `PlayerState.PendingEncounterChain`; the
+win/flee coda's Continue triggers a state refetch and GetGame launches the
+chained .enc (closed-tab resilient). `+combat` ends the encounter and begins
+the fight in the same request — the choice's outcome prose is NOT shown, so
+put transition prose in the fight's intro. Check enforces context: `+chain`
+fight-side only (win/flee, not lose), `+open`/`+combat` .enc-side only;
+unqualified targets must have a sibling file. the_beast_cornered now sets
+`the_lodge.beast_defeated` (was the_beast_slain, which would never have
+closed the_beast's gate).
 
 - `CombatRunner`/`CombatOrchestrator`: on flee, apply `FleeMechanics` and show
   `FleeText` in the coda (today flee applies nothing).

@@ -29,6 +29,10 @@ public class PlayerState
     /// Persists in the Cosmos doc so a closed tab can resume mid-fight.</summary>
     public CombatState? ActiveCombat { get; set; }
 
+    /// <summary>Fully-qualified .enc id queued by a fight outro's +chain. Consumed by
+    /// the next state fetch after the coda is dismissed (closed-tab resilient).</summary>
+    public string? PendingEncounterChain { get; set; }
+
     /// <summary>In-progress picker check (set when runner emits AwaitApproach, cleared on Pick resolution).
     /// Persists so a closed tab can resume mid-picker.</summary>
     public ActivePickerCheck? ActivePickerCheck { get; set; }

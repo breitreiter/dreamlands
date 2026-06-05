@@ -80,9 +80,15 @@ internal static class Helpers
         string category,
         string trigger = "road",
         bool persistent = false,
-        string[]? requires = null)
+        string[]? requires = null,
+        string[]? winMechanics = null,
+        string[]? fleeMechanics = null)
     {
-        var fight = CmbParser.ParseString("""
+        var winMech = string.Join("\n", (winMechanics ?? []).Select(m => "+" + m));
+        var fleeBlock = fleeMechanics == null
+            ? ""
+            : "* flee\nYou get away.\n" + string.Join("\n", fleeMechanics.Select(m => "+" + m));
+        var fight = CmbParser.ParseString($"""
             [title Test Fight]
             [stats hp=10]
 
@@ -91,9 +97,12 @@ internal static class Helpers
 
             * win
             It falls.
+            {winMech}
 
             * lose
             You fall.
+
+            {fleeBlock}
             """);
         fight.Id = id;
         fight.Category = category;

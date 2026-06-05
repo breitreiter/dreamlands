@@ -24,6 +24,10 @@ public abstract record MechanicResult
     public record ItemUnequipped(string DefId, string DisplayName, string Slot) : MechanicResult;
     public record PackUpgraded(int Delta, int NewCapacity) : MechanicResult;
     public record Repooled : MechanicResult;
+    /// <summary>Emitted by +combat (.enc only): hand off into the named fight.</summary>
+    public record CombatStarted(string FightId) : MechanicResult;
+    /// <summary>Emitted by +chain (fight outros only): launch the named .enc after the coda.</summary>
+    public record ChainQueued(string EncounterId) : MechanicResult;
     public record DungeonFinished : MechanicResult;
     public record DungeonFled : MechanicResult;
     /// <summary>Emitted by +add_level: a tableau pick is now pending.</summary>

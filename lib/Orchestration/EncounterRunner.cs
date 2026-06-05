@@ -36,7 +36,7 @@ public abstract record EncounterStep
     ) : EncounterStep;
 }
 
-public enum FinishReason { Completed, NavigatedTo, DungeonFinished, DungeonFled, PlayerDied }
+public enum FinishReason { Completed, NavigatedTo, CombatStarted, DungeonFinished, DungeonFled, PlayerDied }
 
 public static class EncounterRunner
 {
@@ -256,6 +256,9 @@ public static class EncounterRunner
                 session.Player.UsedEncounterIds.Remove(session.CurrentEncounter!.Id);
             if (r is MechanicResult.Navigation nav)
                 return new EncounterStep.Finished(FinishReason.NavigatedTo, nav.EncounterId, Outcome: outcome);
+            if (r is MechanicResult.CombatStarted combat)
+                return new EncounterStep.Finished(FinishReason.CombatStarted,
+                    ResolveFightId(session, combat.FightId), Outcome: outcome);
             if (r is MechanicResult.DungeonFinished)
             {
                 session.Mode = SessionMode.Exploring;
@@ -293,5 +296,20 @@ public static class EncounterRunner
         }
 
         return pendingFinished ?? (EncounterStep)outcome;
+    }
+
+    /// <summary>Resolve a +combat target against the combat bundle: short id within the
+    /// current encounter's directory first (mirrors +open resolution), then qualified.</summary>
+    static string ResolveFightId(GameSession session, string target)
+    {
+        if (session.CombatBundle is not { } fights)
+            throw new InvalidOperationException("No combat bundle loaded; cannot start a fight.");
+
+        var category = session.CurrentEncounter?.Category;
+        if (!string.IsNullOrEmpty(category) && fights.GetById($"{category}/{target}") is { } sibling)
+            return sibling.Id;
+
+        return fights.GetById(target)?.Id
+            ?? throw new InvalidOperationException($"+combat target not found: '{target}'");
     }
 }

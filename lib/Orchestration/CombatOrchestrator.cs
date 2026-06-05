@@ -57,14 +57,13 @@ public static class CombatOrchestrator
 
         if (state.Resolved)
         {
-            // Apply win/lose mechanics through the regular pipeline so they show up the
-            // same as encounter outcomes (gold, tags, conditions, etc.). Flee + monster-flee
-            // emit no mechanics today; revisit if encounter authors need flee-specific hooks.
-            var mechanics = state.PlayerWon
-                ? encounter.WinMechanics
-                : state.PlayerLost
-                    ? encounter.LoseMechanics
-                    : (IReadOnlyList<string>)Array.Empty<string>();
+            // Apply outro mechanics through the regular pipeline so they show up the
+            // same as encounter outcomes (gold, tags, conditions, etc.). Monster-flee
+            // emits no mechanics; revisit if authors need a hook for it.
+            var mechanics = state.PlayerWon ? encounter.WinMechanics
+                : state.PlayerLost ? encounter.LoseMechanics
+                : state.PlayerFled ? encounter.FleeMechanics
+                : (IReadOnlyList<string>)Array.Empty<string>();
             if (mechanics.Count > 0)
                 outcomeMechanics = Mechanics.Apply(mechanics, session.Player, session.Balance, session.Rng);
 
@@ -74,6 +73,15 @@ public static class CombatOrchestrator
             // Persistent fights are never retired — their [requires] gate ends them.
             if (state.PlayerWon && !encounter.Persistent)
                 session.Player.UsedEncounterIds.Add(EncounterSelection.FightUsedKey(encounter));
+
+            // +chain queues a .enc to launch once the player dismisses the coda;
+            // GetGame picks it up on the next state fetch (closed-tab resilient).
+            if (!playerDied)
+            {
+                foreach (var r in outcomeMechanics)
+                    if (r is MechanicResult.ChainQueued chain)
+                        session.Player.PendingEncounterChain = ResolveChainTarget(session, encounter, chain.EncounterId);
+            }
 
             if (!playerDied)
             {
@@ -87,6 +95,20 @@ public static class CombatOrchestrator
         }
 
         return new CombatTurn(encounter.Id, events, outcomeMechanics, state.Resolved, playerDied);
+    }
+
+    /// <summary>Resolve a +chain target: short id within the fight's own directory
+    /// first (mirrors +open resolution), then fully qualified.</summary>
+    static string ResolveChainTarget(GameSession session, CombatEncounter fight, string target)
+    {
+        if (!string.IsNullOrEmpty(fight.Category))
+        {
+            var sibling = session.Bundle.GetByCategory(fight.Category)
+                .FirstOrDefault(e => e.ShortId.Equals(target, StringComparison.OrdinalIgnoreCase));
+            if (sibling != null) return sibling.Id;
+        }
+        return session.Bundle.GetById(target)?.Id
+            ?? throw new InvalidOperationException($"+chain target not found: '{target}' (from fight '{fight.Id}')");
     }
 
     static CombatEncounter ResolveEncounter(GameSession session, string id)

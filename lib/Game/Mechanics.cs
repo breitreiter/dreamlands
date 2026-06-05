@@ -53,6 +53,8 @@ public static class Mechanics
             "skip_time" => ApplySkipTime(args, state),
             "advance_time" => ApplyAdvanceTime(args, state),
             "open" => ApplyOpen(args),
+            "combat" => args.Count >= 1 ? new MechanicResult.CombatStarted(args[0]) : null,
+            "chain" => args.Count >= 1 ? new MechanicResult.ChainQueued(args[0]) : null,
             "repool" => new MechanicResult.Repooled(),
             "finish_dungeon" => ApplyFinishDungeon(state),
             "flee_dungeon" => new MechanicResult.DungeonFled(),

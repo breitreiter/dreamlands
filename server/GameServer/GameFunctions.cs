@@ -122,6 +122,20 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return new OkObjectResult(BuildCombatResponse(session, resumeTurn));
         }
 
+        // A fight outro queued a +chain: launch the .enc now that the coda is dismissed
+        // (the win/flee coda's Continue triggers a state refetch, which lands here).
+        if (player.PendingEncounterChain is { } chainId && player.ActiveCombat == null)
+        {
+            player.PendingEncounterChain = null;
+            if (session.Bundle.GetById(chainId) is { } chained)
+            {
+                var chainStep = EncounterRunner.Begin(session, chained);
+                await store.Save(player);
+                return new OkObjectResult(BuildEncounterResponse(session, chainStep.Encounter, chainStep.GatedChoices));
+            }
+            await store.Save(player); // target gone from the bundle — drop the chain
+        }
+
         // Closed-tab resume for tableau: PendingLevels may be set without an active encounter
         // (e.g., if the encounter session was already closed when +add_level fired).
         if (player.PendingLevels > 0)
@@ -657,6 +671,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 await store.Save(player);
                                 return new OkObjectResult(BuildExploringResponse(session));
 
+                            case FinishReason.CombatStarted:
+                            {
+                                EncounterRunner.EndEncounter(session);
+                                var combatTurn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, finished.NavigateToId!);
+                                await store.Save(player);
+                                return new OkObjectResult(BuildCombatResponse(session, combatTurn));
+                            }
+
                             case FinishReason.DungeonFinished:
                                 player.CurrentDungeonId = null;
                                 await store.Save(player);
@@ -753,6 +775,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 EncounterRunner.EndEncounter(session);
                                 await store.Save(player);
                                 return new OkObjectResult(BuildExploringResponse(session));
+
+                            case FinishReason.CombatStarted:
+                            {
+                                EncounterRunner.EndEncounter(session);
+                                var combatTurn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, pickFinished.NavigateToId!);
+                                await store.Save(player);
+                                return new OkObjectResult(BuildCombatResponse(session, combatTurn));
+                            }
 
                             case FinishReason.DungeonFinished:
                                 player.CurrentDungeonId = null;

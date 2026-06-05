@@ -325,6 +325,7 @@ public static class CombatRunner
         {
             (true, _, _, _)  => (encounter.WinText, (IReadOnlyList<string>)encounter.WinMechanics),
             (_, true, _, _)  => (encounter.LoseText, encounter.LoseMechanics),
+            (_, _, true, _)  => (encounter.FleeText, encounter.FleeMechanics),
             _                => ("", Array.Empty<string>()),
         };
         events.Add(new CombatEvent.Outcome(
