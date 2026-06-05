@@ -17,23 +17,36 @@ sealed class GlmClient(string endpoint, string model, string apiKey = "local", i
 {
     static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(900) };
 
-    public async Task<string> CompleteAsync(
+    public Task<string> CompleteAsync(
         string systemPrompt, string userPrompt,
+        double temperature, double topP, double minP,
+        int maxTokens, bool enableThinking)
+        => CompleteAsync(
+            new[] { ("system", systemPrompt), ("user", userPrompt) },
+            temperature, topP, minP, maxTokens, enableThinking);
+
+    /// <summary>
+    /// Multi-message variant: pass an ordered (role, content) list so callers can ride a
+    /// few-shot example as a genuine prior user/assistant turn. Roles are "system",
+    /// "user", "assistant".
+    /// </summary>
+    public async Task<string> CompleteAsync(
+        IEnumerable<(string role, string content)> messages,
         double temperature, double topP, double minP,
         int maxTokens, bool enableThinking)
     {
         var body = new Dictionary<string, object?>
         {
             ["model"] = model,
-            ["messages"] = new object[]
-            {
-                new { role = "system", content = systemPrompt },
-                new { role = "user", content = userPrompt },
-            },
+            ["messages"] = messages.Select(m => new { role = m.role, content = m.content }).ToArray(),
             ["temperature"] = temperature,
             ["top_p"] = topP,
             ["max_tokens"] = maxTokens,
             ["chat_template_kwargs"] = new { enable_thinking = enableThinking },
+            // Defensive: stop at any chat-template special token. A correctly-templated
+            // instruct model stops on its own, but a base/mis-templated model will run on
+            // and echo a whole synthetic transcript — clip it at the first turn marker.
+            ["stop"] = new[] { "<|im_end|>", "<|im_start|>", "<|user|>", "<|assistant|>", "<|endoftext|>" },
         };
         if (minP > 0) body["min_p"] = minP;
 

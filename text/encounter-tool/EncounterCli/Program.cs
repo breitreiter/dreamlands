@@ -40,8 +40,11 @@ class Program
         Console.WriteLine("                  [--no-filter] [--audit] [--only <scene>]...");
         Console.WriteLine("                  Generate a scene-level COLOR pool per .enc: GLM over-generates");
         Console.WriteLine("                  (steered by a <name>.lens.md / _lens.md), Haiku culls the slop.");
-        Console.WriteLine("  encounter factual <arc-dir> [--qwen-url <url>] [--force] [--prompts-only]");
-        Console.WriteLine("                  Integrate FIXME + curated COLOR bullets into FACTUAL prose blocks.");
+        Console.WriteLine("  encounter factual <arc-dir> [--config <path>] [--force] [--prompts-only] [--only <scene>]...");
+        Console.WriteLine("                  Thread the scene COLOR pool through each FIXME beat into a FACTUAL");
+        Console.WriteLine("                  prose block (GLM via LocalLlm; ../factual strategy).");
+        Console.WriteLine("  encounter factual --parity [N] [--slug <scene>]... [--config <path>]");
+        Console.WriteLine("                  Regression gate: assert the ../factual invariants against eval/factual-parity.");
         Console.WriteLine("  encounter voice <arc-dir> [--qwen-url <url>] [--authors HPL,REH] [--scene <name>]");
         Console.WriteLine("                  [--default-scene mundane] [--programs <dir>] [--temperature 0.7]");
         Console.WriteLine("                  [--force] [--prompts-only]");

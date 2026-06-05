@@ -35,6 +35,37 @@ static class DraftBlocks
         return false;
     }
 
+    static readonly Regex ColorCheckbox = new(@"^\[[ xX]?\]\s*", RegexOptions.Compiled);
+
+    /// <summary>
+    /// Extract the scene-level COLOR pool that `colorize` writes once at the top of the
+    /// file (the first `# --- COLOR ---` block, not anchored to any FIXME). Each bullet's
+    /// `# ` comment prefix and its `[] `/`[x] ` curation checkbox marker are stripped.
+    /// Returns every present bullet: curation is delete-to-cull, so whatever survives in
+    /// the pool is kept; an `[x]` is honored-if-present but not required. Empty list if
+    /// the file carries no pool.
+    /// </summary>
+    public static List<string> ExtractScenePool(List<string> lines)
+    {
+        var bullets = new List<string>();
+        for (int i = 0; i < lines.Count; i++)
+        {
+            if (!lines[i].TrimStart().StartsWith("# --- COLOR", StringComparison.OrdinalIgnoreCase)) continue;
+            for (int j = i + 1; j < lines.Count; j++)
+            {
+                var t = lines[j].TrimStart();
+                if (!t.StartsWith('#')) break;
+                if (t.StartsWith("# ---", StringComparison.Ordinal)) break;   // closing/next block
+                var text = t.StartsWith("# ", StringComparison.Ordinal) ? t[2..]
+                         : t == "#" ? "" : t[1..];
+                text = ColorCheckbox.Replace(text, "").Trim();
+                if (text.Length > 0) bullets.Add(text);
+            }
+            break;
+        }
+        return bullets;
+    }
+
     /// <summary>
     /// Extract the body lines from an adjacent block of the given KIND.
     /// Body lines have their `# ` (or `#`) prefix stripped. Returns null
@@ -247,11 +278,17 @@ static class DraftBlocks
     }
 
     /// <summary>
-    /// Concatenate every .md file in the arc directory as the brief.
+    /// Concatenate the arc's bible .md files as the brief. Excludes colorize-stage
+    /// artifacts that aren't arc intent: per-scene `*.lens.md` / `_lens.md` sidecars and
+    /// the `_color.md` bible (which duplicates the scene COLOR pool).
     /// </summary>
     public static string? LoadBrief(string arcDir)
     {
-        var briefFiles = Directory.GetFiles(arcDir, "*.md").OrderBy(f => f).ToList();
+        var briefFiles = Directory.GetFiles(arcDir, "*.md")
+            .Where(f => !f.EndsWith(".lens.md", StringComparison.OrdinalIgnoreCase))
+            .Where(f => !Path.GetFileName(f).Equals("_lens.md", StringComparison.OrdinalIgnoreCase))
+            .Where(f => !Path.GetFileName(f).Equals("_color.md", StringComparison.OrdinalIgnoreCase))
+            .OrderBy(f => f).ToList();
         if (briefFiles.Count == 0) return null;
         return string.Join("\n\n---\n\n",
             briefFiles.Select(f => $"### {Path.GetFileName(f)}\n\n{File.ReadAllText(f)}"));
@@ -259,7 +296,8 @@ static class DraftBlocks
 
     /// <summary>
     /// Extract the body of the encounter (between front-matter and `choices:`),
-    /// stripped of pipeline draft comments.
+    /// stripped of pipeline draft comments and FIXME beat stubs (those are shown to the
+    /// writer separately as the beat list; a not-yet-written arc has only stubs here).
     /// </summary>
     public static string ExtractEncounterBody(List<string> lines)
     {
@@ -278,7 +316,8 @@ static class DraftBlocks
             if (lines[i].TrimEnd() == "choices:") { end = i; break; }
         }
         return string.Join("\n", lines.Skip(start).Take(end - start)
-            .Where(l => !l.TrimStart().StartsWith('#')));
+            .Where(l => !l.TrimStart().StartsWith('#'))
+            .Where(l => !FixmePattern.IsMatch(l)));
     }
 
     public static string Truncate(string s, int max) => s.Length > max ? s[..max] + "..." : s;
