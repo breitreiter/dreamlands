@@ -96,11 +96,14 @@ public class ArrivalInfo
 {
     public string SettlementName { get; init; } = "";
     public int DaysElapsed { get; init; }
-    public List<ClearedConditionInfo> ConditionsCleared { get; init; } = [];
-    public int HealthBefore { get; init; }
-    public int HealthAfter { get; init; }
-    public int SpiritsBefore { get; init; }
-    public int SpiritsAfter { get; init; }
+    public List<ArrivalLossInfo> Losses { get; init; } = [];
+}
+
+public class ArrivalLossInfo
+{
+    public string Cause { get; init; } = "";
+    public int Health { get; init; }
+    public int Spirits { get; init; }
 }
 
 public class ClearedConditionInfo

@@ -8,7 +8,7 @@ import Inventory from "./Inventory";
 import MarketScreen from "./Market";
 import BankScreen from "./Bank";
 import Inn from "./Inn";
-import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
+import MaskedIcon from "../components/MaskedIcon";
 import DayNightComplication from "../components/DayNightComplication";
 import CombatPicker from "../components/CombatPicker";
 import { Button } from "@/components/ui/button";
@@ -23,26 +23,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { getDiscoveries, getNotices } from "../api/client";
 import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo, ArrivalInfo } from "../api/types";
-
-function StatDelta({ icon, label, before, after }: { icon: string; label: string; before: number; after: number }) {
-  const delta = after - before;
-  const changed = delta !== 0;
-  return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <MaskedIcon icon={icon} className="w-5 h-5" color="currentColor" />
-        <span>{label}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-dim">{before}</span>
-        <span className="text-dim">{"→"}</span>
-        <span className={changed && delta < 0 ? "text-negative" : changed ? "text-positive" : ""}>
-          {after}
-        </span>
-      </div>
-    </div>
-  );
-}
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -819,36 +799,27 @@ export default function Explore({ state }: { state: GameResponse }) {
                   {hasJourney && (
                     <div className="flex flex-col gap-3">
                       <div className="text-accent font-bold tracking-wide">The Journey</div>
-                      {arrival!.conditionsCleared.length > 0 && (
-                        <div className="flex flex-col gap-1.5">
-                          {arrival!.conditionsCleared.map((c) => (
-                            <div key={c.id} className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1.5">
+                        {arrival!.losses.map((loss, i) => (
+                          <div key={i} className="flex flex-col gap-1">
+                            {loss.spirits > 0 && (
                               <div className="flex items-center gap-2">
-                                <img
-                                  src={iconUrl(CONDITION_ICONS[c.id] || "sun.svg")}
-                                  alt=""
-                                  className="w-5 h-5"
-                                />
-                                <span>{c.name}</span>
+                                <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />
+                                <span>
+                                  Lost {loss.spirits} spirit{loss.spirits !== 1 ? "s" : ""} to {loss.cause}
+                                </span>
                               </div>
-                              <span className="text-positive">cleared</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      <div className="flex flex-col gap-1.5 border-t border-edge pt-3">
-                        <StatDelta
-                          icon="heart-plus.svg"
-                          label="Health"
-                          before={arrival!.healthBefore}
-                          after={arrival!.healthAfter}
-                        />
-                        <StatDelta
-                          icon="sensuousness.svg"
-                          label="Spirits"
-                          before={arrival!.spiritsBefore}
-                          after={arrival!.spiritsAfter}
-                        />
+                            )}
+                            {loss.health > 0 && (
+                              <div className="flex items-center gap-2">
+                                <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="#d4c9a8" />
+                                <span>
+                                  Lost {loss.health} health to {loss.cause}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}

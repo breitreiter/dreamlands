@@ -200,14 +200,16 @@ export interface ClearedConditionInfo {
   name: string;
 }
 
+export interface ArrivalLossInfo {
+  cause: string;
+  health: number;
+  spirits: number;
+}
+
 export interface ArrivalInfo {
   settlementName: string;
   daysElapsed: number;
-  conditionsCleared: ClearedConditionInfo[];
-  healthBefore: number;
-  healthAfter: number;
-  spiritsBefore: number;
-  spiritsAfter: number;
+  losses: ArrivalLossInfo[];
 }
 
 export interface EncounterSummaryInfo {

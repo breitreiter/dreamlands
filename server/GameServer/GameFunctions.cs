@@ -331,8 +331,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 string stopReason = "arrived";
                 List<DeliveryInfo> allDeliveries = [];
                 List<ClearedConditionInfo> allClearedConditions = [];
-                var journeyHealthBefore = player.Health;
-                var journeySpiritsBefore = player.Spirits;
+                Dictionary<string, (int Health, int Spirits)> journeyLosses = new();
                 var journeyDayBefore = player.Day;
 
                 for (var i = 1; i < proposedPath.Count; i++)
@@ -441,6 +440,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             data.Balance, session.Rng,
                             startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0);
 
+                        foreach (var drain in campEvents.OfType<EndOfDayEvent.ConditionDrain>())
+                        {
+                            var (h, s) = journeyLosses.GetValueOrDefault(drain.ConditionId);
+                            journeyLosses[drain.ConditionId] = (h + drain.HealthLost, s + drain.SpiritsLost);
+                        }
+
                         player.PendingEndOfDay = false;
 
                         // Safety net: even with no pre-existing severe condition, a freshly-failed
@@ -531,20 +536,24 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 var finalNode = session.CurrentNode;
                 if (finalNode.Poi?.Kind == PoiKind.Settlement)
                 {
-                    var healthDropped = player.Health < journeyHealthBefore;
-                    var spiritsDropped = player.Spirits < journeySpiritsBefore;
-                    var notable = allClearedConditions.Count > 0 || healthDropped || spiritsDropped;
-                    if (notable)
+                    var losses = journeyLosses
+                        .Where(kv => kv.Value.Health > 0 || kv.Value.Spirits > 0)
+                        .Select(kv => new ArrivalLossInfo
+                        {
+                            Cause = ResolveCauseName(kv.Key, data.Balance),
+                            Health = kv.Value.Health,
+                            Spirits = kv.Value.Spirits,
+                        })
+                        .OrderByDescending(l => l.Health + l.Spirits)
+                        .ToList();
+
+                    if (losses.Count > 0)
                     {
                         arrival = new ArrivalInfo
                         {
                             SettlementName = finalNode.Poi.Name ?? finalNode.Poi.SettlementId ?? "Settlement",
                             DaysElapsed = player.Day - journeyDayBefore,
-                            ConditionsCleared = allClearedConditions,
-                            HealthBefore = journeyHealthBefore,
-                            HealthAfter = player.Health,
-                            SpiritsBefore = journeySpiritsBefore,
-                            SpiritsAfter = player.Spirits,
+                            Losses = losses,
                         };
                     }
                 }
@@ -1944,6 +1953,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     }
 
     static string FormatSkillLevel(int level) => level >= 0 ? $"+{level}" : $"{level}";
+
+    static string ResolveCauseName(string id, BalanceData balance)
+    {
+        if (balance.Conditions.TryGetValue(id, out var def) && !string.IsNullOrEmpty(def.Name))
+            return def.Name;
+        return id switch
+        {
+            "starving" => "Starvation",
+            _ => char.ToUpperInvariant(id[0]) + id[1..].Replace('_', ' '),
+        };
+    }
 
     static string FormatItemDescription(ItemDef item)
     {
