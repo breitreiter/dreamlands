@@ -97,8 +97,9 @@ public class SettlementRunnerTests
         session.Player.Day = 10;
         SettlementRunner.EnsureSettlement(session);
 
-        // Settlement should still exist (restocked, not re-initialized)
-        Assert.True(session.Player.Settlements.ContainsKey("s1_1"));
+        // Settlement should be restocked in place, not re-initialized
+        Assert.Same(firstState, session.Player.Settlements["s1_1"]);
+        Assert.True(firstState.LastRestockDay > initialLastRestock);
     }
 
     [Fact]

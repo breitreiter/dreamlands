@@ -238,7 +238,6 @@ public static class Market
             item.IsEquipped = false;
             player.Pack.RemoveAt(packIdx);
             player.Gold += price;
-            var verb = item.IsEquipped ? "Unequipped and sold" : "Sold";
             return new MarketResult(true, $"Sold {def.Name} for {price} gold");
         }
 

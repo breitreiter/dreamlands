@@ -178,7 +178,6 @@ public static partial class EncounterParser
         int currentOptionLine = 0;
         var branches = new List<ConditionalBranch>();
         string? currentCondition = null;
-        int currentConditionLine = 0;
         var branchText = new List<string>();
         var branchMechanics = new List<string>();
         var fallbackText = new List<string>();
@@ -362,7 +361,6 @@ public static partial class EncounterParser
                         errors.Add(new ParseError { Line = lineNum, Message = "@elif after a picker check is not allowed — picker check must be the terminal branch." });
                     PushBranch();
                     currentCondition = rest[..^1].Trim();
-                    currentConditionLine = lineNum;
                     // braceDepth stays at 1
                     continue;
                 }
@@ -428,7 +426,6 @@ public static partial class EncounterParser
                 if (branches.Count > 0 && branches[^1].IsPickerCheck)
                     errors.Add(new ParseError { Line = lineNum, Message = "@elif after a picker check is not allowed — picker check must be the terminal branch." });
                 currentCondition = rest[..^1].Trim();
-                currentConditionLine = lineNum;
                 braceDepth++;
                 inConditional = true;
                 continue;
@@ -451,7 +448,6 @@ public static partial class EncounterParser
                 }
 
                 currentCondition = content[..^1].Trim();
-                currentConditionLine = lineNum;
                 braceDepth++;
                 inConditional = true;
                 inFallback = false;

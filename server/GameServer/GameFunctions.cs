@@ -452,7 +452,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         var campNode = session.CurrentNode;
                         var campBiome = campNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
                         var campTier = campNode.Region?.Tier ?? 1;
-                        var campTerrain = campNode.Region?.Terrain ?? Terrain.Plains;
                         var startCity = data.Map.StartingCity;
 
                         var campEvents = EndOfDay.Resolve(
@@ -950,7 +949,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 var node = session.CurrentNode;
                 var campBiome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
                 var campTier = node.Region?.Tier ?? 1;
-                var campTerrain = node.Region?.Terrain ?? Terrain.Plains;
                 var startCity = data.Map.StartingCity;
 
                 var healthBefore = player.Health;

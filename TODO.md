@@ -36,9 +36,9 @@ Real things strangers from socials will hit. No public posting until these are d
         (`CombatList`/`CombatBegin` in `GameFunctions.cs`) are anonymous and live in prod.
       - `DebugAddCondition` endpoint (`game/{id}/debug/add-condition` in
         `GameFunctions.cs`) — same problem, anyone who knows the route can call it.
-      Consider a real debug gate instead of deletion: a `[debug]` tag filtered at
-      bundle time + a `DREAMLANDS_DEBUG` env flag on the server endpoints, so testing
-      keeps working right up to launch and removal is one switch, not a scavenger hunt.
+      Plan: `plans/debug_tooling_lockdown.md` — loadout picker replaces the trader,
+      localhost gate on debug endpoints. Once it lands this item evaporates (nothing
+      left to remember on launch day).
 - [ ] Fix mobile layout — desktop-first design breaks on phones and tablets:
       fixed-width panels (420px inventory mechanics column), 3-column layouts with
       no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
@@ -85,6 +85,29 @@ Not blockers, but cheap enough (or screenshot-prone enough) to just do.
 - [ ] Combat: rotate the "What's the plan, merchant?" greeting through a small pool
       of one-liners (e.g., "Eyes up.", "Make it count.", "What's it gonna be?"). Pick
       randomly per turn so every fight doesn't open with the same line.
+- [ ] **DESIGN CONVERSATION: condition system experience** (scheduled ~2026-06-06; may
+      blow up into a full plan in `plans/`). Goal: land somewhere where the condition
+      system feels reasonable and fair but also thematically punishing and challenging.
+      Threads to pull:
+      - **Cure-on-settlement-entry feels bad for exhausted.** Warming up at an inn or
+        brazier (freezing) and drawing water from the well (thirsty) make fictional
+        sense; instantly un-exhausting yourself without rest does not. Suspicion: this
+        fell out of nuking wearable boots (exhaustion immunity moved to scarecrow_boots
+        Tool; `ClearedOnSettlement` may have been a blunt patch). Maybe exhausted should
+        require an actual inn stay / rest.
+      - **Silent clears + invisible acquisition.** Settlement-entry clearing is the only
+        silent clear in the game (ReSharper 2026-06-05 found the half-wired
+        `allClearedConditions` plumbing in the GameFunctions travel case — collected,
+        never sent; `ClearedConditionInfo` exists in GameResponse.cs unused). Related
+        gap: ArrivalInfo shows journey *losses* but you can't see that you *got* thirsty
+        crossing the desert — your spirits just decrement for no visible reason.
+        Acquisition, drain, and cure all need legible moments.
+      - Decide the fate of the dead plumbing as part of whatever design lands.
+      Current clearing map (verified 2026-06-05): (1) settlement entry — freezing/
+      thirsty/exhausted, silent; (2) end-of-day out-of-biome — freezing/thirsty, on
+      resolution screen; (3) end-of-day medicine — severe, resolution screen; (4) inn —
+      severe w/ medicine; (5) chapterhouse — severe, free; (6) encounter mechanics;
+      (7) rescue — everything.
 
 ## 3. Post-Launch — Iterate Live
 
@@ -122,6 +145,10 @@ Balance is better tuned with real player data anyway.
 
 ### Rules & Balancing
 
+- [ ] **Economy pass (big, human).** Two symptoms flagged 2026-06-05: (a) with the
+      cheaper food prices, players pick up cash too fast; (b) killing the 18 overworld
+      monsters should yield a decent package of cash so fighting is a viable alternative
+      to trading — right now it doesn't pay.
 - [ ] Pad out the Travel Conditions roster — exhausted/freezing/thirsty may be too thin.
       Consider bringing back swamp fever (spirits-draining, Bushcraft-resistible). Review
       whether each biome has at least one natural Travel Condition source. Each new condition
