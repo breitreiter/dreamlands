@@ -46,3 +46,7 @@ imp/note/inbox/*
 imp/note/processed/*
 imp/note/discarded/*
 !imp/note/*/.gitkeep
+
+# imp/health: local health snapshots; ephemeral, not worth tracking.
+imp/health/
+imp/_meta/health-watermark
