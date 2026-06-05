@@ -16,7 +16,7 @@
   narration: Internal coils whine into a higher pitch as the unit re-routes power.
 
 * move Glowing Heavy Slow Attack
-  narration: The chest plate sparks and something inside it spools loud — it overdrives the lance, bigger than it should be, hotter than it should be.
+  narration: The chest plate sparks and something inside it spools loud. It overdrives the lance, bigger than it should be, hotter than it should be.
 
 * move Heavy Power Defend
   narration: It hunches and projects a stuttering field of pale light around itself.
@@ -24,13 +24,13 @@
 * intro
 The Old Satara Road runs straight through scrub pine and blackened
 stumps, paving stones still fitted tight after centuries of neglect. Two
-men have a handcart blocking it — a sorry, mule-drawn affair, one wheel
-threatening to part company — and they are trying to lever something
+men have a handcart blocking it: a sorry, mule-drawn affair, one wheel
+threatening to part company. They are trying to lever something
 heavy onto it with a plank and a length of rope. The something is
 wrapped in canvas that's slipped loose at one end to reveal smooth dark
 iron and a row of antennae crushed flat against the bed. The shorter
 man sees you first and drops the rope. "Private enterprise. Salvage
-rights. We were here first, and I'll thank you to —" His partner's
+rights. We were here first, and I'll thank you to leave off." His partner's
 voice cuts him off, gone tight and careful. "Ged." Ged keeps talking.
 The canvas is moving.
 
@@ -40,11 +40,11 @@ snapping erect at the crown as the cart cracks and splinters beneath
 it. A row of indicator lights along the chest wakes amber, then red. A
 flat synthetic voice speaks in clean imperial Common: "PYLON UNIT V-7
 ACTIVE. PERIMETER VIOLATION ACKNOWLEDGED. ENGAGEMENT AUTHORIZED." There
-is a sound like a whip-crack and the smell of a forge, and Ged is on
-the ground and not moving and the front of his coat is on fire. Mickey
+is a sound like a whip-crack and the smell of a forge. Ged is on
+the ground and not moving, and the front of his coat is on fire. Mickey
 runs. The recessed face-panel turns to you. One leg drags badly as it
-steps off the wreckage of the cart — something inside it is broken,
-maybe many things — but it is coming for you.
+steps off the wreckage of the cart (something inside it is broken,
+maybe many things), but it is coming for you.
 
 * win
 +give_gold 12

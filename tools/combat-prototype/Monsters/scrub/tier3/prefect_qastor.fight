@@ -21,7 +21,7 @@
   narration: He breathes in once, evenly. The Color in his eyes deepens, and what you took from him is no longer missing.
 
 * intro
-The hall is geometrically too perfect — angles a fraction sharper than
+The hall is geometrically too perfect: angles a fraction sharper than
 your eye can hold, walls that brighten on no schedule. The man who rises
 to greet you wears the formal pleating of a senior interior administrator,
 and the Color is deep in him, in his eyes and the breath he speaks with.
@@ -33,7 +33,7 @@ are carrying. The correction is brief."
 * win
 +give_gold 25
 +add_tag killed_prefect_qastor
-The Color goes out of him the way a lamp goes out — at once and
+The Color goes out of him the way a lamp goes out: at once and
 completely. The angles of the hall settle a fraction softer. The
 pleating of his robe folds neatly under him as he sinks down, the way a
 senior administrator's robe ought to.

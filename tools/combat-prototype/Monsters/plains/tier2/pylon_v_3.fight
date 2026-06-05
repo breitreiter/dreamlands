@@ -16,13 +16,13 @@
   narration: The chest indicators dim to amber. Internal capacitors begin to refill.
 
 * move Glowing Heavy Slow Telegraphed Attack
-  narration: The antennae at the crown lock onto you, the indicator lights go red, and the full lance fires from the crown — clean, surgical, hot.
+  narration: The antennae at the crown lock onto you, the indicator lights go red, and the full lance fires from the crown: clean, surgical, hot.
 
 * intro
 You curse your foul luck and this old imperial survey map and the fact
 that you are, for the third time this hour, lost again. The road is
 gone or was never here. The sun is lower than it should be. The only
-landmark in any direction is a squat tower out across the grass — pale,
+landmark in any direction is a squat tower out across the grass. Pale,
 blocky, taller than a man, standing alone in open country. A guard
 post, you hope. A relay station with a roof and a kettle. You set out
 toward it.
@@ -41,7 +41,7 @@ is no road back the way you came.
 +add_tag killed_pylon_v_3
 The lights along the chest plate fade through amber and out. The antennae
 keep turning a few revolutions before they remember to stop. The voice
-makes one more sound — a syllable that wasn't a word — and the unit goes
+makes one more sound (a syllable that wasn't a word), and the unit goes
 still. The plains around you are still very open.
 
 * lose

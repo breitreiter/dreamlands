@@ -19,7 +19,7 @@
 
 * intro
 You took a shortcut off the marked trail and found his cabin in a hollow
-you would never have found on purpose — low timber, moss-weighted
+you would never have found on purpose. Low timber, moss-weighted
 shingles, smoke curling out of the chimney. The old man at the door was
 congenial. Said he didn't get many visitors, and would you sit a while.
 You traded news for a bowl of stew and stories for another, and the
@@ -35,7 +35,7 @@ cabin is. I've got enemies. Nothing personal, trader."
 +give_gold 10
 +add_tag killed_old_bram
 Bram folds against the doorframe and slides down it. The cabin goes on
-being a cabin — kettle steaming, stew on the hob, the afternoon's fire
+being a cabin. Kettle steaming, stew on the hob, the afternoon's fire
 still warm. You leave it the way he had it, and you leave the way you
 came.
 

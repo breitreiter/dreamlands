@@ -21,14 +21,13 @@
   narration: He steps back behind the wagon-husk; the crossbowman covers his lane.
 
 * intro
-Three of his crew are visible behind the wagon-husk — one with a crossbow,
+Three of his crew are visible behind the wagon-husk: one with a crossbow,
 two pretending not to be paying attention. The man who steps out wears a
 brown leather long-coat and the visor of a dead Pylon strapped over his
 face like a helm. He spreads his hands, friendly. "Old Survey Road,
 friend. South of Forward Depot Three. That's Ashford's. That's me." He
 cocks his head. "Now you can pay the toll, you can walk back the way you
-came, or — third option — you can be why my morning got interesting. Pick
-fast."
+came, or you can be why my morning got interesting. Pick fast."
 
 * win
 +give_gold 12
