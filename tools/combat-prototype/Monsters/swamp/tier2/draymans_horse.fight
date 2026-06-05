@@ -27,8 +27,8 @@ It does not slow when it sees you. It has been on this run since before
 the village was built, and it does not yield the road.
 
 * win
-+gold 10
-+tag killed_draymans_horse
++give_gold 10
++add_tag killed_draymans_horse
 Whatever was driving it through its run-without-end has finished
 running. The bones come apart on the planks one piece at a time, the
 way old harness comes apart, and the human skull goes last and without

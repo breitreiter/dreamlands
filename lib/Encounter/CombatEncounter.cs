@@ -16,7 +16,22 @@ public sealed class CombatEncounter
 
     public string Title { get; set; } = "";
     public string Image { get; set; } = "";
-    public bool Repool { get; set; } = false;
+
+    /// <summary>Where this fight fires: "road" (random travel pool) or "none"
+    /// (arc-launched only, the default).</summary>
+    public string Trigger { get; set; } = "none";
+
+    /// <summary>Optional combat backdrop override (path relative to assets/).
+    /// Empty = server picks the biome default.</summary>
+    public string Background { get; set; } = "";
+
+    /// <summary>Never retired by winning — keeps spawning until a [requires]
+    /// gate disqualifies it. Validation demands a gate on persistent fights.</summary>
+    public bool Persistent { get; set; } = false;
+
+    /// <summary>Raw condition strings gating spawn eligibility (AND together),
+    /// same vocabulary as .enc [requires].</summary>
+    public List<string> Requires { get; set; } = new();
 
     /// <summary>CSS color for blood-splat hit animations. Default mammalian red;
     /// non-mammals (lattice, golem, etc.) override via <c>+blood &lt;hex&gt;</c>.</summary>
@@ -28,6 +43,7 @@ public sealed class CombatEncounter
     public string Intro { get; set; } = "";
     public string WinText { get; set; } = "";
     public string LoseText { get; set; } = "";
+    public string FleeText { get; set; } = "";
 
     /// <summary>Raw mechanic strings (e.g. "gold 8", "tag killed_gorzog") run through
     /// the standard <c>Mechanics.Apply</c> pipeline on victory.</summary>
@@ -35,6 +51,9 @@ public sealed class CombatEncounter
 
     /// <summary>Raw mechanic strings applied on defeat.</summary>
     public List<string> LoseMechanics { get; set; } = new();
+
+    /// <summary>Raw mechanic strings applied when the player flees.</summary>
+    public List<string> FleeMechanics { get; set; } = new();
 }
 
 public sealed record MonsterStats(int Hp);

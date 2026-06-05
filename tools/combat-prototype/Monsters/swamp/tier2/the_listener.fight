@@ -27,8 +27,8 @@ Its head snaps to you. Whatever proverb the Revathi have about silence on
 the deep paths, you understand it now.
 
 * win
-+gold 10
-+tag killed_the_listener
++give_gold 10
++add_tag killed_the_listener
 It folds onto the planks without making any sound. You wait a long
 breath in case there is another one. There is not, this time. The
 proverb the Revathi have about silence on the deep paths, you keep on

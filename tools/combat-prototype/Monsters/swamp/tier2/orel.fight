@@ -31,8 +31,8 @@ something that has never been told it is not a child. You remember, too
 late to matter now, hearing that you should offer it food.
 
 * win
-+gold 10
-+tag killed_orel
++give_gold 10
++add_tag killed_orel
 It folds on the planks with a small wet sound and does not get up. The
 walkway holds it the way the walkway holds anything else. You step
 around it carefully and keep moving, and try not to think about whose

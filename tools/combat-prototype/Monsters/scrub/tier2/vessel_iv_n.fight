@@ -31,8 +31,8 @@ jogging behind it with a tablet, shouting calmly: "Stand clear of the
 unit. Stand clear of the unit." The unit does not stand clear of you.
 
 * win
-+gold 12
-+tag killed_vessel_iv_n
++give_gold 12
++add_tag killed_vessel_iv_n
 The vents close one by one. The Color seals itself back behind the gray
 plates and the unit settles where it stands. The administrator is
 nowhere in sight. Far up the rail-cut, a tablet is bleating an alert

@@ -8,7 +8,7 @@ static class CheckCommand
     public static int Run(string[] args)
     {
         var path = "encounters";
-        var exts = new[] { ".enc" };
+        var exts = new[] { ".enc", ".fight" };
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i] == "--ext" && i + 1 < args.Length)
@@ -66,6 +66,12 @@ static class CheckCommand
                 text = File.ReadAllText(file);
             }
 
+            if (file.EndsWith(".fight", StringComparison.OrdinalIgnoreCase))
+            {
+                if (CheckFight(text, rel)) failed++;
+                continue;
+            }
+
             var result = EncounterParser.Parse(text);
             var vocabErrors = new List<string>();
             var idWarnings = new List<string>();
@@ -121,6 +127,56 @@ static class CheckCommand
         else
             Console.WriteLine($"{failed} of {files.Length} file(s) had errors{(warned > 0 ? $", {warned} with warnings" : "")}.{fixNote}");
         return failed > 0 ? 1 : 0;
+    }
+
+    /// <summary>Validate a .fight file. Returns true if it had errors.</summary>
+    private static bool CheckFight(string text, string rel)
+    {
+        var errors = new List<string>();
+        CombatEncounter? fight = null;
+        try
+        {
+            fight = CmbParser.ParseString(text, rel);
+        }
+        catch (FormatException ex)
+        {
+            errors.Add(ex.Message);
+        }
+
+        if (fight != null)
+        {
+            if (fight.Title.Length == 0)
+                errors.Add("missing [title]");
+            if (fight.Stats.Hp <= 0)
+                errors.Add("missing [stats hp=<n>] with n > 0");
+            if (fight.Moves.Count == 0)
+                errors.Add("no '* move' sections — a fight needs a move pool");
+            if (fight.Persistent && fight.Requires.Count == 0)
+                errors.Add("[persistent] fight has no [requires] gate — it would spawn forever; gate it on a tag/quality");
+
+            foreach (var req in fight.Requires)
+            {
+                var err = ActionVerb.Validate(req, VerbUsage.Condition);
+                if (err != null)
+                    errors.Add($"[requires {req}]: {err}");
+                ValidateItemId(req, errors);
+            }
+            ValidateMechanics(fight.WinMechanics, errors);
+            ValidateMechanics(fight.LoseMechanics, errors);
+            ValidateMechanics(fight.FleeMechanics, errors);
+        }
+
+        errors.AddRange(CheckForDashAffectations(text));
+
+        if (errors.Count == 0)
+        {
+            Console.WriteLine($"  OK  {rel}");
+            return false;
+        }
+        Console.WriteLine($"  ERR {rel}");
+        foreach (var err in errors)
+            Console.WriteLine($"      {err}");
+        return true;
     }
 
     private static void ValidateAccessibility(Encounter encounter, List<string> errors)

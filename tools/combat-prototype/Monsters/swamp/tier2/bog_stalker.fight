@@ -28,8 +28,8 @@ are old — older than they have any right to be, in something this size.
 It does not hurry. The bog hurries for it.
 
 * win
-+gold 12
-+tag killed_bog_stalker
++give_gold 12
++add_tag killed_bog_stalker
 It settles back into the water without a sound, going where it came from.
 The swamp closes up over it and after a moment you couldn't say where it
 had been.

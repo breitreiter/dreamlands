@@ -29,8 +29,8 @@ INNER PERIMETER. UNAUTHORIZED PRESENCE NOTED. COMMENCING ENFORCEMENT."
 The Color in the projector lenses begins to wake.
 
 * win
-+gold 25
-+tag killed_sentinel_7c
++give_gold 25
++add_tag killed_sentinel_7c
 The projector lenses dim, hold a moment of pale amber, and go out. The
 voice makes one last careful, conversational syllable, and the inner
 perimeter is no longer enforced. The city goes on being abandoned.

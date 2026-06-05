@@ -37,8 +37,8 @@ go red. Its arms unfold. The plains around you are very open, and there
 is no road back the way you came.
 
 * win
-+gold 12
-+tag killed_pylon_v_3
++give_gold 12
++add_tag killed_pylon_v_3
 The lights along the chest plate fade through amber and out. The antennae
 keep turning a few revolutions before they remember to stop. The voice
 makes one more sound — a syllable that wasn't a word — and the unit goes

@@ -36,6 +36,11 @@ the weapon/armor description rewrite stays a separate task).
 - **File home**: `text/encounters/combat/<biome>/tier<n>/` for road fights; arc fights
   live in their arc directory (e.g. `text/encounters/arcs/forest/the_lodge/the_beast.fight`).
   The combat loader scans the whole `text/encounters/` tree for `.fight` files.
+- **`[persistent]` frontmatter** (locked 2026-06-05, amends the pooling rule): a
+  persistent fight is never retired, even by winning — recurrence is a spawn
+  property, not an outro script. Validation requires a `[requires]` gate on
+  persistent fights. Motivating case: The Beast (the_lodge arc) roams forest T3
+  roads until the lair fight sets `the_lodge.beast_defeated`.
 
 ## Current state
 
@@ -64,7 +69,15 @@ What's missing:
   would have zero fights. `worlds/*/update-encounters.sh` doesn't touch fights.
 - `EncounterCli check` doesn't validate `.fight` files.
 
-## Phase 1 — Format: frontmatter + flee section
+## Phase 1 — Format: frontmatter + flee section [DONE 2026-06-05]
+
+Landed as planned, plus `[persistent]` (see design decisions). One discovery:
+fight outro mechanics had been using `+gold`/`+tag`/`+set`, which
+`Mechanics.ApplyOne` silently no-ops (unknown verbs return null) — combat wins
+never actually granted gold or set tags. All 20 prototype files rewritten to
+the canonical `+give_gold`/`+add_tag`. Remaining check failures in the
+prototype dir are pre-existing em-dashes in prose; rewrite those during the
+balance pass, before the Phase 4 move into `text/encounters/`.
 
 Parser (`CmbParser.cs`) and model (`CombatEncounter.cs`):
 
@@ -106,7 +119,8 @@ Tests in `tests/Encounter.Tests` for each new token.
   `combat/` prefix.
 - **Used-marking — only winning consumes a fight**: on a win, record the fight in
   `PlayerState.UsedEncounterIds` with a `fight:` prefix
-  (e.g. `fight:combat/plains/tier1/bandit`). Lose and flee never mark — the threat wasn't removed, so it stays in the pool
+  (e.g. `fight:combat/plains/tier1/bandit`) — unless the fight is `[persistent]`,
+  which is never marked. Lose and flee never mark — the threat wasn't removed, so it stays in the pool
   (the T1 plains bandit keeps harassing you until you beat him; defeating him is
   the small triumph that retires the fight). A fight that must be one-shot
   regardless of outcome sets a tag in all three outros and gates itself with

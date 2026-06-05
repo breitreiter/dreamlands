@@ -24,8 +24,8 @@ you. It comes to rest low on the trail in front of you, growling low from its
 ichor-filled maw.
 
 * win
-+gold 12
-+set the_beast_slain
++give_gold 12
++add_tag the_beast_slain
 The creature crouches to attack again, then, all at once, it collapses with a 
 heavy thud. Whatever force animated this monster is gone, and all that remains
 is its ragged corpse.

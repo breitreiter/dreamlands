@@ -30,8 +30,8 @@ you as you enter the clearing. It does not raise the blade. It does
 not need to. It begins to walk.
 
 * win
-+gold 12
-+tag killed_stray_vessel_2
++give_gold 12
++add_tag killed_stray_vessel_2
 The Color leaves it in pulses that get slower and slower until they
 stop. The jambiya falls last. Across the clearing the goat is still
 tied; the cookfire is still smoking; the Tashkari are still gone.

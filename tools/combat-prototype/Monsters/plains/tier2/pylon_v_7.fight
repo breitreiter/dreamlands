@@ -47,8 +47,8 @@ steps off the wreckage of the cart — something inside it is broken,
 maybe many things — but it is coming for you.
 
 * win
-+gold 12
-+tag killed_pylon_v_7
++give_gold 12
++add_tag killed_pylon_v_7
 The chest indicators stutter, hold a long amber, and go dark. The unit
 settles where it stands and does not move again. Ged is still on the
 ground. Mickey has not come back.

@@ -31,8 +31,8 @@ came, or — third option — you can be why my morning got interesting. Pick
 fast."
 
 * win
-+gold 12
-+tag killed_tob_ashford
++give_gold 12
++add_tag killed_tob_ashford
 Tob goes down hard and his crew goes the other way over the rise without
 looking back. The Pylon visor lies in the dust beside him, scratched and
 empty. The Old Survey Road is the Old Survey Road again.

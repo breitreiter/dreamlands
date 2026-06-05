@@ -31,8 +31,8 @@ remembers being human. It steps down off the slope toward you. It does
 not speak. Whatever walks out of the great factory does not speak.
 
 * win
-+gold 12
-+tag killed_stray_vessel_1
++give_gold 12
++add_tag killed_stray_vessel_1
 The Color drains out of the body in a long, slow exhale, and what is
 left in the dust is something that looks for a moment like a man, and
 then less like one, and then not very much like anything at all. The

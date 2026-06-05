@@ -30,8 +30,8 @@ to put you down." He draws his blade. "Take a moment. When you're ready,
 we'll begin."
 
 * win
-+gold 10
-+tag killed_halen_morick
++give_gold 10
++add_tag killed_halen_morick
 Halen goes down with the same composure he came on with. He tries to say
 something, and does not. You take a moment yourself, then keep walking.
 Whoever sent him might send another, but not today.

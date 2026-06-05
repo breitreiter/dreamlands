@@ -31,8 +31,8 @@ smiles, briefly, the way a polite host smiles. "Please. Set down what you
 are carrying. The correction is brief."
 
 * win
-+gold 25
-+tag killed_prefect_qastor
++give_gold 25
++add_tag killed_prefect_qastor
 The Color goes out of him the way a lamp goes out — at once and
 completely. The angles of the hall settle a fraction softer. The
 pleating of his robe folds neatly under him as he sinks down, the way a

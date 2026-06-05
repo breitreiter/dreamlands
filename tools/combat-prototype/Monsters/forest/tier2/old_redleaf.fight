@@ -25,8 +25,8 @@ its eyes catch the canopy-light wrong, an ember-glow that holds steady when
 it shouldn't. The forest has gone quiet around you both.
 
 * win
-+gold 10
-+tag killed_old_redleaf
++give_gold 10
++add_tag killed_old_redleaf
 The bear settles in the leaves and does not rise again. Whatever held the
 ember-glow behind its eyes has gone out. The forest, slow to remember it
 was a forest, begins to make small noises again.

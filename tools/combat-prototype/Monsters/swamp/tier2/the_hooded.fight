@@ -35,8 +35,8 @@ gently, the bog begins to push. If you let it push long enough, you
 understand, you will be one more thing the swamp remembers.
 
 * win
-+gold 10
-+tag killed_the_hooded
++give_gold 10
++add_tag killed_the_hooded
 The shape inside the hood loses interest in being a shape. The robe
 sinks, deflates, soaks dark into the moss. The pressure behind your
 eyes drains away in a single long beat. The bioluminescence in the

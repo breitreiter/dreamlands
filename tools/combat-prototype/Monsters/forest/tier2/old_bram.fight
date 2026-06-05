@@ -32,8 +32,8 @@ ago. The staff is in both hands now. "Can't let it get out where my
 cabin is. I've got enemies. Nothing personal, trader."
 
 * win
-+gold 10
-+tag killed_old_bram
++give_gold 10
++add_tag killed_old_bram
 Bram folds against the doorframe and slides down it. The cabin goes on
 being a cabin — kettle steaming, stew on the hob, the afternoon's fire
 still warm. You leave it the way he had it, and you leave the way you

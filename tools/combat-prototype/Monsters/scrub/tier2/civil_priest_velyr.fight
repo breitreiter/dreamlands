@@ -27,8 +27,8 @@ his head, as if this were a courtesy call. Then his grip on the staff
 changes, and you understand it isn't.
 
 * win
-+gold 14
-+tag bested_velyr
++give_gold 14
++add_tag bested_velyr
 He goes to one knee, then his hands, then he is still. The road is very
 quiet. After a moment a desert lark starts up in the brush, and the world
 remembers itself.

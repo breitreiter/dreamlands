@@ -18,6 +18,8 @@ namespace Dreamlands.Encounter;
 ///   [image foo/bar.webp]
 ///   [blood #7a0a0a]
 ///   [stats hp=18]
+///   [trigger road]
+///   [requires !tag killed_goblin]
 ///
 ///   * move Heavy Telegraphed Slow Attack
 ///     narration: It winds back, hauling the maul over its head.
@@ -36,6 +38,9 @@ namespace Dreamlands.Encounter;
 ///
 ///   * lose
 ///   Everything goes black.
+///
+///   * flee
+///   You scramble back the way you came.
 ///
 /// `* move` is followed by a Move encoding parsed by <see cref="Move.Parse"/>
 /// (last token is the base, preceding tokens are mutators). Multiple narration
@@ -109,11 +114,22 @@ public static partial class CmbParser
 
         switch (key)
         {
-            case "title":  enc.Title = value; break;
-            case "image":  enc.Image = value; break;
-            case "blood":  enc.BloodColor = value; break;
-            case "repool": enc.Repool = ParseBool(value, source, i); break;
-            case "stats":  enc.Stats = ParseStats(value, source, i); break;
+            case "title":      enc.Title = value; break;
+            case "image":      enc.Image = value; break;
+            case "blood":      enc.BloodColor = value; break;
+            case "stats":      enc.Stats = ParseStats(value, source, i); break;
+            case "trigger":    enc.Trigger = ParseTrigger(value, source, i); break;
+            case "background": enc.Background = value; break;
+            case "persistent": enc.Persistent = value.Length == 0 || ParseBool(value, source, i); break;
+            case "requires":
+                if (value.Length == 0)
+                    throw new FormatException($"{source}:{i + 1}: [requires] needs a condition");
+                enc.Requires.Add(value);
+                break;
+            case "repool":
+                throw new FormatException(
+                    $"{source}:{i + 1}: [repool] is gone — fights recur until won implicitly; " +
+                    $"use [persistent] for fights never retired by winning");
             default:
                 throw new FormatException($"{source}:{i + 1}: unknown front-matter key '[{key}]'");
         }
@@ -122,7 +138,7 @@ public static partial class CmbParser
     static int ParseSection(IReadOnlyList<string> lines, int i, string header, CombatEncounter enc, string source)
     {
         if (header.Length == 0)
-            throw new FormatException($"{source}:{i + 1}: '* ' needs a section name (move/intro/win/lose)");
+            throw new FormatException($"{source}:{i + 1}: '* ' needs a section name (move/intro/win/lose/flee)");
 
         int sp = header.IndexOf(' ');
         string kind = sp < 0 ? header : header[..sp];
@@ -146,10 +162,21 @@ public static partial class CmbParser
                 enc.LoseText = loseText;
                 enc.LoseMechanics = loseMech;
                 return i;
+            case "flee":
+                i = ParseProseBlock(lines, i + 1, out string fleeText, out var fleeMech);
+                enc.FleeText = fleeText;
+                enc.FleeMechanics = fleeMech;
+                return i;
             default:
                 throw new FormatException($"{source}:{i + 1}: unknown section '* {kind}'");
         }
     }
+
+    static string ParseTrigger(string s, string source, int line) => s.ToLowerInvariant() switch
+    {
+        "road" or "none" => s.ToLowerInvariant(),
+        _ => throw new FormatException($"{source}:{line + 1}: bad trigger '{s}' (road or none)")
+    };
 
     static bool ParseBool(string s, string source, int line) => s.ToLowerInvariant() switch
     {
@@ -231,6 +258,10 @@ public static partial class CmbParser
             if (trimmed.StartsWith('+'))
             {
                 string mech = trimmed[1..].TrimStart();
+                if (mech == "repool" || mech.StartsWith("repool ", StringComparison.Ordinal))
+                    throw new FormatException(
+                        $"line {i + 1}: +repool is not valid in fights — lose and flee repool implicitly; " +
+                        $"use [persistent] for fights never retired by winning");
                 if (mech.Length > 0) mechanics.Add(mech);
             }
             else if (trimmed.StartsWith('>'))

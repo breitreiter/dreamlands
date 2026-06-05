@@ -75,6 +75,13 @@ beat him). Winning is what retires the fight, recorded as `fight:<id>` in
 UsedEncounterIds. A fight that must be one-shot regardless of outcome sets a
 tag in its outros and gates itself with `[requires tag ...]`.
 
+One declared exception: a `[persistent]` fight is never retired, even by
+winning — wins drive the monster off but don't remove the threat. Persistent
+fights MUST carry a `[requires]` gate so something else can end them (check
+fails otherwise). Canonical example: The Beast roams forest T3 roads, gated on
+`!tag the_lodge.beast_defeated`; only the lair fight in the_lodge arc sets
+that tag.
+
 
 ## Front-matter
 
@@ -285,6 +292,8 @@ sigils with `.enc`: `[key value]` for front-matter, `* name` for sections,
     [image monsters/biome_type.webp]
     [blood #7a0a0a]                   (optional — default mammalian red)
     [stats hp=18]
+    [trigger road]                    (optional — default none)
+    [requires !tag killed_name]       (optional, repeatable)
 
     * move Attack
       narration: It lunges at you, claws raking forward.
@@ -298,11 +307,14 @@ sigils with `.enc`: `[key value]` for front-matter, `* name` for sections,
 
     * win
     Prose shown on player victory.
-    +gold 12
-    +tag killed_name
+    +give_gold 12
+    +add_tag killed_name
 
     * lose
     Prose shown on player defeat.
+
+    * flee
+    Prose shown when the player flees.
 
 ### Front-matter and sections
 
@@ -313,11 +325,16 @@ column 0. `#` is a comment; blank lines are ignored.
     [image <path>]      Image path (relative to assets/)
     [blood <hex>]       Blood-splat color; override for non-mammals (golems, lattice, etc.)
     [stats hp=<n>]      Monster HP — required, must be > 0
+    [trigger <value>]   road = random travel pool; none = arc-launched only (default)
+    [background <path>] Combat backdrop override; default is the biome backdrop
+    [persistent]        Never retired by winning — requires a [requires] gate
+    [requires <cond>]   Spawn gate; same condition syntax as .enc, repeatable (AND)
 
     * move <encoding>   One move in the pool (followed by narration: lines)
     * intro             Block: opening prose
     * win               Block: prose + mechanics on player victory
-    * lose              Block: prose on player defeat
+    * lose              Block: prose + mechanics on player defeat
+    * flee              Block: prose + mechanics when the player flees
 
 ### Move encoding
 
@@ -379,14 +396,15 @@ Canonical encoded form sorts mutators alphabetically then appends the base
 capitalized (e.g. `"Heavy Slow Telegraphed Attack"`). Authoring order does
 not matter — the parser normalizes on load.
 
-### Win/lose mechanics
+### Outro mechanics (win/lose/flee)
 
-In `* win` and `* lose` blocks, `+verb` lines are mechanics run through the
-standard `Mechanics.Apply` pipeline after combat resolves. They share the verb
-vocabulary with `.enc` action verbs:
+In `* win`, `* lose`, and `* flee` blocks, `+verb` lines are mechanics run
+through the standard `Mechanics.Apply` pipeline after combat resolves. They
+share the verb vocabulary with `.enc` action verbs — the same canonical names,
+no fight-specific aliases (`+gold`/`+tag` silently no-op; use the real verbs):
 
-    +gold <n>                 Award gold
-    +tag <tag_id>             Set a world-state tag
+    +give_gold <n>            Award gold
+    +add_tag <tag_id>         Set a world-state tag
     +add_item <item_id>       Give item
     +damage_spirits <n>       Damage spirits
     (full verb list in the Action verbs section above)

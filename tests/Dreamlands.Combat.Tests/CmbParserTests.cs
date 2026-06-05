@@ -74,6 +74,87 @@ public class CmbParserTests
     }
 
     [Fact]
+    public void Trigger_defaults_to_none()
+    {
+        var enc = CmbParser.ParseString(SampleEncounter);
+        Assert.Equal("none", enc.Trigger);
+        Assert.False(enc.Persistent);
+        Assert.Empty(enc.Requires);
+        Assert.Equal("", enc.Background);
+    }
+
+    [Fact]
+    public void Parses_spawn_front_matter()
+    {
+        var enc = CmbParser.ParseString("""
+            [title Bandit]
+            [stats hp=10]
+            [trigger road]
+            [background backdrops/plains_road.webp]
+            [persistent]
+            [requires !tag bandit_defeated]
+            [requires quality notoriety 2]
+
+            * move Attack
+              narration: He swings.
+            """);
+        Assert.Equal("road", enc.Trigger);
+        Assert.Equal("backdrops/plains_road.webp", enc.Background);
+        Assert.True(enc.Persistent);
+        Assert.Equal(["!tag bandit_defeated", "quality notoriety 2"], enc.Requires);
+    }
+
+    [Fact]
+    public void Rejects_bad_trigger_value()
+    {
+        var bad = """
+            [title Foo]
+            [stats hp=10]
+            [trigger settlement]
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
+    }
+
+    [Fact]
+    public void Parses_flee_block_with_mechanics()
+    {
+        var enc = CmbParser.ParseString(SampleEncounter + """
+
+
+            * flee
+            You scramble back the way you came.
+            +tag fled_goblin
+            """);
+        Assert.Contains("scramble", enc.FleeText);
+        Assert.Contains("tag fled_goblin", enc.FleeMechanics);
+    }
+
+    [Fact]
+    public void Rejects_repool_front_matter()
+    {
+        var bad = """
+            [title Foo]
+            [stats hp=10]
+            [repool true]
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
+    }
+
+    [Fact]
+    public void Rejects_repool_mechanic()
+    {
+        var bad = """
+            [title Foo]
+            [stats hp=10]
+
+            * win
+            It flees.
+            +repool
+            """;
+        Assert.Throws<FormatException>(() => CmbParser.ParseString(bad));
+    }
+
+    [Fact]
     public void Rejects_unknown_front_matter()
     {
         var bad = """
