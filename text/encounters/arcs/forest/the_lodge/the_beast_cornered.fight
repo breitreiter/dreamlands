@@ -4,6 +4,7 @@
 
 [title The Beast's Lair]
 [image monsters/swamp_beast_4.png]
+[background forest/forest_tier_3_1]
 [blood #2a4a3a]
 [stats hp=24]
 

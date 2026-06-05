@@ -61,9 +61,9 @@ public class GameData
         Map = MapSerializer.Load(mapPath);
         _bundle = EncounterBundle.Load(bundlePath);
 
-        // Combat bundle: directory of .fight files. Phase 1 looks for a "combat" sibling
-        // of the encounter bundle, with a fallback to the prototype's monsters dir so
-        // gorzog runs without world surgery.
+        // Combat bundle: directory of .fight files. Worlds carry a "combat" dir
+        // (mirrored from text/encounters by update-encounters.sh); in dev, fall back
+        // to the live text/encounters tree so fight edits only need a reload.
         var combatDir = Environment.GetEnvironmentVariable("DREAMLANDS_COMBAT_DIR");
         if (combatDir == null)
         {
@@ -72,16 +72,21 @@ public class GameData
             if (Directory.Exists(inWorld))
                 combatDir = inWorld;
             else if (IsDev)
-                combatDir = Path.Combine(FindRepoRoot(), "tools/combat-prototype/Monsters");
+                combatDir = Path.Combine(FindRepoRoot(), "text/encounters");
         }
+        _combatDir = combatDir;
         if (combatDir != null && Directory.Exists(combatDir))
             CombatBundle = Dreamlands.Encounter.CombatBundle.LoadDirectory(combatDir);
     }
+
+    private string? _combatDir;
 
     public void ReloadBundle()
     {
         var fresh = EncounterBundle.Load(_bundlePath);
         lock (_bundleLock) _bundle = fresh;
+        if (_combatDir != null && Directory.Exists(_combatDir))
+            CombatBundle = Dreamlands.Encounter.CombatBundle.LoadDirectory(_combatDir);
     }
 
     static string FindRepoRoot()

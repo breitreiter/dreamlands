@@ -21,8 +21,8 @@ public sealed class CombatEncounter
     /// (arc-launched only, the default).</summary>
     public string Trigger { get; set; } = "none";
 
-    /// <summary>Optional combat backdrop override (path relative to assets/).
-    /// Empty = server picks the biome default.</summary>
+    /// <summary>Optional combat backdrop override (relative to assets/vignettes/,
+    /// no extension — same space as .enc [vignette]). Empty = biome/tier default.</summary>
     public string Background { get; set; } = "";
 
     /// <summary>Never retired by winning — keeps spawning until a [requires]

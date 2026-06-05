@@ -2265,8 +2265,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     // and Encounter screens: "{biome}/{biome}_tier_{n}_1".
     static string? BuildCombatBiomeImage(Dreamlands.Encounter.CombatEncounter? encounter)
     {
-        if (encounter is null || encounter.Tier is null) return null;
-        var biome = encounter.Category.Split('/').FirstOrDefault();
+        if (encounter is null) return null;
+        if (!string.IsNullOrEmpty(encounter.Background)) return encounter.Background;
+        if (encounter.Tier is null) return null;
+
+        // Category is combat/<biome>/tier<n> for road fights (or <biome>/tier<n>
+        // pre-relocation); arc fights (arcs/<biome>/<arc>) have no tier and rely
+        // on [background] above.
+        var parts = encounter.Category.Split('/');
+        var biome = parts[0] is "combat" or "arcs" && parts.Length > 1 ? parts[1] : parts[0];
         if (string.IsNullOrEmpty(biome)) return null;
         return $"{biome}/{biome}_tier_{encounter.Tier}_1";
     }

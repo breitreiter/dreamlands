@@ -30,6 +30,7 @@ worlds/*/map.png
 worlds/*/assets/
 worlds/*/encounters/
 worlds/*/encounters.bundle.json
+worlds/*/combat/
 .wrangler/
 saves/
 .session.json

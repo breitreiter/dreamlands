@@ -166,7 +166,19 @@ closed the_beast's gate).
 - Loot: no new verb needed — `+item <id>` already exists in the mechanics
   vocabulary; start actually using it in win blocks.
 
-## Phase 4 — Relocation + build pipeline
+## Phase 4 — Relocation + build pipeline [DONE 2026-06-05]
+
+Landed as planned, with details: 19 road fights moved to
+`text/encounters/combat/<biome>/tier<n>/`, the_beast_cornered into the
+the_lodge arc dir (and gained `[background forest/forest_tier_3_1]` since
+arc fights have no tier for the biome-backdrop default).
+`update-encounters.sh` mirrors all `.fight` files into `worlds/<name>/combat/`
+preserving text/encounters-relative paths, so ids are identical in dev
+(fallback root = `text/encounters/`) and deployed worlds; the dir is
+gitignored like the other world artifacts. `ops/reload-bundle` now reloads
+the combat bundle too. `BuildCombatBiomeImage` handles the `combat/` and
+`arcs/` category prefixes and honors `[background]`.
+`tools/combat-prototype/` is gone.
 
 - Move `tools/combat-prototype/Monsters/<biome>/tier<n>/*.fight` →
   `text/encounters/combat/<biome>/tier<n>/`. Add `[trigger road]` to each fight

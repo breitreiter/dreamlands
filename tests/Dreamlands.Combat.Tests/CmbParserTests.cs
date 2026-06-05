@@ -227,16 +227,16 @@ public class CmbParserTests
     }
 
     [Fact]
-    public void Loads_on_disk_monsters_directory()
+    public void Loads_on_disk_fight_files()
     {
         var dir = AppContext.BaseDirectory;
         while (dir != null && !File.Exists(Path.Combine(dir, "Dreamlands.sln")))
             dir = Path.GetDirectoryName(dir);
         Assert.NotNull(dir);
-        var monsters = Path.Combine(dir!, "tools", "combat-prototype", "Monsters");
-        if (!Directory.Exists(monsters)) return;
+        var encounters = Path.Combine(dir!, "text", "encounters");
+        if (!Directory.Exists(encounters)) return;
 
-        var bundle = CombatBundle.LoadDirectory(monsters);
+        var bundle = CombatBundle.LoadDirectory(encounters);
         Assert.NotEmpty(bundle.Encounters);
         foreach (var e in bundle.Encounters)
         {

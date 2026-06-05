@@ -330,7 +330,9 @@ column 0. `#` is a comment; blank lines are ignored.
     [blood <hex>]       Blood-splat color; override for non-mammals (golems, lattice, etc.)
     [stats hp=<n>]      Monster HP — required, must be > 0
     [trigger <value>]   road = random travel pool; none = arc-launched only (default)
-    [background <path>] Combat backdrop override; default is the biome backdrop
+    [background <path>] Combat backdrop override (relative to assets/vignettes/, no
+                        extension — same space as .enc [vignette]). Default is the
+                        biome/tier backdrop; arc fights have no tier, so they need this.
     [persistent]        Never retired by winning — requires a [requires] gate
     [requires <cond>]   Spawn gate; same condition syntax as .enc, repeatable (AND)
 
