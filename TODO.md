@@ -46,7 +46,8 @@ Features, fixes, and balancing needed for a complete gameplay loop.
 
 ### Combat Encounter Triggering
 
-- [ ] Wire .fight encounters into the road encounter pipeline. Today CombatBundle is
+- [ ] Wire .fight encounters into the road encounter pipeline — plan at
+      `plans/fight_integration.md`. Today CombatBundle is
       only reachable via the dev "Fight" picker overlay in Explore — `EncounterSelection.PickOverworld`
       pulls exclusively from `session.Bundle` (.enc) filtered on `Trigger == "road"` and never
       consults `session.CombatBundle`. Need a biome/tier-aware roll that mixes .fight
@@ -223,14 +224,7 @@ block Phase 5+; revisit during content polish.
 - [ ] **Drop `Road Toll`**; fold the best beats into Tob's `.fight` encounter
       and move Tob to tier 1 as the noob-zone menace
 - [ ] **Drop `Collapsed Earthworks`** — not worth rewriting into .enc
-- [ ] `The Conscripts` — remove the `.tac` line; work the fight into the
-      main .enc check
-- [ ] `The Courier` — same: scrub `.tac`, fold into .enc
-- [ ] `The Requisition Line` — replace check logic with a stack of static
-      `tag` checks against dungeon-completion flags
-- [ ] **Fold `The Scavengers` into one of the robot `.fight` encounters**
-- [ ] `The Gentle Giant` — scrub `.tac` line, fold beats into main .enc
-- [ ] `The Passage` — same: scrub `.tac`, fold into main .enc
+- [ ] Review `The Conscripts`, `The Courier`, `The Requisition Line`, `The Scavengers`, `The Gentle Giant`, `The Passage` — tac choices filled; review prose + mechanic balance
 - [ ] `Unusual Cargo` — design note, not a rewrite: this encounter implies
       the player should pick an approach **before** the preamble text renders.
       Not a blocker; capture for the picker UX pass.

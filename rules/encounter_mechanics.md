@@ -2,7 +2,7 @@
 kind: rule
 title: Encounter Mechanics & Game Commands
 created: 2026-02-21
-updated: 2026-05-23
+updated: 2026-06-05
 status: current
 touches:
   files:
@@ -57,6 +57,23 @@ so +open works for road and settlement encounters, not just arcs. Self-reference
 (+open <same encounter>) is valid and loops back cleanly — useful for hub
 encounters that offer multiple choices across visits (see Meilin.enc in the
 hermitage arc as the canonical example).
+
+## Pooling & recurrence
+
+The two encounter formats have opposite recurrence defaults. These are locked:
+
+`.enc` — **one-and-done.** Firing through any random picker adds the id to
+UsedEncounterIds permanently. The only escape is an explicit `+repool` mechanic,
+and it is extremely rare by design: a repooled encounter's text must read
+correctly when the player has already lived this exact moment before, which
+makes the writing much harder. Don't reach for it casually.
+
+`.fight` — **recurs until you win.** There is no explicit repool for fights.
+Lose and flee leave the fight in the pool automatically — the threat wasn't
+removed, so it keeps coming (the T1 plains bandit keeps harassing you until you
+beat him). Winning is what retires the fight, recorded as `fight:<id>` in
+UsedEncounterIds. A fight that must be one-shot regardless of outcome sets a
+tag in its outros and gates itself with `[requires tag ...]`.
 
 
 ## Front-matter
@@ -225,7 +242,7 @@ Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
 Dungeon             +finish_dungeon
                     +flee_dungeon
 
-Return to pool      +repool
+Return to pool      +repool                              (.enc only, extremely rare — see Pooling & recurrence)
 
 Identity            +set_name <name>                     (set player display name; intro only)
 
@@ -372,8 +389,10 @@ vocabulary with `.enc` action verbs:
     +tag <tag_id>             Set a world-state tag
     +add_item <item_id>       Give item
     +damage_spirits <n>       Damage spirits
-    +repool                   Re-eligible after defeat (overrides [repool] front-matter)
     (full verb list in the Action verbs section above)
+
+`+repool` is NOT valid in fights — recurrence is implicit (see Pooling &
+recurrence): lose and flee leave the fight in the pool, winning retires it.
 
 
 ## Factions
