@@ -68,8 +68,15 @@ fi
 echo "==> Bundling encounters..."
 dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle "$REPO_ROOT/text/encounters" --out "$WORLD_DIR"
 
-echo "==> Bundling tactical encounters..."
-dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle-tactical "$REPO_ROOT/text/encounters" --out "$WORLD_DIR"
+echo "==> Copying fight files..."
+fights_dest="$WORLD_DIR/combat"
+rm -rf "$fights_dest"
+mkdir -p "$fights_dest"
+(cd "$REPO_ROOT/text/encounters" && find . -name '*.fight' -exec cp --parents {} "$fights_dest/" \;)
+echo "    $(find "$fights_dest" -name '*.fight' | wc -l) fight file(s)"
+
+#echo "==> Bundling tactical encounters..."
+#dotnet run --project "$REPO_ROOT/text/encounter-tool/EncounterCli" -- bundle-tactical "$REPO_ROOT/text/encounters" --out "$WORLD_DIR"
 
 # --- Summary ---
 
