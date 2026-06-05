@@ -92,7 +92,7 @@ No test projects exist yet. This is a known gap — see `project/TODO.md`.
 
 ## Dependencies
 
-- .NET 8.0
+- .NET 10.0
 - SkiaSharp (mapgen only — image rendering)
 - YamlDotNet (mapgen only — dungeon roster, flavor names)
 - Anthropic.SDK + Microsoft.Extensions.AI (encounter-tool only — LLM integration)
