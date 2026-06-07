@@ -1,10 +1,10 @@
 ---
 kind: plan
 title: "Travails — nuke travel conditions, deterministic journey costs"
-state: active
+state: done
 created: 2026-06-06
-updated: 2026-06-06
-status: ACTIVE — phases 1-4 DONE 2026-06-07 (engine, wiring, sweep, UI; OQ-2/5 resolved); remaining: phase 5 docs + TODO closeout, plus a flagged Reference.tsx ground-up rewrite (stale beyond travails)
+updated: 2026-06-07
+status: DONE 2026-06-07 — all 5 phases shipped (engine, wiring, sweep, UI, docs). All OQs resolved. Follow-ups parked in TODO.md: travails rate playtest, hazard-roster padding, economy pass (travails as money sink), Reference.tsx ground-up rewrite.
 touches:
   files:
     - lib/Rules/ConditionDef.cs
@@ -269,7 +269,14 @@ A "journey" is the `travel` action's path walk. Termination = any stop reason:
 5. **Tests + docs** — EndOfDayTests rewrite, Orchestration travel tests,
    mechanics_reference.md update, condition_rework.md supersede note, TODO.md
    edits (close the design-conversation threads this resolves; rewrite the
-   "pad the roster" item as "add hazard channels").
+   "pad the roster" item as "add hazard channels"). **DONE 2026-06-07.** Tests
+   were rewritten alongside phases 1-3. Docs: `rules/encounter_mechanics.md`
+   (the canonical mechanics rule — mechanics_reference.md is just a pointer to
+   it; HUMAN-REVIEW tier edits made), `plans/condition_rework.md` flipped to
+   superseded, `project/design/skills.md` + `settlements.md` de-conditioned,
+   TODO.md (design-conversation item checked off, roster item rewritten as
+   hazard channels, economy pass annotated with travails-as-sink, Reference.tsx
+   rewrite item added).
 
 ## Open questions
 

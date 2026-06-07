@@ -35,8 +35,11 @@ Tiers are additive — higher tiers include all lower-tier benefits.
 | Tier | Passive benefit |
 |------|----------------|
 | Untrained | None |
-| Trained | 30% chance to resist travel conditions |
-| Expert | 60% chance to resist travel conditions + rations every other day |
+| Trained | Halves all travel hazard costs; rations every other day |
+| Expert | Quarters all travel hazard costs; rations every other day |
+
+Travel hazards (thirst/cold/fatigue) are deterministic per-step spirit costs,
+not resist rolls — see `plans/travel_travails.md`.
 
 ### Cunning
 
@@ -45,8 +48,8 @@ Resists **severe conditions**: Injured, Poisoned, Irradiated, Lattice Sickness.
 | Tier | Resistance chance |
 |------|-------------------|
 | Untrained | None |
-| Trained | 30% |
-| Expert | 60% |
+| Trained | 40% |
+| Expert | 80% |
 
 ---
 
@@ -69,14 +72,14 @@ One line per tier shown under each skill. Must communicate the passive benefit a
 ### Bushcraft
 
 - **Untrained**: No passive benefit. Encounter checks are punishing.
-- **Trained**: 30% chance to resist travel conditions (Freezing, Exhausted, etc). Encounter checks are fair.
-- **Expert**: 60% chance to resist travel conditions (Freezing, Exhausted, etc). Encounter checks are generous.
+- **Trained**: Halves travel hazard costs; eat every other night. Encounter checks are fair.
+- **Expert**: Quarters travel hazard costs. Encounter checks are generous.
 
 ### Cunning
 
 - **Untrained**: No passive benefit. Encounter checks are punishing.
-- **Trained**: 30% chance to resist serious conditions (Injured, Poisoned, etc). Encounter checks are fair.
-- **Expert**: 60% chance to resist serious conditions (Injured, Poisoned, etc). Encounter checks are generous.
+- **Trained**: 40% chance to resist serious conditions (Injured, Poisoned, etc). Encounter checks are fair.
+- **Expert**: 80% chance to resist serious conditions (Injured, Poisoned, etc). Encounter checks are generous.
 
 ---
 
@@ -90,45 +93,41 @@ Shown on the tableau when the player picks an arc reward. Describes the delta �
 | Combat → Expert | Combat | Unlocks swords and heavy armor |
 | Negotiation → Trained | Negotiation | +20% contract payout |
 | Negotiation → Expert | Negotiation | +40% contract payout |
-| Bushcraft → Trained | Bushcraft | 30% chance to resist travel conditions (Freezing, Exhausted, etc) |
-| Bushcraft → Expert | Bushcraft | 60% chance to resist travel conditions (Freezing, Exhausted, etc) |
-| Cunning → Trained | Cunning | 30% chance to resist serious conditions (Injured, Poisoned, etc) |
-| Cunning → Expert | Cunning | 60% chance to resist serious conditions (Injured, Poisoned, etc) |
+| Bushcraft → Trained | Bushcraft | Halves travel hazard costs; eat every other night |
+| Bushcraft → Expert | Bushcraft | Quarters travel hazard costs |
+| Cunning → Trained | Cunning | 40% chance to resist serious conditions (Injured, Poisoned, etc) |
+| Cunning → Expert | Cunning | 80% chance to resist serious conditions (Injured, Poisoned, etc) |
 | Max Health | Max Health | +1 maximum health |
 | Inventory | Inventory | +1 inventory slot |
 
 ---
 
-## Addendum: Condition System Harmonization
+## Addendum: Condition System
 
-### Travel Conditions
+### Travel hazards (NOT conditions)
 
-Travel conditions share a uniform structure: different triggers and cures, but identical
-mechanical effect — a fixed spirits drain each day until cured.
+> **Superseded 2026-06-07 by the travails system** (`plans/travel_travails.md`).
+> The old "travel conditions" — freezing, thirsty, exhausted, as nightly
+> spirit-draining, resist-rolled, settlement-cleared status effects — are gone.
 
-| Condition | Trigger | Cure |
-|-----------|---------|------|
-| Freezing | Camping in cold biomes without protection | Warm shelter or leave cold biome |
-| Thirsty | Traveling in scrub without water | Drink water |
-| Exhausted | Applied every day at end-of-day | Scarecrow's Boots (immune); otherwise Bushcraft resist |
-| Hungry | Resting without food | Eat |
-| Lost | TBD trigger | Enter a settlement |
-| Disheartened | Low spirits threshold | Spirits restored above threshold |
+The road's wear is now a set of **deterministic hazard channels** (no dice):
 
-**Hungry** is refactored back into the travel condition family. It is auto-applied at the
-end of a rest when the player has no food. Same spirits drain as the other travel conditions.
-Previously modeled as a separate starvation mechanic; unified here for consistency.
+| Hazard | Accrues | Spared by | Mitigated by Bushcraft |
+|--------|---------|-----------|------------------------|
+| Thirst | Per step in scrub | Waterskin | yes (halve/quarter the cost) |
+| Cold | Per step in mountains | Wool Bedroll | yes |
+| Fatigue | Per night camped on the road | Scarecrow Boots | yes |
 
-Bushcraft's passive resistance (30%/60%) applies to all travel conditions, including Hungry.
+Exposure accrues per step/night and charges spirits at threshold crossings;
+the toll is summarized at the tail end of each journey. Missing a meal (the old
+"Hungry") is still a flat -1 spirit at end-of-day, handled in EndOfDay, not as a
+condition. Settlement nights are free.
 
-**Balance note**: Resist chances are speculative. Playtest at each Bushcraft tier to check
-whether daily condition accumulation feels punishing, manageable, or trivial. If Untrained
-is too miserable, add a base resist (e.g. 20%) before skill investment. If Trained doesn't
-feel like a meaningful upgrade, raise the tier thresholds. Negotiation is confirmed solid
-(both contract bonus and check behavior tested). Combat and Cunning are untested.
+### Conditions (encounter-applied)
 
-### Serious Conditions
-
-Serious conditions (Injured, Poisoned, Irradiated, Lattice Sickness) should already follow
-the same harmonized structure: fixed daily health drain, different triggers and cures.
-Verify that no serious condition has a unique mechanical shape before shipping.
+The only real conditions left are **severe** ones — Injured, Poisoned,
+Irradiated, Lattice Sickness — each a fixed 1 HP/night drain until treated by
+the matching reusable medicine kit. Cunning gives a passive resist (40%/80%)
+when an encounter tries to apply one. Plus **Lost** (minor): a navigation
+failure that triggers a Lost encounter; Bushcraft-resisted, Cartographer's Kit
+prevents it.

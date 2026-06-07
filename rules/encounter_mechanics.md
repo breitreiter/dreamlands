@@ -2,7 +2,7 @@
 kind: rule
 title: Encounter Mechanics & Game Commands
 created: 2026-02-21
-updated: 2026-06-05
+updated: 2026-06-07
 status: current
 touches:
   files:
@@ -183,9 +183,13 @@ TIME PERIODS
   evening
   night
 
-CONDITIONS
-  freezing  thirsty  irradiated  lattice_sickness
-  exhausted  injured  poisoned
+CONDITIONS  (all severe, encounter-applied; resist via Cunning)
+  injured  poisoned  irradiated  lattice_sickness
+  lost  (minor; navigation failure, Bushcraft-resisted, triggers a Lost encounter)
+
+  Travel hazards (thirst/cold/fatigue) are NOT conditions — they are
+  deterministic per-step spirit costs handled by the travails system, not
+  +add_condition. See rules/travel_travails or plans/travel_travails.md.
 
 
 ## Action verbs
@@ -242,11 +246,14 @@ Spirits             +damage_spirits <amount>
 
 Skills              +add_level                           (grant one pending tableau level-up pick)
 
-Conditions          +add_condition <condition_id>
+Conditions          +add_condition <condition_id>   (severe id, or `lost`)
                     +remove_condition <condition_id>
+                    Note: +add_condition with a travel-hazard id (exhausted/
+                    freezing/thirsty) is invalid — those ids no longer exist.
+                    Use +damage_spirits for a one-time road cost.
 
-Time                +skip_time <period> [no_sleep] [no_meal] [no_biome]
-                    +advance_time <N> [no_sleep] [no_meal] [no_biome]
+Time                +skip_time <period> [no_sleep] [no_meal]
+                    +advance_time <N> [no_sleep] [no_meal]
 
 Dungeon             +finish_dungeon
                     +flee_dungeon
@@ -265,10 +272,12 @@ Equipment (weapon, armor) is tracked via an `IsEquipped` flag on the pack item �
 no item leaves the pack when equipped. The only slots are `weapon` and `armor`
 for `+unequip`; boots were removed as a gear slot (scarecrow_boots is a Tool).
 
-PassiveImmunities: some Tools (e.g. `scarecrow_boots`, `lattice_ward`) passively
-prevent a condition for as long as the item is in the pack. They are never consumed.
+Travail-mitigating tools: some Tools (`waterskin`, `sleeping_kit`,
+`scarecrow_boots`) zero a travel-hazard channel (thirst/cold/fatigue) for as
+long as the item is in the pack. They are never consumed and are not
++add_condition immunities — they feed the deterministic travails math.
 
-Medical kit: `medical_kit` cures any condition without being consumed.
+Medical kit: `medical_kit` cures any severe condition without being consumed.
 
 Food cadence: one food item consumed per day. Cadence intervals vary by Bushcraft tier.
 
@@ -520,9 +529,9 @@ Heavy (RequiredCombat 4 — Expert):
 ### Tools
 
 Shopable:
-  waterskin           Waterskin             PassiveImmunity:thirsty                    scrub  T2  40g
+  waterskin           Waterskin             zeroes thirst travails                     scrub  T2  40g
   cartographers_kit   Cartographer's Kit    gates Lost encounters                      plains T1  80g
-  sleeping_kit        Wool Bedroll          PassiveImmunity:freezing                   forest T2  80g
+  sleeping_kit        Wool Bedroll          zeroes cold travails                       forest T2  80g
   brass_lantern       Old Brass Lantern     light source                               plains T1  15g
   medical_kit         Medical Kit           Cures injured (not consumed)               (any) 25g
 
@@ -532,7 +541,7 @@ Cure tools (consume nothing; remove the named condition):
   mudcap_fungus       Mudcap Spores         Cures poisoned                             swamp  T2  15g
 
 Arc/dungeon-only:
-  scarecrow_boots     Scarecrow Boots       PassiveImmunity:exhausted  (Tool, not Boots type)
+  scarecrow_boots     Scarecrow Boots       zeroes fatigue travails  (Tool, not Boots type)
   control_shaft       Control Shaft         quest item
 
 ### Food

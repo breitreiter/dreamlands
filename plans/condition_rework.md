@@ -1,15 +1,16 @@
 ---
 kind: plan
 title: "Condition System Rework — Two-Tier Severity"
-state: active
+state: superseded
 created: 2026-03-12
-updated: 2026-05-13
-status: current
+updated: 2026-06-07
+status: superseded
 touches:
   features: [conditions, status-effects, end-of-day]
 provenance:
   author: migration:M-001
 ---
+> **Superseded (2026-06-07) by [`travel_travails.md`](travel_travails.md).** The minor-condition half of this plan (freezing/thirsty/exhausted as nightly spirit-draining, resist-rolled, settlement-cleared conditions) is GONE: travel conditions were removed entirely and replaced by the deterministic travails system. What survives and is still current: the **severe** condition model (injured/poisoned/irradiated/lattice_sickness — 1 HP/night, medicine-kit cures, Cunning resist). The ConditionSeverity enum's Minor case is retained but currently unused. Read this file only for severe-condition history.
 > Migration note (M-001, 2026-05-13): Partial implementation. The minor/severe split is in place in the codebase and the conditions roster reflects the new model, but the full UX program (toast path vs crisis screen, market stocking guarantees, inn-upgrade follow-up) is not yet shipped end-to-end.
 
 # Condition Rework — Two-Tier Severity

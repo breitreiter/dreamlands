@@ -85,29 +85,17 @@ Not blockers, but cheap enough (or screenshot-prone enough) to just do.
 - [ ] Combat: rotate the "What's the plan, merchant?" greeting through a small pool
       of one-liners (e.g., "Eyes up.", "Make it count.", "What's it gonna be?"). Pick
       randomly per turn so every fight doesn't open with the same line.
-- [ ] **DESIGN CONVERSATION: condition system experience** (scheduled ~2026-06-06; may
-      blow up into a full plan in `plans/`). Goal: land somewhere where the condition
-      system feels reasonable and fair but also thematically punishing and challenging.
-      Threads to pull:
-      - **Cure-on-settlement-entry feels bad for exhausted.** Warming up at an inn or
-        brazier (freezing) and drawing water from the well (thirsty) make fictional
-        sense; instantly un-exhausting yourself without rest does not. Suspicion: this
-        fell out of nuking wearable boots (exhaustion immunity moved to scarecrow_boots
-        Tool; `ClearedOnSettlement` may have been a blunt patch). Maybe exhausted should
-        require an actual inn stay / rest.
-      - **Silent clears + invisible acquisition.** Settlement-entry clearing is the only
-        silent clear in the game (ReSharper 2026-06-05 found the half-wired
-        `allClearedConditions` plumbing in the GameFunctions travel case — collected,
-        never sent; `ClearedConditionInfo` exists in GameResponse.cs unused). Related
-        gap: ArrivalInfo shows journey *losses* but you can't see that you *got* thirsty
-        crossing the desert — your spirits just decrement for no visible reason.
-        Acquisition, drain, and cure all need legible moments.
-      - Decide the fate of the dead plumbing as part of whatever design lands.
-      Current clearing map (verified 2026-06-05): (1) settlement entry — freezing/
-      thirsty/exhausted, silent; (2) end-of-day out-of-biome — freezing/thirsty, on
-      resolution screen; (3) end-of-day medicine — severe, resolution screen; (4) inn —
-      severe w/ medicine; (5) chapterhouse — severe, free; (6) encounter mechanics;
-      (7) rescue — everything.
+- [x] **DESIGN CONVERSATION: condition system experience** — RESOLVED 2026-06-07 as
+      `plans/travel_travails.md` (shipped phases 1-4). Travel conditions (freezing/
+      thirsty/exhausted) were thanos-snapped and replaced by the deterministic travails
+      system: per-step spirit costs from route + gear + Bushcraft, summarized at journey
+      end. This structurally killed all three threads — exhausted-cure-on-arrival (fatigue
+      is a cost paid, not a state to cure), silent settlement clears (nothing left to
+      clear; the `allClearedConditions`/`ClearedConditionInfo` dead plumbing is deleted),
+      and invisible acquisition (every loss is a named summary line). Travails are also now
+      the game's deliberate money sink (drives the economy pass below). NOT covered: the
+      severe-condition legibility thread (toast vs crisis screen) — still its own open item
+      if it matters.
 
 ## 3. Post-Launch — Iterate Live
 
@@ -121,6 +109,13 @@ Balance is better tuned with real player data anyway.
       (same as Market/Inventory/etc. — duplicate of in-card vitals so the bar matches
       the rest of the app and gives Flee a permanent home)
 - [ ] Rewrite any encounters that use single-spacing between paragraphs
+- [ ] **Reference screen (`ui/web/src/screens/Reference.tsx`) ground-up rewrite.** It's
+      badly stale — describes systems that no longer exist: d20 DC tables + natural 1/20,
+      the haversack as a separate container, boots equipment slot, tokens, balanced-meal
+      bonus spirits, foraging rolls. The travails pass (2026-06-07) fixed only the
+      Conditions/Road/End-of-Day sections it touched; the rest needs a full audit against
+      the current rules (RPS combat, single Pack, travails, 4 skills/tiers, deterministic
+      end-of-day).
 
 ### Map Generation
 
@@ -148,12 +143,16 @@ Balance is better tuned with real player data anyway.
 - [ ] **Economy pass (big, human).** Two symptoms flagged 2026-06-05: (a) with the
       cheaper food prices, players pick up cash too fast; (b) killing the 18 overworld
       monsters should yield a decent package of cash so fighting is a viable alternative
-      to trading — right now it doesn't pay.
-- [ ] Pad out the Travel Conditions roster — exhausted/freezing/thirsty may be too thin.
-      Consider bringing back swamp fever (spirits-draining, Bushcraft-resistible). Review
-      whether each biome has at least one natural Travel Condition source. Each new condition
-      motivates a new immunity item (mosquito netting, etc.) — important since the skill-bonus
-      gear purge will gut the market; immunity gear is the replacement flavor.
+      to trading — right now it doesn't pay. NOTE 2026-06-07: travails (travel spirit
+      costs → inn refills) are now the deliberate money sink and a primary lever here;
+      the inn bed/bath prices (5g/12g) are the cheapest knob for tuning drain severity
+      without touching journey feel. See `plans/travel_travails.md` Economy role.
+- [ ] Pad out the travails hazard roster — currently thirst/cold/fatigue. Each biome
+      should ideally have a natural hazard channel (swamp miasma → mosquito netting,
+      etc.); the system is data-shaped for this (add a `HazardDef` row + a mitigation
+      item — see `lib/Rules/HazardDef.cs`). Immunity gear is the market replacement
+      flavor after the skill-bonus gear purge. Tune the steps-per-spirit thresholds
+      against real playtests (calibration baseline in `project/reference/map_route_lengths.md`).
 - [x] Nuke equippable boots — done (verified 2026-06-05): no boots slot in `ItemType`;
       `scarecrow_boots` is already the non-equippable Tool with exhaustion immunity.
 - [x] Contemplate nuking Mercantile and folding it into Negotiation — done in the Phase 8
