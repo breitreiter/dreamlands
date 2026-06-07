@@ -61,7 +61,6 @@ public static class Rescue
         state.PendingEndOfDay = false;
         state.PendingNoSleep = false;
         state.PendingNoMeal = false;
-        state.PendingNoBiome = false;
 
         return new RescueResult(lostItems, goldLost);
     }

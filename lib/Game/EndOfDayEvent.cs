@@ -5,10 +5,7 @@ public abstract record EndOfDayEvent
 {
     public record FoodConsumed(List<string> FoodEaten) : EndOfDayEvent;
     public record Starving : EndOfDayEvent;
-    public record ResistPassed(string ConditionId, SkillCheckResult? Check = null) : EndOfDayEvent;
-    public record ResistFailed(string ConditionId, SkillCheckResult? Check = null) : EndOfDayEvent;
     public record CureApplied(string ItemDefId, string ConditionId) : EndOfDayEvent;
-    public record ConditionAcquired(string ConditionId) : EndOfDayEvent;
     public record ConditionCured(string ConditionId) : EndOfDayEvent;
     public record ConditionDrain(string ConditionId, int HealthLost, int SpiritsLost) : EndOfDayEvent;
     public record SpecialEffect(string ConditionId, string Effect) : EndOfDayEvent;

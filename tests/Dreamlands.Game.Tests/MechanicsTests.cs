@@ -271,7 +271,6 @@ public class MechanicsTests
         Assert.Equal(2, state.Day);
         Assert.True(state.PendingNoSleep);
         Assert.True(state.PendingNoMeal);
-        Assert.False(state.PendingNoBiome);
     }
 
     [Fact]

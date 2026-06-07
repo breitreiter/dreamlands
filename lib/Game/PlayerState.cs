@@ -81,11 +81,10 @@ public class PlayerState
     public bool PendingEndOfDay { get; set; }
     public bool PendingNoSleep { get; set; }
     public bool PendingNoMeal { get; set; }
-    public bool PendingNoBiome { get; set; }
 
-    // Conditions that the player just cleared this turn — skipped by the next ambient resist roll
-    // so resolving a Lost encounter (or similar) can't immediately re-add the same condition.
-    public HashSet<string> ConditionsClearedThisTurn { get; set; } = new();
+    // Travails ledger — per-hazard exposure accrued during travel, charged at threshold
+    // crossings and flushed into the journey summary at trip end (Travails.Summarize)
+    public Dictionary<string, TravailTally> TravailLedger { get; set; } = new();
 
     // World state
     public HashSet<string> Tags { get; set; } = new();

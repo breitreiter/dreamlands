@@ -14,11 +14,7 @@ public static class SettlementRunner
     /// Does NOT change session mode.
     /// </summary>
     public static SettlementData? EnsureSettlement(GameSession session)
-        => EnsureSettlement(session, out _);
-
-    public static SettlementData? EnsureSettlement(GameSession session, out List<string> clearedConditionIds)
     {
-        clearedConditionIds = [];
         var node = session.CurrentNode;
         if (node.Poi?.Kind != PoiKind.Settlement || node.Poi.SettlementId == null)
             return null;
@@ -27,15 +23,15 @@ public static class SettlementRunner
         var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
         var size = node.Poi.Size ?? SettlementSize.Camp;
 
-        // Settlement entry side effects: clear ClearedOnSettlement conditions
-        // and reset the consecutive-wilderness-nights counter (feeds exhaustion DC).
+        // Settlement entry side effect: clear ClearedOnSettlement conditions.
+        // Interim until the travails phase-3 content sweep removes the last
+        // encounter-applied travel conditions (plans/travel_travails.md).
         foreach (var conditionId in session.Player.ActiveConditions.ToList())
         {
             if (session.Balance.Conditions.TryGetValue(conditionId, out var def)
                 && def.ClearedOnSettlement)
             {
                 session.Player.ActiveConditions.Remove(conditionId);
-                clearedConditionIds.Add(conditionId);
             }
         }
         // Initialize settlement state on first visit

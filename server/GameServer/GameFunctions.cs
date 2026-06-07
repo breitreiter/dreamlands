@@ -84,7 +84,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var session = BuildSession(player);
 
         if (player.PendingEndOfDay && !data.NoCamp)
-            return new OkObjectResult(BuildCampResponse(session, BuildCampThreats(session)));
+            return new OkObjectResult(BuildCampResponse(session, new CampInfo()));
 
         if (player.PendingEndOfDay && data.NoCamp)
             player.PendingEndOfDay = false;
@@ -243,11 +243,24 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                 Movement.Execute(session, dir);
 
+                // Travails: every non-settlement step accrues hazard exposure
+                if (session.CurrentNode.Poi?.Kind != PoiKind.Settlement)
+                    Travails.AccrueStep(player, BiomeOf(session.CurrentNode), data.Balance);
+
                 List<DeliveryInfo>? deliveries = null;
+                ArrivalInfo? moveArrival = null;
                 if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
                 {
-                    player.PendingNoBiome = true;
                     SettlementRunner.EnsureSettlement(session);
+
+                    // Manual-move journeys flush their travails ledger on settlement arrival
+                    if (BuildTravailLines(player) is { } travailLines)
+                        moveArrival = new ArrivalInfo
+                        {
+                            SettlementName = session.CurrentNode.Poi.Name
+                                ?? session.CurrentNode.Poi.SettlementId ?? "Settlement",
+                            Travails = travailLines,
+                        };
 
                     if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
                     {
@@ -323,12 +336,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (player.PendingEndOfDay && !data.NoCamp)
                 {
                     session.Mode = SessionMode.Camp;
-                    response = BuildCampResponse(session, BuildCampThreats(session), deliveries);
+                    response = BuildCampResponse(session, new CampInfo(), deliveries);
                 }
                 else
                 {
                     if (data.NoCamp) player.PendingEndOfDay = false;
-                    response = BuildExploringResponse(session, deliveries);
+                    response = BuildExploringResponse(session, deliveries, moveArrival);
                 }
                 break;
             }
@@ -350,7 +363,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 var stepsCompleted = 0;
                 string stopReason = "arrived";
                 List<DeliveryInfo> allDeliveries = [];
-                List<ClearedConditionInfo> allClearedConditions = [];
                 Dictionary<string, (int Health, int Spirits)> journeyLosses = new();
                 var journeyDayBefore = player.Day;
 
@@ -377,18 +389,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     Movement.Execute(session, stepDir);
                     stepsCompleted = i;
 
+                    // Travails: every non-settlement step accrues hazard exposure
+                    if (session.CurrentNode.Poi?.Kind != PoiKind.Settlement)
+                        Travails.AccrueStep(player, BiomeOf(session.CurrentNode), data.Balance);
+
                     // Settlement arrival logic (same as move)
                     if (session.CurrentNode.Poi?.Kind == PoiKind.Settlement)
                     {
-                        player.PendingNoBiome = true;
-                        SettlementRunner.EnsureSettlement(session, out var clearedHere);
-                        foreach (var cid in clearedHere)
-                        {
-                            if (data.Balance.Conditions.TryGetValue(cid, out var cdef))
-                                allClearedConditions.Add(new ClearedConditionInfo { Id = cid, Name = cdef.Name });
-                            else
-                                allClearedConditions.Add(new ClearedConditionInfo { Id = cid, Name = cid });
-                        }
+                        SettlementRunner.EnsureSettlement(session);
 
                         if (session.CurrentNode.Poi.SettlementId is { } arrivalId)
                         {
@@ -430,13 +438,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         if (hasSevereBefore)
                         {
                             session.Mode = SessionMode.Camp;
+                            var campTravails = BuildTravailLines(player); // flush before save
                             await store.Save(player);
                             return new OkObjectResult(new GameResponse
                             {
                                 Mode = "camp",
                                 Status = BuildStatus(player),
                                 Node = BuildNodeInfo(session.CurrentNode, player, session),
-                                Camp = BuildCampThreats(session),
+                                Camp = new CampInfo(),
                                 Inventory = BuildInventory(player),
                                 Mechanics = BuildMechanics(player),
                                 Deliveries = allDeliveries.Count > 0 ? allDeliveries : null,
@@ -445,18 +454,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                     Path = proposedPath,
                                     StepsCompleted = stepsCompleted,
                                     StopReason = "camp",
+                                    Travails = campTravails,
                                 },
                             });
                         }
 
-                        var campNode = session.CurrentNode;
-                        var campBiome = campNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-                        var campTier = campNode.Region?.Tier ?? 1;
-                        var startCity = data.Map.StartingCity;
+                        // Travails: a night camped on the road accrues fatigue (settlement nights don't)
+                        if (session.CurrentNode.Poi?.Kind != PoiKind.Settlement)
+                            Travails.AccrueNight(player, data.Balance);
 
+                        var startCity = data.Map.StartingCity;
                         var campEvents = EndOfDay.Resolve(
-                            player, campBiome, campTier,
-                            data.Balance, session.Rng,
+                            player, data.Balance,
                             startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0);
 
                         foreach (var drain in campEvents.OfType<EndOfDayEvent.ConditionDrain>())
@@ -467,14 +476,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                         player.PendingEndOfDay = false;
 
-                        // Safety net: even with no pre-existing severe condition, a freshly-failed
-                        // resist that hands out a serious condition can drain the last HP of a
+                        // Safety net: the severe-condition HP drain can take the last HP of a
                         // low-HP player and trigger a rescue. Surface the proper rescue screen
                         // with camp details rather than silently teleporting.
                         var rescued = campEvents.OfType<EndOfDayEvent.PlayerRescued>().FirstOrDefault();
                         if (rescued != null)
                         {
                             session.Mode = SessionMode.Exploring;
+                            var rescueTravails = BuildTravailLines(player); // flush before save
                             await store.Save(player);
                             return new OkObjectResult(new GameResponse
                             {
@@ -486,7 +495,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                     HealthBefore = 0,
                                     HealthAfter = player.Health,
                                     ConditionRows = [],
-                                    Threats = BuildCampThreats(session).Threats,
                                     Events = FormatCampEvents(campEvents),
                                 },
                                 Rescue = new RescueInfo
@@ -503,6 +511,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                     Path = proposedPath,
                                     StepsCompleted = stepsCompleted,
                                     StopReason = "rescued",
+                                    Travails = rescueTravails,
                                 },
                             });
                         }
@@ -527,6 +536,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             if (pick?.Enc is { } enc)
                             {
                                 var step = EncounterRunner.Begin(session, enc);
+                                var encTravails = BuildTravailLines(player); // flush before save
                                 await store.Save(player);
                                 return new OkObjectResult(new GameResponse
                                 {
@@ -542,12 +552,14 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                         Path = proposedPath,
                                         StepsCompleted = stepsCompleted,
                                         StopReason = "encounter",
+                                        Travails = encTravails,
                                     },
                                 });
                             }
                             if (pick?.Fight is { } fight)
                             {
                                 var turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, fight.Id);
+                                var fightTravails = BuildTravailLines(player); // flush before save
                                 await store.Save(player);
                                 var info = BuildCombatInfo(session, turn);
                                 return new OkObjectResult(new GameResponse
@@ -564,6 +576,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                         Path = proposedPath,
                                         StepsCompleted = stepsCompleted,
                                         StopReason = "combat",
+                                        Travails = fightTravails,
                                     },
                                 });
                             }
@@ -571,6 +584,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     }
                 }
 
+                // Every journey flushes its travails at the tail end — settlement
+                // arrivals fold them into ArrivalInfo, wilderness ends carry them
+                // on TravelInfo. Flush before save so the cleared ledger persists.
+                var finalTravails = BuildTravailLines(player);
                 await store.Save(player);
 
                 ArrivalInfo? arrival = null;
@@ -588,14 +605,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         .OrderByDescending(l => l.Health + l.Spirits)
                         .ToList();
 
-                    if (losses.Count > 0)
+                    if (losses.Count > 0 || finalTravails != null)
                     {
                         arrival = new ArrivalInfo
                         {
                             SettlementName = finalNode.Poi.Name ?? finalNode.Poi.SettlementId ?? "Settlement",
                             DaysElapsed = player.Day - journeyDayBefore,
                             Losses = losses,
+                            Travails = finalTravails ?? [],
                         };
+                        finalTravails = null; // shown on arrival, not duplicated on TravelInfo
                     }
                 }
 
@@ -614,6 +633,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         Path = proposedPath,
                         StepsCompleted = stepsCompleted,
                         StopReason = stopReason,
+                        Travails = finalTravails,
                     },
                 };
                 break;
@@ -715,7 +735,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 if (player.PendingEndOfDay && !data.NoCamp)
                                 {
                                     session.Mode = SessionMode.Camp;
-                                    return new OkObjectResult(BuildCampResponse(session, BuildCampThreats(session)));
+                                    return new OkObjectResult(BuildCampResponse(session, new CampInfo()));
                                 }
                                 if (data.NoCamp) player.PendingEndOfDay = false;
                                 return new OkObjectResult(BuildExploringResponse(session));
@@ -820,7 +840,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 if (player.PendingEndOfDay && !data.NoCamp)
                                 {
                                     session.Mode = SessionMode.Camp;
-                                    return new OkObjectResult(BuildCampResponse(session, BuildCampThreats(session)));
+                                    return new OkObjectResult(BuildCampResponse(session, new CampInfo()));
                                 }
                                 if (data.NoCamp) player.PendingEndOfDay = false;
                                 return new OkObjectResult(BuildExploringResponse(session));
@@ -931,7 +951,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (player.PendingEndOfDay && !data.NoCamp)
                 {
                     session.Mode = SessionMode.Camp;
-                    response = BuildCampResponse(session, BuildCampThreats(session));
+                    response = BuildCampResponse(session, new CampInfo());
                 }
                 else
                 {
@@ -947,8 +967,6 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     return new BadRequestObjectResult(new { error = "Not in camp mode" });
 
                 var node = session.CurrentNode;
-                var campBiome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-                var campTier = node.Region?.Tier ?? 1;
                 var startCity = data.Map.StartingCity;
 
                 var healthBefore = player.Health;
@@ -957,9 +975,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                  && def.Severity == ConditionSeverity.Severe)
                     .ToHashSet();
 
+                // Travails: a night camped on the road accrues fatigue (settlement nights don't)
+                if (node.Poi?.Kind != PoiKind.Settlement)
+                    Travails.AccrueNight(player, data.Balance);
+
                 var campEvents = EndOfDay.Resolve(
-                    player, campBiome, campTier,
-                    data.Balance, session.Rng,
+                    player, data.Balance,
                     startX: startCity?.X ?? 0, startY: startCity?.Y ?? 0);
 
                 var rescued = campEvents.OfType<EndOfDayEvent.PlayerRescued>().FirstOrDefault();
@@ -969,14 +990,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                && def.Severity == ConditionSeverity.Severe);
 
                 var conditionRows = BuildConditionRows(conditionsBefore, campEvents);
-                var campInfo = BuildCampThreats(session);
-                campInfo = new CampInfo
+                var campInfo = new CampInfo
                 {
                     HasSevereCondition = hasSevere,
                     HealthBefore = healthBefore,
                     HealthAfter = player.Health,
                     ConditionRows = conditionRows,
-                    Threats = campInfo.Threats,
                     Events = FormatCampEvents(campEvents),
                 };
 
@@ -1784,7 +1803,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             },
         }).ToList();
 
-    GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? deliveries = null) => new()
+    GameResponse BuildExploringResponse(GameSession session, List<DeliveryInfo>? deliveries = null,
+        ArrivalInfo? arrival = null) => new()
     {
         Mode = "exploring",
         Status = BuildStatus(session.Player),
@@ -1793,6 +1813,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Inventory = BuildInventory(session.Player),
         Mechanics = BuildMechanics(session.Player),
         Deliveries = deliveries,
+        Arrival = arrival,
     };
 
     GameResponse BuildEncounterResponse(GameSession session, Encounter encounter, List<GatedChoice> gated) => new()
@@ -1889,23 +1910,20 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Mechanics = BuildMechanics(session.Player),
     };
 
-    CampInfo BuildCampThreats(GameSession session)
-    {
-        var node = session.CurrentNode;
-        var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
-        var tier = node.Region?.Tier ?? 1;
-        var threats = EndOfDay.GetThreats(biome, tier, data.Balance);
+    static string BiomeOf(Dreamlands.Map.Node node)
+        => node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
 
-        return new CampInfo
-        {
-            Threats = threats.Select(t => new CampThreatInfo
+    /// <summary>Flush the travails ledger into display lines. Null when the trip accrued nothing.</summary>
+    List<TravailLineInfo>? BuildTravailLines(PlayerState player)
+        => Travails.Summarize(player, data.Balance)?.Lines
+            .Select(l => new TravailLineInfo
             {
-                ConditionId = t.Id,
-                Name = t.Name,
-                Warning = t.SpecialCure ?? t.SpecialEffect ?? "",
-            }).ToList(),
-        };
-    }
+                Name = l.Name,
+                SpiritsLost = l.SpiritsLost,
+                SparedByGear = l.SparedByGear,
+                Text = l.Text,
+            })
+            .ToList();
 
     List<ConditionRowInfo> BuildConditionRows(
         HashSet<string> conditionsBefore,
@@ -1976,10 +1994,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 EndOfDayEvent.FoodConsumed f => $"Ate: {string.Join(", ", f.FoodEaten)}",
                 EndOfDayEvent.Starving => "No food!",
-                EndOfDayEvent.ResistPassed r => r.Check != null ? $"Resisted {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})" : $"Resisted {r.ConditionId}",
-                EndOfDayEvent.ResistFailed r => r.Check != null ? $"Failed to resist {r.ConditionId} (rolled {r.Check.Rolled} vs DC {r.Check.Target})" : $"Failed to resist {r.ConditionId}",
                 EndOfDayEvent.CureApplied c => $"{c.ItemDefId} cured {c.ConditionId}!",
-                EndOfDayEvent.ConditionAcquired a => $"Contracted {a.ConditionId}",
                 EndOfDayEvent.ConditionCured c => $"{c.ConditionId} cured!",
                 EndOfDayEvent.ConditionDrain d => $"{d.ConditionId}: -{d.HealthLost} health, -{d.SpiritsLost} spirits",
                 EndOfDayEvent.SpecialEffect s => $"{s.ConditionId}: {s.Effect}",

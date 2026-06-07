@@ -192,12 +192,12 @@ public sealed class ActionVerb
     public static readonly ActionVerb SkipTime = new("skip_time",
         VerbUsage.Mechanic, "Advance to a time of day",
         new[] { new ArgDef("period", ArgType.TimePeriod) },
-        new[] { "no_sleep", "no_meal", "no_biome" });
+        new[] { "no_sleep", "no_meal" });
 
     public static readonly ActionVerb AdvanceTime = new("advance_time",
         VerbUsage.Mechanic, "Advance time by N periods",
         new[] { new ArgDef("steps", ArgType.Int) },
-        new[] { "no_sleep", "no_meal", "no_biome" });
+        new[] { "no_sleep", "no_meal" });
 
     // ── Encounter ──────────────────────────────────────────────
 

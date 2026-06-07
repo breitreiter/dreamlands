@@ -67,8 +67,11 @@ public class TravelInfo
     /// <summary>How many tiles of the path were actually traversed (1-based, includes start).</summary>
     public int StepsCompleted { get; init; }
 
-    /// <summary>Why the journey ended: "arrived", "encounter", "rescued".</summary>
+    /// <summary>Why the journey ended: "arrived", "encounter", "combat", "camp", "rescued".</summary>
     public string StopReason { get; init; } = "arrived";
+
+    /// <summary>Travails summary for the (possibly shortened) journey. Null when nothing accrued.</summary>
+    public List<TravailLineInfo>? Travails { get; init; }
 }
 
 public class TravelPoint
@@ -97,6 +100,7 @@ public class ArrivalInfo
     public string SettlementName { get; init; } = "";
     public int DaysElapsed { get; init; }
     public List<ArrivalLossInfo> Losses { get; init; } = [];
+    public List<TravailLineInfo> Travails { get; init; } = [];
 }
 
 public class ArrivalLossInfo
@@ -106,10 +110,12 @@ public class ArrivalLossInfo
     public int Spirits { get; init; }
 }
 
-public class ClearedConditionInfo
+public class TravailLineInfo
 {
-    public string Id { get; init; } = "";
     public string Name { get; init; } = "";
+    public int SpiritsLost { get; init; }
+    public bool SparedByGear { get; init; }
+    public string Text { get; init; } = "";
 }
 
 public class InnRecoveryInfo
@@ -356,7 +362,6 @@ public class CampInfo
     public int HealthBefore { get; init; }
     public int HealthAfter { get; init; }
     public List<ConditionRowInfo> ConditionRows { get; init; } = [];
-    public List<CampThreatInfo> Threats { get; init; } = [];
     public List<CampEventInfo> Events { get; init; } = [];
 }
 
@@ -370,13 +375,6 @@ public class ConditionRowInfo
     public int StacksAfter { get; init; }
     public int HealthLost { get; init; }
     public int SpiritsLost { get; init; }
-}
-
-public class CampThreatInfo
-{
-    public string ConditionId { get; init; } = "";
-    public string Name { get; init; } = "";
-    public string Warning { get; init; } = "";
 }
 
 public class CampEventInfo
