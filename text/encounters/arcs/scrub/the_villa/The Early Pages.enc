@@ -21,5 +21,5 @@ choices:
 * Skip to the last pages = The back of the book, where the writing fails
   +open "The Last Pages"
 
-* Take the journal out to Vastand = He is still waiting at the gate
+* Set the journal down and decide = You have seen enough
   +open "The Decision"
