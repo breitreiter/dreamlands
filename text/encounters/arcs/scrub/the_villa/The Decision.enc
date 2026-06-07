@@ -1,0 +1,40 @@
+The Decision
+[trigger none]
+[vignette dungeons/the_villa]
+
+FIXME(mundane): You come out the side gate. Vastand is where the page said he would be, still working the two Kesharat officials, who have sent for a senior functionary and settled in to wait. He has perhaps an hour.
+FIXME(mundane): He sees you and steps away from the officials, dropping his voice. "Quick, before they see you came from the back. What's in the house?"
+FIXME(mundane): What you carry out, what you tell him, and what you have decided should not survive the night are yours to settle.
+
+choices:
+
+* Hand Vastand the journal and keep your mouth shut = Let him make of it what he will
+  FIXME(mundane): You hand him the journal whole and tell him the estate was tidy. He turns the pages slowly, the way a careful man reads, and stops a long time on the last one.
+  FIXME(dread): "How much of this do you believe?" he asks, and does not wait for an answer. He puts the book inside his coat. The journal makes a kind of sense to a careful man, and you have handed him the first steps of it.
+  +finish_dungeon
+  +add_level
+
+* Hand Vastand the journal and tell him what it cost = The ledgers, the cave, the girl [requires tag villa.economic_value && tag villa.danger]
+  FIXME(mundane): You give him the journal and lay it out: the formation-goods sums, the cave under the floor, the girl in the cabinet. He listens like a man doing arithmetic.
+  FIXME(dread): "Formation goods," he repeats. "And a cave of them." A pause. "You understand I can't pretend I didn't hear it." He does not say whether that is a complaint or a thank-you. He is practical before he is anything else, and now he knows what it is worth and what it costs.
+  +finish_dungeon
+  +add_level
+
+* Burn the journal and the ledgers, then report a tidy estate = Nothing the Kesharat can use [requires tag villa.economic_value && tag villa.danger]
+  FIXME(mundane): The study brazier is right there. The officials have stood outside a locked house for a day and a half and know something was worth locking, and the functionary they sent for has not arrived yet.
+  @if check cunning correct:scheme wrong:hide {
+    FIXME(action): You burn the records down to ash and walk Vastand out clean, and you are both gone before the jurisdiction is decided. The question dies on the mesa with the smell of the smoke.
+    +finish_dungeon
+    +add_level
+    +give_gold 30
+  } @else {
+    FIXME(dread): The functionary arrives in time to notice the wrong things: the weight of the ledgers that are left, the smell of burnt paper, the unlocked study. Vastand will face an inquiry. You are not named in it, but the man who sent you is, and he will not forget whose hands the job was in.
+    +finish_dungeon
+  }
+
+* Keep the journal for yourself = You do not look too hard at why [requires tag villa.saw_cave]
+  FIXME(mundane): You give Vastand the ledgers and a clean report and keep the journal. Nobody finds it.
+  FIXME(dread): Weeks later, on the road, you wake before dawn to find your pack reorganized. Not ransacked. Ordered, with a care you do not remember taking, and the arrangement of it is, on reflection, exactly correct. You do not mention it to anyone.
+  +finish_dungeon
+  +add_level
+  +add_tag villa_kept_journal

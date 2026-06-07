@@ -1,0 +1,25 @@
+The Middle Pages
+[trigger none]
+[vignette dungeons/the_villa]
+
+FIXME(mundane): The middle pages turn. A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. He begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
+FIXME(dread): Then he stopped selling. He writes that he sold a few and then could not, and began sketching the crystals instead. Contracts lapsed. Buyers were stiffed. He stalled.
+FIXME(dread): He became convinced, and the journal grants him some cause, that his buyers were mixed up in something dark, that he was in danger, that someone was following him. After a bad night he hired a servant girl from a nearby village.
+FIXME(horror): He began to feel ill and decided the girl was poisoning him to take the crystals. The entry where he kills her is short and flat: "She was bleeding me to take them. It is done. She is in the kitchen cabinet." He names it the way a man notes where he left a tool.
+
+choices:
+
+* Open the kitchen cabinet = Where he wrote that he put her [requires !tag villa.danger]
+  FIXME(horror): You go back down the hall. The servant girl is folded into the cabinet where he said she would be, some weeks dead. She is small, and young, and there is nothing on her or near her that suggests she poisoned anyone. The sickness was his own.
+  FIXME(revelation): These are not only worth killing for. They make a man do this.
+  +add_tag villa.danger
+  +open "The Middle Pages"
+
+* Turn back to the early pages = The dry beginning
+  +open "The Early Pages"
+
+* Read on to the last pages = The back of the book, where the writing fails
+  +open "The Last Pages"
+
+* Take the journal out to Vastand = He is still waiting at the gate
+  +open "The Decision"

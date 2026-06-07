@@ -1,0 +1,25 @@
+The Early Pages
+[trigger none]
+[vignette dungeons/the_villa]
+
+FIXME(mundane): The early pages are dry. Solan took one of the crystals as payment on a bad debt; he had wanted cash and was annoyed. He started the journal as plain research notes, working out what the thing was and whether it was worth anything. The crystals are geometric, faceted too cleanly to be natural, and he has no name for them either.
+FIXME(mundane): Then a buyer in Aldgate paid an absurd sum for it. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting.
+FIXME(dread): Then the sellers went quiet. The Kesharat Administration began clamping down on sales to foreigners. He worked the scrublands bar to alley chasing a supply that was drying up, and began to believe he was being followed.
+FIXME(mundane): He mentions his books more than once. He kept a careful, separate record of every crystal sale, in a coded shorthand.
+
+choices:
+
+* Look for the sale ledgers he kept = His coded record of the crystal trade [requires !tag villa.economic_value]
+  FIXME(mundane): The five ledgers on the desk are well kept and routine until you find the column he hid in plain sight: receipts from an Aldgate market for a line he calls only "formation goods," small at first, growing by the fourth book to a figure that explains the villa, the cave under it, and the good lock on the door.
+  FIXME(revelation): You understand now what a cave of these is worth.
+  +add_tag villa.economic_value
+  +open "The Early Pages"
+
+* Read on into the worse of it = The pages where his hand starts to change
+  +open "The Middle Pages"
+
+* Skip to the last pages = The back of the book, where the writing fails
+  +open "The Last Pages"
+
+* Take the journal out to Vastand = He is still waiting at the gate
+  +open "The Decision"

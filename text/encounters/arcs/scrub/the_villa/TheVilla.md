@@ -215,3 +215,20 @@ missing. The geometry of how the items are arranged is, on reflection,
 exactly correct.
 
 They do not mention this to anyone.
+
+---
+
+Journal contents:
+
+The windfall. Solan takes one of the crystals as payment for a bad debt. He's annoyed — he wanted cash. He starts the journal as dry research notes, trying to figure out what the thing is and whether it's worth anything.
+The trade. A buyer in Aldgate pays an absurd sum for it. Word moves quietly. Solan starts getting discreet inquiries from other buyers who want one too.
+The good days. He leans on the original seller, turns up a few more leads, and for a while his only problems are good ones: not enough supply, offers he has to refuse, dinner invitations from traders and bureaucrats who suddenly find him fascinating.
+The bust. His sellers go quiet. The Kesharat start clamping down on sales to foreigners. Solan burns his days working the scrublands bar to alley, chasing supply that's drying up. He begins to think he's being followed.
+The break. When it looks hopeless, a broker offers him a tip: a run-down Tashkari villa, owner needs cash more than the house, and there's a cave of the crystals underneath it.
+The acquisition. He begs, borrows, and steals to cover the price. The cave is everything he hoped — an unending supply, all his. Play it right and he controls the market.
+The obsession. He sells a few, then can't. He starts sketching them. He can't bear to part with them. Contracts lapse, buyers are stiffed, he stalls.
+The paranoia. He becomes convinced — not without cause — that the buyers were into something dark, that he's in danger, that someone is following him. After one bad night he hires a servant girl from a nearby village.
+The sickness. He starts feeling ill. He decides the girl is poisoning him to steal the crystals. The sketches sprawl and tangle; the notes shrink to a hand too fine to read.
+The murder. He kills her. He's too afraid to go into town now, but it doesn't matter — he's been spending his time in the cave, and he isn't hungry anymore. The crystals give him what he needs.
+The dissolution. The last entries aren't text. Sprawling diagrams, formulae that don't resolve, the grammar of a man certain he's seen the structure underneath everything.
+

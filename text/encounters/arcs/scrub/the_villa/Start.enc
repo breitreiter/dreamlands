@@ -1,32 +1,23 @@
-Placeholder: The Villa
+The Mesa Road
 [trigger none]
+[vignette dungeons/the_villa]
 
-A placeholder encounter for The Villa arc.
+FIXME(mundane): A young page flags you down on the mesa road, two hours from the rail line, doing a poor job of looking casual until he is close enough to drop the act.
+FIXME(mundane): He sees your guild papers and looks relieved. "You're not one of the faces at the gate. Good. That's who we need."
+FIXME(mundane): "A merchant of ours is dead up at the villa, Ferath Solan. Vastand, our barrister, has been arguing jurisdiction with two Kesharat since morning and can't send anyone they have already seen; it would look like the guild seizing the estate. Nobody's been inside."
+FIXME(mundane): "So he wants you, in the back way: bring out Solan's ledgers before the Kesharat get them, and anything else in there that looks bad for the guild, burn it or carry it, your judgment."
+FIXME(mundane): "I don't know what 'anything else' means." He glances toward the mesa. "Side gate's open."
+FIXME(mundane): You are guild enough that Vastand will trust you with a dead merchant's books, and unknown enough at the gate that no one will mark your going in. That is the whole of why it falls to you.
 
 choices:
 
-* Explore = Search the villa
-    @if check cunning correct:slip wrong:caught {
-        You find what you came for.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
+* Slip in through the servants' gate = Find the ledgers before the Kesharat do
+  FIXME(mundane): The back gate is unlocked. Inside is a house kept carefully and then not kept at all: shuttered windows, weeks of dust, dried herbs hung long past their use.
+  FIXME(dread): Solan is in the back corner of the kitchen, seated, as though he sat down on purpose and did not get up. He has been dead about two days. His face is hard to read.
+  FIXME(mundane): A key hangs on a cord at his neck. It comes free without resistance, and the locked study door at the end of the hall takes it.
+  FIXME(mundane): The study is one careful room: a desk, five ledgers, a life narrowed down to this. You sit and open the topmost book. It is not a ledger. It is a journal.
+  +open "The Early Pages"
 
-* Negotiate = Talk your way through
-    @if check negotiation correct:reason wrong:threaten {
-        You find what you came for.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
-
-* Depart = Leave this place behind
-    You depart The Villa.
-    +flee_dungeon
+* Tell the page you cannot help = Leave the dead their business
+  FIXME(mundane): You hand the errand back to him and walk on. The mesa keeps its own counsel.
+  +flee_dungeon

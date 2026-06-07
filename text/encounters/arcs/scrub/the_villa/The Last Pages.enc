@@ -1,0 +1,25 @@
+The Last Pages
+[trigger none]
+[vignette dungeons/the_villa]
+
+FIXME(dread): The last written pages are barely written, his hand shrunk in places to something too fine to read. He has stopped going into town. "It doesn't matter," one line runs. "I stay below now. The cave gives me what I need. I am not hungry anymore."
+FIXME(horror): The final page is not text. It is covered edge to edge in geometric diagrams in fine ink, worked over many sittings: solids drawn from angles that should not be possible, faces shaded for depth in directions that contradict, the same shape approached from several sides at once. In the corner, very small, he has written: "Not finished. Not close."
+FIXME(mundane): A second door is set low into the back wall behind the desk, with stone steps leading down.
+
+choices:
+
+* Take the low door down the steps = Where he spent his last days [requires !tag villa.saw_cave]
+  FIXME(wonder): The cave walls are clustered with the crystals, some as tall as your waist, faceted in patterns that do not occur in undisturbed rock. The light off them is very faint, and not a color you have a name for.
+  FIXME(horror): Looked at straight on it does nothing. At the edge of your eye it does something you would rather not have seen. You do not stay. You climb back up with the after-image still working behind your eyes.
+  +damage_spirits 2
+  +add_tag villa.saw_cave
+  +open "The Last Pages"
+
+* Turn back to the early pages = The dry beginning
+  +open "The Early Pages"
+
+* Turn back to the middle pages = The descent, and the girl
+  +open "The Middle Pages"
+
+* Take the journal out to Vastand = He is still waiting at the gate
+  +open "The Decision"
