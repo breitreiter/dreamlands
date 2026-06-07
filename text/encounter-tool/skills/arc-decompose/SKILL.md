@@ -281,6 +281,22 @@ Write one `.enc` per file in the file list. For each:
    interiority. The skill does not need to pre-unpack; just do
    not leave interiority in the *final* prose.
 
+5b. **Stub spoken dialogue as actual words, not reported summary.**
+   When a character speaks, write the line they say, even at the
+   skeleton stage: `FIXME(mundane): "You're not guild," the page
+   says. "There's a man dead up at the villa."` Do NOT compress
+   speech to its content (`the page explains a merchant is dead`).
+   The downstream passes — factual especially — are *eager to eat
+   dialogue*: they flatten a spoken line back into bare facts and
+   the voiced moment is lost, because the stub handed them facts to
+   preserve, not a voice. If a human is saying words, the stub
+   carries the words. This is the one place a skeleton stub is
+   allowed to read like prose — a rough quoted line is a placeholder
+   the voice pass refines; a *summary* is a placeholder the factual
+   pass keeps flat. `the_fugitive/Mareen.enc` is the reference: it
+   stubs full quoted dialogue throughout. (Exception to rule 7's
+   witness-statement discipline, which still governs narration.)
+
 6a. **Staging must be physically plausible.** Track where every
    NPC actually is across the arc's timeline. A visitor needs
    lodging — they don't just "withdraw to the back storeroom"

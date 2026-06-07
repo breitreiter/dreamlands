@@ -259,7 +259,11 @@ every revision rather than writing prose. It has three sub-steps:
   preserves it, and the same steering that suppresses invention/fact-loss carries slang
   through unchallenged. Fix it at the **end of Stage 1**, the last point where the language is
   cheaply the human's to rewrite (see §3 Stage 1). Factual *can* de-slang ("say what is
-  MEANT") but reliability is unverified, so it is a backstop, not the gate.
+  MEANT") but reliability is unverified, so it is a backstop, not the gate. **NLP-invisible by
+  construction:** the worst offenders ("clocks" for *notices/recognizes*, "place you" for
+  *recognize you*) are valid English words in a modern *sense*, so automated anachronism
+  detectors pass them clean and only a human read catches them. (Leaked live into the_villa
+  stubs on the §5.1 run; caught by eye, not tooling.)
 - **Curation = cull + repair**, never toggle-the-keepers (`feedback_curation_is_repair`).
 - **Per-beat color repetition.** factual re-threads signature color across a character's
   beats and the body beat over-packs the pool. Curator trims; the real fix (whole-scene-body
@@ -276,6 +280,11 @@ every revision rather than writing prose. It has three sub-steps:
   test once went full isekai, stepping the PC out of a magic portal — caught instantly); the
   dangerous ones are subtle and only surface in the diff against ground truth. The review
   surface must therefore put inputs beside the generated block (see §6).
+- **Later passes eat dialogue.** The same compression bias that suppresses invention also makes
+  factual (especially) *eat* spoken dialogue — it flattens a voiced line back into reported
+  facts. The defense is upstream: at decompose, stub spoken lines as **actual quoted words**,
+  not summaries, so there is a voice to preserve rather than facts to keep flat. Observed on
+  the_villa §5.1 run (`feedback_stub_dialogue_verbatim`; arc-decompose SKILL rule 5b).
 
 ---
 
