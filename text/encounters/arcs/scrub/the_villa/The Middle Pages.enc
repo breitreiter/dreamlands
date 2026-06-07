@@ -2,14 +2,50 @@ The Middle Pages
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME(mundane): The middle pages turn. A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. He begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
-FIXME(dread): Then he stopped selling. He writes that he sold a few and then could not, and began sketching the crystals instead. Contracts lapsed. Buyers were stiffed. He stalled.
-FIXME(dread): He became convinced, and the journal grants him some cause, that his buyers were mixed up in something dark, that he was in danger, that someone was following him. After a bad night he hired a servant girl from a nearby village.
-FIXME(horror): He began to feel ill and decided the girl was poisoning him to take the crystals. The entry where he kills her is short and flat: "She was bleeding me to take them. It is done. She is in the kitchen cabinet." He names it the way a man notes where he left a tool.
+# --- COLOR ---
+# [x] The journal's spine cracks open under pressure.
+# [x] Tiny ink spatters from sections written with too much force, or too quickly
+# [x] The ledger cover's leather has worn smooth where hands held it.
+# [] A page sticks stubbornly to the next, requiring a careful tug to free it.
+# [x] The crystal sketch on this page is rendered with obsessive precision, each line drawn and redrawn.
+# [] The journal's pages smell faintly of dust and something like old blood.
+# [] A single drop of dried ink mars the corner of a crystal sketch.
+# [x] The girl's fingernails are clean, scrubbed raw.
+# [] The girl's dress is frayed at the hem, mended with rough thread.
+# [x] The cabinet door hinges groan when pulled open.
+# [] The journal's pages curl inward at the edges from humidity.
+# [] The ink bleeds through the thin paper in tight clusters.
+# [x] A page tears loose when you turn it too fast.
+# [] The journal cover's corners are worn thin from constant handling.
+# [] The journal's pages feel damp in the center, cool to the touch.
+# [] The floorboards creak underfoot in the empty hallway.
+# [] the kitchen built for a household's staff: a long cold range, a scullery door, iron hooks down the wall
+# [] the rows of hooks down the kitchen wall, most of them empty
+# [] a long preparation table built for many hands, bare now and greyed with dust
+# [x] one corner of the kitchen still in use, a single pot and knife and jar of salt clustered where the cooking shrank to one man
+# [x] the fine floor tiles, laid in a pattern meant to be admired, cracked and black in the grout
+# [x] the great hearth scaled to feed a family, swept cold and long unused
+# --- end ---
+
+FIXME(mundane): The middle of the book, where the hand loosens and then begins to tighten. You turn through it.
 
 choices:
 
-* Open the kitchen cabinet = Where he wrote that he put her [requires !tag villa.danger]
+* Read how he got the cave = The villa, and the supply beneath it
+  FIXME(mundane): A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. He begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
+  +open "The Middle Pages"
+
+* Read why the trade stopped = When he could no longer part with them
+  FIXME(dread): He writes that he sold a few and then could not, and began sketching the crystals instead. Contracts lapsed. Buyers were stiffed. He stalled. He could not bear to give one up.
+  +open "The Middle Pages"
+
+* Read about the girl he hired = The bad nights, and what he decided
+  FIXME(dread): He became convinced, and the journal grants him some cause, that his buyers were mixed up in something dark, that he was in danger, that someone was following him. After a bad night he hired a servant girl from a nearby village.
+  FIXME(horror): Then he began to feel ill and decided she was poisoning him to take the crystals. The entry where he kills her is short and flat: "She was bleeding me to take them. It is done. She is in the kitchen cabinet." He names it the way a man notes where he left a tool.
+  +add_tag villa.read_girl
+  +open "The Middle Pages"
+
+* Open the kitchen cabinet = Where he wrote that he put her [requires tag villa.read_girl && !tag villa.danger]
   FIXME(horror): You go back down the hall. The servant girl is folded into the cabinet where he said she would be, some weeks dead. She is small, and young, and there is nothing on her or near her that suggests she poisoned anyone. The sickness was his own.
   FIXME(revelation): These are not only worth killing for. They make a man do this.
   +add_tag villa.danger

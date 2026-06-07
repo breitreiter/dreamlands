@@ -2,6 +2,27 @@ The Decision
 [trigger none]
 [vignette dungeons/the_villa]
 
+# --- COLOR ---
+# [] the cold brazier in the corner of the study
+# [] the five ledgers where they were found
+# [] the weight of the journal set down on the desk
+# [x] the texture of the journal's cover against the wood of the desk
+# [] the dry crackle of a loose page as you turn it
+# [] the metallic tang of the brazier's cold iron
+# [] the rough texture of the journal's spine against your palm
+# [x] the careful way Vastand turns pages at the gate
+# [x] Vastand's tone as he argues with the official, careful, calm, yet with quiet professional menace. a professional
+# [x] Vastand's tone as he talks with you, friendly, like he's letting you in on a secret
+# [] the worn spot on the desk where the journal sat
+# [] the way the shutters have been closed from the inside
+# [] the smell of old paper and dust in the study
+# [] the faint smell of smoke from the cold brazier
+# [x] the way the late afternoon light falls across the ledgers
+# [] the way the shadows lengthen across the floorboards
+# [x] the distant cry of a desert bird somewhere beyond the walls
+# [] the geometric pattern etched into the study's floor tiles beneath the grime
+# --- end ---
+
 FIXME(mundane): You set the journal down. You have read what you are going to read; the loose pages still in the book will not tell you anything you can use tonight. The brazier stands cold in the corner of the study, and the five ledgers are where you found them.
 FIXME(mundane): Outside, Vastand is still at the gate with the two Kesharat, and perhaps an hour left to him. Whatever you mean to do with what is in this room, you do it here, before you walk back out to him.
 
@@ -9,31 +30,31 @@ choices:
 
 * Carry the journal out and hand it over without a word = Let him make of it what he will
   FIXME(mundane): You come back out to the gate, careful to reach it from the road side and not the house. You give Vastand the journal whole and tell him the estate was tidy. He turns the pages slowly, the way a careful man reads, and stops a long time on the last one.
-  FIXME(dread): "How much of this do you believe?" he asks, and does not wait for an answer. He puts the book inside his coat. The journal makes a kind of sense to a careful man, and you have handed him the first steps of it.
+  FIXME(dread): "How much of this do you believe?" he asks, and does not wait for an answer. He puts the book inside his coat. You're not certain what he'll do with the journal. You hope he'll be more circumspect than the prior owner.
   +finish_dungeon
   +add_level
 
 * Carry the journal out and tell Vastand what it cost = The ledgers, the cave, the girl [requires tag villa.economic_value && tag villa.danger]
   FIXME(mundane): You come back out and lay it in front of him: the formation-goods sums, the cave under the floor, the girl in the cabinet. He listens like a man doing arithmetic.
-  FIXME(dread): "Formation goods," he repeats. "And a cave of them." A pause. "You understand I can't pretend I didn't hear it." He does not say whether that is a complaint or a thank-you. He is practical before he is anything else, and now he knows what it is worth and what it costs.
+  FIXME(dread): "Crystals?" he repeats. "And a cave of them. Lattice-infused." A pause. "You understand I can't pretend I didn't hear it." He does not say whether that is a complaint or a thank-you. He is practical before he is anything else, and now he knows what it is worth and what it costs.
   +finish_dungeon
   +add_level
 
-* Burn the journal and the ledgers in the brazier before you leave = Nothing the Kesharat can use [requires tag villa.economic_value && tag villa.danger]
-  FIXME(mundane): The brazier is right here. The officials have stood outside a locked house for a day and a half and know something was worth locking, and the functionary they sent for has not arrived yet.
-  @if check cunning correct:scheme wrong:hide {
-    FIXME(action): You burn the journal and the marked ledgers down to ash, then come out and give Vastand a clean estate. You are both gone before the jurisdiction is decided, and the question dies on the mesa with the smell of the smoke.
+* Burn the journal and the ledgers in the brazier = No one must know of this [requires tag villa.economic_value && tag villa.danger]
+  FIXME(mundane): If you're going to do this, you need to do it now. No time to plan. You rip a few sheets from the journal and spark a small fire in the brazier. You add more sheets and the flame flares, first orange, then a sickly green. You press on, burning the rest of the pages of the journal, and then the ledgers. The flame gets out of control, spreading up along the wall with incredible speed. You flee the burning house, but spot the page along your escape route.
+  @if check cunning correct:bluff wrong:hide {
+    FIXME(action): The page is staring wide-eyed at the smoke pouring from the study window. "Is that? Did you?" he stammers. "You master wanted a clean house. I've cleaned it. You'd do well to keep quiet about this, unless you're keen for your master to know you're in the business of hiring arsonists." He gawps, but falls silent. You continue on your way.
     +finish_dungeon
     +add_level
-    +give_gold 30
   } @else {
-    FIXME(dread): You burn what you can, but the functionary arrives in time to notice the wrong things: the smell of burnt paper, the ash in the brazier, the unlocked study. Vastand will face an inquiry. You are not named in it, but the man who sent you is, and he will not forget whose hands the job was in.
+    FIXME(dread): You wait, but the boy isn't moving. You sneak along the fenceline, hoping perhaps you can evade him. Just as you thought you might manage it, a regal figure clears his throat. It's the barrister. He gestures to the villa, now burning merrily. "Your work, I imagine? Not very subtle. I'll be handling the paperwork for this for the next week. You can bet the Chapterhouse will be hearing of your... methods." You start to explain. The crystals. Solan's madness. The man isn't listening; he walks off with his page, leaving you where you stand.
+    +add_level
     +finish_dungeon
   }
 
-* Pocket the journal and carry only the ledgers out = You do not look too hard at why [requires tag villa.saw_cave]
-  FIXME(mundane): You take the ledgers out to Vastand with a clean report and keep the journal back for yourself. Nobody finds it.
-  FIXME(dread): You do not know it yet, with the book heavy in your coat, but it will not stay with you. Some weeks from now, on a road east of the mesa, you will wake before dawn to a pack that has been gone through in the night: not robbed, but ordered, every item set where you did not put it and yet exactly where it belongs. The journal will not be among them. You will never learn what took it, or where it has gone to next, and you will not speak of it to anyone.
+* Take the journal and keep it for yourself = You feel an odd sense of attachment [requires tag villa.saw_cave]
+  FIXME(mundane): You're certain there's more to learn, if you study Solan's mad writing more carefully. The diagrams. The strange writing. It must be code. Secrets. Secrets you will master.
+  FIXME(wry): You encounter the page on your way out. You nod solemnly, "It's done, nothing there that might tarnish the guild's good name." The page sighs, relieved that he selected someone of such good character to perform this delicate task.
   +finish_dungeon
   +add_level
   +add_tag villa_kept_journal

@@ -2,6 +2,24 @@ The Mesa Road
 [trigger none]
 [vignette dungeons/the_villa]
 
+# --- COLOR ---
+# [] the weight of a key hanging on a cord at a dead man's neck
+# [x] the way a body slumps in a chair as if it had chosen to sit there forever
+# [] the dust has settled in the grooves of Solan's knuckles
+# [] the uneven pressure of a dead man's fingers on the chair arm
+# [] the way the key's teeth catch the light as it's lifted
+# [x] the smell of dried herbs gone to bitterness in the air
+# [x] the sound of a shuttered window tapping against its frame
+# [] the shadow of a single shutter falling across the kitchen floor
+# [x] the fine plaster ceiling cracked above a water stain spreading like a map
+# [x] the sound of a loose floorboard giving slightly underfoot in the empty hall
+# [] the smell of old paper and damp stone in the study
+# [] the rough texture of a page stuck to the one beneath it
+# [x] the worn and travel-stained binding of the journal
+# [] the sound of the journal's pages turning like dry leaves
+# [x] the pervasive scent of dust and stale air
+# --- end ---
+
 FIXME(mundane): A young page flags you down on the mesa road, two hours from the rail line, doing a poor job of looking casual until he is close enough to drop the act.
 FIXME(mundane): He sees your guild papers and looks relieved. "You're not one of the faces at the gate. Good. That's who we need."
 FIXME(mundane): "A merchant of ours is dead up at the villa, Ferath Solan. Vastand, our barrister, has been arguing jurisdiction with two Kesharat since morning and can't send anyone they have already seen; it would look like the guild seizing the estate. Nobody's been inside."
@@ -12,7 +30,7 @@ FIXME(mundane): You are guild enough that Vastand will trust you with a dead mer
 choices:
 
 * Slip in through the servants' gate = Find the ledgers before the Kesharat do
-  FIXME(mundane): The back gate is unlocked. Inside is a house kept carefully and then not kept at all: shuttered windows, weeks of dust, dried herbs hung long past their use.
+  FIXME(mundane): The back gate is unlocked. Inside is a house once kept carefully, but now in disarray: shuttered windows, weeks of dust, dried herbs hung long past their use.
   FIXME(dread): Solan is in the back corner of the kitchen, seated, as though he sat down on purpose and did not get up. He has been dead about two days. His face is hard to read.
   FIXME(mundane): A key hangs on a cord at his neck. It comes free without resistance, and the locked study door at the end of the hall takes it.
   FIXME(mundane): The study is one careful room: a desk, five ledgers, a life narrowed down to this. You sit and open the topmost book. It is not a ledger. It is a journal.

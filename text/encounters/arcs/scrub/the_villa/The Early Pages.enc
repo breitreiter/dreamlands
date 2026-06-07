@@ -2,14 +2,41 @@ The Early Pages
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME(mundane): The early pages are dry. Solan took one of the crystals as payment on a bad debt; he had wanted cash and was annoyed. He started the journal as plain research notes, working out what the thing was and whether it was worth anything. The crystals are geometric, faceted too cleanly to be natural, and he has no name for them either.
-FIXME(mundane): Then a buyer in Aldgate paid an absurd sum for it. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting.
-FIXME(dread): Then the sellers went quiet. The Kesharat Administration began clamping down on sales to foreigners. He worked the scrublands bar to alley chasing a supply that was drying up, and began to believe he was being followed.
-FIXME(mundane): He mentions his books more than once. He kept a careful, separate record of every crystal sale, in a coded shorthand.
+# --- COLOR ---
+# [] the precise columns of figures in formation goods growing larger across ledgers
+# [x] the precise shorthand of a trader who knows his market
+# [x] the uneven pressure of the quill as Solan's hand tightens
+# [] the way Solan's merchant shorthand tightens into near-illegibility when writing of fear
+# [x] the slight tremor in the ink as he writes about being followed
+# [] the crisp edge of a page turning cleanly in the merchant's hand
+# [] the rhythmic scratch of quill on paper as figures are tallied
+# [] the weight of the ledger balanced on one knee as he reads
+# [x] the worn leather cover of the journal binding
+# [x] the worn spot on the desk where Solan most often worked
+# [x] the faint scent of ink and old paper in the lamplight
+# [x] the names of fine families who suddenly invited Solan to their parlors: Ashcroft, Wren, Swinton
+# [x] the names of sellers who went quiet: Varick, Hassan, Yelena
+# --- end ---
+
+FIXME(mundane): The early pages are in Solan's careful hand. You turn through them, scanning for what matters.
 
 choices:
 
-* Look for the sale ledgers he kept = His coded record of the crystal trade [requires !tag villa.economic_value]
+* Read where it began = The crystal he took on a bad debt
+  FIXME(mundane): He took one of the crystals as payment on a bad debt, annoyed: he had wanted cash, not a curio. He started these notes to work out what the thing was and whether it was worth anything. Geometric, faceted too cleanly to be natural, had never heard of such a thing in his travels.
+  +open "The Early Pages"
+
+* Read the months it paid = When the trade took off
+  FIXME(mundane): A buyer in Aldgate paid an absurd sum for the crystal. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting.
+  +open "The Early Pages"
+
+* Read where his luck turned = The supply drying up, and the books he kept
+  FIXME(dread): Then the sellers went quiet, and the Kesharat Administration began clamping down on sales to foreigners. He worked the scrublands bar to alley after a supply that was drying up, and began to believe he was being followed.
+  FIXME(mundane): More than once in these entries he frets over his books. He kept a careful, separate record of every crystal sale, in a coded shorthand.
+  +add_tag villa.read_turn
+  +open "The Early Pages"
+
+* Look for the sale ledgers he kept = His coded record of the crystal trade [requires tag villa.read_turn && !tag villa.economic_value]
   FIXME(mundane): The five ledgers on the desk are well kept and routine until you find the column he hid in plain sight: receipts from an Aldgate market for a line he calls only "formation goods," small at first, growing by the fourth book to a figure that explains the villa, the cave under it, and the good lock on the door.
   FIXME(revelation): You understand now what a cave of these is worth.
   +add_tag villa.economic_value
