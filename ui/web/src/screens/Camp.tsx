@@ -2,15 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useGame, type CampReportLine, type CampReport } from "../GameContext";
 import type { GameResponse, CampEventInfo, ConditionRowInfo } from "../api/types";
 import MaskedIcon, { iconUrl } from "../components/MaskedIcon";
+import TravailStrip from "../components/TravailStrip";
 import parchment from "../assets/parchment.webp";
 
 const CONDITION_ICONS: Record<string, string> = {
-  freezing: "mountains.svg",
-  thirsty: "water-drop.svg",
   lattice_sickness: "foamy-disc.svg",
   poisoned: "foamy-disc.svg",
   irradiated: "foamy-disc.svg",
-  exhausted: "tread.svg",
   lost: "compass.svg",
   injured: "bloody-stash.svg",
 };
@@ -38,7 +36,7 @@ function buildCampReport(events: CampEventInfo[]): CampReport {
     else if (e.type === "Starving") {
       lines.push({ text: e.description, color: "negative" });
       hasBad = true;
-    } else if (e.type === "ConditionDrain") {
+    } else if (e.type === "ConditionDrain" || e.type === "Travail") {
       lines.push({ text: e.description, color: "negative" });
       hasBad = true;
     } else if (e.type === "RestRecovery")
@@ -47,12 +45,9 @@ function buildCampReport(events: CampEventInfo[]): CampReport {
   return { lines, severity: hasBad ? "bad" : "ok" };
 }
 
-/** Minor events: food, foraging, rest recovery — not condition-related */
+/** Minor events: food and the night's travail toll — not condition-related */
 function getMinorEvents(events: CampEventInfo[]): CampEventInfo[] {
-  const minorTypes = new Set([
-    "FoodConsumed", "Starving", "RestRecovery",
-    "ResistPassed", "ResistFailed", "ConditionAcquired",
-  ]);
+  const minorTypes = new Set(["FoodConsumed", "Starving", "RestRecovery", "Travail"]);
   return events.filter(e => minorTypes.has(e.type));
 }
 
@@ -65,6 +60,8 @@ export default function Camp({ state }: { state: GameResponse }) {
   const [minorExpanded, setMinorExpanded] = useState(false);
   const didResolve = useRef(false);
   const didToast = useRef(false);
+  // Snapshot the journey toll before camp_resolve clears the one-shot travel field
+  const journeyTravails = useRef(state.travel?.travails);
 
   // Auto-resolve on mount — no preamble screen
   useEffect(() => {
@@ -150,6 +147,9 @@ export default function Camp({ state }: { state: GameResponse }) {
           <div className="text-primary/80 leading-loose">
             {crisisSubtitle(conditionRows)}
           </div>
+
+          {/* Journey toll when the crisis interrupted travel */}
+          <TravailStrip travails={journeyTravails.current} />
 
           {/* Haul deliveries */}
           {state.deliveries && state.deliveries.length > 0 && (

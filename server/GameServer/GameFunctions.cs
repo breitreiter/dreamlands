@@ -975,9 +975,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                  && def.Severity == ConditionSeverity.Severe)
                     .ToHashSet();
 
-                // Travails: a night camped on the road accrues fatigue (settlement nights don't)
+                // Travails: a night camped on the road accrues fatigue (settlement nights don't).
+                // Track what this night charged so the camp report can show it.
+                var fatigueBefore = player.TravailLedger.GetValueOrDefault("fatigue")?.SpiritsCharged ?? 0;
                 if (node.Poi?.Kind != PoiKind.Settlement)
                     Travails.AccrueNight(player, data.Balance);
+                var fatigueCharged = (player.TravailLedger.GetValueOrDefault("fatigue")?.SpiritsCharged ?? 0) - fatigueBefore;
 
                 var campEvents = EndOfDay.Resolve(
                     player, data.Balance,
@@ -990,13 +993,20 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                && def.Severity == ConditionSeverity.Severe);
 
                 var conditionRows = BuildConditionRows(conditionsBefore, campEvents);
+                var eventInfos = FormatCampEvents(campEvents);
+                if (fatigueCharged > 0)
+                    eventInfos.Add(new CampEventInfo
+                    {
+                        Type = "Travail",
+                        Description = $"The road wears on you: -{fatigueCharged} spirit{(fatigueCharged == 1 ? "" : "s")} to fatigue",
+                    });
                 var campInfo = new CampInfo
                 {
                     HasSevereCondition = hasSevere,
                     HealthBefore = healthBefore,
                     HealthAfter = player.Health,
                     ConditionRows = conditionRows,
-                    Events = FormatCampEvents(campEvents),
+                    Events = eventInfos,
                 };
 
                 if (rescued != null)
@@ -1686,11 +1696,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Source = "Negotiation",
         });
 
-        var bushcraftTier = (int)p.Skills.GetValueOrDefault(Skill.Bushcraft);
+        var bushcraftTier = p.Skills.GetValueOrDefault(Skill.Bushcraft);
         other.Add(new MechanicLine
         {
-            Label = "Foraging checks",
-            Value = FormatSkillLevel(bushcraftTier),
+            Label = "Travel hazard costs",
+            Value = bushcraftTier switch
+            {
+                SkillTier.Trained => "half",
+                SkillTier.Expert => "quarter",
+                _ => "full",
+            },
             Source = "Bushcraft",
         });
 

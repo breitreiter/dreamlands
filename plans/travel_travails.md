@@ -4,7 +4,7 @@ title: "Travails — nuke travel conditions, deterministic journey costs"
 state: active
 created: 2026-06-06
 updated: 2026-06-06
-status: ACTIVE — phases 1-3 DONE 2026-06-07 (engine, wiring, rules+content sweep; travel conditions fully gone); next: phase 4 UI; UX opens OQ-2/5 to settle there
+status: ACTIVE — phases 1-4 DONE 2026-06-07 (engine, wiring, sweep, UI; OQ-2/5 resolved); remaining: phase 5 docs + TODO closeout, plus a flagged Reference.tsx ground-up rewrite (stale beyond travails)
 touches:
   files:
     - lib/Rules/ConditionDef.cs
@@ -252,7 +252,20 @@ A "journey" is the `travel` action's path walk. Termination = any stop reason:
    engine). 157 .enc files pass check.
 4. **UI** — travails summary component (arrival panel + interruption strip),
    camp screen de-threated, CLI `status`/`travel` output. Style spec applies
-   (`project/screens/styles.md`).
+   (`project/screens/styles.md`). **DONE 2026-06-07.** Notes: arrival dialog
+   renders travail narrative lines (spared lines in gold w/ checked-shield);
+   wilderness journey ends reuse the dialog as "The Road Takes Its Toll";
+   new `TravailStrip` ("The road so far") on Encounter/Combat/Camp when a
+   journey was cut short — rides the one-shot `travel` field, Camp snapshots
+   it in a ref before camp_resolve clears it. Camp was never rendering
+   threats, so de-threating was server-only. CLI prints raw JSON (travails
+   included), no change needed. Mechanics panel "Foraging checks" line (dead
+   system) replaced with "Travel hazard costs: full/half/quarter". Reference
+   travel/conditions sections rewritten; **flagged: Reference.tsx is stale far
+   beyond travails (d20 DCs, haversack, tokens, balanced meals) and needs a
+   ground-up pass — phase 5 should add a TODO item.** Production bundle
+   regenerated via update-encounters.sh; smoke-tested camp Travail event +
+   mechanics line against live server.
 5. **Tests + docs** — EndOfDayTests rewrite, Orchestration travel tests,
    mechanics_reference.md update, condition_rework.md supersede note, TODO.md
    edits (close the design-conversation threads this resolves; rewrite the
@@ -264,15 +277,19 @@ A "journey" is the `travel` action's path walk. Termination = any stop reason:
   2026-06-06, see Calibration section + `project/reference/map_route_lengths.md`.
   Boots question also resolved: keep zeroing fatigue (dungeon-reward valve).
   Residual: playtest only.
-- **OQ-2 (manual-move summary moment)**: with `move` stepping, the ledger flushes
-  on settlement arrival — should the nightly camp screen also show a running
-  "travails so far" tally so a long manual trek isn't a black box until arrival?
+- **OQ-2 (manual-move summary moment)**: ~~running tally on camp screen?~~
+  RESOLVED 2026-06-07: no running tally; instead the camp report shows that
+  night's fatigue charge as an event line ("The road wears on you: -1 spirit
+  to fatigue"), so overnight spirit drops are never unexplained. Ledger still
+  flushes on settlement arrival. (Manual moves are CLI-only — the web UI is
+  click-to-move exclusively.)
 - **OQ-3 (severity enum)**: with Minor empty, collapse `ConditionSeverity` and the
   minor/severe split, or keep the enum for future minor conditions? Leaning keep
   (cheap, and arc content may want minor encounter-applied conditions later).
 - **OQ-4 (fatigue scope)**: does fatigue accrue on nights when the player
   *chose* to camp mid-journey vs. only forced road nights? Current draft: every
   on-road night accrues; settlement nights never do.
-- **OQ-5 (interrupted-journey UX)**: exact placement of the travails strip when an
-  encounter/combat hijacks the screen mid-journey — before the encounter card,
-  after resolution, or folded into the next exploring view?
+- **OQ-5 (interrupted-journey UX)**: ~~strip placement?~~ RESOLVED 2026-06-07:
+  compact `TravailStrip` ("The road so far") above the encounter/combat title,
+  riding the one-shot `travel` response field — it disappears on the player's
+  first action, so it reads as context for the interruption, not chrome.

@@ -175,9 +175,8 @@ export default function Reference() {
             <Table
               headers={["Slot", "Grants", "Examples"]}
               rows={[
-                ["Weapon", "Combat bonus (+1 to +5)", "Bodkin, Hatchet, Falchion, Broadaxe, Scimitar"],
-                ["Armor", "Cunning bonus + injury/freezing resist", "Tunic, Leather, Gambeson, Brigandine"],
-                ["Boots", "Exhaustion resist (+1 to +5)", "Fine Boots, Heavy Work Boots, Trail Boots"],
+                ["Weapon", "Combat moves", "Bodkin, Hatchet, Falchion, Broadaxe, Scimitar"],
+                ["Armor", "Defensive combat moves", "Tunic, Leather, Gambeson, Brigandine"],
               ]}
             />
 
@@ -196,8 +195,7 @@ export default function Reference() {
               rows={[
                 ["Weapons", "Pack", "Three archetypes: daggers (exploiting openings), axes (aggressive), swords (hybrid)"],
                 ["Armor", "Pack", "Light (cunning-focused), medium (balanced), heavy (injury resist)"],
-                ["Boots", "Pack", "Higher tier = more exhaustion resistance"],
-                ["Tools", "Pack", "Grant skill bonuses or condition resistance. Only unique items count; duplicates don't stack."],
+                ["Tools", "Pack", "Spare you travel hazards (waterskin, bedroll) or cure conditions. Reusable while carried."],
                 ["Food", "Haversack", "Protein, grain, sweets. Auto-consumed at end of day. 3 gold each at market."],
                 ["Medicine", "Haversack", "Cures for specific conditions. Auto-consumed when needed at end of day."],
                 ["Tokens", "Haversack", "Minor gear granting +1 to a skill. Story items from encounters."],
@@ -209,103 +207,100 @@ export default function Reference() {
           {/* CONDITIONS */}
           <Section id="conditions" title="Conditions">
             <p>
-              Conditions are ailments you pick up from the environment or encounters.
-              They drain your resources each night until treated.
+              Conditions are ailments you pick up from encounters. Severe conditions
+              cost health every night until treated.
             </p>
 
-            <h3 className="text-dim font-bold mt-6 mb-2">Minor Conditions</h3>
-            <p className="text-muted mb-2">Drain spirits each night. Cleared by reaching a settlement or using the right gear.</p>
-            <Table
-              headers={["Condition", "Drain", "Source", "Cleared By"]}
-              rows={[
-                ["Freezing", "-3 spirits/night", "Mountains (failed resist)", "Enter settlement or leave biome"],
-                ["Thirsty", "-3 spirits/night", "Scrub (failed resist)", "Enter settlement"],
-                ["Exhausted", "-3 spirits/night", "Encounters, overexertion", "Inn stay only"],
-                ["Lost", "Triggers an encounter", "Failed navigation", "Complete the encounter or enter settlement"],
-              ]}
-            />
-
             <h3 className="text-dim font-bold mt-6 mb-2">Severe Conditions</h3>
-            <p className="text-muted mb-2">Cost 1 health per night if untreated. Stack up to 3 times. Each medicine dose reduces stacks by 1.</p>
+            <p className="text-muted mb-2">
+              Cost 1 health per night if untreated. Carrying the matching medicine kit treats
+              them automatically overnight; kits are reusable and never consumed.
+            </p>
             <Table
               headers={["Condition", "Medicine", "Cost"]}
               rows={[
-                ["Injured", "Bandages", "3 gold"],
-                ["Poisoned", "Mudcap Fungus", "15 gold"],
-                ["Irradiated", "Shustov Tonic", "40 gold"],
+                ["Injured", "Medical Kit", "25 gold"],
+                ["Poisoned", "Mudcap Spores", "15 gold"],
+                ["Irradiated", "Shustov Apparatus", "40 gold"],
                 ["Lattice Sickness", "Siphon Glass", "40 gold"],
               ]}
             />
 
+            <h3 className="text-dim font-bold mt-6 mb-2">Lost</h3>
+            <p>
+              Failed navigation can leave you lost. Being lost triggers an encounter on
+              the road; finding your way back is its own small ordeal. Bushcraft helps
+              you avoid getting lost in the first place; a Cartographer's Kit prevents it.
+            </p>
+
             <h3 className="text-dim font-bold mt-6 mb-2">Resisting Conditions</h3>
             <p>
-              Each night on the road, you roll resist checks against ambient conditions
-              (default DC <span className="text-accent">12</span>). Equipment like canteens, sleeping kits, and armor
-              add resist bonuses to help you pass.
+              When an encounter inflicts a severe condition, Cunning gives a passive
+              chance to shrug it off: <span className="text-accent">40%</span> at Trained,{" "}
+              <span className="text-accent">80%</span> at Expert.
             </p>
           </Section>
 
           {/* THE ROAD */}
           <Section id="road" title="The Road">
             <p>
-              Travel happens tile by tile across a grid map. Each night on the road, you roll resist checks
-              against ambient conditions. Some are biome-specific (freezing in the mountains, thirst in the scrub),
-              while exhaustion and getting lost can happen anywhere. Serious conditions like poisoning, injury,
-              and irradiation only come from encounters.
+              Travel happens tile by tile across a grid map. The road itself wears you
+              down: harsh terrain and nights camped in the open cost spirits as you go,
+              and you get an account of the toll at the end of every journey.
             </p>
 
-            <h3 className="text-dim font-bold mt-6 mb-2">Foraging</h3>
-            <p>
-              Each night on the road, you roll Bushcraft to forage for food. Three separate checks
-              determine how much you find:
+            <h3 className="text-dim font-bold mt-6 mb-2">Travel Hazards</h3>
+            <p className="text-muted mb-2">
+              Costs are steady and predictable, not rolled. The right gear removes a
+              hazard entirely; Bushcraft halves all hazard costs at Trained and quarters
+              them at Expert.
             </p>
             <Table
-              headers={["DC", "Yield"]}
+              headers={["Hazard", "Source", "Spared By"]}
               rows={[
-                ["16", "1 food item"],
-                ["18", "2 food items"],
-                ["20", "3 food items"],
+                ["Thirst", "Walking the scrub", "Waterskin"],
+                ["Cold", "Crossing the mountains", "Wool Bedroll"],
+                ["Fatigue", "Each night camped on the road", "Scarecrow Boots"],
               ]}
             />
-            <p className="text-muted">You don't forage in settlements; buy food at the market instead.</p>
+            <p className="text-muted">
+              Settlement nights are free: sleeping in town costs no fatigue.
+            </p>
           </Section>
 
           {/* END OF DAY */}
           <Section id="endofday" title="End of Day">
-            <p>At the end of each day, several things happen automatically in this order:</p>
+            <p>At the end of each day on the road, in order:</p>
             <ol className="list-decimal list-inside space-y-2 ml-2">
               <li>
-                <strong className="text-dim">Resist checks:</strong> Roll against biome-specific conditions (freezing, thirsty, etc.).
-                Equipment resist bonuses help.
+                <strong className="text-dim">Eat:</strong> One ration is consumed automatically.
+                Trained Bushcraft stretches supplies: you only eat every other night.
+                No food means going hungry, <span className="text-accent">-1 spirit</span>.
               </li>
               <li>
-                <strong className="text-dim">Forage:</strong> On the road, roll Bushcraft to find food (skipped in settlements).
+                <strong className="text-dim">Medicine:</strong> A matching medicine kit treats one severe
+                condition overnight. Kits are reusable and never consumed.
               </li>
               <li>
-                <strong className="text-dim">Eat:</strong> Up to 3 food items are consumed from your pack.
-                A <em>balanced meal</em> (1 protein + 1 grain + 1 sweets) grants <span className="text-accent">+1 bonus spirits</span>.
-                No food means you go hungry; you won't recover spirits from resting that night.
+                <strong className="text-dim">Condition drain:</strong> Any untreated severe condition
+                costs <span className="text-accent">1 health</span>. With none, you recover{" "}
+                <span className="text-accent">+1 health</span>.
               </li>
               <li>
-                <strong className="text-dim">Medicine:</strong> If you have a matching cure for a severe condition, one dose is consumed automatically, reducing stacks by 1.
-              </li>
-              <li>
-                <strong className="text-dim">Condition drain:</strong> Minor conditions drain <span className="text-accent">3 spirits</span> each.
-                Untreated severe conditions drain <span className="text-accent">1 health</span>.
-              </li>
-              <li>
-                <strong className="text-dim">Rescue:</strong> If health reaches 0, you're rescued. You lose your inventory and gold but keep your skills and are placed at the nearest settlement.
-              </li>
-              <li>
-                <strong className="text-dim">Rest:</strong> If you ate and slept, recover <span className="text-accent">+1 spirits</span> (or +2 with a balanced meal).
+                <strong className="text-dim">Rescue:</strong> If health reaches 0, you're rescued. You lose
+                items and gold but keep your skills.
               </li>
             </ol>
+            <p className="text-muted mt-2">
+              Spirits never regenerate on the road; refill them at an inn.
+            </p>
           </Section>
 
           {/* SETTLEMENTS */}
           <Section id="settlements" title="Settlements">
             <p>
-              Settlements are safe havens: no biome threats, no foraging.
+              Settlements are safe havens: nights in town cost nothing, and the road's
+              travails reset at the gate.
               They offer services depending on their size: camps, outposts, villages, towns, and cities.
             </p>
 

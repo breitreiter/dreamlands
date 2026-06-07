@@ -6,6 +6,7 @@ import HitLens from "../components/HitLens";
 import HitSplat from "../components/HitSplat";
 import MissMoon from "../components/MissMoon";
 import TopBar from "../components/TopBar";
+import TravailStrip from "../components/TravailStrip";
 import { Button } from "@/components/ui/button";
 
 type Hit = { id: number; x: number; y: number; angle: number; splat: number; miss: boolean };
@@ -561,6 +562,8 @@ export default function Combat({ state }: { state: GameResponse }) {
           )}
         </TopBar>
         <div ref={logRef} className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4">
+          {/* Journey toll when combat cut travel short (one-shot field) */}
+          <TravailStrip travails={state.travel?.travails} />
           <div>
             <h2 className="font-header text-[32px] text-accent leading-none">{combat.title}</h2>
             {combat.introText && (

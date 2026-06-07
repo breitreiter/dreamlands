@@ -22,7 +22,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { getDiscoveries, getNotices } from "../api/client";
-import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo, ArrivalInfo } from "../api/types";
+import type { GameResponse, DeliveryInfo, DiscoveryInfo, EncounterSummaryInfo, ArrivalInfo, TravailLineInfo } from "../api/types";
 
 // Map constants — 100x100 grid at 128px/tile = 12800px source.
 // At max zoom 6: 1 latlng = 64px, so 12800/64 = 200 units.
@@ -528,7 +528,7 @@ export default function Explore({ state }: { state: GameResponse }) {
   const { doAction, loading, gameId, clearCampReport } = useGame();
   const [showInventory, setShowInventory] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
-  const [pendingArrival, setPendingArrival] = useState<{ arrival: ArrivalInfo | null; deliveries: DeliveryInfo[] } | null>(null);
+  const [pendingArrival, setPendingArrival] = useState<{ arrival: ArrivalInfo | null; deliveries: DeliveryInfo[]; roadTravails: TravailLineInfo[] } | null>(null);
   const [discoveries, setDiscoveries] = useState<DiscoveryInfo[]>([]);
   const [traveling, setTraveling] = useState(false);
   const [gridReady, setGridReady] = useState(false);
@@ -577,6 +577,11 @@ export default function Explore({ state }: { state: GameResponse }) {
 
     const deferredDeliveries = result.deliveries?.length ? result.deliveries : null;
     const deferredArrival = result.arrival ?? null;
+    // Journey toll for travel that ended in open wilderness (settlement arrivals
+    // carry their travails inside arrival instead). Drop zero-cost exposure lines.
+    const roadTravails = (result.travel.travails ?? []).filter(
+      (t) => t.spiritsLost > 0 || t.sparedByGear
+    );
 
     const effectiveLen = Math.min(result.travel.stepsCompleted + 1, pathSnapshot.length);
     const rawPts = pathSnapshot.slice(0, effectiveLen).map(
@@ -594,8 +599,8 @@ export default function Explore({ state }: { state: GameResponse }) {
 
     setTravelPhase("idle");
     setAnimSpline([]);
-    if (deferredDeliveries || deferredArrival) {
-      setPendingArrival({ arrival: deferredArrival, deliveries: deferredDeliveries ?? [] });
+    if (deferredDeliveries || deferredArrival || roadTravails.length > 0) {
+      setPendingArrival({ arrival: deferredArrival, deliveries: deferredDeliveries ?? [], roadTravails });
     }
     // MapFollower will remount and flyTo; its onFlyEnd clears traveling.
   }, [traveling, doAction, clearCampReport]);
@@ -769,24 +774,28 @@ export default function Explore({ state }: { state: GameResponse }) {
         onEnterDungeon={() => doAction({ action: "enter_dungeon" })}
       />
 
-      {/* Settlement arrival dialog — journey summary + deliveries */}
+      {/* Journey's-end dialog — travails summary + losses + deliveries */}
       <AlertDialog open={pendingArrival != null}>
         <AlertDialogContent className="max-w-3xl">
           {pendingArrival && (() => {
-            const { arrival, deliveries } = pendingArrival;
+            const { arrival, deliveries, roadTravails } = pendingArrival;
             const headerSubtitle = arrival
               ? `${arrival.daysElapsed} day${arrival.daysElapsed !== 1 ? "s" : ""} on the road`
               : null;
             const settlementName = arrival?.settlementName
               ?? state.node?.poi?.name
               ?? "Settlement";
-            const hasJourney = arrival != null;
+            // Settlement arrivals carry travails inside arrival; wilderness ends carry them on travel
+            const travails = (arrival?.travails ?? roadTravails)
+              .filter((t) => t.spiritsLost > 0 || t.sparedByGear);
+            const losses = arrival?.losses ?? [];
+            const hasJourney = travails.length > 0 || losses.length > 0;
             const hasDeliveries = deliveries.length > 0;
             return (
               <>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="font-header text-accent text-[32px]">
-                    Arrived at {settlementName}
+                    {arrival ? `Arrived at ${settlementName}` : "The Road Takes Its Toll"}
                   </AlertDialogTitle>
                   {headerSubtitle && (
                     <AlertDialogDescription className="text-dim">
@@ -800,7 +809,17 @@ export default function Explore({ state }: { state: GameResponse }) {
                     <div className="flex flex-col gap-3">
                       <div className="text-accent font-bold tracking-wide">The Journey</div>
                       <div className="flex flex-col gap-1.5">
-                        {arrival!.losses.map((loss, i) => (
+                        {travails.map((t, i) => (
+                          <div key={`t${i}`} className="flex items-start gap-2">
+                            <MaskedIcon
+                              icon={t.sparedByGear ? "checked-shield.svg" : "sensuousness.svg"}
+                              className="w-5 h-5 mt-0.5 shrink-0"
+                              color={t.sparedByGear ? "#D0BD62" : "#d4c9a8"}
+                            />
+                            <span>{t.text}</span>
+                          </div>
+                        ))}
+                        {losses.map((loss, i) => (
                           <div key={i} className="flex flex-col gap-1">
                             {loss.spirits > 0 && (
                               <div className="flex items-center gap-2">

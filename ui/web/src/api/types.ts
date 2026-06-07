@@ -127,12 +127,6 @@ export interface InventoryInfo {
   packCapacity: number;
 }
 
-export interface CampThreatInfo {
-  conditionId: string;
-  name: string;
-  warning: string;
-}
-
 export interface CampEventInfo {
   type: string;
   description: string;
@@ -154,7 +148,6 @@ export interface CampInfo {
   healthBefore: number;
   healthAfter: number;
   conditionRows: ConditionRowInfo[];
-  threats: CampThreatInfo[];
   events: CampEventInfo[];
 }
 
@@ -195,21 +188,24 @@ export interface DeliveryInfo {
   flavor: string | null;
 }
 
-export interface ClearedConditionInfo {
-  id: string;
-  name: string;
-}
-
 export interface ArrivalLossInfo {
   cause: string;
   health: number;
   spirits: number;
 }
 
+export interface TravailLineInfo {
+  name: string;
+  spiritsLost: number;
+  sparedByGear: boolean;
+  text: string;
+}
+
 export interface ArrivalInfo {
   settlementName: string;
   daysElapsed: number;
   losses: ArrivalLossInfo[];
+  travails: TravailLineInfo[];
 }
 
 export interface EncounterSummaryInfo {
@@ -363,7 +359,9 @@ export interface CombatRollInfo {
 export interface TravelInfo {
   path: { x: number; y: number }[];
   stepsCompleted: number;
-  stopReason: "arrived" | "encounter" | "combat" | "rescued";
+  stopReason: "arrived" | "encounter" | "combat" | "camp" | "rescued";
+  /** Travails summary for the (possibly shortened) journey. Null when nothing accrued. */
+  travails?: TravailLineInfo[];
 }
 
 export interface MechanicsInfo {

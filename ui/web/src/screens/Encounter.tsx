@@ -6,6 +6,7 @@ import parchment from "../assets/parchment.webp";
 import { formatProse } from "../prose";
 import DieRoll, { MeetsCheck } from "../components/DieRoll";
 import ApproachPicker from "../components/ApproachPicker";
+import TravailStrip from "../components/TravailStrip";
 import Tableau from "./Tableau";
 
 type Segment =
@@ -121,6 +122,9 @@ export default function Encounter({ state }: { state: GameResponse }) {
       {/* Right panel — narrative content */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 md:p-12 flex flex-col">
         <div className="max-w-2xl space-y-6">
+          {/* Journey toll when an encounter cut travel short (one-shot field) */}
+          <TravailStrip travails={state.travel?.travails} />
+
           {/* Base title + body (shown once) */}
           <div>
             <h2 className="text-3xl md:text-4xl font-header text-accent">
