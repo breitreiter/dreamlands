@@ -491,6 +491,59 @@ Write one `.enc` per file in the file list. For each:
     `@else` branch, not by an unfair preamble. The preamble stays
     neutral; the outcome teaches.
 
+13. **No modern or anachronistic slang.** This is a pre-industrial
+    secondary world; use no casual modernism even when the brief or
+    a beat does. Never use "clock" to mean notice or recognize
+    (write "her eyes catch on it", "she marks it"); the same for
+    "place" meaning recognize, "grab" for seize, and the like. These
+    are NLP-invisible (valid words in a modern *sense*), so automated
+    checks pass them clean and only a human read catches them. Scrub
+    at the skeleton stage; downstream passes preserve slang in their
+    input rather than fixing it.
+
+14. **Outcome prose resumes in the immediate aftermath.** Play picks
+    up the instant the encounter ends, so an outcome must never
+    narrate another place or another time as if it were the present
+    moment. Two failures, both seen on the_villa:
+    - *Spatial leap* — a finale choice whose action implies a place
+      the framing already left (the PC decides at the gate, then the
+      outcome says "burn it in the study brazier"). Fix by staging
+      the decision where the action happens, and folding the walk
+      out into each outcome.
+    - *Forward leap* — narrating a later scene as present ("Weeks
+      later you wake to find..."). Fix by restaging in the moment,
+      or, when the brief wants an epilogue, marking it explicitly as
+      a flash-forward in future tense ("You do not know it yet, but
+      in a week..."). The canonical rule is NO FUTURE (see the
+      inherited-rules note); the flash-forward is the one sanctioned
+      exception. Complements 6a, which governs mid-arc staging.
+
+15. **No parenthetical author-glosses.** A parenthetical that
+    explains the situation to whoever reads the stub ("(you are
+    guild, trusted, which is why it falls to you)") is meta, not
+    content, and downstream renders it straight into the prose. Fold
+    the fact into plain narration or cut it. The only parentheses
+    that belong in a stub are the `FIXME(register)` marker itself.
+
+16. **The PC is a known quantity; do not reinvent them.** The PC is
+    a high-ranking member of the Traders Guild, wears a signet ring,
+    and travels alone (a lone wanderer; never named). Respected, but
+    not above the guild's barristers, officers, and factors, who can
+    outrank the PC on guild business and to whom the PC reports. Give
+    the PC no invented possessions, no mount or horse, no companion:
+    per the canonical NO GAME STATE rule the PC "might have anything
+    or nothing", and the skeleton assumes none of it.
+
+**Inherited prose rules (do not re-derive).** Rules 7-16 are the
+decompose-stage application of a canonical "common errors" list that
+lives in `text/encounters/generation/outcomes_prompt.md` (`## HARD
+RULES`: SELF-CONTAINED, NO FUTURE, NO GAME STATE, NO INNER MONOLOGUE,
+BODY CONSISTENCY; plus no slang, no em-dashes, present tense), with
+the fullest live copy in the `FactualCommand.cs` system prompt. When
+in doubt, that source governs. (`outcomes_prompt.md` is currently a
+v1 orphan, not wired to any command; treat it as the spec anyway
+until the rules are unified into one shared house-rules set.)
+
 Write the files in dependency order (Start.enc last, since it links
 forward; or write all and verify at the end — either works).
 
