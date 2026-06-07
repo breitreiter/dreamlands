@@ -91,8 +91,8 @@ public class MechanicsTests
     public void AddCondition_Idempotent()
     {
         var state = Fresh();
-        state.ActiveConditions.Add("freezing");
-        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
+        state.ActiveConditions.Add("lost");
+        var results = Mechanics.Apply(["add_condition lost"], state, Balance, new Random(1));
         Assert.Empty(results);
         Assert.Single(state.ActiveConditions);
     }
@@ -101,48 +101,45 @@ public class MechanicsTests
     public void AddCondition_AppearsInActiveConditions_WhenUntrained()
     {
         var state = Fresh();
-        // Untrained Bushcraft → 0% passive resist → condition always applies
-        state.Skills[Skill.Bushcraft] = SkillTier.Untrained;
-        var results = Mechanics.Apply(["add_condition freezing"], state, Balance, new Random(1));
+        // Untrained Cunning → 0% passive resist → serious condition always applies
+        state.Skills[Skill.Cunning] = SkillTier.Untrained;
+        var results = Mechanics.Apply(["add_condition poisoned"], state, Balance, new Random(1));
 
         var r = Assert.IsType<MechanicResult.ConditionAdded>(results[0]);
-        Assert.Equal("freezing", r.ConditionId);
-        Assert.True(state.ActiveConditions.Contains("freezing"));
+        Assert.Equal("poisoned", r.ConditionId);
+        Assert.True(state.ActiveConditions.Contains("poisoned"));
     }
 
     [Fact]
     public void AddCondition_Resisted_WhenExpertTier()
     {
-        // Expert Bushcraft → 80% resist → over 100 trials should see at least one resist
-        var state = Fresh();
-        state.Skills[Skill.Bushcraft] = SkillTier.Expert;
-
+        // Expert Cunning → 80% resist → over 20 trials should see at least one resist
         bool resisted = false;
         for (int seed = 0; seed < 20; seed++)
         {
             var s = PlayerState.NewGame("test", 99, Balance);
-            s.Skills[Skill.Bushcraft] = SkillTier.Expert;
-            var results = Mechanics.Apply(["add_condition freezing"], s, Balance, new Random(seed));
+            s.Skills[Skill.Cunning] = SkillTier.Expert;
+            var results = Mechanics.Apply(["add_condition poisoned"], s, Balance, new Random(seed));
             if (results.Count > 0 && results[0] is MechanicResult.ConditionResisted r)
             {
-                Assert.Equal("freezing", r.ConditionId);
-                Assert.False(s.ActiveConditions.Contains("freezing"));
+                Assert.Equal("poisoned", r.ConditionId);
+                Assert.False(s.ActiveConditions.Contains("poisoned"));
                 resisted = true;
                 break;
             }
         }
-        Assert.True(resisted, "Expert Bushcraft should resist freezing at least once in 20 tries");
+        Assert.True(resisted, "Expert Cunning should resist poisoned at least once in 20 tries");
     }
 
     [Fact]
     public void RemoveCondition_RemovesFromActiveConditions()
     {
         var state = Fresh();
-        state.ActiveConditions.Add("freezing");
-        var results = Mechanics.Apply(["remove_condition freezing"], state, Balance, Rng);
+        state.ActiveConditions.Add("lost");
+        var results = Mechanics.Apply(["remove_condition lost"], state, Balance, Rng);
 
         Assert.IsType<MechanicResult.ConditionRemoved>(results[0]);
-        Assert.False(state.ActiveConditions.Contains("freezing"));
+        Assert.False(state.ActiveConditions.Contains("lost"));
     }
 
     [Fact]

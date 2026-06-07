@@ -24,8 +24,7 @@ choices:
 
     +remove_condition lost
     +advance_time 5
-    +damage_spirits 2
-    +add_condition exhausted
+    +damage_spirits 3
   }
 
 * Find the rail line and follow it = New track goes somewhere with people; walk it until you reach a depot

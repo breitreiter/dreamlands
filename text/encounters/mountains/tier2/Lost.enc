@@ -20,8 +20,7 @@ choices:
     The traverse goes wrong halfway across; a foot placement fails and you scrabble for a piton that holds, just, while your heart hammers in your throat. You make it to the far side but you've burned time and rattled yourself. The gully above is iced over in the shadow of the face, and you retreat before committing to a climb you can't safely reverse. You find the valley by the long way down, picking through broken ground until the slope relents.
     +remove_condition lost
     +advance_time 5
-    +damage_spirits 2
-    +add_condition exhausted
+    +damage_spirits 3
   }
 
 * Find the prospectors = They know this terrain; get directions

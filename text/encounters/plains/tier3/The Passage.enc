@@ -29,7 +29,7 @@ choices:
     You let it come into the narrow section and give ground each time it swings, trading space for its momentum. You take two hits that you feel through the armor and wait for it to overextend. When it does, you get inside its reach. Something you strike matters. The grinding grows worse. It staggers. The second time it staggers you push through before it recovers, and on the third stumble the legs fold and it goes down sideways with a crash that shakes dust from the ceiling.
     The tunnel is silent. You find another way out.
     +advance_time 4
-    +add_condition exhausted
+    +damage_spirits 2
   } @else {
     You go at it head-on, which is the wrong instinct in a tight space. The first real hit sends you into the wall and the second takes the air from you. You scramble under it and through its legs, which works through luck more than intention, then run in the only direction left. You find a maintenance hatch forty yards down, get it open, and seal it behind you.
     +add_condition injured
@@ -44,7 +44,7 @@ choices:
   } @else {
     You're close, you can feel it, but the sound from the corridor is getting louder and you rush the last step and get it wrong. The hatch stays sealed.
     The maintenance vent near the floor is barely large enough, but the thing behind you isn't. You go through on hands and knees with the sound of it directly behind, and crawl until the space opens into a utility shaft. You climb until it ends at a grate that opens onto empty sky.
-    +add_condition exhausted
+    +damage_spirits 2
     +advance_time 5
   }
 
@@ -56,7 +56,6 @@ choices:
     +damage_spirits 1
   } @else {
     Two dead ends, almost a third, before the sound catches up. You press flat into a side branch too narrow for the thing to follow and wait with your back to the wall while it fills the passage ahead, glass eye sweeping once, twice, then moving on. You stay there long enough to be certain. By the time you work back out through the route you found on the third try, the sky outside has changed.
-    +add_condition exhausted
     +advance_time 6
-    +damage_spirits 1
+    +damage_spirits 3
   }

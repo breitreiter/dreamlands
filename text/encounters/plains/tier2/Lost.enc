@@ -21,8 +21,7 @@ choices:
     The doctrine was applied inconsistently, it turns out; this section of the campaign was improvised as the advance stalled, and what looks like a supply depot is actually a gun emplacement, and the road you expected doesn't run where you calculated. You spend the next hours working outward from your wrong assumption, backtracking twice. By the time you find the road, you're tired and the light is going and your legs know every step of the detour.
     +remove_condition lost
     +advance_time 5
-    +damage_spirits 2
-    +add_condition exhausted
+    +damage_spirits 3
   }
 
 * Find the salvage crew = They know this ground better than any map.

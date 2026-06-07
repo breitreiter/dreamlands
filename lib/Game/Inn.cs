@@ -23,8 +23,7 @@ public static class Inn
     /// Returns the three inn service tiers from balance data. The bed/bath tiers
     /// add a fixed amount of spirits; the full tier restores spirits to max.
     /// All tiers clear severe conditions covered by carried medicine kits;
-    /// kits are reusable and never consumed (minor conditions were already
-    /// cleared by SettlementRunner.EnsureSettlement on entry).
+    /// kits are reusable and never consumed.
     /// </summary>
     public static IReadOnlyList<InnService> GetServiceOptions(BalanceData balance) =>
     [

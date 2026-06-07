@@ -20,8 +20,7 @@ choices:
     The current is real but it leads you wrong, downstream into a bog that has no outlet, a basin where the water collects and stagnates and the smell is something you will not be able to name but will remember. You backtrack in water that reaches your chest at one point. Your pack is soaked. You find higher ground eventually by following a line of trees whose canopy looks slightly different, slightly less dim, which means less water beneath them, which turns out to be true. You are free of the mosswater but you are not where you were trying to be, and you are exhausted in the deep-muscle way that does not resolve with one night's sleep.
     +remove_condition lost
     +advance_time 5
-    +damage_spirits 2
-    +add_condition exhausted
+    +damage_spirits 3
   }
 
 * Look for a camp = Someone lives out here, or passes through. Find their mark.

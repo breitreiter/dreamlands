@@ -115,18 +115,17 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_SpiritDrainingCondition_Drains1Spirit()
+    public void Resolve_ActiveConditions_DoNotDrainSpirits()
     {
-        // Interim until the phase-3 content sweep: encounter-applied travel
-        // conditions still exist and still drain (plans/travel_travails.md).
+        // Spirits drain comes only from starving and travails — conditions cost HP, not spirits
         var p = Fresh();
         p.Spirits = 10;
-        p.ActiveConditions.Add("freezing");
+        p.ActiveConditions.Add("lost");
         AddRation(p);
 
         EndOfDay.Resolve(p, Balance);
 
-        Assert.Equal(9, p.Spirits);
+        Assert.Equal(10, p.Spirits);
     }
 
     [Fact]
@@ -167,12 +166,12 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_MinorConditionDoesNotBlockHealthRegen()
+    public void Resolve_NonSevereConditionDoesNotBlockHealthRegen()
     {
         var p = Fresh();
         p.MaxHealth = 4;
         p.Health = 2;
-        p.ActiveConditions.Add("freezing");
+        p.ActiveConditions.Add("lost");
         AddRation(p);
 
         EndOfDay.Resolve(p, Balance);
@@ -238,17 +237,15 @@ public class EndOfDayTests
     }
 
     [Fact]
-    public void Resolve_MissedMealAndCondition_DrainsBoth()
+    public void Resolve_MissedMeal_DrainsOneSpirit()
     {
         var p = Fresh();
         p.Spirits = 10;
-        p.ActiveConditions.Add("freezing");
         // No ration — and Untrained bushcraft eats every night
 
         EndOfDay.Resolve(p, Balance);
 
-        // -1 missed meal, -1 freezing
-        Assert.Equal(8, p.Spirits);
+        Assert.Equal(9, p.Spirits);
     }
 
     [Fact]

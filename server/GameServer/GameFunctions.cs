@@ -1612,7 +1612,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             Cost = def?.Cost,
             SkillModifiers = [],
             Cures = def?.Cures.ToList() ?? [],
-            Immunities = def?.PassiveImmunities.ToList() ?? [],
+            Immunities = data.Balance.Hazards.Values
+                .Where(h => h.MitigatingItemId == i.DefId)
+                .Select(h => h.Name)
+                .ToList(),
             Moves = def?.Type is ItemType.Weapon or ItemType.Armor
                 ? def.RpsMoves.Select(m => m.DisplayName).ToList()
                 : [],
@@ -1641,12 +1644,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         foreach (var (condId, condDef) in data.Balance.Conditions)
         {
-            var resistSkill = condId switch
-            {
-                "freezing" or "thirsty" or "poisoned" => (Skill?)Skill.Bushcraft,
-                "injured" => Skill.Combat,
-                _ => null,
-            };
+            // Severe conditions resist via Cunning (Mechanics.ApplyAddCondition)
+            var resistSkill = condDef.Severity == ConditionSeverity.Severe
+                ? (Skill?)Skill.Cunning
+                : null;
 
             var skillBonus = resistSkill != null ? (int)p.Skills.GetValueOrDefault(resistSkill.Value) : 0;
 
@@ -2012,14 +2013,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var parts = new List<string>();
         if (def.Severity == ConditionSeverity.Severe)
             parts.Add("Drains health each night");
-        if (def.SpiritsDrain is { })
-            parts.Add("Drains spirits each night");
         if (def.SpecialEffect is { } se)
             parts.Add(se);
-        if (def.ClearedOnSettlement)
-            parts.Add("Cleared at settlements");
-        if (def.SpecialCure is { } sc)
-            parts.Add($"Cure: {sc}");
         return string.Join(". ", parts) + (parts.Count > 0 ? "." : "");
     }
 

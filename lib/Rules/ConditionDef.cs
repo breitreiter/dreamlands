@@ -2,66 +2,41 @@ namespace Dreamlands.Rules;
 
 public enum ConditionSeverity { Minor, Severe }
 
-/// <summary>Definition of a status condition.</summary>
+/// <summary>
+/// Definition of a status condition. All remaining conditions are encounter-acquired;
+/// ambient travel hazards were replaced by the deterministic travails system
+/// (<see cref="HazardDef"/>, plans/travel_travails.md).
+/// </summary>
 public sealed class ConditionDef
 {
     public ConditionSeverity Severity { get; init; } = ConditionSeverity.Minor;
     public string Id { get; init; } = "";
     public string Name { get; init; } = "";
-    public string Biome { get; init; } = "none";
-    public string Tier { get; init; } = "none";
     public int Stacks { get; init; } = 1;
-    public int? SpiritsDrain { get; init; }
-    public string? SpecialCure { get; init; }
     public string? SpecialEffect { get; init; }
-    /// <summary>If true, this condition is automatically cleared when entering a settlement.</summary>
-    public bool ClearedOnSettlement { get; init; }
-    /// <summary>Per-condition resist DC override. Null = use AmbientResistDifficulty.</summary>
-    public Difficulty? ResistDifficulty { get; init; }
 
     internal static IReadOnlyDictionary<string, ConditionDef> All { get; } = BuildAll();
 
     static Dictionary<string, ConditionDef> BuildAll() => new()
     {
-        ["freezing"] = new()
-        {
-            Id = "freezing", Name = "Freezing", Biome = "mountains", Tier = "any",
-            Stacks = 1, SpiritsDrain = 1,
-            ClearedOnSettlement = true,
-            SpecialCure = "Leave the mountain biome or enter a settlement.",
-        },
-        ["thirsty"] = new()
-        {
-            Id = "thirsty", Name = "Thirsty", Biome = "scrub", Tier = "any",
-            Stacks = 1, SpiritsDrain = 1,
-            ClearedOnSettlement = true,
-            SpecialCure = "Enter a settlement.",
-        },
         ["irradiated"] = new()
         {
-            Id = "irradiated", Name = "Irradiated", Biome = "none", Tier = "none",
+            Id = "irradiated", Name = "Irradiated",
             Stacks = 3, Severity = ConditionSeverity.Severe,
         },
         ["lattice_sickness"] = new()
         {
-            Id = "lattice_sickness", Name = "Lattice Sickness", Biome = "none", Tier = "none",
+            Id = "lattice_sickness", Name = "Lattice Sickness",
             Stacks = 3, Severity = ConditionSeverity.Severe,
-        },
-        ["exhausted"] = new()
-        {
-            Id = "exhausted", Name = "Exhausted", Biome = "none", Tier = "none",
-            Stacks = 1, SpiritsDrain = 1,
-            ClearedOnSettlement = true,
-            SpecialCure = "Enter a settlement.",
         },
         ["poisoned"] = new()
         {
-            Id = "poisoned", Name = "Poisoned", Biome = "none", Tier = "none",
+            Id = "poisoned", Name = "Poisoned",
             Stacks = 3, Severity = ConditionSeverity.Severe,
         },
         ["injured"] = new()
         {
-            Id = "injured", Name = "Injured", Biome = "none", Tier = "none",
+            Id = "injured", Name = "Injured",
             Stacks = 3, Severity = ConditionSeverity.Severe,
         },
     };

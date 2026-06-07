@@ -20,8 +20,7 @@ choices:
     The picture above doesn't translate to the ground. What looked like a clear line to water turns into a ravine hidden by undergrowth that drops fifteen feet at the edge. You find a way around it, lose the thread, pick it up again. By the time you reach the timber scouts' blaze line you are scraped up and short-tempered and the light is going fast.
     +remove_condition lost
     +advance_time 5
-    +damage_spirits 2
-    +add_condition exhausted
+    +damage_spirits 3
   }
 
 * Check the moss and shadows = Navigate by the old methods: light angle, moss growth, water flow

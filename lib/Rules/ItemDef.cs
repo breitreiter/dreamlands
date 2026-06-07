@@ -29,10 +29,6 @@ public sealed class ItemDef
     public int Slots { get; init; } = 1;
     public IReadOnlySet<string> Cures { get; init; } = new HashSet<string>();
 
-    /// <summary>Conditions this item passively prevents while present in the pack
-    /// (never consumed, no market role). Used by EndOfDay immunity check.</summary>
-    public IReadOnlySet<string> PassiveImmunities { get; init; } = new HashSet<string>();
-
     public WeaponClass? WeaponClass { get; init; }
     public ArmorClass? ArmorClass { get; init; }
     public int? Cost { get; init; }
@@ -305,13 +301,12 @@ public sealed class ItemDef
             RpsMoves = [new("Heavy Defend", "Defend: Armored"), new("Perfect Power Defend", "Perfect Block ✦")],
         },
 
-        // ── Scarecrow Boots (passive Tool — exhaustion immunity while carried) ──
+        // ── Scarecrow Boots (passive Tool — zeroes fatigue travails while carried) ──
 
         ["scarecrow_boots"] = new()
         {
             Id = "scarecrow_boots", Name = "Scarecrow Boots", Type = ItemType.Tool,
             Description = "Patchwork boots stitched together from a hundred salt-stained leathers. The wearer never tires.",
-            PassiveImmunities = new HashSet<string> { "exhausted" },
         },
 
         // ── Tools: Shopable ──
@@ -320,7 +315,6 @@ public sealed class ItemDef
         {
             Id = "waterskin", Name = "Waterskin", Type = ItemType.Tool,
             Description = "A treated hide bag holding two days of water.",
-            PassiveImmunities = new HashSet<string> { "thirsty" },
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["cartographers_kit"] = new()
@@ -333,7 +327,6 @@ public sealed class ItemDef
         {
             Id = "sleeping_kit", Name = "Wool Bedroll", Type = ItemType.Tool,
             Description = "Thick wool bedroll. Sized to keep a traveler warm through the deepest cold.",
-            PassiveImmunities = new HashSet<string> { "freezing" },
             Biome = "forest", ShopTier = 2, Cost = 80,
         },
 

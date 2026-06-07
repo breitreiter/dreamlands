@@ -82,7 +82,7 @@ public static class SkillResolution
     ///   Expert    = 80%
     ///
     /// Skill domain:
-    ///   Travel conditions (exhausted, freezing, thirsty, lost) → Skill.Bushcraft
+    ///   Getting lost → Skill.Bushcraft
     ///   Serious conditions (injured, poisoned, irradiated, lattice_sickness) → Skill.Cunning
     /// </summary>
     public static bool RollPassiveResist(SkillTier tier, Random rng) =>

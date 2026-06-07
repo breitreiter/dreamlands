@@ -43,20 +43,19 @@ public class SettlementRunnerTests
     }
 
     [Fact]
-    public void EnsureSettlement_ClearsClearedOnSettlementConditions()
+    public void EnsureSettlement_LeavesConditionsAlone()
     {
+        // Settlement entry no longer silently clears anything — travel
+        // conditions are gone (travails), and severe conditions cure at
+        // the inn/chapterhouse, never on the doorstep.
         var session = MakeSessionWithSettlement();
-        session.Player.ActiveConditions.Add("freezing");
-        session.Player.ActiveConditions.Add("thirsty");
-        session.Player.ActiveConditions.Add("exhausted");
-        session.Player.ActiveConditions.Add("injured"); // serious — should NOT clear
+        session.Player.ActiveConditions.Add("injured");
+        session.Player.ActiveConditions.Add("lost");
 
         SettlementRunner.EnsureSettlement(session);
 
-        Assert.DoesNotContain("freezing", session.Player.ActiveConditions);
-        Assert.DoesNotContain("thirsty", session.Player.ActiveConditions);
-        Assert.DoesNotContain("exhausted", session.Player.ActiveConditions);
         Assert.Contains("injured", session.Player.ActiveConditions);
+        Assert.Contains("lost", session.Player.ActiveConditions);
     }
 
     [Fact]

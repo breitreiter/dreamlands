@@ -29,11 +29,11 @@ public static class SkillFlavor
         [(Skill.Negotiation, 2)] = "+40% contract payout. Encounter checks are generous.",
 
         [(Skill.Bushcraft, 0)] = "No passive benefit. Encounter checks are punishing.",
-        [(Skill.Bushcraft, 1)] = "30% chance to resist travel conditions. Encounter checks are fair.",
-        [(Skill.Bushcraft, 2)] = "60% chance to resist travel conditions. Encounter checks are generous.",
+        [(Skill.Bushcraft, 1)] = "Halves travel hazard costs; eat every other night. Encounter checks are fair.",
+        [(Skill.Bushcraft, 2)] = "Quarters travel hazard costs. Encounter checks are generous.",
 
         [(Skill.Cunning, 0)] = "No passive benefit. Encounter checks are punishing.",
-        [(Skill.Cunning, 1)] = "30% chance to resist serious conditions. Encounter checks are fair.",
-        [(Skill.Cunning, 2)] = "60% chance to resist serious conditions. Encounter checks are generous.",
+        [(Skill.Cunning, 1)] = "40% chance to resist serious conditions. Encounter checks are fair.",
+        [(Skill.Cunning, 2)] = "80% chance to resist serious conditions. Encounter checks are generous.",
     };
 }

@@ -27,7 +27,7 @@ choices:
     +damage_spirits 1
   } @else {
     You take a corner fast and skid on old glass and go down. When you're back up the ground is shaking again, slow and deep. You go to ground in a half-collapsed building and press into shadow while the vibration moves around you in a long arc. You aren't certain whether it's gone back to the orchard or simply stilled somewhere you can't see. You wait another hour before you move.
-    +add_condition exhausted
+    +damage_spirits 2
     +advance_time 5
     +damage_spirits 2
   }

@@ -127,27 +127,14 @@ public static class EndOfDay
         return treated;
     }
 
-    /// <summary>
-    /// Apply spirits drain from missed meals and from any active spirit-draining conditions.
-    /// </summary>
+    /// <summary>Apply the spirits penalty for a missed meal.</summary>
     static void ResolveSpiritsDrain(PlayerState state, BalanceData balance, List<EndOfDayEvent> events)
     {
-        // Missed meal drains 1 spirit
         var noFoodToday = events.Any(e => e is EndOfDayEvent.Starving);
         if (noFoodToday)
         {
             state.Spirits = Math.Max(0, state.Spirits - 1);
             events.Add(new EndOfDayEvent.ConditionDrain("starving", 0, 1));
-        }
-
-        // Per-condition drains
-        foreach (var conditionId in state.ActiveConditions)
-        {
-            if (!balance.Conditions.TryGetValue(conditionId, out var def)) continue;
-            if (def.SpiritsDrain is not { } drain || drain <= 0) continue;
-
-            state.Spirits = Math.Max(0, state.Spirits - drain);
-            events.Add(new EndOfDayEvent.ConditionDrain(conditionId, 0, drain));
         }
     }
 

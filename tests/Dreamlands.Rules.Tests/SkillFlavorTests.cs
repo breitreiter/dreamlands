@@ -9,8 +9,8 @@ public class SkillFlavorTests
     [InlineData(Skill.Combat, 2, "Adds axes and medium armor. Encounter checks are fair.")]
     [InlineData(Skill.Combat, 4, "Adds swords and heavy armor. Encounter checks are generous.")]
     [InlineData(Skill.Negotiation, 0, "No contract bonus. Encounter checks are punishing.")]
-    [InlineData(Skill.Bushcraft, 2, "30% chance to resist travel conditions. Encounter checks are fair.")]
-    [InlineData(Skill.Cunning, 4, "60% chance to resist serious conditions. Encounter checks are generous.")]
+    [InlineData(Skill.Bushcraft, 2, "Halves travel hazard costs; eat every other night. Encounter checks are fair.")]
+    [InlineData(Skill.Cunning, 4, "80% chance to resist serious conditions. Encounter checks are generous.")]
     public void Get_ReturnsCorrectFlavor(Skill skill, int level, string expected)
     {
         Assert.Equal(expected, SkillFlavor.Get(skill, level));
@@ -28,7 +28,7 @@ public class SkillFlavorTests
     {
         // Level 1 should map to trained (tier 1), same as level 2
         var result = SkillFlavor.Get(Skill.Bushcraft, 1);
-        Assert.Equal("30% chance to resist travel conditions. Encounter checks are fair.", result);
+        Assert.Equal("Halves travel hazard costs; eat every other night. Encounter checks are fair.", result);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class SkillFlavorTests
     {
         // Level 3 should map to expert (tier 2), same as level 4
         var result = SkillFlavor.Get(Skill.Cunning, 3);
-        Assert.Equal("60% chance to resist serious conditions. Encounter checks are generous.", result);
+        Assert.Equal("80% chance to resist serious conditions. Encounter checks are generous.", result);
     }
 
     [Fact]

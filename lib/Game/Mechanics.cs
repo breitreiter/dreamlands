@@ -310,10 +310,10 @@ public static class Mechanics
         var id = args[0];
         if (state.ActiveConditions.Contains(id)) return null;
 
-        // Passive resist: travel conditions → Bushcraft, serious → Cunning
+        // Passive resist: getting lost → Bushcraft, serious conditions → Cunning
         var resistSkill = id switch
         {
-            "exhausted" or "freezing" or "thirsty" or "lost" => Skill.Bushcraft,
+            "lost" => Skill.Bushcraft,
             "injured" or "poisoned" or "irradiated" or "lattice_sickness" => Skill.Cunning,
             _ => (Skill?)null,
         };

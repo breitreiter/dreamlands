@@ -60,6 +60,6 @@ choices:
     +damage_spirits 1
   } @else {
     You pick the wrong road. The next junction opens onto a square with no exit on the far side, and by the time you've turned around the thing has already rounded the bend. You scramble over a wall, land badly, find an alley, go through it on instinct. When you emerge the sound is gone, or turned, or stalled somewhere behind you. You don't stop moving until the road looks normal again.
-    +add_condition exhausted
+    +damage_spirits 2
     +advance_time 4
   }

@@ -52,7 +52,7 @@ choices:
     "Probably," you say.
     The woman from before is already through the gate. She doesn't look back either, but there's something in the set of her shoulders that wasn't there before.
     +advance_time 2
-    +add_condition exhausted
+    +damage_spirits 1
     +heal_spirits 2
   } @else {
     Three of them at once is too many. You get one down before they overwhelm you, four sets of hands dragging you to the ground. The officer watches without expression until it's done, then crouches beside you.

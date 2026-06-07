@@ -26,14 +26,29 @@ public class BalanceDataTests
     {
         var conditions = BalanceData.Default.Conditions;
         Assert.NotEmpty(conditions);
-        Assert.True(conditions.ContainsKey("freezing"));
-        Assert.True(conditions.ContainsKey("thirsty"));
-        Assert.True(conditions.ContainsKey("exhausted"));
+        Assert.True(conditions.ContainsKey("injured"));
         Assert.True(conditions.ContainsKey("poisoned"));
+        Assert.True(conditions.ContainsKey("irradiated"));
         Assert.True(conditions.ContainsKey("lattice_sickness"));
-        Assert.False(conditions.ContainsKey("hungry"));
-        Assert.False(conditions.ContainsKey("gut_worms"));
-        Assert.False(conditions.ContainsKey("swamp_fever"));
+        // Travel conditions are gone — replaced by travails hazards (plans/travel_travails.md)
+        Assert.False(conditions.ContainsKey("freezing"));
+        Assert.False(conditions.ContainsKey("thirsty"));
+        Assert.False(conditions.ContainsKey("exhausted"));
+    }
+
+    [Fact]
+    public void Hazards_CoverTravelChannels()
+    {
+        var hazards = BalanceData.Default.Hazards;
+        Assert.True(hazards.ContainsKey("thirst"));
+        Assert.True(hazards.ContainsKey("cold"));
+        Assert.True(hazards.ContainsKey("fatigue"));
+        // Every hazard names a real mitigating item and a threshold per skill tier
+        foreach (var h in hazards.Values)
+        {
+            Assert.True(BalanceData.Default.Items.ContainsKey(h.MitigatingItemId), h.Id);
+            Assert.Equal(3, h.UnitsPerSpirit.Count);
+        }
     }
 
     [Fact]

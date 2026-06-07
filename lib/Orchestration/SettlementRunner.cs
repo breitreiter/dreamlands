@@ -23,17 +23,6 @@ public static class SettlementRunner
         var biome = node.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
         var size = node.Poi.Size ?? SettlementSize.Camp;
 
-        // Settlement entry side effect: clear ClearedOnSettlement conditions.
-        // Interim until the travails phase-3 content sweep removes the last
-        // encounter-applied travel conditions (plans/travel_travails.md).
-        foreach (var conditionId in session.Player.ActiveConditions.ToList())
-        {
-            if (session.Balance.Conditions.TryGetValue(conditionId, out var def)
-                && def.ClearedOnSettlement)
-            {
-                session.Player.ActiveConditions.Remove(conditionId);
-            }
-        }
         // Initialize settlement state on first visit
         if (!session.Player.Settlements.ContainsKey(node.Poi.SettlementId))
         {

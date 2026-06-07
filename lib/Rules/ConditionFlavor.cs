@@ -15,26 +15,6 @@ public sealed class ConditionFlavor
 
     static Dictionary<string, ConditionFlavor> BuildAll() => new()
     {
-        ["freezing"] = new()
-        {
-            Ongoing = "The chill has settled into you and you cannot seem to shake it.",
-            Resist = "The mountain\u2019s teeth find your cloak before they find your skin. Tonight, that is enough.",
-            Succumb = "The cold slips past every layer you brought. It settles in as if it means to stay.",
-            HealProgress = "The cold retreats a little. Not vanquished \u2014 only pushed back.",
-            HealFailure = "You feed the fire until dawn. The cold does not care.",
-            HealComplete = "Your warmth is your own again. The cold retreats to the peaks where it belongs.",
-            Death = "You drift rather than wake; numb past cold, past pain, past everything. The mountain takes what it is owed.",
-        },
-        ["thirsty"] = new()
-        {
-            Ongoing = "Your tongue is a strip of leather. The waste watches, and waits.",
-            Resist = "You count every drop. The scrubland circles, patient \u2014 but tonight your throat stays wet.",
-            Succumb = "The waste has taken your water. All that passes through this land pays that toll.",
-            HealProgress = "A mouthful of water, precious as gold out here. Not enough \u2014 but something.",
-            HealFailure = "You lick the inside of your canteen and taste dust.",
-            HealComplete = "Water. You had forgotten that water could taste like anything but want.",
-            Death = "Something silver gleams between the dunes. Your legs carry you toward it before your mind can object. It is always sand. In the end, it is only sand.",
-        },
         ["lattice_sickness"] = new()
         {
             Ongoing = "The colors bleed at the edges of your vision. Something in the lattice has taken root in you.",
@@ -54,16 +34,6 @@ public sealed class ConditionFlavor
             HealFailure = "The medicine does what it can. But you are still here, and the land\u2019s poison is patient.",
             HealComplete = "The curse burns itself out at last, leaving you scarred and still standing. The marks will stay.",
             Death = "Your lungs have forgotten their purpose. The light that has no business being inside you fills every dark space. Then nothing.",
-        },
-        ["exhausted"] = new()
-        {
-            Ongoing = "Boots, boots, boots. Another dawn, another road. Your body has nothing left to spend.",
-            Resist = "The road has had its way with you, but the boots held, and the camp was warm enough. You\u2019ve paid in sweat, not blood.",
-            Succumb = "The blisters split. The cold finds every gap in your bedroll. The road tallies what you owe, and tonight it collects.",
-            HealProgress = "The rest does something. Not everything, but the weight lifts a little.",
-            HealFailure = "You sleep, and the road undoes it. You rise as tired as you lay down.",
-            HealComplete = "Your legs remember what they are for. The road ahead looks possible again.",
-            Death = "You stop to rest for just a moment. The moment never ends.",
         },
         ["poisoned"] = new()
         {

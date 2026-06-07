@@ -4,7 +4,7 @@ title: "Travails — nuke travel conditions, deterministic journey costs"
 state: active
 created: 2026-06-06
 updated: 2026-06-06
-status: ACTIVE — phases 1+2 DONE 2026-06-07 (engine + server wiring, smoke-tested vs live server); next: phase 3 rules/content sweep; UX opens OQ-2/5 to settle during phase 4
+status: ACTIVE — phases 1-3 DONE 2026-06-07 (engine, wiring, rules+content sweep; travel conditions fully gone); next: phase 4 UI; UX opens OQ-2/5 to settle there
 touches:
   files:
     - lib/Rules/ConditionDef.cs
@@ -240,7 +240,16 @@ A "journey" is the `travel` action's path walk. Termination = any stop reason:
    summary, wilderness-end summary, no double-count across journeys.
 3. **Rules + content** — ConditionDef/ConditionFlavor/ItemDef cleanup; sweep the
    11 .enc files; `EncounterCli check` must pass (checker will reject the dead
-   condition ids — good).
+   condition ids — good). **DONE 2026-06-07.** Notes: swept 14 mechanic lines
+   (Lost.enc failure blocks fold exhausted into the existing hit → damage_spirits 3;
+   Old Assay Station storm = flat 4; Conscripts nets +1 heartened). ConditionDef
+   kept only Id/Name/Stacks/Severity/SpecialEffect; Minor severity retained for
+   future (OQ-3 resolved: keep). `lost` condition survives (Hermit/Lost.enc
+   mechanic, Bushcraft resist). PassiveImmunities deleted — gear tooltips now
+   read hazard mitigation from HazardDef.MitigatingItemId. Settlement-entry
+   clearing fully gone. SkillFlavor/ArcRewards Bushcraft text now describes the
+   rate discount (and Cunning resist odds corrected 30/60 → 40/80 to match the
+   engine). 157 .enc files pass check.
 4. **UI** — travails summary component (arrival panel + interruption strip),
    camp screen de-threated, CLI `status`/`travel` output. Style spec applies
    (`project/screens/styles.md`).
