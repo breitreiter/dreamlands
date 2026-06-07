@@ -33,7 +33,7 @@ choices:
 
 * Pocket the journal and carry only the ledgers out = You do not look too hard at why [requires tag villa.saw_cave]
   FIXME(mundane): You take the ledgers out to Vastand with a clean report and keep the journal back for yourself. Nobody finds it.
-  FIXME(dread): Weeks later, on the road, you wake before dawn to find your pack reorganized. Not ransacked. Ordered, with a care you do not remember taking, and the arrangement of it is, on reflection, exactly correct. You do not mention it to anyone.
+  FIXME(dread): You do not know it yet, with the book heavy in your coat, but it will not stay with you. Some weeks from now, on a road east of the mesa, you will wake before dawn to a pack that has been gone through in the night: not robbed, but ordered, every item set where you did not put it and yet exactly where it belongs. The journal will not be among them. You will never learn what took it, or where it has gone to next, and you will not speak of it to anyone.
   +finish_dungeon
   +add_level
   +add_tag villa_kept_journal
