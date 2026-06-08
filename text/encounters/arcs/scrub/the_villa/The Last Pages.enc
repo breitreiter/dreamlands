@@ -18,22 +18,40 @@ The Last Pages
 # --- end ---
 
 FIXME(dread): The back of the book, where the writing fails. You turn the last leaves.
+# --- FACTUAL ---
+# You turn the last leaves of the journal. The pages are warped, water-damaged at the edges, and the writing changes as you go. The hand that was tight and precise grows looser, then warms, then tightens again in a way that stops looking like handwriting.
+# --- end ---
 
 choices:
 
-* Read the last entries he wrote = The hand shrinking, the man going under
+* Read the last entries he wrote 
   FIXME(dread): The last written pages are barely written, his hand shrunk in places to something too fine to read. He has stopped going into town. "It doesn't matter," one line runs. "I stay below now. The cave gives me what I need. I am not hungry anymore."
+  # --- FACTUAL ---
+  # The last written pages are barely written, his hand shrunk in places to something too fine to read. He has stopped going into town. "I stay below now. The cave gives me what I need. I am not hungry anymore, nor sick. I am at peace."
+  # --- end ---
   +add_tag villa.read_lastwords
   +open "The Last Pages"
 
-* Look at the final page = Where the writing stops being writing
+* Skip to the final page 
   FIXME(horror): The final page is not text. It is covered edge to edge in geometric diagrams in fine ink, worked over many sittings: solids drawn from angles that should not be possible, faces shaded for depth in directions that contradict, the same shape approached from several sides at once. In the corner, very small, he has written: "Not finished. Not close."
+  # --- FACTUAL ---
+  # The final page is not text. It is covered edge to edge in geometric diagrams in fine ink, worked over many sittings: solids drawn from angles that should not be possible, faces shaded for depth in directions that contradict, the same shape approached from several sides at once. In the corner, very small, he has written: "Not finished. Not yet."
+  # --- end ---
   +open "The Last Pages"
 
 * Try to find this cave = The danger is clear, and yet you must know [requires tag villa.read_lastwords && !tag villa.saw_cave]
   FIXME(mundane): Nothing in the study shows as a door. It is the last entries that send you looking: he wrote that he stayed below, so there is a below to find. Behind the desk, low in the panelled wall, one section sits flush with no handle, its seam clean of the dust that greys everything else and the floor before it worn pale where a man passed through many times a day. It gives inward on stone steps going down. You follow the dank passage down; at the bottom you find a door, more by feel than sight. You pull it open.
+  # --- FACTUAL ---
+  # Nothing in the study shows as a door. It is the last entries that send you looking: the villa is nearly empty. If there is an entrance to the cave, it must be nearby. Sure enough, gehind the desk, low in the panelled wall, one section sits flush with no handle, its seam clean of the dust that greys everything else and the floor before it worn pale where a man passed through many times a day. It gives inward on stone steps going down. You follow the dank passage down; at the bottom you find a door, more by feel than sight. You pull it open.
+  # --- end ---
   FIXME(wonder): The cave walls are clustered with the crystals, some as tall as your waist, faceted in patterns that do not occur in undisturbed rock. The light off them is both very faint and suddenly overwhelming; not a color you have a name for. 
-  FIXME(horror): You feel sick and slightly dizzy. At the edge of your eye it does something you would rather not have seen. You do not stay. You climb back up with the after-image still working behind your eyes.
+  # --- FACTUAL ---
+  # The cave walls are clustered with the crystals, some as tall as your waist, faceted in patterns that do not occur in undisturbed rock. The light off them is both very faint and suddenly overwhelming; not a color you have a name for.
+  # --- end ---
+  FIXME(horror): You feel sick and slightly dizzy. You close your eyes and cover them with your hand, but the dim light remains. You do not stay. You climb back up with the after-image still burned to your eyes.
+  # --- FACTUAL ---
+  # You feel sick and slightly dizzy. You close your eyes and cover them with your hand, but the dim light remains. You do not stay. You climb back up with the after-image still burned to your eyes.
+  # --- end ---
   +add_condition lattice_sickness
   +add_tag villa.saw_cave
   +open "The Last Pages"

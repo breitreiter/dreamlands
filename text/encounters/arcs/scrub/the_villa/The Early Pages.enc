@@ -19,26 +19,43 @@ The Early Pages
 # --- end ---
 
 FIXME(mundane): The early pages are in Solan's careful hand. You turn through them, scanning for what matters.
+# --- FACTUAL ---
+# The early pages are in Solan's careful hand. You turn through them, scanning for interesting details. The writing is the precise shorthand of a trader, economical and efficient. The worn leather cover of the journal binding feels smooth under your fingers. 
+# --- end ---
 
 choices:
 
-* Read where it began = The crystal he took on a bad debt
+* Start at the beginning
   FIXME(mundane): He took one of the crystals as payment on a bad debt, annoyed: he had wanted cash, not a curio. He started these notes to work out what the thing was and whether it was worth anything. Geometric, faceted too cleanly to be natural, had never heard of such a thing in his travels.
+  # --- FACTUAL ---
+  # The early pages are in Solan's careful hand. He took one of the crystals as payment on a bad debt, annoyed: he had wanted cash, not a curio. He started these notes to work out what the thing was and whether it was worth anything. Geometric, faceted too cleanly to be natural, had never heard of such a thing in his travels.
+  # --- end ---
   +open "The Early Pages"
 
 * Read the months it paid = When the trade took off
   FIXME(mundane): A buyer in Aldgate paid an absurd sum for the crystal. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting.
+  # --- FACTUAL ---
+  # A buyer in Aldgate paid an absurd sum for the crystal. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting. The names appear in his precise shorthand: Ashcroft, Wren, Swinton.
+  # --- end ---
   +open "The Early Pages"
 
 * Read where his luck turned = The supply drying up, and the books he kept
   FIXME(dread): Then the sellers went quiet, and the Kesharat Administration began clamping down on sales to foreigners. He worked the scrublands bar to alley after a supply that was drying up, and began to believe he was being followed.
+  # --- FACTUAL ---
+  # Then the sellers went quiet, and the Kesharat Administration began clamping down on sales to foreigners. Solan worked the scrublands bars and back streets, hunting for people desperate enough to deliver. He began to believe he was being followed. The ink trembles slightly when he writes about the feeling of eyes on him in the market. The names of sellers who went quiet appear in his precise shorthand: Varick, Hassan, Yelena.
+  # --- end ---
   FIXME(mundane): More than once in these entries he frets over his books. He kept a careful, separate record of every crystal sale, in a coded shorthand.
+  # --- FACTUAL ---
+  # More than once in these entries he frets over his books. He kept a careful, separate record of every crystal sale, in a coded shorthand. You're unfamiliar with the cypher, but the structure is simple. You think you could likely get the gist of the coded ledgers.
+  # --- end ---
   +add_tag villa.read_turn
   +open "The Early Pages"
 
-* Look for the sale ledgers he kept = His coded record of the crystal trade [requires tag villa.read_turn && !tag villa.economic_value]
+* Review the coded ledgers = Skim the transactions [requires tag villa.read_turn && !tag villa.economic_value]
   FIXME(mundane): The five ledgers on the desk are well kept and routine until you find the column he hid in plain sight: receipts from an Aldgate market for a line he calls only "formation goods," small at first, growing by the fourth book to a figure that explains the villa, the cave under it, and the good lock on the door.
-  FIXME(revelation): You understand now what a cave of these is worth.
+  # --- FACTUAL ---
+  # The ledgers are well-kept. You scan the columns of goods and prices, routine at first glance. Then you find it: a hidden line item labeled only "formation goods," with receipts from an Aldgate market. The column starts small in the first ledger, grows by the third, and by the fourth book reaches a sum that explains the villa.
+  # --- end ---
   +add_tag villa.economic_value
   +open "The Early Pages"
 

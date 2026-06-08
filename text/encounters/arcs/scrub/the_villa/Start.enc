@@ -21,21 +21,46 @@ The Mesa Road
 # --- end ---
 
 FIXME(mundane): A young page flags you down on the mesa road, two hours from the rail line, doing a poor job of looking casual until he is close enough to drop the act.
+# --- FACTUAL ---
+# A young page flags you down on the mesa road, two hours from the rail line. He stands near a desert villa, time-worn but still an impressive building. The wind carries the grit of the plateau across the exposed landscape, and the sky above is a hard, pale blue.
+# --- end ---
 FIXME(mundane): He sees your guild papers and looks relieved. "You're not one of the faces at the gate. Good. That's who we need."
+# --- FACTUAL ---
+# He sees your guild ring and looks relieved. "Must be my lucky day." He bows slightly, "Jiri, I'm a page under Vastand, guild barrister. You've met?" You shake your head; you have not.
+# --- end ---
 FIXME(mundane): "A merchant of ours is dead up at the villa, Ferath Solan. Vastand, our barrister, has been arguing jurisdiction with two Kesharat since morning and can't send anyone they have already seen; it would look like the guild seizing the estate. Nobody's been inside."
-FIXME(mundane): "So he wants you, in the back way: bring out Solan's ledgers before the Kesharat get them, and anything else in there that looks bad for the guild, burn it or carry it, your judgment."
-FIXME(mundane): "I don't know what 'anything else' means." He glances toward the mesa. "Side gate's open."
+# --- FACTUAL ---
+# "No worries. A merchant of ours is dead up at the villa." the page says. "Our barrister has been arguing jurisdiction with two Kesharat since morning. No one can go inside until the matter is settled." He glances toward the building, then back at you. "He sent me to find someone trustworthy, to sneak in the back way. Tidy up any loose ends, make sure there's nothing for the Kesharat authorities to find."
+# --- end ---
+FIXME(mundane): He glances toward the building. "Side gate's open."
+# --- FACTUAL ---
+# He glances toward the building. "Side gate's open."
+# --- end ---
 FIXME(mundane): You are guild enough that Vastand will trust you with a dead merchant's books, and unknown enough at the gate that no one will mark your going in. That is the whole of why it falls to you.
+# --- FACTUAL ---
+# The whole thing feels a little shady, but maybe this guild barrister could put in a good word for you at the Chapterhouse.
+# --- end ---
 
 choices:
 
-* Slip in through the servants' gate = Find the ledgers before the Kesharat do
-  FIXME(mundane): The back gate is unlocked. Inside is a house once kept carefully, but now in disarray: shuttered windows, weeks of dust, dried herbs hung long past their use.
+* Slip in through the servants' gate = Nice and quiet
+  FIXME(mundane): The back gate is indeed unlocked. Inside is a house once kept carefully, but now in disarray: shuttered windows, weeks of dust, dried herbs hung long past their use.
+  # --- FACTUAL ---
+  # The back gate is unlocked. Inside is a house once kept carefully, but now in disarray: shuttered windows, weeks of dust, dried herbs hung long past their use. A shutter taps against its frame. The smell of dried herbs gone to bitterness hangs in the air. The fine plaster ceiling above shows a water stain spreading like a map. A loose floorboard gives slightly underfoot in the empty hall.
+  # --- end ---
   FIXME(dread): Solan is in the back corner of the kitchen, seated, as though he sat down on purpose and did not get up. He has been dead about two days. His face is hard to read.
-  FIXME(mundane): A key hangs on a cord at his neck. It comes free without resistance, and the locked study door at the end of the hall takes it.
+  # --- FACTUAL ---
+  # You find the merchant, or what's left of him, in his study, seated, as though he sat down on purpose and did not get up. He has been dead about two days. His face is hard to read.
+  # --- end ---
   FIXME(mundane): The study is one careful room: a desk, five ledgers, a life narrowed down to this. You sit and open the topmost book. It is not a ledger. It is a journal.
+  # --- FACTUAL ---
+  # The study looks to have once been a grand affair. But now the book cases are empty and the space is nearly vacant. The only furniture is a small writing desk, stacked with a handful of ledgers. You lift and open the topmost book. It is not a ledger. It is a journal, beloning to one Ferath Solan, bound in worn and travel-stained leather. 
+  # --- end ---
   +open "The Early Pages"
 
 * Tell the page you cannot help = Leave the dead their business
-  FIXME(mundane): You hand the errand back to him and walk on. The mesa keeps its own counsel.
+  FIXME(mundane): You apologize, but insist you must be on your way. The page nods, "Well, we're not going anywhere any time soon. The Kesharat have sent for a civil priest; who knows how long that will take. Let me know if you change your mind."
+  # --- FACTUAL ---
+  # You apologize, but insist you must be on your way. The page nods, "Well, we're not going anywhere any time soon. The Kesharat have sent for a civil priest; who knows how long that will take. Let me know if you change your mind."
+  # --- end ---
   +flee_dungeon

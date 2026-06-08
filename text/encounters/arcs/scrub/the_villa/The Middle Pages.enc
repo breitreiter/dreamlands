@@ -28,26 +28,43 @@ The Middle Pages
 # --- end ---
 
 FIXME(mundane): The middle of the book, where the hand loosens and then begins to tighten. You turn through it.
+# --- FACTUAL ---
+# You skip to the middle. The script is looser here, more forceful. Tiny ink spatters mark sections where Solan was writing too quickly.
+# --- end ---
 
 choices:
 
-* Read how he got the cave = The villa, and the supply beneath it
+* Read how he got the villa = The villa, and the supply beneath it
   FIXME(mundane): A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. He begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
-  +open "The Middle Pages"
-
-* Read why the trade stopped = When he could no longer part with them
-  FIXME(dread): He writes that he sold a few and then could not, and began sketching the crystals instead. Contracts lapsed. Buyers were stiffed. He stalled. He could not bear to give one up.
+  # --- FACTUAL ---
+  # A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. Solan begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
+  # --- end ---
   +open "The Middle Pages"
 
 * Read about the girl he hired = The bad nights, and what he decided
   FIXME(dread): He became convinced, and the journal grants him some cause, that his buyers were mixed up in something dark, that he was in danger, that someone was following him. After a bad night he hired a servant girl from a nearby village.
+  # --- FACTUAL ---
+  # He became convinced that his buyers were involved in something dark, illegal or worse. He thought that he might be in danger, that someone was following him. He hired a servant girl from a nearby village to do his shopping. At first he got on well with the girl.
+  # --- end ---
   FIXME(horror): Then he began to feel ill and decided she was poisoning him to take the crystals. The entry where he kills her is short and flat: "She was bleeding me to take them. It is done. She is in the kitchen cabinet." He names it the way a man notes where he left a tool.
+  # --- FACTUAL ---
+  # A page tears loose when you turn it too fast. You let the loose piece flutter to the ground. Solan eventually becomes convinced that the girl is poisoning him; he feels lethargic, unwell. He's certain she's working with the shadowy cabal that's trying to steal his crystals. The last mention of her is chilling, "It is done. I left her in the kitchen cabinet. Need to come back for her later, when it's safe to go outside."
+  # --- end ---
   +add_tag villa.read_girl
+  +open "The Middle Pages"
+
+* Read why the trade stopped = When he could no longer part with the crystals
+  FIXME(dread): He writes that he sold a few and then could not, and began sketching the crystals instead. Contracts lapsed. Buyers were stiffed. He stalled. He could not bear to give one up.
+  # --- FACTUAL ---
+  # He writes that he sold a few and then could not continue. Contracts lapsed. Buyers became angry. He stalled and made excuses. He could not bear to give them up. For the first time you see sketches of crystals, rendered with obsessive precision, each line drawn and redrawn.
+  # --- end ---
   +open "The Middle Pages"
 
 * Open the kitchen cabinet = Where he wrote that he put her [requires tag villa.read_girl && !tag villa.danger]
   FIXME(horror): You go back down the hall. The servant girl is folded into the cabinet where he said she would be, some weeks dead. She is small, and young, and there is nothing on her or near her that suggests she poisoned anyone. The sickness was his own.
-  FIXME(revelation): These are not only worth killing for. They make a man do this.
+  # --- FACTUAL ---
+  # You go back down the hall. The kitchen was once a grand affair, sized to feed an entire family. Now only a small corner contains a pot and knife. The cabinet door hinges groan when pulled open. The servant girl is folded inside, some weeks dead. She is small, and young. Her fingernails are clean, scrubbed raw. Whatever sickness befell Solan, you can't imagine this poor wretch had anything to do with it. You turn and walk back to the study. If there are any answers for why this happened, they're in the journal unread.
+  # --- end ---
   +add_tag villa.danger
   +open "The Middle Pages"
 
