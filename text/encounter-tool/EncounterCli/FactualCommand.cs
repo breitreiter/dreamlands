@@ -244,6 +244,7 @@ static class FactualCommand
             Console.WriteLine("  (no COLOR pool — run colorize first)");
             return (0, 1, 0);
         }
+        Console.WriteLine($"  ({pool.Count} color line(s) feeding this scene)");
 
         var fixmes = new List<int>();
         for (int i = 0; i < lines.Count; i++)

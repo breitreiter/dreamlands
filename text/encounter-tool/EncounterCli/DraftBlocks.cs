@@ -41,13 +41,15 @@ static class DraftBlocks
     /// Extract the scene-level COLOR pool that `colorize` writes once at the top of the
     /// file (the first `# --- COLOR ---` block, not anchored to any FIXME). Each bullet's
     /// `# ` comment prefix and its `[] `/`[x] ` curation checkbox marker are stripped.
-    /// Returns every present bullet: curation is delete-to-cull, so whatever survives in
-    /// the pool is kept; an `[x]` is honored-if-present but not required. Empty list if
-    /// the file carries no pool.
+    /// Honors curation: if the author has ticked any line (`[x]`), only the ticked
+    /// keepers are returned. If nothing is ticked, the pool is uncurated and the whole
+    /// grab-bag is returned (preserves pre-curation behavior). Empty list if the file
+    /// carries no pool.
     /// </summary>
     public static List<string> ExtractScenePool(List<string> lines)
     {
-        var bullets = new List<string>();
+        var all = new List<string>();
+        var ticked = new List<string>();
         for (int i = 0; i < lines.Count; i++)
         {
             if (!lines[i].TrimStart().StartsWith("# --- COLOR", StringComparison.OrdinalIgnoreCase)) continue;
@@ -56,14 +58,18 @@ static class DraftBlocks
                 var t = lines[j].TrimStart();
                 if (!t.StartsWith('#')) break;
                 if (t.StartsWith("# ---", StringComparison.Ordinal)) break;   // closing/next block
-                var text = t.StartsWith("# ", StringComparison.Ordinal) ? t[2..]
+                var body = t.StartsWith("# ", StringComparison.Ordinal) ? t[2..]
                          : t == "#" ? "" : t[1..];
-                text = ColorCheckbox.Replace(text, "").Trim();
-                if (text.Length > 0) bullets.Add(text);
+                var marker = ColorCheckbox.Match(body);
+                var isTicked = marker.Success && (marker.Value.Contains('x') || marker.Value.Contains('X'));
+                var text = ColorCheckbox.Replace(body, "").Trim();
+                if (text.Length == 0) continue;
+                all.Add(text);
+                if (isTicked) ticked.Add(text);
             }
             break;
         }
-        return bullets;
+        return ticked.Count > 0 ? ticked : all;
     }
 
     /// <summary>
