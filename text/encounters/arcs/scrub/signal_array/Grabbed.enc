@@ -2,24 +2,6 @@ Grabbed
 [trigger none]
 [vignette dungeons/signal_array]
 
-# --- COLOR ---
-# [] the patient weight of Veran's hand on your shoulder
-# [] Chorik's knuckles white as he starts to turn
-# [] the brass button at Chorik's throat catching the late sun
-# [] the dun canvas of Veran's uniform stretched across his back
-# [] the sound of Veran's leather belt creaking as he stands still
-# [] the metallic taste of the air when the wind shifts
-# [] the way Chorik's boot scrapes on the rock as he shifts his weight
-# [] the fourth man's breath held steady as he watches you
-# [] the weight of the interval bell hanging quiet on Veran's belt
-# [] the smell of hot metal carried on a sudden gust
-# [] the pylon's struts humming with stored energy
-# [] the shadow of the pylon stretching long across the mesa
-# [] the heat rising in shimmering waves from the bedrock
-# [] the smell of oiled leather from Veran's belt
-# [] the crew's shadows merging as they close ranks
-# --- end ---
-
 FIXME(action): Veran's hand is on your shoulder. He is not gripping hard. He is being patient with you. The crew is not coordinated yet. Behind him Chorik is starting to turn. The housing is still right there.
 
 choices:

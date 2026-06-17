@@ -2,92 +2,38 @@ The Decision
 [trigger none]
 [vignette dungeons/the_villa]
 
-# --- COLOR ---
-# [] the cold brazier in the corner of the study
-# [] the five ledgers where they were found
-# [] the weight of the journal set down on the desk
-# [x] the texture of the journal's cover against the wood of the desk
-# [] the dry crackle of a loose page as you turn it
-# [] the metallic tang of the brazier's cold iron
-# [] the rough texture of the journal's spine against your palm
-# [x] the careful way Vastand turns pages at the gate
-# [x] Vastand's tone as he argues with the official, careful, calm, yet with quiet professional menace. a professional
-# [x] Vastand's tone as he talks with you, friendly, like he's letting you in on a secret
-# [] the worn spot on the desk where the journal sat
-# [] the way the shutters have been closed from the inside
-# [] the smell of old paper and dust in the study
-# [] the faint smell of smoke from the cold brazier
-# [x] the way the late afternoon light falls across the ledgers
-# [] the way the shadows lengthen across the floorboards
-# [x] the distant cry of a desert bird somewhere beyond the walls
-# [] the geometric pattern etched into the study's floor tiles beneath the grime
-# --- end ---
-
-FIXME(mundane): You set the journal down. You have read what you are going to read; the loose pages still in the book will not tell you anything you can use tonight. The brazier stands cold in the corner of the study, and the five ledgers are where you found them.
-# --- FACTUAL ---
-# You set the journal down. The unread pages still in the book will not tell you anything you want to know. The brazier stands cold in the corner of the study, and the five ledgers are where you found them. 
-# --- end ---
-FIXME(mundane): Outside, Vastand is still at the gate with the two Kesharat, and perhaps an hour left to him. Whatever you mean to do with what is in this room, you do it here, before you walk back out to him.
-# --- FACTUAL ---
-# Outside, the barrister is still at the gate with the two Kesharat. They are gesturing toward the house, and you worry that you have been spotted. Whatever you mean to do, you'll need to do it now.
-# --- end ---
+FIXME: You set the journal down. The unread pages still in the book will not tell you anything you want to know. The brazier stands cold in the corner of the study, and the five ledgers are where you found them. 
+FIXME: Outside, the barrister is still at the gate with the two Kesharat. They are gesturing toward the house, and you worry that you have been spotted. Whatever you mean to do, you'll need to do it now.
 
 choices:
 
 * Carry the journal out and hand it over without a word = Let him make of it what he will
-  FIXME(mundane): You come back out to the gate, careful to reach it from the road side and not the house. You give Vastand the journal whole and tell him the estate was tidy. He turns the pages slowly, the way a careful man reads, and stops a long time on the last one.
-  # --- FACTUAL ---
-  # You come back out to the gate, careful to reach it from the road side and not the house. You wave to Vastand, and he excuses himself from the Kesharat and walks to meet you. You give Vastand the journal and tell him the estate was tidy. He turns the pages slowly.
-  # --- end ---
-  FIXME(dread): "How much of this do you believe?" he asks, and does not wait for an answer. He puts the book inside his coat. You're not certain what he'll do with the journal. You hope he'll be more circumspect than the prior owner.
-  # --- FACTUAL ---
-  # "How much of this do you believe?" he asks, and does not wait for an answer. He puts the book inside his coat. You're not certain what he'll do with the journal. You hope he'll be more circumspect than the prior owner.
-  # --- end ---
+  FIXME: You come back out to the gate, careful to reach it from the road side and not the house. You wave to Vastand, and he excuses himself from the Kesharat and walks to meet you. You give Vastand the journal and tell him the estate was tidy. He turns the pages slowly.
+  FIXME: "How much of this do you believe?" he asks, and does not wait for an answer. He puts the book inside his coat. You're not certain what he'll do with the journal. You hope he'll be more circumspect than the prior owner.
   +finish_dungeon
   +add_level
 
 * Carry the journal out and tell Vastand what it cost = The ledgers, the cave, the girl [requires tag villa.economic_value && tag villa.danger]
-  FIXME(mundane): You come back out and lay it in front of him: the formation-goods sums, the cave under the floor, the girl in the cabinet. He listens like a man doing arithmetic.
-  # --- FACTUAL ---
-  # You come back out to the gate, careful to reach it from the road side and not the house. You wave to Vastand, and he excuses himself from the Kesharat and walks to meet you. You give Vastand the journal. You also give him the full story, the crystals, Solan's madness, the poor servant girl, and the dubious cave. He listens like a man doing arithmetic.
-  # --- end ---
-  FIXME(dread): "Crystals?" he repeats. "And a cave of them. Lattice-infused." A pause. "You understand I can't pretend I didn't hear it." He does not say whether that is a complaint or a thank-you. He is practical before he is anything else, and now he knows what it is worth and what it costs.
-  # --- FACTUAL ---
-  # "Crystals?" he repeats. "And a cave of them. Lattice-infused." A pause. "You understand I can't pretend I didn't hear this." He does not say whether that is a complaint or a thank-you. "Good work, professional, thorough." He taps the book, "I'll bring it back to the Chapterhouse, see what they can make of it." You return to the road, hopeful that the guild leaders will do the right thing.
-  # --- end ---
+  FIXME: You come back out to the gate, careful to reach it from the road side and not the house. You wave to Vastand, and he excuses himself from the Kesharat and walks to meet you. You give Vastand the journal. You also give him the full story, the crystals, Solan's madness, the poor servant girl, and the dubious cave. He listens like a man doing arithmetic.
+  FIXME: "Crystals?" he repeats. "And a cave of them. Lattice-infused." A pause. "You understand I can't pretend I didn't hear this." He does not say whether that is a complaint or a thank-you. "Good work, professional, thorough." He taps the book, "I'll bring it back to the Chapterhouse, see what they can make of it." You return to the road, hopeful that the guild leaders will do the right thing.
   +finish_dungeon
   +add_level
 
 * Burn the journal and the ledgers in the brazier = No one must know of this [requires tag villa.economic_value && tag villa.danger]
-  FIXME(mundane): No time to plan. You rip a few sheets from the journal and spark a small fire in the brazier. You add more sheets and the flame flares, first orange, then a sickly green. You press on, burning the rest of the pages of the journal, and then the ledgers. The flame gets out of control, spreading up along the wall with incredible speed. You flee the burning house, but spot the page along your escape route.
-  # --- FACTUAL ---
-  # You rip a few sheets from the journal and spark a small fire in the brazier. You add more sheets and the flame flares, first orange, then a sickly green. You press on, burning the rest of the pages of the journal, and then the ledgers. The flame gets out of control, spreading up along the wall with incredible speed. You flee the burning house, but spot the page along your escape route.
-  # --- end ---
+  FIXME: You rip a few sheets from the journal and spark a small fire in the brazier. You add more sheets and the flame flares, first orange, then a sickly green. You press on, burning the rest of the pages of the journal, and then the ledgers. The flame gets out of control, spreading up along the wall with incredible speed. You flee the burning house, but spot the page along your escape route.
   @if check cunning correct:bluff wrong:hide {
-    FIXME(action): The page is staring wide-eyed at the smoke pouring from the study window. "Is that? Did you?" he stammers. "You master wanted a clean house. I've cleaned it. You'd do well to keep quiet about this, unless you're keen for your master to know you're in the business of hiring arsonists." He gawps, but falls silent. You continue on your way.
-    # --- FACTUAL ---
-    # The page is staring wide-eyed at the smoke pouring from the study window. "Is that? Did you?" he stammers. "Your master wanted a clean house. I've cleaned it. You'd do well to keep quiet about this, unless you're keen for the barrister to know you're in the business of hiring arsonists." He gawps, but falls silent. You continue on your way.
-    # --- end ---
+    FIXME: The page is staring wide-eyed at the smoke pouring from the study window. "Is that? Did you?" he stammers. "Your master wanted a clean house. I've cleaned it. You'd do well to keep quiet about this, unless you're keen for the barrister to know you're in the business of hiring arsonists." He gawps, but falls silent. You continue on your way.
     +finish_dungeon
     +add_level
   } @else {
-    FIXME(dread): You wait, but the boy isn't moving. You sneak along the fenceline, hoping perhaps you can evade him. Just as you thought you might manage it, a regal figure clears his throat. It's the barrister. He gestures to the villa, now burning merrily. "Your work, I imagine? Not very subtle. I'll be handling the paperwork for this for the next week. You can bet the Chapterhouse will be hearing of your... methods." You start to explain. The crystals. Solan's madness. The man isn't listening; he walks off with his page, leaving you where you stand.
-    # --- FACTUAL ---
-    # You wait, but the boy isn't moving. You sneak along the fenceline, hoping perhaps you can evade him. Just as you thought you might manage it, a regal figure clears his throat. It's the barrister. He gestures to the villa, now burning merrily. "Your work, I imagine? Not very subtle. I'll be handling the paperwork for this for the next week. You can bet the Chapterhouse will be hearing of your... methods." You start to explain. The crystals. Solan's madness. The man isn't listening; he walks off with his page, leaving you where you stand.
-    # --- end ---
+    FIXME: You wait, but the boy isn't moving. You sneak along the fenceline, hoping perhaps you can evade him. Just as you thought you might manage it, a regal figure clears his throat. It's the barrister. He gestures to the villa, now burning merrily. "Your work, I imagine? Not very subtle. I'll be handling the paperwork for this for the next week. You can bet the Chapterhouse will be hearing of your... methods." You start to explain. The crystals. Solan's madness. The man isn't listening; he walks off with his page, leaving you where you stand.
     +add_level
     +finish_dungeon
   }
 
 * Take the journal and keep it for yourself = You feel an odd sense of attachment [requires tag villa.saw_cave]
-  FIXME(mundane): You're certain there's more to learn, if you study Solan's mad writing more carefully. The diagrams. The strange writing. It must be code. Secrets. Secrets you will master.
-  # --- FACTUAL ---
-  # You're certain there's more to learn, if you study Solan's mad writing more carefully. The diagrams. The strange writing. It must be code. Secrets. Secrets you will master.
-  # --- end ---
-  FIXME(wry): You encounter the page on your way out. You nod solemnly, "It's done, nothing there that might tarnish the guild's good name." The page sighs, relieved that he selected someone of such good character to perform this delicate task.
-  # --- FACTUAL ---
-  # You encounter the page on your way out. You nod solemnly, "It's done, nothing there that might tarnish the guild's good name." The page sighs, relieved that he selected someone of such good character to perform this delicate task.
-  # --- end ---
+  FIXME: You're certain there's more to learn, if you study Solan's mad writing more carefully. The diagrams. The strange writing. It must be code. Secrets. Secrets you will master.
+  FIXME: You encounter the page on your way out. You nod solemnly, "It's done, nothing there that might tarnish the guild's good name." The page sighs, relieved that he selected someone of such good character to perform this delicate task.
   +finish_dungeon
   +add_level
   +add_tag villa_kept_journal

@@ -2,21 +2,6 @@ Chorik
 [trigger none]
 [vignette dungeons/signal_array]
 
-# --- COLOR ---
-# [] Chorik's hands wrapped around his teacup, knuckles pale
-# [] Chorik's gaze fixed on a point between his boots
-# [] A muscle twitching in Chorik's jaw
-# [] the dun canvas of Chorik's uniform stretched taut across his shoulders
-# [] the small brass button at his throat catching the late sun
-# [] The teacup held motionless in both hands
-# [] the white neck cloth unwrinkled despite the heat
-# [] the steam rising from Chorik's teacup in the still air
-# [] The tea leaves settling at the bottom of Chorik's cup
-# [] the tea kit's tin cups reflecting the lowering sun
-# [] The others' conversation continuing without him
-# [] the rock beneath the tea kit mat radiating stored heat
-# --- end ---
-
 FIXME(mundane): Chorik is next to you at the rest circle, teacup in both hands. The others have gone back to their own conversations across the rock but they are still in easy earshot.
 
 choices:
