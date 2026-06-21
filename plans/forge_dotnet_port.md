@@ -431,9 +431,11 @@ are **gitignored**, as is `out/`. Add to `.gitignore`: `*.enc.json`, `out/`,
    `critic.plan.md` (deterministic POV pre-pass + one per-thread GLM checklist
    call; closed six-kind list; default-pass; every flag cites a verbatim span).
    Stub `GlmHighTempColorProvider` + a short DIY note.
-7. **Docs.** Rewrite `skills/arc-colorize` as a forge-color operator guide; add a
-   `Forge/CLAUDE.md` (port forge's gotchas); update the main `CLAUDE.md` pipeline
-   section; refresh memory.
+7. **Docs. ✅ SHIPPED 2026-06-21.** Added `Forge/CLAUDE.md` (pipeline, modules,
+   config/secrets, gotchas, imp notes). Updated `text/encounter-tool/CLAUDE.md`
+   (Forge in structure; arc flow = decompose → Forge). Removed dead
+   `eval/factual-parity/` fixtures (25 files). `arc-colorize` skill was already
+   removed; `arc-decompose` already points to forge. Memory refreshed.
 
 ---
 

@@ -9,16 +9,23 @@ CLI and library for authoring, validating, and bundling narrative encounters for
 ```
 encounter-tool/
 ├── Encounter.sln
-├── EncounterCli/
+├── EncounterCli/              # validation, bundling, fixme/generate
 │   ├── Program.cs             # CLI dispatcher (top-level statements)
 │   ├── CheckCommand.cs        # Validate .enc files
 │   ├── BundleCommand.cs       # Parse + bundle to JSON
 │   ├── FixmeCommand.cs        # LLM-expand FIXME stubs
 │   ├── GenerateCommand.cs     # Oracle-driven encounter generation
 │   └── LlmClient.cs           # Anthropic SDK wrapper
+└── Forge/                     # the arc prose pipeline (see Forge/CLAUDE.md)
+    └── ...                    # parse → categorize → color → synthesis/weave → integrate
 ```
 
 The parser library lives at `lib/Encounter/` (namespace `Dreamlands.Encounter`, zero dependencies). EncounterCli references it and adds the CLI + LLM integration.
+
+**Forge** is the .NET port of the `~/repos/narr/forge` pipeline that turns skeleton
+`.enc` (FIXME stubs) into finished prose. It replaced the failed EncounterCli
+`colorize`/`factual`/`voice`/`critic` stages (deleted). See `Forge/CLAUDE.md` and
+`plans/forge_dotnet_port.md`.
 
 ## Build & Run
 
@@ -75,11 +82,20 @@ Loaded from next to the executable by default. Use `--config <path>` to override
 
 ## Encounter Authoring Pipeline
 
+Two flows share the skeleton + validate + bundle infrastructure:
+
+**Single-encounter `fixme` flow** (quick one-off expansion):
 1. **Skeleton** — Author writes .enc file with structure, choices, and mechanics. Prose outcomes are stubbed with `FIXME: brief description of what happens`.
 2. **Expand** — `fixme` command calls LLM to expand each FIXME into prose. Output is marked `REVIEW:`.
 3. **Review** — Author reads REVIEW lines, edits as needed, removes the REVIEW prefix.
 4. **Validate** — `check` command confirms syntax is clean.
 5. **Bundle** — `bundle` command packages everything into JSON for the game build.
+
+**Arc flow** (the real prose pipeline): the `arc-decompose` skill expands an arc's
+`.md` substrate into FIXME-stub `.enc` skeletons, then the **Forge** project
+(`Forge/CLAUDE.md`) carries them to finished prose (parse → categorize → color →
+synthesis/weave → integrate). `check`/`bundle` are shared. See
+`plans/forge_dotnet_port.md`.
 
 ## Encounter Generation
 
