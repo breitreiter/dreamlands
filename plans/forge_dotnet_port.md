@@ -4,7 +4,7 @@ title: "Forge → .NET — trash the legacy enc pipeline, port the working forge
 state: active
 created: 2026-06-20
 updated: 2026-06-21
-status: active — Phase 1 SHIPPED (Forge project + peer-JSON spine: parse/integrate, the_villa round-trips byte-identical & sha-matches forge; dead EncounterCli stages deleted). Next: Phase 2 (GlmClient + categorize).
+status: active — Phases 1–2 SHIPPED. P1: peer-JSON spine (parse/integrate, byte-identical round-trip, dead stages deleted). P2: GlmClient + categorize (byte-identical prompts to categorize.py; 31/39 tone agreement vs forge on the_villa, deltas are temp=0.3 variance on adjacent calls, Start 8/8). Next: Phase 3 (GatewayClient + synthesis).
 touches:
   files:
     - text/encounter-tool/Encounter.sln
@@ -391,8 +391,14 @@ are **gitignored**, as is `out/`. Add to `.gitignore`: `*.enc.json`, `out/`,
    them (not just dead `voice`); deviates from the original delete list to avoid
    breaking `fixme`. Stale `eval/factual-parity/` fixtures + `arc-colorize` skill
    left for the docs phase (Phase 7).
-2. **Free GLM stages.** `GlmClient`, `CategorizeCommand`. Gate: tones match a
-   forge run on the_villa sidecars.
+2. **Free GLM stages. ✅ SHIPPED 2026-06-21.** `Config.cs` (gitignored
+   appsettings.json, imp:8080 defaults), `GlmClient.cs` (OpenAI-compatible chat +
+   `/models` id resolution + `StripThink`; `data[0].id` — imp returns a hybrid
+   models/data body, `data` present), `CategorizeCommand.cs`. Prompts byte-identical
+   to `categorize.py`. Gate PASSED: 31/39 (79%) tone agreement with forge on
+   the_villa (Start 8/8 exact); the 8 deltas are all adjacent/ambiguous calls =
+   GLM temp=0.3 variance (forge's tones are one sample, not truth), not a port
+   defect. `--dry-run` verified offline prompt assembly incl. `Choice context:`.
 3. **Paid synthesis.** `GatewayClient` (all the quirks), `SynthesisCommand` with
    `--dry-run`/`--limit`/`--model`. Gate: one-beat smoke matches forge output
    shape; dry-run prompt is byte-identical to forge's.

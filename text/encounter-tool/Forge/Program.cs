@@ -6,6 +6,7 @@ return args[0] switch
 {
     "parse" => ParseCommand.Run(args[1..]),
     "integrate" => IntegrateCommand.Run(args[1..]),
+    "categorize" => await CategorizeCommand.RunAsync(args[1..]),
     "-h" or "--help" or "help" => Usage(),
     var cmd => Unknown(cmd),
 };
@@ -15,10 +16,14 @@ static int Usage()
     Console.WriteLine("""
         forge — enrich .enc encounter files via the peer-JSON pipeline.
 
-        Phase 1 (spine — free, local):
+        Spine (free, local):
           parse <file.enc> [...]              .enc -> X.enc.json beat skeleton (idempotent)
           integrate <file.enc.json> [...]     peer JSON -> out/<arc>/<name>.enc
             [--out <dir>]                     output root (default: ./out)
+
+        Stages:
+          categorize <file.enc.json> [...]    tag each beat with one of six tones (GLM on imp)
+            [--force] [--dry-run] [--config <path>]
 
         Path args may be files or directories (dirs expand to their *.enc / *.enc.json).
         """);

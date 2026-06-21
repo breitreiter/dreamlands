@@ -9,4 +9,9 @@
     <AssemblyName>forge</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- gitignored real config copied next to the binary at build; example committed -->
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" Condition="Exists('appsettings.json')" />
+  </ItemGroup>
+
 </Project>
