@@ -1,6 +1,6 @@
 ---
 name: arc-decompose
-description: Turn an arc brief (markdown sketch of a Dreamlands narrative arc — premise, characters, beats, endings) into a structurally sound set of `.enc` files with FIXME-stub prose. Produces the SKELETON only — legal syntax, no orphan tags, no infinite loops, hubs wired per established arc patterns. Prose quality is left to later pipeline passes (colorize, factual, voice). Use when the user has written or pointed at a brief like `text/encounters/arcs/<biome>/<arc>/<Name>.md` and wants the bones of the arc on disk before any writing-pass happens.
+description: Expand an arc's lightweight `.md` substrate (brief + `_scenes`/`_cast`/`_set`/`_color` bibles + per-scene `*.lens.md`) into a structurally sound set of `.enc` files with FIXME-stub prose. The `_scenes.md` scene breakdown is the primary structural input; decompose translates its narrative beats into `.enc` topology. Produces the SKELETON only — legal syntax, no orphan tags, no infinite loops, hubs wired per established arc patterns. Prose quality is left to the downstream prose stages (the forge project — `plans/forge_dotnet_port.md` — which supersedes the retired EncounterCli colorize/factual/voice passes). The cheap `.md` substrate LEADS and the harder-to-reverse `.enc` follows: co-evolution is fine, but land structural/dramatic decisions in the `.md` layer before baking them into `.enc`. Use when an arc under `text/encounters/arcs/<biome>/<arc>/` has enough substrate to expand into the bones of the arc.
 ---
 
 # Arc decompose
@@ -9,7 +9,10 @@ Turn an arc brief into a skeleton of `.enc` files: legal syntax, every
 choice routed, every quality/tag setter has a reader and vice versa,
 every terminal reachable, no infinite loops, hubs wired per the
 established patterns. Prose is FIXME stubs throughout — quality writing
-is handled by later pipeline passes (see `plans/arc_writer.md`).
+is handled by the downstream prose stages (the **forge** project,
+`plans/forge_dotnet_port.md`, which supersedes the retired EncounterCli
+colorize/factual/voice pipeline; `plans/arc_writer.md` is the older
+pipeline design).
 
 You are not a writer here. You are a structural engineer with a taste
 for game flow. The acceptance bar is **does this play sanely from end
@@ -17,11 +20,46 @@ to end**, not **is this prose good**.
 
 ## Inputs
 
+**Substrate leads; start light, then expand.** Decompose is Stage 1: it
+expands the lightweight `.md` substrate into `.enc` files. The substrate (the
+brief, the bibles `_cast` / `_set` / `_scenes` / `_color`, per-scene
+`*.lens.md`) is **cheap to change**; `.enc` content, once baked, is **hard to
+claw back out** (structure and the downstream pipeline come to depend on it).
+So author and iterate decisions in the `.md` layer first, then expand them
+into `.enc`. **Co-evolution is fine** — the substrate may still be growing as
+you decompose — but do not *originate* structure or drama directly in `.enc`
+that has no home in the substrate; push any substantive new decision back to
+the cheap `.md` layer first. Once both exist, **you own keeping them in
+sync.** Practically: work from `_scenes.md` (the scene breakdown is your
+primary structural input); where it or the other substrate is thin, sketch it
+lightly in markdown before writing the matching `.enc`, rather than inventing
+in `.enc`. Lens / `_color` completeness is a prerequisite of the downstream
+prose stages (forge), not a decompose blocker — flag gaps at hand-off
+(Step 7), don't stop. (The flow is
+documented in `plans/arc_authoring_workflow.md` §3, §8.)
+
 Before doing anything else, read all of the following, in order:
 
-1. **The brief.** Always a markdown file in the arc directory, usually
-   named after the arc (e.g. `TheRelayPost.md`, `the_hermitage.md`,
-   `README.md`). The user will name it or pass a path.
+1. **The Stage-0 substrate** (authored before this stage):
+   - **The brief** — a markdown file in the arc directory, usually named
+     after the arc (e.g. `TheRelayPost.md`, `the_hermitage.md`,
+     `README.md`). Premise, characters, endings.
+   - **`_scenes.md` — the scene breakdown, and your primary structural
+     input.** A *scene* here is a narrative beat the player traverses, **not
+     a `.enc` file**. Your core job is to **fan these scenes out into `.enc`
+     topology** (hubs, spokes, staged gates). Each scene's resulting
+     tag/quality state is the wiring contract you must honor: a tag a scene
+     sets must have a reader, and a gate must have a setter.
+   - **`_cast.md` / `_set.md`** — characters and physical staging. The
+     source of the concrete nouns and the who-knows-what your FIXME stubs
+     must respect (and the "what the set does NOT contain" guardrails).
+   - **`_color.md` + per-scene `*.lens.md`** — the color substrate the
+     downstream prose stages (forge) consume. You do not consume these
+     for structure, but **confirm they exist**: a missing lens means the
+     prose stage runs blind on that scene. Their presence is part of
+     "ready to decompose," so flag any gap in Step 7. (Forge's exact
+     substrate inputs are still settling — `plans/forge_dotnet_port.md`;
+     treat lens/`_color` as the current contract.)
 2. **`project/encounter-spec/arc_patterns.md`** — the cumulative
    inventory of structural techniques across the authored arcs. Treat
    every numbered section as a tool in the box. Decompose by *picking*
@@ -60,10 +98,15 @@ Produce a short plan in chat (~half a screen) covering, in order:
    brief warrants that shape. If the brief has more than two
    characters or more than two locations the player must visit before
    resolution, default to a mid-hub or staged-hub shape.
-2. **File list.** One `.enc` per encounter, with a one-line role per
-   file (Start / mid-hub / character scene / terminal). Include
-   filename conventions used by the arc (`Title Case.enc` with spaces
-   is normal; see existing arcs).
+2. **Scenes → files.** Work from `_scenes.md`: map each scene
+   (narrative beat) to the `.enc` file(s) that realize it. A scene may
+   fan into several files (a hub plus its spokes) or collapse with
+   others into one; say which and why. One `.enc` per encounter, with a
+   one-line role per file (Start / mid-hub / character scene /
+   terminal). Include filename conventions used by the arc (`Title
+   Case.enc` with spaces is normal; see existing arcs). If a scene in
+   `_scenes.md` has no file, or a file has no scene, that is a gap to
+   resolve before writing.
 3. **State map.** Every arc-local tag and quality you'll introduce.
    - Tags: `<arc>.<name>` with a one-line role (scene-visited,
      earned-knowledge, commitment marker — see `arc_patterns.md` §2d).
@@ -538,11 +581,22 @@ Write one `.enc` per file in the file list. For each:
 decompose-stage application of a canonical "common errors" list that
 lives in `text/encounters/generation/outcomes_prompt.md` (`## HARD
 RULES`: SELF-CONTAINED, NO FUTURE, NO GAME STATE, NO INNER MONOLOGUE,
-BODY CONSISTENCY; plus no slang, no em-dashes, present tense), with
-the fullest live copy in the `FactualCommand.cs` system prompt. When
-in doubt, that source governs. (`outcomes_prompt.md` is currently a
-v1 orphan, not wired to any command; treat it as the spec anyway
-until the rules are unified into one shared house-rules set.)
+BODY CONSISTENCY; plus no slang, no em-dashes, present tense). Treat
+`outcomes_prompt.md` as the governing spec. (It is a v1 orphan not
+wired to any command; the EncounterCli `FactualCommand.cs` carried a
+partial copy, but that pipeline is retired — the forge project is the
+live downstream. The rules are house rules regardless of which tool
+enforces them, so they still govern here.)
+
+**A note on stage names.** This skill names downstream roles by their
+pipeline-era labels — *colorize* (texture), *factual* (verifiable
+prose), *voice* (register), *critic/adversarial* (review). Those
+EncounterCli passes are retired; the same roles now live in the
+**forge** project (`plans/forge_dotnet_port.md`). The decompose-stage
+discipline below (stub interiority for the fact stage to unpack, stub
+dialogue as words because the fact stage eats summaries, etc.) holds
+regardless of which tool performs the pass — read "factual pass" /
+"voice pass" as "the downstream stage that does X."
 
 Write the files in dependency order (Start.enc last, since it links
 forward; or write all and verify at the end — either works).
@@ -583,9 +637,14 @@ Produce a short walk-through in chat:
 
 Tell the user:
 
-- File list shipped.
+- File list shipped, and how each scene in `_scenes.md` mapped to it
+  (which scenes fanned out, which collapsed).
 - Number of FIXME beats by encounter (gives them a sense of the work
   the later passes have to do).
+- **Substrate readiness for the prose stages:** confirm every scene has
+  a `*.lens.md` and that `_color.md` exists. Name any scene missing a
+  lens — the downstream prose stage (forge) runs blind there, so that
+  gap must be closed before prose generation.
 - Any structural questions the brief left ambiguous and you resolved
   one way — they may want to flip the call.
 - Any patterns you reached for that aren't in `arc_patterns.md` yet
@@ -679,13 +738,19 @@ non-negotiables from `arc_patterns.md` §9 and `rules/encounter_mechanics.md`:
   (`TheRelayPost.md`). The skill adapts: extract structure where
   present, infer where absent, and surface anything that needed
   inference in the hand-off (Step 7).
-- The skill operates inside the arc directory. The brief, the .enc
-  files, any sidecar `scenes.md` or `context.md` all live together.
+- The skill operates inside the arc directory, where the whole arc
+  lives together: the Stage-0 substrate (brief, `_scenes`/`_cast`/`_set`/
+  `_color` bibles, per-scene `*.lens.md`) and the `.enc` files this stage
+  writes. The substrate is read, not authored, here (it is Stage 0 —
+  substrate-first; see §Inputs).
 - The skill does not run `bundle`, `worlds/<world>/build.sh`, or any
   asset-rebuild step. That's the author's call once the arc is
   prose-complete.
-- This skill is the first stage of the broader arc-writer pipeline
-  documented in `plans/arc_writer.md`. The subsequent passes
-  (colorize, factual, voice, adversarial) operate on the output of
-  this stage. Producing a clean structural skeleton is what makes
-  those passes viable.
+- This skill is the structural stage of the arc-writer flow. The
+  subsequent prose passes (texture, factual, voice, review) operate on
+  this stage's output; they are being built in the **forge** project
+  (`plans/forge_dotnet_port.md`), which supersedes the retired
+  EncounterCli pipeline (`plans/arc_writer.md` is the older design,
+  `plans/arc_authoring_workflow.md` the working understanding).
+  Producing a clean structural skeleton is what makes those passes
+  viable.

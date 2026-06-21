@@ -10,7 +10,14 @@ into your Claude config by symlink (or copy).
 
 | Skill | What it does |
 |---|---|
+| `arc-sketch` | Author or revise an arc's Stage-0 narrative sketch — premise, Canon (NPC interiority, motivations, themes, surface-vs-reserved facts), and scene-by-scene in PC point-of-view. The substrate that LEADS, before decompose. Stage 0 of the arc-writer pipeline. |
 | `arc-decompose` | Turn an arc brief (markdown sketch — premise, characters, beats, endings) into a structurally sound set of `.enc` files with FIXME-stub prose. Stage 1 of the arc-writer pipeline (see `plans/arc_writer.md`). |
+
+> **Retired:** `arc-colorize` was the Stage-2 texture-generation skill for the
+> EncounterCli colorize/factual/voice pipeline. That pipeline is superseded by
+> the **forge** project (`~/repos/narr/forge`, being ported to a .NET `Forge`
+> project per `plans/forge_dotnet_port.md`), so the skill was retired. Recover
+> it from git history if needed.
 
 ## Installation
 
