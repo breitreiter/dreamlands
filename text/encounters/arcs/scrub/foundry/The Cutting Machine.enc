@@ -1,0 +1,37 @@
+The Cutting Machine
+[trigger none]
+[vignette dungeons/foundry]
+
+FIXME(action): The shriek grows until it is the only thing in the world: one machine taller than a house, working in the dark. A blade drives down through stacked metal plate, cutting each one into a shape for some later assembly. Where the edge bites, the metal flares with the Color and then cools to a low glow, the way a worked piece holds heat after the tool has passed.
+FIXME(dread): Suhail is talking. Over the noise the PC cannot make out a word. He walks out of the lamplight toward the machine. It thunks, drops in pitch, grinds down to silence. The PC finds him again by his voice, off in the dark to one side, already mid-sentence.
+
+choices:
+
+* Hear out the rest = Let him finish at the machine [requires !tag foundry.blade_taken]
+    FIXME(dread): He works the shutdown, keys open a housing along the cutting head, and draws the blade out of it: the length of an arm, the edge still faintly lit. He wraps the tang in a rag. His hands know the order of the work. Where a man dressed like he sleeps in ditches learned this machine, he does not say.
+    FIXME(revelation): He talks while he works. He was there, he says, when this all started, nearly two hundred years ago. He gives the number plainly, and it does not fit the face saying it. His clan had heard of an order of monks guarding a treasure. The monks fought. He pantomimes it with the blade as he tells it.
+    FIXME(revelation): What they found was a seal tall as a man, cut into the living stone, inlaid with gold and silver, some demon or guardian deity. Not the treasure they wanted. They pried the metal loose. Then a blinding flash, the first time anyone had seen the Color, then sickness and an afterglow, then nothing.
+    FIXME(dread): Those who had been there developed a mania for order over the following weeks. It took hold of the whole clan: war plans grew meticulous, conquered villages were absorbed into administration rather than burned, supply lines made certain. What they first called the ordering sickness they later called the Lattice, the ambient order that aligned the growing empire.
+    FIXME(action): The blade is at the PC's throat. "I could open you here. No one would mark it." He is looking past the PC, at a monk centuries dead, and for a moment does not seem to know which of them is in front of him. Then it passes. He makes a short tired sound that is not a laugh and presses the blade into the PC's hands. "Take it. You'll rest easier with me unarmed."
+    +add_item shimmering_blade
+    +add_tag foundry.blade_taken
+    +open "The Cutting Machine"
+
+* Follow the clicking to the benches = Toward the assembly work [requires tag foundry.blade_taken && !tag foundry.assembly_seen]
+    FIXME(mundane): The PC leaves the silenced machine and crosses toward the clicking.
+    +add_tag foundry.assembly_seen
+    +open "Assembly"
+
+* Follow the slam to the presses = Toward the deep slow beat [requires tag foundry.blade_taken && !tag foundry.press_seen]
+    FIXME(dread): The PC leaves the silenced machine and crosses toward the slam.
+    +add_tag foundry.press_seen
+    +open "The Press"
+
+* Head for the door at the back = Try to go deeper into the factory
+    @if tag foundry.assembly_seen && tag foundry.cutter_seen && tag foundry.press_seen && tag foundry.blade_taken {
+        FIXME(dread): Suhail nods and leads the PC off the floor, toward the door at the back.
+        +open "Control Room"
+    } @else {
+        FIXME(mundane): Not yet, Suhail says. Take the blade, and see the rest of the floor.
+        +open "The Cutting Machine"
+    }

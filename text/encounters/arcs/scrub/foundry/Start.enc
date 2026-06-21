@@ -1,32 +1,20 @@
-Placeholder: The Foundry
+The Gate
 [trigger none]
+[vignette dungeons/foundry]
 
-A placeholder encounter for The Foundry arc.
+FIXME(dread): Days through the deepest scrub to reach here. The ground is stained with the Color, that purple beyond purple the eye refuses to hold; the sky is pale hues refracted into strange threads, hard to look at. The PC has been squinting, resting the eyes, and the after-image stays burned in behind the lids.
+FIXME(mundane): Over the last day a low headache and a faint sickness have settled into the body. It may be the glare of everything. It may be something else.
+FIXME(wonder): Then the factory: a vast windowless concrete bulk risen out of the scrub, brutalist, smokestacks pouring black smoke into the refracted sky. Nothing shows what it makes, where raw material comes in, where finished goods go out, or who hauls them. No yards, no worn roads, no loading. It reads as the one solid thing for miles, a place that might be safe to rest in, and it is plainly intriguing.
+FIXME(mundane): The PC approaches the gate and is refused. The guild signet counts for nothing here.
+FIXME(dread): A wild-haired man in a vagrant's rags walks up out of the scrub and through the gate without slowing. The guards begin a motion to stop him and it dies before it commits; they know him, or know what he is, and the knowing pulls the hand back down. He is past them before they finish deciding not to act.
+FIXME(mundane): He turns and calls the PC through on his own authority. The PC enters under his name, a vagrant's name, where a guild member's standing failed a moment before. Asked why, he deflects, already a step down the corridor. "Plenty of time. Long way down."
 
 choices:
 
-* Explore = Search the foundry
-    @if check combat correct:rush wrong:outlast {
-        You find something valuable.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
+* Follow him inside = Go where the guild ring could not
+    FIXME(dread): The PC steps past the guards after him, into the dark beyond the gate. The daylight ends a few feet in.
+    +open "The Lamp"
 
-* Negotiate = Talk your way through
-    @if check negotiation correct:reason wrong:threaten {
-        You find something valuable.
-        +give_gold 25
-        +finish_dungeon
-    } @else {
-        It doesn't go well.
-        +add_condition injured
-        +finish_dungeon
-    }
-
-* Depart = Leave this place behind
-    You depart Foundry.
+* Turn back = Decide this is not guild business
+    FIXME(mundane): The PC does not follow. The vagrant is already gone into the dark, and the guards have remembered their refusal. The PC turns for the long road back through the scrub.
     +flee_dungeon

@@ -1,0 +1,19 @@
+The Question
+[trigger none]
+[vignette dungeons/foundry]
+
+FIXME(dread): He asks it over the emptiest husk in the room. "Why do you care about them? They lost themselves long ago. To end one is to break a machine. What are they to you?" His hand is on the control, but he is in no hurry to throw it now.
+FIXME(revelation): The move is not to win the argument over whether the husks are real. It is to refuse the terms: not to promise proof, but to refuse to make the PC's own conduct wait on a verdict the Lattice made unknowable. It is also a refusal to be the instrument he has spent the whole descent building.
+
+choices:
+
+* Refuse the terms = Answer that you will not wait on the Lattice's verdict
+    FIXME(revelation): The PC gives the answer. Suhail puts the move into plain words: you will lose your mind trying to outthink the machine, so do what you believe is right and answer to yourself. He has known it all along and been too alone to make it, which is why he needed someone to follow him into the dark.
+    FIXME(dread): He throws the control without ceremony and they walk out together, the blade in the PC's hands the whole way. Behind them the plant labours toward its end. The road is quiet.
+    +add_level
+    +finish_dungeon
+
+* End him with the shimmering blade = Refuse him a different way [requires has shimmering_blade]
+    FIXME(action): The PC uses the edge he gave them. It does the work cleanly. Whatever he wanted from the question, he does not get to hear the answer. The plant is already running away; the PC walks out ahead of the smoke, the blade still in hand.
+    +add_level
+    +finish_dungeon

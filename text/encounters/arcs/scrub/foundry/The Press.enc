@@ -1,0 +1,49 @@
+The Press
+[trigger none]
+[vignette dungeons/foundry]
+
+FIXME(dread): The slam is felt before it is heard, deep and slow as a heartbeat, up through the boots and into the teeth. The lamp finds the nearest press: a black mass coming down on its bed and lifting, coming down and lifting, a worker feeding it, sliding a blank under the die, drawing the hand back, sliding the next. The timing is exact and it is close.
+FIXME(horror): Suhail forces nothing. He stoops, picks a heavy tool off the floor, and lobs it underhand into the press bed, into the strike zone, the way a man tosses a stick for a dog. Then he steps back to watch.
+FIXME(horror): A husk goes after it, out of the dark, drawn to the dropped thing the way the benches were drawn to scattered pins. It gets down and starts in under the die, reaching, untroubled, while the ram comes down and lifts and comes down. It does not look at the press. It will go in after the tool whether the stroke is up or down.
+FIXME(dread): Suhail watches the PC, not the husk. "Residue. A reflex in old meat. You're grieving a machine." The more the thing looks like a person, the more he says it, like a man who needs it to land more than he needs it to be true.
+
+choices:
+
+* Haul the husk clear of the press = Get it out before the stroke [requires !tag foundry.press_acted]
+    FIXME(action): The husk is half under the die, reaching. Getting a hand to its collar means reaching past the stroke line, and the ram is on its down-cycle. The gap between strokes is short.
+    @if check combat correct:strategize wrong:rush {
+        FIXME(action): The PC times the lift of the ram and drags the husk back in the gap. It comes clear. It resumes reaching for nothing, unbothered. The PC's own hands are whole.
+        +quality foundry.challenge 1
+        +add_tag foundry.press_acted
+        +open "The Press"
+    } @else {
+        FIXME(action): The PC lunges without the timing. The husk comes clear, but the ram catches the PC on the way out, a wound that will not close on its own.
+        +add_condition injured
+        +quality foundry.challenge 1
+        +add_tag foundry.press_acted
+        +open "The Press"
+    }
+
+* Keep your hands clear = Stand back from the press [requires !tag foundry.press_acted]
+    FIXME(dread): The PC stays back. The husk reaches under the die, and what the press does with it is the press's business. Suhail watches the PC the whole time, to see whether it mattered to them.
+    +add_tag foundry.press_acted
+    +open "The Press"
+
+* Follow the clicking to the benches = Toward the assembly work [requires !tag foundry.assembly_seen]
+    FIXME(mundane): The PC leaves the presses and crosses toward the clicking.
+    +add_tag foundry.assembly_seen
+    +open "Assembly"
+
+* Follow the shriek to the cutting machine = Toward the worst of the noise [requires !tag foundry.cutter_seen]
+    FIXME(action): The PC leaves the presses and crosses toward the shriek.
+    +add_tag foundry.cutter_seen
+    +open "The Cutting Machine"
+
+* Head for the door at the back = Try to go deeper into the factory
+    @if tag foundry.assembly_seen && tag foundry.cutter_seen && tag foundry.press_seen && tag foundry.blade_taken {
+        FIXME(dread): Suhail nods and leads the PC off the floor, toward the door at the back.
+        +open "Control Room"
+    } @else {
+        FIXME(mundane): Suhail shakes his head. There is more on the floor to see first.
+        +open "The Press"
+    }

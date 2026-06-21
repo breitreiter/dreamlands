@@ -1,0 +1,19 @@
+Control Room
+[trigger none]
+[vignette dungeons/foundry]
+
+FIXME(dread): The control room is a wall of panels, most of them dark, a few lit with the Color. Suhail knows which ones. He works through a cabinet without hurry, the same practiced hands that opened the cutting head, throwing governors and hauling levers past their stops, taking the brakes off the place one system at a time: the furnaces that feed the stacks, the presses, every safeguard built to hold the plant short of tearing itself apart.
+FIXME(dread): One control he leaves. He rests a hand on it and tells the PC plainly what it does. Thrown, the plant runs away with itself, heat and pressure climbing with nothing left to bleed them off. It is not quick. It builds. There is the time it takes to walk out at a steady pace and no more than that; go now and they go safe. The place comes down after, on its own, with no one left in it but the husks. "A small thing," he says. "Noise and broken glass. They are already gone."
+FIXME(revelation): Then the truth, his hand still on the control. Decades of provocations, each one watched for a response that never came: burned depots rebuilt better, killed administrators replaced faster, every disruption the machine absorbed and somehow used. He came to see whether this one is any different, whether there is a scale of damage the entity cannot simply route around. He does not think there is. He wants to be wrong.
+FIXME(revelation): Then the question he cannot answer: whether even this was designed for him. Whether the urge to poke at the machine, to find its limits, to make it react, was itself placed in him. Every past failure is one more proof he cannot refute.
+
+choices:
+
+* Stand with him at the panel = Meet what he is asking of you
+    @if quality foundry.challenge 2 {
+        FIXME(dread): He does not reach for the switch. He looks instead at the nearest husk, the emptiest one in the room, and asks his question over it.
+        +open "The Question"
+    } @else {
+        FIXME(dread): He sets the choice in front of the PC as a switch to be thrown. "Press it, or stop me. Now."
+        +open "The Switch"
+    }

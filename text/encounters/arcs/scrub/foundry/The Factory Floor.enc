@@ -1,0 +1,32 @@
+The Factory Floor
+[trigger none]
+[vignette dungeons/foundry]
+
+FIXME(dread): The lamp gives back six feet of a dark that has no edges. The floor of the place is open and black, and it speaks in three directions: the shuffle and click of assembly benches one way, the deep slow slam of presses another, a shriek and grind of metal on metal a third.
+FIXME(mundane): Suhail lets the PC choose. There is no order to it; each sound waits its turn. Only when all three have been seen will he turn the PC toward the door at the back.
+
+choices:
+
+* Follow the clicking to the benches = Toward the assembly work [requires !tag foundry.assembly_seen]
+    FIXME(mundane): The PC crosses the dark toward the clicking. The benches resolve out of it, hands moving.
+    +add_tag foundry.assembly_seen
+    +open "Assembly"
+
+* Follow the shriek to the cutting machine = Toward the worst of the noise [requires !tag foundry.cutter_seen]
+    FIXME(action): The PC crosses toward the shriek. It builds until it crowds out everything else.
+    +add_tag foundry.cutter_seen
+    +open "The Cutting Machine"
+
+* Follow the slam to the presses = Toward the deep slow beat [requires !tag foundry.press_seen]
+    FIXME(dread): The PC crosses toward the slam, felt in the boots before it is heard.
+    +add_tag foundry.press_seen
+    +open "The Press"
+
+* Head for the door at the back = Try to go deeper into the factory
+    @if tag foundry.assembly_seen && tag foundry.cutter_seen && tag foundry.press_seen && tag foundry.blade_taken {
+        FIXME(dread): Suhail nods and leads the PC off the floor, toward the door at the back and the room behind it.
+        +open "Control Room"
+    } @else {
+        FIXME(mundane): Suhail shakes his head. There is more on the floor to see first.
+        +open "The Factory Floor"
+    }
