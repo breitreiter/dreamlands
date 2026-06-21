@@ -15,10 +15,6 @@ class Program
             "check" => CheckCommand.Run(rest),
             "bundle" => BundleCommand.Run(rest),
             "fixme" => FixmeCommand.RunAsync(rest).GetAwaiter().GetResult(),
-            "colorize" => ColorizeCommand.RunAsync(rest).GetAwaiter().GetResult(),
-            "factual" => FactualCommand.RunAsync(rest).GetAwaiter().GetResult(),
-            "voice" => VoiceCommand.RunAsync(rest).GetAwaiter().GetResult(),
-            "critic" => CriticCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "generate" => GenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "haul-generate" => HaulGenerateCommand.RunAsync(rest).GetAwaiter().GetResult(),
             "push" => PushCommand.Run(rest).GetAwaiter().GetResult(),
@@ -36,22 +32,6 @@ class Program
         Console.WriteLine("                  [--expand-url <url>] [--programs <dir>] [--author HPL|REH|CAS]");
         Console.WriteLine("                  [--scene mundane|action|horror|dread|wonder|revelation] [--candidates N]");
         Console.WriteLine("                  per-beat: FIXME(scene_type): e.g. FIXME(dread): or FIXME(horror):");
-        Console.WriteLine("  encounter colorize <arc-dir> [--config <path>] [--force] [--prompts-only]");
-        Console.WriteLine("                  [--no-filter] [--audit] [--only <scene>]...");
-        Console.WriteLine("                  Generate a scene-level COLOR pool per .enc: GLM over-generates");
-        Console.WriteLine("                  (steered by a <name>.lens.md / _lens.md), Haiku culls the slop.");
-        Console.WriteLine("  encounter factual <arc-dir> [--config <path>] [--force] [--prompts-only] [--only <scene>]...");
-        Console.WriteLine("                  Thread the scene COLOR pool through each FIXME beat into a FACTUAL");
-        Console.WriteLine("                  prose block (GLM via LocalLlm; ../factual strategy).");
-        Console.WriteLine("  encounter factual --parity [N] [--slug <scene>]... [--config <path>]");
-        Console.WriteLine("                  Regression gate: assert the ../factual invariants against eval/factual-parity.");
-        Console.WriteLine("  encounter voice <arc-dir> [--qwen-url <url>] [--authors HPL,REH] [--scene <name>]");
-        Console.WriteLine("                  [--default-scene mundane] [--programs <dir>] [--temperature 0.7]");
-        Console.WriteLine("                  [--force] [--prompts-only]");
-        Console.WriteLine("                  Produce author-voiced variants of each FACTUAL block via voices/*.json.");
-        Console.WriteLine("  encounter critic <arc-dir> [--config <path>] [--phase factual|voice|both]");
-        Console.WriteLine("                  [--force] [--prompts-only]");
-        Console.WriteLine("                  Cross-provider critique of FACTUAL and VOICED blocks via Anthropic SDK.");
         Console.WriteLine("  encounter generate [--out <file>] [--config <path>] [--prompts-only]");
         Console.WriteLine("  encounter haul-generate [--config <path>] [--catalog <path>] [--prompts-only]");
         Console.WriteLine("  encounter push [<path>] [--world <name>]");
