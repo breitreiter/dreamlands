@@ -4,7 +4,7 @@ title: "Forge → .NET — trash the legacy enc pipeline, port the working forge
 state: active
 created: 2026-06-20
 updated: 2026-06-21
-status: active — Phases 1–4 SHIPPED. P1: peer-JSON spine. P2: categorize. P3: GatewayClient + synthesis (dry-run byte-identical). P4: Thread.cs (real Dreamlands.Game engine — EncounterParser + Conditions gating + Mechanics nav; NOT a port of thread.py) + weave; thread spines byte-identical to thread.py (vastand 19/cave 18) AND weave --dry-run byte-identical to weave.py both threads. Live weave (PAID) deferred. Next: Phase 5 (color provider — opaque imp orchestration).
+status: active — Phases 1–5 SHIPPED; pipeline end-to-end in .NET (parse→categorize→color→synthesis/weave→integrate). P5: IColorProvider seam + ImpLoomColorProvider (opaque ssh/scp/grind) + GlmHighTemp stub + ColorCommand; color --dry-run beats-job identical to color.py, untoned-guard verified. Live imp round-trip + live weave/synthesis (PAID/slow) deferred but runnable. Remaining: Phase 6 (compare/critic — optional) + Phase 7 (docs).
 touches:
   files:
     - text/encounter-tool/Encounter.sln
@@ -418,9 +418,15 @@ are **gitignored**, as is `out/`. Add to `.gitignore`: `*.enc.json`, `out/`,
    `OptionText`). Gate PASSED: thread spines BYTE-IDENTICAL to thread.py (vastand
    19/cave 18) AND `weave --dry-run` BYTE-IDENTICAL to `weave.py` both threads
    (674/595 lines). Live weave (PAID, ship-quality prose) deferred to the user.
-5. **Color provider.** `IColorProvider` + `ImpLoomColorProvider` + `ColorCommand`
-   (opaque imp orchestration). Gate: `--dry-run` builds a correct beats-job;
-   `--limit 1` round-trips one enriched beat from imp.
+5. **Color provider. ✅ SHIPPED 2026-06-21.** `Color.cs` (`IColorProvider` seam +
+   `BeatJob`/`ColorRecord` DTOs), `ImpLoomColorProvider.cs` (opaque ssh/scp →
+   `grind` → pull, port of color.py orchestration; loom internals undocumented by
+   design), `GlmHighTempColorProvider.cs` (FOSS-fallback stub, throws, never run),
+   `ColorCommand.cs` (collect uncoloured/--force, untoned-guard, `--provider`,
+   merge). Config += `Imp` section. Gate PASSED: `color --dry-run --force` beats-job
+   identical (id+tone+text, 39) to `color.py`; untoned-guard halts a fresh arc.
+   Live imp round-trip (`--limit 1`, gemma triplet) deferred but runnable via ssh
+   (halt GLM with `swap-model stop all`, then `grind` — loom is a script, not a service).
 6. **Eval + critic (optional/last).** `CompareCommand`; then `CriticCommand` per
    `critic.plan.md` (deterministic POV pre-pass + one per-thread GLM checklist
    call; closed six-kind list; default-pass; every flag cites a verbatim span).

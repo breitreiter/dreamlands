@@ -10,6 +10,7 @@ public sealed class ForgeConfig
 {
     public GlmConfig Glm { get; set; } = new();
     public GatewayConfig Gateway { get; set; } = new();
+    public ImpConfig Imp { get; set; } = new();
 
     private static readonly JsonSerializerOptions Opts = new() { PropertyNameCaseInsensitive = true };
 
@@ -41,4 +42,15 @@ public sealed class GatewayConfig
 
     /// Default integrator (gateway model id). Swap per run with --model.
     public string IntegratorModel { get; set; } = "workers-ai/@cf/moonshotai/kimi-k2.6";
+}
+
+public sealed class ImpConfig
+{
+    /// The opaque loom color service on imp. We ship a beats-job to LoomInbox, run
+    /// Grind, and pull the enriched beats from LoomOutbox. The steering internals are
+    /// undocumented here by design — magic shell stuff, beats in, enriched beats out.
+    public string SshTarget { get; set; } = "joseph@imp";
+    public string LoomInbox { get; set; } = "~/loom-io/inbox";
+    public string LoomOutbox { get; set; } = "~/loom-io/outbox";
+    public string Grind { get; set; } = "~/repos/loom/bin/grind";
 }

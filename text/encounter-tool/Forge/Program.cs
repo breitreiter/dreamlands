@@ -7,6 +7,7 @@ return args[0] switch
     "parse" => ParseCommand.Run(args[1..]),
     "integrate" => IntegrateCommand.Run(args[1..]),
     "categorize" => await CategorizeCommand.RunAsync(args[1..]),
+    "color" => await ColorCommand.RunAsync(args[1..]),
     "synthesis" => await SynthesisCommand.RunAsync(args[1..]),
     "weave" => await WeaveCommand.RunAsync(args[1..]),
     "thread" => ThreadCommand.Run(args[1..]),
@@ -27,6 +28,8 @@ static int Usage()
         Stages:
           categorize <file.enc.json> [...]    tag each beat with one of six tones (GLM on imp)
             [--force] [--dry-run] [--config <path>]
+          color <file.enc.json> [...]         enrich each beat into a color bank (imp loom; free, SLOW)
+            [--force] [--limit N] [--dry-run] [--provider imp|glm-hi-temp] [--config <path>]
           synthesis <file.enc.json> [...]     beat + color -> finished prose (PAID gateway)
             [--model ID] [--limit N] [--beats id,id] [--dry-run] [--no-lens] [--force] [--config <path>]
           weave <arc-dir>                     threaded story-so-far synthesis along one path (PAID)
