@@ -4,7 +4,7 @@ title: "Forge → .NET — trash the legacy enc pipeline, port the working forge
 state: active
 created: 2026-06-20
 updated: 2026-06-21
-status: active — Phases 1–2 SHIPPED. P1: peer-JSON spine (parse/integrate, byte-identical round-trip, dead stages deleted). P2: GlmClient + categorize (byte-identical prompts to categorize.py; 31/39 tone agreement vs forge on the_villa, deltas are temp=0.3 variance on adjacent calls, Start 8/8). Next: Phase 3 (GatewayClient + synthesis).
+status: active — Phases 1–3 SHIPPED. P1: peer-JSON spine (byte-identical round-trip). P2: GlmClient + categorize (31/39 tone agreement, deltas = temp variance). P3: GatewayClient (Cloudflare, all quirks) + synthesis; dry-run prompt assembly BYTE-IDENTICAL to synthesis.py across all 39 the_villa beats (paid path ported, not live-fired). Next: Phase 4 (Thread via Dreamlands.Game + weave).
 touches:
   files:
     - text/encounter-tool/Encounter.sln
@@ -399,9 +399,15 @@ are **gitignored**, as is `out/`. Add to `.gitignore`: `*.enc.json`, `out/`,
    the_villa (Start 8/8 exact); the 8 deltas are all adjacent/ambiguous calls =
    GLM temp=0.3 variance (forge's tones are one sample, not truth), not a port
    defect. `--dry-run` verified offline prompt assembly incl. `Choice context:`.
-3. **Paid synthesis.** `GatewayClient` (all the quirks), `SynthesisCommand` with
-   `--dry-run`/`--limit`/`--model`. Gate: one-beat smoke matches forge output
-   shape; dry-run prompt is byte-identical to forge's.
+3. **Paid synthesis. ✅ SHIPPED 2026-06-21.** `Config.cs` += `Gateway` section
+   (gitignored appsettings.json), `GatewayClient.cs` (curl UA vs WAF, 4006
+   QuotaExhausted abort, EmptyCompletion retry, Retry-After backoff),
+   `SynthesisCommand.cs` (logic-filter SYSTEM as exact 1655-char raw string +
+   `build_user`; `--dry-run`/`--force`/`--model`/`--limit`/`--beats`/`--no-lens`).
+   Gate PASSED: `synthesis --dry-run --force` is BYTE-IDENTICAL to
+   `synthesis.py --dry-run` across all 39 the_villa beats (2711 lines each, diff
+   empty). Paid path ported but not live-fired (no spend); live one-beat smoke
+   deferred to the user's discretion. appsettings.example.json += Gateway placeholder.
 4. **Threaded weave.** `Thread.cs` (adapter over `Dreamlands.Game`/`EncounterRunner`) + `WeaveCommand`.
    Gate: the_villa "tell Vastand" thread (19 beats) produces ship-quality prose,
    no POV drift / factual leakage — forge's acceptance bar.

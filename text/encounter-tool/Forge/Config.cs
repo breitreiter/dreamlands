@@ -9,6 +9,7 @@ using System.Text.Json;
 public sealed class ForgeConfig
 {
     public GlmConfig Glm { get; set; } = new();
+    public GatewayConfig Gateway { get; set; } = new();
 
     private static readonly JsonSerializerOptions Opts = new() { PropertyNameCaseInsensitive = true };
 
@@ -27,4 +28,17 @@ public sealed class GlmConfig
 
     /// "auto" = query /models and use the first id; or pin an explicit model id.
     public string Model { get; set; } = "auto";
+}
+
+public sealed class GatewayConfig
+{
+    /// The Cloudflare AI Gateway OpenAI-compatible chat-completions URL. PAID.
+    /// Lives only in the gitignored appsettings.json — never a path outside the repo.
+    public string Endpoint { get; set; } = "";
+
+    /// Bearer token for the gateway. Gitignored config only; never logged.
+    public string ApiKey { get; set; } = "";
+
+    /// Default integrator (gateway model id). Swap per run with --model.
+    public string IntegratorModel { get; set; } = "workers-ai/@cf/moonshotai/kimi-k2.6";
 }
