@@ -10,6 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- The real engine: parse + gating + navigation for the thread walk. Forge
+         depends on these; they never depend on Forge and never read the peer JSON. -->
+    <ProjectReference Include="..\..\..\lib\Encounter\Dreamlands.Encounter.csproj" />
+    <ProjectReference Include="..\..\..\lib\Game\Dreamlands.Game.csproj" />
+    <ProjectReference Include="..\..\..\lib\Rules\Dreamlands.Rules.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- gitignored real config copied next to the binary at build; example committed -->
     <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" Condition="Exists('appsettings.json')" />
   </ItemGroup>

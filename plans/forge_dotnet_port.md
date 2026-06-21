@@ -4,7 +4,7 @@ title: "Forge → .NET — trash the legacy enc pipeline, port the working forge
 state: active
 created: 2026-06-20
 updated: 2026-06-21
-status: active — Phases 1–3 SHIPPED. P1: peer-JSON spine (byte-identical round-trip). P2: GlmClient + categorize (31/39 tone agreement, deltas = temp variance). P3: GatewayClient (Cloudflare, all quirks) + synthesis; dry-run prompt assembly BYTE-IDENTICAL to synthesis.py across all 39 the_villa beats (paid path ported, not live-fired). Next: Phase 4 (Thread via Dreamlands.Game + weave).
+status: active — Phases 1–4 SHIPPED. P1: peer-JSON spine. P2: categorize. P3: GatewayClient + synthesis (dry-run byte-identical). P4: Thread.cs (real Dreamlands.Game engine — EncounterParser + Conditions gating + Mechanics nav; NOT a port of thread.py) + weave; thread spines byte-identical to thread.py (vastand 19/cave 18) AND weave --dry-run byte-identical to weave.py both threads. Live weave (PAID) deferred. Next: Phase 5 (color provider — opaque imp orchestration).
 touches:
   files:
     - text/encounter-tool/Encounter.sln
@@ -408,9 +408,16 @@ are **gitignored**, as is `out/`. Add to `.gitignore`: `*.enc.json`, `out/`,
    `synthesis.py --dry-run` across all 39 the_villa beats (2711 lines each, diff
    empty). Paid path ported but not live-fired (no spend); live one-beat smoke
    deferred to the user's discretion. appsettings.example.json += Gateway placeholder.
-4. **Threaded weave.** `Thread.cs` (adapter over `Dreamlands.Game`/`EncounterRunner`) + `WeaveCommand`.
-   Gate: the_villa "tell Vastand" thread (19 beats) produces ship-quality prose,
-   no POV drift / factual leakage — forge's acceptance bar.
+4. **Threaded weave. ✅ SHIPPED 2026-06-21.** `Thread.cs` drives the REAL engine
+   (`EncounterParser` + `Conditions.Evaluate` gating + `Mechanics.Apply` nav/tags;
+   peer JSON supplies beat identity, engine never reads JSON), `Threads.cs`
+   (vastand/cave plans), `ThreadCommand` (debug spine dump), `WeaveCommand`
+   (threaded story-so-far; reuses `SynthesisCommand.BuildUser`). Forge.csproj now
+   refs Dreamlands.Encounter/Game/Rules. Label-convention bridge: plan matches
+   `OptionLink`, peer beat.choice keys on `OptionPreview` (both fall back to
+   `OptionText`). Gate PASSED: thread spines BYTE-IDENTICAL to thread.py (vastand
+   19/cave 18) AND `weave --dry-run` BYTE-IDENTICAL to `weave.py` both threads
+   (674/595 lines). Live weave (PAID, ship-quality prose) deferred to the user.
 5. **Color provider.** `IColorProvider` + `ImpLoomColorProvider` + `ColorCommand`
    (opaque imp orchestration). Gate: `--dry-run` builds a correct beats-job;
    `--limit 1` round-trips one enriched beat from imp.
