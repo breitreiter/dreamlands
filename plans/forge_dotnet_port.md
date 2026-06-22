@@ -4,7 +4,7 @@ title: "Forge → .NET — trash the legacy enc pipeline, port the working forge
 state: active
 created: 2026-06-20
 updated: 2026-06-21
-status: active — Phases 1–5 SHIPPED; pipeline end-to-end in .NET (parse→categorize→color→synthesis/weave→integrate). P5: IColorProvider seam + ImpLoomColorProvider (opaque ssh/scp/grind) + GlmHighTemp stub + ColorCommand; color --dry-run beats-job identical to color.py, untoned-guard verified. Live imp round-trip + live weave/synthesis (PAID/slow) deferred but runnable. Remaining: Phase 6 (compare/critic — optional) + Phase 7 (docs).
+status: active — Phases 1–5 + 7 SHIPPED; pipeline end-to-end in .NET and LIVE-VALIDATED. Live smoke 2026-06-21: weave vastand (the_villa, kimi-k2.6 via Cloudflare gateway) generated 18/19 beats fresh, coherent threaded prose, POV-consistent, facts preserved; EmptyCompletion guard fired correctly on 1 beat (no crash, no blank-cell overwrite); reuse/resume verified. ~58s/beat (kimi+thinking). Key in gitignored appsettings.json. Remaining: Phase 6 (compare/critic — optional); a true from-scratch dreamlands arc still needs a live gemma color run (deferred).
 touches:
   files:
     - text/encounter-tool/Encounter.sln
