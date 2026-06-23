@@ -2,18 +2,40 @@ Control Room
 [trigger none]
 [vignette dungeons/foundry]
 
-FIXME(dread): The control room is a wall of panels, most of them dark, a few lit with the Color. Suhail knows which ones. He works through a cabinet without hurry, the same practiced hands that opened the cutting head, throwing governors and hauling levers past their stops, taking the brakes off the place one system at a time: the furnaces that feed the stacks, the presses, every safeguard built to hold the plant short of tearing itself apart.
-FIXME(dread): One control he leaves. He rests a hand on it and tells the PC plainly what it does. Thrown, the plant runs away with itself, heat and pressure climbing with nothing left to bleed them off. It is not quick. It builds. There is the time it takes to walk out at a steady pace and no more than that; go now and they go safe. The place comes down after, on its own, with no one left in it but the husks. "A small thing," he says. "Noise and broken glass. They are already gone."
-FIXME(revelation): Then the truth, his hand still on the control. Decades of provocations, each one watched for a response that never came: burned depots rebuilt better, killed administrators replaced faster, every disruption the machine absorbed and somehow used. He came to see whether this one is any different, whether there is a scale of damage the entity cannot simply route around. He does not think there is. He wants to be wrong.
-FIXME(revelation): Then the question he cannot answer: whether even this was designed for him. Whether the urge to poke at the machine, to find its limits, to make it react, was itself placed in him. Every past failure is one more proof he cannot refute.
+FIXME(dread): Suhail stands a few paces away from the panel. He's waiting for your decision.
 
 choices:
 
-* Stand with him at the panel = Meet what he is asking of you
-    @if quality foundry.challenge 2 {
-        FIXME(dread): He does not reach for the switch. He looks instead at the nearest husk, the emptiest one in the room, and asks his question over it.
-        +open "The Question"
+* Demand to know why [requires quality foundry.challenge 2]
+    FIXME(revelation): Then the truth, his hand still on the control. Decades of provocations, each one watched for a response that never came: burned depots rebuilt better, killed administrators replaced faster, every disruption the machine absorbed and somehow used. He came to see whether this one is any different, whether there is a scale of damage the entity cannot simply route around. He does not think there is. He wants to be wrong.
+    FIXME(revelation): Then the question he cannot answer: whether even this was designed for him. Whether the urge to poke at the machine, to find its limits, to make it react, was itself placed in him. Every past failure is one more proof he cannot refute.
+    FIXME(dread): Then he turns the question outward, over the emptiest husk in the room, the one with the least left behind the eyes. "Why do you care about them? They lost themselves long ago. To end one is to break a machine. What are they to you?" His hand is on the control, but he is in no hurry to throw it.
+    +add_tag foundry.knows_fate
+    +open "Control Room"
+
+* Refuse the terms = Answer that you will not wait on the Lattice's verdict [requires tag foundry.knows_fate]
+    FIXME(revelation): The move is not to win the argument over whether the workers are real. It is to refuse the terms: not to promise proof, but to refuse to make your own conduct wait on a verdict the Lattice made unknowable. It is also a refusal to be the instrument he has spent the whole descent building.
+    FIXME(revelation): You give the answer. Suhail puts the move into plain words: you will lose your mind trying to outthink the machine, so do what you believe is right and answer to yourself. He has known it all along and been too alone to make it, which is why he needed someone to follow him into the dark.
+    FIXME(dread): He throws the control without ceremony and you walk out together, the blade in your hands the whole way. Behind you the plant labours toward its end. The road is quiet.
+    +add_level
+    +finish_dungeon
+
+* Draw steel = Force him to stop
+    @if has shimmering_blade {
+        FIXME(action): You're still carrying the shimmering blade. It does the work cleanly. When it's done, you stand alone in the small pool of light in the black control room. You imagine the workers will dutifully clean up the body, just like everything else.
+        FIXME(mundane): With some effort, you find your way clear of the factory and back to the road. You wonder whether you disrupted Suhail's plan, or the Lattice's plan, or did exactly as you were guided.
+        +add_level
+        +finish_dungeon
     } @else {
-        FIXME(dread): He sets the choice in front of the PC as a switch to be thrown. "Press it, or stop me. Now."
-        +open "The Switch"
+        FIXME(action): You draw your weapon and strike. The blows cut cloth and leather, but pass through Suhail's body, leaving only an illuminated purple ripple in their wake. You stop. He looks at you, almost sorry. "You're not the first to try. If you're done, let's end this." He steps back to the panel and pulls the switch. The dull whine starts almost immediately.
+        FIXME(dread): You turn and flee. You can't bear to look at this deathless monster. Somehow, you find your way clear of the plant before it collapses, though only just.
+        FIXME(mundane): On the road away from the site, a party of engineers is heading toward it. They heard the blast. They ask, with professional interest, whether the structure came down cleanly.
+        +add_level
+        +finish_dungeon
     }
+
+* Step back and let him finish  
+    FIXME(dread): You stand away. Suhail throws the control, and the plant begins to labour toward its end. You walk out together at a steady pace, ahead of the smoke.
+    FIXME(mundane): On the road away from the site, a party of engineers is heading toward it. They heard the blast. They ask, with professional interest, whether the structure came down cleanly.
+    +add_level
+    +finish_dungeon

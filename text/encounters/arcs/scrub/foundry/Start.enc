@@ -2,19 +2,21 @@ The Gate
 [trigger none]
 [vignette dungeons/foundry]
 
-FIXME(dread): Days through the deepest scrub to reach here. The ground is stained with the Color, that purple beyond purple the eye refuses to hold; the sky is pale hues refracted into strange threads, hard to look at. The PC has been squinting, resting the eyes, and the after-image stays burned in behind the lids.
+FIXME(dread): Days through the deepest scrub to reach here. The ground is stained with the Color, that purple beyond purple the eye refuses to hold; the sky is pale hues refracted into strange threads, hard to look at. You have been squinting, resting your eyes, and the after-image stays burned in behind the lids.
 FIXME(mundane): Over the last day a low headache and a faint sickness have settled into the body. It may be the glare of everything. It may be something else.
 FIXME(wonder): Then the factory: a vast windowless concrete bulk risen out of the scrub, brutalist, smokestacks pouring black smoke into the refracted sky. Nothing shows what it makes, where raw material comes in, where finished goods go out, or who hauls them. No yards, no worn roads, no loading. It reads as the one solid thing for miles, a place that might be safe to rest in, and it is plainly intriguing.
-FIXME(mundane): The PC approaches the gate and is refused. The guild signet counts for nothing here.
-FIXME(dread): A wild-haired man in a vagrant's rags walks up out of the scrub and through the gate without slowing. The guards begin a motion to stop him and it dies before it commits; they know him, or know what he is, and the knowing pulls the hand back down. He is past them before they finish deciding not to act.
-FIXME(mundane): He turns and calls the PC through on his own authority. The PC enters under his name, a vagrant's name, where a guild member's standing failed a moment before. Asked why, he deflects, already a step down the corridor. "Plenty of time. Long way down."
+FIXME(mundane): You approach the factory entrance, hoping for some shade, water, and break from the strange landscape. Your path is blocked by two armored guards, their faces invisible beneath full helms. They do not speak. You present your ring, and call upon them for hospitality, but they are unmoved.
+FIXME(dread): A wild-haired man in a vagrant's rags walks up behind you and slips between the two guards without slowing. The guards begin a motion to stop him, but step aside; they know him, or know what he is.
+FIXME(mundane): He turns and calls to you, "are you coming, or are you just going to stand there?"
 
 choices:
 
-* Follow him inside = Go where the guild ring could not
-    FIXME(dread): The PC steps past the guards after him, into the dark beyond the gate. The daylight ends a few feet in.
+* Follow him inside 
+    FIXME(dread): You step past the guards after him, into the dark beyond the gate. The daylight ends a few feet in.
+    FIXME(mundane): Just inside, in the first dark, he searches a supply closet and hands you a carbide lamp. "You'll want this. Dark inside." He gives his name then, Suhail, as though it had only just occurred to him you had not been introduced.
+    FIXME(dread): He is filthy and sun-baked, dust in every seam of him, and not a day past his mid-thirties under all of it. He moves through the dark at ease, carrying no light of his own; your lamp reaches six feet and no further.
     +open "The Lamp"
 
-* Turn back = Decide this is not guild business
-    FIXME(mundane): The PC does not follow. The vagrant is already gone into the dark, and the guards have remembered their refusal. The PC turns for the long road back through the scrub.
+* Turn back = Decide this is not your business
+    FIXME(mundane): You do not follow. The vagrant is already gone into the dark, and the guards have remembered their refusal. You turn for the long road back through the scrub.
     +flee_dungeon

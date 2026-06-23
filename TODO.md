@@ -44,6 +44,12 @@ Real things strangers from socials will hit. No public posting until these are d
       no stacking breakpoint, 20px base font too large for phones, InstrumentCluster
       overlay not adapted for small screens, no touch-friendly target sizing.
       Socials traffic is mostly phones — biggest single item on this list.
+      Plan: `plans/mobile_layout.md` (state: ready) — audit found the surface is
+      smaller than it looks (Encounter already reflows, Explore's map needs
+      nothing). Real work: Market+Bank (shared stack/tab fix), instrument-cluster
+      FAB, Combat (visual reflow + a mobile-only review gate), plus global
+      font/touch-target knobs. Two prototypes gate full commit: Combat monster
+      banner (hit-splat anchoring) + the gated turn loop.
 - [ ] Update weapon/armor descriptions in inventory, market, and bank screens to explain
       what they actually do in the RPS combat system — current copy is from the d20 era
       ("+2 to attack rolls" etc.) and doesn't surface the moves the item contributes to

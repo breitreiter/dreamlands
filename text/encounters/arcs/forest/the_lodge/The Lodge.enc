@@ -2,32 +2,15 @@ The Lodge
 [trigger none]
 [vignette dungeons/the_lodge]
 
-The lodge sits between the trees as though it grew there. Low-roofed, timber and fieldstone, fitted into the terrain with such care you nearly walk past it. The door is closed, but not barred. You push it open. Inside, silence.
+You climb out of the hollow and follow the rim until the ground levels. Beyond it, the lodge sits between the trees as though it grew there. Low-roofed, timber and fieldstone, fitted into the terrain with such care you nearly walk past it. The door is closed, but not barred. You push it open. Inside, silence.
 
-The dust is the first thing. Dust on the table, dust on the chairs, dust thick on the bedding in the loft where the corners have been mouse-chewed and not repaired. Tools on the wall — drawknife, awl, a small adze — with the leather of their handles gone hard and cracked. The single window has a film on it the color of old tallow. A spider has built across the inside of it in a generation that came and went.
+The dust is the first thing. Dust on the table, dust on the chairs, dust thick on the bedding in the loft where the corners have been mouse-chewed and not repaired. Tools on the wall: a drawknife, an awl, a small adze, the leather of their handles gone hard and cracked. The single window has a film on it the color of old tallow. A spider has built across the inside of it in a generation that came and went.
 
-choices:
+On a shelf above the hearth, where a working man would keep his Bible or his ledger, there is a journal wrapped in oiled cloth gone brittle. Pages of irregular paper sewn into a hide cover. The hand is the same throughout but degrades: early entries neat and slightly schooled, late entries cramped and hurried, the descender strokes growing more emphatic until they are almost slashes.
 
-* Take the Old Tooth = It was left for whoever came this far
-    +add_item the_old_tooth
-    +finish_dungeon
-
-* Leave the lodge as you found it = Close the door behind you
-    +finish_dungeon
-
-
---- NOTES ---
-
-The Lodge
-It is most of a day further on, in a small flat above a stream — defensible sightlines, a spring nearby, good drainage. A low building of dark timber, sod roof gone partway to moss, a stone chimney. No smoke. A worked stump out front with a deep grain-smoothed dish in the center from years of use.
-The door is closed but not barred. The PC pushes it open.
-
-
-No one has lit a fire in this room in a long time.
-The Journal
-It is on a shelf above the hearth, where a working man would keep his Bible or his ledger. Wrapped in oiled cloth that has gone brittle. Pages of irregular paper sewn into a hide cover. The hand is the same throughout but degrades — early entries neat and slightly schooled, late entries cramped, hurried, with the descender strokes growing more emphatic until they are almost slashes.
 """
-Foundation laid. Two courses of stone before the ground hardened. The country gives good timber and is honest about its weather. M. will approve of the spring. She'll hate the winters, but we'll get by.
+Foundation laid. Two courses of stone before the ground hardened. The country gives good timber and is honest about its weather. M. will approve of the spring. She will hate the winters, but we will get by.
+
 Came down to Hadrith for nails, salt, ten pounds of flour. The smith asked where I had settled and I told him east of the ridge and he did not ask further. I think he had heard already. He gave me fair coin for the pelts.
 """
 
@@ -40,18 +23,40 @@ Something at the treeline two nights running. Not bear. Not cat. Stood at the ed
 Then further, near the end.
 
 """
-Found another body this morning. Woodsman, man I had seen but never spoken with. Body was in a pitiful state. The beast makes crude totems from them. I could not bring myself to bury this one. I think, perhaps, the beast is doing something sacred here. He's trying to teach me something, a higher truth. 
-They say there used to be an older race in these woods. Here long before the Revathi came. Perhaps the beast is one of them. It must see something in me; know that we are more alike.
+Found another body this morning. A woodsman, a man I had seen but never spoken with. The body was in a pitiful state. The beast makes crude totems from them. I could not bring myself to bury this one. I think, perhaps, the beast is doing something sacred here. He is trying to teach me something, a higher truth.
+
+They say there used to be an older race in these woods, here long before the Revathi came. Perhaps the beast is one of them. It must see something in me, know that we are more alike.
 """
 
-You skip ahead to the final entry
+A few pages on:
+
+"""
+He left me a gift. On the flat stone at the treeline, where I set out scraps in the hard month. A tooth, long as a knife blade, gray as riverbed stone, old past anything in these woods. Not one of his. His are black; I have seen them close now.
+
+I set a handle to it. It sits in the hand like it remembers being held. The dreams started the night I brought it under my roof. I sleep better than I have in years.
+"""
+
+You skip to the final entry.
 
 """
 In sleep last night we spoke again. Not with words. No need.
-I cannot find the word for the things now. I go looking for them among the words and it was not there. I do not need them.
-I know where he is.
-Found the place this morning. Cleft in the rock. Cold air out of it. Just like the dreams.
-Tomorrow at first light.
-The final lesson is there. After that I am free.
+
+I cannot find the word for the things now. I go looking for them among the words and it is not there. I do not need them.
+
+Cooked meat has lost its savor. I take it as it comes now and am stronger for it.
+
+I know where he is. Found the place this morning. A cleft in the rock. Cold air out of it. Just like the dreams.
+
+Tomorrow at first light. The final lesson is there. After that I am free.
 """
 
+choices:
+
+* Take the Old Tooth = It was left for whoever came this far
+    It hangs on a peg above the hearth, beside where the journal lay: a tooth long as a knife blade, gray as riverbed stone, set into a wooden handle worn smooth by use. The edge is keen, though everything else in this room has gone to dust and cracked leather. He went to his final lesson without it. He left it behind, or it stayed.
+    +add_item the_old_tooth
+    +finish_dungeon
+
+* Leave the lodge as you found it = Close the door behind you
+    You wrap the journal back in its brittle cloth and set it on the shelf. You close the door behind you and walk south.
+    +finish_dungeon

@@ -1,15 +1,16 @@
-The Follower
+The Trail
 [trigger none]
 [vignette dungeons/the_lodge]
 
-FIXME(mundane): You have been in the deep forest for days. The paths here are animal trails or nothing. The canopy is so dense that direction loses meaning, and the undergrowth has thinned to almost nothing in the deep shade, leaving cathedral distances between enormous trunks. You notice the figure at the edge of your vision. Lean, dark-clad, standing between two trees forty yards ahead. When you look directly, nothing. The space between the trunks is empty.
+FIXME(mundane): You have been in the deep forest for days. The paths here are animal trails or nothing. The canopy is so dense that direction loses meaning, and the undergrowth has thinned to almost nothing in the deep shade, leaving cathedral distances between enormous trunks. This morning you cross a track pressed deep into the black mud, and you know it at once: four toes, the size of a spread hand. The beast. The same creature that has ambushed you on the roads, taken your blood, and slipped back into the brush before you could finish it. The track is fresh. It is not hunting this time. It is going somewhere.
 
 choices:
 
-* Follow = Step off the path toward where it was
-    The track is faint but present: a compressed fern here, a turned stone there. Something with light feet and long practice in not being seen. You follow it north, and deeper.
+* Follow the trail = Hunt the thing for once
+    The track is faint but steady: a compressed fern here, a turned stone there. You have bled for this creature more than once. Now you mean to collect. You follow the trail north, and deeper.
+    +open "The Clearing"
 
 
-* Ignore it = Keep your heading
-    You keep your eyes forward and your pace steady. The sense of being watched fades after half a mile. The deep forest continues in silence, undisturbed, offering nothing.
+* Let it go = Keep your heading
+    You keep your eyes forward and your pace steady. Whatever score stands between you and the beast, the deep forest is not where you want to settle it. The trail goes cold behind you.
     +flee_dungeon

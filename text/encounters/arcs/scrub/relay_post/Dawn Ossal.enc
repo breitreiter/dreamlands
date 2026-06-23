@@ -8,8 +8,7 @@ choices:
 
 * Confront her openly = Tell her what is happening and ask her to stand down
     FIXME(action): You cross the room and tell her plainly. Ossal has asked for your help. The post stays open. The copies stay here. You are not going to fight her and you are not going to lie. You are asking her to sit down.
-    FIXME(dread): She argues. Passionately, logically, with the specific evidence from her log, line by line, citation by citation. When it is clear you are not moving she stops. She sits down at her desk. She goes quiet. Ossal goes through her pack and finds the wax-paper sleeve under her bedroll. He puts it in his case. The originals stay in the file. The relay stays operational.
-    +give_gold 15
+    FIXME(dread): She argues. Passionately, logically, with the specific evidence from her log, line by line, citation by citation. When it is clear you are not changing your mind, she stops. She sits down at her desk. She goes quiet. Ossal goes through her pack. He finds the wax-paper sleeve under her bedroll. He puts it all in his case. The relay stays operational, and you depart. On the way back to the main road, you encounter a pair of Kesharat warriors. They're looking for Ossal. You exchange pleasantries and direct them to the station.
     +finish_dungeon
     +add_level
 

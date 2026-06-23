@@ -2,78 +2,33 @@ The Rest Interval
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): The rest circle is a flat patch of rock about ten meters from the tower. The kettle is on. Veran sits a little upslope. Baret is next to him. Richard is across from Baret, heavy in his seat. Chorik is off-axis from the circle, not quite settled in. The bell is silent. The crew has time on the clock until they go back to the work.
-# --- FACTUAL ---
-# The rest circle is a flat patch of rock about ten meters from the tower. The kettle is on, steam rising from its brass spout in the late sun. Veran sits a little upslope, his dun canvas sleeve brushing against the rock. Baret is next to him, his thumb rubbing the worn edge of the Reshîd clan band on his wrist. Richard sits across from Baret, heavy in his seat, his belt creaking as he shifts. The interval bell hangs silent on Veran's belt, a lighter patch on the worn leather where it rests. Chorik is off-axis from the circle, not quite settled in. His hands are wrapped around his tin cup, knuckles white. His neck cloth is folded so crisp it could stand on its own. His eyes are fixed on the distant pylon, not blinking. The heat rises in visible waves from the bedrock. The bell is silent. The crew has time on the clock until they go back to the work.
-# --- end ---
+FIXME(mundane): The crew sits around a flat patch of rock about ten meters from the tower, the kettle in the middle, you among them. Veran has the head of the circle, the teapot by his knee. Baret is beside him. Richard is across the rock, heavy in his seat. Chorik sits next to you, a little apart from the talk, his teacup in both hands. The circle is small enough that anything said carries without anyone raising a voice. The bell is silent. The crew has time on the clock until they go back to the work.
 choices:
 
-* Walk over to the foreman = He has the head of the rest circle and the teapot. [requires !tag signal_array.met_veran]
-    FIXME(mundane): You cross to where Veran sits. He pours you a cup of tea from the small pot. You sit down across from him.
-    # --- FACTUAL ---
-    # You cross to where Veran sits. He pours you a cup of tea from the small pot. You sit down across from him. The interval bell hangs silent on his belt, the leather worn smooth where the brass clips against it. The dun canvas of his uniform sleeve brushes against the rock as he hands you the tin cup.
-    # --- end ---
-    FIXME(mundane): Veran is in his mid-fifties. He has the weathered build of a career fieldworker. He has been doing Kesharat infrastructure work for thirty years. He is the foreman of this crew and signs off completion. The bell on his belt is field-issue.
-    # --- FACTUAL ---
-    # Veran is in his mid-fifties. He has the weathered build of a career fieldworker. He has been doing Kesharat infrastructure work for thirty years. He is the foreman of this crew and signs off completion. The interval bell hangs silent on his belt, field-issue. The dun canvas of his uniform sleeve brushes against the rock as he pours. The worn leather of his belt shows a lighter patch where the brass bell hangs.
-    # --- end ---
+* Turn to the foreman = He has the head of the circle and the teapot. [requires !tag signal_array.met_veran]
+    FIXME(mundane): You turn to Veran at the head of the circle. He tops up your cup from the pot by his knee.
+    FIXME(mundane): Veran is in his mid-fifties. He has the weathered build of a career fieldworker. He has been doing Kesharat infrastructure work for thirty years, he says. He is the foreman of this crew and signs off completion. The bell on his belt is field-issue; clever clockwork.
     FIXME(mundane): He asks where you have come from. He listens. He volunteers the crew's own route in return: they came down from the previous site three days ago. He names the landmarks. He describes the river crossing, the salt-flat traverse, the long climb up the south slope of the mesa.
-    # --- FACTUAL ---
-    # Veran asks where you have come from. He listens. He volunteers the crew's own route in return: they came down from the previous site three days ago. He names the landmarks. He describes the river crossing, the salt-flat traverse, the long climb up the south slope of the mesa. The dun canvas of his uniform sleeve brushes against the rock. The worn leather of his belt shows a lighter patch where the brass bell hangs.
-    # --- end ---
-    FIXME(dread): The route does not close. The landmarks he names are real, but they are arranged in a sequence that would take a week to walk, told in the time the direct road takes.
-    # --- FACTUAL ---
-    # Veran points to the east. "We came down from the salt flats there. Then crossed the river at the ford. Then up the south slope of the mesa." He gestures to the west. "The road you came from is that way. Three days." The landmarks he names are real, but they are arranged in a sequence that would take a week to walk, told in the time the direct road takes. Chorik's eyes are fixed on the distant pylon, not blinking. His hands are wrapped around his tin cup, knuckles white.
-    # --- end ---
+    FIXME(dread): He says they made it in three days. You carry road distances for a living, and the legs he just named do not add to three days. The river crossing, the salt-flat traverse, the climb up the south slope of the mesa, strung in that order, is the better part of a week's walking. Every landmark is real. Made the way he says he made it, in the time he gives, the journey cannot be done.
     +open "Veran"
 
 * Chat with the young worker = He has just settled in with a fresh cup of tea. [requires !tag signal_array.met_baret]
-    FIXME(mundane): You sit next to Baret. He pours you a cup of tea from the kettle.
-    # --- FACTUAL ---
-    # You sit next to Baret. He pours you a cup of tea from the kettle. His thumb rubs the worn edge of his Reshîd clan band as he reaches for the pot. The brass spout steams in the late sun. He sets the cup beside you on the flat rock.
-    # --- end ---
+    FIXME(mundane): You turn to Baret, beside Veran.
     FIXME(mundane): Baret is in his late twenties. His hands have the build of someone who grew up working stone. His tunic cuffs are rolled and the Reshîd clan band on his wrist is visible whenever he reaches for the kettle.
-    # --- FACTUAL ---
-    # Baret is in his late twenties. His hands have the build of someone who grew up working stone. His tunic cuffs are rolled and the Reshîd clan band on his wrist is visible whenever he reaches for the kettle. His thumb rubs the worn edge of the band as he pours.
-    # --- end ---
     FIXME(mundane): He talks about his family. His mother is well. His sisters are well. His nephew was born while he has been on the road. He was supposed to be home for the birth. He knows he is overdue. He says he will be home after this job. Just this one more.
-    # --- FACTUAL ---
-    # "My mother is well," Baret says. "My sisters are well." He traces the rim of his tin cup with a finger. "My nephew was born while I've been on the road. I was supposed to be home for the birth." He looks at his wrist, rubbing the worn edge of his Reshîd clan band. "I know I'm overdue. I'll be home after this job. Just this one more."
-    # --- end ---
     FIXME(dread): He says "just this one more" twice in five minutes. He hears himself say it the second time. He laughs at himself a little. He does not stop saying it.
-    # --- FACTUAL ---
-    # Baret says, "Just this one more job and I'll be home." He sips his tea. Five minutes pass. He says, "Just this one more job and I'll be home." He stops. He looks at his cup. He laughs a little. He does not stop saying it. His thumb rubs the worn edge of his Reshîd clan band. The kettle's brass spout steams in the late sun.
-    # --- end ---
     +open "Baret"
 
 * Meet the heavier man = He is across the circle, his weight on the rock. [requires !tag signal_array.met_richard]
-    FIXME(mundane): You move around the circle and sit by Richard. He shifts to make room and tops up your tea.
-    # --- FACTUAL ---
-    # You move around the circle and sit by Richard. He shifts to make room and tops up your tea. The brass button at his collar catches the light as he leans forward. His belt creaks under the movement.
-    # --- end ---
-    FIXME(mundane): Richard is in his forties. He is built like a man who lifts hogs. His collar is unbuttoned and the back of his neck shows grassland sunburn. He is a pig farmer from the rich grasslands near Aldgate. He has a prize pig at home. His brother is taking care of her in his absence.
-    # --- FACTUAL ---
-    # You move around to where Richard sits, the dun canvas of his uniform stretched tight across his shoulders. He shifts to make room, his belt creaking as he adjusts his weight. The brass button at his collar catches the light. His collar is unbuttoned, revealing a sunburned nape that speaks of grassland sun, not mesa. He tops up your tea from the kettle. "You have a farm?" he asks. "I've got one near Aldgate. Prize pig. Blackwood sow. Brother's seeing to her while I'm away. Don't trust his feeding, though. She needs the right mash."
-    # --- end ---
+    FIXME(mundane): You turn to Richard across the rock. He tops up your tea from where he sits.
+    FIXME(mundane): Richard is in his forties. He says he is a pig farmer from the rich grasslands near Aldgate. He has a prize pig at home. His brother is taking care of her in his absence.
     FIXME(mundane): He asks if you have been by his farm. He describes it: the road in, the gate, the pig pen by the barn. He wants news. He reckons it is about time for the harvest festival. He worries about his brother's husbandry. He does not think his brother feeds the pig appropriately.
-    # --- FACTUAL ---
-    # Richard shifts to make room for you on the rock. He tops up your tea from the kettle. "You been by my farm?" he asks. "The road in's easy enough. Gate's painted blue. Pig pen's by the barn." He wants news. He reckons it's about time for the harvest festival. He worries about his brother's husbandry. He does not think his brother feeds the pig appropriately.
-    # --- end ---
     +open "Richard"
 
-* Check in on the quiet one = He is off to one side of the circle. [requires !tag signal_array.met_chorik]
-    FIXME(mundane): You move around to where Chorik is sitting and settle in next to him. The rest circle is small enough that the others are in easy earshot, conversations carrying without anyone raising a voice.
-    # --- FACTUAL ---
-    # You move around to where Chorik is sitting and settle in next to him. The rest circle is small enough that the others are in easy earshot, conversations carrying without anyone raising a voice. Chorik's hands are wrapped around his tin cup, knuckles white. His neck cloth is folded so crisp it could stand on its own. You ask him how he is. He answers in short sentences. He does not initiate. When you press for more he changes the subject.
-    # --- end ---
-    FIXME(mundane): Chorik is buttoned to the throat. His neck cloth is folded crisp. He is the only one of the four whose uniform fits him exactly the way the uniform is meant to fit. You ask him how he is. He answers in short sentences. He does not initiate. When you press for more he changes the subject.
-    # --- FACTUAL ---
-    # You settle next to Chorik. His neck cloth is folded so crisp it could stand on its own. You ask him how he is. He answers in short sentences. He does not initiate. When you press for more he changes the subject.
-    # --- end ---
-    FIXME(dread): The other three patch his discomfort with on-his-behalf inventions, contributing across the rock. Veran says Chorik has been quiet since the last site, don't mind him. Baret says Chorik is just tired, aren't you Chorik. Richard says don't ask him about that, he doesn't like to talk about it. Chorik does not contradict any of them. He does not confirm any of them. He drinks his tea.
-    # --- FACTUAL ---
-    # Chorik's hands are wrapped around his tin cup, knuckles white. Veran says, "Chorik has been quiet since the last site, don't mind him." Baret says, "Chorik's just tired, aren't you Chorik." Richard says, "Don't ask him about that, he doesn't like to talk about it." Chorik does not contradict any of them. He does not confirm any of them. He drinks his tea.
-    # --- end ---
+* Check in on the quiet one = He sits next to you, a little apart from the talk. [requires !tag signal_array.met_chorik]
+    FIXME(mundane): You turn to Chorik beside you. The circle is small enough that the others stay in easy earshot, conversations carrying without anyone raising a voice.
+    FIXME(mundane): Chorik is buttoned to the throat. His uniform is new, unstained, no wear on the elbows or knees. You ask him how he is. He answers in short sentences. He does not initiate. When you press for more he changes the subject.
+    FIXME(dread): The other three patch his discomfort with on-his-behalf inventions, contributing across the rock. Veran says Chorik has been quiet since the last site, don't mind him. Baret says Chorik is just tired, aren't you Chorik? Richard says don't ask him about that, he doesn't like to talk about it. Chorik does not contradict or elaborate. He drinks his tea.
     +open "Chorik"
 
 * Sit back and watch = Stay quiet and listen [requires !tag signal_array.observed]
@@ -81,14 +36,8 @@ choices:
 
 * Wait out the rest interval = Let the time pass; they will finish the work after.
     FIXME(mundane): You stay where you are. The crew finishes their tea. The dust shimmer settles back over the road, and after a while the bell on Veran's belt rings again, softer this time. The crew rises from the rest circle and returns to the housing at the base of the tower. Veran checks the cable connections. Chorik fits the top cross-piece. Richard takes a laminated activation card out of his pocket. Baret rolls up the bedroll mat and stows the tea kit. The work resumes.
-    # --- FACTUAL ---
-    # You stay where you are. The crew finishes their tea. The dust shimmer settles back over the road, and after a while the bell on Veran's belt rings again, softer this time. The crew rises from the rest circle and returns to the housing at the base of the tower. Veran checks the cable connections. Chorik fits the top cross-piece. Richard takes a laminated activation card out of his pocket. Baret rolls up the bedroll mat and stows the tea kit. The work resumes.
-    # --- end ---
     +open "Completion"
 
 * Walk off the work site = Decide this is not your concern
     FIXME(mundane): You stand. You thank Veran for the tea. You step out of the rest circle and back onto the mesa road. The crew watches you go without rising. The bell on Veran's belt does not ring again before you are out of earshot.
-    # --- FACTUAL ---
-    # You stand. You thank Veran for the tea. You step out of the rest circle and back onto the mesa road. The crew watches you go without rising. The interval bell hanging silent on Veran's belt does not ring again before you are out of earshot.
-    # --- end ---
     +flee_dungeon

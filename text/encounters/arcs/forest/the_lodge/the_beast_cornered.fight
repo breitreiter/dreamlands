@@ -21,15 +21,17 @@
   narration: The creature finds renewed strength, far beyond anything natural.
 
 * intro
-You feel the thing before you see it; something is watching you, trailing you
-in the brush. The first attack is swift, soundless, as the things lunges past
-you. It comes to rest low on the trail in front of you, growling low from its
-ichor-filled maw.
+The cold breath of the hollow closes over you as you reach the bottom. The
+dark under the far wall moves. It does not circle, does not test you; it has
+done all of that already, on the roads, in the brush. It rises from a bed of
+fern and old bones and turns its ichor-filled maw toward you. Neither of you
+is going to run this time.
 
 * win
 +give_gold 12
 +add_tag the_lodge.beast_defeated
-The creature crouches to attack again, then, all at once, it collapses with a 
++chain "The Lodge"
+The creature crouches to attack again, then, all at once, it collapses with a
 heavy thud. Whatever force animated this monster is gone, and all that remains
 is its ragged corpse.
 

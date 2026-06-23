@@ -6,21 +6,22 @@ FIXME: You skip to the middle. The script is looser here, more forceful. Tiny in
 
 choices:
 
-* Read how he got the villa = The villa, and the supply beneath it
+* Read about the villa
   FIXME: A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. Solan begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
+  FIXME: The section includes some rough math on the value of the crystals, a plan to order mining equipment, and some ruminations on how to best manage market supply.
   +open "The Middle Pages"
 
-* Read about the girl he hired = The bad nights, and what he decided
-  FIXME: He became convinced that his buyers were involved in something dark, illegal or worse. He thought that he might be in danger, that someone was following him. He hired a servant girl from a nearby village to do his shopping. At first he got on well with the girl.
-  FIXME: A page tears loose when you turn it too fast. You let the loose piece flutter to the ground. Solan eventually becomes convinced that the girl is poisoning him; he feels lethargic, unwell. He's certain she's working with the shadowy cabal that's trying to steal his crystals. The last mention of her is chilling, "It is done. I left her in the kitchen cabinet. Need to come back for her later, when it's safe to go outside."
+* Read about the girl he hired 
+  FIXME: Solan became convinced that his buyers were involved in something dark, illegal or worse. He thought that he might be in danger, that someone was following him. He hired a servant girl from a nearby village to do his shopping. At first he got on well with the girl.
+  FIXME: Solan eventually becomes convinced that the girl is poisoning him; he feels lethargic, unwell. He's certain she's working with a shadowy cabal that's trying to steal his crystals. The last mention of her is chilling, "It is done. I left her in the kitchen cabinet. Need to come back for her later, when it's safe to go outside."
   +add_tag villa.read_girl
   +open "The Middle Pages"
 
-* Read why the trade stopped = When he could no longer part with the crystals
-  FIXME: He writes that he sold a few and then could not continue. Contracts lapsed. Buyers became angry. He stalled and made excuses. He could not bear to give them up. For the first time you see sketches of crystals, rendered with obsessive precision, each line drawn and redrawn.
+* Read why the trade stopped
+  FIXME: Solan sold a few crystals and then could not continue. Contracts lapsed. Buyers became angry. He stalled and made excuses. He could not bear to give them up. For the first time you see sketches of crystals, rendered with obsessive precision, each line drawn and redrawn.
   +open "The Middle Pages"
 
-* Open the kitchen cabinet = Where he wrote that he put her [requires tag villa.read_girl && !tag villa.danger]
+* Open the kitchen cabinet = See what became of the girl [requires tag villa.read_girl && !tag villa.danger]
   FIXME: You go back down the hall. The kitchen was once a grand affair, sized to feed an entire family. Now only a small corner contains a pot and knife. The cabinet door hinges groan when pulled open. The servant girl is folded inside, some weeks dead. She is small, and young. Her fingernails are clean, scrubbed raw. Whatever sickness befell Solan, you can't imagine this poor wretch had anything to do with it. You turn and walk back to the study. If there are any answers for why this happened, they're in the journal unread.
   +add_tag villa.danger
   +open "The Middle Pages"

@@ -2,12 +2,19 @@ The Lamp
 [trigger none]
 [vignette dungeons/foundry]
 
-FIXME(mundane): Just inside, in the first dark, the man searches a supply closet and hands the PC a carbide lamp. "You'll want this. I won't." He gives his name then, Suhail, as though it had only just occurred to him they had not been introduced.
-FIXME(mundane): The PC asks whether he is someone important. He allows that he is, or was. He was brothers with most of the men who run the Kesharat now; rode with them, got into the kind of trouble young men get into, in the good years when they were all young together. "A long time ago. They chose a different path." He still likes trouble. He just does it alone now.
-FIXME(dread): He is filthy and sun-baked, dust in every seam of him, and not a day past his mid-thirties under all of it. The arithmetic of "a long time ago" does not sit right against the face saying it, and he offers nothing to fix the discrepancy.
-FIXME(dread): He turns, and in the lightless room the Color is the only thing the PC can see of him: his eyes, intense with it, the same purple beyond purple from the scrub now burning behind a living face. Out in the glare it never registered. Here it is unmistakable. He names it before it becomes a question. Kesharat privilege, he calls it, the locals' word for the standing he carries. "Reserved for those the Lattice takes a particular interest in." He moves through the dark at ease. The PC has a circle of lamplight six feet wide.
+FIXME(dread): When he turns toward you, the Color is the only part of him the lamp catches: his eyes, intense with it, the same purple beyond purple from the scrub now burning behind a living face. Out in the glare it never registered. Here it is unmistakable.
 
 choices:
+
+* Ask who he is = Press him on the standing he carries [requires !tag foundry.asked_who]
+    FIXME(mundane): He allows that he is someone, or was. He was brothers with most of the men who run the Kesharat now; rode with them, got into the kind of trouble young men get into, in the good years when they were all young together. "A long time ago. They chose a different path." He still likes trouble. He just does it alone now. Nothing about "a long time ago" fits the young face saying it, and he offers nothing to fix the discrepancy.
+    +add_tag foundry.asked_who
+    +open "The Lamp"
+
+* Ask how he walked past the guards = Your ring failed; he never broke stride [requires !tag foundry.asked_guards]
+    FIXME(dread): Kesharat privilege, he calls it. "I don't take much interest in the Lattice, but the thing takes a keen interest in me. It clears obstables from my way. Like those guards."
+    +add_tag foundry.asked_guards
+    +open "The Lamp"
 
 * Go deeper into the factory = Follow his lamp-less ease into the dark
     FIXME(dread): The corridor gives out onto the open floor of the place, and the lamp finds no walls. The dark speaks from three directions at once.

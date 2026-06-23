@@ -7,15 +7,16 @@ FIXME: The early pages are in Solan's careful hand. You turn through them, scann
 choices:
 
 * Start at the beginning
-  FIXME: The early pages are in Solan's careful hand. He took one of the crystals as payment on a bad debt, annoyed: he had wanted cash, not a curio. He started these notes to work out what the thing was and whether it was worth anything. Geometric, faceted too cleanly to be natural, had never heard of such a thing in his travels.
+  FIXME: Solan took one of the crystals as payment on a bad debt, annoyed: he had wanted cash, not a curio. He started these notes to work out what the thing was and whether it was worth anything. The crystal was geometric, faceted too cleanly to be natural, had never heard of such a thing in his travels.
   +open "The Early Pages"
 
-* Read the months it paid = When the trade took off
+* Skip ahead 
+  FIXME: This section reads more like an itinerary than a diary. Solan sketches plans for taking meetings, writes notes of interesting market rumors.
   FIXME: A buyer in Aldgate paid an absurd sum for the crystal. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting. The names appear in his precise shorthand: Ashcroft, Wren, Swinton.
   +open "The Early Pages"
 
-* Read where his luck turned = The supply drying up, and the books he kept
-  FIXME: Then the sellers went quiet, and the Kesharat Administration began clamping down on sales to foreigners. Solan worked the scrublands bars and back streets, hunting for people desperate enough to deliver. He began to believe he was being followed. The ink trembles slightly when he writes about the feeling of eyes on him in the market. The names of sellers who went quiet appear in his precise shorthand: Varick, Hassan, Yelena.
+* Skip past the early notes
+  FIXME: Then the sellers went quiet, and the Kesharat Administration began clamping down on sales to foreigners. Solan worked the scrublands bars and back streets, hunting for people desperate enough to deliver. He began to believe he was being followed. The ink trembles slightly when he writes about the feeling of eyes on him in the market. He lists some of his sellers, Varick an official with a drug problem, Hassan a sketchy fixer, and Yelena a clanswoman with debts.
   FIXME: More than once in these entries he frets over his books. He kept a careful, separate record of every crystal sale, in a coded shorthand. You're unfamiliar with the cypher, but the structure is simple. You think you could likely get the gist of the coded ledgers.
   +add_tag villa.read_turn
   +open "The Early Pages"

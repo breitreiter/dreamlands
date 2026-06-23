@@ -494,6 +494,12 @@ A load-bearing principle, not a nicety:
   There is no "finish bibles → gate → decompose" order; it's one iterative co-authoring loop,
   the cockpit surfacing each generated/edited artifact beside its justification (§6a). *(This
   softens the §3 Stage-0 `0c` → Stage-1 boundary — in practice they are one loop.)*
+  **But the loop is directional: the cheap `.md` substrate leads, the `.enc` follows.** `.enc`
+  content, once baked, is hard to claw back out (structure and the downstream pipeline come to
+  depend on it), so the author starts light in markdown and expands into `.enc` — co-evolving,
+  but never *originating* a substantive structural/dramatic decision directly in `.enc` that has
+  no home in the substrate. After both exist, the author owns keeping them in sync. (User
+  steer, 2026-06-07; encoded in the arc-decompose skill §Inputs.)
 - **The one hard gate — structure frozen.** The load-bearing sign-off (§3 Stage 1): complete,
   playable, dramatically satisfying, bland; slang scrubbed; walk/sim/viz clean. The cockpit
   **refuses prose work until the author signs off here.** That single enforced gate is what

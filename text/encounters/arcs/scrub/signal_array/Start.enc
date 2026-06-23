@@ -2,14 +2,14 @@ The Pylon Crew
 [trigger none]
 [vignette dungeons/signal_array]
 
-FIXME(mundane): PC comes upon a half-built Kesharat tower on the mesa road. Locals call them signal arrays; nobody outside the Administration is clear on what they signal to. Four workers in Kesharat infrastructure uniform are around the metal housing at the base.
-FIXME(mundane): The foreman waves the PC wide of the cable run and does not stop the work. The crew works around the PC without introductions. None of them looks up except the fourth worker, who glances at the PC and looks away.
-FIXME(dread): During the wait the PC clocks the seams the uniform cannot cover. Baret's Reshîd clan band is visible at his rolled cuff. Richard's grassland sunburn shows above his unbuttoned collar. Chorik is buttoned to the throat and stands too still.
-FIXME(mundane): The bell on the foreman's belt rings. The crew breaks for rest and turns warm. The foreman smiles and welcomes the PC. The other three fall in around the rest circle. The fourth worker drifts in after the others, slower, and sits where they make room for him.
+FIXME(mundane): You come upon a half-built steel Kesharat tower on the mesa road. Locals call them signal arrays; nobody outside the Administration is clear on what they signal to. Four workers in Kesharat work crew uniforms are around the metal housing at the base.
+FIXME(mundane): The foreman waves you wide of the cable run and does not stop the work. The crew works around you without introductions. None of them looks up except the fourth worker, who glances at you and looks away.
+FIXME: You marvel at the tall, shining metal tower. it's like nothing you've seen in your travels. you understand the kesharat are able to transmit their voices long distances through the air. perhaps this thing aids in that process somehow?
+FIXME(mundane): The bell on the foreman's belt rings. The crew breaks for rest and their demeanor turns warm. The foreman calls out and invites you to sit with them. The other three fall in around a rough circle of stones. The fourth worker drifts in after the others, slower, and sits where they make room for him.
 choices:
 
 * Sit with the crew = Take the tea they are offering
-    FIXME(mundane): The PC sits with the crew at the rest circle. The foreman pours tea and introduces the crew: Veran, Baret, Richard, Chorik.
+    FIXME(mundane): You sit with the crew at the rest circle. The foreman pours tea and introduces the crew: Veran, Baret, Richard, Chorik.
     +open "The Rest Interval"
 
 * Walk on = Keep your road and put the crew behind you

@@ -112,7 +112,7 @@ public sealed class ItemDef
         ["the_old_tooth"] = new()
         {
             Id = "the_old_tooth", Name = "The Old Tooth", Type = ItemType.Weapon,
-            Description = "A dagger so old the steel has gone gray. It has no plain attack — only the riposte and the provoke, for those who know how to use fear.",
+            Description = "A tooth the length of a knife blade, gray as riverbed stone, set into a worn wooden handle. It has no plain attack — only the riposte and the provoke, for those who know how to use fear.",
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
             RpsMoves = [new("Riposte Attack", "Riposte"), new("Heavy Power Provoking Attack", "Provoke ✦")],

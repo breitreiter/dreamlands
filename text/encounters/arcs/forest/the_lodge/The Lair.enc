@@ -2,21 +2,22 @@ The Lair
 [trigger none]
 [vignette dungeons/the_lodge]
 
-The trail opens onto the lip of a long fold in the ground — not a sinkhole, more a depression where the land drops twenty feet into a wet hollow choked with fern and the bones of old falls. The air coming out of it is colder than the air on the rim, and rank.
+The trail opens onto the lip of a long fold in the ground. Not a sinkhole, more a depression where the land drops twenty feet into a wet hollow choked with fern and the bones of old falls. The air coming out of it is colder than the air on the rim, and rank.
 
-REPLACE WITH FIGHT
+The trail goes down into it. Something shifts in the dark at the bottom, low and patient, and goes still again.
 
 choices:
 
-* Continue north = Follow the smoke
-    +open "The Lodge"
+* Descend into the hollow = Climb down after it
+    You pick your way down the slope, hand over root and stone, into the cold breath of the place. The fern closes over the rim behind you.
+    +combat the_beast_cornered
 
-* Sit with what this means = [requires meets cunning trained]
-    A guide who does not wish to be seen. A trail that tests. A destination at the end of it. Whatever is waiting at that smoke, it expected you to come this far.
+* Read the ground before you go down = What the trail has been telling you [requires meets cunning trained]
+    It has never tried hard to lose you. You think back along the line of it: ambushes on the road that ended with it slipping away unfinished, a mauled man dropped across your path, a trail always just plain enough to follow. Whatever dens in this hollow has been drawing you toward it since the first time you traded blood. It wanted you here, and it wanted you to come down on your own feet.
 
-    You continue north.
-    +open "The Lodge"
+    You go down anyway.
+    +combat the_beast_cornered
 
 * Turn back = You have seen enough
-    You have not been harmed. You are free to leave. You descend the ridge and walk south until the deep forest thins and the tier-two paths return.
+    Whatever score stands between you and the thing below, nothing forces you to settle it on its own ground. You climb back from the lip and walk south until the deep forest thins and the tier-two paths return.
     +flee_dungeon

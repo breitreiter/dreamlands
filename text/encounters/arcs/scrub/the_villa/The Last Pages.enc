@@ -2,12 +2,12 @@ The Last Pages
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME: You turn the last leaves of the journal. The pages are warped, water-damaged at the edges, and the writing changes as you go. The hand that was tight and precise grows looser, then warms, then tightens again in a way that stops looking like handwriting.
+FIXME: You turn the last leaves of the journal. The pages are warped, water-damaged at the edges, and the writing changes as you go. The hand that was tight and precise grows looser, more frenetic.
 
 choices:
 
 * Read the last entries he wrote 
-  FIXME: The last written pages are barely written, his hand shrunk in places to something too fine to read. He has stopped going into town. "I stay below now. The cave gives me what I need. I am not hungry anymore, nor sick. I am at peace."
+  FIXME: The last written pages are barely written, his hand shrunk in places to something too fine to read. He has stopped going into town. "I stay below now. The cave gives me what I need. I am not hungry anymore. I am at peace."
   +add_tag villa.read_lastwords
   +open "The Last Pages"
 

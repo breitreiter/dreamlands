@@ -296,12 +296,33 @@ Write one `.enc` per file in the file list. For each:
    common failure is the transit ending with "you step inside"
    and the body opening with "you step inside" again.
 
-3. **Arrival/welcome belongs in the incoming transit, not the
-   hub body.** The hub body is re-rendered on every spoke return.
-   Anything that should only happen once — a door slamming, an
-   NPC standing up to greet the PC, the smell of tea hitting them
-   for the first time — goes in the transit, not the body. The
-   body is static ambient texture true on every visit.
+3. **A hub body re-renders on every loop — keep it to static
+   ambient; one-time prose goes in the incoming transit.** Any
+   encounter that is the `+open` target of its own choices is a
+   hub, and its body is re-shown *in full* every time a choice
+   loops back to it. This includes **small conversational hubs**
+   — a scene whose spokes (`Ask X`, `Ask Y`) each `+open` back to
+   the same file so the player can work through them — not just
+   the big mid-arc routing hubs. The body must be two or three
+   sentences of ambient texture that stay true on every visit:
+   no introductions, no name/face establishment, no inciting
+   beat, no exposition. Everything that should land **once** — a
+   lamp handed over, an NPC's name and face, a door slamming, the
+   smell of tea — goes in the **incoming transit** (the outcome
+   of the choice that first opens the hub) or in a first-visit-
+   gated spoke, never the body.
+
+   **Test, before writing any encounter body: does a choice in
+   this file `+open` back to this same file?** If yes, you are
+   writing a hub body — move all once-only prose out of it. The
+   failure this prevents (seen on `foundry/The Lamp`): a
+   self-looping conversational hub carried three paragraphs of
+   intro — the lamp handoff, the man's appearance, the Color in
+   his eyes — in its body, so the player re-read the whole
+   introduction every time a question spoke looped back. The fix:
+   the handoff and appearance moved up into the *incoming*
+   transit (the prior scene's "follow him in" outcome), leaving
+   the hub body a single ambient line.
 
 4. **Character tension surfaces through observed reactions in
    spokes, not as body fixtures.** If two NPCs are in a long-
@@ -632,6 +653,10 @@ Produce a short walk-through in chat:
 - **Endings**: list every reachable `+finish_dungeon` and
   `+flee_dungeon` and the play sequence that triggers it. Confirm
   this matches the endings the brief promised.
+- **Self-loop hub bodies**: list every encounter that has a choice
+  `+open`-ing back to itself. Each one is a hub — open its file and
+  confirm the body is ambient-only (no intro, name/face, or one-time
+  beat that would re-fire on every loop). See continuity rule 3.
 
 ### Step 7 — Hand off.
 

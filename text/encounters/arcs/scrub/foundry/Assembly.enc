@@ -3,38 +3,17 @@ Assembly
 [vignette dungeons/foundry]
 
 FIXME(horror): Workers stand at a bench inside the lamp's circle, hands moving on the same small clockwork assembly, unhurried and exact. Beyond the circle, only sound: shuffle and click in every direction, more hands than the dark will give up.
-FIXME(horror): They wear the same drab uniform, the same cropped haircut, men and women alike, every age from the very young to the very old. When one tilts toward the light it has Suhail's eyes: the Color banked and burning, in face after face.
-FIXME(horror): The PC speaks to one of them. Nothing answers. Out of the black, Suhail's voice, delighted: "SHE CAN'T HEAR YOU." The words go out and keep going, echo on echo, and the size of the place lands, vast and full of unseen work.
-FIXME(dread): Suhail knocks a worker's piece to the floor and tips its bin of pins across the ground. The husk stumbles after the scattered work, mechanical and untroubled, and gathers it back. "Nothing minds. They only tidy." He makes the same case in every space, never louder: they are hollow, whatever lived in them is gone, this is tidying and not suffering.
+FIXME(horror): They wear the same drab uniform, the same cropped haircut, men and women alike, every age from the very young to the very old. When one of them tilts toward the light, the eyes that catch it are Suhail's: the Color tinged and burning, the same purple beyond purple, in face after face.
+FIXME(horror): You speak to the woman nearest you. Nothing answers. Out of the black, Suhail's voice, delighted: "SHE CAN'T HEAR YOU." The words echo in the space; the room must be enourmous, vast and full of unseen work.
+FIXME(dread): Suhail knocks her bin of pins across the ground. She stumbles after the scattered parts, untroubled, and slowly starts gathering the individual pins back up. "Nothing minds. They only tidy." 
 
 choices:
 
-* Set the husk's work right = Sort the pins back, steady its hands [requires !tag foundry.assembly_acted]
-    FIXME(mundane): The PC gathers the scattered pins and sets the work straight. It costs nothing. The husk resumes as though nothing had happened. Suhail watches the PC's face, not the work.
+* Set her work right = Sort the pins back, steady her hands
+    FIXME(mundane): You gather the scattered pins and set the work straight. It costs nothing. She resumes as though nothing had happened. Suhail watches your face, not the work.
     +quality foundry.challenge 1
-    +add_tag foundry.assembly_acted
-    +open "Assembly"
+    +open "The Factory Floor"
 
-* Keep your hands at your sides = Let the husk gather its own work [requires !tag foundry.assembly_acted]
-    FIXME(dread): The PC does nothing. The husk gathers the pins itself, untroubled, and bends back to the bench. Suhail nods, as though a point had been made.
-    +add_tag foundry.assembly_acted
-    +open "Assembly"
-
-* Follow the shriek to the cutting machine = Toward the worst of the noise [requires !tag foundry.cutter_seen]
-    FIXME(action): The PC leaves the benches and crosses toward the shriek.
-    +add_tag foundry.cutter_seen
-    +open "The Cutting Machine"
-
-* Follow the slam to the presses = Toward the deep slow beat [requires !tag foundry.press_seen]
-    FIXME(dread): The PC leaves the benches and crosses toward the slam.
-    +add_tag foundry.press_seen
-    +open "The Press"
-
-* Head for the door at the back = Try to go deeper into the factory
-    @if tag foundry.assembly_seen && tag foundry.cutter_seen && tag foundry.press_seen && tag foundry.blade_taken {
-        FIXME(dread): Suhail nods and leads the PC off the floor, toward the door at the back.
-        +open "Control Room"
-    } @else {
-        FIXME(mundane): Suhail shakes his head. There is more on the floor to see first.
-        +open "Assembly"
-    }
+* Leave her to it = Let her gather her own work
+    FIXME(dread): You do nothing. She toils away on the ground and fades into darkness as the lantern's light leaves. You think you see Suhail grin briefly, but you can't be sure.
+    +open "The Factory Floor"

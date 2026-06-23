@@ -7,7 +7,7 @@ FIXME(mundane): Veran is across from you at the rest circle, finishing his tea. 
 choices:
 
 * Press him on the geometry = Ask him to walk you through the route again [requires !tag signal_array.pressed_veran]
-    FIXME(dread): You ask him to walk you through it again. He has a second explanation ready. It does not close either. He seems mildly puzzled that you are asking, but not concerned, and not defensive. He returns to the route description with the same confidence as before.
+    FIXME(dread): You ask him to walk it again. The days come out different this time. He says they laid over two nights at the salt flat waiting out a wind, which makes it five. It is a good answer, delivered exactly as confidently as the first, and it is not the answer he gave a moment ago. Five days still does not cover the south slope. He seems mildly puzzled you are still on it, not concerned and not defensive, and goes back to being proud of the crew.
     +add_tag signal_array.pressed_veran
     +open "Veran"
 

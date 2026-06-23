@@ -2,31 +2,36 @@ The Factory Floor
 [trigger none]
 [vignette dungeons/foundry]
 
-FIXME(dread): The lamp gives back six feet of a dark that has no edges. The floor of the place is open and black, and it speaks in three directions: the shuffle and click of assembly benches one way, the deep slow slam of presses another, a shriek and grind of metal on metal a third.
-FIXME(mundane): Suhail lets the PC choose. There is no order to it; each sound waits its turn. Only when all three have been seen will he turn the PC toward the door at the back.
+FIXME(dread): The lamp gives back six feet of a dark that has no edges. The floor is open and black, and it speaks from three directions: the shuffle and click of assembly benches one way, the deep slow slam of presses another, a shriek and grind of metal on metal a third.
+FIXME(mundane): Suhail says there is something he means to do at the back of the place, when you are ready for it. Until then he is content to let you look. There is no order to it; each sound waits its turn.
 
 choices:
 
-* Follow the clicking to the benches = Toward the assembly work [requires !tag foundry.assembly_seen]
-    FIXME(mundane): The PC crosses the dark toward the clicking. The benches resolve out of it, hands moving.
-    +add_tag foundry.assembly_seen
-    +open "Assembly"
+* Follow the clicking to the benches = Toward the assembly work
+    @if !tag foundry.assembly_seen {
+        FIXME(mundane): You cross the dark toward the clicking. The benches resolve out of it, hands moving.
+        +add_tag foundry.assembly_seen
+        +quality foundry.areas_seen 1
+        +open "Assembly"
+    } @else {
+        FIXME(mundane): You have already been among the benches. The clicking goes on, unchanged.
+        +open "The Factory Floor"
+    }
 
 * Follow the shriek to the cutting machine = Toward the worst of the noise [requires !tag foundry.cutter_seen]
-    FIXME(action): The PC crosses toward the shriek. It builds until it crowds out everything else.
+    FIXME(action): You cross toward the shriek. It builds until it crowds out everything else.
     +add_tag foundry.cutter_seen
+    +quality foundry.areas_seen 1
     +open "The Cutting Machine"
 
 * Follow the slam to the presses = Toward the deep slow beat [requires !tag foundry.press_seen]
-    FIXME(dread): The PC crosses toward the slam, felt in the boots before it is heard.
+    FIXME(dread): You cross toward the slam, felt in the boots before it is heard.
     +add_tag foundry.press_seen
+    +quality foundry.areas_seen 1
     +open "The Press"
 
-* Head for the door at the back = Try to go deeper into the factory
-    @if tag foundry.assembly_seen && tag foundry.cutter_seen && tag foundry.press_seen && tag foundry.blade_taken {
-        FIXME(dread): Suhail nods and leads the PC off the floor, toward the door at the back and the room behind it.
-        +open "Control Room"
-    } @else {
-        FIXME(mundane): Suhail shakes his head. There is more on the floor to see first.
-        +open "The Factory Floor"
-    }
+* Tell Suhail you are ready [requires quality foundry.areas_seen 2]
+    FIXME(dread): You tell him you are ready. He leads you off the floor, toward the door at the back and the room behind it.
+    FIXME(dread): The control room is a wall of panels, most of them dark, a few lit with the Color. Suhail knows which ones. He works through a cabinet without hurry, the same practiced hands that opened the cutting head, throwing governors and hauling levers past their stops, taking the brakes off the place one system at a time: the furnaces that feed the stacks, the presses, every safeguard built to hold the plant short of tearing itself apart.
+    FIXME(dread): One control he leaves. He rests a hand on it and tells you plainly what it does. Thrown, the plant runs away with itself, heat and pressure climbing with nothing left to bleed them off. It is not quick. It builds. There is the time it takes to walk out at a steady pace and no more than that; go now and they go safe. The place comes down after, on its own. "A small thing," he says. "Noise and broken glass. No one left inside but the workers, and they are already gone."
+    +open "Control Room"
