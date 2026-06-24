@@ -10,6 +10,7 @@ return args[0] switch
     "color" => await ColorCommand.RunAsync(args[1..]),
     "synthesis" => await SynthesisCommand.RunAsync(args[1..]),
     "weave" => await WeaveCommand.RunAsync(args[1..]),
+    "review" => ReviewCommand.Run(args[1..]),
     "thread" => ThreadCommand.Run(args[1..]),
     "-h" or "--help" or "help" => Usage(),
     var cmd => Unknown(cmd),
@@ -34,6 +35,8 @@ static int Usage()
             [--model ID] [--limit N] [--beats id,id] [--dry-run] [--no-lens] [--force] [--config <path>]
           weave <arc-dir>                     threaded story-so-far synthesis along one path (PAID)
             [--thread name] [--model ID] [--dry-run] [--force] [--config <path>]
+          review <dir|file.enc.json>          pre-weave gate: stub+tone+color -> markdown (free, local)
+            [--thread name] [--out <dir>]       --thread renders one path in reading order
           thread <arc-dir> [--thread name]    debug: print a thread's beat spine
 
         Path args may be files or directories (dirs expand to their *.enc / *.enc.json).
