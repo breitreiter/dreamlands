@@ -12,6 +12,7 @@ into your Claude config by symlink (or copy).
 |---|---|
 | `arc-sketch` | Author or revise an arc's Stage-0 narrative sketch — premise, Canon (NPC interiority, motivations, themes, surface-vs-reserved facts), and scene-by-scene in PC point-of-view. The substrate that LEADS, before decompose. Stage 0 of the arc-writer pipeline. |
 | `arc-decompose` | Turn an arc brief (markdown sketch — premise, characters, beats, endings) into a structurally sound set of `.enc` files with FIXME-stub prose. Stage 1 of the arc-writer pipeline (see `plans/arc_writer.md`). |
+| `forge-run` | Run one substrate-complete arc's skeleton `.enc` through the Forge prose pipeline (parse → categorize → color → weave → integrate → promote). Centerpiece: the human-judgment PRE-KIMI color-review gate — hand-critique the gemma color bank for referent/identity/medium/invented-entity misreads before the paid weave. Companion to `plans/scrub_arc_processing.md`. |
 
 > **Retired:** `arc-colorize` was the Stage-2 texture-generation skill for the
 > EncounterCli colorize/factual/voice pipeline. That pipeline is superseded by
