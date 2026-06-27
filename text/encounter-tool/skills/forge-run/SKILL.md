@@ -52,6 +52,13 @@ Run from repo root. `A="text/encounters/arcs/<biome>/<arc>"`. `forge` =
    `.md` to `out/compare/`. Crash-safe/resumable (re-run reuses good cells,
    retries empties). Uncovered beats fall back to isolated `synthesis` (lower
    quality — flag them).
+   **Gotcha (load-bearing): weave reuses any existing non-empty
+   `synthesis_sofar` cell.** So if you **edit a beat's color *after* it was
+   already woven**, a plain re-weave will `[reuse]` the stale cell and your fix
+   will NOT propagate. After a late color edit, re-weave the affected beats with
+   `--force` (or delete their `synthesis_sofar[<model>]` cell first). A render
+   showing all `[reuse]` and no generation means nothing new was produced — if
+   you expected your edits to land, that's the smell.
 7. **Curate** (manual JSON for now). Read the woven prose; cull + **repair**
    weak beats (`feedback_curation_is_repair` — it's an edit surface, not a
    checkbox). For each kept beat, hand-edit its sidecar: set `final` to the
