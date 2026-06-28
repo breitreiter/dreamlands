@@ -50,8 +50,15 @@ Run from repo root. `A="text/encounters/arcs/<biome>/<arc>"`. `forge` =
 6. **Weave** (PAID Cloudflare/kimi). Only on vetted color.
    `forge weave "$A" --thread <name>` per thread; renders a continuous-read
    `.md` to `out/compare/`. Crash-safe/resumable (re-run reuses good cells,
-   retries empties). Uncovered beats fall back to isolated `synthesis` (lower
-   quality — flag them).
+   retries empties).
+   **Every beat MUST be on a thread — ALWAYS story-so-far, NEVER isolated
+   synthesis.** Weaving with the prior finished prose fed forward is the dominant
+   quality lever; isolated per-beat `synthesis` produces bad prose and is not used
+   for production. So threads must form a **complete covering set**: after weaving,
+   run the coverage diff (below) and if any beat is uncovered, **author more
+   threads** (alternate endings, decline off-ramps, every hub sub-branch) and weave
+   them — do not fall back to synthesis. The `synthesis` CLI is for smoke/dry-checks
+   only.
    **Gotcha (load-bearing): weave reuses any existing non-empty
    `synthesis_sofar` cell.** So if you **edit a beat's color *after* it was
    already woven**, a plain re-weave will `[reuse]` the stale cell and your fix
@@ -188,8 +195,32 @@ woven prose replaces the line anyway for approved beats), or fix-then-reparse +
 re-color just that one beat. Note it at the gate; don't let it silently ride
 into the promoted `.enc` on an *un*approved (FIXME-retained) beat.
 
+## Thread coverage (must hit 100%)
+
+After weaving every thread, diff covered beats (those with a `synthesis_sofar`
+cell) against all beats:
+
+```
+python3 - <<'PY'
+import json,glob,sys
+arc=sys.argv[1] if len(sys.argv)>1 else "."
+unc=[(f,b["line"],b.get("choice")) for f in glob.glob(arc+"/*.enc.json")
+     for b in json.load(open(f))["beats"] if "synthesis_sofar" not in b["stages"]]
+print(f"uncovered: {len(unc)}"); [print("  ",f,l,repr(c)) for f,l,c in unc]
+PY
+```
+
+Any uncovered beat means a thread is missing. Author a thread that walks through
+that choice (use `forge thread "$A" --thread <name>` to dry-check the spine and
+confirm the walk is legal — an illegal plan throws), add it, weave it. Repeat
+until uncovered == 0. Threads are a covering set, not a sampling.
+
 ## Hard rules (carry these)
 
+- **Always story-so-far; never isolated synthesis.** Every beat is woven on a
+  thread with the prior finished prose fed forward — that's the dominant quality
+  lever. Threads must cover 100% of beats. Isolated `synthesis` prose is bad and
+  is not shipped.
 - **The gate is pre-kimi.** Never weave un-reviewed color. The whole point is to
   not pay to assemble slop and then repair-and-re-run.
 - **Flag referent swaps only.** Don't sand off the alien texture — that texture
