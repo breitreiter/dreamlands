@@ -27,11 +27,11 @@ static int Usage()
             [--out <dir>]                     output root (default: ./out)
 
         Stages:
-          categorize <file.enc.json> [...]    tag each beat with one of six tones (GLM on imp)
+          categorize <file.enc.json> [...]    tag each beat with one of six tones (GLM via router)
             [--force] [--dry-run] [--config <path>]
           color <file.enc.json> [...]         enrich each beat into a color bank (imp loom; free, SLOW)
             [--force] [--limit N] [--dry-run] [--provider imp|glm-hi-temp] [--config <path>]
-          synthesis <file.enc.json> [...]     beat + color -> finished prose (PAID gateway)
+          synthesis <file.enc.json> [...]     beat + color -> finished prose (PAID, via router)
             [--model ID] [--limit N] [--beats id,id] [--dry-run] [--no-lens] [--force] [--config <path>]
           weave <arc-dir>                     threaded story-so-far synthesis along one path (PAID)
             [--thread name] [--model ID] [--dry-run] [--force] [--config <path>]

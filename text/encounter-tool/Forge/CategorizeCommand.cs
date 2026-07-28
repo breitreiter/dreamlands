@@ -56,7 +56,9 @@ public static partial class CategorizeCommand
             return 2;
         }
 
-        var glm = new GlmClient(ForgeConfig.Load(configPath).Glm);
+        var cfg = ForgeConfig.Load(configPath).Router;
+        var router = dry ? null : new RouterClient(cfg);
+        var model = dry ? cfg.CategorizeModel : await router!.ModelIdAsync(cfg.CategorizeUpstream, cfg.CategorizeModel);
 
         foreach (var pp in paths)
         {
@@ -73,7 +75,7 @@ public static partial class CategorizeCommand
                     continue;
                 }
 
-                var tone = await ClassifyAsync(glm, b);
+                var tone = await ClassifyAsync(router!, cfg.CategorizeUpstream, model, b);
                 if (tone is null)
                 {
                     tone = "mundane";
@@ -99,9 +101,9 @@ public static partial class CategorizeCommand
         return $"{ctx}Beat: {b.Original}";
     }
 
-    private static async Task<string?> ClassifyAsync(GlmClient glm, PeerBeat b)
+    private static async Task<string?> ClassifyAsync(RouterClient router, string upstream, string model, PeerBeat b)
     {
-        var raw = GlmClient.StripThink(await glm.ChatAsync(
+        var raw = RouterClient.StripThink(await router.ChatAsync(upstream, model,
             [new ChatMessage("system", SystemPrompt), new ChatMessage("user", UserPrompt(b))],
             temperature: 0.3, maxTokens: 1500));
         return ExtractTone(raw);

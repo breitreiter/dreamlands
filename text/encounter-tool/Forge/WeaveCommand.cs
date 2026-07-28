@@ -43,13 +43,13 @@ public static class WeaveCommand
         }
 
         var cfg = ForgeConfig.Load(configPath);
-        model ??= cfg.Gateway.IntegratorModel;
+        model ??= cfg.Router.IntegratorModel;
 
         var (order, tags) = Thread.Walk(arcDir, plan);
         var tagRepr = "[" + string.Join(", ", tags.OrderBy(t => t, StringComparer.Ordinal).Select(t => $"'{t}'")) + "]";
         Console.WriteLine($"thread '{threadName}': {order.Count} beat(s); final tags = {tagRepr}; model = {model}");
 
-        var gw = dry ? null : new GatewayClient(cfg.Gateway);
+        var router = dry ? null : new RouterClient(cfg.Router);
         var docCache = new Dictionary<string, (string Path, PeerDocument Doc)>(StringComparer.Ordinal);
 
         (string Path, PeerDocument Doc) DocFor(string source)
@@ -108,7 +108,7 @@ public static class WeaveCommand
             string text;
             try
             {
-                text = await gw!.CompleteAsync(model,
+                text = await router!.CompleteAsync(cfg.Router.SynthesisUpstream, model,
                     [new ChatMessage("system", SynthesisCommand.SystemPrompt),
                      new ChatMessage("user", SynthesisCommand.BuildUser(b, color, null, story))]);
             }

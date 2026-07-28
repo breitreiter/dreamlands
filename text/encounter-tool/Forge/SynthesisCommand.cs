@@ -118,9 +118,9 @@ public static class SynthesisCommand
         }
 
         var cfg = ForgeConfig.Load(configPath);
-        model ??= cfg.Gateway.IntegratorModel;
-        // dry-run assembles prompts only — no creds needed, no gateway constructed.
-        var gw = dry ? null : new GatewayClient(cfg.Gateway);
+        model ??= cfg.Router.IntegratorModel;
+        // dry-run assembles prompts only — no token needed, no router constructed.
+        var router = dry ? null : new RouterClient(cfg.Router);
 
         var done = 0;
         try
@@ -156,7 +156,7 @@ public static class SynthesisCommand
                         string text;
                         try
                         {
-                            text = GlmClient.StripThink(await gw!.ChatAsync(model,
+                            text = RouterClient.StripThink(await router!.ChatAsync(cfg.Router.SynthesisUpstream, model,
                                 [new ChatMessage("system", SystemPrompt), new ChatMessage("user", user)]));
                         }
                         catch (QuotaExhaustedException) { throw; }
@@ -179,7 +179,7 @@ public static class SynthesisCommand
         }
         catch (QuotaExhaustedException e)
         {
-            Console.Error.WriteLine($"\n! Cloudflare daily free neuron cap exhausted — stopping.\n  {e.Message}");
+            Console.Error.WriteLine($"\n! router daily cap exhausted — stopping.\n  {e.Message}");
             return 3; // agreed "stop the whole comparison" signal
         }
 
