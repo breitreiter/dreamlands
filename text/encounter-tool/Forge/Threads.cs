@@ -36,5 +36,44 @@ public static class Threads
             "Set the journal down and decide",
             "Take the journal and keep it for yourself",
         ],
+        // The off-ramp: decline the job at the gate and leave (-> flee_dungeon).
+        // Covers Start's "Leave the dead their business" beat.
+        ["decline"] =
+        [
+            "Tell the page you cannot help",
+        ],
+        // The hand-it-over-unread ending: enter, set the journal down without
+        // deep reading, give it to Vastand wordlessly. Covers The Decision's
+        // "Let him make of it what he will" beats (no gate on this ending).
+        ["giveover"] =
+        [
+            "Slip in through the servants' gate",
+            "Set the journal down and decide",
+            "Carry the journal out and hand it over without a word",
+        ],
+        // The arson ending, run as a grand tour: read EVERY journal sub-branch
+        // (so the otherwise-uncovered reading beats get woven prose) while
+        // collecting villa.economic_value (read_turn -> ledgers) and villa.danger
+        // (read_girl -> cabinet), then burn it all. Covers Early "Start at the
+        // beginning"/"Skip ahead", Middle "Read about the villa"/"Read why the
+        // trade stopped", and The Decision's "No one must know" beats (22/24/28 —
+        // both the bluff and hide @if branches, since the walker keys on the
+        // choice, not the branch; the hide beat's story-so-far is mildly
+        // contaminated by the bluff beat — repair at curation).
+        ["arson"] =
+        [
+            "Slip in through the servants' gate",
+            "Start at the beginning",
+            "Skip ahead",
+            "Skip past the early notes",
+            "Review the coded ledgers",
+            "Read on into the worse of it",
+            "Read about the villa",
+            "Read why the trade stopped",
+            "Read about the girl he hired",
+            "Open the kitchen cabinet",
+            "Set the journal down and decide",
+            "Burn the journal and the ledgers in the brazier",
+        ],
     };
 }
