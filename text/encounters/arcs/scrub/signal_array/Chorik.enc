@@ -20,6 +20,6 @@ choices:
     }
 
 * Let him be = Sit quietly without pressing
-    FIXME(mundane): You return your attention to the other workers. None comment on Chorik's departure or his eventualy return.
+    FIXME(mundane): You return your attention to the other workers. None comment on Chorik's departure or his eventual return.
     +add_tag signal_array.met_chorik
     +open "The Rest Interval"
