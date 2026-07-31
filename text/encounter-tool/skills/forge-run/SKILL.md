@@ -82,6 +82,52 @@ Run from repo root. `A="text/encounters/arcs/<biome>/<arc>"`. `forge` =
     (`feedback_no_unprompted_push`). Rollback is trivial — the branch isolates
     everything; sidecars/`out/` are gitignored.
 
+## Where the state lives (check this FIRST on resume)
+
+**Sidecars are written next to the arc path you pass, and `out/` is written
+relative to your cwd.** Neither is a fixed location. So an arc's real state can sit
+**outside this repo entirely** — whether from Tier-2 isolation or just from having
+been run under a different tool in a different directory — while a stale in-repo
+copy sits right where you'd naturally look.
+
+This already bit `the_villa`: live state is `~/repos/narr/forge/arcs/the_villa/`
+(39/39 woven + curated), while `text/encounters/arcs/scrub/the_villa/*.enc.json`
+still holds a stale 33/39 snapshot, and the integrated `out/` landed under
+`text/encounter-tool/` because that was the cwd — with an *older* `out/compare/`
+also at repo root. Four plausible-looking locations, one of them current.
+
+In the villa's case the outside-the-repo copy was **not** isolation: that path is
+the original Python forge's own tracked `arcs/` corpus, the codebase this pipeline
+was ported from. Worth knowing because it generalizes the warning rather than
+narrowing it — the reason a copy is elsewhere matters less than the habit of never
+assuming the in-repo one is current.
+
+So **on resume, never trust a sidecar's existence as state.** Date the files and
+count woven beats before believing anything:
+
+```
+find ~ -name "*.enc.json" -path "*<arc>*" -not -path "*/proc/*" -newer <some-ref>
+```
+
+Then verify per-beat rather than by mtime — count beats with a non-empty
+`stages.synthesis_sofar` cell and with `final`+`approved`, per file. Also check
+`source_sha` against the in-repo `.enc`: if it matches, the two copies' *sources*
+agree and integrate's guard will pass, even though their sidecars differ wildly.
+
+**Corollary — the durability problem.** Curated sidecars hold both the paid weave
+output and the human curation judgment, so treat them as an artifact to preserve,
+not a cache. In this repo they are gitignored; outside it they may be tracked but
+left uncommitted, which looks safe and isn't. The villa hit exactly that: 39 curated
+beats sat uncommitted in narr/forge's working tree for a month (fixed 2026-07-27,
+`2ae9d9a`). **So don't check whether the sidecars are under version control — check
+whether the curated state is actually committed.** `git status` in whichever repo
+holds them, once curation is done. Losing that state costs real money *and* real
+judgment work to reconstruct.
+
+When committing sidecars, verify no **source drift** first: every beat's `original`
+should be byte-identical to the previous commit. If an `original` changed, the
+source `.enc` moved under the sidecar and the weave may no longer match its stub.
+
 ## Tone spot-check (step 3)
 
 Render `forge review "$A"` and read each beat's tone against its stub. Tones
