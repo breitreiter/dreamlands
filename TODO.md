@@ -79,6 +79,28 @@ Real things strangers from socials will hit. No public posting until these are d
 
 Not blockers, but cheap enough (or screenshot-prone enough) to just do.
 
+- [ ] **Event-forensics log — emit a replay-grade action log (NOT cheap; here because it
+      must be capturing before launch).** The normative post-launch support case is
+      state-bug complaints — "I got warped across the map", "my sword vanished" — which
+      are undebuggable unless we logged the causal chain *as it happened*. You can't
+      retro-capture week-one complaints, so this ships before go-live.
+      - Add an **`IEventSink`** alongside `IGameStore` (`server/GameServer/GameStore.cs`):
+        `CosmosEventSink` (db `dreamlands`, new container **`events`**, PK `gameId`, with
+        a **TTL** like the `games` one below) + a local/no-op sink for dev. DI-wire in
+        `Program.cs` next to the store.
+      - Emit **one event per action** at the `GameAction` boundary
+        (`GameFunctions.cs`): `{gameId, seq, ts, action, inputs, seed, pre/post player
+        state, outcome}`. Append-only; the `games` container / game state is untouched.
+      - **Replay fidelity:** `PlayerState.Seed` → `GameSession.Rng` is deterministic, but
+        `lib/Game/Choices.cs` gates on `Random.Shared` (non-deterministic) — so a captured
+        seed does NOT fully reproduce a run today. Route gameplay RNG through the seeded
+        `session.Rng` (or record realized rolls in the event). Do this so "replay the
+        warp" actually works.
+      - The **consumer** is ordinator (home o11y box): it tails the Cosmos change feed
+        read-only and reconstructs any game's timeline. Full design + contract mapping:
+        `~/repos/ordinator/project/plans/dreamlands-event-forensics.md`. Nothing to build
+        here for the consumer side — dreamlands' only job is to emit to the `events`
+        container.
 - [ ] Set Cosmos DB TTL on `games` container — 30 days (2592000s) to auto-expire idle saves.
       `az cosmosdb sql container update -a <account> -g <rg> -d dreamlands -n games --ttl 2592000`
       One command — do it during the .NET 10 Azure session.
