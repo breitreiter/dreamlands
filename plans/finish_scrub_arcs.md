@@ -269,6 +269,52 @@ T1  reference doc  ──▶  T2  promote the_villa  ──▶  T3  threads out 
 T1 first because everything else is harder to resume without it. T8 runs during T2's
 read-through, since that is human-time anyway. T3 and T4 must both land before T5.
 
+## Session checkpoint — 2026-08-01
+
+**Everything is committed. Working tree clean. Nothing pushed.**
+
+Seven commits on `combat-pivot`, plus one in `~/repos/narr/forge`:
+
+| Commit | What |
+|---|---|
+| `2ae9d9a` *(narr/forge)* | the villa's curated 39/39 sidecars — the durability fix |
+| `c350fc5` | forge: all LLM calls through minrouter |
+| `af9be44` | forge: the villa's 3 coverage threads |
+| `e4877d8` | scrub arcs: `Midnight.enc` hub continuity + `Chorik.enc` typo |
+| `fdec774` | plans: this plan + supersede the old order |
+| `c0d31f0` | TODO: event-forensics pre-launch item |
+| `584b3e9` | **T1 done** — `project/encounter-spec/authoring_flow.md` |
+
+### T1 is complete
+
+`project/encounter-spec/authoring_flow.md` is the current reference. Three
+dead-pipeline traps were retired in the same pass:
+`plans/arc_authoring_workflow.md` (superseded, banner, salvage carried forward),
+`project/encounter-spec/colorize/README.md` (runtime pointer corrected, content
+kept), and the already-deleted `arc-colorize` skill / `EncounterCli colorize`
+command confirmed gone rather than merely undocumented.
+
+### Resume here — T2, promote `the_villa`
+
+Next action is the **review gate**: render the five FIXME-stub → prose diffs and
+read them. Everything is pre-verified and still true as of this checkpoint:
+
+- `source_sha` matches between narr and repo for all 5 files
+- `0` FIXME across `text/encounter-tool/out/the_villa/*.enc`
+- all 28 scrub files pass `encounter check`
+- 36/39 finals match a kimi cell byte-for-byte; 3 are hand repairs
+
+Then: branch `forge/the_villa`, copy the 5 `.enc` over the canonical ones, `check`
++ `bundle`, clean up the stale in-repo sidecars and both stray `out/` dirs, commit.
+
+**Do not lose:** `~/repos/narr/forge/arcs/the_villa/` is the archive of record for
+the curated sidecars. Now committed, so a reboot is safe.
+
+### Still open before arc #2
+
+T3 (threads → `_threads.json`) and T4 (router smoke test — `GET /help` with bearer,
+confirm the path Forge calls before spending). T8 (K3 A/B) can run any time.
+
 ## Open questions
 
 - **Does the post-weave continuity critic need building?** The cross-file
