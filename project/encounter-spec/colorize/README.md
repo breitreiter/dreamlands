@@ -1,10 +1,19 @@
 # Colorize — method & reference
 
 Preserved from the `colorize` prototyping spike (originally the unversioned
-sibling repo `../colorize`, now folded into the tool). The **method itself runs
-in code**: `EncounterCli colorize` (see `text/encounter-tool/skills/arc-colorize/SKILL.md`).
-These files are the spec, the taste anchor, and an eval set — reference, not
-runtime.
+sibling repo `../colorize`, now folded into the tool). These files are the spec,
+the taste anchor, and an eval set — reference, not runtime.
+
+> **Runtime pointer updated 2026-08-01.** The old runtime named here —
+> `EncounterCli colorize` and the `arc-colorize` skill — **no longer exists**;
+> both were deleted in the June 2026 Forge pivot. The color stage now lives in
+> Forge (`forge color`, the imp loom gemma triplet). See
+> `project/encounter-spec/authoring_flow.md` §4 and `Forge/CLAUDE.md`.
+>
+> **The content below is still current.** `method.md`, `exemplars.md`,
+> `findings.md`, and `eval/` are about color *authoring*, not about the retired
+> command — and their central finding (the per-scene lens is the top quality
+> lever) is load-bearing in Forge today.
 
 - **`method.md`** — the living spec for color-authoring (what color is, the
   discipline, register, the PC's renaissance frame, the lens, open questions).

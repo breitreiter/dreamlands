@@ -1,10 +1,10 @@
 ---
 kind: plan
-title: Arc-authoring workflow — working understanding (alignment checkpoint)
-state: exploring
+title: Arc-authoring workflow — working understanding (SUPERSEDED)
+state: superseded
 created: 2026-06-06
-updated: 2026-06-06
-status: ALIGNED (2026-06-06 session) — §5 flags worked through w/ user; live opens now in §7. Pending: author-centric rewrite (§5.2) + first end-to-end arc run (§5.1)
+updated: 2026-08-01
+status: SUPERSEDED 2026-08-01 by project/encounter-spec/authoring_flow.md. This doc describes the RETIRED EncounterCli colorize/factual/voice/critic pipeline, deleted in the June 2026 Forge pivot — its stage detail (§3) is wrong, not merely stale. Kept for provenance and for the two unresolved design problems in §6, which have been carried forward into §7 of the new doc.
 touches:
   files:
     - text/encounter-tool/EncounterCli/
@@ -16,6 +16,27 @@ touches:
 ---
 
 # Arc-Authoring Workflow — Working Understanding
+
+> # ⚠️ SUPERSEDED — DO NOT FOLLOW THIS DOCUMENT
+>
+> **Current reference: [`project/encounter-spec/authoring_flow.md`](../project/encounter-spec/authoring_flow.md).**
+>
+> Written 2026-06-06, two weeks before the Forge pivot. **Stages 2–5 below
+> (`colorize` / `factual` / `voice` / `critic`) describe code that no longer
+> exists** — it was deleted from EncounterCli and replaced by the Forge pipeline
+> (`parse → categorize → color → review → weave → integrate`). The stage detail in
+> §3 is actively wrong, not merely out of date.
+>
+> **What was salvaged** into §7 of the new doc, still unresolved: §6a observability,
+> §6b the unit-and-representation problem, and the cross-file continuity class.
+> §6b's near-term ask — that `check` warn on tagged `FIXME(...)` stubs and not only
+> bare `FIXME:` — is **done**; `check` warns on both.
+>
+> §7's "disposition of the scrub arcs" is also obsolete: `signal_array` was
+> re-scaffolded from scratch, the orphaned `_X.enc` scratch set is gone, and all four
+> scrub arcs are now tracked in `plans/finish_scrub_arcs.md`.
+>
+> Kept for provenance only.
 
 > **Purpose.** A shared, corrected understanding of the arc-authoring flow as a single
 > workflow, so we don't lose progress across a context clear and have a fixed surface to
