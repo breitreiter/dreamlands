@@ -104,7 +104,11 @@ public sealed class RouterClient
                 throw new QuotaExhaustedException(body.Trim().Length > 0 ? body.Trim()
                     : $"{upstream}: daily cap exhausted");
 
-            if (code is 429 or 500 or 502 or 503 && attempt < retries - 1)
+            // 504 belongs here with the rest of the gateway family: a long kimi
+            // completion behind the router times out at the edge often enough that
+            // dropping the beat on the first one just means re-running (and paying)
+            // later. Observed on the 2026-08-04 smoke test.
+            if (code is 429 or 500 or 502 or 503 or 504 && attempt < retries - 1)
             {
                 var ra = resp.Headers.RetryAfter?.Delta?.TotalSeconds;
                 await Task.Delay(TimeSpan.FromSeconds(ra is not null ? (int)ra.Value : delay));
