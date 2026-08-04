@@ -2,27 +2,29 @@ The Early Pages
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME: The early pages are in Solan's careful hand. You turn through them, scanning for interesting details. The writing is the precise shorthand of a trader, economical and efficient. The worn leather cover of the journal binding feels smooth under your fingers. 
+The early pages are in Solan's careful hand. You turn through them, scanning for interesting details. The writing is the precise shorthand of a trader, economical and efficient, the letters tight angles and small loops. The worn leather cover of the journal binding feels smooth under your fingers.
 
 choices:
 
 * Start at the beginning
-  FIXME: Solan took one of the crystals as payment on a bad debt, annoyed: he had wanted cash, not a curio. He started these notes to work out what the thing was and whether it was worth anything. The crystal was geometric, faceted too cleanly to be natural, had never heard of such a thing in his travels.
+  The early entries say that Solan took a strange crystal as payment on a bad debt. He had wanted blunt coin, not a curio, and his annoyance is plain in the ink. He started these notes to work out what the thing was and whether it was worth anything. The crystal was geometric, faceted too cleanly to be natural, an impossible geometry. He had never heard of such a thing in his travels.
   +open "The Early Pages"
 
 * Skip ahead 
-  FIXME: This section reads more like an itinerary than a diary. Solan sketches plans for taking meetings, writes notes of interesting market rumors.
-  FIXME: A buyer in Aldgate paid an absurd sum for the crystal. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting. The names appear in his precise shorthand: Ashcroft, Wren, Swinton.
+  The pages that follow are ruled and angled, cramped with appointments. Solan sketches plans for taking meetings, each entry rigidly spaced and underscored with a thin, unwavering line. Beneath the times, he writes notes of interesting market rumors: fluctuations in trade, unusual demand, reports concerning shipments. This section reads more like an itinerary than a diary.
+  A buyer in Aldgate paid an absurd sum for the crystal. Word moved quietly, and other discreet buyers wanted one too. For a while his only problems were good ones: short supply, offers he could refuse, dinner invitations from traders and bureaucrats who suddenly found him interesting. The names appear in his precise shorthand: Ashcroft, Wren, Swinton.
   +open "The Early Pages"
 
 * Skip past the early notes
-  FIXME: Then the sellers went quiet, and the Kesharat Administration began clamping down on sales to foreigners. Solan worked the scrublands bars and back streets, hunting for people desperate enough to deliver. He began to believe he was being followed. The ink trembles slightly when he writes about the feeling of eyes on him in the market. He lists some of his sellers, Varick an official with a drug problem, Hassan a sketchy fixer, and Yelena a clanswoman with debts.
-  FIXME: More than once in these entries he frets over his books. He kept a careful, separate record of every crystal sale, in a coded shorthand. You're unfamiliar with the cypher, but the structure is simple. You think you could likely get the gist of the coded ledgers.
+  You turn the page. Solan's sources for the crystals went quiet. The Kesharat Administration began clamping down on sales to foreigners. Solan worked the scrublands bars and back streets, hunting for people desperate enough to deliver. He began to believe he was being followed. The ink trembles slightly when he writes about the feeling of eyes on him in the market. He lists some of his sellers: Varick, an official with a drug problem; Hassan, a sketchy fixer; and Yelena, a clanswoman with debts.
+  More than once in these entries he frets over his books. He kept a careful, separate record of every crystal sale, in a coded shorthand. You're unfamiliar with the cypher, but the structure is simple. You think you could likely get the gist of the coded ledgers.
   +add_tag villa.read_turn
   +open "The Early Pages"
 
 * Review the coded ledgers = Skim the transactions [requires tag villa.read_turn && !tag villa.economic_value]
-  FIXME: The ledgers are well-kept. You scan the columns of goods and prices, routine at first glance. Then you find it: a hidden line item labeled only "formation goods," with receipts from an Aldgate market. The column starts small in the first ledger, grows by the third, and by the fourth book reaches a sum that explains the villa.
+  The ledgers are well-kept. You scan the columns of goods and prices. Routine at first glance.
+
+  You find it: a hidden line item labeled only "formation goods," with receipts from an Aldgate market. The column starts small in the first ledger. It grows by the third. By the fourth book the sum reaches a figure that explains the villa.
   +add_tag villa.economic_value
   +open "The Early Pages"
 

@@ -2,23 +2,23 @@ The Last Pages
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME: You turn the last leaves of the journal. The pages are warped, water-damaged at the edges, and the writing changes as you go. The hand that was tight and precise grows looser, more frenetic.
+You turn the last leaves of the journal. They rustle, and a smell rises like unearthed roots and dissolving ink. The pages are warped, water-damaged at the edges, and the final leaves cling together, swollen and stained a rust color that rubs off on your fingers. The writing changes as you go. The hand that was tight and precise grows looser, more frenetic. The early letters stand like neat soldiers in sharp rows.
 
 choices:
 
 * Read the last entries he wrote 
-  FIXME: The last written pages are barely written, his hand shrunk in places to something too fine to read. He has stopped going into town. "I stay below now. The cave gives me what I need. I am not hungry anymore. I am at peace."
+  The last pages are barely written. His hand has shrunk in places to something too fine to read, attenuated to lines like filigree. He has stopped going into town. "I stay below now. The cave gives me what I need. I am not hungry anymore. I am at peace."
   +add_tag villa.read_lastwords
   +open "The Last Pages"
 
 * Skip to the final page 
-  FIXME: The final page is not text. It is covered edge to edge in geometric diagrams in fine ink, worked over many sittings: solids drawn from angles that should not be possible, faces shaded for depth in directions that contradict, the same shape approached from several sides at once. In the corner, very small, he has written: "Not finished. Not yet."
+  The final page is not text. Fine ink covers it edge to edge, worked over many sittings. Geometric diagrams fill the leaf: solids drawn from angles that should not be possible, faces shaded for depth in directions that contradict. The same shape is approached from several sides at once. Pressed into the corner, minuscule, he has written: "Not finished. Not yet."
   +open "The Last Pages"
 
 * Try to find this cave = The danger is clear, and yet you must know [requires tag villa.read_lastwords && !tag villa.saw_cave]
-  FIXME: Nothing in the study shows as a door. It is the last entries that send you looking: the villa is nearly empty. If there is an entrance to the cave, it must be nearby. Sure enough, gehind the desk, low in the panelled wall, one section sits flush with no handle, its seam clean of the dust that greys everything else and the floor before it worn pale where a man passed through many times a day. It gives inward on stone steps going down. You follow the dank passage down; at the bottom you find a door, more by feel than sight. You pull it open.
-  FIXME: The cave walls are clustered with the crystals, some as tall as your waist, faceted in patterns that do not occur in undisturbed rock. The light off them is both very faint and suddenly overwhelming; not a color you have a name for.
-  FIXME: You feel sick and slightly dizzy. You close your eyes and cover them with your hand, but the dim light remains. You do not stay. You climb back up with the after-image still burned to your eyes.
+  Nothing in the study shows as a door. The last entries send you looking; the villa is nearly empty, and if there is an entrance to the cave, it must be nearby. Behind the desk, low in the panelled wall, one section sits flush with no handle. Its seam is clean of the dust that greys everything else, and the floor before it is worn pale where a man passed through many times a day. It gives inward on stone steps going down. You follow the dank passage down. At the bottom you find a door, more by feel than sight. You pull it open.
+  You step inside. The cave walls cluster with crystals, some as tall as your waist. They rear like silent, faceted idols, faceted in patterns that do not occur in undisturbed rock. The light off them is both very faint and suddenly overwhelming; it is not a color you have a name for.
+  A slick nausea coils in your gut, tasting of something ferrous. You feel sick and slightly dizzy. You close your eyes and cover them with your hand, but the dim light remains, clinging behind your lids like a residue. You do not stay. You scrabble up the passage. The rough stone tears at your skin. You climb back up with the after-image still burned to your eyes.
   +add_condition lattice_sickness
   +add_tag villa.saw_cave
   +open "The Last Pages"

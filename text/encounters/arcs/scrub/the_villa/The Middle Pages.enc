@@ -2,27 +2,35 @@ The Middle Pages
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME: You skip to the middle. The script is looser here, more forceful. Tiny ink spatters mark sections where Solan was writing too quickly.
+You skip to the middle. The script is looser here, more forceful. The angles of the shorthand are subtly altered, fractionally displaced from their earlier neat regression. Tiny ink spatters mark sections where Solan was writing too quickly. They fleck the page in an indeterminate grey. The shutter taps against its frame.
 
 choices:
 
 * Read about the villa
-  FIXME: A broker tipped him to a run-down Tashkari villa whose owner needed cash more than the house, with a cave of the crystals underneath it. Solan begged, borrowed, and stole to cover the price. The cave was everything he hoped: an unending supply, all his.
-  FIXME: The section includes some rough math on the value of the crystals, a plan to order mining equipment, and some ruminations on how to best manage market supply.
+  A broker had tipped him to a run-down Tashkari villa whose owner needed cash more than the house. The man handed Solan the address like a crumbling confession. Beneath the house was a cave of the crystals. Solan begged, borrowed, and stole to cover the price. The earth yielded with unnatural ease. The mouth of the cave was not quite rock, but shimmered like a recession in reality, sharp with ozone and the cessation of birdsong. The cave was everything he had hoped. An unending supply, all his.
+  You turn the page. The entries here turn to practical matters. Solan has filled the margins with rough math: carat weights, counts, crown values tallied in cramped columns. The figures translate to sums that would dwarf his earlier trade. You note his record include no mention of tax, guild stamps, or any of the procedures that keep your trade distinct from smuggling.
+
+  He has sketched equipment between the lines. Picks, shoring timber, a cart for the tailings. He notes a foundry in Aldgate that stocks hand-crank winches. He plans to order lead-lined scales for weighing the fragments. He describes the cave again in passing. The tailings glimmer with a faint luminescence like frost. The violet shards carry a demonstrable chill, not a warmth precisely. He writes that the ticking of any mechanism seems abnormally loud in the cavern's stillness.
+
+  Then he considers the market. He calculates how many crystals to release each season, weighing scarcity against the risk of notice. He names buyers who can be made to wait and buyers who cannot. He reminds himself to refuse every third offer, to vary his routes home, to keep the Aldgate merchant hungry. The handwriting stays steady and plain. Only the pencil marks in the margin are pressed hard enough to tear the paper.
   +open "The Middle Pages"
 
 * Read about the girl he hired 
-  FIXME: Solan became convinced that his buyers were involved in something dark, illegal or worse. He thought that he might be in danger, that someone was following him. He hired a servant girl from a nearby village to do his shopping. At first he got on well with the girl.
-  FIXME: Solan eventually becomes convinced that the girl is poisoning him; he feels lethargic, unwell. He's certain she's working with a shadowy cabal that's trying to steal his crystals. The last mention of her is chilling, "It is done. I left her in the kitchen cabinet. Need to come back for her later, when it's safe to go outside."
+  Solan became convinced that his buyers were involved in something dark, illegal or worse. The buyers were unfailingly polite. Their politeness unsettled him. Something wrong clung to their transactions. The silences between them were deeper than profit could explain. He thought that he might be in danger, that someone was following him. He hired a servant girl from a nearby village to do his shopping. At first he got on well with the girl.
+  Later entries show the turn. Solan writes of a lethargy that crept into him, a viscous drag on the edges of his waking hours. It was not illness, precisely, but a mineral fatigue leaching the color from his days, leaving his mouth tasting of dust and something else. Something floral, sickeningly sweet, clinging to the back of his throat. He felt unwell. He became convinced the girl was poisoning him. Her smiles, once a comfort, began to seem like geometries he could not read, angles that should not belong in human features. He was certain she worked with a shadowy cabal. They were trying to steal his crystals.
+
+The last mention of her is chilling. "It is done. I left her in the kitchen cabinet. Need to come back for her later, when it's safe to go outside."
   +add_tag villa.read_girl
   +open "The Middle Pages"
 
 * Read why the trade stopped
-  FIXME: Solan sold a few crystals and then could not continue. Contracts lapsed. Buyers became angry. He stalled and made excuses. He could not bear to give them up. For the first time you see sketches of crystals, rendered with obsessive precision, each line drawn and redrawn.
+  You turn the page. Solan sold a few crystals. Then he could not continue. Contracts lapsed. Buyers became angry. He stalled and made excuses. He could not bear to give them up.
+
+For the first time in the journal, you see sketches of crystals. They are rendered with obsessive precision. Each line is drawn and redrawn. The facets are traced, erased, and traced again. Infinitesimal flaws accumulate in the margins. The drawings crowd out the columns of figures. Beneath crossed-out tallies, the crystals repeat, larger and more exact with each attempt.
   +open "The Middle Pages"
 
 * Open the kitchen cabinet = See what became of the girl [requires tag villa.read_girl && !tag villa.danger]
-  FIXME: You go back down the hall. The kitchen was once a grand affair, sized to feed an entire family. Now only a small corner contains a pot and knife. The cabinet door hinges groan when pulled open. The servant girl is folded inside, some weeks dead. She is small, and young. Her fingernails are clean, scrubbed raw. Whatever sickness befell Solan, you can't imagine this poor wretch had anything to do with it. You turn and walk back to the study. If there are any answers for why this happened, they're in the journal unread.
+  You go back down the hall. The kitchen was once a grand affair, sized to feed an entire family. Now only a small corner contains a pot and knife. The cabinet door hinges groan when pulled open. The servant girl is folded inside, some weeks dead. She is small, and young. Her fingernails are clean, scrubbed raw. Whatever sickness befell Solan, you can't imagine this poor wretch had anything to do with it. You turn and walk back to the study. If there are any answers for why this happened, they're in the journal unread.
   +add_tag villa.danger
   +open "The Middle Pages"
 

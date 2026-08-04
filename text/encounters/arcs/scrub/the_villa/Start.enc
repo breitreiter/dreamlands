@@ -2,20 +2,20 @@ The Mesa Road
 [trigger none]
 [vignette dungeons/the_villa]
 
-FIXME: A young page flags you down on the mesa road, two hours from the rail line. He stands near a desert villa, time-worn but still an impressive building. The wind carries the grit of the plateau across the exposed landscape, and the sky above is a hard, pale blue.
-FIXME: He sees your guild ring and looks relieved. "Must be my lucky day." He bows slightly, "Jiri, I'm a page under Vastand, guild barrister. You've met?" You shake your head; you have not.
-FIXME: "No worries. A merchant of ours is dead up at the villa." He points to the structure. "The barrister has been arguing jurisdiction with two Kesharat since morning. No one can go inside until the matter is settled." He looks at you hopefully. "He sent me to find someone trustworthy, to sneak in the back way. Tidy up any loose ends, make sure there's nothing for the Kesharat authorities to find."
-FIXME: He glances toward the building. "Side gate's open."
+A young page flags you down on the mesa road, two hours from the rail line. He stands near a desert villa, time-worn but still impressive. The stucco is the color of old bone, crazed with fine cracks. The wind carries the grit of the plateau across the exposed landscape. The sky above is hard, pale blue, bleached nearly white at the zenith.
+He sees your guild ring and looks relieved. "Must be my lucky day." He bows slightly, a shallow and economical dip of his head. "Jiri, I'm a page under Vastand, guild barrister. You've met?" You shake your head; you have not.
+"No worries. A merchant of ours is dead up at the villa." He points to the structure with a bone-thin finger. "The barrister has been arguing jurisdiction with two Kesharat since morning. No one can go inside until the matter is settled." He looks at you hopefully, his eyes overly bright. "He sent me to find someone trustworthy, to sneak in the back way. Tidy up any loose ends, make sure there's nothing for the Kesharat authorities to find."
+He glances toward the building. "Side gate's open."
 The whole thing feels a little shady, but maybe this guild barrister could put in a good word for you at the Chapterhouse.
 
 choices:
 
 * Slip in through the servants' gate = Nice and quiet
-  FIXME: The back gate is unlocked. Inside is a house once kept carefully, but now in disarray: shuttered windows, weeks of dust, dried herbs hung long past their use. A shutter taps against its frame. The smell of dried herbs gone to bitterness hangs in the air. The fine plaster ceiling above shows a water stain spreading like a map. A loose floorboard gives slightly underfoot in the empty hall.
-  FIXME: You find the merchant, or what's left of him, in his study, seated. He has been dead about two days. His face is hard to read.
-  FIXME: The study looks to have once been a grand affair. But now the book cases are empty and the space is nearly vacant. The only furniture is a small writing desk, stacked with a handful of ledgers. You lift and open the topmost book. It is not a ledger. It is a journal, belonging to one Ferath Solan, bound in worn and travel-stained leather. 
+  The back gate is unlocked. Inside, the house was once kept carefully, but now it is in disarray. Sunlight filters in through shutters covering the windows. Weeks of dust lie thick. Dried herbs hang in brittle bundles, long past their use. A shutter taps against its frame. The smell of the herbs, gone to bitterness, hangs in the air. Fine plaster on the ceiling above shows a water stain spreading like a map. A loose floorboard gives slightly underfoot in the empty hall.
+  You find the merchant, or what's left of him, in his study, seated. Globes and ledgers stand in their usual arrangement, dulled by a film of dust. He has been dead about two days. His face is hard to read.
+  The study looks to have once been a grand affair. Now the book cases are empty and the space is nearly vacant. The only furniture is a small writing desk stacked with a handful of ledgers. You lift and open the topmost book. It is not a ledger. It is a journal, belonging to one Ferath Solan, bound in worn and travel-stained leather.
   +open "The Early Pages"
 
 * Tell the page you cannot help = Leave the dead their business
-  FIXME: You apologize, but insist you must be on your way. The page nods, "Well, we're not going anywhere any time soon. The Kesharat have sent for a civil priest; who knows how long that will take. Let me know if you change your mind."
+  You apologize, but insist you must be on your way. The page nods. "Well, we're not going anywhere any time soon. The Kesharat have sent for a civil priest; who knows how long that will take. Let me know if you change your mind."
   +flee_dungeon
