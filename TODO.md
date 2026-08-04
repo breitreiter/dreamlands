@@ -10,20 +10,25 @@ iteration, then the writing track (its own schedule).
 
 Real things strangers from socials will hit. No public posting until these are done.
 
-- [ ] **Azure .NET 10 runtime bump** — the repo upgraded to .NET 10 (June 2026) but the
-      `dreamlands-api` Function App is still on the .NET 8 isolated runtime. The next
-      `./deploy.sh api` will deploy fine and then serve a broken API. deploy.sh has a
-      blocking banner until this is done. Steps:
-      1. Bump the runtime stack:
-         `az functionapp config set -n dreamlands-api -g dreamlands-rg --linux-fx-version "DOTNET-ISOLATED|10.0"`
-      2. Verify it took:
-         `az functionapp config show -n dreamlands-api -g dreamlands-rg --query linuxFxVersion`
-         (expect `DOTNET-ISOLATED|10.0`) and confirm `FUNCTIONS_EXTENSION_VERSION` is `~4`:
-         `az functionapp config appsettings list -n dreamlands-api -g dreamlands-rg --query "[?name=='FUNCTIONS_EXTENSION_VERSION'].value"`
-      3. Run `./deploy.sh api` and smoke-test the live API (load the game at
-         game.dreamlands.org, hit an endpoint).
-      4. Delete the scary banner block from `deploy_api()` in deploy.sh (it's marked
-         with DELETE THIS BLOCK comments), then check this off.
+- [x] **Azure .NET 10 runtime bump** — done 2026-08-04. The deploy.sh banner is deleted.
+
+      **The command recorded here was wrong** — worth remembering, because it would have
+      failed silently. `dreamlands-api` is a **Windows** Function App (`kind: functionapp`,
+      `reserved: false`), not Linux, so `--linux-fx-version` sets a property the app does
+      not read; `linuxFxVersion` reads back empty either way, so the "verify" step would
+      have looked inconclusive rather than failed. The knob on Windows is
+      `netFrameworkVersion`, which was `v8.0`:
+
+          az functionapp config set -n dreamlands-api -g dreamlands-rg \
+            --net-framework-version v10.0
+
+      Verified `netFrameworkVersion=v10.0`, `FUNCTIONS_EXTENSION_VERSION=~4`,
+      `FUNCTIONS_WORKER_RUNTIME=dotnet-isolated`; `az functionapp list-runtimes --os windows`
+      confirms `dotnet-isolated` 10 is supported on Functions v4.
+
+      Note for future infra work: ARM **writes** need an MFA step-up login
+      (`az login --tenant <id> --scope https://management.core.windows.net//.default`),
+      even when reads already succeed.
 - [ ] **Debug affordance sweep — remove everything at once, last thing before launch.**
       The Shady Trader and the "Pick a fight" button are both essential testing tools
       (gear combos, spawning specific combat encounters) and stay until the end; they
