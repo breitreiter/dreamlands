@@ -294,7 +294,40 @@ dead-pipeline traps were retired in the same pass:
 kept), and the already-deleted `arc-colorize` skill / `EncounterCli colorize`
 command confirmed gone rather than merely undocumented.
 
-### Resume here — T2, promote `the_villa`
+## Session checkpoint — 2026-08-04: T2 DONE
+
+**`the_villa` is promoted.** Commit `0a03088` on `combat-pivot` (no arc branch —
+`feedback_single_branch_workflow`). 39 FIXMEs → 0; `check` clean across 157 files;
+`bundle` wrote 137 encounters; diff was body prose only, +49/−39, no tag/mechanics/
+choice lines touched. The 4 remaining warnings are pre-existing (`villa.*` ids
+absent from `known_ids.txt`).
+
+**The review gate was deliberately reordered**, with the user's agreement: promote
+first, then read and repair the tracked files in place. Rationale — curation *is* an
+editing pass ([[feedback_curation_is_repair]]), so it wants a real edit surface and
+versioned diffs rather than a read-only render against a gitignored dir. Nothing
+shipped: the branch is unpushed. **Final tidying is in progress by the user directly
+on `text/encounters/arcs/scrub/the_villa/*.enc`** (minor: repetition, richer text).
+
+**Verdict on the output: among the best prose in the project.** One arc is not a
+sample, but it establishes that this path works — and the load-bearing part is the
+human gating *before* kimi (color review → full thread coverage → curation-as-repair),
+not the integrator.
+
+**Intermediate artifacts are kept on purpose** (may inform process improvement).
+Durable: narr sidecars at `2ae9d9a`. Not durable, single gitignored copy:
+`text/encounter-tool/out/the_villa/` and repo-root `out/compare/`. The step-6 cleanup
+below is therefore **deferred, not skipped** — including the stale in-repo
+`*.enc.json`, which still misreads as state.
+
+### Resume here — T3 + T4, the `signal_array` prerequisites
+
+Both block arc #2. T3: threads out of `Forge/Threads.cs` into per-arc
+`_threads.json`, regression-checked against the villa's five. T4: minrouter smoke
+test (`GET /help` with bearer; `GET /v1/models` 404s) before any paid weave, plus
+committing the router migration to the base branch. T8 (K3 A/B) still optional.
+
+### (historical) Resume point — T2, promote `the_villa`
 
 Next action is the **review gate**: render the five FIXME-stub → prose diffs and
 read them. Everything is pre-verified and still true as of this checkpoint:
