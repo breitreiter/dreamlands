@@ -35,17 +35,13 @@ public static class WeaveCommand
             return 2;
         }
         var arcDir = positional[0];
-        threadName ??= Threads.Default;
-        if (!Threads.All.TryGetValue(threadName, out var plan))
-        {
-            Console.Error.WriteLine($"unknown thread '{threadName}' (have: {string.Join(", ", Threads.All.Keys)})");
-            return 2;
-        }
+        var (name, plan) = ThreadPlans.Resolve(arcDir, threadName);
+        threadName = name;
 
         var cfg = ForgeConfig.Load(configPath);
         model ??= cfg.Router.IntegratorModel;
 
-        var (order, tags) = Thread.Walk(arcDir, plan);
+        var (order, tags) = Thread.Walk(arcDir, plan.Path);
         var tagRepr = "[" + string.Join(", ", tags.OrderBy(t => t, StringComparer.Ordinal).Select(t => $"'{t}'")) + "]";
         Console.WriteLine($"thread '{threadName}': {order.Count} beat(s); final tags = {tagRepr}; model = {model}");
 

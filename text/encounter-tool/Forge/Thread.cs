@@ -47,7 +47,7 @@ public static class Thread
         foreach (var label in plan)
         {
             if (!encs.TryGetValue(cur, out var e))
-                throw new InvalidOperationException($"thread: no encounter '{cur}'");
+                throw new ThreadPlanException($"thread: no encounter '{cur}'");
             var (enc, source) = e;
             var beats = peerBeats.GetValueOrDefault(source) ?? [];
 
@@ -58,9 +58,11 @@ public static class Thread
 
             var choice = enc.Choices.FirstOrDefault(c => (c.OptionLink ?? c.OptionText) == label);
             if (choice is null)
-                throw new InvalidOperationException($"thread: no choice '{label}' in '{cur}'");
+                throw new ThreadPlanException(
+                    $"thread: no choice '{label}' in '{cur}' — have: "
+                    + string.Join(" | ", enc.Choices.Select(c => c.OptionLink ?? c.OptionText)));
             if (!string.IsNullOrEmpty(choice.Requires) && !Conditions.Evaluate(choice.Requires, state, balance, rng))
-                throw new InvalidOperationException(
+                throw new ThreadPlanException(
                     $"thread: gate fails at '{cur}' / '{label}': requires [{choice.Requires}], "
                     + $"tags [{string.Join(", ", state.Tags.Order())}]");
 
@@ -83,7 +85,7 @@ public static class Thread
 
             if (terminal) break;
             if (nav is null)
-                throw new InvalidOperationException($"thread: choice '{label}' in '{cur}' neither navigates nor terminates");
+                throw new ThreadPlanException($"thread: choice '{label}' in '{cur}' neither navigates nor terminates");
             cur = nav;
         }
 

@@ -75,13 +75,10 @@ public static class ReviewCommand
     // One thread's beats in reading order — the exact sequence/content kimi will weave.
     private static int RunThread(string arcDir, string threadName, string? outDir)
     {
-        if (!Threads.All.TryGetValue(threadName, out var plan))
-        {
-            Console.Error.WriteLine($"unknown thread '{threadName}' (have: {string.Join(", ", Threads.All.Keys)})");
-            return 2;
-        }
+        var (name, plan) = ThreadPlans.Resolve(arcDir, threadName);
+        threadName = name;
 
-        var (order, tags) = Thread.Walk(arcDir, plan);
+        var (order, tags) = Thread.Walk(arcDir, plan.Path);
         var docs = new Dictionary<string, PeerDocument>(StringComparer.Ordinal);
         PeerBeat? Beat(string source, int line)
         {

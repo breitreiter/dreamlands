@@ -47,7 +47,7 @@ dotnet run --project text/encounter-tool/Forge -- <cmd> ...
 # synthesis <file.enc.json> ...         per-beat integrator    [--model ID] [--limit N] [--beats id,id] [--dry-run] [--no-lens] [--force]
 # weave <arc-dir>                       threaded synthesis     [--thread vastand|cave] [--model ID] [--dry-run] [--force]
 # integrate <file.enc.json>|<dir> ...   peer JSON -> out/      [--out <dir>]
-# thread <arc-dir>                      debug: print beat spine [--thread name]
+# thread <arc-dir>                      debug: print beat spine [--thread name] [--coverage]
 ```
 
 Dirs expand to their `*.enc` / `*.enc.json` children. With nothing approved,
@@ -65,7 +65,7 @@ proves the spine is lossless).
 | `CategorizeCommand.cs` | tone tagging (GLM via router, `imp-glmchat`) |
 | `Color.cs` + `ImpLoomColorProvider` + `GlmHighTempColorProvider` + `ColorCommand` | color stage behind `IColorProvider` (loom, over ssh — NOT via the router) |
 | `SynthesisCommand.cs` | the logic-filter SYSTEM prompt + `BuildUser` (shared with weave); paid integrator via router `cf` |
-| `Thread.cs` + `Threads.cs` + `ThreadCommand` | engine-driven graph walk -> ordered beat spine |
+| `Thread.cs` + `ThreadPlans.cs` + `ThreadCommand` | engine-driven graph walk -> ordered beat spine; per-arc `_threads.json` loader; `--coverage` |
 | `WeaveCommand.cs` | threaded story-so-far synthesis |
 | `Config.cs` | gitignored `appsettings.json` loader (Router / Imp) |
 
@@ -106,6 +106,14 @@ default. `*.enc.json`, `out/`, and `*.key` are gitignored.
 - **Color exists to break "Claude-tic" contamination** — decompose (Claude) bakes its
   tics into the stubs; the gemma triplet injects genuinely alien texture. This is why
   color is load-bearing and why the `glm-hi-temp` FOSS fallback is explicitly inferior.
+- **Threads are content, and coverage is the gate before you spend.** Each arc's
+  threads live in `_threads.json` beside its bibles (name -> `note` + ordered `path` of
+  choice labels); the `note` carries the thread's *coverage intent*, which is the part
+  that cannot be reconstructed later. `weave` only generates prose for beats some thread
+  reaches, so an uncovered beat silently falls back to isolated synthesis — the path we
+  do not ship. Run `forge thread <arc> --coverage` (free, exits 1 while any beat is
+  uncovered) until it is clean, *then* weave. the_villa is the reference: 5 threads,
+  39/39, 0 uncovered.
 - **Daily caps are fatal, not transient.** minrouter enforces a per-upstream daily cap
   and signals a spent one with HTTP 429 + `daily limit for '<upstream>' reached` —
   `RouterClient` raises `QuotaExhaustedException` on that marker so the run aborts
