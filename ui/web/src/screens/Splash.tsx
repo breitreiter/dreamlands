@@ -53,7 +53,7 @@ export default function Splash() {
         {error && (
           <p className="text-negative">{error}</p>
         )}
-        <div className="mx-auto max-w-md text-left border border-action/40 rounded-md bg-black/40 px-5 py-4 space-y-2">
+        <div className="mx-auto max-w-md text-left border border-action/40 rounded-md bg-panel-alt px-5 py-4 space-y-2">
           <p className="font-header text-accent leading-none">Unfinished alpha build</p>
           <p className="text-muted">
             This is a work in progress and does not represent the finished product.
