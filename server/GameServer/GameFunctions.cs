@@ -2161,6 +2161,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 return new BadRequestObjectResult(new { error = $"Unknown combat action '{actionReq.Action}'" });
         }
 
+        // Commit and flee only mean anything while the fight is live. A double-submit
+        // (two clicks on the final commit, or a client retry) would otherwise reach
+        // CombatRunner.Step and surface its internal invariant as a 500. The "continue"
+        // branch above already returned, so it isn't caught by this.
+        if (player.ActiveCombat.Resolved)
+            return new BadRequestObjectResult(new { error = "Combat is already resolved" });
+
         var turn = Dreamlands.Orchestration.CombatOrchestrator.Step(session, action);
 
         // On player death, don't rescue immediately — leave the defeat coda visible
