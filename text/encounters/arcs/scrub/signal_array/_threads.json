@@ -1,0 +1,55 @@
+{
+  "default": "siesta",
+  "threads": {
+    "siesta": {
+      "note": "The full rest interval, then act, then speak. The grand tour and the spine of the arc: every hub spoke in turn (the hub hides each once taken), Veran pressed on the geometry, Chorik drawn out (-> chorik_unguarded, which unlocks Aftermath's gated 'Speak up' branch), then wait out the interval, move on the housing, and say something true. Longest thread, so it carries the deepest story-so-far and should be woven first. NOTE: 'Sit back and watch' -> Observe belongs on this thread and is deliberately omitted only because Observe's exit choice currently has no navigation (its +open is dropped by the parser — see bugs/). Restore it here once that is fixed.",
+      "path": [
+        "Sit with the crew",
+        "Turn to the foreman",
+        "Press him on the geometry",
+        "Step back to the circle",
+        "Chat with the young worker",
+        "Step back to the circle",
+        "Meet the heavier man",
+        "Step back to the circle",
+        "Check in on the quiet one",
+        "Try to draw him out",
+        "Wait out the rest interval",
+        "Move on the housing",
+        "Speak up"
+      ]
+    },
+    "witness": {
+      "note": "The quiet run: sit, let Chorik alone rather than pressing him, wait the interval out, and get clear when the pylon goes live. Covers Chorik's 'Let him be' (the alternative to drawing him out) and Completion's 'Get clear of the pylon' walk-away.",
+      "path": [
+        "Sit with the crew",
+        "Check in on the quiet one",
+        "Let him be",
+        "Wait out the rest interval",
+        "Get clear of the pylon"
+      ]
+    },
+    "silence": {
+      "note": "Reach the aftermath and say nothing. Covers Aftermath's 'Walk away without speaking' ending. Deliberately skips the rest-interval conversations so the ending is reached by a PC who never learned the crew's names.",
+      "path": [
+        "Sit with the crew",
+        "Wait out the rest interval",
+        "Move on the housing",
+        "Walk away without speaking"
+      ]
+    },
+    "roadside": {
+      "note": "The off-ramp at the road: decline the tea and keep walking (-> flee_dungeon). Covers Start's 'Walk on' beat, which nothing else reaches.",
+      "path": [
+        "Walk on"
+      ]
+    },
+    "leave": {
+      "note": "The second off-ramp: take the tea, then decide the work site is not your concern and go (-> flee_dungeon). Covers The Rest Interval's 'Walk off the work site' beat.",
+      "path": [
+        "Sit with the crew",
+        "Walk off the work site"
+      ]
+    }
+  }
+}
