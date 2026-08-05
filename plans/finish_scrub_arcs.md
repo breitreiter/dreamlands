@@ -320,12 +320,47 @@ Durable: narr sidecars at `2ae9d9a`. Not durable, single gitignored copy:
 below is therefore **deferred, not skipped** — including the stale in-repo
 `*.enc.json`, which still misreads as state.
 
-### Resume here — T3 + T4, the `signal_array` prerequisites
+### T3 DONE — threads are per-arc content (`c99d47a`)
 
-Both block arc #2. T3: threads out of `Forge/Threads.cs` into per-arc
-`_threads.json`, regression-checked against the villa's five. T4: minrouter smoke
-test (`GET /help` with bearer; `GET /v1/models` 404s) before any paid weave, plus
-committing the router migration to the base branch. T8 (K3 A/B) still optional.
+`_threads.json` beside the arc's bibles; `Threads.cs` deleted with no fallback.
+`ReviewCommand` was an unlisted third consumer and moved too. The villa's five
+threads ported verbatim (comments → `note`, preserving coverage intent) and
+regression-checked: all five spines byte-identical to the old hardcoded walk,
+verified by building a worktree at HEAD and diffing real output.
+
+Also adds **`forge thread <arc> --coverage`** (the T3 "worth considering" item, built
+because signal_array needs it): walks every thread, unions the spines, reports what
+nothing reaches, exits 1 while any beat is uncovered. On the villa it independently
+reproduces 39/39, 0 uncovered. Author-fixable failures now print one line instead of
+a stack trace, and a no-such-label error lists the choices that do exist.
+
+### T4 DONE — router verified end-to-end, cf cap raised (`7f41674`)
+
+Both paths confirmed against `GET /help`, then exercised through `RouterClient`
+itself (not just curl): `POST /x/imp-glmchat/v1/chat/completions` (categorize, cold
+auto-load ~30s) and `POST /x/cf/compat/chat/completions` (paid, real completion).
+The router migration was already committed as `c350fc5`.
+
+**The cf daily cap was 20 — raised to 250.** 20 could not finish a single arc (the
+villa's `vastand` alone was 19 calls). A weave beat is ~1.2k prompt tokens ≈ 500
+neurons ≈ **$0.006**, so a full arc weave ≈ $1 and a runaway now tops out ≈
+$1.50/day. Config is `~/repos/minrouter/appsettings.json` on imp (not a git repo;
+`.bak` beside it is the rollback), `systemctl --user restart minrouter`. Counters are
+durable SQLite and survive restarts; **caps roll at UTC midnight**, not local.
+
+Two findings folded in: **504 was not retried** while 500/502/503 were, so a
+transient edge timeout killed a beat and forced paying for it twice (fixed); and a
+low `max_tokens` returns an empty *billed* completion, because kimi's always-on
+thinking eats the budget before `</think>` — the mechanism behind
+`EmptyCompletionException`.
+
+### Resume here — T5, `signal_array`
+
+Prerequisites are all clear. Substrate is clean (67 beats, all tone-tagged since
+`67a1247`). Next: `forge parse`, then **author `_threads.json` to 67/67 coverage**,
+driving it with `--coverage` until it exits 0 — that is the real work and the thing
+most likely to slip at 10 files. Then categorize → color (overnight, box to itself)
+→ review gate → weave → curate → integrate → promote.
 
 ### (historical) Resume point — T2, promote `the_villa`
 
