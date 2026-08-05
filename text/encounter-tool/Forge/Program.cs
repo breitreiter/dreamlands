@@ -14,6 +14,7 @@ try
         "weave" => await WeaveCommand.RunAsync(args[1..]),
         "review" => ReviewCommand.Run(args[1..]),
         "thread" => ThreadCommand.Run(args[1..]),
+        "suggest-threads" => ThreadSuggestCommand.Run(args[1..]),
         "-h" or "--help" or "help" => Usage(),
         var cmd => Unknown(cmd),
     };

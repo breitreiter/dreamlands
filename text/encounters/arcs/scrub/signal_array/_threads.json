@@ -2,7 +2,7 @@
   "default": "siesta",
   "threads": {
     "siesta": {
-      "note": "The full rest interval, then act, then speak. The grand tour and the spine of the arc: every hub spoke in turn (the hub hides each once taken), Veran pressed on the geometry, Chorik drawn out (-> chorik_unguarded, which unlocks Aftermath's gated 'Speak up' branch), then wait out the interval, move on the housing, and say something true. Longest thread, so it carries the deepest story-so-far and should be woven first.",
+      "note": "The spine: the whole rest interval, then act, then speak. Every hub spoke in turn (the hub hides each once taken), Veran pressed on the geometry, Chorik drawn out (-> chorik_unguarded, which unlocks Aftermath's gated 'Speak up'), watch the circle, then wait the interval out, move on the housing, and say something true. Longest thread; weave it first so the shared opening beats are in place for the others.",
       "path": [
         "Sit with the crew",
         "Turn to the foreman",
@@ -21,36 +21,67 @@
         "Speak up"
       ]
     },
-    "witness": {
-      "note": "The quiet run: sit, let Chorik alone rather than pressing him, wait the interval out, and get clear when the pylon goes live. Covers Chorik's 'Let him be' (the alternative to drawing him out) and Completion's 'Get clear of the pylon' walk-away.",
+    "silence": {
+      "note": "The same full siesta, but leave Chorik alone rather than drawing him out, and then say nothing in the aftermath. Covers Chorik's 'Let him be' and Aftermath's 'Walk away without speaking'. Carries the full tour deliberately: the ending lands harder woven against a PC who spent the whole interval with them.",
       "path": [
         "Sit with the crew",
+        "Turn to the foreman",
+        "Press him on the geometry",
+        "Step back to the circle",
+        "Chat with the young worker",
+        "Step back to the circle",
+        "Meet the heavier man",
+        "Step back to the circle",
         "Check in on the quiet one",
         "Let him be",
-        "Wait out the rest interval",
-        "Get clear of the pylon"
-      ]
-    },
-    "silence": {
-      "note": "Reach the aftermath and say nothing. Covers Aftermath's 'Walk away without speaking' ending. Deliberately skips the rest-interval conversations so the ending is reached by a PC who never learned the crew's names.",
-      "path": [
-        "Sit with the crew",
+        "Sit back and watch",
+        "Return to the circle",
         "Wait out the rest interval",
         "Move on the housing",
         "Walk away without speaking"
       ]
     },
-    "roadside": {
-      "note": "The off-ramp at the road: decline the tea and keep walking (-> flee_dungeon). Covers Start's 'Walk on' beat, which nothing else reaches.",
+    "withdraw": {
+      "note": "Full siesta, wait the interval out, then get clear of the pylon when it goes live instead of moving on the housing. Covers Completion's 'Get clear of the pylon'.",
       "path": [
-        "Walk on"
+        "Sit with the crew",
+        "Turn to the foreman",
+        "Press him on the geometry",
+        "Step back to the circle",
+        "Chat with the young worker",
+        "Step back to the circle",
+        "Meet the heavier man",
+        "Step back to the circle",
+        "Check in on the quiet one",
+        "Try to draw him out",
+        "Sit back and watch",
+        "Return to the circle",
+        "Wait out the rest interval",
+        "Get clear of the pylon"
       ]
     },
     "leave": {
-      "note": "The second off-ramp: take the tea, then decide the work site is not your concern and go (-> flee_dungeon). Covers The Rest Interval's 'Walk off the work site' beat.",
+      "note": "Full siesta, then decide the work site is not your concern and walk before the interval ends (-> flee_dungeon). Covers The Rest Interval's 'Walk off the work site'.",
       "path": [
         "Sit with the crew",
+        "Turn to the foreman",
+        "Press him on the geometry",
+        "Step back to the circle",
+        "Chat with the young worker",
+        "Step back to the circle",
+        "Meet the heavier man",
+        "Step back to the circle",
+        "Check in on the quiet one",
+        "Try to draw him out",
+        "Sit back and watch",
+        "Return to the circle",
         "Walk off the work site"
+      ]
+    },
+    "roadside": {
+      "note": "The off-ramp at the road: decline the tea and keep walking (-> flee_dungeon). Covers Start's 'Walk on', which nothing else reaches.",
+      "path": [
+        "Walk on"
       ]
     }
   }
