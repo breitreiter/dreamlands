@@ -19,6 +19,9 @@ map_*.json
 mapgen/sizing.md
 .vscode/
 *.sh
+# Leading slash anchors to the repo root, so this un-ignores ONLY the top-level
+# deploy script — a downstream utility named deploy.sh stays ignored.
+!/deploy.sh
 !worlds/*/build.sh
 !worlds/*/use.sh
 !worlds/*/rebuild.sh
