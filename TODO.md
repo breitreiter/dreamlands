@@ -304,10 +304,31 @@ Time estimates: simple .enc ~30 min, .tac add-on ~20 min, arc ~5 hr, locale guid
 
 - [x] Locale guides for all biome/tier combos
 - [ ] Batch-generate skeletons via `generate` command
-- [ ] Arc reachability lint — `check` command should walk the encounter graph from Start,
-      enumerate all paths (branching on choices × check pass/fail), and warn on: unreachable
-      encounters, paths that never reach `+finish_dungeon`/`+flee_dungeon`, and cycles with
-      no exit. Treats arcs as directed graphs, not individual files.
+- [ ] **Arc reachability lint — port Forge's state-space walker into `check`.** The
+      algorithm now exists and is proven: `forge suggest-threads` (`Forge/ThreadSuggestCommand.cs`,
+      commit `e16eb87`) enumerates every legal playthrough of an arc and reports what nothing
+      reaches. On `signal_array` it enumerated 4,241 walks and correctly identified the 2
+      unreachable choices. Lifting it into `EncounterCli` would replace today's
+      `ValidateOpenTargets`, which only checks that a `+open` names a file that exists — it
+      cannot tell whether anything ever *arrives* there.
+
+      Warn on: unreachable encounters and choices, paths that never reach
+      `+finish_dungeon`/`+flee_dungeon`, and cycles with no advancing state (the
+      "mutually-recursive `+open`" hazard `arc_patterns.md` §hazards lists as *not yet
+      detectable* — this detects it).
+
+      **The correction that makes it work: an arc is a state machine, not a directed graph.**
+      Hub spokes gated `[requires !tag met_X]` mean taking an edge *removes* it, so the
+      available choices depend on the tags carried. Nodes are `(encounter, tagset)`, and a
+      path is a loop only when it repeats a full state — a hub revisit with new tags is
+      progress. Every fixed-edge-set formulation (shortest path, edge cover, Chinese postman)
+      answers the wrong question, which is why this sat undone.
+
+      Sizing note: enumeration is exponential in principle. `signal_array` (10 enc, 22
+      choices) enumerates in under a second, but `check` runs over 157 files, so it needs a
+      per-arc walk cap with an explicit "TRUNCATED" report rather than a silent partial pass
+      — a lint that quietly under-reports is worse than none. The suggester already carries
+      `--max-walks` for this.
 
 ### Post-picker-pivot rewrites (not urgent)
 
