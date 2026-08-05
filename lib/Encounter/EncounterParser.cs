@@ -258,7 +258,12 @@ public static partial class EncounterParser
                     {
                         Preamble = JoinProse(singleText),
                         Branches = branches.ToList(),
-                        Fallback = fallback
+                        Fallback = fallback,
+                        // singleMechanics collects every +verb written at choice level —
+                        // before the @if or after the closing brace. Both are choice-level
+                        // and run whichever branch fires. Dropping them silently broke hub
+                        // returns across five arcs (bugs/choice_mechanics_after_conditional_dropped.md).
+                        Mechanics = singleMechanics.ToList(),
                     }
                 });
             }

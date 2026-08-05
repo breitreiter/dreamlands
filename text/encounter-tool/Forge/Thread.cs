@@ -99,6 +99,7 @@ public static class Thread
         var all = new List<string>();
         foreach (var br in c.Conditional.Branches) all.AddRange(br.Outcome.Mechanics);
         if (c.Conditional.Fallback is not null) all.AddRange(c.Conditional.Fallback.Mechanics);
+        all.AddRange(c.Conditional.Mechanics); // choice-level, outside the branches
         return all;
     }
 }

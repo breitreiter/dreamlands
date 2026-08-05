@@ -147,7 +147,8 @@ static class BundleCommand
                     {
                         preamble = c.Conditional.Preamble,
                         branches,
-                        fallback
+                        fallback,
+                        mechanics = c.Conditional.Mechanics
                     }
                 });
             }

@@ -64,6 +64,14 @@ public sealed class ConditionalOutcome
 
     /// <summary>@else branch, null if absent.</summary>
     public OutcomePart? Fallback { get; init; }
+
+    /// <summary>
+    /// Choice-level mechanics written outside the @if/@else blocks — before the first
+    /// @if, or after the closing brace. They run in addition to whichever branch fires,
+    /// so a hub return (`+open "Hub"`) can be written once rather than repeated in
+    /// every arm. Empty when the choice puts all its mechanics inside branches.
+    /// </summary>
+    public IReadOnlyList<string> Mechanics { get; init; } = Array.Empty<string>();
 }
 
 /// <summary>One outcome path: prose text and optional mechanics.</summary>

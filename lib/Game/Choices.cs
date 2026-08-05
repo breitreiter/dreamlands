@@ -147,7 +147,7 @@ public static class Choices
                     return new ResolvedChoice(
                         preamble,
                         branch.Outcome.Text,
-                        branch.Outcome.Mechanics,
+                        WithChoiceLevel(branch.Outcome.Mechanics, choice.Conditional),
                         checkResult);
                 }
             }
@@ -158,14 +158,26 @@ public static class Choices
                 return new ResolvedChoice(
                     preamble,
                     choice.Conditional.Fallback.Text,
-                    choice.Conditional.Fallback.Mechanics,
+                    WithChoiceLevel(choice.Conditional.Fallback.Mechanics, choice.Conditional),
                     lastCheckResult);
             }
 
-            return new ResolvedChoice(preamble, "", [], lastCheckResult);
+            return new ResolvedChoice(
+                preamble, "", WithChoiceLevel([], choice.Conditional), lastCheckResult);
         }
 
         return new ResolvedChoice(null, "", [], null);
+    }
+
+    /// Branch mechanics plus the choice-level ones written outside the @if/@else. The
+    /// branch runs first so a hub return (`+open`) written at choice level lands last,
+    /// which is the order the author wrote it in.
+    private static IReadOnlyList<string> WithChoiceLevel(
+        IReadOnlyList<string> branchMechanics, Encounter.ConditionalOutcome conditional)
+    {
+        if (conditional.Mechanics.Count == 0) return branchMechanics;
+        if (branchMechanics.Count == 0) return conditional.Mechanics;
+        return [.. branchMechanics, .. conditional.Mechanics];
     }
 
     /// <summary>

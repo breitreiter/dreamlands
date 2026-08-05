@@ -133,7 +133,14 @@ public static class EncounterRunner
             check.Skill,
             IsMeetsCheck: false);
 
-        var resolved = new ResolvedChoice(check.Preamble, finalText, body.Mechanics, skillCheckResult);
+        // Choice-level mechanics (outside the @if/@else) run whichever arm the picker
+        // lands on — same rule as Choices.Resolve applies to the static branches.
+        var choiceLevel = choice.Conditional!.Mechanics;
+        var mechanics = choiceLevel.Count == 0
+            ? body.Mechanics
+            : (IReadOnlyList<string>)[.. body.Mechanics, .. choiceLevel];
+
+        var resolved = new ResolvedChoice(check.Preamble, finalText, mechanics, skillCheckResult);
 
         // Clear picker state before applying mechanics (mechanics may alter pack etc.)
         session.Player.ActivePickerCheck = null;
@@ -213,7 +220,11 @@ public static class EncounterRunner
                 // Pre-roll failed: skip picker entirely, emit the @else (fail) body directly.
                 var fallbackBody = choice.Conditional!.Fallback
                     ?? new Encounter.OutcomePart { Text = "", Mechanics = Array.Empty<string>() };
-                var failResolved = new ResolvedChoice(pending.Preamble, fallbackBody.Text, fallbackBody.Mechanics, null);
+                var failLevel = choice.Conditional!.Mechanics;
+                var failMechanics = failLevel.Count == 0
+                    ? fallbackBody.Mechanics
+                    : (IReadOnlyList<string>)[.. fallbackBody.Mechanics, .. failLevel];
+                var failResolved = new ResolvedChoice(pending.Preamble, fallbackBody.Text, failMechanics, null);
                 return FinishResolved(session, failResolved);
             }
             preRollPassed = true;

@@ -88,6 +88,8 @@ static class CheckCommand
                 var dir = Path.GetDirectoryName(file) ?? "";
                 var navErrors = ValidateOpenTargets(result.Encounter, shortIdsByDir.GetValueOrDefault(dir));
                 vocabErrors.AddRange(navErrors);
+
+                ValidateNoMechanicsDropped(text, result.Encounter, vocabErrors);
             }
 
             var markerWarnings = CheckForMarkers(text);
@@ -258,6 +260,8 @@ static class CheckCommand
 
                 if (conditional.Fallback is { } fallback)
                     ValidateMechanics(fallback.Mechanics, errors);
+
+                ValidateMechanics(conditional.Mechanics, errors);
             }
 
             if (choice.Single is { } single)
@@ -339,6 +343,38 @@ static class CheckCommand
         File.WriteAllText(filePath, text);
         Console.WriteLine($"      auto-fixed bad characters");
         return true;
+    }
+
+    /// <summary>
+    /// Every `+verb` in the source must survive into the parsed model. A mechanic the
+    /// parser discards is invisible: the file reads correctly, `check` passes, and the
+    /// game quietly loses a navigation or a tag. That is exactly how `+open` hub returns
+    /// died in five arcs (bugs/choice_mechanics_after_conditional_dropped.md), so this
+    /// reconciles the two sides by count rather than trusting any single code path.
+    /// </summary>
+    private static void ValidateNoMechanicsDropped(string text, Encounter encounter, List<string> errors)
+    {
+        // Mirror the parser's own rule for what counts as a mechanic line: '+' then a letter.
+        var inSource = text.Split('\n')
+            .Select(l => l.Trim())
+            .Count(l => l.Length >= 2 && l[0] == '+' && char.IsLetter(l[1]));
+
+        var inModel = 0;
+        foreach (var choice in encounter.Choices)
+        {
+            if (choice.Single is { } single) inModel += single.Part.Mechanics.Count;
+            if (choice.Conditional is { } cond)
+            {
+                foreach (var branch in cond.Branches) inModel += branch.Outcome.Mechanics.Count;
+                if (cond.Fallback is { } fb) inModel += fb.Mechanics.Count;
+                inModel += cond.Mechanics.Count;
+            }
+        }
+
+        if (inModel < inSource)
+            errors.Add($"{inSource - inModel} mechanic line(s) were dropped during parsing "
+                       + $"({inSource} '+verb' lines in the file, {inModel} in the parsed model). "
+                       + "A discarded mechanic silently loses navigation or tags.");
     }
 
     private static void ValidateMechanics(IReadOnlyList<string> mechanics, List<string> errors, bool isFight = false)

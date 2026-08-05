@@ -72,7 +72,8 @@ public sealed class EncounterBundle
                     {
                         Preamble = cond.Preamble,
                         Branches = branches,
-                        Fallback = fallback
+                        Fallback = fallback,
+                        Mechanics = cond.Mechanics ?? [],
                     };
                 }
                 else if (c.Single is { } s)
@@ -137,7 +138,8 @@ public sealed class EncounterBundle
     record EncounterDto(string Id, string Category, string? Trigger, int? Tier, string? Vignette, string Title, string Body, List<string>? Requires, List<ChoiceDto> Choices);
     record ChoiceDto(string OptionText, string? OptionLink, string? OptionPreview, string? Requires,
         ConditionalDto? Conditional, SingleDto? Single);
-    record ConditionalDto(string Preamble, List<BranchDto> Branches, OutcomePartDto? Fallback);
+    record ConditionalDto(string Preamble, List<BranchDto> Branches, OutcomePartDto? Fallback,
+        List<string>? Mechanics);
     record BranchDto(string Condition, string? BranchKind, string? PickerSkill, string? PickerCorrect, string? PickerWrong, string Text, List<string> Mechanics);
     record SingleDto(string Text, List<string> Mechanics);
     record OutcomePartDto(string Text, List<string> Mechanics);

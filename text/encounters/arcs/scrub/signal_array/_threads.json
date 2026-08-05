@@ -2,7 +2,7 @@
   "default": "siesta",
   "threads": {
     "siesta": {
-      "note": "The full rest interval, then act, then speak. The grand tour and the spine of the arc: every hub spoke in turn (the hub hides each once taken), Veran pressed on the geometry, Chorik drawn out (-> chorik_unguarded, which unlocks Aftermath's gated 'Speak up' branch), then wait out the interval, move on the housing, and say something true. Longest thread, so it carries the deepest story-so-far and should be woven first. NOTE: 'Sit back and watch' -> Observe belongs on this thread and is deliberately omitted only because Observe's exit choice currently has no navigation (its +open is dropped by the parser — see bugs/). Restore it here once that is fixed.",
+      "note": "The full rest interval, then act, then speak. The grand tour and the spine of the arc: every hub spoke in turn (the hub hides each once taken), Veran pressed on the geometry, Chorik drawn out (-> chorik_unguarded, which unlocks Aftermath's gated 'Speak up' branch), then wait out the interval, move on the housing, and say something true. Longest thread, so it carries the deepest story-so-far and should be woven first.",
       "path": [
         "Sit with the crew",
         "Turn to the foreman",
@@ -14,6 +14,8 @@
         "Step back to the circle",
         "Check in on the quiet one",
         "Try to draw him out",
+        "Sit back and watch",
+        "Return to the circle",
         "Wait out the rest interval",
         "Move on the housing",
         "Speak up"

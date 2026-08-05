@@ -1,11 +1,13 @@
 ---
 kind: bug
 title: "Choice-level mechanics after an @if/@else block are silently dropped by the parser"
-state: open
+state: fixed
 created: 2026-08-04
+fixed: 2026-08-04
 severity: high
-status: open — 21 mechanic lines across 8 files in 5 arcs are parsed away, including
-  navigation. Affects shipped content, not just tooling. `check` passes them clean.
+status: fixed — parser now keeps choice-level mechanics (`ConditionalOutcome.Mechanics`)
+  and `check` hard-fails on any mechanic it would discard. All 21 lines across 8 files
+  in 5 arcs are live again with no content edits. See "Resolution".
 touches:
   files:
     - lib/Encounter/EncounterParser.cs
@@ -105,9 +107,40 @@ Either way, **`check` must hard-fail (or at minimum warn on) a mechanic it is ab
 to discard.** That is the part that turns this from a one-time cleanup into a class
 that cannot recur.
 
+## Resolution (2026-08-04)
+
+**Option 1, parser support.** No content was edited — all 21 lines work as written.
+
+- `ConditionalOutcome.Mechanics` holds choice-level mechanics. The parser already
+  accumulated them in `singleMechanics`; the conditional path in `FinishChoice` simply
+  never read it. So the fix also picks up mechanics written *before* the `@if`, which
+  were dropped by the same omission.
+- They run **in addition to** whichever branch fires, appended after the branch's own,
+  which is the order the author wrote. Applied in `Choices.Resolve` and in all three
+  picker paths in `EncounterRunner` (success, `@else`, and the untrained pre-roll
+  bypass — each builds its outcome separately and each needed it).
+- Round-trips through the bundle (`BundleCommand` emits, `BundleLoader` reads).
+- `Forge`'s `Thread.AllMechanics` includes them, which is what unblocked walking
+  through `Observe`.
+
+**The guard: `ValidateNoMechanicsDropped` in `CheckCommand`.** It counts `+verb` lines
+in the source and mechanics in the parsed model and errors on a shortfall. Deliberately
+a reconciliation rather than a check for this specific shape — it catches *any* future
+drop, whatever its cause. Verified by stashing the parser fix and re-running: it
+reports exactly 8 / 4 / 3 on the fugitive files, matching the original scan.
+
+**Verification.** All 157 files pass `check` with zero dropped-mechanic errors. The
+previously-lost mechanics are present in the bundle (`Mareen` → `open "Mareen"`;
+`Observe` → `add_tag signal_array.observed` + `open "The Rest Interval"`). 510 tests
+pass, including 7 new regression tests in `ChoiceLevelMechanicsTests` and
+`ChoiceLevelMechanicsResolveTests`.
+
 ## Impact on Forge
 
-`forge thread` cannot walk through `Observe`, so its 4 beats are uncoverable and
-would fall back to isolated synthesis. Tracked in `plans/finish_scrub_arcs.md` T5;
-`signal_array/_threads.json` carries a note where the spoke was removed, to be
-restored once this is fixed.
+`forge thread` could not walk through `Observe`, stranding its 4 beats. Resolved: the
+`siesta` thread now takes the spoke, and `signal_array` coverage went 56/67 → 60/67.
+
+The remaining 7 uncovered beats are `Grabbed.enc`, a **separate and still-open**
+limitation: `Thread.Walk` takes the first branch's navigation, so `Completion`'s
+`@else → Grabbed` is unreachable by any thread. Tracked in
+`plans/finish_scrub_arcs.md` T5.
