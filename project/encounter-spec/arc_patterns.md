@@ -83,6 +83,15 @@ This is one of two canonical mid-arc hub shapes. It generalizes:
 The `+open "Hub"` after the conditional ensures both branches return
 home; the tag toggles full-vs-recap on the next entry.
 
+> **This pattern was silently broken until 2026-08-04.** The parser
+> discarded choice-level mechanics written outside the `@if`/`@else`, so
+> the `+open "Hub"` above never reached the engine and the spoke ended the
+> encounter instead of returning. It hit 18 choices across `the_fugitive`
+> (15), `the_hermitage` (2), and `signal_array` (1) — all of them written
+> correctly against this doc. Fixed in the parser (no content edits), and
+> `check` now hard-fails on any dropped mechanic. See
+> `bugs/choice_mechanics_after_conditional_dropped.md` and `format.md` §3.2 E.
+
 ### 1a.ii. Hide-the-choice variant
 
 The other common shape — used in `forest/the_hermitage/Tower.enc` and

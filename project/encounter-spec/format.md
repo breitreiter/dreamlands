@@ -141,6 +141,33 @@ After a choice boundary, the parser collects lines until the next `* ` or end of
   }
 ```
 
+**E) Choice-level mechanics** — `+commands` written outside the `@if`/`@else`, either
+before the block or after it. They run **in addition to** whichever branch fires, so a
+shared outcome (most often a hub return) is written once instead of repeated in every
+arm:
+
+```
+* Ask about the knife = The wrapped blade on the table
+  @if tag fugitive.knife_truth {
+    "The mark." She glances at the cloth. "Yes."
+  } @else {
+    "A punishment. Something that's been coming a long time."
+  }
+  +open "Mareen"
+```
+
+Equivalent to putting `+open "Mareen"` inside both arms, and preferred when every
+branch ends the same way — a hub with eight spokes reads far better this way, and there
+is no risk of one arm silently missing the return.
+
+Ordering: the branch's own mechanics run first, then the choice-level ones, matching
+reading order. Mechanics written *before* the `@if` behave identically — position
+outside the block is what matters, not which side.
+
+> Both positions were **silently discarded** by the parser until 2026-08-04, which
+> dead-ended 18 choices across three arcs. Fixed, with `check` now hard-failing on any
+> mechanic it would drop. See `bugs/choice_mechanics_after_conditional_dropped.md`.
+
 ### 3.3 Block structure
 
 - `@if <condition> {` opens the first conditional branch.
@@ -190,8 +217,13 @@ For each choice, the parser produces:
 - **OptionPreview** (string, optional): text after `=`, if present.
 - **Requires** (string, optional): condition from `[requires ...]`, e.g. `"has ancient_key"`.
 - Either:
-  - **Conditional:** Preamble (prose before `@if`), Branches (ordered list of condition + outcome), Fallback (outcome from `@else`, optional).
+  - **Conditional:** Preamble (prose before `@if`), Branches (ordered list of condition + outcome), Fallback (outcome from `@else`, optional), and **Mechanics** (choice-level commands written outside the block — see §3.2 E — which run after whichever branch fires).
   - **Single:** prose + commands.
+
+`check` reconciles the two sides: every `+verb` line in the source must appear
+somewhere in the parsed model, and a shortfall is an error. A mechanic the parser
+discards is otherwise invisible — the file reads correctly and the game quietly loses
+a navigation or a tag.
 
 ---
 
