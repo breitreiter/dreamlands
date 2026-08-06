@@ -4,7 +4,7 @@ title: "OpenTelemetry export from GameServer to AppSignal"
 state: active
 created: 2026-08-06
 updated: 2026-08-06
-status: Phase 1 built and locally verified against a fake collector (metrics + custom spans + tripwire flowing, logs muted). NOT yet deployed. Phase 1 found that AspNetCore instrumentation yields no request spans in the isolated worker — see §2a. Phases 2-4 open.
+status: Phase 1 deployed (production app settings still unset, so it is inert there) and validated end-to-end against the dev AppSignal app — the custom metric is visible in their UI. Phase 2 pass 1 (game.action span + action count/duration + game.created) built and locally verified, traces now flowing; NOT yet deployed. Remaining: phase 2 pass 2 (reason_code sweep, encounter/combat counters), phase 3 Cosmos, phase 4 host telemetry + App Insights teardown.
 touches:
   files:
     - server/GameServer/GameServer.csproj
@@ -256,7 +256,39 @@ tell us *which action*, and that is the only question worth asking, because
   `dreamlands.combat.ended{result}`
 - `dreamlands.rejected{reason_code}` — see below
 
-**The 400 problem, and the one refactor this phase needs.** Client/server drift
+### Phase 2 pass 1 — built 2026-08-06, verified locally
+
+Shipped: the `game.action` span (tags `dreamlands.action`, `.mode`,
+`.in_dungeon`, `.game_id`, plus `ActivityStatusCode.Error` on any 4xx/5xx),
+`dreamlands.action.count{action,outcome}`, `dreamlands.action.duration{action}`,
+and `dreamlands.game.created`.
+
+**The outcome dimension needed no sweep at all.** `GameAction`'s ~40 return sites
+already encode the outcome in their result type, so `OutcomeOf()` reads it back
+off `IActionResult` — `OkObjectResult` → `ok`, `BadRequestObjectResult` →
+`rejected`, `NotFoundObjectResult` → `not_found` — and not one existing return
+statement had to change. The only structural change is that the handler body moved
+into a private `RunGameAction(...)`, so the `[Function]` method can time it and
+label the result; `req` was referenced exactly once (the body read), which is what
+made the extraction clean.
+
+Verified against the real dev collector: `/v1/traces` **and** `/v1/metrics` both
+`200 OK` — this is the first run where traces flowed at all, confirming the §2a
+conclusion that our own source is the only source of server spans. Label values
+`ok`, `rejected` and `not_found` confirmed on the wire by driving one of each.
+All 510 tests pass.
+
+Two notes for whoever picks this up:
+
+- A new game opens *inside* the intro encounter, so `move` is illegal until the
+  encounter is resolved. Test traffic that opens with a move produces six `400`s
+  and zero `ok` samples — the metrics are right and the traffic is wrong.
+- Payload-string extraction from protobuf merges adjacent strings that have no
+  separator between them, so a label value can appear glued to its key
+  (`actionmove`). Don't read a missing token as a missing label; check the
+  separator-delimited ones (`ok`, `rejected`, `not_found` all appear cleanly).
+
+**The 400 problem, and the one refactor this phase needs — still to do (pass 2).** Client/server drift
 shows up as a rising rate of "legal request the server refuses", and today those
 are ~40 inline `return new BadRequestObjectResult(new { error = "…" })` sites,
 several with the user's input interpolated into the message

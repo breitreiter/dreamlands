@@ -38,6 +38,27 @@ public static class Telemetry
     public static void RecordDebugEndpointHit(string endpoint) =>
         DebugEndpointHits.Add(1, new KeyValuePair<string, object?>("endpoint", endpoint));
 
+    // Every label combination is its own metric series, so the only dimensions here
+    // are bounded sets: the action verb (the GameAction switch cases) and a fixed
+    // outcome vocabulary. Game ids, item ids, coordinates and other user-supplied
+    // strings belong on spans, never on these.
+    private static readonly Counter<long> Actions =
+        Meter.CreateCounter<long>("dreamlands.action.count");
+
+    private static readonly Histogram<double> ActionDuration =
+        Meter.CreateHistogram<double>("dreamlands.action.duration", unit: "s");
+
+    private static readonly Counter<long> GamesCreated =
+        Meter.CreateCounter<long>("dreamlands.game.created");
+
+    public static void RecordAction(string action, string outcome, double seconds)
+    {
+        Actions.Add(1, new TagList { { "action", action }, { "outcome", outcome } });
+        ActionDuration.Record(seconds, new TagList { { "action", action } });
+    }
+
+    public static void RecordGameCreated() => GamesCreated.Add(1);
+
     public static IServiceCollection AddDreamlandsTelemetry(this IServiceCollection services)
     {
         // The single gate. Everything below is skipped when unset.

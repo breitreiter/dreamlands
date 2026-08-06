@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Dreamlands.Encounter;
 using Dreamlands.Flavor;
@@ -7,6 +8,7 @@ using Dreamlands.Orchestration;
 using Dreamlands.Rules;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
@@ -39,6 +41,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     public async Task<IActionResult> NewGame(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/new")] HttpRequest req)
     {
+        Telemetry.RecordGameCreated();
+
         var rng = new Random();
         var gameId = Guid.NewGuid().ToString("N")[..12];
         var seed = rng.Next();
@@ -177,10 +181,50 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var actionReq = await req.ReadFromJsonAsync<ActionRequest>();
         if (actionReq == null) return new BadRequestObjectResult(new { error = "Invalid request body" });
 
+        // The generic HTTP layer only sees POST /api/game/{id}/action, which is every
+        // verb in the game funnelled through one route. This span is what makes "which
+        // action is slow" answerable — and in the isolated worker it is the only
+        // server-side span we get at all (see plans/otel_appsignal.md §2a).
+        var verb = actionReq.Action ?? "none";
+        using var activity = Telemetry.Source.StartActivity("game.action");
+        activity?.SetTag("dreamlands.action", verb);
+        activity?.SetTag("dreamlands.game_id", id);
+
+        var started = Stopwatch.GetTimestamp();
+        var result = await RunGameAction(actionReq, id);
+        Telemetry.RecordAction(verb, OutcomeOf(result),
+            Stopwatch.GetElapsedTime(started).TotalSeconds);
+
+        if (result is IStatusCodeActionResult { StatusCode: >= 400 } failed)
+            activity?.SetStatus(ActivityStatusCode.Error, $"HTTP {failed.StatusCode}");
+
+        return result;
+    }
+
+    /// <summary>
+    /// Maps the handler's result to a bounded outcome vocabulary. Reading it off the
+    /// status code keeps every existing return site untouched — no sweep required.
+    /// </summary>
+    private static string OutcomeOf(IActionResult result) => result switch
+    {
+        OkObjectResult => "ok",
+        NotFoundObjectResult => "not_found",
+        BadRequestObjectResult => "rejected",
+        IStatusCodeActionResult { StatusCode: >= 500 } => "error",
+        _ => "other",
+    };
+
+    private async Task<IActionResult> RunGameAction(ActionRequest actionReq, string id)
+    {
         var player = await store.Load(id);
         if (player == null) return new NotFoundObjectResult(new { error = "Game not found" });
 
         var session = BuildSession(player);
+
+        // Activity.Current is the game.action span started by the caller; null when
+        // nothing is listening, which is the no-telemetry case.
+        Activity.Current?.SetTag("dreamlands.mode", session.Mode.ToString());
+        Activity.Current?.SetTag("dreamlands.in_dungeon", player.CurrentDungeonId != null);
 
         GameResponse response;
 
