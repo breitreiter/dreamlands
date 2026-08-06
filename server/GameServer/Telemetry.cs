@@ -59,6 +59,46 @@ public static class Telemetry
 
     public static void RecordGameCreated() => GamesCreated.Add(1);
 
+    /// <summary>
+    /// Why the server said no. The code is a stable slug, never the human message —
+    /// several of those interpolate user input, which would be unbounded cardinality.
+    /// A rising rate here is the signal for client/server drift.
+    /// </summary>
+    private static readonly Counter<long> Rejections =
+        Meter.CreateCounter<long>("dreamlands.rejected");
+
+    public static void RecordRejection(string reasonCode)
+    {
+        Rejections.Add(1, new TagList { { "reason_code", reasonCode } });
+        Activity.Current?.SetTag("dreamlands.reject_reason", reasonCode);
+    }
+
+    private static readonly Counter<long> EncountersStarted =
+        Meter.CreateCounter<long>("dreamlands.encounter.started");
+
+    /// <summary>
+    /// Encounter ids are paths like "plains/tier1/Lost" or "arcs/forest/fugitive/Start";
+    /// the leading segment (biome, "arcs", "intro") is a bounded label. The full id is
+    /// far too high-cardinality for a metric.
+    /// </summary>
+    public static void RecordEncounterStarted(string? encounterId)
+    {
+        var slash = encounterId?.IndexOf('/') ?? -1;
+        var kind = slash > 0 ? encounterId![..slash] : "unknown";
+        EncountersStarted.Add(1, new TagList { { "kind", kind } });
+    }
+
+    private static readonly Counter<long> CombatsStarted =
+        Meter.CreateCounter<long>("dreamlands.combat.started");
+
+    private static readonly Counter<long> CombatsEnded =
+        Meter.CreateCounter<long>("dreamlands.combat.ended");
+
+    public static void RecordCombatStarted() => CombatsStarted.Add(1);
+
+    public static void RecordCombatEnded(string result) =>
+        CombatsEnded.Add(1, new TagList { { "result", result } });
+
     public static IServiceCollection AddDreamlandsTelemetry(this IServiceCollection services)
     {
         // The single gate. Everything below is skipped when unset.

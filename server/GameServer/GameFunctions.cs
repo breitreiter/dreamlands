@@ -68,7 +68,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var introEnc = data.Bundle.GetById("intro/00_Intro");
         if (introEnc != null)
         {
-            var step = EncounterRunner.Begin(session, introEnc);
+            var step = BeginEncounter(session, introEnc);
             await store.Save(player);
             return new OkObjectResult(new { gameId, state = BuildEncounterResponse(session, step.Encounter, step.GatedChoices) });
         }
@@ -133,7 +133,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             player.PendingEncounterChain = null;
             if (session.Bundle.GetById(chainId) is { } chained)
             {
-                var chainStep = EncounterRunner.Begin(session, chained);
+                var chainStep = BeginEncounter(session, chained);
                 await store.Save(player);
                 return new OkObjectResult(BuildEncounterResponse(session, chainStep.Encounter, chainStep.GatedChoices));
             }
@@ -214,6 +214,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         _ => "other",
     };
 
+    /// <summary>
+    /// A 400 with a stable reason code beside the human message. The message is
+    /// unchanged on the wire — several interpolate user input, so only the code is
+    /// safe to use as a metric dimension.
+    /// </summary>
+    private static IActionResult Reject(string reasonCode, string message)
+    {
+        Telemetry.RecordRejection(reasonCode);
+        return new BadRequestObjectResult(new { error = message });
+    }
+
     private async Task<IActionResult> RunGameAction(ActionRequest actionReq, string id)
     {
         var player = await store.Load(id);
@@ -233,17 +244,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "inn_book":
             {
                 if (session.Mode != SessionMode.Exploring)
-                    return new BadRequestObjectResult(new { error = "Cannot rest while not exploring" });
+                    return Reject("not_exploring_rest", "Cannot rest while not exploring");
 
                 var innNode = session.CurrentNode;
                 if (innNode.Poi?.Kind != PoiKind.Settlement)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+                    return Reject("not_at_settlement", "Not at a settlement");
 
                 var serviceId = actionReq.InnService ?? Inn.BedServiceId;
                 var isChapterhouse = innNode == session.Map.StartingCity;
                 var bookResult = Inn.BookService(player, data.Balance, serviceId, chapterhouse: isChapterhouse);
                 if (!bookResult.Success)
-                    return new BadRequestObjectResult(new { error = bookResult.Reason });
+                    return Reject("inn_booking_refused", bookResult.Reason);
 
                 await store.Save(player);
 
@@ -273,17 +284,17 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "move":
             {
                 if (session.Mode != SessionMode.Exploring)
-                    return new BadRequestObjectResult(new { error = "Cannot move while not exploring" });
+                    return Reject("not_exploring_move", "Cannot move while not exploring");
 
                 if (player.CurrentDungeonId != null)
-                    return new BadRequestObjectResult(new { error = "Cannot move while in a dungeon — leave the dungeon first" });
+                    return Reject("move_in_dungeon", "Cannot move while in a dungeon — leave the dungeon first");
 
                 if (!Enum.TryParse<Direction>(actionReq.Direction, true, out var dir))
-                    return new BadRequestObjectResult(new { error = $"Invalid direction: {actionReq.Direction}" });
+                    return Reject("invalid_direction", $"Invalid direction: {actionReq.Direction}");
 
                 var target = Movement.TryMove(session, dir);
                 if (target == null)
-                    return new BadRequestObjectResult(new { error = $"No exit {actionReq.Direction}" });
+                    return Reject("no_exit", $"No exit {actionReq.Direction}");
 
                 Movement.Execute(session, dir);
 
@@ -363,13 +374,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                         var pick = EncounterSelection.PickOverworld(session, node);
                         if (pick?.Enc is { } enc)
                         {
-                            var step = EncounterRunner.Begin(session, enc);
+                            var step = BeginEncounter(session, enc);
                             await store.Save(player);
                             return new OkObjectResult(BuildEncounterResponse(session, step.Encounter, step.GatedChoices));
                         }
                         if (pick?.Fight is { } fight)
                         {
-                            var turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, fight.Id);
+                            var turn = BeginCombat(session, fight.Id);
                             await store.Save(player);
                             return new OkObjectResult(BuildCombatResponse(session, turn));
                         }
@@ -393,16 +404,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "travel":
             {
                 if (session.Mode != SessionMode.Exploring)
-                    return new BadRequestObjectResult(new { error = "Cannot travel while not exploring" });
+                    return Reject("not_exploring_travel", "Cannot travel while not exploring");
                 if (player.CurrentDungeonId != null)
-                    return new BadRequestObjectResult(new { error = "Cannot travel while in a dungeon" });
+                    return Reject("travel_in_dungeon", "Cannot travel while in a dungeon");
 
                 if (actionReq.Path is not { Count: >= 2 } proposedPath)
-                    return new BadRequestObjectResult(new { error = "Path is required (at least 2 points)" });
+                    return Reject("path_too_short", "Path is required (at least 2 points)");
 
                 // Validate start matches current position
                 if (proposedPath[0].X != player.X || proposedPath[0].Y != player.Y)
-                    return new BadRequestObjectResult(new { error = "Path must start at current position" });
+                    return Reject("path_bad_origin", "Path must start at current position");
 
                 var stepsCompleted = 0;
                 string stopReason = "arrived";
@@ -419,7 +430,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                     // Validate each step is a single cardinal move
                     if (Math.Abs(dx) + Math.Abs(dy) != 1)
-                        return new BadRequestObjectResult(new { error = $"Invalid step at index {i}: not adjacent" });
+                        return Reject("path_step_not_adjacent", $"Invalid step at index {i}: not adjacent");
 
                     var stepDir = dx == 1 ? Direction.East
                         : dx == -1 ? Direction.West
@@ -428,7 +439,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
                     // Validate the move is legal (not into water, not out of bounds)
                     if (Movement.TryMove(session, stepDir) == null)
-                        return new BadRequestObjectResult(new { error = $"Blocked step at index {i}" });
+                        return Reject("path_step_blocked", $"Blocked step at index {i}");
 
                     Movement.Execute(session, stepDir);
                     stepsCompleted = i;
@@ -579,7 +590,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             var pick = EncounterSelection.PickOverworld(session, encNode);
                             if (pick?.Enc is { } enc)
                             {
-                                var step = EncounterRunner.Begin(session, enc);
+                                var step = BeginEncounter(session, enc);
                                 var encTravails = BuildTravailLines(player); // flush before save
                                 await store.Save(player);
                                 return new OkObjectResult(new GameResponse
@@ -602,7 +613,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             }
                             if (pick?.Fight is { } fight)
                             {
-                                var turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, fight.Id);
+                                var turn = BeginCombat(session, fight.Id);
                                 var fightTravails = BuildTravailLines(player); // flush before save
                                 await store.Save(player);
                                 var info = BuildCombatInfo(session, turn);
@@ -686,16 +697,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "choose":
             {
                 if (session.CurrentEncounter == null)
-                    return new BadRequestObjectResult(new { error = "No active encounter" });
+                    return Reject("no_active_encounter", "No active encounter");
 
                 var allChoices = session.CurrentEncounter.Choices;
                 var idx = actionReq.ChoiceIndex ?? -1;
                 if (idx < 0 || idx >= allChoices.Count)
-                    return new BadRequestObjectResult(new { error = $"Invalid choice index: {idx}" });
+                    return Reject("invalid_choice_index", $"Invalid choice index: {idx}");
 
                 var chosen = allChoices[idx];
                 if (chosen.Requires != null && !Conditions.Evaluate(chosen.Requires, player, data.Balance, Random.Shared))
-                    return new BadRequestObjectResult(new { error = "Choice is locked" });
+                    return Reject("choice_locked", "Choice is locked");
                 var result = EncounterRunner.Choose(session, chosen);
 
                 switch (result)
@@ -719,7 +730,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 var next = EncounterSelection.ResolveNavigation(session, finished.NavigateToId!, session.CurrentNode);
                                 if (next != null)
                                 {
-                                    var step = EncounterRunner.Begin(session, next);
+                                    var step = BeginEncounter(session, next);
                                     await store.Save(player);
                                     return new OkObjectResult(new GameResponse
                                     {
@@ -737,7 +748,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             case FinishReason.CombatStarted:
                             {
                                 EncounterRunner.EndEncounter(session);
-                                var combatTurn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, finished.NavigateToId!);
+                                var combatTurn = BeginCombat(session, finished.NavigateToId!);
                                 await store.Save(player);
                                 return new OkObjectResult(BuildCombatResponse(session, combatTurn));
                             }
@@ -795,16 +806,16 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "pick_approach":
             {
                 if (session.CurrentEncounter == null || player.ActivePickerCheck == null)
-                    return new BadRequestObjectResult(new { error = "No active picker check" });
+                    return Reject("no_active_picker", "No active picker check");
 
                 var approachId = actionReq.Approach;
                 if (string.IsNullOrEmpty(approachId))
-                    return new BadRequestObjectResult(new { error = "approach id required" });
+                    return Reject("missing_approach_id", "approach id required");
 
                 // Validate the approach id is in the skill's roster
                 var pickerSkill = player.ActivePickerCheck.Skill;
                 if (Dreamlands.Rules.ApproachRoster.GetApproach(pickerSkill, approachId) == null)
-                    return new BadRequestObjectResult(new { error = $"Invalid approach '{approachId}' for skill '{pickerSkill}'" });
+                    return Reject("invalid_approach", $"Invalid approach '{approachId}' for skill '{pickerSkill}'");
 
                 var pickResult = EncounterRunner.Pick(session, approachId);
                 switch (pickResult)
@@ -824,7 +835,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                                 var pickNav = EncounterSelection.ResolveNavigation(session, pickFinished.NavigateToId!, session.CurrentNode);
                                 if (pickNav != null)
                                 {
-                                    var step = EncounterRunner.Begin(session, pickNav);
+                                    var step = BeginEncounter(session, pickNav);
                                     await store.Save(player);
                                     return new OkObjectResult(new GameResponse
                                     {
@@ -842,7 +853,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                             case FinishReason.CombatStarted:
                             {
                                 EncounterRunner.EndEncounter(session);
-                                var combatTurn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, pickFinished.NavigateToId!);
+                                var combatTurn = BeginCombat(session, pickFinished.NavigateToId!);
                                 await store.Save(player);
                                 return new OkObjectResult(BuildCombatResponse(session, combatTurn));
                             }
@@ -901,18 +912,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var slotId = actionReq.RewardSlotId;
                 if (string.IsNullOrEmpty(slotId))
-                    return new BadRequestObjectResult(new { error = "rewardSlotId required" });
+                    return Reject("missing_reward_slot", "rewardSlotId required");
 
                 if (player.PendingLevels <= 0)
-                    return new BadRequestObjectResult(new { error = "No pending level picks" });
+                    return Reject("no_pending_level_picks", "No pending level picks");
 
                 var slot = System.Array.Find(Dreamlands.Rules.ArcRewards.All, s => s.Id == slotId);
                 if (slot == null)
-                    return new BadRequestObjectResult(new { error = $"Unknown reward slot '{slotId}'" });
+                    return Reject("unknown_reward_slot", $"Unknown reward slot '{slotId}'");
 
                 var takenCount = player.ArcRewardsTaken.GetValueOrDefault(slotId);
                 if (takenCount >= slot.Cap)
-                    return new BadRequestObjectResult(new { error = $"Slot '{slotId}' is at cap" });
+                    return Reject("reward_slot_at_cap", $"Slot '{slotId}' is at cap");
 
                 // Reconstruct any pending outcome from CurrentEncounterId for closed-tab resilience
                 var pickStep = EncounterRunner.PickReward(session, slotId, null);
@@ -929,24 +940,24 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "enter_dungeon":
             {
                 if (session.Mode != SessionMode.Exploring)
-                    return new BadRequestObjectResult(new { error = "Cannot enter dungeon while not exploring" });
+                    return Reject("not_exploring_enter_dungeon", "Cannot enter dungeon while not exploring");
 
                 var node = session.CurrentNode;
                 if (node.Poi?.Kind != PoiKind.Dungeon || node.Poi.DungeonId == null)
-                    return new BadRequestObjectResult(new { error = "No dungeon at current location" });
+                    return Reject("no_dungeon_here", "No dungeon at current location");
 
                 if (player.CompletedDungeons.Contains(node.Poi.DungeonId))
-                    return new BadRequestObjectResult(new { error = "Dungeon already completed" });
+                    return Reject("dungeon_completed", "Dungeon already completed");
 
                 player.CurrentDungeonId = node.Poi.DungeonId;
                 var start = EncounterSelection.GetDungeonStart(session, node);
                 if (start == null)
                 {
                     player.CurrentDungeonId = null;
-                    return new BadRequestObjectResult(new { error = "Dungeon entrance is sealed" });
+                    return Reject("dungeon_sealed", "Dungeon entrance is sealed");
                 }
 
-                var step = EncounterRunner.Begin(session, start);
+                var step = BeginEncounter(session, start);
                 await store.Save(player);
                 response = BuildEncounterResponse(session, step.Encounter, step.GatedChoices);
                 break;
@@ -955,10 +966,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "start_encounter":
             {
                 if (session.Mode != SessionMode.Exploring)
-                    return new BadRequestObjectResult(new { error = "Cannot start encounter while not exploring" });
+                    return Reject("not_exploring_start_encounter", "Cannot start encounter while not exploring");
 
                 if (string.IsNullOrEmpty(actionReq.EncounterId))
-                    return new BadRequestObjectResult(new { error = "encounterId required" });
+                    return Reject("missing_encounter_id", "encounterId required");
 
                 var available = EncounterSelection.GetAvailableAtPoi(session, session.CurrentNode);
                 var encTarget = available.FirstOrDefault(e => e.Id.Equals(actionReq.EncounterId, StringComparison.OrdinalIgnoreCase));
@@ -972,7 +983,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 }
 
                 if (encTarget == null)
-                    return new BadRequestObjectResult(new { error = $"Encounter '{actionReq.EncounterId}' not available at this location" });
+                    return Reject("encounter_not_available", $"Encounter '{actionReq.EncounterId}' not available at this location");
 
                 if (curNode.Poi?.Kind == PoiKind.Settlement && curNode.Poi.SettlementId != null
                     && session.Player.Settlements.TryGetValue(curNode.Poi.SettlementId, out var sState2))
@@ -980,7 +991,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                     sState2.StoryletOffers.Remove(actionReq.EncounterId);
                 }
 
-                var step = EncounterRunner.Begin(session, encTarget);
+                var step = BeginEncounter(session, encTarget);
                 await store.Save(player);
                 response = BuildEncounterResponse(session, step.Encounter, step.GatedChoices);
                 break;
@@ -1008,7 +1019,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "camp_resolve":
             {
                 if (session.Mode != SessionMode.Camp)
-                    return new BadRequestObjectResult(new { error = "Not in camp mode" });
+                    return Reject("not_in_camp", "Not in camp mode");
 
                 var node = session.CurrentNode;
                 var startCity = data.Map.StartingCity;
@@ -1091,15 +1102,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var sNode = session.CurrentNode;
                 if (sNode.Poi?.Kind != PoiKind.Settlement || sNode.Poi.SettlementId == null)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+                    return Reject("not_at_settlement", "Not at a settlement");
 
                 if (actionReq.Order == null)
-                    return new BadRequestObjectResult(new { error = "order required" });
+                    return Reject("missing_order", "order required");
 
                 var settlementId = sNode.Poi.SettlementId;
                 SettlementRunner.EnsureSettlement(session);
                 if (!player.Settlements.TryGetValue(settlementId, out var settlementState))
-                    return new BadRequestObjectResult(new { error = "Settlement not initialized" });
+                    return Reject("settlement_not_initialized", "Settlement not initialized");
 
                 var order = new MarketOrder(
                     actionReq.Order.Buys.Select(b => new BuyLine(b.ItemId, b.Quantity)).ToList(),
@@ -1135,7 +1146,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var rNode = session.CurrentNode;
                 if (rNode.Poi?.Kind != PoiKind.Settlement)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+                    return Reject("not_at_settlement", "Not at a settlement");
 
                 var biome = rNode.Region?.Terrain.ToString().ToLowerInvariant() ?? "plains";
                 var rationRng = new Random();
@@ -1158,18 +1169,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var hNode = session.CurrentNode;
                 if (hNode.Poi?.Kind != PoiKind.Settlement || hNode.Poi.SettlementId == null)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+                    return Reject("not_at_settlement", "Not at a settlement");
 
                 if (string.IsNullOrEmpty(actionReq.OfferId))
-                    return new BadRequestObjectResult(new { error = "offerId required" });
+                    return Reject("missing_offer_id", "offerId required");
 
                 SettlementRunner.EnsureSettlement(session);
                 if (!player.Settlements.TryGetValue(hNode.Poi.SettlementId, out var haulState))
-                    return new BadRequestObjectResult(new { error = "Settlement not initialized" });
+                    return Reject("settlement_not_initialized", "Settlement not initialized");
 
                 var claimResult = Market.ClaimHaul(player, actionReq.OfferId, haulState);
                 if (!claimResult.Success)
-                    return new BadRequestObjectResult(new { error = claimResult.Message });
+                    return Reject("haul_claim_refused", claimResult.Message);
 
                 await store.Save(player);
                 response = new GameResponse
@@ -1197,11 +1208,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "abandon_haul":
             {
                 if (string.IsNullOrEmpty(actionReq.OfferId))
-                    return new BadRequestObjectResult(new { error = "offerId required" });
+                    return Reject("missing_offer_id", "offerId required");
 
                 var haulIdx = player.Pack.FindIndex(i => i.HaulOfferId == actionReq.OfferId);
                 if (haulIdx < 0)
-                    return new BadRequestObjectResult(new { error = "Haul not found in pack" });
+                    return Reject("haul_not_in_pack", "Haul not found in pack");
 
                 player.Pack.RemoveAt(haulIdx);
                 await store.Save(player);
@@ -1213,18 +1224,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var bNode = session.CurrentNode;
                 if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.SettlementId == null)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+                    return Reject("not_at_settlement", "Not at a settlement");
 
                 if (string.IsNullOrEmpty(actionReq.ItemId) || string.IsNullOrEmpty(actionReq.Source))
-                    return new BadRequestObjectResult(new { error = "itemId and source required" });
+                    return Reject("missing_item_or_source", "itemId and source required");
 
                 SettlementRunner.EnsureSettlement(session);
                 if (!player.Settlements.TryGetValue(bNode.Poi.SettlementId, out var bDepositState))
-                    return new BadRequestObjectResult(new { error = "Settlement not initialized" });
+                    return Reject("settlement_not_initialized", "Settlement not initialized");
 
                 var depositError = Bank.Deposit(player, actionReq.ItemId, actionReq.Source, bDepositState, data.Balance);
                 if (depositError != null)
-                    return new BadRequestObjectResult(new { error = depositError });
+                    return Reject("bank_deposit_refused", depositError);
 
                 await store.Save(player);
                 response = BuildInventoryResponse(session, player);
@@ -1235,18 +1246,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var bNode = session.CurrentNode;
                 if (bNode.Poi?.Kind != PoiKind.Settlement || bNode.Poi.SettlementId == null)
-                    return new BadRequestObjectResult(new { error = "Not at a settlement" });
+                    return Reject("not_at_settlement", "Not at a settlement");
 
                 if (actionReq.BankIndex == null)
-                    return new BadRequestObjectResult(new { error = "bankIndex required" });
+                    return Reject("missing_bank_index", "bankIndex required");
 
                 SettlementRunner.EnsureSettlement(session);
                 if (!player.Settlements.TryGetValue(bNode.Poi.SettlementId, out var bWithdrawState))
-                    return new BadRequestObjectResult(new { error = "Settlement not initialized" });
+                    return Reject("settlement_not_initialized", "Settlement not initialized");
 
                 var withdrawError = Bank.Withdraw(player, actionReq.BankIndex.Value, bWithdrawState, data.Balance);
                 if (withdrawError != null)
-                    return new BadRequestObjectResult(new { error = withdrawError });
+                    return Reject("bank_withdraw_refused", withdrawError);
 
                 await store.Save(player);
                 response = BuildInventoryResponse(session, player);
@@ -1256,11 +1267,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "equip":
             {
                 if (string.IsNullOrEmpty(actionReq.ItemId))
-                    return new BadRequestObjectResult(new { error = "ItemId is required" });
+                    return Reject("missing_item_id", "ItemId is required");
 
                 var results = Mechanics.Apply([$"equip {actionReq.ItemId}"], player, data.Balance, session.Rng);
                 if (results.Count == 0)
-                    return new BadRequestObjectResult(new { error = $"Cannot equip '{actionReq.ItemId}' — not in pack or not equippable" });
+                    return Reject("cannot_equip", $"Cannot equip '{actionReq.ItemId}' — not in pack or not equippable");
 
                 response = BuildInventoryResponse(session, player);
                 break;
@@ -1270,11 +1281,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             {
                 var slot = actionReq.Slot;
                 if (string.IsNullOrEmpty(slot))
-                    return new BadRequestObjectResult(new { error = "Slot is required (weapon, armor)" });
+                    return Reject("missing_slot", "Slot is required (weapon, armor)");
 
                 var results = Mechanics.Apply([$"unequip {slot}"], player, data.Balance, session.Rng);
                 if (results.Count == 0)
-                    return new BadRequestObjectResult(new { error = $"Nothing equipped in slot '{slot}'" });
+                    return Reject("slot_empty", $"Nothing equipped in slot '{slot}'");
 
                 response = BuildInventoryResponse(session, player);
                 break;
@@ -1283,18 +1294,18 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             case "discard":
             {
                 if (string.IsNullOrEmpty(actionReq.ItemId))
-                    return new BadRequestObjectResult(new { error = "ItemId is required" });
+                    return Reject("missing_item_id", "ItemId is required");
 
                 var results = Mechanics.Apply([$"discard {actionReq.ItemId}"], player, data.Balance, session.Rng);
                 if (results.Count == 0)
-                    return new BadRequestObjectResult(new { error = $"Item '{actionReq.ItemId}' not found in inventory" });
+                    return Reject("item_not_in_inventory", $"Item '{actionReq.ItemId}' not found in inventory");
 
                 response = BuildInventoryResponse(session, player);
                 break;
             }
 
             default:
-                return new BadRequestObjectResult(new { error = $"Unknown action: {actionReq.Action}" });
+                return Reject("unknown_action", $"Unknown action: {actionReq.Action}");
         }
 
         await store.Save(player);
@@ -2152,7 +2163,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         Dreamlands.Orchestration.CombatOrchestrator.CombatTurn turn;
         try
         {
-            turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, beginReq.EncounterId);
+            turn = BeginCombat(session, beginReq.EncounterId);
         }
         catch (InvalidOperationException ex)
         {
@@ -2219,11 +2230,57 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             return new BadRequestObjectResult(new { error = "Combat is already resolved" });
 
         var turn = Dreamlands.Orchestration.CombatOrchestrator.Step(session, action);
+        RecordCombatOutcome(turn);
 
         // On player death, don't rescue immediately — leave the defeat coda visible
         // and let Continue (action="continue", above) chain into CombatRescue.
         await store.Save(player);
         return new OkObjectResult(BuildCombatResponse(session, turn));
+    }
+
+    /// <summary>
+    /// Wraps EncounterRunner.Begin so every encounter entry is counted in one place —
+    /// encounters start from the intro, road rolls, chains and navigation targets.
+    /// </summary>
+    private static EncounterStep.ShowEncounter BeginEncounter(GameSession session, Encounter encounter)
+    {
+        Telemetry.RecordEncounterStarted(encounter.Id);
+        return EncounterRunner.Begin(session, encounter);
+    }
+
+    /// <summary>
+    /// Wraps CombatOrchestrator.Begin so every entry into a fight is counted in one
+    /// place — combat can start from an encounter chain, a navigation target, or the
+    /// debug picker.
+    /// </summary>
+    private static Dreamlands.Orchestration.CombatOrchestrator.CombatTurn BeginCombat(
+        GameSession session, string encounterId)
+    {
+        var turn = Dreamlands.Orchestration.CombatOrchestrator.Begin(session, encounterId);
+        Telemetry.RecordCombatStarted();
+        RecordCombatOutcome(turn);
+        return turn;
+    }
+
+    /// <summary>
+    /// Combat metrics live at this boundary, not in Dreamlands.Combat — the engine
+    /// stays a pure (state, args, balance, rng) -> (state, results) library so it can
+    /// be driven headless for testing and modelling. The terminal Outcome event is
+    /// the engine telling us how the fight ended; we only translate it.
+    /// </summary>
+    private static void RecordCombatOutcome(Dreamlands.Orchestration.CombatOrchestrator.CombatTurn turn)
+    {
+        var outcome = turn.Events.OfType<Dreamlands.Combat.CombatEvent.Outcome>().FirstOrDefault();
+        if (outcome == null) return;
+
+        Telemetry.RecordCombatEnded(outcome switch
+        {
+            { PlayerWon: true } => "won",
+            { PlayerLost: true } => "lost",
+            { PlayerFled: true } => "fled",
+            { MonsterFled: true } => "monster_fled",
+            _ => "other",
+        });
     }
 
     /// <summary>

@@ -4,7 +4,7 @@ title: "OpenTelemetry export from GameServer to AppSignal"
 state: active
 created: 2026-08-06
 updated: 2026-08-06
-status: Phase 1 deployed (production app settings still unset, so it is inert there) and validated end-to-end against the dev AppSignal app — the custom metric is visible in their UI. Phase 2 pass 1 (game.action span + action count/duration + game.created) built and locally verified, traces now flowing; NOT yet deployed. Remaining: phase 2 pass 2 (reason_code sweep, encounter/combat counters), phase 3 Cosmos, phase 4 host telemetry + App Insights teardown.
+status: Phase 1 deployed (production app settings still unset, so it is inert there) and validated end-to-end against the dev AppSignal app — the custom metric is visible in their UI. Phase 2 COMPLETE (pass 1 span + action metrics, pass 2 reason codes + encounter/combat counters), built and locally verified, traces flowing; NOT yet deployed — deployment deferred until phase 2 was tidy, which it now is. Remaining: deploy + set production app settings, phase 3 Cosmos, phase 4 host telemetry + App Insights teardown.
 touches:
   files:
     - server/GameServer/GameServer.csproj
@@ -288,7 +288,42 @@ Two notes for whoever picks this up:
   (`actionmove`). Don't read a missing token as a missing label; check the
   separator-delimited ones (`ok`, `rejected`, `not_found` all appear cleanly).
 
-**The 400 problem, and the one refactor this phase needs — still to do (pass 2).** Client/server drift
+### Phase 2 pass 2 — built 2026-08-06, verified locally
+
+Shipped: `dreamlands.rejected{reason_code}` across all 56 reject sites in
+`RunGameAction` (46 distinct codes), `dreamlands.encounter.started{kind}`, and
+`dreamlands.combat.started` / `dreamlands.combat.ended{result}`.
+
+`Reject(reasonCode, message)` returns the existing human message untouched — the
+wire contract is unchanged — and additionally stamps `dreamlands.reject_reason`
+on the current span, so a single trace explains its own 400 without log access.
+
+**Combat and encounter counters sit at the server boundary, never in `lib/`.**
+`Dreamlands.Combat` and `Dreamlands.Orchestration` stay pure
+`(state, args, balance, rng) -> (state, results)` libraries so they can be driven
+headless for testing and modelling; instrumenting them would put I/O in the one
+place the architecture guarantees there is none. Instead two thin wrappers in
+`GameFunctions` — `BeginCombat` (5 call sites) and `BeginEncounter` (8 call
+sites) — count entries, and `RecordCombatOutcome` translates the engine's own
+terminal `CombatEvent.Outcome` into a `won|lost|fled|monster_fled` label. The
+engine tells us how the fight ended; we only translate it.
+
+Verified on the wire by driving each path: `unknown_action` and
+`invalid_choice_index` reason codes, `kind=intro`, and a real fight begun through
+the debug picker then fled (`combat.started`, `combat.ended{result=fled}`). All
+510 tests pass.
+
+**Deliberately not swept:** the ~21 `BadRequestObjectResult` sites *outside*
+`RunGameAction` (market, inn, bank, combat endpoints). The action endpoint is
+where client/server drift shows up, and a partial sweep with a clear boundary
+beats a sprawling one. Extend if those start mattering.
+
+**Observation, pre-existing, not fixed here:** malformed JSON in the request body
+makes `ReadFromJsonAsync` throw, which surfaces as a **500**, not a 400. Worth a
+separate decision — it is a client error being reported as a server fault, and it
+will show up as `outcome=error` in the action metrics.
+
+**The 400 problem, and the refactor it needed — DONE in pass 2, kept for context.** Client/server drift
 shows up as a rising rate of "legal request the server refuses", and today those
 are ~40 inline `return new BadRequestObjectResult(new { error = "…" })` sites,
 several with the user's input interpolated into the message
