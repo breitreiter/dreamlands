@@ -186,7 +186,12 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         // action is slow" answerable — and in the isolated worker it is the only
         // server-side span we get at all (see plans/otel_appsignal.md §2a).
         var verb = actionReq.Action ?? "none";
-        using var activity = Telemetry.Source.StartActivity("game.action");
+        // The verb goes in the span NAME so a trace list is readable at a glance, but
+        // only if it is one we recognise: the name is a grouping key, and anyone can
+        // POST an arbitrary action string. Unknown verbs stay under the bare name and
+        // are counted as unknown_action anyway.
+        using var activity = Telemetry.Source.StartActivity(
+            KnownActions.Contains(verb) ? $"game.action {verb}" : "game.action");
         activity?.SetTag("dreamlands.action", verb);
         activity?.SetTag("dreamlands.game_id", id);
 
@@ -200,6 +205,19 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
         return result;
     }
+
+    /// <summary>
+    /// The verbs RunGameAction's switch handles. Only used to bound span names — if
+    /// this drifts from the switch the span just falls back to the bare name, which is
+    /// a harmless degradation rather than a bug.
+    /// </summary>
+    private static readonly HashSet<string> KnownActions =
+    [
+        "inn_book", "move", "travel", "choose", "pick_approach", "pick_reward",
+        "enter_dungeon", "start_encounter", "end_encounter", "end_dungeon",
+        "camp_resolve", "market_order", "restock_rations", "claim_haul",
+        "abandon_haul", "bank_deposit", "bank_withdraw", "equip", "unequip", "discard",
+    ];
 
     /// <summary>
     /// Maps the handler's result to a bounded outcome vocabulary. Reading it off the

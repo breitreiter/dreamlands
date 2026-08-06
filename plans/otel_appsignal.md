@@ -346,7 +346,40 @@ balances, encounter-choice distributions, per-player progression. Those belong t
 the event-forensics log (§7), not to a metrics backend, and mixing them makes both
 worse.
 
-## 4. Phase 3 — Cosmos spans
+## 4. Phase 3 — Cosmos spans + trace legibility
+
+### Built 2026-08-06 (verified in production, not locally — see caveat)
+
+Two things, shipped together because the first deploy of phase 2 showed traces
+reading `game.action, GET, GET, GET`:
+
+1. **Span names carry the verb.** `game.action move`, `game.action choose`. Only
+   for verbs in the switch's known set — a span name is a grouping key and anyone
+   can POST an arbitrary action string, so unrecognised verbs stay under the bare
+   name (and are already counted as `unknown_action`). If that set drifts from the
+   switch the name just degrades to `game.action`, which is harmless.
+2. **Client spans identify themselves.** OTel names client spans after the HTTP
+   method alone, hence `GET GET GET`. They now display as `GET <host>`; paths are
+   deliberately excluded because Cosmos URLs embed document ids. The Functions
+   runtime's own `*.core.windows.net` storage polling is filtered out entirely —
+   it is not our code and would otherwise dominate.
+
+**Verified facts about the Cosmos SDK (3.46.1), by reflection rather than docs:**
+`CosmosClientOptions.CosmosClientTelemetryOptions.DisableDistributedTracing`
+defaults to **true**, so Cosmos tracing is off unless explicitly enabled — now set
+to `false` in `CosmosGameStore.CreateClient`. The SDK pins its diagnostic namespace
+as the constant `OpenTelemetryAttributeKeys.DiagnosticNamespace = "Azure.Cosmos"`
+but does not expose the per-operation source names, so the tracer registers
+`AddSource("Azure.Cosmos*")` — a wildcard, matched to what could actually be
+confirmed.
+
+**Caveat: the Cosmos and client-span work cannot be verified locally.** Dev uses
+the file-backed store and makes no outbound calls, so there is nothing to trace.
+This shipped verified-by-construction and must be confirmed in AppSignal: expect
+Cosmos operation spans as children of `game.action`, and the surviving bare `GET`s
+to become `GET <cosmos-host>`.
+
+### Original notes
 
 - **Cosmos.** `CosmosGameStore.CreateClient` currently builds a client with no
   telemetry options. The Cosmos SDK ships distributed tracing behind its own

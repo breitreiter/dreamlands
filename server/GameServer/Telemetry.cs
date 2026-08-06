@@ -152,10 +152,33 @@ public static class Telemetry
             // registered for metrics only, below.
             .WithTracing(t => t
                 .AddSource(SourceName)
+                // Cosmos SDK spans (enabled in CosmosGameStore.CreateClient). Wildcard
+                // because the SDK pins only its diagnostic namespace — the constant
+                // OpenTelemetryAttributeKeys.DiagnosticNamespace is "Azure.Cosmos" —
+                // and not the per-operation source names built on top of it.
+                .AddSource("Azure.Cosmos*")
                 .AddHttpClientInstrumentation(o =>
-                    // The worker's own long-lived gRPC channel to the host is noise.
+                {
                     o.FilterHttpRequestMessage = r =>
-                        r.RequestUri?.AbsolutePath.Contains("AzureFunctionsRpcMessages") != true))
+                    {
+                        var uri = r.RequestUri;
+                        if (uri == null) return true;
+                        // The worker's own gRPC channel to the Functions host, and the
+                        // runtime's own storage plumbing (AzureWebJobsStorage polling).
+                        // Neither is our code; both would otherwise dominate the traces.
+                        if (uri.AbsolutePath.Contains("AzureFunctionsRpcMessages")) return false;
+                        return !uri.Host.EndsWith(".core.windows.net", StringComparison.OrdinalIgnoreCase);
+                    };
+                    // OTel names client spans after the HTTP method alone, so a trace
+                    // list reads "GET GET GET". Add the host — bounded, and enough to
+                    // tell Cosmos from anything else at a glance. Paths are deliberately
+                    // left out: Cosmos URLs embed document ids.
+                    o.EnrichWithHttpRequestMessage = (activity, request) =>
+                    {
+                        if (request.RequestUri is { } uri)
+                            activity.DisplayName = $"{request.Method.Method} {uri.Host}";
+                    };
+                }))
             .WithMetrics(m => m
                 .AddMeter(SourceName)
                 .AddAspNetCoreInstrumentation()

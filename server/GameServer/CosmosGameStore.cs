@@ -52,6 +52,13 @@ public class CosmosGameStore : IGameStore
         return new CosmosClient(connectionString, new CosmosClientOptions
         {
             UseSystemTextJsonSerializerWithOptions = jsonOpts,
+            // Off by default (verified against SDK 3.46.1: DisableDistributedTracing
+            // defaults to true). Every game action does at least one read and one
+            // write, so without this the largest slice of request time is invisible.
+            CosmosClientTelemetryOptions = new CosmosClientTelemetryOptions
+            {
+                DisableDistributedTracing = false,
+            },
         });
     }
 
