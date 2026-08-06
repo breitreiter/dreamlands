@@ -354,7 +354,69 @@ low `max_tokens` returns an empty *billed* completion, because kimi's always-on
 thinking eats the budget before `</think>` — the mechanism behind
 `EmptyCompletionException`.
 
-### Resume here — T5, `signal_array`
+## Session checkpoint — 2026-08-05: T5 in flight, `signal_array` coloured
+
+**Committed and clean.** Six commits since the last checkpoint:
+
+| Commit | What |
+|---|---|
+| `67a1247` | `signal_array` Start.enc:7 — the one untagged beat, retagged `(wonder)` + rewritten |
+| `9f5a00a` | first-pass thread set + the parser bug it exposed |
+| `daeaabf` | **parser keeps choice-level mechanics; `check` fails on dropped ones** |
+| `6a8dbd5` | `format.md` §3.2 E + `arc_patterns.md` §1a correction |
+| `e16eb87` | `forge suggest-threads` + adopted thread set |
+| `f2f5878` | TODO — arc reachability lint pointed at the working algorithm |
+
+### Where `signal_array` is
+
+- **Substrate**: complete, all 67 beats tone-tagged (authored, not LLM — **skip
+  `categorize`**, `--force` would overwrite the deliberate `(wonder)` on Start:7).
+- **Parsed**: 67 beats, sidecars match disk.
+- **Threads**: 5 (`siesta` 54, `silence` 50, `withdraw` 46, `leave` 39, `roadside` 5),
+  **60/67 beats covered**. The 7 uncovered are all `Grabbed.enc` — reachable only via a
+  branch `Thread.Walk` cannot select (it takes the first branch's navigation). Open
+  decision: add branch-forcing (`"Move on the housing#else"`) or let those 7 fall to
+  isolated synthesis.
+- **Colour**: 67/67 done (one overnight pass, 66 beats). **Sidecars are gitignored** —
+  backup of the bank at `<scratchpad>/colorbank-backup/`.
+- **Review gate**: rendered to `out/review/` (whole-arc + one per thread). Read
+  `signal_array.review.siesta.md` first — it is the order kimi will see.
+- **Not yet run**: weave (PAID, ~60 unique calls against a 250/day cf cap).
+
+### Colour-bank repairs applied
+
+12 hand fixes to `stages.color.enriched` across 5 beats, all cast renames:
+`Start:7` invented names for all four crew (pre-empting a reveal the source withholds
+until `Start:11`), `Start:11` `Foreman Hemlock`, `Aftermath:6` `Elias` (was the PC),
+`Aftermath:13` `Elias Finch`, `Rest Interval:24` `Elias` (was Richard's unnamed brother,
+plus a `Husbndry` typo), `Observe:4` `the Peterson dig`.
+
+**IN FLIGHT at checkpoint:** re-colour of `Aftermath:13` (hallucinated an indoor scene
+with lamplight and a Persian rug onto an outdoor dusk beat) and `Veran:4` (`chipped
+Formica`, `fluorescent hum`, `Earl Grey`). Originals saved to
+`<scratchpad>/recolor-originals.json`. **If the reboot killed it**, both beats will have
+no `stages.color`; re-run `forge color <arc>` (it queues exactly the uncoloured ones,
+~35 min cold), or restore from the saved originals.
+
+### Known colour-bank characteristics — do NOT treat as defects
+
+POV flips to first person, em-dashes, markdown asterisks and ~2× expansion are the
+colour stage's normal signature; the villa's bank (which produced the project's best
+prose) measures the same. Colour is a bank, not a draft — `weave` reads the `facts` list
+alongside it and writes clean second-person prose. Still open on `signal_array` and worth
+a human eye: **13 beats with anachronism** (concrete, sodium, plastic, obsidian ×4 in
+`Completion`/`Grabbed`) — flagged, not fixed.
+
+### Resume here
+
+1. Verify the two re-coloured beats (or re-run them).
+2. Read the review gate; re-colour anything else that fails.
+3. Decide `Grabbed` branch-forcing.
+4. `forge weave` per thread, `siesta` first.
+
+---
+
+### (historical) Resume point — T5, `signal_array`
 
 Prerequisites are all clear. Substrate is clean (67 beats, all tone-tagged since
 `67a1247`). Next: `forge parse`, then **author `_threads.json` to 67/67 coverage**,
