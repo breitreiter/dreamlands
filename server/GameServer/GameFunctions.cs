@@ -1448,6 +1448,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/{id}/debug/add-condition")] HttpRequest req,
         string id)
     {
+        Telemetry.RecordDebugEndpointHit("add-condition");
+
         var debugReq = await req.ReadFromJsonAsync<DebugConditionRequest>();
         if (debugReq == null) return new BadRequestObjectResult(new { error = "Invalid request body" });
 
@@ -2063,6 +2065,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         // Debug-only affordance: lists all loaded .fight encounters so the picker
         // overlay in Explore can let the developer fight any of them. Players
         // never reach this endpoint via the normal play path.
+        Telemetry.RecordDebugEndpointHit("combat-list");
+
         if (data.CombatBundle == null)
             return new OkObjectResult(new { encounters = Array.Empty<object>() });
         var list = data.CombatBundle.Encounters
@@ -2085,6 +2089,8 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "game/{id}/combat/begin")] HttpRequest req,
         string id)
     {
+        Telemetry.RecordDebugEndpointHit("combat-begin");
+
         var beginReq = await req.ReadFromJsonAsync<CombatBeginRequest>();
         if (beginReq == null || string.IsNullOrWhiteSpace(beginReq.EncounterId))
             return new BadRequestObjectResult(new { error = "Missing encounterId" });

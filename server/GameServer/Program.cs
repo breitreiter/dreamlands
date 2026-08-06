@@ -9,6 +9,7 @@ var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
     .ConfigureServices(services =>
     {
+        services.AddDreamlandsTelemetry();
         services.AddSingleton<GameData>();
         services.AddSingleton<IGameStore>(sp =>
         {

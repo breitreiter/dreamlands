@@ -245,6 +245,14 @@ Everything else is a one-liner placeholder.
 - [x] React app hosting — live on Cloudflare Pages via `deploy.sh web` (verified 2026-06-05).
 - [x] GameServer hosting — live on Azure Functions + Cosmos DB via `deploy.sh api`
       (verified 2026-06-05).
+- [ ] OTel export from GameServer → AppSignal's hosted collector. Plan:
+      `plans/otel_appsignal.md` (state: active). Phase 1 (metrics + custom meter)
+      is deployed and validated against the dev collector; production app settings
+      still to set. Config is carried by env vars only, so the collector endpoint
+      and push key live in Azure app settings, never in the repo. Remaining:
+      phase 2 domain spans/metrics, phase 3 Cosmos spans, phase 4 host telemetry +
+      App Insights teardown (it is still active — verified 2026-08-06).
+      Adjacent to, not a replacement for, the event-forensics log above.
 - [ ] Cloudflare R2 asset CDN — create bucket, attach custom domain, wire up push.sh,
       update web client to use CDN base URL in production. Existing push.sh skeleton works.
       Reference at [[cdn_deployment]].
