@@ -142,6 +142,16 @@ Balance is better tuned with real player data anyway.
       (same as Market/Inventory/etc. — duplicate of in-card vitals so the bar matches
       the rest of the app and gives Flee a permanent home)
 - [ ] Rewrite any encounters that use single-spacing between paragraphs
+- [ ] Encounter screen: animate the scroll after a choice is picked. Today the view jumps
+      down to the chosen choice (or slightly above it when there isn't a full screen of
+      text), which makes it hard to follow what just happened. Smooth-scroll upward so the
+      player can track the transition from choice to outcome.
+- [ ] Add visual excitement to the moment a choice is made — some animation/flourish on
+      the selected choice rather than a silent swap to outcome text.
+- [ ] Rework the journey-finish modal:
+      - Stack everything top-to-bottom in one column; scroll if it overflows.
+      - Give each summary line an icon bullet (coins for delivery payout, water for
+        thirst, boot for exhaustion, etc.) instead of undifferentiated text lines.
 - [ ] **Reference screen (`ui/web/src/screens/Reference.tsx`) ground-up rewrite.** It's
       badly stale — describes systems that no longer exist: d20 DC tables + natural 1/20,
       the haversack as a separate container, boots equipment slot, tokens, balanced-meal
@@ -353,6 +363,10 @@ Time estimates: simple .enc ~30 min, .tac add-on ~20 min, arc ~5 hr, locale guid
 Sites that survived the Phase 4 sweep but need real authoring attention. None
 block Phase 5+; revisit during content polish.
 
+- [ ] Review ported `.enc` files and the hard-coded failure lines — many outcome/failure
+      texts currently don't make much sense (leftovers from the d20-era port and generic
+      fallback copy). Sweep them and rewrite so failures read as consequences of what the
+      player actually did.
 - [ ] `arcs/plains/grainway_station/Dalla.enc` — rewrite
 - [ ] `arcs/plains/metal_beast/Belly of the Beast.enc` — rewrite
 - [ ] `arcs/plains/metal_beast/The Gauntlet.tac` — summarize into the arc's
