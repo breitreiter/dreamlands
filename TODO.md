@@ -242,6 +242,24 @@ Everything else is a one-liner placeholder.
       Version-prefix assets for cache busting.
 - [ ] Google OAuth login + session reconnect — implementation, if the launch-blocker
       decision lands on "yes". See [[google_oauth]].
+- [ ] **Move deployment identifiers out of tracked files** (tidy-up, not urgent — the
+      2026-08-04 review found no actual exposure). This repo is public, and the Azure
+      resource group / Function App name sit in tracked prose and now in `deploy.sh`.
+      Nothing here is a credential — real secrets live in Azure app settings
+      (`DREAMLANDS_COSMOS`) and a local wrangler OAuth token, and neither an RG name nor
+      a Pages project name grants access without auth. It's hygiene, not a hole:
+      - `deploy.sh` — replace the `AZURE_RESOURCE_GROUP` / `AZURE_FUNCTIONAPP_NAME`
+        defaults with a gitignored `deploy.env`, plus a tracked `deploy.env.example`
+        (matches the house convention of shipping example config).
+      - Strip the same values from the deployment docs: `project/architecture/
+        content_deploy.md` and `project/architecture/deployment.md` (both already on
+        `origin/main`), and `imp/reference/{content_deploy_pipeline,deployment_ops}.md`.
+        The imp ones are gnome territory — route via a proposal, don't hand-edit.
+      - Note while in there: `imp/reference/deployment_ops.md` still says the domain is
+        `game.dreamlands.org`. It's `merchant.dreamlands.org`; the old host doesn't
+        resolve. Already captured via `imp note` on 2026-08-04.
+      - Rewriting history isn't worth it — these values are already in `origin/main`.
+        Scrubbing forward is enough for hygiene; treat them as public and rely on auth.
 
 ### Testing & Regression
 
