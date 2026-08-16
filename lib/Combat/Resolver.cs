@@ -47,13 +47,13 @@ public static class Resolver
         if (HasWary(p) && m.Base == "attack") p = new Move("defend", new HashSet<string>());
         if (HasWary(m) && p.Base == "attack") m = new Move("defend", new HashSet<string>());
 
-        int pOut = OutgoingDamage(p, m);
-        int mOut = OutgoingDamage(m, p);
+        int pOut = OutgoingDamage(p, m) + Counter(p, m);
+        int mOut = OutgoingDamage(m, p) + Counter(m, p);
         int pPrev = Prevention(p, m);
         int mPrev = Prevention(m, p);
 
-        int pTaken = Math.Max(0, mOut - pPrev);
-        int mTaken = Math.Max(0, pOut - mPrev);
+        int pTaken = Absorb(p, mOut, pPrev);
+        int mTaken = Absorb(m, pOut, mPrev);
 
         int pHeal = Heal(p, m);
         int mHeal = Heal(m, p);
@@ -105,22 +105,64 @@ public static class Resolver
     static int OutgoingDamage(Move attacker, Move defender)
     {
         if (attacker.Base != "attack") return 0;
-        int dmg = 4;
+        int dmg = BaseAttackDamage;
         if (attacker.Has("heavy")) dmg += 4;
         if (attacker.Has("weak")) dmg -= 2;
         if (attacker.Has("riposte") && defender.Base == "attack") dmg += 2;
         return Math.Max(0, dmg);
     }
 
+    /// <summary>
+    /// How much of <paramref name="incoming"/> actually lands.
+    ///
+    /// A Defend CAPS what gets through rather than shaving a flat amount, so a
+    /// guard holds against a haymaker as well as it does against a jab. Everything
+    /// else keeps the old subtractive prevention.
+    ///
+    /// The cap is deliberately not zero for a plain Defend: full immunity was tried
+    /// during the pivot and made combat tedious — every exchange became a stall. The
+    /// trickle is what keeps a guard from being an off-switch.
+    /// </summary>
+    static int Absorb(Move defender, int incoming, int prevention) =>
+        DefendCap(defender) is { } cap
+            ? Math.Min(incoming, cap)
+            : Math.Max(0, incoming - prevention);
+
+    /// <summary>Damage ceiling while guarding, or null for moves that are not a Defend.</summary>
+    static int? DefendCap(Move defender)
+    {
+        if (defender.Base != "defend") return null;
+        if (defender.Has("perfect")) return 0;
+        if (defender.Has("heavy")) return 1;
+        return 2;
+    }
+
+    /// <summary>
+    /// A Defend punches back at an Attack, for the same damage as a base attack.
+    ///
+    /// This is what makes Defend BEAT Attack rather than merely blunt it, and it is
+    /// what closes the RPS triangle: Attack beats Recover (cancels the heal and
+    /// stuns), Recover beats Defend (a free heal against a guard with nothing to
+    /// block), Defend beats Attack. Without it, attacking is never wrong — it beats
+    /// Recover, chips through Defend, and trades evenly with itself, and the player
+    /// wins even trades because a 24-point pool outlasts almost every monster.
+    ///
+    /// See plans/defang_aggro.md for the measurements. A counter of 2 was not
+    /// enough to change behaviour; it has to be a real trade.
+    /// </summary>
+    static int Counter(Move defender, Move attacker) =>
+        defender.Base == "defend" && attacker.Base == "attack" ? BaseAttackDamage : 0;
+
+    /// <summary>Damage of a plain, unmutated Attack. Also the size of a Defend's counter.</summary>
+    public const int BaseAttackDamage = 4;
+
+    /// <summary>
+    /// Subtractive mitigation for the moves that are not a Defend. Defends do not
+    /// appear here — they are handled by <see cref="DefendCap"/>, which is the single
+    /// source of truth for how much a guard lets through.
+    /// </summary>
     static int Prevention(Move defender, Move attacker)
     {
-        if (defender.Base == "defend")
-        {
-            if (defender.Has("perfect")) return 999;
-            int p = 2;
-            if (defender.Has("heavy")) p += 2;
-            return p;
-        }
         if (defender.Base == "attack" && defender.Has("riposte") && attacker.Base == "attack")
             return 2;
         if (defender.Base == "recover" && defender.Has("shielded"))

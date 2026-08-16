@@ -8,30 +8,58 @@ public class ResolverTests
     static Move M(string s) => Move.Parse(s);
 
     [Fact]
-    public void Attack_vs_defend_basic_damage_minus_prevention()
+    public void Attacking_into_a_defend_loses_the_exchange()
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("attack"), M("defend"), rng);
-        // Attack 4 - Defend 2 = 2 damage to monster.
-        Assert.Equal(0, r.PlayerDelta);
+        // The guard caps the hit at 2 and punches back for a full 4. Attacking into
+        // a Defend is now a net loss for the attacker — this is the pairing that
+        // closes the RPS triangle.
+        Assert.Equal(-4, r.PlayerDelta);
         Assert.Equal(-2, r.MonsterDelta);
     }
 
     [Fact]
-    public void Big_attack_pushes_through_basic_defend()
+    public void Defend_caps_a_big_attack_rather_than_shaving_it()
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("heavy attack"), M("defend"), rng);
-        // Wait — Attack mutators in super_rps use "Heavy" for +4. Confirm.
-        Assert.Equal(0, r.PlayerDelta);
-        Assert.Equal(-6, r.MonsterDelta); // 4 base + 4 heavy - 2 defend = 6
+        // 8 raw, but a guard holds against a haymaker as well as against a jab, so
+        // only the cap of 2 lands. The counter is unchanged at 4 — winding up for a
+        // big swing into a guard is the worst thing you can do.
+        Assert.Equal(-4, r.PlayerDelta);
+        Assert.Equal(-2, r.MonsterDelta);
     }
 
     [Fact]
-    public void Perfect_defend_blocks_all_damage()
+    public void Heavy_defend_caps_tighter_than_plain_defend()
+    {
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("heavy attack"), M("heavy defend"), rng);
+        Assert.Equal(-4, r.PlayerDelta);
+        Assert.Equal(-1, r.MonsterDelta);
+    }
+
+    [Fact]
+    public void Perfect_defend_blocks_all_damage_and_still_counters()
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("attack"), M("perfect defend"), rng);
+        Assert.Equal(0, r.MonsterDelta);
+        // Every Defend counters, mutated ones included. Perfect Power Defend is
+        // therefore a clean 4-for-nothing — deliberate, and gated behind Power plus
+        // the two elite armors that carry it.
+        Assert.Equal(-4, r.PlayerDelta);
+    }
+
+    [Fact]
+    public void Recover_beats_defend_completing_the_triangle()
+    {
+        var rng = new Random(0);
+        // Attack > Recover (cancel + stun), Defend > Attack (counter), and here
+        // Recover > Defend: a free heal against a guard with nothing to block.
+        var r = Resolver.Resolve(M("recover"), M("defend"), rng);
+        Assert.Equal(4, r.PlayerDelta);
         Assert.Equal(0, r.MonsterDelta);
     }
 
@@ -61,10 +89,12 @@ public class ResolverTests
     public void Wary_recover_vs_attack_converts_to_defend()
     {
         var rng = new Random(0);
-        // Wary Recover treated as basic Defend. Attack 4 - Defend 2 = 2 damage to player.
+        // Wary Recover is treated as a basic Defend, so it caps the hit at 2 — and,
+        // because it IS a Defend by the time damage resolves, it counters for 4 too.
+        // Wary gear punishes an attacker, not just survives one.
         var r = Resolver.Resolve(M("wary recover"), M("attack"), rng);
         Assert.Equal(-2, r.PlayerDelta);
-        Assert.Equal(0, r.MonsterDelta);
+        Assert.Equal(-4, r.MonsterDelta);
         // No stun on the (converted-to-defend) target.
         Assert.False(r.StunPlayerNext);
     }
