@@ -97,7 +97,7 @@ public sealed class ItemDef
             Description = "A forward-curved dagger from the eastern scrublands. The heavy tip makes a pommel strike land like a hammer.",
             WeaponClass = Rules.WeaponClass.Dagger,
             RequiredCombat = 0,
-            RpsMoves = [new("Attack", "Attack"), new("Stun Power Attack", "Pommel Stun ✦")],
+            RpsMoves = [new("Attack", "Attack"), new("Stunning Power Attack", "Pommel Stun ✦")],
             Biome = "scrub", ShopTier = 2, Cost = 40,
         },
         ["seax"] = new()
@@ -175,7 +175,7 @@ public sealed class ItemDef
             Description = "Versatile and fast. Sword, Expert Combat.",
             WeaponClass = Rules.WeaponClass.Sword,
             RequiredCombat = 4,
-            RpsMoves = [new("Riposte Attack", "Riposte"), new("Stun Power Attack", "Pommel Stun ✦")],
+            RpsMoves = [new("Riposte Attack", "Riposte"), new("Stunning Power Attack", "Pommel Stun ✦")],
             Biome = "plains", ShopTier = 1, Cost = 15,
         },
         ["scimitar"] = new()
