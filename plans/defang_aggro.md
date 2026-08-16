@@ -4,7 +4,7 @@ title: "Defang aggro — closing the RPS triangle"
 state: exploring
 created: 2026-08-16
 updated: 2026-08-16
-status: Findings + measured lever comparison. Recommends one engine change (Defend counter-damages Attack) validated by experiment, plus one content lever that ships without engine work. Nothing implemented; the engine experiments were run locally and reverted.
+status: Findings + measured lever comparison across seven variants. Recommends two composed engine changes (Defend caps incoming damage, and counter-damages Attack) validated by experiment, plus one content lever that ships without engine work. Nothing implemented; all engine experiments were run locally and reverted.
 touches:
   files:
     - lib/Combat/Resolver.cs (the recommended change)
@@ -58,7 +58,19 @@ All numbers are mean win% across all 19 fights at **T0 dagger/light lower**
 | **baseline** | **88.2** | 79.4 | 31.4 | 41.5 | ~57 |
 | Defend prevention 2 → 4 | 83.1 | 77.3 | 42.3 | 50.9 | ~41 |
 | Defend counter-damage 2 | 82.0 | 77.2 | 46.2 | 51.6 | ~36 |
-| **Defend counter-damage 4** | 67.5 | **70.6** | 61.7 | 62.4 | **~9** |
+| Defend counter-damage 4 | 67.5 | **70.6** | 61.7 | 62.4 | ~9 |
+| Defend **caps** damage at 2 | 88.7 | 87.5 | 53.5 | 60.2 | ~35 |
+| cap + heavy 8 → 12 | 74.5 | **77.3** | 52.3 | 57.5 | ~25 |
+| **cap + counter-damage 4** | **68.6** (last) | 78.2 | **82.0** | 80.8 | ~13 |
+
+Cap semantics tested: a Defend caps what gets through rather than shaving a flat
+amount — plain 2, heavy 1, perfect 0 — so a guard holds against a haymaker as
+well as against a jab.
+
+Read the cap row carefully: **it does not touch aggro at all** (88.7 vs a
+baseline 88.2) while lifting control by 22 points and turtle by 19. It raises the
+floor without lowering the ceiling. That is a different, and gentler, instrument
+than the counter — and the two compose.
 
 ### Content levers (single monster, old_bram, berserk win%)
 
@@ -70,13 +82,42 @@ All numbers are mean win% across all 19 fights at **T0 dagger/light lower**
 | + both | 79.4 | riposte is doing all the work |
 | hp 18 → 28 | 74.2 | **backfires — see below** |
 
-## 3. Recommendation: Defend counter-damages Attack, at 4
+## 3. Recommendation: cap + counter, together
 
-One change in `Resolver.cs`: a plain Defend meeting an Attack deals damage back
-equal to a base attack.
+Two changes in `Resolver.cs`, which do different jobs and compose:
 
-This is the only lever tested that actually fixes the problem rather than
-scaling it. At counter-damage 4:
+**Cap** — a Defend caps incoming damage (plain 2, heavy 1, perfect 0) instead of
+subtracting a flat 2. Makes defending *survivable* against big hits.
+
+**Counter** — a plain Defend meeting an Attack deals 4 back. Makes defending
+*worth a slot*.
+
+Together they invert the problem: berserk becomes the **worst** strategy at
+68.6%, while aggro (78.2), control (82.0) and turtle (80.8) land within four
+points of each other. Mindless attacking is punished and all three archetypes
+are live.
+
+### Why both
+
+Neither alone is sufficient, and they fail in opposite directions:
+
+- **Cap alone** leaves berserk untouched (88.7). Defending survives heavies but
+  still deals nothing, so racing is still correct. It lifts the floor only.
+- **Counter alone at 4** works (berserk 67.5) but does nothing about the heavies
+  that make defending feel obligatory rather than chosen.
+
+Cap is also the prerequisite for the thing you actually want out of this: **it
+buys headroom to give monsters bigger attacks.** A player who guards is insulated
+from the buff; a player who does not, eats it. Tested by raising heavy from +4 to
++8 on top of the cap — berserk falls to 74.5% and tell-reading aggro overtakes it
+at 77.3%.
+
+Caveat on that test: `heavy` is symmetric, so raising it buffs player heavy
+weapons too, which is why the upper bands barely move. An asymmetric version —
+authoring more or bigger heavies onto monsters — is a content change and would
+bite harder.
+
+At counter-damage 4:
 
 - **Attack-spam stops being best.** Tell-reading aggro (70.6%) overtakes mindless
   berserk (67.5%) — the game starts rewarding attention.
@@ -91,10 +132,11 @@ scaling it. At counter-damage 4:
 Counter-damage 2 is not enough (berserk still 82.0). The counter has to be a
 real trade, not a scratch.
 
-**Open sub-decision:** whether to also raise prevention 2 → 4 so a defender takes
-nothing at all from a basic attack, or leave them taking 2 so defending is still
-a slow bleed. Prevention 4 alone was tested and is weaker than counter 4; the two
-combined were not tested.
+**Do not go further and make Defend block everything.** That was tried during the
+pivot and made combat feel extremely tedious — full immunity turns every exchange
+into a stall. The cap keeps a trickle coming through, which is what stops a guard
+from being an off-switch. The 2/1/0 cap ladder is a tuning knob if the trickle
+feels wrong.
 
 ## 4. Do NOT use monster HP
 
@@ -125,12 +167,20 @@ Caveat: riposte also drove control down (16.7% → 4.1%), so on its own it makes
 fights harder without making them more interesting. It is a mitigation, not the
 fix.
 
-## 6. `Stunning Defend` is inert — worth a look
+## 6. `Stunning Defend` is weak on monsters BY DESIGN — leave it alone
 
-Adding it moved berserk by **+1.2 points**, i.e. nothing. It procs at 50%
-(`ConditionProcChance`) and only converts one enemy slot to Skipped, which
-against a 3-slot commit is worth ~4 damage half the time. Either the proc rate or
-the effect is too small to matter. Worth deciding whether it should exist at all.
+Adding it to a monster moved berserk by +1.2 points, i.e. nothing. That is not a
+bug and it is not a reason to buff it.
+
+It is balanced for **player** use, where the constraint is the opposite one: a
+guaranteed skip-on-enemy-attack would make control far too strong, since a
+control player already knows the plan and could place the stun exactly where it
+hurts. The 50% proc is what keeps that in check.
+
+The lesson is about the harness, not the move: measuring a player-side move by
+bolting it onto a monster answers the wrong question. Player-side and monster-side
+balance are separate problems for any move whose value depends on knowing the
+opponent's commit.
 
 ## 7. Caveats
 
@@ -153,10 +203,14 @@ recovers still punishes control, and none ships (see
 
 ## 8. Suggested order
 
-1. Prototype counter-damage 4 in `Resolver.cs`, re-run the harness, confirm the
-   spread collapse holds across all bands and entry-spirit levels.
-2. Decide the prevention sub-question (§3).
-3. Narration for countered attacks.
+1. Prototype cap + counter-damage 4 in `Resolver.cs`, re-run the harness, confirm
+   the inversion holds across all bands and entry-spirit levels.
+2. Tune the cap ladder (2/1/0) against feel — it is the dial that decides whether
+   guarding reads as attrition or as a stall (§3).
+3. Narration for countered attacks, and for a capped hit, so a blocked haymaker
+   reads differently from a blocked jab.
 4. Re-check the T3 fights and fight lengths against the new resolver.
-5. Independently, seed `riposte` through the monster corpus (§5) — useful with or
+5. Then, with the cap in place, revisit monster attack sizes — the cap is what
+   makes bigger heavies survivable for a player who guards (§3).
+6. Independently, seed `riposte` through the monster corpus (§5) — useful with or
    without the engine change.
