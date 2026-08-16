@@ -78,7 +78,7 @@ than the counter — and the two compose.
 |---|---|---|
 | baseline | 93.4 | |
 | + `Riposte Attack` | **79.6** | works, -13.8; mutual kills 3.4% → 6.8% |
-| + `Stunning Defend` | 94.6 | **inert** |
+| + `Stunning Defend` | 94.6 | no effect — but see §6, this is by design |
 | + both | 79.4 | riposte is doing all the work |
 | hp 18 → 28 | 74.2 | **backfires — see below** |
 
@@ -117,20 +117,15 @@ weapons too, which is why the upper bands barely move. An asymmetric version —
 authoring more or bigger heavies onto monsters — is a content change and would
 bite harder.
 
-At counter-damage 4:
+### What the counter buys
 
-- **Attack-spam stops being best.** Tell-reading aggro (70.6%) overtakes mindless
-  berserk (67.5%) — the game starts rewarding attention.
-- **The spread collapses from ~57 points to ~9.** All three archetypes land
-  within a few points of each other, which is the "different strategies are
-  viable" property the design wants.
-- **The triangle actually closes:**
-  Attack beats Recover (cancel + stun) → Recover beats Defend (free heal against
-  a guard that has nothing to block) → Defend beats Attack (counter). Each move
-  beats one and loses to one. That is the game the format promises.
+**It closes the triangle.** Attack beats Recover (cancel + stun) → Recover beats
+Defend (free heal against a guard with nothing to block) → Defend beats Attack
+(counter). Each move beats one and loses to one, which is the game the format
+promises and does not currently deliver.
 
-Counter-damage 2 is not enough (berserk still 82.0). The counter has to be a
-real trade, not a scratch.
+It has to be a real trade: counter-damage **2** is not enough (berserk still
+82.0). At 4 the attacker loses the exchange outright.
 
 **Do not go further and make Defend block everything.** That was tried during the
 pivot and made combat feel extremely tedious — full immunity turns every exchange
