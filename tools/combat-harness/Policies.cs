@@ -214,3 +214,27 @@ public sealed class TurtlePolicy : IPolicy
         return slots;
     }
 }
+
+/// <summary>
+/// Pure aggression: attack every slot, always, no matter what the tell says.
+/// This is what "just attack" actually looks like at the keyboard, and it is the
+/// control for <see cref="AggroPolicy"/> — the difference between the two is
+/// precisely what reading the tell is worth.
+/// </summary>
+public sealed class BerserkPolicy : IPolicy
+{
+    public string Name => "berserk";
+
+    public Move[] Commit(TurnContext ctx, CombatState state)
+    {
+        var slots = new Move[3];
+        var chosen = new List<Move>(3);
+        for (int i = 0; i < 3; i++)
+        {
+            var avail = ctx.Available(chosen, state);
+            slots[i] = Pick.Attack(avail) ?? Pick.Defend(avail) ?? avail[0];
+            chosen.Add(slots[i]);
+        }
+        return slots;
+    }
+}

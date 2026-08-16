@@ -39,7 +39,7 @@ if (!Directory.Exists(root))
 var bundle = CombatBundle.LoadDirectory(root);
 var balance = BalanceData.Default;
 
-IPolicy[] policies = [new AggroPolicy(), new ControlPolicy(), new TurtlePolicy(), new RandomPolicy()];
+IPolicy[] policies = [new BerserkPolicy(), new AggroPolicy(), new ControlPolicy(), new TurtlePolicy(), new RandomPolicy()];
 var bands = Loadouts.All();
 
 Console.WriteLine($"trials={trials}/cell  seed={seed}  {bundle.Encounters.Count()} fights");
@@ -48,7 +48,9 @@ Console.WriteLine();
 
 int sweepTrials = Math.Max(50, trials / 4);
 var agg = new Dictionary<(string Band, string Policy), double>();
-var header = $"{"fight",-34}{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")) + $"{"best",9}{"spread",8}";
+var costAgg = new Dictionary<(string Band, string Policy), double>();
+var condAgg = new Dictionary<(string Band, string Policy), double>();
+var header = $"{"fight",-34}{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")) + $"{"best",9}{"spread",8}{"bsrk-mk",9}";
 Console.WriteLine(header);
 Console.WriteLine(new string('-', header.Length));
 
@@ -57,20 +59,30 @@ foreach (var enc in bundle.Encounters.OrderBy(e => e.Tier ?? 9).ThenBy(e => e.Id
     foreach (var (bandName, kit) in bands)
     {
         var winPct = new double[policies.Length];
+        var mutualPct = new double[policies.Length];
+        var spiritsLeft = new double[policies.Length];
+        var condsGained = new double[policies.Length];
         for (int p = 0; p < policies.Length; p++)
         {
-            int wins = 0, n = 0;
+            int wins = 0, mutual = 0, n = 0;
+            long spiritsOnWin = 0, condsOnWin = 0;
             foreach (var lo in kit)
             {
                 for (int t = 0; t < trials; t++)
                 {
                     var rng = new Random(Seed(seed, enc.Id, lo.Label, policies[p].Name, t));
                     var r = Runner.Run(enc, lo.Weapon, lo.Armor, policies[p], balance, rng, spiritsSweep[0]);
-                    if (r.Outcome == Outcome.Won) wins++;
+                    if (r.Outcome == Outcome.Won) { wins++; spiritsOnWin += r.SpiritsLeft; condsOnWin += r.ConditionsGained; }
+                    if (r.Outcome == Outcome.MutualKill) mutual++;
                     n++;
                 }
             }
             winPct[p] = 100.0 * wins / n;
+            mutualPct[p] = 100.0 * mutual / n;
+            spiritsLeft[p] = wins == 0 ? 0 : spiritsOnWin / (double)wins;
+            condsGained[p] = wins == 0 ? 0 : condsOnWin / (double)wins;
+            costAgg[(bandName, policies[p].Name)] = costAgg.GetValueOrDefault((bandName, policies[p].Name)) + spiritsLeft[p] / bundle.Encounters.Count();
+            condAgg[(bandName, policies[p].Name)] = condAgg.GetValueOrDefault((bandName, policies[p].Name)) + condsGained[p] / bundle.Encounters.Count();
         }
         foreach (var (p, w) in policies.Zip(winPct))
             agg[(bandName, p.Name)] = agg.GetValueOrDefault((bandName, p.Name)) + w / bundle.Encounters.Count();
@@ -79,7 +91,7 @@ foreach (var enc in bundle.Encounters.OrderBy(e => e.Tier ?? 9).ThenBy(e => e.Id
         double spread = winPct.Max() - winPct.Min();
         Console.WriteLine($"{enc.Id,-34}{bandName,-25}" +
             string.Concat(winPct.Select(w => $"{w,8:F1}%")) +
-            $"{policies[bestIdx].Name,9}{spread,7:F1}%");
+            $"{policies[bestIdx].Name,9}{spread,7:F1}%{mutualPct[Array.IndexOf(policies, policies.First(x => x.Name == "berserk"))],9:F1}%");
     }
 }
 
@@ -88,6 +100,13 @@ Console.WriteLine("mean win% across all fights");
 Console.WriteLine($"{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")));
 foreach (var (bandName, _) in bands)
     Console.WriteLine($"{bandName,-25}" + string.Concat(policies.Select(p => $"{agg.GetValueOrDefault((bandName, p.Name)),8:F1}%")));
+
+Console.WriteLine();
+Console.WriteLine("cost of winning: mean spirits left / conditions gained, on wins only (20 spirits in)");
+Console.WriteLine($"{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,16}")));
+foreach (var (bandName, _) in bands)
+    Console.WriteLine($"{bandName,-25}" + string.Concat(policies.Select(p =>
+        $"{costAgg.GetValueOrDefault((bandName, p.Name)),9:F1}sp{condAgg.GetValueOrDefault((bandName, p.Name)),5:F2}c")));
 
 Console.WriteLine();
 Console.WriteLine($"mean win% by entry spirits (all fights x all bands, {sweepTrials} trials/cell)");

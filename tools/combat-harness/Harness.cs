@@ -5,9 +5,17 @@ using Dreamlands.Rules;
 
 namespace Dreamlands.CombatHarness;
 
-public enum Outcome { Won, Lost, Fled, MonsterFled, Stalled }
+public enum Outcome { Won, Lost, MutualKill, Fled, MonsterFled, Stalled }
 
-public sealed record FightResult(Outcome Outcome, int Turns, int SpiritsLeft, int HealthLeft);
+/// <summary>
+/// Winning is not free. Spirits spent in a fight are spirits unavailable for the
+/// walk home (fatigue is 1/night untrained), and conditions inflicted by Brutal /
+/// Tainted / Glowing / Venomous attacks persist past the fight. A policy that
+/// wins at 1 spirit and two conditions has not really won — scoring outcome
+/// alone flatters whichever strategy trades hardest.
+/// </summary>
+public sealed record FightResult(
+    Outcome Outcome, int Turns, int SpiritsLeft, int HealthLeft, int ConditionsGained);
 
 /// <summary>
 /// Everything a policy is allowed to see when choosing a commit. This is
@@ -126,13 +134,24 @@ public static class Runner
             turns++;
         }
 
-        var outcome = state.PlayerWon ? Outcome.Won
-                    : state.PlayerLost ? Outcome.Lost
+        // Mirror CombatOrchestrator.Finalize:
+        //     playerDied = state.PlayerLost || session.Player.Health <= 0;
+        // A mutual kill sets BOTH PlayerWon and PlayerLost (CombatRunner.cs:166-167
+        // fire independently in the same slot). TryAddOutcome checks PlayerWon first
+        // so the outcome EVENT reads "won", but Finalize sees PlayerLost, keeps
+        // ActiveCombat, and routes to the defeat coda and rescue. From the player's
+        // chair that is a death, so it must not be scored as a win here — reading the
+        // raw flags with PlayerWon first over-credits exactly the strategy that trades
+        // hardest.
+        bool died = state.PlayerLost || player.Health <= 0;
+        var outcome = died && state.PlayerWon ? Outcome.MutualKill
+                    : died ? Outcome.Lost
+                    : state.PlayerWon ? Outcome.Won
                     : state.PlayerFled ? Outcome.Fled
                     : state.MonsterFled ? Outcome.MonsterFled
                     : Outcome.Stalled;
 
-        return new FightResult(outcome, turns, player.Spirits, player.Health);
+        return new FightResult(outcome, turns, player.Spirits, player.Health, player.ActiveConditions.Count);
     }
 
     static (string Tell, IReadOnlyList<Move>? Plan) LastTurnStarted(IReadOnlyList<CombatEvent> events)
