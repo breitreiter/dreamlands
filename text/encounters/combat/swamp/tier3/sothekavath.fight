@@ -4,6 +4,7 @@
 [image monsters/swamp_boss.png]
 [blood #3a3024]
 [stats hp=28]
+[trigger road]
 
 * move Heavy Defend
   narration: Sothëkavath sets the thousand-year guard. Steel from a dozen eras hardens at once.

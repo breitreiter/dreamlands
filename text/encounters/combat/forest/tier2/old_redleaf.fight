@@ -3,6 +3,7 @@
 [title Old Redleaf]
 [image monsters/forest_bear.png]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: It swipes a forepaw at you, claws splayed.

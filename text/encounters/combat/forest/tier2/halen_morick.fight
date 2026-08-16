@@ -3,6 +3,7 @@
 [title Halen Morick]
 [image monsters/forest_knight.png]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: He steps in with a quick thrust, blade tracking your guard.

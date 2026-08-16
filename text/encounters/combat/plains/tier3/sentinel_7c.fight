@@ -4,6 +4,7 @@
 [image monsters/plains_boss.png]
 [blood #b58a2e]
 [stats hp=24]
+[trigger road]
 
 * move Defend
   narration: It folds its arms inward and the projector lenses dim across all of them at once.

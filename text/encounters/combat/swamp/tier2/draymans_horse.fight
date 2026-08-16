@@ -4,6 +4,7 @@
 [image monsters/swamp_beast_1.png]
 [blood #3a3024]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: It snaps the human jaw shut on whatever it can reach.

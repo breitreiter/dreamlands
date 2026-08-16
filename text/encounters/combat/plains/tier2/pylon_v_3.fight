@@ -4,6 +4,7 @@
 [image monsters/plains_robot_1.png]
 [blood #b58a2e]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: A pale beam stutters out of the chest plate and burns past you.

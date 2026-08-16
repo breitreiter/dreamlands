@@ -3,6 +3,7 @@
 [title Old Bram]
 [image monsters/forest_ranger.png]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: He drives the butt of the staff at your ribs.

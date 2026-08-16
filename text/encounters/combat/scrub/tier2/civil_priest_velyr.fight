@@ -3,6 +3,7 @@
 [title Civil Priest Velyr]
 [image monsters/scrub_mage.png]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: He drives the butt of the staff at your ribs.

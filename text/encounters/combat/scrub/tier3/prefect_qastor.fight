@@ -4,6 +4,7 @@
 [image monsters/scrub_boss.png]
 [blood #6b3aa0]
 [stats hp=24]
+[trigger road]
 
 * move Defend
   narration: He folds his hands and the angles of the hall sharpen around him.

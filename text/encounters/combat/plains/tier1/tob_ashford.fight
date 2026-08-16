@@ -1,8 +1,10 @@
-# Tob Ashford, the Mask — plains T2 basic duelist (bandit)
+# Tob Ashford, the Mask — plains T1 basic duelist (bandit)
+# The bogeyman of the starting zone: first fight most players will ever see.
 
 [title Tob Ashford, the Mask]
 [image monsters/plains_bandit.png]
-[stats hp=18]
+[stats hp=12]
+[trigger road]
 
 * move Attack
   narration: He closes the gap and cuts at you, fast and low.

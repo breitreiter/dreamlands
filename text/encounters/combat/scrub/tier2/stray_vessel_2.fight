@@ -4,6 +4,7 @@
 [image monsters/scrub_warrior_2.png]
 [blood #6b3aa0]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: It cuts down with the jambiya, hand sure on the grip.

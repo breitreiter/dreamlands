@@ -4,6 +4,7 @@
 [image monsters/swamp_beast_4.png]
 [blood #2a4a3a]
 [stats hp=24]
+[trigger road]
 
 * move Attack
   narration: A thick-knuckled limb lashes out from the murk.

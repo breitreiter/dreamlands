@@ -4,6 +4,7 @@
 [image monsters/plains_robot_2.png]
 [blood #b58a2e]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: A misfiring beam scorches past you, flickering.

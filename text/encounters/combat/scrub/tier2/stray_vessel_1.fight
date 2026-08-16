@@ -4,6 +4,7 @@
 [image monsters/scrub_warrior_1.png]
 [blood #6b3aa0]
 [stats hp=18]
+[trigger road]
 
 * move Attack
   narration: The Tashkari curve cuts at you in a remembered hand.
