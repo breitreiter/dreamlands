@@ -1,13 +1,14 @@
-using Dreamlands.Combat;
 using Dreamlands.CombatHarness;
 using Dreamlands.Encounter;
 using Dreamlands.Rules;
 
-// Smoke-level sweep: a random-strategy PC in random gear against every fight in
-// the corpus. This exists to prove the harness drives the live engine end to end;
-// the numbers are a floor, not a balance verdict. See plans/rps_combat_harness.md.
+// Sweeps the three core strategy archetypes (plus random as a floor) across
+// tier-coherent loadouts against every fight in the corpus.
+//
+// The numbers are a LOWER BOUND on optimal play, not optimal play. See
+// plans/rps_combat_harness.md §8 for why that caveat is load-bearing.
 
-int trials = 2000;
+int trials = 1000;
 int seed = 20260816;
 string root = Path.Combine(RepoRoot(), "text", "encounters", "combat");
 
@@ -32,51 +33,64 @@ if (!Directory.Exists(root))
 
 var bundle = CombatBundle.LoadDirectory(root);
 var balance = BalanceData.Default;
-var policy = new RandomPolicy();
 
-// Random gear means "any legal loadout", including the empty ones — no weapon
-// leaves the pool with no Attack at all, which is a real (if losing) choice.
-var weapons = ItemDef.All.Values.Where(d => d.Type == ItemType.Weapon).Cast<ItemDef?>().Append(null).ToArray();
-var armors  = ItemDef.All.Values.Where(d => d.Type == ItemType.Armor).Cast<ItemDef?>().Append(null).ToArray();
+IPolicy[] policies = [new AggroPolicy(), new ControlPolicy(), new TurtlePolicy(), new RandomPolicy()];
+var bands = Loadouts.Bands.Select(b => (b.Name, Kit: Loadouts.ForBand(b.Req))).ToList();
 
-Console.WriteLine($"policy={policy.Name}  gear=random  trials={trials}/fight  seed={seed}");
-Console.WriteLine($"{weapons.Length} weapon options x {armors.Length} armor options, {bundle.Encounters.Count()} fights\n");
-Console.WriteLine($"{"fight",-40}{"hp",4}  {"win",7}{"loss",7}{"stall",7}  {"turns",6}");
+Console.WriteLine($"trials={trials}/cell  seed={seed}  {bundle.Encounters.Count()} fights");
+foreach (var (name, kit) in bands) Console.WriteLine($"  {name}: {kit.Count} loadouts");
+Console.WriteLine();
+
+var header = $"{"fight",-34}{"band",-17}" + string.Concat(policies.Select(p => $"{p.Name,9}")) + $"{"best",9}{"spread",8}";
+Console.WriteLine(header);
+Console.WriteLine(new string('-', header.Length));
 
 foreach (var enc in bundle.Encounters.OrderBy(e => e.Tier ?? 9).ThenBy(e => e.Id, StringComparer.Ordinal))
 {
-    var tally = new Dictionary<Outcome, int>();
-    long turnsTotal = 0;
-    int fightSeed = StableHash(enc.Id);
-
-    for (int t = 0; t < trials; t++)
+    foreach (var (bandName, kit) in bands)
     {
-        // One RNG per trial drives gear choice and the fight, so a (seed, trial)
-        // pair reproduces exactly. NOT HashCode.Combine: .NET randomises string
-        // hashing per process, so that seeds differently on every run.
-        var rng = new Random(unchecked(seed * 31 + fightSeed) * 31 + t);
-        var weapon = weapons[rng.Next(weapons.Length)];
-        var armor  = armors[rng.Next(armors.Length)];
+        var winPct = new double[policies.Length];
+        for (int p = 0; p < policies.Length; p++)
+        {
+            int wins = 0, n = 0;
+            foreach (var lo in kit)
+            {
+                for (int t = 0; t < trials; t++)
+                {
+                    var rng = new Random(Seed(seed, enc.Id, lo.Label, policies[p].Name, t));
+                    var r = Runner.Run(enc, lo.Weapon, lo.Armor, policies[p], balance, rng);
+                    if (r.Outcome == Outcome.Won) wins++;
+                    n++;
+                }
+            }
+            winPct[p] = 100.0 * wins / n;
+        }
 
-        var r = Runner.Run(enc, weapon, armor, policy, balance, rng);
-        tally[r.Outcome] = tally.GetValueOrDefault(r.Outcome) + 1;
-        turnsTotal += r.Turns;
+        int bestIdx = Array.IndexOf(winPct, winPct.Max());
+        double spread = winPct.Max() - winPct.Min();
+        Console.WriteLine($"{enc.Id,-34}{bandName,-17}" +
+            string.Concat(winPct.Select(w => $"{w,8:F1}%")) +
+            $"{policies[bestIdx].Name,9}{spread,7:F1}%");
     }
-
-    double pct(Outcome o) => 100.0 * tally.GetValueOrDefault(o) / trials;
-    Console.WriteLine($"{enc.Id,-40}{enc.Stats.Hp,4}  {pct(Outcome.Won),6:F1}%{pct(Outcome.Lost),6:F1}%" +
-                      $"{pct(Outcome.Stalled),6:F1}%  {turnsTotal / (double)trials,6:F1}");
 }
+
+if (Tell.UnknownCount > 0)
+    Console.Error.WriteLine(
+        $"WARNING: {Tell.UnknownCount} unrecognised tells — lib/Combat/Tells.cs has likely been reworded. " +
+        "The policies are reading nothing and every number above is suspect.");
 
 return 0;
 
-/// <summary>FNV-1a. Stable across processes and runtimes, unlike string.GetHashCode.</summary>
-static int StableHash(string s)
+static int Seed(int seed, params object[] parts)
 {
     unchecked
     {
-        uint h = 2166136261;
-        foreach (char c in s) { h ^= c; h *= 16777619; }
+        uint h = (uint)seed;
+        foreach (var p in parts)
+        {
+            foreach (char c in p.ToString() ?? "") { h ^= c; h *= 16777619; }
+            h ^= 0x9e3779b9;
+        }
         return (int)h;
     }
 }
