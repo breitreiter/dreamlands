@@ -35,13 +35,14 @@ var bundle = CombatBundle.LoadDirectory(root);
 var balance = BalanceData.Default;
 
 IPolicy[] policies = [new AggroPolicy(), new ControlPolicy(), new TurtlePolicy(), new RandomPolicy()];
-var bands = Loadouts.Bands.Select(b => (b.Name, Kit: Loadouts.ForBand(b.Req))).ToList();
+var bands = Loadouts.All();
 
 Console.WriteLine($"trials={trials}/cell  seed={seed}  {bundle.Encounters.Count()} fights");
-foreach (var (name, kit) in bands) Console.WriteLine($"  {name}: {kit.Count} loadouts");
+foreach (var (name, kit) in bands) Console.WriteLine($"  {name,-28} {kit.Count,2} loadouts: {string.Join(", ", kit.Select(l => l.Label).Take(3))}{(kit.Count > 3 ? ", ..." : "")}");
 Console.WriteLine();
 
-var header = $"{"fight",-34}{"band",-17}" + string.Concat(policies.Select(p => $"{p.Name,9}")) + $"{"best",9}{"spread",8}";
+var agg = new Dictionary<(string Band, string Policy), double>();
+var header = $"{"fight",-34}{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")) + $"{"best",9}{"spread",8}";
 Console.WriteLine(header);
 Console.WriteLine(new string('-', header.Length));
 
@@ -65,14 +66,22 @@ foreach (var enc in bundle.Encounters.OrderBy(e => e.Tier ?? 9).ThenBy(e => e.Id
             }
             winPct[p] = 100.0 * wins / n;
         }
+        foreach (var (p, w) in policies.Zip(winPct))
+            agg[(bandName, p.Name)] = agg.GetValueOrDefault((bandName, p.Name)) + w / bundle.Encounters.Count();
 
         int bestIdx = Array.IndexOf(winPct, winPct.Max());
         double spread = winPct.Max() - winPct.Min();
-        Console.WriteLine($"{enc.Id,-34}{bandName,-17}" +
+        Console.WriteLine($"{enc.Id,-34}{bandName,-25}" +
             string.Concat(winPct.Select(w => $"{w,8:F1}%")) +
             $"{policies[bestIdx].Name,9}{spread,7:F1}%");
     }
 }
+
+Console.WriteLine();
+Console.WriteLine("mean win% across all fights");
+Console.WriteLine($"{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")));
+foreach (var (bandName, _) in bands)
+    Console.WriteLine($"{bandName,-25}" + string.Concat(policies.Select(p => $"{agg.GetValueOrDefault((bandName, p.Name)),8:F1}%")));
 
 if (Tell.UnknownCount > 0)
     Console.Error.WriteLine(
