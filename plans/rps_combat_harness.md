@@ -12,7 +12,7 @@ touches:
     - tests/Dreamlands.Combat.Tests/ (baseline regression test)
   features: [combat, balance, tooling]
 related:
-  - project/combat/landing_plan.md → Phase 5 "Sim and tuning" (unstarted, and still d20-framed — supersede or rewrite it)
+  - project/combat/landing_plan.md → Phase 5 "Sim and tuning" (SUPERSEDED by this doc; d20-era baselines there are not binding on RPS)
   - plans/otel_gameplay_analytics.md (measures what real players do; this measures what is possible)
   - imp/reference/super_rps.md (design reference for moves and mutators)
   - imp/reference/weapon_classes.md:15 ("Numbers still need a sim pass")
@@ -137,6 +137,13 @@ have a Recover. It was removed on purpose: the read-strategy felt like the
 "surprise, you suck now" — a punish the player cannot see coming and cannot
 learn from. That is a sound instinct and the reason this is not simply a gap to
 fill.
+
+**The precedent was Halen Morick.** He is remembered as originally having no
+Recover, and the failure mode was concrete: a player who did not know that in
+advance would fish for a Recover to lock him down, find one that never came, and
+get eaten alive while spending slots on Reads that could never pay. That is the
+exact shape of the objection — the strategy fails for a reason the player cannot
+observe until it is too late to change plan.
 
 Worth reconsidering, though, **if the counter is telegraphed.** The objection is
 to the ambush, not to the counter existing. A no-recover monster that announces

@@ -78,15 +78,28 @@ Done when: all 18 sprites have a corresponding `.cmb` that runs through the engi
 
 ## Phase 5: Sim and tuning
 
-Goal: weapon classes balanced, fatality rates match the locked baselines.
+**SUPERSEDED — see `plans/rps_combat_harness.md`.**
 
-Build:
-- Evolve `tools/combat-prototype/` into a batch sim: PC profile x monster stat block matrix, output fatality rates and average rounds.
-- Primary target: find the dagger DoT-injured proc rate that puts dagger DPS within ~10% of sword/axe across T1/T2/T3.
-- Secondary: confirm fatality rates match the pivot-doc baselines (even-match <10%, overmatched 40-70% at T1/T2, overmatched tourist ~91% at T3).
-- Adjust monster stat blocks to hit baselines; do not adjust the design.
+Everything below was written for the d20 engine and does not survive the RPS
+pivot: there is no AC, no to-hit, no damage dice, and no dagger DoT proc rate to
+solve for. `tools/combat-prototype/` became `tools/combat-sim/`, which stopped
+compiling at the pivot and was deleted in `06f8ad1`.
 
-Done when: sim output matches the locked tuning baseline.
+The baselines quoted below (even-match <10%, overmatched 40-70%, tourist ~91%)
+are d20-era numbers and are **not** binding on RPS. Establishing RPS-era targets
+is an open question in the new plan.
+
+Kept for history:
+
+> Goal: weapon classes balanced, fatality rates match the locked baselines.
+>
+> Build:
+> - Evolve `tools/combat-prototype/` into a batch sim: PC profile x monster stat block matrix, output fatality rates and average rounds.
+> - Primary target: find the dagger DoT-injured proc rate that puts dagger DPS within ~10% of sword/axe across T1/T2/T3.
+> - Secondary: confirm fatality rates match the pivot-doc baselines (even-match <10%, overmatched 40-70% at T1/T2, overmatched tourist ~91% at T3).
+> - Adjust monster stat blocks to hit baselines; do not adjust the design.
+>
+> Done when: sim output matches the locked tuning baseline.
 
 ## Still open at landing time
 
