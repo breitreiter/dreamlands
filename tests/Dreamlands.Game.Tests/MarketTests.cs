@@ -160,6 +160,60 @@ public class MarketTests
     }
 
     [Fact]
+    public void Buy_AboveCombatTier_GoesToPackInsteadOfAutoEquipping()
+    {
+        var state = Fresh();
+        state.Gold = 100;
+        var settlement = MakeSettlement();
+        settlement.Prices["hatchet"] = 15;
+        settlement.Stock["hatchet"] = 1;
+
+        // Untrained buying an axe: the sale goes through, but the weapon slot stays empty.
+        var result = Market.Buy(state, "hatchet", settlement, Balance, new Random(1));
+
+        Assert.True(result.Success);
+        Assert.Null(state.EquippedWeapon);
+        Assert.Contains(state.Pack, i => i.DefId == "hatchet" && !i.IsEquipped);
+    }
+
+    [Fact]
+    public void Buy_AboveCombatTier_MustFitInPack()
+    {
+        var state = Fresh();
+        state.Gold = 100;
+        state.PackCapacity = 0;
+        var settlement = MakeSettlement();
+        settlement.Prices["hatchet"] = 15;
+        settlement.Stock["hatchet"] = 1;
+
+        // Auto-equip is what lets a purchase bypass pack capacity. Gear the player
+        // cannot equip does not get that bypass, so a full pack refuses the sale.
+        var result = Market.Buy(state, "hatchet", settlement, Balance, new Random(1));
+
+        Assert.False(result.Success);
+        Assert.Equal("Pack is full", result.Message);
+        Assert.Equal(100, state.Gold);
+        Assert.Equal(1, settlement.Stock["hatchet"]);
+    }
+
+    [Fact]
+    public void Buy_AtCombatTier_StillAutoEquipsPastAFullPack()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Combat] = SkillTier.Trained;
+        state.Gold = 100;
+        state.PackCapacity = 0;
+        var settlement = MakeSettlement();
+        settlement.Prices["hatchet"] = 15;
+        settlement.Stock["hatchet"] = 1;
+
+        var result = Market.Buy(state, "hatchet", settlement, Balance, new Random(1));
+
+        Assert.True(result.Success);
+        Assert.Equal("hatchet", state.EquippedWeapon!.DefId);
+    }
+
+    [Fact]
     public void Buy_FailsWhenPackFull()
     {
         var state = Fresh();

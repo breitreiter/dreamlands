@@ -1287,6 +1287,13 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (string.IsNullOrEmpty(actionReq.ItemId))
                     return Reject("missing_item_id", "ItemId is required");
 
+                // Checked ahead of the verb so the refusal can name the reason — the verb
+                // itself gates too, but only reports failure as an empty result list.
+                if (data.Balance.Items.TryGetValue(actionReq.ItemId, out var equipDef)
+                    && !Mechanics.MeetsCombatRequirement(player, equipDef))
+                    return Reject("combat_tier_too_low",
+                        $"{equipDef.Name} requires {equipDef.RequiredCombat} Combat");
+
                 var results = Mechanics.Apply([$"equip {actionReq.ItemId}"], player, data.Balance, session.Rng);
                 if (results.Count == 0)
                     return Reject("cannot_equip", $"Cannot equip '{actionReq.ItemId}' — not in pack or not equippable");
@@ -1359,7 +1366,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             buyPrice = Market.GetBuyFromSettlementPrice(entry.Item.Id, settlementState, data.Balance),
             quantity = entry.Quantity,
             skillModifiers = new Dictionary<string, int>(),
-            requiredCombat = entry.Item.RequiredCombat,
+            requiredCombat = (int)entry.Item.RequiredCombat,
             description = entry.Item.Description ?? "",
         }).ToList();
 
@@ -1706,6 +1713,7 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 : [],
             IsEquippable = def?.Type is ItemType.Weapon or ItemType.Armor,
             IsEquipped = i.IsEquipped,
+            RequiredCombat = (int)(def?.RequiredCombat ?? SkillTier.Untrained),
             DestinationName = i.DestinationName,
             DestinationHint = i.DestinationX != null && i.DestinationY != null
                 ? HaulGeneration.BuildRelativeHint(playerX, playerY, i.DestinationX.Value, i.DestinationY.Value)

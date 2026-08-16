@@ -32,11 +32,11 @@ public sealed record Loadout(string Band, ItemDef? Weapon, ItemDef? Armor)
 /// </summary>
 public static class Loadouts
 {
-    public static readonly (int Req, string Name)[] Tiers =
+    public static readonly (SkillTier Req, string Name)[] Tiers =
     [
-        (0, "T0 dagger/light"),
-        (2, "T1 axe/medium"),
-        (4, "T2 sword/heavy"),
+        (SkillTier.Untrained, "T0 dagger/light"),
+        (SkillTier.Trained,   "T1 axe/medium"),
+        (SkillTier.Expert,    "T2 sword/heavy"),
     ];
 
     /// <summary>Store-bought (ShopTier 1) vs endgame (ShopTier 2 or unique).</summary>

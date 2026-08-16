@@ -445,9 +445,9 @@ export default function MarketScreen({
                       <div className="flex-1 min-w-0">
                         <div className="text-primary flex items-center gap-2 flex-wrap">
                           {item.name}
-                          {item.requiredCombat > 0 && playerCombatLevel * 2 < item.requiredCombat && (
+                          {playerCombatLevel < item.requiredCombat && (
                             <span className="text-negative text-[11px] font-bold uppercase tracking-wide border border-negative/40 px-1 rounded flex-shrink-0">
-                              {item.requiredCombat <= 2 ? "Trained" : "Expert"} Combat
+                              {item.requiredCombat === 1 ? "Trained" : "Expert"} Combat
                             </span>
                           )}
                           <span className="text-muted">({projQty} available)</span>

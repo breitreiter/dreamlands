@@ -172,6 +172,59 @@ public class MechanicsTests
     }
 
     [Fact]
+    public void Equip_RefusedWhenCombatTierTooLow()
+    {
+        var state = Fresh();
+        // hatchet is an axe: Trained Combat. A fresh character is Untrained.
+        state.Pack.Add(new ItemInstance("hatchet", "Hatchet"));
+
+        var results = Mechanics.Apply(["equip hatchet"], state, Balance, Rng);
+
+        Assert.Empty(results);
+        Assert.Null(state.EquippedWeapon);
+        Assert.Contains(state.Pack, i => i.DefId == "hatchet" && !i.IsEquipped);
+    }
+
+    [Fact]
+    public void Equip_AllowedOnceCombatTierIsMet()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Combat] = SkillTier.Trained;
+        state.Pack.Add(new ItemInstance("hatchet", "Hatchet"));
+
+        Mechanics.Apply(["equip hatchet"], state, Balance, Rng);
+
+        Assert.Equal("hatchet", state.EquippedWeapon!.DefId);
+    }
+
+    [Fact]
+    public void Equip_TrainedIsStillShortOfExpertGear()
+    {
+        var state = Fresh();
+        state.Skills[Skill.Combat] = SkillTier.Trained;
+        // brigandine is heavy armor: Expert Combat.
+        state.Pack.Add(new ItemInstance("brigandine", "Brigandine"));
+
+        Assert.Empty(Mechanics.Apply(["equip brigandine"], state, Balance, Rng));
+        Assert.Null(state.EquippedArmor);
+    }
+
+    [Fact]
+    public void Equip_ArcRewardGearIsGatedLikeAnythingElse()
+    {
+        var state = Fresh();
+        // Quest rewards are deliberately gated — an early arc hands out medium armor
+        // the player cannot wear until they spend a tableau pick on Combat.
+        state.Pack.Add(new ItemInstance("mountain_regiment_armor", "17th Mountain Regiment Armor"));
+
+        Assert.Empty(Mechanics.Apply(["equip mountain_regiment_armor"], state, Balance, Rng));
+
+        state.Skills[Skill.Combat] = SkillTier.Trained;
+        Mechanics.Apply(["equip mountain_regiment_armor"], state, Balance, Rng);
+        Assert.Equal("mountain_regiment_armor", state.EquippedArmor!.DefId);
+    }
+
+    [Fact]
     public void Unequip_ClearsIsEquippedFlag()
     {
         var state = Fresh();

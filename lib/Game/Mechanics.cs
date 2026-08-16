@@ -187,6 +187,14 @@ public static class Mechanics
         return new MechanicResult.ItemLost(item.DefId, item.DisplayName);
     }
 
+    /// <summary>
+    /// True when the player's Combat tier meets <paramref name="def"/>'s
+    /// <see cref="ItemDef.RequiredCombat"/>. Callers that equip gear must check this;
+    /// tiers only ever rise, so a passing check never has to be revisited.
+    /// </summary>
+    public static bool MeetsCombatRequirement(PlayerState state, ItemDef def) =>
+        state.Skills.GetValueOrDefault(Skill.Combat) >= def.RequiredCombat;
+
     static MechanicResult? ApplyEquip(List<string> args, PlayerState state, BalanceData balance)
     {
         if (args.Count < 1) return null;
@@ -196,6 +204,7 @@ public static class Mechanics
         if (item == null) return null;
         if (!balance.Items.TryGetValue(itemId, out var def)) return null;
         if (def.Type is not (ItemType.Weapon or ItemType.Armor)) return null;
+        if (!MeetsCombatRequirement(state, def)) return null;
 
         var slot = def.Type switch
         {

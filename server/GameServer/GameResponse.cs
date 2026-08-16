@@ -285,6 +285,9 @@ public class ItemInfo
     public List<string> Moves { get; init; } = [];
     public bool IsEquippable { get; init; }
     public bool IsEquipped { get; init; }
+    /// <summary>Combat tier ordinal needed to equip (0 untrained, 1 trained, 2 expert).
+    /// Comparable directly against <see cref="SkillInfoDto.Level"/>.</summary>
+    public int RequiredCombat { get; init; }
     public string? DestinationName { get; init; }
     public string? DestinationHint { get; init; }
     public int? Payout { get; init; }

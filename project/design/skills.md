@@ -4,11 +4,28 @@ Four skills: Combat, Negotiation, Bushcraft, Cunning. Each has three tiers: Untr
 
 ## Check Mechanic (all skills)
 
-Every skill check offers three approaches. Tier determines outcomes:
+Every skill check offers three approaches — one correct, one wrong, one neutral (the
+approach the encounter names as neither). Tier determines outcomes:
 
-- **Untrained**: One or more approaches auto-fail regardless of choice
-- **Trained**: The best of the three approaches always succeeds
-- **Expert**: Two of the three approaches always succeed; only the worst fails
+| Tier | Correct | Neutral | Wrong |
+|------|---------|---------|-------|
+| Untrained | 50% coinflip | Fail | Fail |
+| Trained | Succeed | Fail | Fail |
+| Expert | Succeed | Succeed | Fail |
+
+The wrong approach always fails, at every tier. See `SkillResolution.ResolvePicker`.
+Each non-direct cell carries a `ConnectorKind` so the engine can narrate the gap
+between the pick and the outcome.
+
+Approach rosters (`ApproachRoster.cs`) are fixed per skill; which one is correct is
+authored per encounter:
+
+| Skill | Approaches |
+|-------|-----------|
+| Combat | Rush · Strategize · Outlast |
+| Negotiation | Charm · Reason · Threaten |
+| Bushcraft | Push · Plan · Reroute |
+| Cunning | Hide · Bluff · Scheme |
 
 ## Skill Tiers
 
@@ -16,11 +33,32 @@ Tiers are additive — higher tiers include all lower-tier benefits.
 
 ### Combat
 
-| Tier | Gear unlocked |
-|------|--------------|
-| Untrained | Daggers, light armor |
-| Trained | + axes, medium armor |
-| Expert | + swords, heavy armor |
+| Tier | Gear unlocked | `ItemDef.RequiredCombat` |
+|------|--------------|--------------------------|
+| Untrained | Daggers, light armor | `SkillTier.Untrained` |
+| Trained | + axes, medium armor | `SkillTier.Trained` |
+| Expert | + swords, heavy armor | `SkillTier.Expert` |
+
+Combat has no passive effect outside gear access — it does not change damage, HP, or
+the move pool directly. What better gear buys is *named moves* (`ItemDef.RpsMoves`):
+the weapon supplies every Attack in the pool, the armor every Defend.
+
+### Enforcement
+
+`Mechanics.MeetsCombatRequirement(state, def)` is the single gate. Two callers:
+
+- `Mechanics.ApplyEquip` — refuses the equip verb (returns null, which the server
+  turns into a `combat_tier_too_low` rejection naming the tier).
+- `Market.Buy` — above-tier gear can still be **bought**, it just doesn't auto-equip.
+  Note the knock-on: auto-equip is what lets a purchase bypass pack capacity, so
+  buying gear you can't wear needs a free pack slot where buying gear you can wear
+  would not.
+
+The gate only has to hold at equip time — tiers never fall, so an equipped item never
+needs re-validating. Nothing unequips retroactively.
+
+Arc-reward gear is gated like anything else, deliberately: an early arc grants medium
+armor the player cannot wear yet, which is the nudge to spend a tableau pick on Combat.
 
 ### Negotiation
 
@@ -39,7 +77,17 @@ Tiers are additive — higher tiers include all lower-tier benefits.
 | Expert | Quarters all travel hazard costs; rations every other day |
 
 Travel hazards (thirst/cold/fatigue) are deterministic per-step spirit costs,
-not resist rolls — see `plans/travel_travails.md`.
+not resist rolls — see `plans/travel_travails.md`. The tier indexes
+`HazardDef.UnitsPerSpirit` directly:
+
+| Hazard | Untrained | Trained | Expert |
+|--------|-----------|---------|--------|
+| Thirst (scrub steps) | 1 spirit / 2 steps | / 4 | / 8 |
+| Cold (mountain steps) | 1 spirit / 2 steps | / 4 | / 8 |
+| Fatigue (nights camped) | 1 spirit / night | / 2 nights | / 4 |
+
+Food cadence is a straight Untrained-vs-trained split (`EndOfDay.ShouldEatTonight`):
+Trained and Expert both eat on odd days only.
 
 ### Cunning
 
@@ -67,7 +115,7 @@ One line per tier shown under each skill. Must communicate the passive benefit a
 
 - **Untrained**: No contract bonus. Encounter checks are punishing.
 - **Trained**: +20% contract payout. Encounter checks are fair.
-- **Expert**: +40% contract payout. Two of three approaches succeed.
+- **Expert**: +40% contract payout. Encounter checks are generous.
 
 ### Bushcraft
 
@@ -85,20 +133,25 @@ One line per tier shown under each skill. Must communicate the passive benefit a
 
 ## Level-up Picker Text
 
-Shown on the tableau when the player picks an arc reward. Describes the delta — what this specific upgrade adds.
+Shown on the tableau when the player picks an arc reward. Describes the delta — what this
+specific upgrade adds. Source of truth is `ArcRewards.All`; the tableau screen wraps each
+label as "Train {label}" / "Master {label}" (✓ Trained / ✓ Mastered once owned).
 
-| Option | Picker label | What it grants |
-|--------|-------------|----------------|
-| Combat → Trained | Combat | Unlocks axes and medium armor |
-| Combat → Expert | Combat | Unlocks swords and heavy armor |
-| Negotiation → Trained | Negotiation | +20% contract payout |
-| Negotiation → Expert | Negotiation | +40% contract payout |
-| Bushcraft → Trained | Bushcraft | Halves travel hazard costs; eat every other night |
-| Bushcraft → Expert | Bushcraft | Quarters travel hazard costs |
-| Cunning → Trained | Cunning | 40% chance to resist serious conditions (Injured, Poisoned, etc) |
-| Cunning → Expert | Cunning | 80% chance to resist serious conditions (Injured, Poisoned, etc) |
-| Max Health | Max Health | +1 maximum health |
-| Inventory | Inventory | +1 inventory slot |
+| Slot id | Label | First pick | Second pick |
+|---------|-------|-----------|-------------|
+| `combat` | Combat | You can now equip axes and medium armor | You can now equip swords and heavy armor |
+| `negotiation` | Negotiation | Contracts pay 20% more on delivery | Contracts pay 40% more on delivery |
+| `cunning` | Cunning | 40% chance to resist serious conditions (injured, etc) | 80% chance to resist serious conditions (injured, etc) |
+| `bushcraft` | Bushcraft | Halves travel hazard costs; eat every other night | Quarters travel hazard costs |
+| `health` | Constitution | Gain +1 max health | Gain +1 max health |
+| `inventory` | Packing | Gain +1 pack slot | Gain +1 pack slot |
+
+Every slot caps at 2 picks (`ArcRewardSlot.Cap`). Health and pack each grant 1 per pick
+(`ArcRewards.HealthPerPick`, `ArcRewards.InventoryPerPick`), so a maxed track is +2 health
+or +2 slots over the starting 4 health / 8 slots.
+
+> `plans/arc_leveling.md` still says "+5 max health" for the health track. The code grants
+> +1. The plan is the stale one.
 
 ---
 

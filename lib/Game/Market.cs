@@ -164,15 +164,18 @@ public static class Market
 
         var instance = new ItemInstance(def.Id, def.Name);
 
-        // Auto-equip weapon/armor/boots if the slot is empty (bypasses pack capacity)
+        // Auto-equip weapon/armor if the slot is empty (bypasses pack capacity). Gear
+        // above the player's Combat tier can still be bought — it just goes into the
+        // pack like anything else, and so has to fit.
+        var canEquip = Mechanics.MeetsCombatRequirement(player, def);
         var autoEquipped = false;
-        if (def.Type is ItemType.Weapon && player.EquippedWeapon == null)
+        if (canEquip && def.Type is ItemType.Weapon && player.EquippedWeapon == null)
         {
             instance.IsEquipped = true;
             player.Pack.Add(instance);
             autoEquipped = true;
         }
-        else if (def.Type is ItemType.Armor && player.EquippedArmor == null)
+        else if (canEquip && def.Type is ItemType.Armor && player.EquippedArmor == null)
         {
             instance.IsEquipped = true;
             player.Pack.Add(instance);

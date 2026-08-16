@@ -85,7 +85,10 @@ export default function Inventory({
         {/* Right: Inventory */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {inventory ? (
-            <InventoryPanel inventory={inventory} />
+            <InventoryPanel
+              inventory={inventory}
+              combatTier={status.skills.find(s => s.id === "combat")?.level ?? 0}
+            />
           ) : (
             <div className="p-4 text-muted">No inventory data</div>
           )}
@@ -159,7 +162,9 @@ function CharacterPanel({
   );
 }
 
-function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
+const TIER_NAMES = ["Untrained", "Trained", "Expert"];
+
+function InventoryPanel({ inventory, combatTier }: { inventory: InventoryInfo; combatTier: number }) {
   const { doAction, loading } = useGame();
   const pack = inventory.pack;
 
@@ -207,7 +212,9 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
                 {label}
               </div>
               <div className="space-y-2">
-                {items.map((item, i) => (
+                {items.map((item, i) => {
+                  const tierLocked = item.isEquippable && combatTier < item.requiredCombat;
+                  return (
                   <ItemCard
                     key={`${key}-${item.defId}-${i}`}
                     item={item}
@@ -220,7 +227,10 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
                           </Button>
                         )}
                         {!item.isEquipped && item.isEquippable && (
-                          <Button variant="secondary" size="icon" disabled={loading} title="Equip"
+                          <Button variant="secondary" size="icon" disabled={loading || tierLocked}
+                            title={tierLocked
+                              ? `Requires ${TIER_NAMES[item.requiredCombat]} Combat`
+                              : "Equip"}
                             onClick={() => doAction({ action: "equip", itemId: item.defId })}>
                             <MaskedIcon icon="barbute.svg" className="w-5 h-5" color="currentColor" />
                           </Button>
@@ -229,7 +239,8 @@ function InventoryPanel({ inventory }: { inventory: InventoryInfo }) {
                       </>
                     }
                   />
-                ))}
+                  );
+                })}
               </div>
             </div>
           );

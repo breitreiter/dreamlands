@@ -116,6 +116,8 @@ export interface ItemInfo {
   moves: string[];
   isEquippable: boolean;
   isEquipped: boolean;
+  /** Combat tier ordinal needed to equip (0 untrained, 1 trained, 2 expert). */
+  requiredCombat: number;
   destinationName: string | null;
   destinationHint: string | null;
   payout: number | null;
