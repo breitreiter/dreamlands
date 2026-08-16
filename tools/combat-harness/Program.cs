@@ -9,6 +9,9 @@ using Dreamlands.Rules;
 // plans/rps_combat_harness.md §8 for why that caveat is load-bearing.
 
 int trials = 1000;
+// Entry spirits. 20 is the cap you leave town with, not what you arrive with:
+// fatigue alone costs 1/night untrained and the T2/T3 fights are days out.
+int[] spiritsSweep = [20, 15, 10, 5];
 int seed = 20260816;
 string root = Path.Combine(RepoRoot(), "text", "encounters", "combat");
 
@@ -19,8 +22,10 @@ for (int i = 0; i < args.Length; i++)
         case "--trials" when i + 1 < args.Length: trials = int.Parse(args[++i]); break;
         case "--seed"   when i + 1 < args.Length: seed   = int.Parse(args[++i]); break;
         case "--root"   when i + 1 < args.Length: root   = args[++i]; break;
+        case "--spirits" when i + 1 < args.Length:
+            spiritsSweep = args[++i].Split(',').Select(int.Parse).ToArray(); break;
         case "-h" or "--help":
-            Console.WriteLine("Usage: CombatHarness [--trials N] [--seed N] [--root <combat dir>]");
+            Console.WriteLine("Usage: CombatHarness [--trials N] [--seed N] [--root <dir>] [--spirits 20,15,10,5]");
             return 0;
     }
 }
@@ -41,6 +46,7 @@ Console.WriteLine($"trials={trials}/cell  seed={seed}  {bundle.Encounters.Count(
 foreach (var (name, kit) in bands) Console.WriteLine($"  {name,-28} {kit.Count,2} loadouts: {string.Join(", ", kit.Select(l => l.Label).Take(3))}{(kit.Count > 3 ? ", ..." : "")}");
 Console.WriteLine();
 
+int sweepTrials = Math.Max(50, trials / 4);
 var agg = new Dictionary<(string Band, string Policy), double>();
 var header = $"{"fight",-34}{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")) + $"{"best",9}{"spread",8}";
 Console.WriteLine(header);
@@ -59,7 +65,7 @@ foreach (var enc in bundle.Encounters.OrderBy(e => e.Tier ?? 9).ThenBy(e => e.Id
                 for (int t = 0; t < trials; t++)
                 {
                     var rng = new Random(Seed(seed, enc.Id, lo.Label, policies[p].Name, t));
-                    var r = Runner.Run(enc, lo.Weapon, lo.Armor, policies[p], balance, rng);
+                    var r = Runner.Run(enc, lo.Weapon, lo.Armor, policies[p], balance, rng, spiritsSweep[0]);
                     if (r.Outcome == Outcome.Won) wins++;
                     n++;
                 }
@@ -82,6 +88,29 @@ Console.WriteLine("mean win% across all fights");
 Console.WriteLine($"{"band",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")));
 foreach (var (bandName, _) in bands)
     Console.WriteLine($"{bandName,-25}" + string.Concat(policies.Select(p => $"{agg.GetValueOrDefault((bandName, p.Name)),8:F1}%")));
+
+Console.WriteLine();
+Console.WriteLine($"mean win% by entry spirits (all fights x all bands, {sweepTrials} trials/cell)");
+Console.WriteLine($"{"spirits",-25}" + string.Concat(policies.Select(p => $"{p.Name,9}")));
+foreach (var sp in spiritsSweep)
+{
+    var means = new double[policies.Length];
+    for (int p = 0; p < policies.Length; p++)
+    {
+        int wins = 0, n = 0;
+        foreach (var enc in bundle.Encounters)
+        foreach (var (bandName, kit) in bands)
+        foreach (var lo in kit)
+            for (int t = 0; t < sweepTrials; t++)
+            {
+                var rng = new Random(Seed(seed, enc.Id, lo.Label, policies[p].Name, sp, t));
+                if (Runner.Run(enc, lo.Weapon, lo.Armor, policies[p], balance, rng, sp).Outcome == Outcome.Won) wins++;
+                n++;
+            }
+        means[p] = 100.0 * wins / n;
+    }
+    Console.WriteLine($"{sp + " spirits",-25}" + string.Concat(means.Select(m => $"{m,8:F1}%")));
+}
 
 if (Tell.UnknownCount > 0)
     Console.Error.WriteLine(

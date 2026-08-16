@@ -93,11 +93,19 @@ public static class Runner
     /// Runs one fight through the live engine. All mechanics come from
     /// <see cref="CombatRunner"/> — the harness only chooses moves and reads events.
     /// </summary>
+    /// <param name="entrySpirits">
+    /// Spirits the player walks in with. The 20-spirit start is a CAP, not a
+    /// guarantee: travel drains it (fatigue alone is 1/night untrained, before
+    /// biome hazards), and the T2/T3 fights sit a long way from any town. Full
+    /// spirits is therefore the best case, not the typical one. MaxSpirits is
+    /// left at 20, so Recover can still heal back toward the cap.
+    /// </param>
     public static FightResult Run(
         CombatEncounter enc, ItemDef? weapon, ItemDef? armor,
-        IPolicy policy, BalanceData balance, Random rng)
+        IPolicy policy, BalanceData balance, Random rng, int? entrySpirits = null)
     {
         var player = PlayerState.NewGame("harness", 0, balance);
+        if (entrySpirits is { } sp) player.Spirits = Math.Clamp(sp, 0, player.MaxSpirits);
         var state = new CombatState { Profile = CombatPlayerProfile.From(weapon, armor) };
 
         var events = CombatRunner.Begin(enc, player, state, rng);
