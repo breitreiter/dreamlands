@@ -1,10 +1,10 @@
 ---
 kind: plan
 title: "Defang aggro — closing the RPS triangle"
-state: exploring
+state: active
 created: 2026-08-16
 updated: 2026-08-16
-status: Findings + measured lever comparison across seven variants. Recommends two composed engine changes (Defend caps incoming damage, and counter-damages Attack) validated by experiment, plus one content lever that ships without engine work. Nothing implemented; all engine experiments were run locally and reverted.
+status: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
 touches:
   files:
     - lib/Combat/Resolver.cs (the recommended change)

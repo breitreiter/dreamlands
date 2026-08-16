@@ -2501,13 +2501,20 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             _                      => $"You picked {VerbName(x.PlayerMove)}, they picked {VerbName(x.MonsterMove)}",
         };
         var effect = $"{DescribeDelta(x.PlayerDelta, "You")}, {DescribeDelta(x.MonsterDelta, "they")}";
+        // A guard that turns an attack back deals damage from a non-attack move, which
+        // otherwise reads as damage from nowhere. Name it.
+        if (Countered(x.PlayerMove, x.MonsterMove)) effect += " (you turned the blow back)";
+        else if (Countered(x.MonsterMove, x.PlayerMove)) effect += " (they turned your blow back)";
         var line = $"{moves} • {effect}";
         if (!string.IsNullOrEmpty(x.MonsterNarration))
             line += $"\n    {x.MonsterNarration}";
         return new CombatLogEntry
         {
             Text = line,
-            PlayerAttack = x.PlayerMove.Base == "attack"
+            // Drives the hit splat on the monster sprite. A countering Defend deals
+            // real damage, so it has to register here too or the number lands with no
+            // animation behind it.
+            PlayerAttack = x.PlayerMove.Base == "attack" || Countered(x.PlayerMove, x.MonsterMove)
                 ? new PlayerAttackInfo
                 {
                     Outcome = x.MonsterDelta < 0 ? "hit" : "miss",
@@ -2524,6 +2531,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
     // and tooltips; the prose log just names what kind of action each side took.
     static string VerbName(Dreamlands.Encounter.Move m) =>
         m.Base.Length == 0 ? m.Base : char.ToUpper(m.Base[0]) + m.Base[1..];
+
+    /// <summary>Did <paramref name="defender"/>'s guard punch back at <paramref name="attacker"/>?
+    /// Mirrors Resolver.Counter.</summary>
+    static bool Countered(Dreamlands.Encounter.Move defender, Dreamlands.Encounter.Move attacker) =>
+        defender.Base == "defend" && attacker.Base == "attack";
 
     static string DescribeDelta(int delta, string subj) =>
         delta < 0 ? $"{subj} take {-delta} damage"

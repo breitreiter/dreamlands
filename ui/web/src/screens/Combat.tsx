@@ -68,7 +68,7 @@ function moveTooltip(encoded: string): string {
 
   switch (base) {
     case "attack":   parts.push("Deal damage."); break;
-    case "defend":   parts.push("Block incoming damage in this slot."); break;
+    case "defend":   parts.push("Caps incoming damage at 2 in this slot, and strikes back for 4 against an attack."); break;
     case "recover":  parts.push("Heal spirits."); break;
     case "read":     parts.push("Reveal the enemy's plan for next turn."); break;
     case "skipped":  parts.push("No action."); break;
@@ -76,9 +76,10 @@ function moveTooltip(encoded: string): string {
 
   if (has("heavy")) {
     if (base === "attack")  parts.push("+4 damage");
-    if (base === "defend")  parts.push("+2 prevent");
+    if (base === "defend")  parts.push("Caps at 1 instead of 2");
     if (base === "recover") parts.push("+2 heal");
   }
+  if (has("perfect") && base === "defend") parts.push("Takes no damage at all");
   if (has("shielding") && base === "defend") parts.push("Nullifies stuns and harmful conditions on you");
   if (has("stunning"))   parts.push("Chance to stun");
   if (has("brutal"))     parts.push("May inflict Injured");
