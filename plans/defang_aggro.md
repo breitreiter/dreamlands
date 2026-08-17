@@ -3,8 +3,8 @@ kind: plan
 title: "Defang aggro — closing the RPS triangle"
 state: active
 created: 2026-08-16
-updated: 2026-08-16
-status: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
+updated: 2026-08-17
+status: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. First play signal 2026-08-17: the counter reads as too strong to a player who was never told it exists (§9) — fix the reference and the missing narration before touching the numbers. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
 touches:
   files:
     - lib/Combat/Resolver.cs (the recommended change)
@@ -209,3 +209,32 @@ recovers still punishes control, and none ships (see
    makes bigger heavies survivable for a player who guards (§3).
 6. Independently, seed `riposte` through the monster corpus (§5) — useful with or
    without the engine change.
+
+## 9. Play signal, 2026-08-17 — the counter reads as too strong
+
+First report from actual play (not the harness): a basic Defend countering an
+Attack for 4 "makes the defend action absurdly strong". The player did not know
+the counter was intentional, which is itself a finding — see
+[[reference_omits_defend_counter]], the shipped reference never mentions it.
+
+**Do not re-tune on this alone.** The 4 was measured, and 2 was measured and
+rejected: berserk stayed at 82.0% with a counter of 2, versus 68.6% at 4. Dropping
+it back re-opens exactly the aggro dominance this plan closed. One fight's
+impression is not the harness.
+
+What the report is genuinely evidence for, in order of likelihood:
+
+1. **A discoverability failure, not a balance one.** A move whose headline effect
+   is undocumented reads as a bug when it fires. Fixing the reference may resolve
+   the complaint entirely. Do this first, then re-ask.
+2. **Narration is still missing** (§7, item 3 of the order above, never done). A
+   countered attack currently produces damage with no explanation in the log, so
+   the counter arrives as an unexplained number — the worst possible framing for a
+   mechanic that is supposed to feel like a read paying off.
+3. **The cap ladder, not the counter, may be the wrong dial.** If guarding feels
+   dominant, the trickle (plain 2) is the tuning knob §3 already nominates; it
+   changes how much a guard concedes without un-closing the triangle.
+
+If a re-tune does turn out to be wanted, re-run the harness across all 6 gear bands
+and 4 entry-spirit levels rather than adjusting to taste — the whole point of the
+existing numbers is that aggro dominance was invisible without them.
