@@ -3,8 +3,8 @@ kind: plan
 title: "OpenTelemetry export from GameServer to AppSignal"
 state: active
 created: 2026-08-06
-updated: 2026-08-06
-status: Phase 1 deployed (production app settings still unset, so it is inert there) and validated end-to-end against the dev AppSignal app — the custom metric is visible in their UI. Phase 2 COMPLETE (pass 1 span + action metrics, pass 2 reason codes + encounter/combat counters), built and locally verified, traces flowing; NOT yet deployed — deployment deferred until phase 2 was tidy, which it now is. Remaining: deploy + set production app settings, phase 3 Cosmos, phase 4 host telemetry + App Insights teardown.
+updated: 2026-08-17
+status: Phases 1-3 COMPLETE and deployed; production app settings are set and AppSignal is receiving traces + metrics from the live app. Phase 1 baseline wiring, phase 2 domain spans/metrics (action span, action/reject/encounter/combat metrics), phase 3 Cosmos spans + readable trace names all verified. Phase 4 BUILT 2026-08-17 but NOT deployed: worker package + UseFunctionsWorkerDefaults verified locally, host telemetryMode flip is unverifiable locally (Core Tools ignores it) and needs OTEL_RESOURCE_ATTRIBUTES set in Azure app settings before host spans can authenticate to AppSignal (§5 finding 5). Remaining: deploy phase 4, confirm faas.* invocation spans arrive, then the App Insights teardown. Known un-actioned observation: malformed request JSON surfaces as a 500, so client errors land as outcome=error (§3 pass 2).
 touches:
   files:
     - server/GameServer/GameServer.csproj
@@ -420,7 +420,135 @@ is dropping `dreamlands.action.duration`'s per-action dimension (the HTTP-layer
 histogram still covers overall latency), then sampling traces via
 `OTEL_TRACES_SAMPLER` — a config change, no redeploy.
 
-## 5. Phase 4 (optional, decide later) — host-level telemetry
+## 5. Phase 4 — host-level telemetry
+
+### Built 2026-08-17 (worker half verified locally; host half NOT verifiable locally)
+
+Shipped: `Microsoft.Azure.Functions.Worker.OpenTelemetry` 1.2.0,
+`.UseFunctionsWorkerDefaults()` on the OpenTelemetry builder in `Telemetry.cs`, and
+`host.json` `"telemetryMode": "OpenTelemetry"` (documented casing — the plan
+previously wrote it lowercase).
+
+The extension method is **not** in `Microsoft.Azure.Functions.Worker`, as the docs'
+snippet implies. It is `ConfigureFunctionsOpenTelemetry.UseFunctionsWorkerDefaults`
+in namespace `Microsoft.Azure.Functions.Worker.OpenTelemetry`, extending
+`IOpenTelemetryBuilder` — confirmed by reading the assembly metadata, not by
+guessing at usings.
+
+**Verified locally against a fake collector:** the worker's resource now carries
+`ai.sdk.prefix=dotnetiso:1.2.0.0`, which is the worker package's own marker, so
+`UseFunctionsWorkerDefaults()` is definitely in effect. Our `game.action choose`
+span still exports with all its tags, so the addition broke nothing.
+
+**Still no host invocation span locally.** Core Tools 4.8.0 ignores the
+`telemetryMode` flip exactly as it did in phase 1, now with the worker package
+installed and the flag set — so that combination is ruled out as the reason.
+**The host half of this phase can only be judged in Azure**, which is what makes
+deployment the verification step rather than a formality.
+
+**Finding 5 — the Functions host cannot authenticate to AppSignal the way we do.**
+This is the blocker the plan did not anticipate. AppSignal authenticates by the
+resource attribute `appsignal.config.push_api_key` (finding 3), which we set in
+*our* C# code. The host is a **separate Microsoft-owned process**; it reads
+`OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS`, and it never runs
+our `AddAttributes` block. So host spans will be exported and then dropped unless
+`OTEL_RESOURCE_ATTRIBUTES` carries the AppSignal config keys as an app setting:
+
+```
+OTEL_RESOURCE_ATTRIBUTES=appsignal.config.push_api_key=<key>,appsignal.config.name=dreamlands,appsignal.config.environment=production,appsignal.config.language_integration=dotnet
+```
+
+Harmless to the worker, which already reads that variable via
+`AddEnvironmentVariableDetector()`. **Watch for a silent partial success here** —
+worker spans keep arriving because they carry the attribute in code, so "AppSignal
+is receiving" is not evidence the host half works. The test is specifically whether
+`faas.*`-tagged invocation spans appear.
+
+**Finding 6 — host logs would be exported, and AppSignal rejects logs outright.**
+`telemetryMode` also routes host logs through OTLP, which finding 4 says the
+collector does not accept at all. Muted at the source with a `logging` →
+`OpenTelemetry` → `logLevel.default: None` block in `host.json`, which targets only
+the OTel logger provider and leaves console/file logging alone. This is the host-side
+twin of the `AddFilter<OpenTelemetryLoggerProvider>` line in `Telemetry.cs`.
+
+**Duplicate request telemetry is a documented hazard we happen to dodge.** MS warns
+that a worker running AspNetCore *tracing* double-reports every request the host
+already reports. We register AspNetCore for **metrics only** (finding 2), so there is
+nothing to duplicate. Anyone who later "fixes" finding 2 by adding AspNetCore tracing
+back must check this first.
+
+**Accepted costs of the flip**, both from MS docs: the Azure portal drops log
+streaming while `telemetryMode` is OpenTelemetry, and portal "Recent function
+invocation" traces only work when telemetry goes to Azure Monitor.
+
+**Incidental observation, contradicting §2a:** `http.server.request.duration` now
+*does* carry `http.route` (`api/game/{id}/action`, `api/game/new`, `api/health`), so
+the server-latency histogram is a per-route breakdown after all, not the coarse
+aggregate the phase-1 notes recorded. Also `service.version` exported empty locally —
+expected, since `api-version` is populated by `deploy.sh`; confirm it is non-empty in
+production, because `appsignal.config.revision` rides on it and drives deploy markers.
+
+**Method note:** the fake-collector technique dumps the payload, and the payload
+carries the push API key in the clear. Phase 1's notes flagged this for the
+forwarding-proxy variant; it applies just as much here. Treat any collector log as
+key material and delete it.
+
+### Deployment runbook (not yet run)
+
+App is `dreamlands-api` in `dreamlands-rg` (defaults in `deploy.sh`). **Run these
+interactively and never commit an invocation with the key filled in.**
+
+**Step 1 — app settings before code.** Setting them first means the host has
+somewhere valid to send from its very first export; deploying first would just
+throw away a few minutes of host spans. Note `appsettings set` **restarts the app**.
+
+```bash
+# Read current state first — this is also how you confirm what phase 1-3 set.
+az functionapp config appsettings list -n dreamlands-api -g dreamlands-rg \
+  --query "[?starts_with(name,'OTEL_') || starts_with(name,'APPSIGNAL_') || name=='APPLICATIONINSIGHTS_CONNECTION_STRING'].name" -o tsv
+
+# The host authenticates only through this variable (finding 5). One line, no spaces
+# around the commas. Quote it — the commas are argument separators to az otherwise.
+az functionapp config appsettings set -n dreamlands-api -g dreamlands-rg --settings \
+  "OTEL_RESOURCE_ATTRIBUTES=appsignal.config.push_api_key=<PROD_PUSH_KEY>,appsignal.config.name=dreamlands,appsignal.config.environment=production,appsignal.config.language_integration=dotnet"
+```
+
+**Step 2 — deploy the code** (`host.json` flip + worker package) the usual way:
+
+```bash
+./deploy.sh
+```
+
+**Step 3 — verify the host half specifically.** Drive a few requests, then look in
+AppSignal for spans carrying `faas.name` / `faas.trigger` / `faas.execution`, and for
+our `game.action` spans appearing as **children** of an invocation span rather than as
+roots. Worker spans arriving proves nothing here — they authenticate in code and would
+arrive even if the host's exports were being dropped wholesale.
+
+Also confirm on this pass: `service.version` / `appsignal.config.revision` are
+non-empty (they were empty locally), and cold-start spans show up.
+
+**Step 4 — only after step 3 passes, tear down App Insights.** Until this runs the
+host sends to Azure Monitor *and* AppSignal, which is the deliberately safe
+intermediate state — never blind, at the cost of duplicate spans at launch traffic.
+
+```bash
+# ARM write: needs the MFA step-up login recorded in TODO.md.
+az login --tenant <id> --scope https://management.core.windows.net//.default
+
+az functionapp config appsettings delete -n dreamlands-api -g dreamlands-rg \
+  --setting-names APPLICATIONINSIGHTS_CONNECTION_STRING
+```
+
+Then delete the `microsoft.insights/components` resource named `dreamlands-api` and
+its two alert artifacts (`Application Insights Smart Detection`,
+`Failure Anomalies - dreamlands-api`). Nothing in the repo references App Insights, so
+there is no code change and no rollback beyond re-adding the setting.
+
+**Rollback for the whole phase** is the `host.json` flip plus a redeploy; the worker
+package and `UseFunctionsWorkerDefaults()` are inert without it.
+
+### Original notes
 
 Flipping `host.json` to `"telemetryMode": "openTelemetry"` adds host invocation
 spans and cold-start visibility, and with

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using Microsoft.Azure.Functions.Worker.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using Microsoft.Extensions.Logging;
@@ -126,6 +127,10 @@ public static class Telemetry
                 "the collector will reject every export.");
 
         services.AddOpenTelemetry()
+            // Phase 4. Pairs with host.json "telemetryMode": "OpenTelemetry": the host
+            // emits the invocation span and this makes our spans its children rather
+            // than parallel roots. Inert if the host.json flag is ever removed.
+            .UseFunctionsWorkerDefaults()
             .ConfigureResource(r => r
                 .AddService(
                     serviceName: Environment.GetEnvironmentVariable("OTEL_SERVICE_NAME") ?? "dreamlands-api",
@@ -167,6 +172,13 @@ public static class Telemetry
                         // runtime's own storage plumbing (AzureWebJobsStorage polling).
                         // Neither is our code; both would otherwise dominate the traces.
                         if (uri.AbsolutePath.Contains("AzureFunctionsRpcMessages")) return false;
+                        // The Cosmos SDK probes the Instance Metadata Service once per
+                        // client to tag its telemetry with VM/region info. App Service
+                        // blocks outbound traffic to that link-local address, so the
+                        // probe always fails (WSAEACCES) on the first Cosmos call of a
+                        // cold-started worker. The SDK swallows it; only this
+                        // instrumentation made it look like an error.
+                        if (uri.Host == "169.254.169.254") return false;
                         return !uri.Host.EndsWith(".core.windows.net", StringComparison.OrdinalIgnoreCase);
                     };
                     // OTel names client spans after the HTTP method alone, so a trace
