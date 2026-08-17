@@ -8,14 +8,13 @@ public class ResolverTests
     static Move M(string s) => Move.Parse(s);
 
     [Fact]
-    public void Attacking_into_a_defend_loses_the_exchange()
+    public void Attacking_into_a_defend_is_chipped_to_the_cap()
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("attack"), M("defend"), rng);
-        // The guard caps the hit at 2 and punches back for a full 4. Attacking into
-        // a Defend is now a net loss for the attacker — this is the pairing that
-        // closes the RPS triangle.
-        Assert.Equal(-4, r.PlayerDelta);
+        // A guard caps the hit at 2 and deals nothing back. Attacking into a Defend
+        // is a poor trade, not a losing one — the base move is a pure guard.
+        Assert.Equal(0, r.PlayerDelta);
         Assert.Equal(-2, r.MonsterDelta);
     }
 
@@ -25,9 +24,8 @@ public class ResolverTests
         var rng = new Random(0);
         var r = Resolver.Resolve(M("heavy attack"), M("defend"), rng);
         // 8 raw, but a guard holds against a haymaker as well as against a jab, so
-        // only the cap of 2 lands. The counter is unchanged at 4 — winding up for a
-        // big swing into a guard is the worst thing you can do.
-        Assert.Equal(-4, r.PlayerDelta);
+        // only the cap of 2 lands. Capping, not shaving, is the whole point.
+        Assert.Equal(0, r.PlayerDelta);
         Assert.Equal(-2, r.MonsterDelta);
     }
 
@@ -36,28 +34,28 @@ public class ResolverTests
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("heavy attack"), M("heavy defend"), rng);
-        Assert.Equal(-4, r.PlayerDelta);
+        Assert.Equal(0, r.PlayerDelta);
         Assert.Equal(-1, r.MonsterDelta);
     }
 
     [Fact]
-    public void Perfect_defend_blocks_all_damage_and_still_counters()
+    public void Perfect_defend_blocks_all_damage()
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("attack"), M("perfect defend"), rng);
+        // A perfect guard takes nothing. It also deals nothing — hitting back is a
+        // riposte rider, not something the base Defend does.
         Assert.Equal(0, r.MonsterDelta);
-        // Every Defend counters, mutated ones included. Perfect Power Defend is
-        // therefore a clean 4-for-nothing — deliberate, and gated behind Power plus
-        // the two elite armors that carry it.
-        Assert.Equal(-4, r.PlayerDelta);
+        Assert.Equal(0, r.PlayerDelta);
     }
 
     [Fact]
-    public void Recover_beats_defend_completing_the_triangle()
+    public void Recover_beats_defend()
     {
         var rng = new Random(0);
-        // Attack > Recover (cancel + stun), Defend > Attack (counter), and here
-        // Recover > Defend: a free heal against a guard with nothing to block.
+        // A free heal against a guard with nothing to block. Note this is NOT part of
+        // a closed triangle: with the counter reverted, Attack no longer loses to
+        // Defend. See plans/defang_aggro.md.
         var r = Resolver.Resolve(M("recover"), M("defend"), rng);
         Assert.Equal(4, r.PlayerDelta);
         Assert.Equal(0, r.MonsterDelta);
@@ -89,12 +87,12 @@ public class ResolverTests
     public void Wary_recover_vs_attack_converts_to_defend()
     {
         var rng = new Random(0);
-        // Wary Recover is treated as a basic Defend, so it caps the hit at 2 — and,
-        // because it IS a Defend by the time damage resolves, it counters for 4 too.
-        // Wary gear punishes an attacker, not just survives one.
+        // Wary Recover is treated as a basic Defend, so it caps the hit at 2 and
+        // deals nothing back — wary gear survives an attacker rather than punishing
+        // one.
         var r = Resolver.Resolve(M("wary recover"), M("attack"), rng);
         Assert.Equal(-2, r.PlayerDelta);
-        Assert.Equal(-4, r.MonsterDelta);
+        Assert.Equal(0, r.MonsterDelta);
         // No stun on the (converted-to-defend) target.
         Assert.False(r.StunPlayerNext);
     }

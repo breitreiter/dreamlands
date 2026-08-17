@@ -1,10 +1,12 @@
 ---
 kind: bug
 title: "The shipped player reference contradicts the engine on what Defend does"
-state: open
+state: fixed
 created: 2026-08-17
+fixed: 2026-08-17
 severity: medium
-status: open — production reference tells players Defend only blunts an Attack; the engine has it beat one
+status: resolved by reverting the engine, not by editing the doc — the counter is gone, so the
+  reference was right all along. See "Resolution".
 touches:
   files:
     - ui/web/src/screens/Reference.tsx
@@ -71,10 +73,24 @@ Worth deciding at the same time whether the reference should state the cap ladde
 (plain 2 / heavy 1 / perfect 0, `Resolver.DefendCap`), since the rewrite also
 dropped the rider table that used to carry it.
 
-## Not in scope here
+## Resolution (2026-08-17)
 
-Whether a 4-damage counter is *correctly tuned* is a separate question from whether
-it is documented. The surprise-in-play reaction is recorded as an open balance
-signal on [[defang_aggro]] — the harness measured the counter as the fix for
-aggro dominance, so a re-tune should start from those numbers rather than from the
-one-fight impression.
+**Fixed from the other end: the counter was reverted, so the reference is correct
+as written.** The doc was never the thing out of step — the engine was. The counter
+was not the agreed design (the agreed fix for Defend was the clamp alone), and a
+guard that hits back for a full attack is a riposte, which belongs on gear rather
+than on the base move. Reverted in `Resolver.cs`; see [[defang_aggro]] §9.
+
+Verified against the current engine, cell by cell: Attack-into-Defend inflicts 2,
+Defend caps incoming at 2 and deals nothing back, and the rest of the matrix was
+already right. No edit to `Reference.tsx` was needed.
+
+The one line that still overstates things is the intro — "Every base action beats
+one other and loses to a third". With the counter gone the triangle is **not**
+closed: Attack no longer loses to Defend. That sentence should be softened the next
+time the reference is touched. Tracked as the remaining item here rather than as its
+own bug.
+
+The `Combat.tsx` tooltip was corrected in the same pass — it had said Defend
+"strikes back for 4", which came from the same reverted change. It now reads as a
+pure cap. The stale "+2 prevent" text it replaced was a real bug and stays fixed.

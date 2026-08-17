@@ -4,7 +4,7 @@ title: "Defang aggro — closing the RPS triangle"
 state: active
 created: 2026-08-16
 updated: 2026-08-17
-status: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. First play signal 2026-08-17: the counter reads as too strong to a player who was never told it exists (§9) — fix the reference and the missing narration before touching the numbers. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
+status: PARTLY REVERTED 2026-08-17 — the counter is out (it was never the agreed design; see §9), the cap stays. Aggro dominance is unsolved again: berserk back to 88.7% in starting kit. Clamping harder was measured and does not change that (§9). Was: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
 touches:
   files:
     - lib/Combat/Resolver.cs (the recommended change)
@@ -210,31 +210,74 @@ recovers still punishes control, and none ships (see
 6. Independently, seed `riposte` through the monster corpus (§5) — useful with or
    without the engine change.
 
-## 9. Play signal, 2026-08-17 — the counter reads as too strong
+## 9. REVERTED 2026-08-17 — the counter was never the agreed design
 
-First report from actual play (not the harness): a basic Defend countering an
-Attack for 4 "makes the defend action absurdly strong". The player did not know
-the counter was intentional, which is itself a finding — see
-[[reference_omits_defend_counter]], the shipped reference never mentions it.
+The counter shipped in f7934ae on the reasoning in §3. That reasoning stands as
+*measurement*, but the change itself was out of scope: the agreed fix for Defend
+was the clamp, not a free riposte on the base move. Reverted in `Resolver.cs` —
+`Counter` is gone, `DefendCap` stays. A guard that hits back for a full attack is a
+riposte, which is a gear rider, not a property of the base action.
 
-**Do not re-tune on this alone.** The 4 was measured, and 2 was measured and
-rejected: berserk stayed at 82.0% with a counter of 2, versus 68.6% at 4. Dropping
-it back re-opens exactly the aggro dominance this plan closed. One fight's
-impression is not the harness.
+Verification: with the counter removed the harness reproduces the §2 cap row
+exactly — berserk 88.7, aggro 87.5, control 53.5, turtle 60.2 at T0 lower — so the
+revert lands precisely on the previously measured cap-only variant and nothing else
+moved.
 
-What the report is genuinely evidence for, in order of likelihood:
+Tests were rewritten from the design rather than edited to pass, mirroring what
+f7934ae did in the other direction. Two whose *names* asserted the counter premise
+were renamed: `Attacking_into_a_defend_loses_the_exchange` →
+`..._is_chipped_to_the_cap`, and `Perfect_defend_blocks_all_damage_and_still_counters`
+→ `Perfect_defend_blocks_all_damage`. `Recover_beats_defend_completing_the_triangle`
+lost its second clause: the triangle is **not** closed any more, and the test should
+not claim it is.
 
-1. **A discoverability failure, not a balance one.** A move whose headline effect
-   is undocumented reads as a bug when it fires. Fixing the reference may resolve
-   the complaint entirely. Do this first, then re-ask.
-2. **Narration is still missing** (§7, item 3 of the order above, never done). A
-   countered attack currently produces damage with no explanation in the log, so
-   the counter arrives as an unexplained number — the worst possible framing for a
-   mechanic that is supposed to feel like a read paying off.
-3. **The cap ladder, not the counter, may be the wrong dial.** If guarding feels
-   dominant, the trickle (plain 2) is the tuning knob §3 already nominates; it
-   changes how much a guard concedes without un-closing the triangle.
+### What this re-opens
 
-If a re-tune does turn out to be wanted, re-run the harness across all 6 gear bands
-and 4 entry-spirit levels rather than adjusting to taste — the whole point of the
-existing numbers is that aggro dominance was invisible without them.
+Aggro dominance, in full. Berserk is back to 88.7% in starting kit and the
+best-policy column returns to aggro nearly everywhere. §1 is unsolved again. The
+counter was the only measured engine lever that inverted it; every remaining option
+is either a different engine dial or content work (§5).
+
+### The clamp-harder dial, now measured
+
+"Clamp harder to 1 if we need to" — this was never in the §2 table, so it was
+measured 2026-08-17 at T0 dagger/light lower, 400 trials, 20 spirits:
+
+| cap ladder (plain/heavy/perfect) | berserk | aggro | control | turtle |
+|---|---|---|---|---|
+| **2/1/0 (current)** | 88.7 | 87.5 | 53.5 | 60.2 |
+| 1/1/0 | 86.5 | 87.9 | 72.0 | 72.3 |
+| 1/0/0 | 85.5 | 87.1 | 69.7 | 70.6 |
+
+Read this the same way as the original cap row: **clamping harder does not touch
+aggro** (88.7 → 86.5 → 85.5, all within noise of each other) while lifting control
+and turtle by another ~12 and ~12 points. It raises the floor again without lowering
+the ceiling, which is the same shape as the 2-cap and the same reason it will not
+defang aggro on its own.
+
+Two notes if it is adopted:
+
+- At plain 1, **`heavy` defend stops meaning anything** — 1/1/0 makes the heavy
+  rider identical to a plain guard. If the plain cap drops to 1 the ladder wants to
+  become 1/0/0, which is variant B above, and that in turn collapses `heavy` into
+  `perfect`. The cap ladder has three rungs and only three values below 3; tightening
+  the bottom rung squeezes the whole thing.
+- Turtle at ~72% with nothing to lose makes long guard chains cheap. §3's warning
+  about full immunity making combat tedious applies by degrees, and 1/0/0 is most of
+  the way there for anyone wearing heavy armor.
+
+### If aggro dominance is worth solving again
+
+In rough order of cost, none of them a counter on the base move:
+
+1. **Riposte on monsters** (§5, still untouched, no engine change) — measured
+   -13.8 on old_bram. Puts the punishment on specific enemies you can learn, which
+   is a better fit for the format than a global rule.
+2. **Bigger monster heavies** on top of the cap (§3) — berserk 74.5, aggro takes
+   over at 77.3. Symmetric, so authoring the heavies onto monsters bites harder than
+   raising the rider.
+3. **A riposte rider on player armor**, if defending should ever hit back — same
+   effect as the reverted counter but earned through gear rather than free on the
+   base move, and tunable per item.
+
+Do NOT reach for monster HP (§4).

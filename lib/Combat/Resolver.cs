@@ -47,8 +47,8 @@ public static class Resolver
         if (HasWary(p) && m.Base == "attack") p = new Move("defend", new HashSet<string>());
         if (HasWary(m) && p.Base == "attack") m = new Move("defend", new HashSet<string>());
 
-        int pOut = OutgoingDamage(p, m) + Counter(p, m);
-        int mOut = OutgoingDamage(m, p) + Counter(m, p);
+        int pOut = OutgoingDamage(p, m);
+        int mOut = OutgoingDamage(m, p);
         int pPrev = Prevention(p, m);
         int mPrev = Prevention(m, p);
 
@@ -128,7 +128,16 @@ public static class Resolver
             ? Math.Min(incoming, cap)
             : Math.Max(0, incoming - prevention);
 
-    /// <summary>Damage ceiling while guarding, or null for moves that are not a Defend.</summary>
+    /// <summary>
+    /// Damage ceiling while guarding, or null for moves that are not a Defend.
+    ///
+    /// A Defend is a pure guard: it caps what lands and deals nothing back. A counter
+    /// of 4 shipped briefly in f7934ae to close the RPS triangle and was reverted — a
+    /// guard that hits back for a full attack is a riposte, which is a gear rider and
+    /// not a property of the base move. This ladder is the dial if guarding needs to
+    /// concede less; see plans/defang_aggro.md for what that leaves unsolved about
+    /// aggro dominance.
+    /// </summary>
     static int? DefendCap(Move defender)
     {
         if (defender.Base != "defend") return null;
@@ -137,23 +146,7 @@ public static class Resolver
         return 2;
     }
 
-    /// <summary>
-    /// A Defend punches back at an Attack, for the same damage as a base attack.
-    ///
-    /// This is what makes Defend BEAT Attack rather than merely blunt it, and it is
-    /// what closes the RPS triangle: Attack beats Recover (cancels the heal and
-    /// stuns), Recover beats Defend (a free heal against a guard with nothing to
-    /// block), Defend beats Attack. Without it, attacking is never wrong — it beats
-    /// Recover, chips through Defend, and trades evenly with itself, and the player
-    /// wins even trades because a 24-point pool outlasts almost every monster.
-    ///
-    /// See plans/defang_aggro.md for the measurements. A counter of 2 was not
-    /// enough to change behaviour; it has to be a real trade.
-    /// </summary>
-    static int Counter(Move defender, Move attacker) =>
-        defender.Base == "defend" && attacker.Base == "attack" ? BaseAttackDamage : 0;
-
-    /// <summary>Damage of a plain, unmutated Attack. Also the size of a Defend's counter.</summary>
+    /// <summary>Damage of a plain, unmutated Attack.</summary>
     public const int BaseAttackDamage = 4;
 
     /// <summary>
