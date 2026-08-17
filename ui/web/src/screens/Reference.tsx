@@ -119,40 +119,31 @@ export default function Reference() {
           <Section id="character" title="Your Character">
             <p>
               You are a travelling merchant of the Traders Guild, working the imperial borderlands.
-              Four numbers describe you: what you can take, what you can bear, what you can spend,
-              and what you can carry.
+              Your character has four key stats.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Stat label="Health" value="4" note="The last resort. Untreated conditions take it a point per night, and combat only reaches it once your spirits are spent. Reach 0 and you are rescued." />
-              <Stat label="Spirits" value="20" note="Morale and stamina in one pool. The road drains it, blows land on it first, and only an inn or a Recover refills it." />
-              <Stat label="Gold" value="50" note="Spent on gear, medicine, food, and beds. Earned from contracts, encounters, and selling what you find." />
+              <Stat label="Health" value="4" note="Your physical wellbeing. Damaged by combat (only if Spirits are already zero) and untreated serious conditions." />
+              <Stat label="Spirits" value="20" note="Your morale and stamina. Drained by travel (especially travel in harsh conditions) and combat. Restore by sleeping in an inn." />
+              <Stat label="Gold" value="50" note="Spent on gear, medicine, food, and lodging. Primarily earned from completing guild contracts." />
               <Stat label="Pack slots" value="8" note="Everything you own occupies one slot: weapon, armor, tools, medicine, rations, and each undelivered contract." />
             </div>
-            <p className="text-muted">
-              Damage in a fight is taken out of spirits first and only bites into health when spirits
-              run out. Spirits are the buffer you spend; health is the one you protect.
-            </p>
           </Section>
 
           {/* ADVANCEMENT */}
           <Section id="advancement" title="Advancement">
             <p>
-              You do not level up by fighting, trading, or walking. You level up by{" "}
-              <strong className="text-dim">going somewhere</strong>. Scattered across the map are
-              sites that are not settlements — ruins, camps, works, holdings. Each holds a
-              questline. Travel there, enter it, and see it through to the end, and you gain a level.
+              On the map you'll find settlements, where you buy, sell, and listen for rumors.
+              Settlements are on trade routes. You'll also find markers that are off the trade
+              routes; ruins, camps, and strange places. Each holds a questline. Travel there, enter
+              it, and see it through to the end, and you gain a level.
             </p>
-            <p>
-              Every level opens the <strong className="text-dim">tableau</strong>: pick one upgrade.
-              Each track can be taken twice and no further, so nothing stacks past a second step and
-              you cannot max everything in one run.
-            </p>
+            <p>There are six advancement tracks, each with two potential upgrades.</p>
             <Table
               headers={["Track", "First pick", "Second pick"]}
               rows={[
-                ["Combat", "Axes and medium armor", "Swords and heavy armor"],
+                ["Combat", "Can use axes and medium armor", "Can use swords and heavy armor"],
                 ["Negotiation", "Contracts pay 20% more", "Contracts pay 40% more"],
-                ["Bushcraft", "Halves travel costs; eat every other night", "Quarters travel costs"],
+                ["Bushcraft", "Half spirits and food lost to travel", "Quarters spirit cost for travel"],
                 ["Cunning", "40% to resist serious conditions", "80% to resist serious conditions"],
                 ["Constitution", "+1 max health", "+1 max health"],
                 ["Packing", "+1 pack slot", "+1 pack slot"],
@@ -169,30 +160,26 @@ export default function Reference() {
             <p>
               Four skills, three tiers each: <span className="text-accent">Untrained</span>,{" "}
               <span className="text-accent">Trained</span>, <span className="text-accent">Expert</span>.
-              There are no numbers and no experience bar. A skill moves only when you spend a
-              tableau pick on it.
             </p>
             <Table
-              headers={["Skill", "What it governs", "Trained", "Expert"]}
+              headers={["Skill", "Untrained", "Trained", "Expert"]}
               rows={[
-                ["Combat", "Violence, and the gear you are fit to use", "Axes, medium armor", "Swords, heavy armor"],
-                ["Negotiation", "Persuasion, bartering, social footwork", "+20% contract payout", "+40% contract payout"],
-                ["Bushcraft", "Wilderness travel, weather, rations", "Half travel costs, eat every other night", "Quarter travel costs"],
-                ["Cunning", "Awareness, trickery, staying whole", "40% resist serious conditions", "80% resist serious conditions"],
+                ["Combat", "Simple weapons", "Axes, medium armor", "Swords, heavy armor"],
+                ["Negotiation", "No bonus", "+20% contract payout", "+40% contract payout"],
+                ["Bushcraft", "No bonus", "Half spirits and food lost to travel", "Quarters spirit cost for travel"],
+                ["Cunning", "20% change to resist serious conditions", "40% resist serious conditions", "80% resist serious conditions"],
               ]}
             />
-            <p className="text-muted">
-              Every tier also improves how skill checks resolve, in every skill. See below.
-            </p>
+            <p className="text-muted">Every tier also improves how skill checks resolve.</p>
           </Section>
 
           {/* SKILL CHECKS */}
           <Section id="checks" title="Skill Checks">
             <p>
-              There are no dice rolls against a difficulty number. When a check comes up you are
-              offered <strong className="text-dim">three approaches</strong>, and you choose one.
-              One of the three is the right read on the situation, one is a mistake, and one is
-              somewhere in between.
+              Sometimes while navigating a narrative encounter, you'll be presented with a skill
+              check. Each check offers <strong className="text-dim">three approaches</strong>, and
+              you choose one. One of the three is the right read on the situation, one is a mistake,
+              and one is somewhere in between.
             </p>
             <Table
               headers={["Skill", "Approaches"]}
@@ -204,22 +191,17 @@ export default function Reference() {
               ]}
             />
             <p>
-              Which approach is correct depends entirely on the scene, not on the skill. Your tier
-              decides how much slack you get for reading it wrong:
+              Which approach is correct depends entirely on the scene. Your skill tier decides how
+              much slack you get for reading it wrong:
             </p>
             <Table
               headers={["", "Best approach", "Middle approach", "Worst approach"]}
               rows={[
-                [<strong key="u">Untrained</strong>, "50/50 — you may still flub it", "Fail", "Fail"],
+                [<strong key="u">Untrained</strong>, "50% chance of success", "Fail", "Fail"],
                 [<strong key="t">Trained</strong>, "Succeed", "Fail", "Fail"],
                 [<strong key="e">Expert</strong>, "Succeed", "Succeed", "Fail"],
               ]}
             />
-            <p className="text-muted">
-              So training does not make you luckier — it makes your judgement count. Untrained, even
-              a correct read fails half the time; Expert, craft carries you through a merely decent
-              read. Nobody survives the wrong approach.
-            </p>
           </Section>
 
           {/* COMBAT */}
@@ -234,71 +216,46 @@ export default function Reference() {
             <Sub>The triangle</Sub>
             <p>Every base action beats one other and loses to a third.</p>
             <Table
-              headers={["Action", "What it does", "Beaten by"]}
+              headers={["Action", "Vs Attack", "Vs Defend", "Vs Recover"]}
               rows={[
-                ["Attack", "4 damage. Against a Recover it cancels the heal outright and stuns them.", "Defend"],
-                ["Defend", "Caps whatever lands on you at 2, and strikes an attacker back for 4.", "Recover"],
-                ["Recover", "Heals 4 spirits — but only if nobody is swinging at you.", "Attack"],
-                ["Read Intent", "Reveals the enemy's full plan for next turn. Costs you the slot.", "Anything aggressive"],
+                ["Attack", "Trade 4 damage", "Inflict 2 damage", "Inflict 4 damage and recovering party skips next action"],
+                ["Defend", "Caps incoming damage to 2", "Nothing", "Nothing"],
+                ["Recover", "Skip next action", "Heal 4", "Heal 4"],
               ]}
             />
-            <p className="text-muted">
-              A guard is not an off-switch — a trickle still gets through — but it does hit back,
-              which is what makes leading with Attack every turn a losing habit.
+            <p>
+              A fourth action is only available to the player character: Read Intent — reveals the
+              enemy's full plan for next turn. This costs you an action, but can help you strategize
+              your next turn.
             </p>
 
-            <Sub>Where your moves come from</Sub>
-            <p>
-              Your move list is your gear. Recover and Read Intent are always yours; everything else
-              is granted by what you have equipped.
-            </p>
+            <Sub>Advanced actions</Sub>
+            <p>Better gear grants better actions.</p>
             <ul className="list-disc list-inside space-y-2 ml-2">
               <li>
                 <strong className="text-dim">Your weapon supplies every Attack you have.</strong>{" "}
-                With no weapon equipped you cannot attack at all. Some fine weapons drop the plain
-                swing entirely in favour of specialist strikes.
+                With no weapon equipped you cannot attack at all.
               </li>
               <li>
-                <strong className="text-dim">Your armor supplies every Defend you have.</strong>{" "}
-                Unarmored you fall back on a plain Defend, which is better than wearing armor that
-                grants none.
-              </li>
-              <li>
-                Better gear does not deal more damage in some invisible way — it hands you{" "}
-                <strong className="text-dim">named special moves</strong>, and those are the whole
-                advantage. A Pommel Stun, a Perfect Block, a Riposte.
+                <strong className="text-dim">Your armor improves Defend and Recover.</strong>{" "}
+                Armor typically grants improved Defend and Recover variants.
               </li>
             </ul>
 
-            <Sub>What the special moves do</Sub>
-            <Table
-              headers={["Rider", "Effect"]}
-              rows={[
-                ["Heavy", "Attack: +4 damage. Defend: caps damage at 1. Recover: +2 healing."],
-                ["Perfect", "Defend takes no damage at all."],
-                ["Shielding", "Defend nullifies stuns and conditions aimed at you."],
-                ["Riposte", "Counters an incoming attack: prevents 2 and adds 2."],
-                ["Stunning", "Chance to skip the target's next slot."],
-                ["Brutal / Venomous / Glowing / Tainted", "Chance to inflict Injured, Poisoned, Irradiated, or Lattice Sickness."],
-                ["Provoking / Terrifying", "Berzerk or Fear: narrows the target's move pool next turn."],
-                ["Exhausting", "Hits hard, then stuns you."],
-                ["Power / Slow", "Once per turn / once every other turn."],
-              ]}
-            />
-
             <Sub>Reading the enemy</Sub>
             <p>
-              Every turn opens with a <strong className="text-dim">tell</strong> — one line hinting
+              Every turn opens with a <strong className="text-dim">tell</strong>; one line hinting
               at the shape of the enemy's commitment. Pressing the attack, on their back foot,
-              winded, or winding up something heavy. Play Read Intent and you see their exact three
-              moves before you commit next turn.
+              winded, or winding up something heavy.
             </p>
 
             <Sub>Stuns and flight</Sub>
             <p>
               A stun turns the victim's next slot into nothing. If it lands on the third slot it
               carries into the first slot of the following turn. Fleeing ends the fight, but it
-              spends the turn: the enemy's three moves still resolve against you while you go.
+              spends the turn: the enemy's three moves still resolve against you before you escape.
+              If you commit to flee, and you survive to the end of the turn, you always successfully
+              flee.
             </p>
           </Section>
 
@@ -306,11 +263,13 @@ export default function Reference() {
           <Section id="inventory" title="Equipment & Inventory">
             <p>
               There is one container: your pack, <span className="text-accent">8 slots</span> to
-              start and at most 10. There is no separate food bag and no free storage on your
-              person. <strong className="text-dim">Almost everything takes a slot</strong> — your
-              equipped weapon and armor, every tool and medicine kit, every day's rations, and every
-              contract you are carrying. Buy carelessly at market and you will find yourself with no
-              room for food.
+              start and at most 10. <strong className="text-dim">Everything takes a slot</strong> —
+              your equipped weapon and armor, every tool and medicine kit, every day's rations, and
+              every contract you are carrying. You will need to plan carefully and only carry what
+              you need, especially when travelling to distant points of interest. Load up on guild
+              contracts and you'll make more money, but risk misfortune on the road. Load up on gear
+              and you'll struggle with income. Load up on both and you'll find yourself starving on
+              the road.
             </p>
 
             <Sub>What lives in the pack</Sub>
@@ -325,41 +284,14 @@ export default function Reference() {
                 ["Contracts", "One slot each until delivered."],
               ]}
             />
-
-            <Sub>Combat requirements</Sub>
-            <p>
-              The good gear expects a fighter. Daggers and light armor ask nothing of you; axes and
-              medium armor require <span className="text-accent">Trained</span> Combat; swords and
-              heavy armor require <span className="text-accent">Expert</span>. Below the tier you
-              cannot equip it at all — though you can still buy it, carry it, and grow into it. The
-              market flags anything beyond your reach.
-            </p>
-            <p className="text-muted">
-              This applies to the spoils of a questline too. Finish an early arc and you may be
-              handed armor you cannot yet wear: that is the game telling you where a tableau pick
-              would go.
-            </p>
-            <Table
-              headers={["Class", "Combat", "Character"]}
-              rows={[
-                ["Daggers", "Untrained", "Counters and stuns; The Old Tooth trades the plain swing for a riposte and a provoke."],
-                ["Axes", "Trained", "Heavy swings and staggering blows, and no fine work at all."],
-                ["Swords", "Expert", "Hybrids — riposte, pommel, and blades that guard or mend as they cut."],
-                ["Light armor", "Untrained", "Evasion and guile: cautious reads, cloaks, shadow steps."],
-                ["Medium armor", "Trained", "Balance: evasions and blocks in the same kit."],
-                ["Heavy armor", "Expert", "Absorption: armored guards and perfect blocks."],
-              ]}
-            />
           </Section>
 
           {/* CONDITIONS */}
           <Section id="conditions" title="Conditions">
             <p>
-              The most dangerous encounters — legendary monsters, the worst of the road — do not
-              simply damage you. They leave something behind. There are four serious conditions, and
-              each behaves the same way: <strong className="text-dim">1 health per night, every
-              night, until it is treated</strong>. With only four health to your name, an untreated
-              condition is a countdown.
+              The most dangerous encounters can inflict one of four serious conditions, and each
+              behaves the same way: <strong className="text-dim">lose 1 health per night, every
+              night, until it is treated</strong>.
             </p>
             <p>
               The counter is entirely a matter of preparation. Carry the matching kit and the
@@ -455,9 +387,8 @@ export default function Reference() {
           {/* SETTLEMENTS */}
           <Section id="settlements" title="Settlements">
             <p>
-              Settlements are the other half of the game: the only place spirits come back, the only
-              place to spend gold, and free of the road's accrual. What is on offer depends on
-              size — camps, outposts, villages, towns, and cities.
+              Settlements are the practical topology of the game. You can go anywhere, but you'll
+              mostly be travelling from settlement to settlement.
             </p>
 
             <Sub>Market</Sub>
@@ -479,9 +410,10 @@ export default function Reference() {
               Bigger settlements carry more. Remote outposts are the odd exception: they are the
               likeliest place to find specialty medicine, a reward for making the trek.
             </p>
+            <p>You will consume a lot of food; leave space in your pack.</p>
 
             <Sub>Inn</Sub>
-            <p>Three tiers, one night each. Spirits only — health comes back on its own overnight.</p>
+            <p>Three offerings:</p>
             <Table
               headers={["Service", "Cost", "Spirits"]}
               rows={[
@@ -492,13 +424,15 @@ export default function Reference() {
             />
             <p className="text-muted">
               Any stay also applies the medicine you are carrying. Without the right kit, the
-              condition stays with you.
+              condition stays with you. The inn will not allow you to rest if doing so would advance
+              an untreatable serious condition.
             </p>
 
             <Sub>Storage</Sub>
             <p>
               Every settlement keeps a strongroom of <span className="text-accent">10 slots</span>,
-              local to that town. Somewhere to leave the winter bedroll while you cross the scrub.
+              local to that town. You'll most likely ignore these until you reach the edges of the
+              map and need to plan long, dangerous treks to non-settlement destinations.
             </p>
 
             <Sub>Chapterhouse</Sub>
