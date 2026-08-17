@@ -232,6 +232,11 @@ Balance is better tuned with real player data anyway.
       first entry. `_intro.enc` convention, `SeenBiomeTiers` on PlayerState, `TryPickIntro`
       in selection logic. Design in [[biome_intro_encounters]].
 - [ ] More variety in meal labels
+- [ ] Market UX — make it easy to top up empty pack slots with food at the *end* of a
+      trade. The auto-fill button exists but disappears as soon as another trade action is
+      staged, so restocking means leaving the market and re-entering. Likely shape is a
+      final-transaction step rather than a standing button — a plain "fill inventory with
+      food" button was already tried and felt clumsy.
 
 ### Flavor Text
 
