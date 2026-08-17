@@ -43,6 +43,10 @@ public class PlayerState
     /// <summary>Encounter id we were resolving when the tableau opened. Used to re-emit AwaitTableauPick on closed-tab resume.</summary>
     public string? PendingTableauReturn { get; set; }
 
+    /// <summary>Set when the tableau suspends an outcome that also ended the dungeon. The exit is
+    /// deferred until the last pick is spent; without it the dungeon is never left.</summary>
+    public bool PendingDungeonExit { get; set; }
+
     /// <summary>Tracks how many times each reward slot has been picked. Keys are slot ids; each capped at 2.</summary>
     public Dictionary<string, int> ArcRewardsTaken { get; set; } = new();
 

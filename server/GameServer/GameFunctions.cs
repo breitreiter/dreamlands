@@ -1570,6 +1570,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
         var rng = new Random(rngSeed);
         var session = new GameSession(player, data.Map, data.Bundle, data.Balance, rng, data.CombatBundle);
 
+        // Recovery: standing in a dungeon that is already completed is not a reachable state —
+        // enter_dungeon rejects completed dungeons — so it is residue from a dropped exit.
+        if (player.CurrentDungeonId != null && player.CompletedDungeons.Contains(player.CurrentDungeonId))
+            player.CurrentDungeonId = null;
+
         if (player.ActiveCombat != null)
         {
             session.Mode = SessionMode.InCombat;

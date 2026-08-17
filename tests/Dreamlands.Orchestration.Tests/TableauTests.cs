@@ -220,4 +220,65 @@ public class TableauTests
         var tableau = (EncounterStep.AwaitTableauPick)step;
         Assert.Equal(1, tableau.PendingLevels);
     }
+
+    // ── 8. A level granted alongside +finish_dungeon still leaves the dungeon ──
+
+    [Fact]
+    public void Choose_AddLevelWithFinishDungeon_ParksThePendingExit()
+    {
+        var session = Helpers.MakeSession();
+        session.Player.CurrentDungeonId = "brides_cave";
+        var enc = EncounterWithMechanics(["add_level", "finish_dungeon"]);
+        EncounterRunner.Begin(session, enc);
+
+        var step = EncounterRunner.Choose(session, enc.Choices[0]);
+
+        Assert.IsType<EncounterStep.AwaitTableauPick>(step);
+        Assert.True(session.Player.PendingDungeonExit);
+        Assert.Contains("brides_cave", session.Player.CompletedDungeons);
+    }
+
+    [Fact]
+    public void PickReward_LastPick_CompletesTheDeferredDungeonExit()
+    {
+        var session = Helpers.MakeSession();
+        session.Player.CurrentDungeonId = "brides_cave";
+        var enc = EncounterWithMechanics(["add_level", "finish_dungeon"]);
+        EncounterRunner.Begin(session, enc);
+        EncounterRunner.Choose(session, enc.Choices[0]);
+
+        var step = EncounterRunner.PickReward(session, "combat", null);
+
+        var finished = Assert.IsType<EncounterStep.Finished>(step);
+        Assert.Equal(FinishReason.DungeonFinished, finished.Reason);
+        Assert.Null(session.Player.CurrentDungeonId);
+        Assert.False(session.Player.PendingDungeonExit);
+    }
+
+    [Fact]
+    public void PickReward_WithPicksRemaining_KeepsTheDungeonExitParked()
+    {
+        var session = Helpers.MakeSession();
+        session.Player.CurrentDungeonId = "brides_cave";
+        var enc = EncounterWithMechanics(["add_level", "add_level", "finish_dungeon"]);
+        EncounterRunner.Begin(session, enc);
+        EncounterRunner.Choose(session, enc.Choices[0]);
+
+        EncounterRunner.PickReward(session, "combat", null);
+
+        Assert.True(session.Player.PendingDungeonExit);
+        Assert.Equal("brides_cave", session.Player.CurrentDungeonId);
+    }
+
+    [Fact]
+    public void PickReward_WithoutADungeon_DoesNotClaimAFinishedExit()
+    {
+        var session = Helpers.MakeSession();
+        session.Player.PendingLevels = 1;
+
+        var step = EncounterRunner.PickReward(session, "combat", null);
+
+        Assert.IsType<EncounterStep.Finished>(step);
+        Assert.Equal(FinishReason.Completed, ((EncounterStep.Finished)step).Reason);
+    }
 }

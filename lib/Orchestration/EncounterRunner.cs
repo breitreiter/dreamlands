@@ -192,6 +192,15 @@ public static class EncounterRunner
             session.Player.CurrentEncounterId = null;
         }
 
+        // Complete a dungeon exit the tableau deferred. CompletedDungeons was already
+        // recorded by +finish_dungeon; only the location flag is left to clear.
+        if (session.Player.PendingDungeonExit)
+        {
+            session.Player.PendingDungeonExit = false;
+            session.Player.CurrentDungeonId = null;
+            return new EncounterStep.Finished(FinishReason.DungeonFinished, Outcome: pendingOutcome);
+        }
+
         return pendingOutcome is not null ? (EncounterStep)pendingOutcome : new EncounterStep.Finished(FinishReason.Completed);
     }
 
@@ -300,6 +309,10 @@ public static class EncounterRunner
         if (session.Player.PendingLevels > 0)
         {
             session.Player.PendingTableauReturn = session.Player.CurrentEncounterId;
+            // The tableau spans a request boundary, so the pending finish cannot ride along on the
+            // step — it is parked on the player and consumed by the last PickReward.
+            if (pendingFinished != null)
+                session.Player.PendingDungeonExit = true;
             var available = GetAvailableSlots(session.Player);
             // Wrap the pending finished step or outcome as the payload to hand back after picks.
             var resumeOutcome = pendingFinished?.Outcome ?? outcome;
