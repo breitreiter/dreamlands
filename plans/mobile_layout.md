@@ -3,8 +3,8 @@ kind: plan
 title: "Mobile layout — make the web client survive phones"
 state: ready
 created: 2026-06-22
-updated: 2026-06-22
-status: ready — shape settled (audit + Combat reflow/review-gate sketched). Launch blocker per TODO.md §1. Two prototypes gate full commit: Combat monster banner (hit-splat anchoring) + gated turn loop.
+updated: 2026-08-17
+status: ready — shape settled (audit + Combat reflow/review-gate sketched). Launch blocker per TODO.md §1. Two prototypes gate full commit: Combat monster banner (hit-splat anchoring) + gated turn loop. 2026-08-17 — the journey's-end dialog moved from "unaudited" to confirmed broken: it soft-locks when tall (see [[alert_dialog_overflows_viewport]]), and its one-line height cap jumps the queue ahead of everything else here.
 touches:
   features: [web-ui]
   files:
@@ -75,6 +75,32 @@ Copy that pattern everywhere a side pane needs to vanish on mobile.
   and Deposit/Withdraw, a **segmented tab toggle** on mobile is probably nicer
   than a long stacked scroll. Same component pattern solves both → one unit of
   work.
+
+### Confirmed broken — the journey's-end dialog
+
+Was "unaudited"; it is now a reproduced soft-lock. Full writeup in
+[[alert_dialog_overflows_viewport]]; the fix lands here rather than standalone
+because it is the same single-column-collapse problem this plan exists to solve.
+
+- **The dialog cannot scroll.** `AlertDialogContent`
+  (`components/ui/alert-dialog.tsx:59`) is `fixed` + `translate-y-[-50%]` with a
+  width cap and **no height cap or overflow rule**. Taller-than-viewport content
+  bleeds off both edges and the page scrollbar cannot reach it, so the sole
+  dismiss button becomes unreachable. Hit in production at Fenwick with three
+  deliveries at once.
+- **The single-column collapse is what makes it tall.** `Explore.tsx:807` only
+  splits into two columns at `md:`, so below that the travails list and every
+  delivery (name + flavor paragraph + payout line each) stack in one column.
+- Fix, in order:
+  1. `max-h-[calc(100dvh-2rem)] overflow-y-auto` on `AlertDialogContent` — one
+     line, un-sticks *every* dialog in the app (`Explore`, `Inventory`,
+     `Market`). `dvh` not `vh`, for mobile browser chrome.
+  2. Pin header + footer and scroll only the body, so "Continue" stays visible
+     while deliveries scroll. Per call site, not in the component.
+  3. Decide whether the delivery list wants its own capped scroll region, and
+     whether two columns should kick in earlier than `md:`.
+- `max-w-3xl` on a 360px screen still needs the look it always needed; step 1
+  does not address width.
 
 ### Contained redesign
 
@@ -213,9 +239,6 @@ Everything else is CSS.
   first.
 - **Camp** (`Camp.tsx`) — end-of-day (meal/medicine/threats); not yet audited
   for two-pane.
-- **Arrival/journey dialogs** (`Explore.tsx` AlertDialog, `max-w-3xl`,
-  `md:grid-cols-2`) — already degrade, but `max-w-3xl` on 360px still needs a
-  look.
 
 ## Two global knobs (app-wide multipliers)
 
@@ -235,6 +258,10 @@ Set once, every screen benefits — flagged in TODO.md §1:
    banner (sticky hit-anchor) first.
 5. **Free/polish:** Encounter art-banner; Inventory overlay → mobile sheet; Camp
    + dialogs cleanup.
+
+Exception to the ordering: the dialog height cap (step 1 of the journey's-end
+fix) is a one-line change against a live soft-lock, so it goes first regardless
+of where the rest of that work sits.
 
 ## Note
 

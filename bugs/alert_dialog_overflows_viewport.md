@@ -71,8 +71,14 @@ Recommend 1 as the immediate fix since it un-sticks every dialog, with 2 as a
 follow-up for the arrival dialog specifically if the scrolled-away button proves
 awkward.
 
-## Related
+## Where the fix lives
 
-Worth a pass over whether the arrival dialog should split into two columns earlier
-than `md:`, or cap the delivery list with its own scroll region, rather than
-relying solely on the dialog scrolling.
+Rolled into [[mobile_layout]] rather than fixed standalone — the single-column
+collapse that makes the dialog tall is the same defect that plan already exists to
+address, and fixing the height cap without the column behaviour would only move the
+seam. See its "Confirmed broken — the journey's-end dialog" section for the
+sequenced fix, including whether the delivery list wants its own scroll region and
+whether two columns should kick in earlier than `md:`.
+
+The one-line height cap is called out there as jumping the plan's ordering, since
+it is a live soft-lock.
