@@ -4,7 +4,7 @@ title: "Defang aggro — closing the RPS triangle"
 state: active
 created: 2026-08-16
 updated: 2026-08-17
-status: PARTLY REVERTED 2026-08-17 — the counter is out (it was never the agreed design; see §9), the cap stays. Aggro dominance is unsolved again: berserk back to 88.7% in starting kit. Clamping harder was measured and does not change that (§9). Was: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
+status: SUPERSEDED 2026-08-17 by [[defend_stagger]] — the tempo lever, measured to invert berserk vs aggro by 7 points without lifting control. This plan stays as the record of the root-cause analysis and the measured levers that did NOT work. PARTLY REVERTED 2026-08-17 — the counter is out (it was never the agreed design; see §9), the cap stays. Aggro dominance is unsolved again: berserk back to 88.7% in starting kit. Clamping harder was measured and does not change that (§9). Was: SHIPPED to lib in f7934ae (cap + counter 4), with tests rewritten from the design and the UI updated. Re-measured across all 6 gear bands and 4 entry-spirit levels: the inversion holds everywhere and the best-policy column now varies instead of being aggro in 57/57 cells. Remaining: imp/reference/super_rps.md is stale (gnome territory, needs regeneration not hand-editing), and the riposte content seeding in section 5 is still untouched.
 touches:
   files:
     - lib/Combat/Resolver.cs (the recommended change)
@@ -281,3 +281,22 @@ In rough order of cost, none of them a counter on the base move:
    base move, and tunable per item.
 
 Do NOT reach for monster HP (§4).
+
+## 10. Superseded by [[defend_stagger]]
+
+§3's recommendation (cap + counter) is dead: the counter was reverted (§9) and the
+cap alone does not defang aggro. §3's secondary hope — that the cap "buys headroom
+for bigger monster attacks" as an anti-aggro lever — was measured on 2026-08-17 and
+does not hold: monster damage has to double before the ordering flips, and then by
+1.5 points. Riposte (§5) is the strongest stakes-raising lever at −19.6 on berserk
+and still does not invert.
+
+The finding that explains all of those failures: **tempo beats mitigation.** Any
+slot not spent attacking lengthens the fight, so mitigation never repays the slot
+it costs, and levers that raise the stakes uniformly preserve the ordering. See
+[[defend_stagger]] for the lever that does change it, the full measured table, and
+the invariant (§4 there) that the Defend leak is the clock on control.
+
+§5's riposte seeding is still worth doing for per-monster texture. §4's
+don't-touch-monster-HP finding stands. §6's "leave Stunning Defend alone" is
+obsoleted by the stagger — see [[defend_stagger]] §5.2.
