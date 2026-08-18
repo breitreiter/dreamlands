@@ -8,6 +8,7 @@ status: ready — shape settled and measured. A Defend that stops an Attack cost
 touches:
   files:
     - lib/Combat/Resolver.cs
+    - text/encounter-tool/EncounterCli/CheckCommand.cs
     - lib/Combat/CombatRunner.cs
     - server/GameServer/GameFunctions.cs
     - ui/web/src/screens/Combat.tsx
@@ -167,10 +168,42 @@ which is a gear rider, not a property of the base move. See `defang_aggro` §9.
 6. **Re-measure after**, all bands and entry-spirit levels, and re-check the T3
    fights specifically.
 
+### Monster pools must contain an opening
+
+The real lesson from early testing was not about the Berzerk rider — it was
+**monsters whose pool is all attacks**. The player's core loop is hunting for an
+opening; a pool with no openings does not read as hard, it reads as broken, and the
+player only discovers it by being nearly dead. There were no openings, only damage.
+
+Audited 2026-08-17: the corpus is clean. All 19 monsters carry at least one Defend
+*and* one Recover, and attack share tops out at 50% (`old_bram`, `old_redleaf`,
+`sentinel_7c`, `the_listener`), with the lightest at 20% (`vessel_iv_n`,
+`bog_stalker`). Since the AI picks uniformly, attack share *is* the per-slot attack
+probability, so monsters commit 1.0–1.5 attacks per turn out of three and openings
+are the majority of slots.
+
+Two consequences for this plan:
+
+- **The stagger scales with attack share.** It only fires on slots where a Defend
+  meets an Attack, so at 20–50% attack share it fires roughly 0.6–1.5 times per
+  turn against a full guard. The measured inversion already reflects the real
+  corpus, but re-tuning pool composition upward would amplify the stagger and needs
+  re-measuring.
+- **It partly answers the all-attack failure mode too.** Under the stagger, guarding
+  an aggressive monster *creates* the opening by stealing its slots, rather than
+  merely surviving. That is worth stating in the narration design (§5.4).
+
+Enforced 2026-08-17 in `CheckCommand.CheckFight`: an all-attack pool is now a hard
+error, with the reasoning in the message. The convention of carrying both a Defend
+and a Recover is stronger than the check (which requires only one non-attack move)
+and is currently universal in the corpus; it is left as a convention rather than a
+gate.
+
 ### The berzerk ban is undocumented
 
-The no-berzerk-monsters decision lives only in the absence of the rider from the
-corpus. `rules/encounter_mechanics.md:381` still describes `provoking` neutrally,
+Same shape as the pool finding above: the decision lives only in the absence of the
+rider from the corpus. Note the rider itself is fine and stays — `provoking` on
+player gear (The Old Tooth) is deliberate. `rules/encounter_mechanics.md:381` still describes `provoking` neutrally,
 so the vocabulary invites an author to reintroduce it. `enraging` (`:404`) appears
 on nothing at all and is dead vocabulary. Writing the ban down is a prerequisite
 for this plan, not a tidy-up: the stagger makes a berzerked target strictly worse

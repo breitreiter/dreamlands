@@ -154,6 +154,11 @@ static class CheckCommand
                 errors.Add("missing [stats hp=<n>] with n > 0");
             if (fight.Moves.Count == 0)
                 errors.Add("no '* move' sections — a fight needs a move pool");
+            else if (fight.Moves.All(m => m.Action.Base == "attack"))
+                errors.Add("every move in the pool is an Attack — a monster needs at least one "
+                         + "non-attack move. All-attack pools were cut in early testing: the player's "
+                         + "core loop is hunting for an opening, and a pool with none teaches that only "
+                         + "by killing them. Add a Defend and/or a Recover.");
             if (fight.Persistent && fight.Requires.Count == 0)
                 errors.Add("[persistent] fight has no [requires] gate — it would spawn forever; gate it on a tag/quality");
 
