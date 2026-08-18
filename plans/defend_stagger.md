@@ -141,9 +141,16 @@ which is a gear rider, not a property of the base move. See `defang_aggro` §9.
      attacker, the rider says nothing. `defang_aggro` §6 concluded it was weak on
      monsters *by design* and should be left alone; this change obsoletes that
      conclusion and the rider needs a new job or removal from the vocabulary.
-   - Does it interact with Berzerk? A berzerked monster is pool-locked to attacks,
-     so it can be staggered every turn. That may be the intended shape of Berzerk
-     as a *drawback*, or it may be a lock-loop. Check before shipping.
+   - **Berzerk + stagger is a lock-loop, and the only live path into it is the
+     player's.** No monster in the corpus inflicts Berzerk (zero `Provoking`, zero
+     `Enraging` across all 19 `.fight` files) — berzerk monsters were cut in early
+     testing because they favoured racing, which is the thing this whole plan is
+     trying to defang. But The Old Tooth (`ItemDef.cs:125`) still carries
+     `Heavy Power Provoking Attack`, which berzerks the *monster*: pool-locked to
+     Attack, into a player who then guards and staggers every slot. Provoke-then-
+     turtle is a real exploit this change would create. `Power` gates the provoke
+     to once per turn and Berzerk does not persist unless re-applied, which limits
+     it, but it needs a decision before ship.
 3. **Tests** — write from the design, not by editing until green, per the pattern
    in `defang_aggro` §9. Cover: plain Defend staggers, both directions, slot-3
    carry, and each mutator decision from step 2.
@@ -159,6 +166,19 @@ which is a gear rider, not a property of the base move. See `defang_aggro` §9.
    currently overstated and is tracked in [[reference_omits_defend_counter]].
 6. **Re-measure after**, all bands and entry-spirit levels, and re-check the T3
    fights specifically.
+
+### The berzerk ban is undocumented
+
+The no-berzerk-monsters decision lives only in the absence of the rider from the
+corpus. `rules/encounter_mechanics.md:381` still describes `provoking` neutrally,
+so the vocabulary invites an author to reintroduce it. `enraging` (`:404`) appears
+on nothing at all and is dead vocabulary. Writing the ban down is a prerequisite
+for this plan, not a tidy-up: the stagger makes a berzerked target strictly worse
+off, so the cost of someone re-adding a provoking monster goes up.
+
+`Reference.tsx` no longer mentions Berzerk at all — the 2026-08-17 rewrite dropped
+the rider table — so a player who buys The Old Tooth gets a mechanic with no
+player-facing explanation anywhere.
 
 ## 6. What this does not fix, and measurement caveats
 
