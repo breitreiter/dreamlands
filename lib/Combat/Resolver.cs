@@ -61,6 +61,15 @@ public static class Resolver
         bool stunP = StunsTarget(m, p, rng);
         bool stunM = StunsTarget(p, m, rng);
 
+        // A guard that stops an Attack costs the attacker their next slot. This is what
+        // makes Attack lose to Defend, and it is deliberately TEMPO rather than damage:
+        // mitigation never repays the slot it costs, so the only lever that changes the
+        // meta is one that takes slots off the aggressor. Applies to every Defend,
+        // mutated or not, and to a Wary Recover/Read that converted to one above.
+        // See plans/defend_stagger.md.
+        if (p.Base == "defend" && m.Base == "attack") stunM = true;
+        if (m.Base == "defend" && p.Base == "attack") stunP = true;
+
         // Exhausting attack self-stuns regardless of outcome.
         if (p.Base == "attack" && p.Has("exhausting")) stunP = true;
         if (m.Base == "attack" && m.Has("exhausting")) stunM = true;
@@ -131,12 +140,14 @@ public static class Resolver
     /// <summary>
     /// Damage ceiling while guarding, or null for moves that are not a Defend.
     ///
-    /// A Defend is a pure guard: it caps what lands and deals nothing back. A counter
-    /// of 4 shipped briefly in f7934ae to close the RPS triangle and was reverted — a
-    /// guard that hits back for a full attack is a riposte, which is a gear rider and
-    /// not a property of the base move. This ladder is the dial if guarding needs to
-    /// concede less; see plans/defang_aggro.md for what that leaves unsolved about
-    /// aggro dominance.
+    /// A Defend deals no damage back — a guard that hits for a full attack is a
+    /// riposte, which is a gear rider, not a property of the base move. What it does
+    /// instead is stagger the attacker (see Resolve).
+    ///
+    /// The leak is load-bearing: the trickle a guard concedes is the guaranteed
+    /// loss-per-turn that stops a defensive player stalling forever. Clamping it
+    /// tighter strengthens control and does nothing to aggro — measured, see
+    /// plans/defend_stagger.md §4. Do not lower these numbers.
     /// </summary>
     static int? DefendCap(Move defender)
     {

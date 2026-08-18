@@ -349,6 +349,46 @@ public class CombatRunnerTests
     }
 
     [Fact]
+    public void Stagger_on_slot_3_carries_to_slot_1_of_next_turn()
+    {
+        // Attack-only pool, so every monster slot swings. The player guards at slot 3
+        // → the guard staggers the attacker, and a slot-3 stun bleeds into slot 1 of
+        // next turn exactly like any other forward stun.
+        var enc = CmbParser.ParseString("""
+            [title Relentless]
+            [stats hp=999]
+
+            * move Attack
+              narration: It swings.
+
+            * intro
+            Test foe.
+
+            * win
+            Won.
+
+            * lose
+            Lost.
+            """);
+        enc.Id = "test/relentless";
+        var player = MakePlayer(spirits: 999, health: 999);
+        var state = MakeState();
+
+        var rng = new Random(0);
+        CombatRunner.Begin(enc, player, state, rng);
+
+        CombatRunner.Step(enc, player, state,
+            new PlayerCombatAction.Commit(
+                Move.Parse("attack"),
+                Move.Parse("attack"),
+                Move.Parse("defend")),
+            rng);
+
+        Assert.True(state.MonsterCarryStun[0],
+            "Slot 3 Defend vs Attack should carry-stagger the monster's slot 1 of next turn.");
+    }
+
+    [Fact]
     public void Flee_burns_turn_and_ends_combat()
     {
         var enc = MakeEncounter();

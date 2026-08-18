@@ -68,7 +68,7 @@ function moveTooltip(encoded: string): string {
 
   switch (base) {
     case "attack":   parts.push("Deal damage."); break;
-    case "defend":   parts.push("Caps incoming damage at 2 in this slot."); break;
+    case "defend":   parts.push("Caps incoming damage at 2 in this slot, and staggers an attacker: they lose their next slot."); break;
     case "recover":  parts.push("Heal spirits."); break;
     case "read":     parts.push("Reveal the enemy's plan for next turn."); break;
     case "skipped":  parts.push("No action."); break;

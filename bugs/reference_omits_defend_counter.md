@@ -85,11 +85,11 @@ Verified against the current engine, cell by cell: Attack-into-Defend inflicts 2
 Defend caps incoming at 2 and deals nothing back, and the rest of the matrix was
 already right. No edit to `Reference.tsx` was needed.
 
-The one line that still overstates things is the intro — "Every base action beats
-one other and loses to a third". With the counter gone the triangle is **not**
-closed: Attack no longer loses to Defend. That sentence should be softened the next
-time the reference is touched. Tracked as the remaining item here rather than as its
-own bug.
+The intro line — "Every base action beats one other and loses to a third" — was
+briefly overstated after the revert, since nothing then beat Attack. Resolved
+2026-08-17 by [[defend_stagger]]: a guard now costs an attacker their next slot, so
+Attack genuinely loses to Defend again, in tempo rather than damage. The triangle
+matrix records the stagger in both the Attack and Defend rows.
 
 The `Combat.tsx` tooltip was corrected in the same pass — it had said Defend
 "strikes back for 4", which came from the same reverted change. It now reads as a

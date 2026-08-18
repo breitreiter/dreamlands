@@ -2514,6 +2514,10 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
             _                      => $"You picked {VerbName(x.PlayerMove)}, they picked {VerbName(x.MonsterMove)}",
         };
         var effect = $"{DescribeDelta(x.PlayerDelta, "You")}, {DescribeDelta(x.MonsterDelta, "they")}";
+        // A guard steals the attacker's next slot. Without naming it, the slot simply
+        // goes missing next turn and the player has no way to connect cause to effect.
+        if (Staggered(x.PlayerMove, x.MonsterMove)) effect += " (your guard staggers them)";
+        else if (Staggered(x.MonsterMove, x.PlayerMove)) effect += " (their guard staggers you)";
         var line = $"{moves} • {effect}";
         if (!string.IsNullOrEmpty(x.MonsterNarration))
             line += $"\n    {x.MonsterNarration}";
@@ -2536,6 +2540,11 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
 
     // Capitalized base verb for the slot log. Mutators are surfaced through icons
     // and tooltips; the prose log just names what kind of action each side took.
+    /// <summary>Did <paramref name="guard"/> stop <paramref name="attacker"/>'s swing and
+    /// cost them their next slot? Mirrors the stagger in Resolver.Resolve.</summary>
+    static bool Staggered(Dreamlands.Encounter.Move guard, Dreamlands.Encounter.Move attacker) =>
+        guard.Base == "defend" && attacker.Base == "attack";
+
     static string VerbName(Dreamlands.Encounter.Move m) =>
         m.Base.Length == 0 ? m.Base : char.ToUpper(m.Base[0]) + m.Base[1..];
 

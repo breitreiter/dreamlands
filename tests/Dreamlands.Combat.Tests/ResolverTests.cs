@@ -8,14 +8,69 @@ public class ResolverTests
     static Move M(string s) => Move.Parse(s);
 
     [Fact]
-    public void Attacking_into_a_defend_is_chipped_to_the_cap()
+    public void Attacking_into_a_defend_is_chipped_and_costs_the_attacker_a_slot()
     {
         var rng = new Random(0);
         var r = Resolver.Resolve(M("attack"), M("defend"), rng);
-        // A guard caps the hit at 2 and deals nothing back. Attacking into a Defend
-        // is a poor trade, not a losing one — the base move is a pure guard.
+        // A guard caps the hit at 2 and deals nothing back — the punish is tempo, not
+        // damage. Attacking into a Defend loses the exchange because it costs a slot.
         Assert.Equal(0, r.PlayerDelta);
         Assert.Equal(-2, r.MonsterDelta);
+        Assert.True(r.StunPlayerNext);
+        Assert.False(r.StunMonsterNext);
+    }
+
+    [Fact]
+    public void The_stagger_runs_both_directions()
+    {
+        var rng = new Random(0);
+        // Player guards, monster swings: the monster loses the slot.
+        var r = Resolver.Resolve(M("defend"), M("attack"), rng);
+        Assert.True(r.StunMonsterNext);
+        Assert.False(r.StunPlayerNext);
+    }
+
+    [Fact]
+    public void Every_defend_staggers_mutated_or_not()
+    {
+        var rng = new Random(0);
+        foreach (var guard in new[] { "defend", "heavy defend", "perfect defend", "shielding defend" })
+        {
+            var r = Resolver.Resolve(M(guard), M("attack"), rng);
+            Assert.True(r.StunMonsterNext);
+        }
+    }
+
+    [Fact]
+    public void A_guard_that_stops_nothing_staggers_nothing()
+    {
+        var rng = new Random(0);
+        // The stagger is payment for reading an attack correctly, not for guarding.
+        foreach (var opposing in new[] { "defend", "recover", "read" })
+        {
+            var r = Resolver.Resolve(M("defend"), M(opposing), rng);
+            Assert.False(r.StunMonsterNext);
+            Assert.False(r.StunPlayerNext);
+        }
+    }
+
+    [Fact]
+    public void Trading_blows_staggers_neither_side()
+    {
+        var rng = new Random(0);
+        var r = Resolver.Resolve(M("attack"), M("attack"), rng);
+        Assert.False(r.StunPlayerNext);
+        Assert.False(r.StunMonsterNext);
+    }
+
+    [Fact]
+    public void Shielding_does_not_protect_an_attacker_from_the_stagger()
+    {
+        var rng = new Random(0);
+        // Shielding nullifies statuses aimed at you WHILE YOU GUARD. An attacker is
+        // not guarding, so carrying the rider on an attack buys nothing.
+        var r = Resolver.Resolve(M("shielding defend"), M("attack"), rng);
+        Assert.True(r.StunMonsterNext);
     }
 
     [Fact]
@@ -50,12 +105,11 @@ public class ResolverTests
     }
 
     [Fact]
-    public void Recover_beats_defend()
+    public void Recover_beats_defend_completing_the_triangle()
     {
         var rng = new Random(0);
-        // A free heal against a guard with nothing to block. Note this is NOT part of
-        // a closed triangle: with the counter reverted, Attack no longer loses to
-        // Defend. See plans/defang_aggro.md.
+        // Attack > Recover (cancel + stun), Defend > Attack (stagger), and here
+        // Recover > Defend: a free heal against a guard with nothing to block.
         var r = Resolver.Resolve(M("recover"), M("defend"), rng);
         Assert.Equal(4, r.PlayerDelta);
         Assert.Equal(0, r.MonsterDelta);
@@ -87,12 +141,12 @@ public class ResolverTests
     public void Wary_recover_vs_attack_converts_to_defend()
     {
         var rng = new Random(0);
-        // Wary Recover is treated as a basic Defend, so it caps the hit at 2 and
-        // deals nothing back — wary gear survives an attacker rather than punishing
-        // one.
+        // Wary Recover is treated as a basic Defend, so it caps the hit at 2, deals
+        // nothing back, and staggers the attacker like any other guard.
         var r = Resolver.Resolve(M("wary recover"), M("attack"), rng);
         Assert.Equal(-2, r.PlayerDelta);
         Assert.Equal(0, r.MonsterDelta);
+        Assert.True(r.StunMonsterNext);
         // No stun on the (converted-to-defend) target.
         Assert.False(r.StunPlayerNext);
     }

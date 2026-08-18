@@ -4,7 +4,7 @@ title: "Defend staggers the attacker — tempo, not mitigation"
 state: ready
 created: 2026-08-17
 updated: 2026-08-17
-status: ready — shape settled and measured. A Defend that stops an Attack costs the attacker their next slot. Inverts berserk vs aggro by 7 points at T0 lower (74.3 vs 81.3) while leaving control at 51.5, i.e. it defangs mindless attacking without rewarding the tedious line. Supersedes the cap+counter approach in defang_aggro, whose counter half was reverted. Not implemented.
+status: SHIPPED to lib 2026-08-17. A Defend that stops an Attack costs the attacker their next slot. Inverts berserk vs aggro by 7 points at T0 lower (74.3 vs 81.3) while leaving control at 51.5, i.e. it defangs mindless attacking without rewarding the tedious line. Re-measured after implementation: aggro is now the best policy in all 6 gear bands and at all 4 entry-spirit levels, and the shipped code reproduces the experiment exactly. Supersedes the cap+counter approach in defang_aggro. Remaining: Stunning Defend is now redundant (§7.4), the provoke-then-turtle lock is undecided (§5.2), and monster pools can drop the mandatory Recover but only deliberately (§5).
 touches:
   files:
     - lib/Combat/Resolver.cs
@@ -271,11 +271,68 @@ as a proxy and should be checked directly.
 
 ## 7. Suggested order
 
-1. Decide the four mutator interactions in §5.2 — they are design calls, not
-   measurements, and the tests depend on them.
-2. Implement in `Resolver`, tests from the design, re-run the harness across all
-   bands and entry-spirit levels.
-3. Narration + tooltip + reference, together. Do not ship the rule without them.
-4. Give `Stunning Defend` a new job or retire it.
-5. Re-check `Perfect Power Defend` against §4 now that it also steals a slot.
-6. Separately, and independently: price the Read (§6).
+1. ~~Decide the four mutator interactions in §5.2.~~ Done, except the provoke lock:
+   every Defend staggers regardless of mutator; a Wary Recover/Read that converts to
+   a guard staggers too; `shielding` does not protect an attacker (it nullifies
+   statuses aimed at you *while guarding*, and an attacker is not guarding).
+2. ~~Implement in `Resolver`, tests from the design, re-run the harness.~~ Done, §8.
+3. ~~Narration + tooltip + reference.~~ Done: the combat log names a stagger in both
+   directions, the Defend tooltip states it, and the reference triangle now records
+   it — which makes "every base action beats one other and loses to a third" true
+   again.
+4. **Give `Stunning Defend` a new job or retire it.** Now strictly redundant: a 50%
+   chance of what every guard does.
+5. **Decide the provoke-then-turtle lock** (§5.2) — The Old Tooth berzerks a monster
+   into an attack-only pool, which a guarding player then staggers every slot.
+6. **Re-check `Perfect Power Defend`** against §4 now that it also steals a slot.
+7. Monster pools may drop the mandatory Recover, deliberately and per-monster.
+8. Separately, and independently: price the Read (§6).
+
+## 8. Shipped 2026-08-17 — results
+
+`Resolver.Resolve` sets the stun flag on whichever side swung into a guard, placed
+next to the other stun sources and reusing the existing forward-stun plumbing, so
+slot-3 staggers carry into next turn's slot 1 like anything else. Six new resolver
+tests plus a runner test for the carry; 528 tests pass.
+
+**The shipped code reproduces the experiment exactly** (T0 lower: 74.3 / 81.3 /
+51.5 / 64.6), which is the check that the measured variant and the implemented rule
+are the same thing.
+
+Full sweep, 300 trials/cell, monster AI unchanged:
+
+| band | berserk | aggro | control | turtle |
+|---|---|---|---|---|
+| T0 dagger/light lower | 74.5 | **81.3** | 51.6 | 64.4 |
+| T0 dagger/light upper | 85.5 | **89.3** | 67.5 | 72.8 |
+| T1 axe/medium lower | 74.0 | **81.1** | 52.9 | 65.3 |
+| T1 axe/medium upper | 88.9 | **93.9** | 91.2 | 90.6 |
+| T2 sword/heavy lower | 83.3 | **87.4** | 55.6 | 69.2 |
+| T2 sword/heavy upper | 83.3 | **88.8** | 77.1 | 83.2 |
+
+By entry spirits, all bands: 20sp 84.1/**88.9**/73.3/78.8 · 15sp 76.1/**83.0**/63.9/71.5
+· 10sp 58.6/**67.3**/47.5/56.7 · 5sp 41.8/**47.2**/30.6/40.1.
+
+Against the pre-stagger baseline at 20 spirits (93.6 / 92.8 / 69.9 / 69.8):
+berserk **−9.5**, aggro −3.9, control **+3.4** (and −1.9 in the starting kit,
+i.e. flat), turtle **+9.0**.
+
+### Honest reading of that
+
+**Aggro wins everywhere.** We have replaced "mindless attacking is best in 57/57
+cells" with "informed attacking is best in 24/24 cells". That is the intended
+direction — reading the tell now pays — but it is *not* policy diversity, which
+`rps_combat_harness` §7.1 nominates as the metric that says the rule-breakers
+aren't decorative. The counter, for contrast, did produce a varying argmax, at the
+cost of making control the winner. Diversity is still unearned, and is unlikely to
+come from the payoff matrix at all while the monster is uniform random and Read is
+priced at 1-for-3 (§6).
+
+**Turtle gained more than expected** — +9.0 overall, versus control's +3.4. The
+starting-kit numbers hide it (turtle +4.2 there); the gain is concentrated in the
+upper gear bands where defensive riders are strong. Worth watching in play: the
+design intent was tempo denial as texture, not as a survival engine.
+
+Cost-of-winning barely moved (berserk 10.1 → 8.2 spirits left), so this does not
+read as extra grind, but there is still no turn-count metric to confirm fights
+actually got shorter (§6).

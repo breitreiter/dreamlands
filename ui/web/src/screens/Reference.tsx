@@ -218,8 +218,8 @@ export default function Reference() {
             <Table
               headers={["Action", "Vs Attack", "Vs Defend", "Vs Recover"]}
               rows={[
-                ["Attack", "Trade 4 damage", "Inflict 2 damage", "Inflict 4 damage and recovering party skips next action"],
-                ["Defend", "Caps incoming damage to 2", "Nothing", "Nothing"],
+                ["Attack", "Trade 4 damage", "Inflict 2 damage, then lose your next action", "Inflict 4 damage and recovering party skips next action"],
+                ["Defend", "Caps incoming damage to 2 and the attacker loses their next action", "Nothing", "Nothing"],
                 ["Recover", "Skip next action", "Heal 4", "Heal 4"],
               ]}
             />
