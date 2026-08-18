@@ -251,8 +251,9 @@ export default function Reference() {
 
             <Sub>Stuns and flight</Sub>
             <p>
-              A stun turns the victim's next slot into nothing. If it lands on the third slot it
-              carries into the first slot of the following turn. Fleeing ends the fight, but it
+              A stun turns the victim's next slot into nothing. There are two ways to land one:
+              guard against an attack, or attack someone who is recovering. If it lands on the third
+              slot it carries into the first slot of the following turn. Fleeing ends the fight, but it
               spends the turn: the enemy's three moves still resolve against you before you escape.
               If you commit to flee, and you survive to the end of the turn, you always successfully
               flee.
