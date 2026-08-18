@@ -194,10 +194,40 @@ Two consequences for this plan:
   merely surviving. That is worth stating in the narration design (§5.4).
 
 Enforced 2026-08-17 in `CheckCommand.CheckFight`: an all-attack pool is now a hard
-error, with the reasoning in the message. The convention of carrying both a Defend
-and a Recover is stronger than the check (which requires only one non-attack move)
-and is currently universal in the corpus; it is left as a convention rather than a
-gate.
+error, with the reasoning in the message. The check requires only *one* non-attack
+move, deliberately — see below.
+
+### The mandatory Recover is a casualty of this change, and that is the point
+
+Every monster currently carries a Recover, and the reason is mechanical rather than
+thematic: **attack-into-Recover is the only gear-independent stun in the game.**
+`Resolver.StunsTarget` has exactly three sources — Attack vs Recover (always),
+`stunning` Attack (50%, gear), `stunning` Defend (50%, gear). So a Recover in the
+pool is what guarantees a player without stun gear can ever take a slot off a
+monster. It is there as a nod to control.
+
+The stagger replaces that with a guaranteed, gear-independent, *player-chosen* stun
+source. **Stun access stops being a property of the monster's pool and becomes a
+property of the player's read.** Which means the Recover is no longer load-bearing
+and the monster design space opens up considerably:
+
+- **Attack + Defend, no sustain** — pure pressure. Damage you land sticks, and the
+  guard is your tempo answer. Currently impossible: it would be stun-proof for a
+  player without stunning gear.
+- **Heavier attack shares** than today's 50% ceiling, since guarding now yields
+  tempo rather than only mitigation.
+- The stagger fires on *any* monster attack, so unlike attack-into-Recover it does
+  not constrain pool composition at all.
+
+**Ordering dependency: relax pools only after the stagger ships.** Before it, an
+attack-plus-defend monster is stun-proof for most loadouts, which is the failure
+mode this section exists to prevent. The check stays at "at least one non-attack
+move" — that is the invariant that survives either way, because it is about
+openings existing, not about stuns.
+
+This also settles §5.2's question about `Stunning Defend`: the stagger makes it a
+chance-based version of what every Defend does, so it is fully redundant rather
+than merely weak.
 
 ### The berzerk ban is undocumented
 
