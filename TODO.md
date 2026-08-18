@@ -148,6 +148,16 @@ Balance is better tuned with real player data anyway.
       player can track the transition from choice to outcome.
 - [ ] Add visual excitement to the moment a choice is made — some animation/flourish on
       the selected choice rather than a silent swap to outcome text.
+- [ ] Combat move tooltips concatenate instead of wrapping. `moveTooltip()`
+      (`ui/web/src/screens/Combat.tsx:63`) builds a `string[]` and returns
+      `parts.join(". ")`, so a complex move becomes one run-on line — e.g. Sentinel 7-C's
+      `Glowing Heavy Slow Telegraphed Attack` renders as "Deal damage.. +4 damage. May
+      inflict Irradiated. Heavy windup. Once every other turn". Two bugs in that: the
+      base clauses already end in a period so the join doubles it, and there is no
+      trailing period. Wants one line per rider. The string is rendered through the
+      native `title` attribute (`:810`, `:1176`), which does honour `\n`, so a
+      line-per-rider fix needs no new component — a styled tooltip would, and is the
+      bigger version of this task.
 - [ ] Rework the journey-finish modal:
       - Stack everything top-to-bottom in one column; scroll if it overflows.
       - Give each summary line an icon bullet (coins for delivery payout, water for
