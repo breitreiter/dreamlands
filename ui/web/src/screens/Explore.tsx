@@ -67,6 +67,18 @@ function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => v
 
 type TravelPhase = "idle" | "preview" | "animating";
 
+// Journey's-end summary bullets — one icon per toll channel, keyed on the
+// hazard name the server sends (Travails.Summarize -> HazardDef.Name).
+const TRAVAIL_ICONS: Record<string, string> = {
+  thirst: "water-drop.svg",
+  cold: "mountains.svg",
+  fatigue: "boots.svg",
+};
+
+function travailIcon(name: string) {
+  return TRAVAIL_ICONS[name.toLowerCase()] ?? "sensuousness.svg";
+}
+
 const TILE_MS = 300; // milliseconds per tile during animation
 const TILES_PER_DAY = 5;
 const FOOD_PER_DAY = 1;
@@ -776,7 +788,7 @@ export default function Explore({ state }: { state: GameResponse }) {
 
       {/* Journey's-end dialog — travails summary + losses + deliveries */}
       <AlertDialog open={pendingArrival != null}>
-        <AlertDialogContent className="max-w-3xl">
+        <AlertDialogContent className="grid-rows-[auto_minmax(0,1fr)_auto] overflow-y-hidden">
           {pendingArrival && (() => {
             const { arrival, deliveries, roadTravails } = pendingArrival;
             const headerSubtitle = arrival
@@ -804,7 +816,8 @@ export default function Explore({ state }: { state: GameResponse }) {
                   )}
                 </AlertDialogHeader>
 
-                <div className={`grid gap-6 ${hasJourney && hasDeliveries ? "md:grid-cols-2" : "grid-cols-1"}`}>
+                {/* One column, top to bottom, scrolled by the content's fixed height. */}
+                <div className="flex flex-col gap-6 overflow-y-auto -mr-2 pr-2">
                   {hasJourney && (
                     <div className="flex flex-col gap-3">
                       <div className="text-accent font-bold tracking-wide">The Journey</div>
@@ -812,7 +825,7 @@ export default function Explore({ state }: { state: GameResponse }) {
                         {travails.map((t, i) => (
                           <div key={`t${i}`} className="flex items-start gap-2">
                             <MaskedIcon
-                              icon={t.sparedByGear ? "checked-shield.svg" : "sensuousness.svg"}
+                              icon={travailIcon(t.name)}
                               className="w-5 h-5 mt-0.5 shrink-0"
                               color={t.sparedByGear ? "#D0BD62" : "#d4c9a8"}
                             />
@@ -820,18 +833,18 @@ export default function Explore({ state }: { state: GameResponse }) {
                           </div>
                         ))}
                         {losses.map((loss, i) => (
-                          <div key={i} className="flex flex-col gap-1">
+                          <div key={i} className="flex flex-col gap-1.5">
                             {loss.spirits > 0 && (
-                              <div className="flex items-center gap-2">
-                                <MaskedIcon icon="sensuousness.svg" className="w-5 h-5" color="#d4c9a8" />
+                              <div className="flex items-start gap-2">
+                                <MaskedIcon icon="sensuousness.svg" className="w-5 h-5 mt-0.5 shrink-0" color="#d4c9a8" />
                                 <span>
                                   Lost {loss.spirits} spirit{loss.spirits !== 1 ? "s" : ""} to {loss.cause}
                                 </span>
                               </div>
                             )}
                             {loss.health > 0 && (
-                              <div className="flex items-center gap-2">
-                                <MaskedIcon icon="heart-plus.svg" className="w-5 h-5" color="#d4c9a8" />
+                              <div className="flex items-start gap-2">
+                                <MaskedIcon icon="heart-plus.svg" className="w-5 h-5 mt-0.5 shrink-0" color="#d4c9a8" />
                                 <span>
                                   Lost {loss.health} health to {loss.cause}
                                 </span>
@@ -848,15 +861,15 @@ export default function Explore({ state }: { state: GameResponse }) {
                       <div className="text-accent font-bold tracking-wide">Deliveries</div>
                       {deliveries.map((d, i) => (
                         <div key={i} className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2">
-                            <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5" color="#D0BD62" />
+                          <div className="flex items-start gap-2">
+                            <MaskedIcon icon="wooden-crate.svg" className="w-5 h-5 mt-0.5 shrink-0" color="#D0BD62" />
                             <span className="text-accent font-bold">{d.name}</span>
                           </div>
                           {d.flavor && (
                             <div className="text-primary/80 leading-relaxed ml-7">{d.flavor}</div>
                           )}
-                          <div className="flex items-center gap-2 ml-7">
-                            <MaskedIcon icon="two-coins.svg" className="w-4 h-4" color="#D0BD62" />
+                          <div className="flex items-start gap-2 ml-7">
+                            <MaskedIcon icon="two-coins.svg" className="w-4 h-4 mt-1 shrink-0" color="#D0BD62" />
                             <span>+{d.payout} gold</span>
                           </div>
                         </div>

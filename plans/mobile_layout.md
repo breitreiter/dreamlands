@@ -92,13 +92,17 @@ because it is the same single-column-collapse problem this plan exists to solve.
   splits into two columns at `md:`, so below that the travails list and every
   delivery (name + flavor paragraph + payout line each) stack in one column.
 - Fix, in order:
-  1. `max-h-[calc(100dvh-2rem)] overflow-y-auto` on `AlertDialogContent` — one
-     line, un-sticks *every* dialog in the app (`Explore`, `Inventory`,
-     `Market`). `dvh` not `vh`, for mobile browser chrome.
-  2. Pin header + footer and scroll only the body, so "Continue" stays visible
-     while deliveries scroll. Per call site, not in the component.
-  3. Decide whether the delivery list wants its own capped scroll region, and
-     whether two columns should kick in earlier than `md:`.
+  1. DONE (2026-08-22) — `max-h-[calc(100dvh-2rem)] overflow-y-auto` on
+     `AlertDialogContent` (`components/ui/alert-dialog.tsx:59`), un-sticks
+     *every* dialog in the app. `dvh` not `vh`, for mobile browser chrome.
+  2. DONE (2026-08-22) — header + footer pinned, body scrolls, so "Continue"
+     stays visible while deliveries scroll. Done at the `Explore.tsx` call site
+     (`grid-rows-[auto_minmax(0,1fr)_auto] overflow-y-hidden` on the content +
+     `overflow-y-auto` on the summary grid), not in the component.
+  3. DONE (2026-08-22) — resolved by dropping columns entirely: the summary is
+     one column at every width and the whole body is the scroll region, so no
+     separate delivery scroller and no `md:` breakpoint. Side-by-side existed
+     partly to manage dialog height, which the scroll fix now handles.
 - `max-w-3xl` on a 360px screen still needs the look it always needed; step 1
   does not address width.
 

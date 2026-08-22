@@ -158,10 +158,11 @@ Balance is better tuned with real player data anyway.
       native `title` attribute (`:810`, `:1176`), which does honour `\n`, so a
       line-per-rider fix needs no new component — a styled tooltip would, and is the
       bigger version of this task.
-- [ ] Rework the journey-finish modal:
-      - Stack everything top-to-bottom in one column; scroll if it overflows.
-      - Give each summary line an icon bullet (coins for delivery payout, water for
-        thirst, boot for exhaustion, etc.) instead of undifferentiated text lines.
+- [x] Rework the journey-finish modal (2026-08-22): single column top-to-bottom with a
+      scrolling body under a pinned header/footer, and a per-channel icon bullet on each
+      summary line (water for thirst, mountains for cold, boot for fatigue, coins for
+      delivery payout). Dialog height cap lives on `AlertDialogContent` and un-sticks
+      every dialog in the app.
 - [ ] **Reference screen (`ui/web/src/screens/Reference.tsx`) ground-up rewrite.** It's
       badly stale — describes systems that no longer exist: d20 DC tables + natural 1/20,
       the haversack as a separate container, boots equipment slot, tokens, balanced-meal
