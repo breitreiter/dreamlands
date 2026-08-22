@@ -1,10 +1,12 @@
 # Tob Ashford, the Mask — plains T1 basic duelist (bandit)
 # The bogeyman of the starting zone: first fight most players will ever see.
+# Entered only from plains/tier1/Road Toll.enc, which carries the shakedown
+# and the pay-him-off branch. Not in the road pool on its own.
 
 [title Tob Ashford, the Mask]
 [image monsters/plains_bandit.png]
 [stats hp=12]
-[trigger road]
+[trigger none]
 
 * move Attack
   narration: He closes the gap and cuts at you, fast and low.
@@ -23,13 +25,9 @@
   narration: He steps back behind the wagon-husk; the crossbowman covers his lane.
 
 * intro
-Three of his crew are visible behind the wagon-husk: one with a crossbow,
-two pretending not to be paying attention. The man who steps out wears a
-brown leather long-coat and the visor of a dead Pylon strapped over his
-face like a helm. He spreads his hands, friendly. "Old Survey Road,
-friend. South of Forward Depot Three. That's Ashford's. That's me." He
-cocks his head. "Now you can pay the toll, you can walk back the way you
-came, or you can be why my morning got interesting. Pick fast."
+The long knife comes out of the long-coat like it has been waiting there all
+morning. Behind him the crossbowman stands up off his knees, unhurried, and
+the other two stop pretending. The scratched visor turns to find you.
 
 * win
 +give_gold 12
@@ -41,3 +39,8 @@ empty. The Old Survey Road is the Old Survey Road again.
 * lose
 The bolt finds you somewhere in the cut of his footwork. Tob steps over
 to make sure of it. The road is his again, like he said.
+
+* flee
+You break for the grain and it takes you in, and the bolt that follows you
+does not miss by as much as you would like. Nobody comes after you. Ashford
+has no reason to leave a road that pays.

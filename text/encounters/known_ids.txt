@@ -6,6 +6,7 @@
 
 lost
 brides_cave_heard_harlan
+killed_tob_ashford
 
 ## Plains arcs
 grainway_assault_possible

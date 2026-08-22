@@ -1,21 +1,27 @@
 Road Toll
 [trigger road]
 [tier 1]
+[requires !tag killed_tob_ashford]
 
-A group of rough-looking men step out from behind a ruined cart, blocking the road. Their leader, a stocky fellow with a chipped sword and some sort of hand-sewn tabard, holds up a hand.
+Three men are waiting behind the husk of a burned wagon where the road bends. One has a crossbow across his knees. The other two are making a show of not paying attention.
 
-"Well hello merchant. Have you heard about the new road toll? Twenty-five gold, by order of the local militia." He grins. The others fan out behind him. This is imperial territory, there are no local militas.
+The fourth steps out into the road to meet you. Brown leather long-coat, and strapped over his face like a helm, the visor of a dead Pylon, scratched blind. He spreads his hands, friendly as a man selling you a horse.
 
-The area is rolling hills, still high with grain. There is a farmhouse in the distance. A squat stone imperial mile marker stands about 20 paces from you.
+"Old Survey Road, friend. South of Forward Depot Three. That's Ashford's. That's me." He lets that sit a moment. "The toll is twenty-five gold. You can pay it, or you can be why my morning got interesting."
+
+The land here is rolling hills still high with grain, a farmhouse small in the distance. A squat stone imperial mile marker stands about 20 paces off, which means this road belongs to the Empire and always has.
 
 choices:
 
-* Fight your way through = Draw steel
-
-* Make a run for it = You might be able to outrun them
-  +repool
-
 * Pay the toll = Be out 25 gold but on your way
-  You fish out the coins and hand them over. The leader counts them with practiced fingers, nods, and waves you through. "Fair travels, hope to meet again soon," he calls after you.
+  You count out the coins. Ashford takes them without looking at them, weighing the purse by feel, and steps aside.
+  "Fair travels. Hope to meet again soon." The crossbowman does not move as you pass, and neither do you look at him.
   +rem_gold 25
   +repool
+
+* Refuse = There is no toll on an imperial road
+  You tell him what the mile marker says. Ashford turns his head toward it as though he has never noticed it before, then turns back.
+  "Huh," he says. "So it does."
+  He draws.
+  +repool
+  +combat combat/plains/tier1/tob_ashford
