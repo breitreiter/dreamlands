@@ -951,7 +951,15 @@ public class GameFunctions(GameData data, IGameStore store, ILogger<GameFunction
                 if (pickStep is EncounterStep.AwaitTableauPick stillPending)
                     return new OkObjectResult(BuildTableauPromptResponse(session, stillPending));
 
-                // All picks consumed — return exploring
+                // All picks consumed. The night the encounter ran into is still owed, so hand
+                // back camp rather than a map view the server will refuse to move from.
+                if (player.PendingEndOfDay && !data.NoCamp)
+                {
+                    session.Mode = SessionMode.Camp;
+                    return new OkObjectResult(BuildCampResponse(session, new CampInfo()));
+                }
+
+                if (data.NoCamp) player.PendingEndOfDay = false;
                 return new OkObjectResult(BuildExploringResponse(session));
             }
 
